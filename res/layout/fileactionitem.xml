@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="40sp">
+  
+  <ImageView
+		android:id="@+id/icon"
+		android:layout_x="2sp"
+		android:layout_y="3sp"
+		android:layout_width="30sp"
+		android:layout_height="30sp"
+	/>
+	
+	<TextView
+		android:id="@+id/label"
+		android:layout_x="40sp"
+		android:layout_y="8sp"
+		android:layout_width="260sp"
+		android:layout_height="20sp"
+		android:textSize="16sp"
+	/> 	
+</AbsoluteLayout>

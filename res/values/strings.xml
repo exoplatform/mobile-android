@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="LoginPage">AppController!</string>
+    <string name="app_name">eXoMobile</string>
+    <string name="AppsPage">Applications View</string>
+</resources>

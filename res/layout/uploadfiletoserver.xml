@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/MainLayout"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background"
+    >
+    
+    <ImageView 
+		android:layout_x="0sp" 
+		android:layout_y="0sp" 
+		android:id="@+id/ImageView01" 
+		android:layout_width="wrap_content" 
+		android:layout_height="40sp"
+		android:background="@drawable/navigationbar"
+		/>
+		
+		<Button
+		android:id="@+id/Button_Close"
+		android:layout_x="2sp"
+		android:layout_y="02sp"
+		android:layout_width="wrap_content"
+		android:layout_height="38sp"
+		/>
+	<Button
+		android:id="@+id/Button_Language_Help"
+		android:layout_width="30sp"
+		android:layout_height="30sp"
+		android:layout_x="285sp"
+		android:layout_y="05sp"
+		android:background="@drawable/setting1"
+	/>
+	
+	<EditText 
+  		android:id="@+id/EditTextImageName"
+  		android:layout_x="5sp"
+		android:layout_y="50sp"
+  		android:layout_width="310sp" 
+  		android:layout_height="40sp"
+  		android:hint="newImage.jpg"
+  		/>
+  		
+	<ImageView 
+		android:id="@+id/ImageView"
+		android:layout_x="40sp"
+		android:layout_y="100sp"
+		android:layout_width="240sp" 
+		android:layout_height="270sp"
+		/>
+		
+		<Button 
+		android:text="Upload" 
+		android:id="@+id/ButtonUpImage" 
+		android:layout_x="30sp"
+		android:layout_y="380sp"
+		android:layout_width="120sp" 
+		android:layout_height="wrap_content"
+		/>
+		
+	<Button 
+		android:text="Cancel" 
+		android:id="@+id/ButtonCancel" 
+		android:layout_x="170sp"
+		android:layout_y="380sp"
+		android:layout_width="120sp" 
+		android:layout_height="wrap_content"
+		/>
+		
+</AbsoluteLayout>

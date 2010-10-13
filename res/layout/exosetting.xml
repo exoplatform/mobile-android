@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+  	xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="wrap_content"
+  	android:layout_height="wrap_content">
+  	
+ 	<Button 
+ 		android:text="Back" 
+ 		android:id="@+id/back" 
+ 		android:layout_width="wrap_content" 
+ 		android:layout_height="wrap_content"
+ 		/>
+ 	<TextView 
+ 		android:text="Change language" 
+ 		android:id="@+id/changeLanguage" 
+ 		android:layout_width="wrap_content" 
+ 		android:layout_height="wrap_content"
+ 		android:layout_x="20sp"
+		android:layout_y="50sp"
+ 		
+ 	/>	
+
+	<RadioGroup
+  		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:orientation="vertical"
+		android:layout_x="40sp"
+		android:layout_y="70sp"
+   		>
+   		<RadioButton
+    		android:id="@+id/english"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:text="English" />
+   		<RadioButton
+    		android:id="@+id/french"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:text="French" />
+   		<RadioButton
+    		android:id="@+id/vietnamese"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:text="Vietnamese" />
+	</RadioGroup>
+ 
+
+</AbsoluteLayout>

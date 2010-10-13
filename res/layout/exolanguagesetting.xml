@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="250sp"
+  android:layout_height="220sp"
+  android:background="@drawable/background"
+  >
+
+	<ImageView 
+		android:layout_x="01sp" 
+		android:layout_y="0sp" 
+		android:id="@+id/ImageView01" 
+		android:layout_width="248sp" 
+		android:layout_height="40sp"
+		android:background="@drawable/navigationbar"
+		/>
+
+ 	<TextView 
+ 		android:id="@+id/changeLanguage" 
+ 		android:layout_width="170sp" 
+ 		android:layout_height="30sp"
+ 		android:layout_x="10sp"
+		android:layout_y="07sp"
+		android:textSize="18sp"
+		android:textColor="#FF000000"
+ 	/>	
+	
+	<Button 
+ 		android:id="@+id/Button_Close" 
+ 		android:gravity="center_horizontal"
+ 		android:layout_width="70sp" 
+ 		android:layout_height="40sp"
+ 		android:layout_x="180sp"
+		android:layout_y="2sp"
+ 	/>
+
+	<RadioGroup
+  		android:layout_width="210sp"
+   		android:layout_height="wrap_content"
+   		android:orientation="vertical"
+		android:layout_x="20sp"
+		android:layout_y="60sp"
+   		>
+   		<RadioButton
+    		android:id="@+id/english"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:text="English" />
+   		<RadioButton
+    		android:id="@+id/french"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:text="French" />
+	</RadioGroup>
+ 	
+ 	<Button 
+ 		android:id="@+id/Button_Help" 
+ 		android:gravity="center_horizontal"
+ 		android:layout_width="200sp" 
+ 		android:layout_height="40sp"
+ 		android:layout_x="25sp"
+		android:layout_y="180sp"
+		android:text="Help"
+ 	/>
+ 	
+	<ImageView 
+		android:layout_width="40sp"
+		android:layout_height="30sp" 
+		android:layout_x="180sp" 
+		android:layout_y="65sp"  
+		android:id="@+id/ImageView_EN"
+		android:background="@drawable/en"
+	/>
+	
+	<ImageView 
+		android:layout_width="40sp"
+		android:layout_height="30sp" 
+		android:layout_x="180sp" 
+		android:layout_y="115sp"  
+		android:id="@+id/ImageView_FR"
+		android:background="@drawable/fr"
+	/>
+	
+</AbsoluteLayout>
