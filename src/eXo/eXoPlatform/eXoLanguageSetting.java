@@ -1,4 +1,4 @@
-package eXo.eXoMobile;
+package eXo.eXoPlatform;
 
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;

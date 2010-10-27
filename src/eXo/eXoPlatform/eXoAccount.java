@@ -1,8 +1,8 @@
-package eXo.eXoMobile;
+package eXo.eXoPlatform;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import eXo.eXoMobile.AppController;
+import eXo.eXoPlatform.AppController;
 
 public class eXoAccount extends Activity
 {

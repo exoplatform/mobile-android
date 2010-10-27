@@ -1,4 +1,4 @@
-package eXo.eXoMobile;
+package eXo.eXoPlatform;
 
 public class eXoApp extends Object
 {

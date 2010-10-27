@@ -1,4 +1,4 @@
-package eXo.eXoMobile;
+package eXo.eXoPlatform;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -6,7 +6,7 @@ import java.net.URL;
 
 import org.apache.http.client.ClientProtocolException;
 
-import eXo.eXoMobile.AppController;
+import eXo.eXoPlatform.AppController;
 
 public class eXoFile {
 

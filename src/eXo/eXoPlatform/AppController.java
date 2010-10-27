@@ -1,4 +1,4 @@
-package eXo.eXoMobile;
+package eXo.eXoPlatform;
 
 import java.net.HttpURLConnection;
 import java.net.URL;

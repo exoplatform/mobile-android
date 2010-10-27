@@ -1,4 +1,4 @@
-package eXo.eXoMobile;
+package eXo.eXoPlatform;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -1,4 +1,4 @@
-package eXo.eXoMobile;
+package eXo.eXoPlatform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
 
-import eXo.eXoMobile.file.eXoChatMessageContent;
+import eXo.eXoPlatform.file.eXoChatMessageContent;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -1,8 +1,8 @@
-package eXo.eXoMobile;
+package eXo.eXoPlatform;
 
 import java.util.ResourceBundle;
 
-import eXo.eXoMobile.AppController;
+import eXo.eXoPlatform.AppController;
 
 import android.app.Dialog;
 import android.content.Context;
