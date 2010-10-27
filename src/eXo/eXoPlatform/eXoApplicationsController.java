@@ -316,7 +316,7 @@ public class eXoApplicationsController extends Activity
         	String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME, "exo_prf_username");
     		String password = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD, "exo_prf_password");
 	    	
-    		connectToChatServer(url.getHost(), 5224, userName, password);
+    		connectToChatServer(url.getHost(), 5222, userName, password);
     		  if(eXoChatList.conn == null || !eXoChatList.conn.isConnected())
     		    	return;
 	    	
