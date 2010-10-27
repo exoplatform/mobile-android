@@ -1,4 +1,4 @@
-package eXo.eXoPlatform.file;
+package eXo.eXoPlatform;
 
 public class eXoChatMessageContent {
 
