@@ -140,7 +140,7 @@ public class eXoFilesController extends Activity
     	
         imgView = (ImageView) findViewById(R.id.ImageView);
         
-
+        
         _btnCloseBack = (Button) findViewById(R.id.Button_Close);
         _btnCloseBack.setOnClickListener(new OnClickListener() {
         public void onClick(View v) {
