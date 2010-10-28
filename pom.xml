@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+      <groupId>org.exoplatform</groupId>
+      <artifactId>exo.parent</artifactId>
+      <version>7</version>
+    </parent>
+    <groupId>org.exoplatform.mobile</groupId>
+    <artifactId>exo-mobile-android</artifactId>
+    <version>1.0.0-CR02-SNAPSHOT</version>
+    <packaging>apk</packaging>
+    <name>eXo Mobile Android</name>
+    <description>eXo Mobile Android projects.</description>
+
+    <scm>
+      <connection>scm:svn:http://svn.exoplatform.org/exo-int/mobile/trunk/exo-mobile-android</connection>
+      <developerConnection>scm:svn:http://svn.exoplatform.org/exo-int/mobile/trunk/exo-mobile-android</developerConnection>
+      <url>http://fisheye.exoplatform.org/browse/exo-int/mobile/trunk/exo-mobile-android</url>
+    </scm>
+
+    <properties>
+	  <!-- Runtimes -->
+	  <com.google.android.version>2.1.2</com.google.android.version>
+	  <!-- Libraries -->
+	<org.jivesoftware.smack.version>3.1.0</org.jivesoftware.smack.version>
+    </properties>
+    <dependencies>
+      <dependency>
+        <groupId>com.google.android</groupId>
+        <artifactId>android</artifactId>
+        <version>${com.google.android.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>jivesoftware</groupId>
+        <artifactId>smack</artifactId>
+        <version>${org.jivesoftware.smack.version}</version>
+        <scope>compile</scope>
+      </dependency>
+    </dependencies>
+
+      <build>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+          <plugin>
+            <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+            <artifactId>maven-android-plugin</artifactId>
+            <version>2.6.0</version>
+            <configuration>
+              <sdk>
+                <platform>7</platform>
+                <path>/Users/fdrouet/Runtimes/android/sdk</path>
+              </sdk>
+              <deleteConflictingFiles>true</deleteConflictingFiles>
+            </configuration>
+            <extensions>true</extensions>
+          </plugin>
+        </plugins>
+      </build>
+  </project>
