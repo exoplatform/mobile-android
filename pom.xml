@@ -7,7 +7,7 @@
       <artifactId>exo.parent</artifactId>
       <version>7</version>
     </parent>
-    <groupId>org.exoplatform.mobile</groupId>
+    <groupId>org.exoplatform.mobile.platform</groupId>
     <artifactId>exo-mobile-android</artifactId>
     <version>1.0.0-CR02-SNAPSHOT</version>
     <packaging>apk</packaging>
