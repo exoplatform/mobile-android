@@ -396,14 +396,31 @@ public class eXoFilesController extends Activity
 	static private Bitmap fileFolderIcon(eXoFile file)
 	{
 		String contentType = "unknown.png";
-		int index =  FILE_CONTENT_TYPE.indexOf(file.contentType);
-		if(index >= 0)
-		{
-			contentType = file.contentType;
-			contentType = contentType.substring(contentType.indexOf("/") + 1);
-			contentType += ".png";
-			contentType = contentType.replace("/", ":");
-		}
+//		int index =  FILE_CONTENT_TYPE.indexOf(file.contentType);
+//		if(index >= 0)
+//		{
+//			contentType = file.contentType;
+//			contentType = contentType.substring(contentType.indexOf("/") + 1);
+//			contentType += ".png";
+//			contentType = contentType.replace("/", ":");
+//		}
+		     
+		if(file.contentType.indexOf("image") >= 0)
+			contentType = "image.png";
+		else if(file.contentType.indexOf("video") >= 0)
+			contentType = "video.png";
+		else if(file.contentType.indexOf("audio") >= 0)
+			contentType = "music.png";
+		else if(file.contentType.indexOf("application/msword") >= 0)
+			contentType = "word.png";
+		else if(file.contentType.indexOf("application/pdf") >= 0)
+			contentType = "pdf.png";
+		else if(file.contentType.indexOf("application/vnd.ms-excel") >= 0)
+			contentType = "xls.png";
+		else if(file.contentType.indexOf("application/vnd.ms-powerpoint") >= 0)
+			contentType = "ppt.png";
+		else if(file.contentType.indexOf("text") >= 0)
+			contentType = "text.png";
 		
 		Bitmap bmp = null;
 		try {
@@ -467,10 +484,8 @@ public class eXoFilesController extends Activity
 	}
 	
 	public static void createExoFilesAdapter()
-	{
-		
+	{	
    		BaseAdapter test = new BaseAdapter() {
-			
 			
 			  public View getView(int position, View convertView, ViewGroup parent) 
 			    {

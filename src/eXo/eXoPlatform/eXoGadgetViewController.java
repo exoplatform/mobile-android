@@ -3,6 +3,10 @@ package eXo.eXoPlatform;
 
 import java.util.ResourceBundle;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -30,6 +34,7 @@ public class eXoGadgetViewController extends Activity
 	ListView _lstvGadgets;
 	
 	String strCannotBackToPreviousPage;
+	String strConnectionTimedOut;
 	
 	eXoGadgetViewController thisClass;
 	static eXoApplicationsController _delegate;
@@ -93,7 +98,21 @@ public class eXoGadgetViewController extends Activity
 						// TODO Auto-generated method stub
 						eXoApplicationsController.webViewMode = 0;
 						currentGadget = gadget;
-				    	
+						DefaultHttpClient client = new DefaultHttpClient();
+					    HttpGet get = new HttpGet(currentGadget._strGadgetUrl);
+					    try {
+					    	HttpResponse response = client.execute(get);
+					        int status = response.getStatusLine().getStatusCode();
+					        if(status < 200 || status >= 300)
+					        {
+					        	Toast.makeText(eXoGadgetViewController.this, strConnectionTimedOut, Toast.LENGTH_LONG).show();
+					        	return;
+					        }
+					    } catch (Exception e) {
+								// TODO: handle exception
+					    	return;
+						}
+						
 			            Intent next = new Intent(eXoGadgetViewController.this, eXoWebViewController.class);
 			            eXoGadgetViewController.this.startActivity(next);
 					}
@@ -152,6 +171,8 @@ public class eXoGadgetViewController extends Activity
     		strClose = new String(resourceBundle.getString("CloseButton").getBytes("ISO-8859-1"), "UTF-8");
     		
         	strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage").getBytes("ISO-8859-1"), "UTF-8");
+        	strConnectionTimedOut = new String(resourceBundle.getString("ConnectionTimedOut").getBytes("ISO-8859-1"), "UTF-8");
+        	
 //        	
 		} catch (Exception e) {
 			// TODO: handle exception

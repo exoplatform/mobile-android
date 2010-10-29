@@ -17,10 +17,12 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.Intent;
@@ -140,6 +142,11 @@ public class AppController extends Activity
                 {
                     public void run()
                     {
+                    	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    	imm.hideSoftInputFromWindow(_edtxDomain.getWindowToken(), 0);
+                    	imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
+                    	imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
+
                     	signInProgress();
                     }
                 };

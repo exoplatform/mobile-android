@@ -3,6 +3,7 @@ package eXo.eXoPlatform;
 import java.util.ResourceBundle;
 
 import android.app.Activity;
+import android.graphics.Shader.TileMode;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -42,7 +43,8 @@ public class eXoWebViewController extends Activity
 		 if(eXoApplicationsController.webViewMode == 0)
 		 {
 			 url = eXoGadgetViewController.currentGadget.getGadgetUrl();
-			 _txtvTitleBar.setText(eXoGadgetViewController.currentGadget._strGadgetName);
+			 String titlebar = eXoGadgetViewController.currentGadget._strGadgetName;
+			 _txtvTitleBar.setText(titlebar.replace("%20", " "));
 		 }
 		 else if(eXoApplicationsController.webViewMode == 1)
 		 {

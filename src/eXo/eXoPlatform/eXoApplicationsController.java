@@ -41,8 +41,6 @@ public class eXoApplicationsController extends Activity
 	
 	public	static short webViewMode;//0: view gadget, 1: View file, 2: view help;
 	
-	String fileDescription;
-	String chatDescription;
 	String fileTittle;
 	String chatTittle;
 	
@@ -137,8 +135,8 @@ public class eXoApplicationsController extends Activity
 	 public void createAdapter()
 	 {
 		 List<eXoApp> exoapps = new ArrayList<eXoApp>(2);
-	     exoapps.add(new eXoApp(fileTittle, fileDescription));
-	     exoapps.add(new eXoApp(chatTittle, chatDescription));
+	     exoapps.add(new eXoApp(fileTittle, ""));
+	     exoapps.add(new eXoApp(chatTittle, ""));
 	     exoAppsAdapter = new eXoAppsAdapter(exoapps);
 	     _lstvApps.setAdapter(exoAppsAdapter);
 	     _lstvApps.setOnItemClickListener(exoAppsAdapter);
@@ -192,7 +190,7 @@ public class eXoApplicationsController extends Activity
 	    public View getView(int position, View convertView, ViewGroup parent) 
 	    {
 	    	LayoutInflater inflater = getLayoutInflater();
-	    	View rowView = inflater.inflate(R.layout.rowinlistview, parent, false);
+	    	View rowView = inflater.inflate(R.layout.gadgettabitem, parent, false);
 	    	bindView(rowView, _arreXoApps.get(position));
 	    	return(rowView);
 	    }
@@ -202,8 +200,6 @@ public class eXoApplicationsController extends Activity
 	    	ImageView icon=(ImageView)view.findViewById(R.id.icon);
 	    	if(app._streXoAppName.equalsIgnoreCase(fileTittle))
 	    	{
-	    		textViewFileDescription = (TextView)view.findViewById(R.id.description);
-	    		textViewFileDescription.setText(app._streXoAppDescription);
 	    		
 	    		labelFileName = (TextView)view.findViewById(R.id.label);
 	    		labelFileName.setText(app._streXoAppName);
@@ -212,9 +208,6 @@ public class eXoApplicationsController extends Activity
 	    	}
 	    	else if (app._streXoAppName.equalsIgnoreCase(chatTittle))
 	    	{
-	    		textViewChatDescription = (TextView)view.findViewById(R.id.description);
-	    		textViewChatDescription.setText(app._streXoAppDescription);
-	    		
 	    		labelChatName = (TextView)view.findViewById(R.id.label);
 	    		labelChatName.setText(app._streXoAppName);
 	    		
@@ -344,8 +337,8 @@ public class eXoApplicationsController extends Activity
 					// TODO Auto-generated method stub
 //					icon.setBackgroundResource(R.drawable.onlineicon);	
 					 List<eXoApp> exoapps = new ArrayList<eXoApp>(2);
-				        exoapps.add(new eXoApp(fileTittle, fileDescription));
-				        exoapps.add(new eXoApp(chatTittle, chatDescription));
+				        exoapps.add(new eXoApp(fileTittle, ""));
+				        exoapps.add(new eXoApp(chatTittle, ""));
 				        exoAppsAdapter = new eXoAppsAdapter(exoapps);
 				        _lstvApps.setAdapter(exoAppsAdapter);
 				        _lstvApps.setOnItemClickListener(exoAppsAdapter);
@@ -435,19 +428,14 @@ public class eXoApplicationsController extends Activity
 		String strSignOut = "";
     	String strTxtVieweXoAppsTittle = "";
     	String strtxtVieweXoGadgetsTittle = "";
-    	String strfileDescription  = "";
     	String strfileTittle = "";
-    	String strchatDescription = "";
     	String strchatTittle = "";
     	
     	try {
-    		
     		strSignOut = new String(resourceBundle.getString("SignOutButton").getBytes("ISO-8859-1"), "UTF-8");
     		strTxtVieweXoAppsTittle = new String(resourceBundle.getString("NativeApplicationsHeader").getBytes("ISO-8859-1"), "UTF-8");
         	strtxtVieweXoGadgetsTittle = new String(resourceBundle.getString("GadgetsHeader").getBytes("ISO-8859-1"), "UTF-8");
-        	strfileDescription  = new String(resourceBundle.getString("FileDescription").getBytes("ISO-8859-1"), "UTF-8");
         	strfileTittle = new String(resourceBundle.getString("FilesApplication").getBytes("ISO-8859-1"), "UTF-8");
-        	strchatDescription = new String(resourceBundle.getString("ChatDescription").getBytes("ISO-8859-1"), "UTF-8");
         	strchatTittle = new String(resourceBundle.getString("ChatApplication").getBytes("ISO-8859-1"), "UTF-8");
         	strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage").getBytes("ISO-8859-1"), "UTF-8");	
 		} catch (Exception e) {
@@ -458,9 +446,7 @@ public class eXoApplicationsController extends Activity
 		txtVieweXoAppsTittle.setText(strTxtVieweXoAppsTittle);
 		txtVieweXoGadgetsTittle.setText(strtxtVieweXoGadgetsTittle);
 		
-		fileDescription = strfileDescription;
-		fileTittle = strfileTittle;
-    	chatDescription = strchatDescription; 
+		fileTittle = strfileTittle; 
     	chatTittle = strchatTittle;
     	
     }

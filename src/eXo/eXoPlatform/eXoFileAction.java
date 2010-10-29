@@ -181,7 +181,7 @@ public class eXoFileAction extends Dialog implements OnClickListener {
     	    private void bindView(View view, FileActionDescription fileAction) 
     	    {
     	    	TextView label = (TextView)view.findViewById(R.id.label);
-    	    	label.setText(fileAction.actionName);
+    	    	label.setText(fileAction.actionName.replace("%20", " "));
     	    	ImageView icon = (ImageView)view.findViewById(R.id.icon);
     	    	icon.setImageResource(fileAction.imageID);
     	    	
