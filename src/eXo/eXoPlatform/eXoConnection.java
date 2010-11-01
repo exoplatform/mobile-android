@@ -122,8 +122,7 @@ public class eXoConnection
 	public String getExtend(String domain)
 	{
 //		StringBuffer buf = new StringBuffer();
-		if(domain.equalsIgnoreCase("http://platform.demo.exoplatform.org") || domain.equalsIgnoreCase("http://192.168.1.83:8080") || domain.equalsIgnoreCase("") || 
-				domain.equalsIgnoreCase("http://localhost:8080"))
+		if(domain.equalsIgnoreCase("http://platform.demo.exoplatform.org"))
 		{
 			return "/portal/private/intranet";
 		}
@@ -155,6 +154,8 @@ public class eXoConnection
 			e.getMessage();	
 		}
 	    
+		if(strUrlContent.contains("error', '/main?url"))
+			return "ERROR";
 		
 		int index = strUrlContent.indexOf("eXo.env.server.portalBaseURL = \"");
 		if(index > 0)
@@ -183,10 +184,11 @@ public class eXoConnection
 			CookieStore cookiesStore;
 			String strCookie = "";
 			
-			if(_fullDomainStr == null || _fullDomainStr.equalsIgnoreCase(""))
-			{
-				_fullDomainStr = getExtend(domain);
-			}
+			_fullDomainStr = getExtend(domain);
+			
+			if(_fullDomainStr.equalsIgnoreCase("ERROR"))
+				return "ERROR";
+			
 			String redirectStr = domain.concat(_fullDomainStr);
 			
 			DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -230,7 +232,13 @@ public class eXoConnection
 				if(_strFirstLoginContent.contains("Sign in failed. Wrong username or password."))
 				{
 					return "NO";
+				} 
+				else if(_strFirstLoginContent.contains("error', '/main?url"))
+				{
+					_strFirstLoginContent = null;
+					return "ERROR";
 				}
+				
 				else
 				{
 					return "YES";
