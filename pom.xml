@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.exoplatform</groupId>
     <artifactId>exo.parent</artifactId>
-    <version>7</version>
+    <version>8</version>
   </parent>
   <groupId>org.exoplatform.mobile.platform</groupId>
   <artifactId>exo-mobile-android</artifactId>
