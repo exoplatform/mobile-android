@@ -46,7 +46,6 @@
         <configuration>
           <sdk>
             <platform>7</platform>
-            <path>${env.ANDROID_HOME}</path>
           </sdk>
           <deleteConflictingFiles>true</deleteConflictingFiles>
         </configuration>
