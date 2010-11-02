@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.exoplatform.mobile.platform</groupId>
   <artifactId>exo-mobile-android</artifactId>
-  <version>1.0.0-CR02-SNAPSHOT</version>
+  <version>1.0.0-CR03-SNAPSHOT</version>
   <packaging>apk</packaging>
   <name>eXo Mobile Android</name>
   <description>eXo Mobile Android projects.</description>
@@ -18,6 +18,8 @@
     <url>http://fisheye.exoplatform.org/browse/exo-int/mobile/trunk/exo-mobile-android</url>
   </scm>
   <properties>
+	<!-- SNAPSHOTS must be deployed in our private repository -->
+	<exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
     <!-- Runtimes -->
     <com.google.android.version>2.1.2</com.google.android.version>
     <!-- Libraries -->
