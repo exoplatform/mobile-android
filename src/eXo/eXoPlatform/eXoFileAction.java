@@ -84,7 +84,7 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 		});
         
         _txtvFileName = (TextView) findViewById(R.id.TextView_FileName);
-        _txtvFileName.setText(myFile.fileName);
+        _txtvFileName.setText(myFile.fileName.replace("%20", " "));
         
         changeLanguage(AppController.bundle);
         

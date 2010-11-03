@@ -317,12 +317,19 @@ public class eXoFilesController extends Activity
 				    	    	        	Intent next = new Intent(thisClass, eXoWebViewController.class);
 				    	    	        	thisClass.startActivity(next);
 				    	    	        } 
+				    	        		else
+				    	        		{
+				    	        			int index = _strCurrentDirectory.lastIndexOf("/");
+								 			_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
+				    	        		}
 						        	 thisClass.runOnUiThread(dismissProgressDialog);
 						        	 }
 						         };
 					            
 						         showProgressDialog(true);
 					            
+						         
+						         
 					            thread =  new Thread(loadingDataRunnable, "fileItemClickOnIcon"); 
 					            thread.start();
 					            dialog.dismiss();
@@ -333,6 +340,8 @@ public class eXoFilesController extends Activity
 		    	        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() { 
 		    	        	public void onClick(DialogInterface dialog, int id) { 
 		    	        		
+		    	        		int index = _strCurrentDirectory.lastIndexOf("/");
+					 			_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
 		    	        	} 
 		    	        });   
 		    	        

@@ -30,6 +30,7 @@
  		android:layout_x="05sp" 
  		android:layout_y="07sp"
  		android:textSize="18sp"
+ 		android:maxLines="1"
  		android:textColor="#FF000000"
  		/>
 
