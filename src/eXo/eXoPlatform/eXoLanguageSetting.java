@@ -62,7 +62,10 @@ public class eXoLanguageSetting extends Dialog implements OnClickListener {
 	     else if(locallize.equalsIgnoreCase("LocalizeFR.properties"))
 	   	  	myOptionFrench.setChecked(true); 
 	     else
+	     {
 	    	 myOptionEnglish.setChecked(true);
+	    	 updateLocallize("LocalizeEN.properties"); 
+	     }
 	    
 	}
 

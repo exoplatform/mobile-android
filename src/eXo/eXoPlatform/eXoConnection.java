@@ -168,7 +168,7 @@ public class eXoConnection
 		}
 		else 
 		{
-			context = "/portal/private/classic";
+			context = "/portal/private/intranet";
 		}
 		
 		return context;

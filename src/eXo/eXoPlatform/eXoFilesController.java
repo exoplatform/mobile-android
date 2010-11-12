@@ -310,18 +310,23 @@ public class eXoFilesController extends Activity
 						         {
 						         public void run()
 						         {
-						        	 boolean isSaved = saveToLocal(AppController.auth, AppController.credential, _strCurrentDirectory, localFilePath, myFile.fileName.replace("%20", " "), false);
+						        	 //boolean isSaved = saveToLocal(AppController.auth, AppController.credential, _strCurrentDirectory, localFilePath, myFile.fileName.replace("%20", " "), false);
+						        	 saveToLocal(AppController.auth, AppController.credential, _strCurrentDirectory, localFilePath, myFile.fileName.replace("%20", " "), false);
 				    	        		
-				    	        		if(isSaved && myFile.contentType.equalsIgnoreCase("image/jpeg"))
-				    	    	        {
-				    	    	        	Intent next = new Intent(thisClass, eXoWebViewController.class);
-				    	    	        	thisClass.startActivity(next);
-				    	    	        } 
-				    	        		else
-				    	        		{
-				    	        			int index = _strCurrentDirectory.lastIndexOf("/");
-								 			_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
-				    	        		}
+//				    	        		if(isSaved && myFile.contentType.equalsIgnoreCase("image/jpeg"))
+//				    	    	        {
+//				    	    	        	Intent next = new Intent(thisClass, eXoWebViewController.class);
+//				    	    	        	thisClass.startActivity(next);
+//				    	    	        } 
+//				    	        		else
+//				    	        		{
+//				    	        			int index = _strCurrentDirectory.lastIndexOf("/");
+//								 			_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
+//				    	        		}
+				    	        		
+				    	        		int index = _strCurrentDirectory.lastIndexOf("/");
+							 			_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
+							 			
 						        	 thisClass.runOnUiThread(dismissProgressDialog);
 						        	 }
 						         };

@@ -59,6 +59,7 @@ public class eXoApplicationsController extends Activity
 	TextView labelChatName;
 	
 	String strCannotBackToPreviousPage;
+	String strChatServer;
 	
 	@Override
     public void onCreate(Bundle icicle) 
@@ -354,6 +355,7 @@ public class eXoApplicationsController extends Activity
 				String msg = e.getMessage();
 				Log.e(str, msg);
 				e.printStackTrace();
+				Toast.makeText(eXoApplicationsController.this, strChatServer, Toast.LENGTH_SHORT).show();
 			}
 	    	
 	    }
@@ -437,7 +439,8 @@ public class eXoApplicationsController extends Activity
         	strtxtVieweXoGadgetsTittle = new String(resourceBundle.getString("GadgetsHeader").getBytes("ISO-8859-1"), "UTF-8");
         	strfileTittle = new String(resourceBundle.getString("FilesApplication").getBytes("ISO-8859-1"), "UTF-8");
         	strchatTittle = new String(resourceBundle.getString("ChatApplication").getBytes("ISO-8859-1"), "UTF-8");
-        	strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage").getBytes("ISO-8859-1"), "UTF-8");	
+        	strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage").getBytes("ISO-8859-1"), "UTF-8");
+        	strChatServer = new String(resourceBundle.getString("ChatServer").getBytes("ISO-8859-1"), "UTF-8");
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
