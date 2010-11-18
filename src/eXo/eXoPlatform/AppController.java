@@ -131,7 +131,9 @@ public class AppController extends Activity
     	_edtxUserName.setText(_strUserName);
     	_edtxPassword.setText(_strPassword);
     	
-        
+    	_edtxUserName.setSingleLine(true);
+    	
+    	
         changeLanguage(bundle);
         
        _btnSignIn.setOnClickListener(new View.OnClickListener() 
@@ -176,6 +178,7 @@ public class AppController extends Activity
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
         }
+       
         return false;
     }
     
