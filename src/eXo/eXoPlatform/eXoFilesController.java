@@ -216,7 +216,6 @@ public class eXoFilesController extends Activity
 	      return false;
 	  }
 	
-	
 	static Runnable cannotAceesSDCard = new Runnable() {
 		
 		public void run() {
@@ -290,7 +289,7 @@ public class eXoFilesController extends Activity
 			  }
 			  		if(myFile.isFolder)
 			    	{
-		    			_textViewFolder.setText(myFile.fileName);
+		    			_textViewFolder.setText(myFile.fileName.replace("%20", " "));
 			    		createExoFilesAdapter();
 			    	}
 			    	else
@@ -332,9 +331,7 @@ public class eXoFilesController extends Activity
 						         };
 					            
 						         showProgressDialog(true);
-					            
-						         
-						         
+					             
 					            thread =  new Thread(loadingDataRunnable, "fileItemClickOnIcon"); 
 					            thread.start();
 					            dialog.dismiss();
@@ -653,7 +650,6 @@ public class eXoFilesController extends Activity
 	   		else
 	   			is = getInputStreamFromServer(auth, credential, url);
 		   	
-		   	
 	   		File f = new File(path);
 	   		if(!f.exists())
 	   		{
@@ -808,8 +804,10 @@ public class eXoFilesController extends Activity
 	    
     public static boolean MoveFileFromServerToOtherServer(AuthScope auth, UsernamePasswordCredentials credential, eXoFile exoFile, String urlDestination)
     {
-    	boolean putFileBoolean = putFileToServerFromOtherServer(auth, credential, exoFile, urlDestination);	
-	    boolean deleteFileBoolean = deleteFileOnServer(auth, credential, exoFile.fatherUrl + "/" + exoFile.fileName);
+    	boolean putFileBoolean = putFileToServerFromOtherServer(auth, credential, exoFile, urlDestination);
+    	boolean deleteFileBoolean = false;
+    	if(putFileBoolean)
+    		deleteFileBoolean = deleteFileOnServer(auth, credential, exoFile.fatherUrl + "/" + exoFile.fileName);
 	    	
 	    return (putFileBoolean && deleteFileBoolean);
     }

@@ -3,7 +3,6 @@ package eXo.eXoPlatform;
 import java.util.ResourceBundle;
 
 import android.app.Activity;
-import android.graphics.Shader.TileMode;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;

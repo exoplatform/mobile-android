@@ -99,8 +99,6 @@ public class AppController extends Activity
         if(strLocalize == null || strLocalize.equalsIgnoreCase("exo_prf_localize"))
         	strLocalize = "LocalizeEN.properties";
         
-        
-       
         try {
 
         	bundle = new PropertyResourceBundle(getAssets().open(strLocalize));
@@ -108,8 +106,6 @@ public class AppController extends Activity
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-        
-        
         
         _txtViewDomain = (TextView) findViewById(R.id.TextView_Domain);
         _txtViewUserName = (TextView) findViewById(R.id.TextView_UserName);
@@ -189,7 +185,7 @@ public class AppController extends Activity
     		
     		_progressDialog.setMessage(strLoadingDataFromServer);
     		
-//    		_progressDialog.dismiss();
+               //    		_progressDialog.dismiss();
 //    		
 //            _progressDialog = ProgressDialog.show(AppController.this, strWait, strLoadingDataFromServer);
 //            _progressDialog.setIcon(R.drawable.wait);

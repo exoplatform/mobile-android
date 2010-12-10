@@ -151,6 +151,10 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 										else if(copyMoveFileMode == 2)
 										{
 											eXoFilesController.MoveFileFromServerToOtherServer(AppController.auth, AppController.credential, copyMoveFile, url);
+											copyMoveFileMode = 0;
+//											String tmp = url.substring(0, url.lastIndexOf("/"));
+//											if(tmp.equalsIgnoreCase(copyMoveFile.fatherUrl))
+//												eXoFilesController.thisClass.runOnUiThread(reloadFileAdapter);
 										}
 										
 									}
@@ -164,6 +168,7 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 				        	 
 				        	 dismiss();
 				        	 eXoFilesController.thisClass.runOnUiThread(dismissProgressDialog);
+				        	 
 				        	 }
 				         };
 			            
@@ -245,12 +250,12 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 			}
 		};
 		
-	 static Runnable dismissProgressDialog = new Runnable() {
+		
+		static Runnable dismissProgressDialog = new Runnable() {
 			
 			public void run() {
 				// TODO Auto-generated method stub
 				eXoFilesController._progressDialog.dismiss();
-				
 				thread.stop();
 			}
 		};
