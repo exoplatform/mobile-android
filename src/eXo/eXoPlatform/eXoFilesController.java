@@ -58,6 +58,7 @@ public class eXoFilesController extends Activity
 //	for eXo image View
 	EditText txtFileName;
 	ImageView imgView;
+	ImageView imgViewEmptyPage;
 	Button _btnUploadImage;
 	Button _btnCancelUploadImage;
 	static ProgressDialog _progressDialog;
@@ -91,7 +92,7 @@ public class eXoFilesController extends Activity
 //        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.exofilesview);
-        
+		
     	_btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
     	_btnUploadImage.setOnClickListener( new OnClickListener(){
             public void onClick(View v ){
@@ -139,7 +140,8 @@ public class eXoFilesController extends Activity
          });
     	
         imgView = (ImageView) findViewById(R.id.ImageView);
-        
+        imgViewEmptyPage = (ImageView) findViewById(R.id.ImageViewEmptyPage);
+        imgViewEmptyPage.setVisibility(View.INVISIBLE);
         
         _btnCloseBack = (Button) findViewById(R.id.Button_Close);
         _btnCloseBack.setOnClickListener(new OnClickListener() {
@@ -154,14 +156,13 @@ public class eXoFilesController extends Activity
 	        	 if(_strCurrentDirectory.equalsIgnoreCase(_rootUrl))
 	 			{
 	 				eXoFilesController.this.finish();
-//	        		 Intent next = new Intent(eXoFilesController.this, eXoApplicationsController.class);
-//	         		eXoFilesController.this.startActivity(next);
 	 			}
 	 			else
 	 			{
 	 				int index = _strCurrentDirectory.lastIndexOf("/");
 	 				_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
-	 				arrFiles = getPersonalDriveContent();	
+	 				arrFiles = getPersonalDriveContent();
+	 				
 	 				runOnUiThread(closeBackRunnable);
 		   			
 	 			}
@@ -199,12 +200,8 @@ public class eXoFilesController extends Activity
         
         changeLanguage(AppController.bundle);
 		
-    	//Files List
-//        arrFiles = getPersonalDriveContent();
         createExoFilesAdapter();
-//        ExoFilesAdapter filesAdapter = new ExoFilesAdapter(arrFiles);
-//        _lstvFiles.setAdapter(filesAdapter);      
-//        _lstvFiles.setOnItemClickListener(filesAdapter);
+
         
     } 
 
@@ -241,8 +238,15 @@ public class eXoFilesController extends Activity
 		
 		public void run() {
 			// TODO Auto-generated method stub
+			
+			if(arrFiles.isEmpty())
+				 thisClass.imgViewEmptyPage.setVisibility(View.VISIBLE);
+			else
+				thisClass.imgViewEmptyPage.setVisibility(View.INVISIBLE);
+			
 			_progressDialog.dismiss();
 			thread.stop();
+			
 		}
 	};
 	
@@ -291,6 +295,7 @@ public class eXoFilesController extends Activity
 			    	{
 		    			_textViewFolder.setText(myFile.fileName.replace("%20", " "));
 			    		createExoFilesAdapter();
+			    		
 			    	}
 			    	else
 			    	{
@@ -311,17 +316,6 @@ public class eXoFilesController extends Activity
 						         {
 						        	 //boolean isSaved = saveToLocal(AppController.auth, AppController.credential, _strCurrentDirectory, localFilePath, myFile.fileName.replace("%20", " "), false);
 						        	 saveToLocal(AppController.auth, AppController.credential, _strCurrentDirectory, localFilePath, myFile.fileName.replace("%20", " "), false);
-				    	        		
-//				    	        		if(isSaved && myFile.contentType.equalsIgnoreCase("image/jpeg"))
-//				    	    	        {
-//				    	    	        	Intent next = new Intent(thisClass, eXoWebViewController.class);
-//				    	    	        	thisClass.startActivity(next);
-//				    	    	        } 
-//				    	        		else
-//				    	        		{
-//				    	        			int index = _strCurrentDirectory.lastIndexOf("/");
-//								 			_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
-//				    	        		}
 				    	        		
 				    	        		int index = _strCurrentDirectory.lastIndexOf("/");
 							 			_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
@@ -473,6 +467,13 @@ public class eXoFilesController extends Activity
 			
 		} while (local1 > 0);
 		
+		if(arrFilesTmp.isEmpty()) 
+		{
+//			ImageView imgView = new ImageView(thisClass.getApplicationContext());
+//			imgView.setImageResource(R.drawable.emptypage);
+//			
+//			_lstvFiles.addView(imgView, 200, 200);
+		}
 		
 		return arrFilesTmp;
 	}
@@ -527,6 +528,8 @@ public class eXoFilesController extends Activity
 						         {
 						        	 
 						        	 arrFiles = getPersonalDriveContent();
+						        	 
+						        	 
 						        	 thisClass.runOnUiThread(fileItemClickRunnable);
 						        	    	
 						        	 thisClass.runOnUiThread(dismissProgressDialog);

@@ -121,11 +121,16 @@ public class eXoConnection
 		
 	public String getExtend(String domain)
 	{
-//		StringBuffer buf = new StringBuffer();
-		if(domain.equalsIgnoreCase("http://platform.demo.exoplatform.org"))
+		if(domain.indexOf("http://platform.demo.exoplatform") >= 0)
 		{
-			return "/portal/private/intranet";
+			if(domain.equalsIgnoreCase("http://platform.demo.exoplatform.org"))
+			{
+				return "/portal/private/intranet";
+			}
+			return "ERROR";
+			
 		}
+		
 		
 		String context = "";
 		String strUrlContent = "";
@@ -238,8 +243,7 @@ public class eXoConnection
 					_strFirstLoginContent = null;
 					return "ERROR";
 				}
-				
-				else
+				else if(_strFirstLoginContent.contains("eXo.env.portal"))
 				{
 					return "YES";
 				}
@@ -257,6 +261,8 @@ public class eXoConnection
 		{	
 			return e.getMessage();	
 		}
+		
+		return "ERROR";
 	}
 	
 	public String sendRequestToGetGadget(String urlStr, String username, String password)
