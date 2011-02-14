@@ -52,6 +52,7 @@ public class eXoFilesController extends Activity
 	static ListView _lstvFiles;
 	static TextView _textViewFolder;
 	static Button _btnCloseBack;
+	TextView _textViewEmptyPage;
 
 	Button _btnLanguageHelp;
 	
@@ -142,6 +143,9 @@ public class eXoFilesController extends Activity
         imgView = (ImageView) findViewById(R.id.ImageView);
         imgViewEmptyPage = (ImageView) findViewById(R.id.ImageViewEmptyPage);
         imgViewEmptyPage.setVisibility(View.INVISIBLE);
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        _textViewEmptyPage = (TextView)findViewById(R.id.TextView_EmptyPage);
         
         _btnCloseBack = (Button) findViewById(R.id.Button_Close);
         _btnCloseBack.setOnClickListener(new OnClickListener() {
@@ -240,10 +244,16 @@ public class eXoFilesController extends Activity
 			// TODO Auto-generated method stub
 			
 			if(arrFiles.isEmpty())
+			{
 				 thisClass.imgViewEmptyPage.setVisibility(View.VISIBLE);
+				 thisClass._textViewEmptyPage.setVisibility(View.VISIBLE);
+			}
 			else
+			{
 				thisClass.imgViewEmptyPage.setVisibility(View.INVISIBLE);
-			
+				thisClass._textViewEmptyPage.setVisibility(View.INVISIBLE);
+			}
+				
 			_progressDialog.dismiss();
 			thread.stop();
 			
@@ -852,10 +862,12 @@ public class eXoFilesController extends Activity
     	String strCloseBack = "";
     	String strUploadFile = "";
     	String strCancel = "";
+    	String strEmptyPage = "";
     	try {
     		strCloseBack = new String(resourceBundle.getString("CloseButton").getBytes("ISO-8859-1"), "UTF-8");
     		strUploadFile = new String(resourceBundle.getString("Upload").getBytes("ISO-8859-1"), "UTF-8");
     		strCancel = new String(resourceBundle.getString("Cancel").getBytes("ISO-8859-1"), "UTF-8");
+    		strEmptyPage = new String(resourceBundle.getString("EmptyPage").getBytes("ISO-8859-1"), "UTF-8");
         	strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage").getBytes("ISO-8859-1"), "UTF-8");
         	strDownloadFileIntoSDCard = new String(resourceBundle.getString("DownloadFileInToSDCard").getBytes("ISO-8859-1"), "UTF-8");
 		} catch (Exception e) {
@@ -865,6 +877,7 @@ public class eXoFilesController extends Activity
 		_btnCloseBack.setText(strCloseBack);
 		_btnUploadImage.setText(strUploadFile);
 		_btnCancelUploadImage.setText(strCancel);
+		_textViewEmptyPage.setText(strEmptyPage);
     	
     	_delegate.changeLanguage(resourceBundle);
     	_delegate.createAdapter();

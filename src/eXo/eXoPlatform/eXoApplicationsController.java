@@ -136,8 +136,8 @@ public class eXoApplicationsController extends Activity
 	 public void createAdapter()
 	 {
 		 List<eXoApp> exoapps = new ArrayList<eXoApp>(2);
-	     exoapps.add(new eXoApp(fileTittle, ""));
 	     exoapps.add(new eXoApp(chatTittle, ""));
+	     exoapps.add(new eXoApp(fileTittle, ""));
 	     exoAppsAdapter = new eXoAppsAdapter(exoapps);
 	     _lstvApps.setAdapter(exoAppsAdapter);
 	     _lstvApps.setOnItemClickListener(exoAppsAdapter);

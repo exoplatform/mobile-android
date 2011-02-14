@@ -1,6 +1,5 @@
 package eXo.eXoPlatform;
 
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -261,9 +260,10 @@ public class AppController extends Activity
         		_strDomain = "http://" + _strDomain;
         	}
 
+    		
     		URL url = new URL(_strDomain);
-    		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-    		con.getResponseCode();
+//    		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//    		int code = con.getResponseCode();
     		
 
         	_strUserName = _edtxUserName.getText().toString();
@@ -293,8 +293,6 @@ public class AppController extends Activity
         		runOnUiThread(returnResFaileConnection);
         	}
         	
-        	
-    		
 		} catch (Exception e) {
 			// TODO: handle exception
 //			String msg = e.getMessage();
@@ -302,8 +300,6 @@ public class AppController extends Activity
 //			Log.v(str, msg);
 			runOnUiThread(returnResFaileConnection);
 		}
-    	
-    	
     }
    
     public List<eXoGadget> getGadgetsList()

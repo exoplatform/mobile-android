@@ -20,6 +20,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 
 public class eXoConnection
@@ -196,9 +199,15 @@ public class eXoConnection
 			
 			String redirectStr = domain.concat(_fullDomainStr);
 			
-			DefaultHttpClient httpClient = new DefaultHttpClient();
+			HttpParams httpParameters = new BasicHttpParams();
+    		HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+    		HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+    		HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+    		
+			DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+			
 			HttpGet httpGet = new HttpGet(redirectStr);
- 
+			
 			response = httpClient.execute(httpGet);
 			cookiesStore = httpClient.getCookieStore();
 			List<Cookie> cookies = cookiesStore.getCookies();

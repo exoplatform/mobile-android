@@ -10,11 +10,20 @@
    
    <ImageView 
 		android:layout_x="0sp" 
-		android:layout_y="0sp" 
+		android:layout_y="80sp" 
 		android:id="@+id/ImageViewEmptyPage" 
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
 		android:background="@drawable/emptypage"
+		/>
+	<TextView
+		android:layout_x="0sp"
+		android:layout_y="280sp"
+		android:layout_width="320sp"
+		android:layout_height="40sp"
+		android:id="@+id/TextView_EmptyPage"		
+		android:textSize="18sp"
+		android:gravity="center_horizontal"	
 		/>
 	<ImageView 
 		android:layout_x="0sp" 
