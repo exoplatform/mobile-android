@@ -18,12 +18,13 @@
 		/>
 	<TextView
 		android:layout_x="0sp"
-		android:layout_y="280sp"
+		android:layout_y="380sp"
 		android:layout_width="320sp"
 		android:layout_height="40sp"
 		android:id="@+id/TextView_EmptyPage"		
 		android:textSize="18sp"
-		android:gravity="center_horizontal"	
+		android:gravity="center_horizontal"
+		android:textColor="@color/black"	
 		/>
 	<ImageView 
 		android:layout_x="0sp" 

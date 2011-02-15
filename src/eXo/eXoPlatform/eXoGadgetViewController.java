@@ -99,6 +99,7 @@ public class eXoGadgetViewController extends Activity
 						eXoApplicationsController.webViewMode = 0;
 						currentGadget = gadget;
 						DefaultHttpClient client = new DefaultHttpClient();
+						AppController._eXoConnection.loginForStandaloneGadget(currentGadget._strGadgetUrl, "demo", "gtn");
 					    HttpGet get = new HttpGet(currentGadget._strGadgetUrl);
 					    try {
 					    	HttpResponse response = client.execute(get);

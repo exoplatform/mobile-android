@@ -146,6 +146,7 @@ public class eXoFilesController extends Activity
 //        DisplayMetrics dm = new DisplayMetrics();
 //        getWindowManager().getDefaultDisplay().getMetrics(dm);
         _textViewEmptyPage = (TextView)findViewById(R.id.TextView_EmptyPage);
+        _textViewEmptyPage.setVisibility(View.INVISIBLE);
         
         _btnCloseBack = (Button) findViewById(R.id.Button_Close);
         _btnCloseBack.setOnClickListener(new OnClickListener() {

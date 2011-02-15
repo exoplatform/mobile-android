@@ -274,6 +274,98 @@ public class eXoConnection
 		return "ERROR";
 	}
 	
+	public String loginForStandaloneGadget(String domain, String username, String password)
+	{
+		try
+		{
+			HttpResponse response;
+			HttpEntity entity;
+			CookieStore cookiesStore;
+			String strCookie = "";
+			
+			_fullDomainStr = getExtend(domain);
+			
+			if(_fullDomainStr.equalsIgnoreCase("ERROR"))
+				return "ERROR";
+			
+			String redirectStr = domain.concat(_fullDomainStr);
+			
+			HttpParams httpParameters = new BasicHttpParams();
+    		HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+    		HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+    		HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+    		
+			DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+			
+			HttpGet httpGet = new HttpGet(redirectStr);
+			
+			response = httpClient.execute(httpGet);
+			cookiesStore = httpClient.getCookieStore();
+			List<Cookie> cookies = cookiesStore.getCookies();
+			
+			if(!cookies.isEmpty())
+			{
+				for (int i = 0; i < cookies.size(); i++)
+				{
+					strCookie = cookies.get(i).getName().toString() + "=" + cookies.get(i).getValue().toString();
+				}
+			}
+			
+//			int indexOfPrivate = redirectStr.indexOf("/classic");
+			
+//			//Request to login
+//			String loginStr = "http://mobile.demo.exoplatform.org/portal/login";
+//			if(indexOfPrivate > 0)
+//				loginStr = redirectStr.substring(0, indexOfPrivate).concat("/j_security_check");
+//			else
+//				loginStr = redirectStr.concat("/j_security_check");
+			
+			HttpPost httpPost = new HttpPost("http://mobile.demo.exoplatform.org/portal/login");
+			List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
+			nvps.add(new BasicNameValuePair("username", username));
+			nvps.add(new BasicNameValuePair("password", password));
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+			httpPost.setHeader("Cookie", strCookie);
+			_strCookie = strCookie;
+			response = httpClient.execute(httpPost);
+			entity = response.getEntity();
+		
+			if (entity != null) 
+			{
+				InputStream instream = entity.getContent();
+				_strFirstLoginContent = convertStreamToString(instream);
+				if(_strFirstLoginContent.contains("Sign in failed. Wrong username or password."))
+				{
+					return "NO";
+				} 
+				else if(_strFirstLoginContent.contains("error', '/main?url"))
+				{
+					_strFirstLoginContent = null;
+					return "ERROR";
+				}
+				else if(_strFirstLoginContent.contains("eXo.env.portal"))
+				{
+					return "YES";
+				}
+			}
+			else
+			{
+				return "ERROR";
+			}
+		}
+		catch (ClientProtocolException e) 
+		{
+			 return e.getMessage();	  
+		} 
+		catch (IOException e) 
+		{	
+			return e.getMessage();	
+		}
+		
+		return "ERROR";
+	}
+	
+	
 	public String sendRequestToGetGadget(String urlStr, String username, String password)
 	{
 		try

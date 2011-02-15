@@ -184,13 +184,7 @@ public class AppController extends Activity
     		
     		_progressDialog.setMessage(strLoadingDataFromServer);
     		
-               //    		_progressDialog.dismiss();
-//    		
-//            _progressDialog = ProgressDialog.show(AppController.this, strWait, strLoadingDataFromServer);
-//            _progressDialog.setIcon(R.drawable.wait);
-    		
     		eXoApplicationsController.arrGadgets = listOfGadgets();
-//    		eXoApplicationsController.arrGadgets = null;
     		Intent next = new Intent(AppController.this, eXoApplicationsController.class);
     		startActivity(next);
     		
@@ -417,10 +411,7 @@ public class AppController extends Activity
     	}
     	else
     	{
-    		
     		strContent = AppController._eXoConnection.sendRequestToGetGadget(url, userName, password);
-    		//dataReply = [[_delegate getConnection] sendRequestWithAuthorization:[url absoluteString]];
-    		//dataReply = [[_delegate getConnection] sendRequestToGetGadget:[url absoluteString]];
     	}
     	
     	int index1;
@@ -442,18 +433,6 @@ public class AppController extends Activity
     		String gadgetIconUrl = getStringForGadget(tmpStr, "\"thumbnail\":\"", "\",");
 
     		gadgetIconUrl = gadgetIconUrl.replace("http://localhost:8080", domain);
-    		
-//    		if(gadgetIconUrl == "")
-//    		{
-//    			try {
-//    				imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
-//				} catch (Exception e) {
-//					// TODO: handle exception
-//					imgGadgetIcon = null;
-//				}
-//    		}
-//    		else
-//    			imgGadgetIcon = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
     		
     		try {
 				imgGadgetIcon = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
@@ -551,6 +530,22 @@ public class AppController extends Activity
     			return null;
     		String gadgetTabName = strContent.substring(0, index3); 
     		List<eXoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
+    		
+    		List<eXoStandAloneGadget> arrTmpStandaloneGadgetsInITem = listOfStandaloneGadgetsWithURL(_strDomain + gadgetTabUrlStr);
+    		for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) 
+    		{
+    			eXoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
+    			for (int j = 0; j < arrTmpStandaloneGadgetsInITem.size(); j++) 
+    			{
+    				eXoStandAloneGadget tmpStandaloneGadget = arrTmpStandaloneGadgetsInITem.get(j);
+    				if (tmpStandaloneGadget._strName.equalsIgnoreCase(tmpGadget._strGadgetName)) 
+    				{
+    					arrTmpGadgetsInItem.set(i, new eXoGadget(tmpGadget._strGadgetName, tmpGadget._strGadgetDescription, tmpStandaloneGadget._urlContent, tmpGadget._btmGadgetIcon));
+    					break;
+    				}
+    			}
+    		}
+    		
     		GateInDbItem tmpGateInDbItem = new GateInDbItem(gadgetTabName, gadgetTabUrlStr, arrTmpGadgetsInItem);
     		arrTmpGadgets.add(tmpGateInDbItem);
     		
@@ -576,6 +571,66 @@ public class AppController extends Activity
 		return str;
 	}
    
+	private List<eXoStandAloneGadget> listOfStandaloneGadgetsWithURL(String url)
+	{
+		List<eXoStandAloneGadget> arrTmpStandaloneGadgets = new ArrayList<eXoStandAloneGadget>();
+		String strContent = AppController._eXoConnection.sendRequestToGetGadget(url, _strUserName, _strPassword);
+		
+		int index1;
+		int index2;
+
+		String[] arrParagraphs = strContent.split("<div class=\"UIGadget\"");
+
+		for (int i = 1; i < arrParagraphs.length; i++) 
+		{
+			String tmpStr1 = arrParagraphs[i];
+			index1 = tmpStr1.indexOf("standalone");
+			if (index1 >= 0) 
+			{
+				index2 = tmpStr1.indexOf("<a style=\"display:none\" href=\"");
+				String strStandaloneUrl = "";
+				String strStandaloneName = "";
+				if (index2 >= 0) 
+				{
+					int mark = 0;
+					for (int j = index2 + 30; j < tmpStr1.length(); j++) 
+					{
+						if (tmpStr1.charAt(j) == '"') 
+						{
+							mark = j;
+							break;
+						}
+					}
+					strStandaloneUrl = tmpStr1.substring(index2 + 30, mark);
+				}
+//				String tmpStr = "<div class=\"GadgetTitle\" style=\"display: none; float: none; width: auto; margin-right: 75px\">";
+				index2 = tmpStr1.indexOf("<div class=\"GadgetTitle\" style=\"display: none; float: none; width: auto; margin-right: 75px\">");
+				index2 = tmpStr1.indexOf("<div class=\"GadgetTitle\" style=\"display: none; float: none; width: auto; margin-right: 75px\">");
+				index2 = tmpStr1.indexOf("<div class=\"GadgetTitle\" style=\"display: none; float: none; width: auto; margin-right: 75px\">");
+				if (index2 >= 0) 
+				{
+					int mark = 0;
+					for (int j = index2 + 93; j < tmpStr1.length(); j++) 
+					{
+						if (tmpStr1.charAt(j) == '<') 
+						{
+							mark = j;
+							break;
+						}
+					}
+					strStandaloneName = tmpStr1.substring(index2 + 93, mark);
+				}
+				
+				if (strStandaloneUrl.length() > 0 && strStandaloneName.length() > 0) 
+				{
+					eXoStandAloneGadget tmpStandaloneGadget = new eXoStandAloneGadget(strStandaloneName, strStandaloneUrl);
+					arrTmpStandaloneGadgets.add(tmpStandaloneGadget);
+				}
+			}
+		}
+		return arrTmpStandaloneGadgets;
+	}
+	
 	public void showUserGuide()
 	{
 		eXoApplicationsController.webViewMode = 2;
