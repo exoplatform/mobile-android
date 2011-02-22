@@ -1,11 +1,13 @@
 package eXo.eXoPlatform;
 
 
+
 import java.util.ResourceBundle;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.cookie.*;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.webkit.CookieSyncManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
+
 
 
 public class eXoGadgetViewController extends Activity 
@@ -40,12 +44,17 @@ public class eXoGadgetViewController extends Activity
 	static eXoApplicationsController _delegate;
 	
 	public static eXoGadget currentGadget;
+	public static Cookie cookie = null;
+
 	
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
-        super.onCreate(savedInstanceState);
         
+    	super.onCreate(savedInstanceState);
+        
+		CookieSyncManager.createInstance(this);
+
 //        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.exogadgetview);
@@ -99,7 +108,9 @@ public class eXoGadgetViewController extends Activity
 						eXoApplicationsController.webViewMode = 0;
 						currentGadget = gadget;
 						DefaultHttpClient client = new DefaultHttpClient();
-						AppController._eXoConnection.loginForStandaloneGadget(currentGadget._strGadgetUrl, "demo", "gtn");
+						
+						//AppController._eXoConnection.loginForStandaloneGadget(currentGadget._strGadgetUrl, "demo", "gtn");						
+						
 					    HttpGet get = new HttpGet(currentGadget._strGadgetUrl);
 					    try {
 					    	HttpResponse response = client.execute(get);
@@ -112,7 +123,7 @@ public class eXoGadgetViewController extends Activity
 					    } catch (Exception e) {
 								// TODO: handle exception
 					    	return;
-						}
+					    }
 						
 			            Intent next = new Intent(eXoGadgetViewController.this, eXoWebViewController.class);
 			            eXoGadgetViewController.this.startActivity(next);

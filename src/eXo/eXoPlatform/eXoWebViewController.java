@@ -1,12 +1,17 @@
 package eXo.eXoPlatform;
 
+import java.util.List;
 import java.util.ResourceBundle;
+
+import org.apache.http.cookie.Cookie;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,10 +27,16 @@ public class eXoWebViewController extends Activity
 	
 	 public void onCreate(Bundle icicle) 
 	 {
+		 		 
 		 super.onCreate(icicle);
 //		 requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		 requestWindowFeature(Window.FEATURE_NO_TITLE);
 		 setContentView(R.layout.webview);
+		 
+		
+		 setupCookies();
+		 
+		 
 		 _wvGadget = (WebView) findViewById(R.id.WebView_01);
 		 _txtvTitleBar = (TextView) findViewById(R.id.TextView_TitleBar);
 		 
@@ -105,6 +116,25 @@ public class eXoWebViewController extends Activity
 		 
 		changeLanguage(AppController.bundle);
 	 } 
+	 
+	 
+	 private void setupCookies() {
+		    List<Cookie> cookies = AppController._eXoConnection._sessionCookies;// .authenticateAndReturnCookies();
+		 
+		    if (cookies != null) {
+		    		    	
+		       //CookieManager.getInstance().removeSessionCookie();
+
+		      for (Cookie cookie : cookies) {
+		    		String cookieString = cookie.getName() + "=" + cookie.getValue();
+		    		CookieManager.getInstance().setCookie(cookie.getDomain(), cookieString);
+		      }
+		      
+		      //CookieManager.getInstance().setCookie("mobile.demo.exoplatform.org","JSESSIONID="+ cookie.getValue()+";domain=mobile.demo.exoplatform.org");
+		    	
+		      CookieSyncManager.getInstance().sync();
+		    }
+	 }
 
 	 public boolean onKeyDown(int keyCode, KeyEvent event) {
 	      //Save data to the server once the user hits the back button

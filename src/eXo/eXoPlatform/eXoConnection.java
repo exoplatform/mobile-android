@@ -25,9 +25,12 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 
+
+
 public class eXoConnection
 {
 	public static int splitLinesAt = 76;
+	public List<Cookie> _sessionCookies;
 	public	String _strCookie = "";
 	public String _strFirstLoginContent;
 	public String _fullDomainStr;
@@ -212,6 +215,7 @@ public class eXoConnection
 			cookiesStore = httpClient.getCookieStore();
 			List<Cookie> cookies = cookiesStore.getCookies();
 			
+			
 			if(!cookies.isEmpty())
 			{
 				for (int i = 0; i < cookies.size(); i++)
@@ -238,6 +242,8 @@ public class eXoConnection
 			_strCookie = strCookie;
 			response = httpClient.execute(httpPost);
 			entity = response.getEntity();
+			
+			this._sessionCookies = new ArrayList<Cookie>(cookies);		
 		
 			if (entity != null) 
 			{
@@ -300,25 +306,31 @@ public class eXoConnection
 			HttpGet httpGet = new HttpGet(redirectStr);
 			
 			response = httpClient.execute(httpGet);
+			
 			cookiesStore = httpClient.getCookieStore();
 			List<Cookie> cookies = cookiesStore.getCookies();
+			
 			
 			if(!cookies.isEmpty())
 			{
 				for (int i = 0; i < cookies.size(); i++)
 				{
-					strCookie = cookies.get(i).getName().toString() + "=" + cookies.get(i).getValue().toString();
+					strCookie = cookies.get(i).getName().toString() + "=" + cookies.get(i).getValue().toString() +";domain=mobile.demo.exoplatform.org";
 				}
 			}
 			
-//			int indexOfPrivate = redirectStr.indexOf("/classic");
 			
-//			//Request to login
-//			String loginStr = "http://mobile.demo.exoplatform.org/portal/login";
-//			if(indexOfPrivate > 0)
-//				loginStr = redirectStr.substring(0, indexOfPrivate).concat("/j_security_check");
-//			else
-//				loginStr = redirectStr.concat("/j_security_check");
+			
+			/*
+			int indexOfPrivate = redirectStr.indexOf("/classic");
+			
+			//Request to login
+			String loginStr = "http://mobile.demo.exoplatform.org/portal/login";
+			if(indexOfPrivate > 0)
+				loginStr = redirectStr.substring(0, indexOfPrivate).concat("/j_security_check");
+			else
+				loginStr = redirectStr.concat("/j_security_check");
+			*/
 			
 			HttpPost httpPost = new HttpPost("http://mobile.demo.exoplatform.org/portal/login");
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
@@ -328,6 +340,20 @@ public class eXoConnection
 			httpPost.setHeader("Cookie", strCookie);
 			_strCookie = strCookie;
 			response = httpClient.execute(httpPost);
+			
+			cookiesStore = httpClient.getCookieStore();
+			cookies = cookiesStore.getCookies();
+			
+			
+			if(!cookies.isEmpty())
+			{
+				for (int i = 0; i < cookies.size(); i++)
+				{
+					strCookie = cookies.get(i).getName().toString() + "=" + cookies.get(i).getValue().toString();
+				}
+			}
+			_sessionCookies = cookies;
+			
 			entity = response.getEntity();
 		
 			if (entity != null) 
@@ -352,6 +378,11 @@ public class eXoConnection
 			{
 				return "ERROR";
 			}
+			
+			
+			  
+			
+			
 		}
 		catch (ClientProtocolException e) 
 		{
