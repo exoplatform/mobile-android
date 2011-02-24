@@ -40,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.apache.commons.lang.StringEscapeUtils;
 
 public class eXoFilesController extends Activity 
 {
@@ -467,6 +468,8 @@ public class eXoFilesController extends Activity
 				String fileName = responseStr.substring(0, local2);
 				if(!fileName.equalsIgnoreCase(".."))
 				{
+					fileName = StringEscapeUtils.unescapeHtml(fileName);
+					fileName = StringEscapeUtils.unescapeJava(fileName);
 					eXoFile file = new eXoFile(_strCurrentDirectory + "/" + fileName);
 					arrFilesTmp.add(file);
 				}
