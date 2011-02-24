@@ -13,9 +13,9 @@
   <name>eXo Mobile Android</name>
   <description>eXo Mobile Android projects.</description>
   <scm>
-    <connection>scm:svn:http://svn.exoplatform.org/exo-int/mobile/trunk/exo-mobile-android</connection>
-    <developerConnection>scm:svn:http://svn.exoplatform.org/exo-int/mobile/trunk/exo-mobile-android</developerConnection>
-    <url>http://fisheye.exoplatform.org/browse/exo-int/mobile/trunk/exo-mobile-android</url>
+    <connection>scm:svn:https://svn.exoplatform.org/projects/mobile/trunk/exo-mobile-android</connection>
+    <developerConnection>scm:svn:https://svn.exoplatform.org/projects/mobile/trunk/exo-mobile-android</developerConnection>
+    <url>https://fisheye.exoplatform.org/browse/mobile/trunk/exo-mobile-android</url>
   </scm>
   <properties>
     <!-- SNAPSHOTS must be deployed in our private repository -->
