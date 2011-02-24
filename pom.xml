@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.exoplatform.mobile.platform</groupId>
   <artifactId>exo-mobile-android</artifactId>
-  <version>1.0.0-CR03-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>apk</packaging>
   <name>eXo Mobile Android</name>
   <description>eXo Mobile Android projects.</description>
