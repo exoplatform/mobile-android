@@ -2,6 +2,7 @@ package eXo.eXoPlatform;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -49,6 +50,8 @@ public class AppController extends Activity
 	String _strDomain = "";
 	String _strUserName = "";
 	String _strPassword = "";
+	
+	private String _strContentForStandaloneURL;
 	
 	//private eXoConnection _eXoConnection = new eXoConnection();
 	public static eXoConnection _eXoConnection = new eXoConnection();
@@ -360,7 +363,7 @@ public class AppController extends Activity
     		bmpUrl = bmpUrl.replace("localhost", _strDomain);
     		bmp = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
     		
-    		eXoGadget tempGadget = new eXoGadget(title, description, url, bmp);
+    		eXoGadget tempGadget = new eXoGadget(title, description, url, bmp, null);
     		arrGadgets.add(tempGadget);
     		
     		indexStart = indexEnd;
@@ -414,6 +417,8 @@ public class AppController extends Activity
     		strContent = AppController._eXoConnection.sendRequestToGetGadget(url, userName, password);
     	}
     	
+    	_strContentForStandaloneURL = new String(strContent);
+    	
     	int index1;
     	int index2;
     	
@@ -431,6 +436,7 @@ public class AppController extends Activity
     		strGadgetName = getStringForGadget(tmpStr, "\"title\":\"", "\","); 
     		strGadgetDescription = getStringForGadget(tmpStr, "\"description\":\"", "\",");
     		String gadgetIconUrl = getStringForGadget(tmpStr, "\"thumbnail\":\"", "\",");
+    		String gadgetID = getStringForGadget(tmpStr, "'content-", "'");
 
     		gadgetIconUrl = gadgetIconUrl.replace("http://localhost:8080", domain);
     		
@@ -477,8 +483,7 @@ public class AppController extends Activity
     		
     		gadgetUrl += gadgetXmlFile;
     		
-    		eXoGadget gadget = new eXoGadget(strGadgetName, strGadgetDescription, gadgetUrl, imgGadgetIcon);
-    		
+    		eXoGadget gadget = new eXoGadget(strGadgetName, strGadgetDescription, gadgetUrl, imgGadgetIcon, gadgetID);
     		
     		arrTmpGadgets.add(gadget);
 
@@ -530,19 +535,18 @@ public class AppController extends Activity
     			return null;
     		String gadgetTabName = strContent.substring(0, index3); 
     		List<eXoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
+    		    		
+    		HashMap<String,String> mapOfURLs = listOfStandaloneGadgetsURL();
     		
-    		List<eXoStandAloneGadget> arrTmpStandaloneGadgetsInITem = listOfStandaloneGadgetsWithURL(_strDomain + gadgetTabUrlStr);
     		for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) 
     		{
     			eXoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
-    			for (int j = 0; j < arrTmpStandaloneGadgetsInITem.size(); j++) 
+    			
+    			String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
+    			
+    			if (urlStandalone != null) 
     			{
-    				eXoStandAloneGadget tmpStandaloneGadget = arrTmpStandaloneGadgetsInITem.get(j);
-    				if (tmpStandaloneGadget._strName.equalsIgnoreCase(tmpGadget._strGadgetName)) 
-    				{
-    					arrTmpGadgetsInItem.set(i, new eXoGadget(tmpGadget._strGadgetName, tmpGadget._strGadgetDescription, tmpStandaloneGadget._urlContent, tmpGadget._btmGadgetIcon));
-    					break;
-    				}
+    				tmpGadget._strGadgetUrl = urlStandalone;
     			}
     		}
     		
@@ -571,64 +575,59 @@ public class AppController extends Activity
 		return str;
 	}
    
-	private List<eXoStandAloneGadget> listOfStandaloneGadgetsWithURL(String url)
+	private HashMap<String,String> listOfStandaloneGadgetsURL()
 	{
-		List<eXoStandAloneGadget> arrTmpStandaloneGadgets = new ArrayList<eXoStandAloneGadget>();
-		String strContent = AppController._eXoConnection.sendRequestToGetGadget(url, _strUserName, _strPassword);
+		HashMap<String, String> mapOfURLs = new HashMap<String,String>();
+		String strContent = _strContentForStandaloneURL; 
 		
 		int index1;
 		int index2;
 
-		String[] arrParagraphs = strContent.split("<div class=\"UIGadget\"");
+		String[] arrParagraphs = strContent.split("<div class=\"UIGadget\" id=\"");
 
 		for (int i = 1; i < arrParagraphs.length; i++) 
 		{
 			String tmpStr1 = arrParagraphs[i];
-			index1 = tmpStr1.indexOf("standalone");
-			if (index1 >= 0) 
-			{
-				index2 = tmpStr1.indexOf("<a style=\"display:none\" href=\"");
-				String strStandaloneUrl = "";
-				String strStandaloneName = "";
-				if (index2 >= 0) 
+			
+			String idString = tmpStr1.substring(0, 36);
+			
+			if (this.isAGadgetIDString(idString)) {
+			
+				index1 = tmpStr1.indexOf("standalone");
+				if (index1 >= 0) 
 				{
-					int mark = 0;
-					for (int j = index2 + 30; j < tmpStr1.length(); j++) 
+					index2 = tmpStr1.indexOf("<a style=\"display:none\" href=\"");
+					String strStandaloneUrl = "";
+					if (index2 >= 0) 
 					{
-						if (tmpStr1.charAt(j) == '"') 
+						int mark = 0;
+						for (int j = index2 + 30; j < tmpStr1.length(); j++) 
 						{
-							mark = j;
-							break;
+							if (tmpStr1.charAt(j) == '"') 
+							{
+								mark = j;
+								break;
+							}
 						}
+						strStandaloneUrl = tmpStr1.substring(index2 + 30, mark);
 					}
-					strStandaloneUrl = tmpStr1.substring(index2 + 30, mark);
-				}
-//				String tmpStr = "<div class=\"GadgetTitle\" style=\"display: none; float: none; width: auto; margin-right: 75px\">";
-				index2 = tmpStr1.indexOf("<div class=\"GadgetTitle\" style=\"display: none; float: none; width: auto; margin-right: 75px\">");
-				index2 = tmpStr1.indexOf("<div class=\"GadgetTitle\" style=\"display: none; float: none; width: auto; margin-right: 75px\">");
-				index2 = tmpStr1.indexOf("<div class=\"GadgetTitle\" style=\"display: none; float: none; width: auto; margin-right: 75px\">");
-				if (index2 >= 0) 
-				{
-					int mark = 0;
-					for (int j = index2 + 93; j < tmpStr1.length(); j++) 
+					
+
+					if (strStandaloneUrl.length() > 0) 
 					{
-						if (tmpStr1.charAt(j) == '<') 
-						{
-							mark = j;
-							break;
-						}
+						mapOfURLs.put(idString, strStandaloneUrl);
 					}
-					strStandaloneName = tmpStr1.substring(index2 + 93, mark);
-				}
-				
-				if (strStandaloneUrl.length() > 0 && strStandaloneName.length() > 0) 
-				{
-					eXoStandAloneGadget tmpStandaloneGadget = new eXoStandAloneGadget(strStandaloneName, strStandaloneUrl);
-					arrTmpStandaloneGadgets.add(tmpStandaloneGadget);
 				}
 			}
 		}
-		return arrTmpStandaloneGadgets;
+		return mapOfURLs;
+	}
+	
+	
+	private boolean isAGadgetIDString(String potentialIDString) 
+	{
+		if ((potentialIDString.charAt(8) == '-') && (potentialIDString.charAt(13) == '-')) return true;
+		return false;
 	}
 	
 	public void showUserGuide()

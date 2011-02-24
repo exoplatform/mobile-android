@@ -5,15 +5,17 @@ import android.graphics.Bitmap;
 public class eXoGadget {
 	public final String _strGadgetName;
 	public final String _strGadgetDescription;
-	public final String _strGadgetUrl;
+	public String _strGadgetUrl;
 	public final Bitmap _btmGadgetIcon;
+	public final String _strGadgetID;
 	
-	public eXoGadget(String gadgetName, String gadgetDescription, String gadgetUrl, Bitmap gadgetIcon) 
+	public eXoGadget(String gadgetName, String gadgetDescription, String gadgetUrl, Bitmap gadgetIcon, String gadgetID) 
 	{
 		_strGadgetName = gadgetName;
 		_strGadgetDescription = gadgetDescription;
 		_strGadgetUrl = gadgetUrl;
 		_btmGadgetIcon = gadgetIcon;
+		_strGadgetID = gadgetID;
 	}
 	
 	public String getGadgetName()
@@ -34,6 +36,11 @@ public class eXoGadget {
 	public Bitmap getGadgetIcon()
 	{
 		return _btmGadgetIcon;
+	}
+	
+	public String getGadgetID()
+	{
+		return _strGadgetID;
 	}
 }
 

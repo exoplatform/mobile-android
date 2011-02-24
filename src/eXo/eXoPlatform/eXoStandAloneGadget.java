@@ -2,17 +2,17 @@ package eXo.eXoPlatform;
 
 public class eXoStandAloneGadget {
 
-	String _strName;
-	String _urlContent;
+	public String _strGadgetID;
+	public String _urlContent;
 	
 	public eXoStandAloneGadget()
 	{
 		
 	}
 	
-	public eXoStandAloneGadget(String name, String url)
+	public eXoStandAloneGadget(String gadgetID, String url)
 	{
-		_strName = name;
+		_strGadgetID = gadgetID;
 		_urlContent = url;
 	}
 }

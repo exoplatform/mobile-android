@@ -4,6 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="smack.jar"/>
-	<classpathentry kind="lib" path="/Volumes/Leopard/Project/Android/exo-mobile-android/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="commons-lang-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
