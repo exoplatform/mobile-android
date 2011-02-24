@@ -127,17 +127,18 @@ public class eXoConnection
 		
 	public String getExtend(String domain)
 	{
-		if(domain.indexOf("http://platform.demo.exoplatform") >= 0)
-		{
-			if(domain.equalsIgnoreCase("http://platform.demo.exoplatform.org"))
-			{
-				return "/portal/private/intranet";
-			}
-			return "ERROR";
-			
-		}
+//		if(domain.indexOf("http://platform.demo.exoplatform") >= 0)
+//		{
+//			if(domain.equalsIgnoreCase("http://platform.demo.exoplatform.org"))
+//			{
+//				return "/portal/private/intranet";
+//			}
+//			return "ERROR";
+//			
+//		}
 		
-		
+		return "/portal/private/intranet";
+		/*
 		String context = "";
 		String strUrlContent = "";
 		try 
@@ -183,7 +184,7 @@ public class eXoConnection
 		}
 		
 		return context;
-		
+		*/
 	}
 
 	public String sendAuthentication(String domain, String username, String password)

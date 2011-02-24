@@ -125,13 +125,13 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 								}
 								else if(pos == 3)//Delete file, folder
 								{
-									String url = myFile.fatherUrl + "/" + myFile.fileName;
+									String url = myFile.urlStr;
 						    		url = url.replace(" ", "%20");
 						    		url = url.replace("+", "%2B");
 						    		
 						    		eXoFilesController.deleteFileOnServer(AppController.auth, AppController.credential, url);
 						    		//Files List   
-						    		eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent();
+						    		eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(myFile.urlStr);
 						    		eXoFilesController.thisClass.runOnUiThread(reloadFileAdapter);
 						   			
 								}
@@ -139,7 +139,7 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 								{
 									if(copyMoveFileMode == 1 || copyMoveFileMode == 2)
 									{
-										String url = myFile.fatherUrl + "/" + myFile.fileName + "/" + copyMoveFile.fileName;
+										String url = myFile.urlStr + "/" + copyMoveFile.fileName;
 										url = url.replace(" ", "%20");
 										url = url.replace("+", "%2B");
 							    		
@@ -162,8 +162,7 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 								}
 								else//Rename file 
 								{
-									eXoFileRenameAddFolder renameAddFolder = new eXoFileRenameAddFolder(thisClass, myFile, true);
-									renameAddFolder.show();
+									
 								}
 				        	 
 				        	 dismiss();

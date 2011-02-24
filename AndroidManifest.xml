@@ -8,7 +8,7 @@
     	android:debuggable="true"
     	>
         <activity android:name=".AppController"
-                  android:label="eXoPlatform"
+                  android:label="eXo Platform"
                   android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,7 @@
         <activity android:name=".eXoGadgetViewController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
         	
     </application>
-    <uses-sdk android:minSdkVersion="5" />
+    <uses-sdk android:minSdkVersion="7" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>

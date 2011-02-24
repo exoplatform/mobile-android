@@ -281,11 +281,11 @@ public class eXoApplicationsController extends Activity
 	    	
 	    	if(eXoFilesController._strCurrentDirectory == null)
 	    	{
-	    		eXoFilesController._strCurrentDirectory = domain + "/rest/private/jcr/repository/collaboration/Users/" + userName + "/Private";
+	    		eXoFilesController._strCurrentDirectory = domain + "/rest/private/jcr/repository/collaboration/Users/" + userName;
 	    		eXoFilesController._rootUrl = eXoFilesController._strCurrentDirectory;
 	    	}
 	    	
-	    	eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent();
+	    	eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(eXoFilesController._strCurrentDirectory);
 	    	eXoFilesController._delegate = thisClass;
 	    	Intent next = new Intent(eXoApplicationsController.this, eXoFilesController.class);
 	    	eXoApplicationsController.this.startActivity(next);

@@ -110,12 +110,11 @@ public class eXoFilesController extends Activity
             		fileName = txtFileName.getHint().toString();
             	}
             	
-            	//fileName = fileName.replace(" ", "%20");
             	String encodedePath = _uri.getEncodedPath();
             	
             	saveToLocal(AppController.auth, AppController.credential, encodedePath, localFilePath, fileName, true);
             	
-            	putFileToServerFromLocal(AppController.auth, AppController.credential, myFile.fatherUrl + "/" + myFile.fileName + "/" + fileName.replace(" ", "%20"), localFilePath, fileName, "image/jpeg");
+            	putFileToServerFromLocal(AppController.auth, AppController.credential, myFile.urlStr + "/" + fileName.replace(" ", "%20"), localFilePath, fileName, "image/jpeg");
             	
             	runOnUiThread(reloadFileAdapter);
    	        	 runOnUiThread(dismissProgressDialog);
@@ -159,18 +158,17 @@ public class eXoFilesController extends Activity
 	         public void run()
 	         {
 	        	 
-	        	 if(_strCurrentDirectory.equalsIgnoreCase(_rootUrl))
+	        	 if(myFile.urlStr.equalsIgnoreCase(_rootUrl))
 	 			{
 	 				eXoFilesController.this.finish();
 	 			}
 	 			else
 	 			{
-	 				int index = _strCurrentDirectory.lastIndexOf("/");
-	 				_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
-	 				arrFiles = getPersonalDriveContent();
+	 				int index = myFile.urlStr.lastIndexOf("/");
+	 				myFile.urlStr = myFile.urlStr.substring(0, index);
+	 				arrFiles = getPersonalDriveContent(myFile.urlStr);
 	 				
 	 				runOnUiThread(closeBackRunnable);
-		   			
 	 			}
 	 				
 	        	 runOnUiThread(dismissProgressDialog);
@@ -449,11 +447,11 @@ public class eXoFilesController extends Activity
 		return bmp;
 	}
 		
-	public static List<eXoFile> getPersonalDriveContent()
+	public static List<eXoFile> getPersonalDriveContent(String url)
 	{
 		List<eXoFile> arrFilesTmp = new ArrayList <eXoFile>();
 		
-		String responseStr = AppController._eXoConnection.sendRequestWithAuthorizationReturnString(_strCurrentDirectory);
+		String responseStr = AppController._eXoConnection.sendRequestWithAuthorizationReturnString(url.replace(" ", "%20"));
 		
 		int local1;
 		int local2;
@@ -463,6 +461,10 @@ public class eXoFilesController extends Activity
 		
 			if(local1 > 0)
 			{
+				int local3 = responseStr.indexOf("<a href=\"");
+				int local4 = responseStr.indexOf("\"><img src");
+				String urlStr = responseStr.substring(local3 + 9, local4);
+				
 				responseStr = responseStr.substring(local1 + 8);
 				local2 =  responseStr.indexOf("</a>");
 				String fileName = responseStr.substring(0, local2);
@@ -470,7 +472,8 @@ public class eXoFilesController extends Activity
 				{
 					fileName = StringEscapeUtils.unescapeHtml(fileName);
 					fileName = StringEscapeUtils.unescapeJava(fileName);
-					eXoFile file = new eXoFile(_strCurrentDirectory + "/" + fileName);
+					
+					eXoFile file = new eXoFile(urlStr, fileName);
 					arrFilesTmp.add(file);
 				}
 					
@@ -541,8 +544,7 @@ public class eXoFilesController extends Activity
 						         public void run()
 						         {
 						        	 
-						        	 arrFiles = getPersonalDriveContent();
-						        	 
+						        	 arrFiles = getPersonalDriveContent(myFile.urlStr);
 						        	 
 						        	 thisClass.runOnUiThread(fileItemClickRunnable);
 						        	    	
@@ -573,9 +575,8 @@ public class eXoFilesController extends Activity
 					         {
 					        	 
 					        	 myFile = arrFiles.get(positionOfFileItem);
-					        	 _strCurrentDirectory = _strCurrentDirectory + "/" + myFile.fileName;
 					        	 if(myFile.isFolder)
-					        		 arrFiles = getPersonalDriveContent();
+					        		 arrFiles = getPersonalDriveContent(myFile.urlStr);
 					        	thisClass.runOnUiThread(fileItemClickRunnable);
 					        	    	
 					        	 thisClass.runOnUiThread(dismissProgressDialog);
@@ -806,7 +807,7 @@ public class eXoFilesController extends Activity
 	public static boolean putFileToServerFromOtherServer(AuthScope auth, UsernamePasswordCredentials credential, eXoFile exoFile, String urlDestination)
 	{
 		
-	    boolean saveFile = saveToLocal(auth, credential, exoFile.fatherUrl + "/" + exoFile.fileName, localFilePath, exoFile.fileName, false);
+	    boolean saveFile = saveToLocal(auth, credential, exoFile.urlStr + "/", localFilePath, exoFile.fileName, false);
 	    boolean putFile = putFileToServerFromLocal(auth, credential, urlDestination, localFilePath, exoFile.fileName, exoFile.contentType);
 	    File file = new File(localFilePath + exoFile.fileName);
 	    file.delete();
@@ -824,7 +825,7 @@ public class eXoFilesController extends Activity
     	boolean putFileBoolean = putFileToServerFromOtherServer(auth, credential, exoFile, urlDestination);
     	boolean deleteFileBoolean = false;
     	if(putFileBoolean)
-    		deleteFileBoolean = deleteFileOnServer(auth, credential, exoFile.fatherUrl + "/" + exoFile.fileName);
+    		deleteFileBoolean = deleteFileOnServer(auth, credential, exoFile.urlStr);
 	    	
 	    return (putFileBoolean && deleteFileBoolean);
     }
@@ -847,7 +848,7 @@ public class eXoFilesController extends Activity
 			f.mkdir();
 		}
    		
-   		return putFileToServerFromLocal(auth, credential, exoFile.fatherUrl + "/" + folderName, localFilePath, folderName + "/", "application/x-director");
+   		return putFileToServerFromLocal(auth, credential, exoFile.urlStr, localFilePath, folderName + "/", "application/x-director");
    		
     }
   

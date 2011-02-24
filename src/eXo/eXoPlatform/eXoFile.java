@@ -10,13 +10,13 @@ import eXo.eXoPlatform.AppController;
 
 public class eXoFile {
 
-	public String		fatherUrl;
+	public String		urlStr;
 	public String		fileName;
 	public String		contentType;
 	public boolean 		isFolder;
 	
 	
-	public eXoFile(String currentDirectory)
+	public eXoFile(String urlString, String file_Name)
 	{
 		HttpURLConnection con = null;
 		
@@ -25,20 +25,16 @@ public class eXoFile {
 			String strUserName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME, "exo_prf_username");
 			String strPassword = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD, "exo_prf_password");
 			
-			currentDirectory = currentDirectory.replace(" ", "%20");
-			int index = currentDirectory.lastIndexOf("/");
-			fatherUrl = currentDirectory.substring(0, index);
-			fileName = currentDirectory.substring(index + 1, currentDirectory.length());
+			urlStr = urlString.replace(" ", "%20");
+			fileName = file_Name;
 			
-			URL url = new URL(currentDirectory);
+			URL url = new URL(urlStr);
 			con = (HttpURLConnection) url.openConnection();
 			
-		    
 		    con.setRequestMethod("GET");		     
 		    con.setRequestProperty( "Authorization", AppController._eXoConnection.stringOfAuthorizationHeaderWithUserNameAndPassword(strUserName, strPassword));
 		    
 		    contentType = con.getContentType();
-//		    int contentLength = con.getContentLength();
 		     
 		    if(contentType.indexOf("text/html") >= 0)
 		    {
