@@ -103,8 +103,8 @@ public class eXoWebViewController extends Activity
 				 
 				 if(eXoApplicationsController.webViewMode == 1)
 				 {
-					 int index = eXoFilesController._strCurrentDirectory.lastIndexOf("/");
-					 eXoFilesController._strCurrentDirectory = eXoFilesController._strCurrentDirectory.substring(0, index);
+					 int index = eXoFilesController.myFile.urlStr.lastIndexOf("/");
+					 eXoFilesController.myFile.urlStr = eXoFilesController.myFile.urlStr.substring(0, index);
 					  
 				 }
 				 

@@ -13,6 +13,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -65,7 +66,6 @@ public class eXoFilesController extends Activity
 	Button _btnCancelUploadImage;
 	static ProgressDialog _progressDialog;
 	
-	public static String _strCurrentDirectory;
 	public static String _rootUrl;
 		
 	public static String localFilePath = "/sdcard/eXo/";
@@ -112,13 +112,12 @@ public class eXoFilesController extends Activity
             	
             	String encodedePath = _uri.getEncodedPath();
             	
-            	saveToLocal(AppController.auth, AppController.credential, encodedePath, localFilePath, fileName, true);
-            	
+            	saveFileToLocal(AppController.auth, AppController.credential, encodedePath, localFilePath, fileName, true);
             	putFileToServerFromLocal(AppController.auth, AppController.credential, myFile.urlStr + "/" + fileName.replace(" ", "%20"), localFilePath, fileName, "image/jpeg");
             	
             	runOnUiThread(reloadFileAdapter);
-   	        	 runOnUiThread(dismissProgressDialog);
-   	        	 }
+   	        	runOnUiThread(dismissProgressDialog);
+   	         }
    	         };
               
    	        showProgressDialog(true);
@@ -264,13 +263,13 @@ public class eXoFilesController extends Activity
 		
 		public void run() {
 			// TODO Auto-generated method stub
-	   			_textViewFolder.setText(getFolderNameFromUrl(_strCurrentDirectory));
+	   			_textViewFolder.setText(getFolderNameFromUrl(myFile.urlStr));
 	  	    	
 		   			//Files List
 	   			
 	   			createExoFilesAdapter();
 	   			try {	   				
-		   			if(_strCurrentDirectory.equalsIgnoreCase(_rootUrl))
+		   			if(myFile.urlStr.equalsIgnoreCase(_rootUrl))
 			   			_btnCloseBack.setText( new String(AppController.bundle.getString("CloseButton").getBytes("ISO-8859-1"), "UTF-8"));
 			   		else
 			   			_btnCloseBack.setText( new String(AppController.bundle.getString("BackButton").getBytes("ISO-8859-1"), "UTF-8"));
@@ -324,11 +323,10 @@ public class eXoFilesController extends Activity
 						         {
 						         public void run()
 						         {
-						        	 //boolean isSaved = saveToLocal(AppController.auth, AppController.credential, _strCurrentDirectory, localFilePath, myFile.fileName.replace("%20", " "), false);
-						        	 saveToLocal(AppController.auth, AppController.credential, _strCurrentDirectory, localFilePath, myFile.fileName.replace("%20", " "), false);
+						        	 saveFileToLocal(AppController.auth, AppController.credential, myFile.urlStr, localFilePath, myFile.fileName.replace("%20", " "), false);
 				    	        		
-				    	        		int index = _strCurrentDirectory.lastIndexOf("/");
-							 			_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
+				    	        		int index = myFile.urlStr.lastIndexOf("/");
+				    	        		myFile.urlStr = myFile.urlStr.substring(0, index);
 							 			
 						        	 thisClass.runOnUiThread(dismissProgressDialog);
 						        	 }
@@ -346,8 +344,8 @@ public class eXoFilesController extends Activity
 		    	        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() { 
 		    	        	public void onClick(DialogInterface dialog, int id) { 
 		    	        		
-		    	        		int index = _strCurrentDirectory.lastIndexOf("/");
-					 			_strCurrentDirectory = _strCurrentDirectory.substring(0, index);
+		    	        		int index = myFile.urlStr.lastIndexOf("/");
+		    	        		myFile.urlStr = myFile.urlStr.substring(0, index);
 		    	        	} 
 		    	        });   
 		    	        
@@ -411,14 +409,6 @@ public class eXoFilesController extends Activity
 	static private Bitmap fileFolderIcon(eXoFile file)
 	{
 		String contentType = "unknown.png";
-//		int index =  FILE_CONTENT_TYPE.indexOf(file.contentType);
-//		if(index >= 0)
-//		{
-//			contentType = file.contentType;
-//			contentType = contentType.substring(contentType.indexOf("/") + 1);
-//			contentType += ".png";
-//			contentType = contentType.replace("/", ":");
-//		}
 		     
 		if(file.contentType.indexOf("image") >= 0)
 			contentType = "image.png";
@@ -530,8 +520,6 @@ public class eXoFilesController extends Activity
 
 							positionOfFileItem = pos;
 							myFile = arrFiles.get(positionOfFileItem);
-							
-				        	 _strCurrentDirectory = _strCurrentDirectory + "/" + myFile.fileName;
 				        	 
 				        	 if(!myFile.isFolder)
 				        	 {
@@ -600,8 +588,8 @@ public class eXoFilesController extends Activity
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
 							positionOfFileItem = pos;
-							myFile = arrFiles.get(positionOfFileItem);
-							eXoFileAction fileAction = new eXoFileAction(thisClass, myFile);
+//							myFile = arrFiles.get(positionOfFileItem);
+							eXoFileAction fileAction = new eXoFileAction(thisClass, arrFiles.get(positionOfFileItem));
 							//fileAction.setTitle("User guide & language setting");
 							fileAction.show();
 							
@@ -654,9 +642,8 @@ public class eXoFilesController extends Activity
    		//_lstvFiles.setOnItemClickListener(test);
 	}
 	
-	//Files Adapter - it was used to be Data Source for Files List View
-	
-	private static boolean saveToLocal(AuthScope auth, UsernamePasswordCredentials credential, String url, String path, String file, boolean isTakeImage)
+
+	private static boolean saveFileToLocal(AuthScope auth, UsernamePasswordCredentials credential, String url, String path, String file, boolean isTakeImage)
 	{
 	    boolean returnValue = false;
 	    	
@@ -738,7 +725,7 @@ public class eXoFilesController extends Activity
 	    	
 	}
 	    
-	public static boolean deleteFileOnServer(AuthScope auth, UsernamePasswordCredentials credential, String url)
+	public static boolean deleteMethod(AuthScope auth, UsernamePasswordCredentials credential, String url)
 	{
 		boolean returnValue = false;
 	    	
@@ -796,62 +783,48 @@ public class eXoFilesController extends Activity
 			
 	    return returnValue;
 	}
-	    
-	public static boolean putFileToServerFromCamera(AuthScope auth, UsernamePasswordCredentials credential, InputStream is, String url)
+	
+	public static boolean copyMethod(AuthScope auth, UsernamePasswordCredentials credential, String source, String destination)
 	{
 		boolean returnValue = false;
+		
+	    DefaultHttpClient client = new DefaultHttpClient();
+	    client.getCredentialsProvider().setCredentials(auth, credential);
+	   
+	    HttpPut put = new HttpPut(destination);
+		
+		put.setHeader("Destination", source);
+		put.setHeader("Overwrite", "T");
+
+		try {
+			
+	    	HttpResponse response = client.execute(put);
+	        int status = response.getStatusLine().getStatusCode();
+	        if(status >= 200 && status < 300)
+	        {
+	        	returnValue = true;
+	        }
+	        	
+	    } catch (Exception e) {
+	    	// TODO: handle exception
+			String msg = e.getMessage();
+			String str = e.toString();
+			Log.d(msg, str);
+	    }
 			
 	    return returnValue;
 	}
-	
-	public static boolean putFileToServerFromOtherServer(AuthScope auth, UsernamePasswordCredentials credential, eXoFile exoFile, String urlDestination)
-	{
-		
-	    boolean saveFile = saveToLocal(auth, credential, exoFile.urlStr + "/", localFilePath, exoFile.fileName, false);
-	    boolean putFile = putFileToServerFromLocal(auth, credential, urlDestination, localFilePath, exoFile.fileName, exoFile.contentType);
-	    File file = new File(localFilePath + exoFile.fileName);
-	    file.delete();
 
-	    return (saveFile && putFile);
-	}
-	    
-	public static boolean copyFileFromServerToOtherServer(AuthScope auth, UsernamePasswordCredentials credential, eXoFile exoFile, String urlDestination)
+	public static boolean moveMethod(AuthScope auth, UsernamePasswordCredentials credential, String source, String destination)
 	{
-		return putFileToServerFromOtherServer(auth, credential, exoFile, urlDestination);    	
+		boolean returnValue = false;
+		returnValue = eXoFilesController.copyMethod(auth, credential, source, destination);
+		if(returnValue)
+			returnValue = eXoFilesController.deleteMethod(auth, credential, source);
+		
+		return returnValue;
 	}
-	    
-    public static boolean MoveFileFromServerToOtherServer(AuthScope auth, UsernamePasswordCredentials credential, eXoFile exoFile, String urlDestination)
-    {
-    	boolean putFileBoolean = putFileToServerFromOtherServer(auth, credential, exoFile, urlDestination);
-    	boolean deleteFileBoolean = false;
-    	if(putFileBoolean)
-    		deleteFileBoolean = deleteFileOnServer(auth, credential, exoFile.urlStr);
-	    	
-	    return (putFileBoolean && deleteFileBoolean);
-    }
-	   
-   
-    public static boolean addNewFolder(AuthScope auth, UsernamePasswordCredentials credential, eXoFile exoFile, String folderName)
-    {
-    	String path = localFilePath;
-    	File f = new File(path);
-   		if(!f.exists())
-   		{
-   			f.mkdir();
-   		}
-   		
-   		path += "/" + folderName;
-   		
-   		f = new File(path);
-   		if(!f.exists())
-		{
-			f.mkdir();
-		}
-   		
-   		return putFileToServerFromLocal(auth, credential, exoFile.urlStr, localFilePath, folderName + "/", "application/x-director");
-   		
-    }
-  
+	
     private String getFolderNameFromUrl(String url)
     {
     	String folder = "";
@@ -862,6 +835,31 @@ public class eXoFilesController extends Activity
     	return folder;
     }
    
+
+    public String encodeUrl(String urlString)
+    {
+        
+    	urlString.replace("&", "%26");
+    	urlString.replace("+", "%2B");
+    	urlString.replace(",", "%2C");
+    	//urlString.replace("/", "%2F");
+    	//urlString.replace(":", "%3A");
+    	urlString.replace(";", "%3B");
+    	urlString.replace("=", "%3D");
+    	urlString.replace("?", "%3F");
+    	urlString.replace("@", "%40");
+    	urlString.replace(" ", "%20");
+    	urlString.replace("\t", "%09");
+    	urlString.replace("#", "%23");
+    	urlString.replace("<", "%3C");
+    	urlString.replace(">", "%3E");
+    	urlString.replace("\"", "%22");
+    	urlString.replace("\n", "%0A");
+    	
+    	
+        return urlString;
+    }
+    
     public void changeLanguage(ResourceBundle resourceBundle)
     {
     	String strCloseBack = "";

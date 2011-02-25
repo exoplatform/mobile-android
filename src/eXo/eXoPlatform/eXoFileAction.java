@@ -48,7 +48,7 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 	ListView _lvFileAction;
 	TextView _txtvFileName;
 	Context thisClass;
-	public eXoFile myFile;
+	private eXoFile myFile;
 	//copyMoveFileMode: 1-copy, 2-move;
 	public static short copyMoveFileMode = 0;
 	public static eXoFile copyMoveFile = null;
@@ -114,7 +114,6 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 								}
 								else if(pos == 1)//Copy file
 								{
-									
 									copyMoveFileMode = 1;
 									copyMoveFile = myFile;
 								}
@@ -125,12 +124,10 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 								}
 								else if(pos == 3)//Delete file, folder
 								{
-									String url = myFile.urlStr;
-						    		url = url.replace(" ", "%20");
-						    		url = url.replace("+", "%2B");
-						    		
-						    		eXoFilesController.deleteFileOnServer(AppController.auth, AppController.credential, url);
-						    		//Files List   
+						    		eXoFilesController.deleteMethod(AppController.auth, AppController.credential, myFile.urlStr);
+						    		//Files List
+						    		int index = myFile.urlStr.lastIndexOf("/");
+						    		myFile.urlStr = myFile.urlStr.substring(0, index);
 						    		eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(myFile.urlStr);
 						    		eXoFilesController.thisClass.runOnUiThread(reloadFileAdapter);
 						   			
@@ -139,26 +136,32 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 								{
 									if(copyMoveFileMode == 1 || copyMoveFileMode == 2)
 									{
-										String url = myFile.urlStr + "/" + copyMoveFile.fileName;
-										url = url.replace(" ", "%20");
-										url = url.replace("+", "%2B");
-							    		
 										//Copy file
 										if(copyMoveFileMode == 1)
 										{
-											eXoFilesController.copyFileFromServerToOtherServer(AppController.auth, AppController.credential, copyMoveFile, url);
+											int index = copyMoveFile.urlStr.lastIndexOf("/");
+											String tmpUrl = copyMoveFile.urlStr;
+											String lastPathComponent = copyMoveFile.urlStr.substring(index, copyMoveFile.urlStr.length());
+											eXoFilesController.copyMethod(AppController.auth, AppController.credential, copyMoveFile.urlStr, myFile.urlStr.concat(lastPathComponent));
+											copyMoveFile.urlStr = tmpUrl;
+											
+											copyMoveFileMode = 0;
 										}
 										else if(copyMoveFileMode == 2)
 										{
-											eXoFilesController.MoveFileFromServerToOtherServer(AppController.auth, AppController.credential, copyMoveFile, url);
-											copyMoveFileMode = 0;
-//											String tmp = url.substring(0, url.lastIndexOf("/"));
-//											if(tmp.equalsIgnoreCase(copyMoveFile.fatherUrl))
-//												eXoFilesController.thisClass.runOnUiThread(reloadFileAdapter);
+											if(!copyMoveFile.urlStr.equalsIgnoreCase(myFile.urlStr))
+											{
+												int index = copyMoveFile.urlStr.lastIndexOf("/");
+												String tmpUrl = copyMoveFile.urlStr;
+												String lastPathComponent = copyMoveFile.urlStr.substring(index, copyMoveFile.urlStr.length());
+												eXoFilesController.moveMethod(AppController.auth, AppController.credential, copyMoveFile.urlStr, myFile.urlStr.concat(lastPathComponent));
+												copyMoveFile.urlStr = tmpUrl;
+												
+												copyMoveFileMode = 0;
+											}
 										}
-										
 									}
-									
+								
 								}
 								else//Rename file 
 								{

@@ -279,13 +279,15 @@ public class eXoApplicationsController extends Activity
 	    	String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME, "exo_prf_username");
 	    	String domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN, "exo_prf_domain");
 	    	
-	    	if(eXoFilesController._strCurrentDirectory == null)
+	    	if(eXoFilesController.myFile == null)
 	    	{
-	    		eXoFilesController._strCurrentDirectory = domain + "/rest/private/jcr/repository/collaboration/Users/" + userName;
-	    		eXoFilesController._rootUrl = eXoFilesController._strCurrentDirectory;
+	    		eXoFilesController.myFile = new eXoFile();
+	    		eXoFilesController.myFile.fileName = userName;
+	    		eXoFilesController.myFile.urlStr = domain + "/rest/private/jcr/repository/collaboration/Users/" + userName;
+	    		eXoFilesController._rootUrl = eXoFilesController.myFile.urlStr;
 	    	}
 	    	
-	    	eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(eXoFilesController._strCurrentDirectory);
+	    	eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(eXoFilesController.myFile.urlStr);
 	    	eXoFilesController._delegate = thisClass;
 	    	Intent next = new Intent(eXoApplicationsController.this, eXoFilesController.class);
 	    	eXoApplicationsController.this.startActivity(next);

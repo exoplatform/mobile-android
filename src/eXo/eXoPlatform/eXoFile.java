@@ -15,11 +15,14 @@ public class eXoFile {
 	public String		contentType;
 	public boolean 		isFolder;
 	
+	public eXoFile()
+	{
+		
+	}
 	
 	public eXoFile(String urlString, String file_Name)
 	{
 		HttpURLConnection con = null;
-		
 		try 
 		{
 			String strUserName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME, "exo_prf_username");
@@ -35,7 +38,7 @@ public class eXoFile {
 		    con.setRequestProperty( "Authorization", AppController._eXoConnection.stringOfAuthorizationHeaderWithUserNameAndPassword(strUserName, strPassword));
 		    
 		    contentType = con.getContentType();
-		     
+
 		    if(contentType.indexOf("text/html") >= 0)
 		    {
 		    	if(con.getContentEncoding() == null)

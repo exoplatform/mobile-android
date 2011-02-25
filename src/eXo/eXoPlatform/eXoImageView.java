@@ -57,7 +57,7 @@ public class eXoImageView extends Activity {
             	
             	String localFile = "file:///sdcard/eXo/";
             	saveToLocal(AppController.auth, AppController.credential, imageUri, localFile, fileName);
-            	putFileToServerFromLocal(AppController.auth, AppController.credential, eXoFilesController._strCurrentDirectory, localFile, fileName, "image/jpeg");
+            	putFileToServerFromLocal(AppController.auth, AppController.credential, eXoFilesController.myFile.urlStr, localFile, fileName, "image/jpeg");
             }
 
         });
