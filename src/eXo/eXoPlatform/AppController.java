@@ -187,8 +187,10 @@ public class AppController extends Activity
     		
     		_progressDialog.setMessage(strLoadingDataFromServer);
     		
-    		eXoApplicationsController.arrGadgets = listOfGadgets();
+//    		eXoApplicationsController.arrGadgets = listOfGadgets();
+    		listOfGadgets();
     		Intent next = new Intent(AppController.this, eXoApplicationsController.class);
+    		
     		startActivity(next);
     		
     		thread.stop();
@@ -500,7 +502,9 @@ public class AppController extends Activity
     public List<GateInDbItem>listOfGadgets()
     {    	
     	_strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN, "exo_prf_domain");
-    	List<GateInDbItem> arrTmpGadgets = new ArrayList<GateInDbItem>();
+//    	List<GateInDbItem> arrTmpGadgets = new ArrayList<GateInDbItem>();
+    	
+    	eXoApplicationsController.arrGadgets =  new ArrayList<GateInDbItem>();
 
     	String strContent = AppController._eXoConnection.getFirstLoginContent();
 
@@ -538,27 +542,33 @@ public class AppController extends Activity
     		    		
     		HashMap<String,String> mapOfURLs = listOfStandaloneGadgetsURL();
     		
-    		for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) 
+    		if(arrTmpGadgetsInItem != null)
     		{
-    			eXoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
-    			
-    			String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
-    			
-    			if (urlStandalone != null) 
-    			{
-    				tmpGadget._strGadgetUrl = urlStandalone;
-    			}
+    			for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) 
+        		{
+        			eXoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
+        			
+        			String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
+        			
+        			if (urlStandalone != null) 
+        			{
+        				tmpGadget._strGadgetUrl = urlStandalone;
+        			}
+        		}
+        		
+        		GateInDbItem tmpGateInDbItem = new GateInDbItem(gadgetTabName, gadgetTabUrlStr, arrTmpGadgetsInItem);
+//        		arrTmpGadgets.add(tmpGateInDbItem);
+        		eXoApplicationsController.arrGadgets.add(tmpGateInDbItem);
+
+        		
+        		strContent = strContent.substring(index3);
+        		index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
     		}
     		
-    		GateInDbItem tmpGateInDbItem = new GateInDbItem(gadgetTabName, gadgetTabUrlStr, arrTmpGadgetsInItem);
-    		arrTmpGadgets.add(tmpGateInDbItem);
-    		
-    		strContent = strContent.substring(index3);
-    		index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
     		
     	} while (index1 > 0);
     	
-    	return arrTmpGadgets;
+    	return null;
     }
 
 	private String parseUrl(String urlStr, String neededStr, boolean offset, String enddedStr)
