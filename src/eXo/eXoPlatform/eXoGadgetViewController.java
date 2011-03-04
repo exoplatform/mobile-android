@@ -75,7 +75,7 @@ public class eXoGadgetViewController extends Activity
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				eXoLanguageSetting customizeDialog = new eXoLanguageSetting(eXoGadgetViewController.this, 6, thisClass);
+				eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoGadgetViewController.this, 6, thisClass);
         		customizeDialog.show();
 				
 			}

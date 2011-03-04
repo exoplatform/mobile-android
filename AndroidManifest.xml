@@ -18,8 +18,8 @@
         <activity android:name=".eXoApplicationsController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
         <activity android:name=".eXoWebViewController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
         <activity android:name=".eXoFilesController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
-        <activity android:name=".eXoChat" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
-        <activity android:name=".eXoChatList" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
+        <activity android:name=".eXoChatController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
+        <activity android:name=".eXoChatListController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
         <activity android:name=".eXoGadgetViewController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
         	
     </application>

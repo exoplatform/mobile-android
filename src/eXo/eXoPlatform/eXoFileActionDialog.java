@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class eXoFileAction extends Dialog implements OnClickListener {
+public class eXoFileActionDialog extends Dialog implements OnClickListener {
 	
 	public class FileActionDescription extends Object
 	{
@@ -64,7 +64,7 @@ public class eXoFileAction extends Dialog implements OnClickListener {
 	FileActionDescription[] fileActionList = null;
 	String strCannotBackToPreviousPage;
 
-	public eXoFileAction(Context context, eXoFile file) {
+	public eXoFileActionDialog(Context context, eXoFile file) {
 		super(context);
 	
 		thisClass = context;

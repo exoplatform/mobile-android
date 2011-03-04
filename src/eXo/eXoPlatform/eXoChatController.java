@@ -30,7 +30,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class eXoChat extends Activity{
+public class eXoChatController extends Activity{
 	
 	public static List<eXoChatMessageContent> listChatContent = new ArrayList<eXoChatMessageContent>();
 	public static String currentChatStr = "";
@@ -41,7 +41,7 @@ public class eXoChat extends Activity{
 	Button _btnLanguageHelp;
 	TextView tvCurrentChat;
 
-	public static eXoChat thisClass;
+	public static eXoChatController thisClass;
 	static eXoApplicationsController _delegate;
 	
 	public static PacketListener packetListener;
@@ -91,7 +91,7 @@ public class eXoChat extends Activity{
                 		
                 		Message message = new Message(currentChatStr, Message.Type.chat);
                 		message.setBody(msg);
-                		eXoChatList.conn.sendPacket(message);
+                		eXoChatListController.conn.sendPacket(message);
                 		
                 		listChatContent.add(new eXoChatMessageContent("Me", msg));
             			messageEditText.setText("");
@@ -112,12 +112,12 @@ public class eXoChat extends Activity{
 				// TODO Auto-generated method stub
 				currentChatStr = "";
 				//eXoChatList.arrListChat.set(eXoChatList.posOfChatingMember, listChatContent);
-				eXoChatList.conn.removePacketListener(packetListener);
+				eXoChatListController.conn.removePacketListener(packetListener);
 				//eXoChatList.conn.addPacketListener(eXoChatList.packetListener, new MessageTypeFilter(Message.Type.chat));
 				
 //				eXoChat.this.finish();
-				Intent next = new Intent(eXoChat.this, eXoChatList.class);
-				eXoChat.this.startActivity(next);
+				Intent next = new Intent(eXoChatController.this, eXoChatListController.class);
+				eXoChatController.this.startActivity(next);
 			}
 		});
         
@@ -126,7 +126,7 @@ public class eXoChat extends Activity{
         {	
         	public void onClick(View v) 
 			{
-        		eXoLanguageSetting customizeDialog = new eXoLanguageSetting(eXoChat.this, 4, thisClass);
+        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoChatController.this, 4, thisClass);
         		customizeDialog.setTitle("User guide & language setting");
         		customizeDialog.show();
 			}	
@@ -145,19 +145,19 @@ public class eXoChat extends Activity{
 	    			
 	    			String fromName = StringUtils.parseBareAddress(message.getFrom());
 	    			
-	    			for(int i = 0; i < eXoChatList.listChatRosterEntry.size(); i++)
+	    			for(int i = 0; i < eXoChatListController.listChatRosterEntry.size(); i++)
 	    			{
-	    				fromChatStr = eXoChatList.listChatRosterEntry.get(i).address;
+	    				fromChatStr = eXoChatListController.listChatRosterEntry.get(i).address;
 	    				final String chatFromName = fromChatStr.substring(0, fromChatStr.lastIndexOf("@"));
 	    				if(fromName.equalsIgnoreCase(fromChatStr))
 	    				{
-	    					List<eXoChatMessageContent> msgContent = eXoChatList.arrListChat.get(i);
+	    					List<eXoChatMessageContent> msgContent = eXoChatListController.arrListChat.get(i);
 	    					msgContent.add(new eXoChatMessageContent(chatFromName, message.getBody()));
-	    					eXoChatList.arrListChat.set(i, msgContent);
+	    					eXoChatListController.arrListChat.set(i, msgContent);
 	    					
-	    					if(fromName.equalsIgnoreCase(eXoChat.currentChatStr))
+	    					if(fromName.equalsIgnoreCase(eXoChatController.currentChatStr))
 	    					{
-	    						listChatContent = eXoChatList.arrListChat.get(i);
+	    						listChatContent = eXoChatListController.arrListChat.get(i);
 	    					}
 	    					else
 	    					{
@@ -182,7 +182,7 @@ public class eXoChat extends Activity{
 			}
 	    };
 	    
-	    eXoChatList.conn.addPacketListener(packetListener, filter);
+	    eXoChatListController.conn.addPacketListener(packetListener, filter);
 	    
         changeLanguage(AppController.bundle);
         
@@ -193,7 +193,7 @@ public class eXoChat extends Activity{
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //Save data to the server once the user hits the back button
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Toast.makeText(eXoChat.this, strCannotBackToPreviousPage ,Toast.LENGTH_LONG).show();
+            Toast.makeText(eXoChatController.this, strCannotBackToPreviousPage ,Toast.LENGTH_LONG).show();
         }
         return false;
     }

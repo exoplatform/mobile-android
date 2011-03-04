@@ -39,13 +39,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class eXoChatList extends Activity{
+public class eXoChatListController extends Activity{
 	
 	private static Button btnClose;
 	private static Button _btnLanguageHelp;
 	private static TextView tvTitle;
 	private ListView lvChatList;
-	eXoChatList thisClass;
+	eXoChatListController thisClass;
 	static eXoApplicationsController _delegate;
 
 	public static XMPPConnection conn;
@@ -94,8 +94,8 @@ public class eXoChatList extends Activity{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
-				Intent next = new Intent(eXoChatList.this, eXoApplicationsController.class);
-				eXoChatList.this.startActivity(next);
+				Intent next = new Intent(eXoChatListController.this, eXoApplicationsController.class);
+				eXoChatListController.this.startActivity(next);
 //				eXoChatList.this.finish();
 				
 			}
@@ -107,7 +107,7 @@ public class eXoChatList extends Activity{
         	public void onClick(View v) 
 			{
         		
-        		eXoLanguageSetting customizeDialog = new eXoLanguageSetting(eXoChatList.this, 3, thisClass);
+        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoChatListController.this, 3, thisClass);
         		customizeDialog.setTitle("User guide & language setting");
         		customizeDialog.show();
 			}	
@@ -142,9 +142,9 @@ public class eXoChatList extends Activity{
 	    					str.add(new eXoChatMessageContent(chatFromName, message.getBody()));
 	    					arrListChat.set(i, str);
 	    					
-	    					if(fromName.equalsIgnoreCase(eXoChat.currentChatStr))
+	    					if(fromName.equalsIgnoreCase(eXoChatController.currentChatStr))
 	    					{
-	    						eXoChat.setListAdapter();
+	    						eXoChatController.setListAdapter();
 	    					}
 	    					else
 	    					{
@@ -249,7 +249,7 @@ public class eXoChatList extends Activity{
 	 public boolean onKeyDown(int keyCode, KeyEvent event) {
 	      //Save data to the server once the user hits the back button
 	      if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-	          Toast.makeText(eXoChatList.this, strCannotBackToPreviousPage ,Toast.LENGTH_SHORT).show();
+	          Toast.makeText(eXoChatListController.this, strCannotBackToPreviousPage ,Toast.LENGTH_SHORT).show();
 	      }
 	      return false;
 	  }
@@ -370,13 +370,13 @@ public class eXoChatList extends Activity{
 	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
 	    {
 	    	posOfChatingMember = position;
-	    	eXoChat.currentChatStr = listChatRosterEntry.get(position).address;
-	    	eXoChat.listChatContent = arrListChat.get(position);
+	    	eXoChatController.currentChatStr = listChatRosterEntry.get(position).address;
+	    	eXoChatController.listChatContent = arrListChat.get(position);
 	    	conn.removePacketListener(packetListener);
 	    	
-	    	eXoChat._delegate = _delegate;
-	    	Intent next = new Intent(eXoChatList.this, eXoChat.class);
-	    	eXoChatList.this.startActivity(next);
+	    	eXoChatController._delegate = _delegate;
+	    	Intent next = new Intent(eXoChatListController.this, eXoChatController.class);
+	    	eXoChatListController.this.startActivity(next);
 	    }
 	   
 	}

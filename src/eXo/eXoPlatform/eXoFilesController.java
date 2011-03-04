@@ -13,7 +13,6 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -186,7 +185,7 @@ public class eXoFilesController extends Activity
         _btnLanguageHelp.setOnClickListener(new View.OnClickListener() {	
         	public void onClick(View v) 
 			{
-        		eXoLanguageSetting customizeDialog = new eXoLanguageSetting(eXoFilesController.this, 2, thisClass);
+        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoFilesController.this, 2, thisClass);
         		customizeDialog.show();
 			}	
 		});
@@ -589,9 +588,9 @@ public class eXoFilesController extends Activity
 							// TODO Auto-generated method stub
 							positionOfFileItem = pos;
 //							myFile = arrFiles.get(positionOfFileItem);
-							eXoFileAction fileAction = new eXoFileAction(thisClass, arrFiles.get(positionOfFileItem));
+							eXoFileActionDialog fileActionDialog = new eXoFileActionDialog(thisClass, arrFiles.get(positionOfFileItem));
 							//fileAction.setTitle("User guide & language setting");
-							fileAction.show();
+							fileActionDialog.show();
 							
 						}
 					});

@@ -80,10 +80,10 @@ public class eXoApplicationsController extends Activity
         {	
         	public void onClick(View v) 
 			{
-        		if(eXoChatList.conn != null && eXoChatList.conn.isAuthenticated())
+        		if(eXoChatListController.conn != null && eXoChatListController.conn.isAuthenticated())
         		{
-        			eXoChatList.conn.getRoster().removeRosterListener(eXoChatList.rosterListener);
-            		eXoChatList.conn.disconnect();
+        			eXoChatListController.conn.getRoster().removeRosterListener(eXoChatListController.rosterListener);
+            		eXoChatListController.conn.disconnect();
         		}
         		
         		Intent next = new Intent(eXoApplicationsController.this, AppController.class);
@@ -97,7 +97,7 @@ public class eXoApplicationsController extends Activity
         	public void onClick(View v) 
 			{
         		
-        		eXoLanguageSetting customizeDialog = new eXoLanguageSetting(eXoApplicationsController.this, 1, thisClass);
+        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoApplicationsController.this, 1, thisClass);
         		customizeDialog.show();
 			}	
 		});
@@ -212,7 +212,7 @@ public class eXoApplicationsController extends Activity
 	    		labelChatName = (TextView)view.findViewById(R.id.label);
 	    		labelChatName.setText(app._streXoAppName);
 	    		
-	    		if(eXoChatList.conn == null || !eXoChatList.conn.isConnected() || !eXoChatList.conn.isAuthenticated())
+	    		if(eXoChatListController.conn == null || !eXoChatListController.conn.isConnected() || !eXoChatListController.conn.isAuthenticated())
 	    			icon.setImageResource(R.drawable.offlineicon);
 	    		else
 	    			icon.setImageResource(R.drawable.onlineicon);
@@ -313,26 +313,26 @@ public class eXoApplicationsController extends Activity
     		String password = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD, "exo_prf_password");
 	    	
     		connectToChatServer(url.getHost(), 5222, userName, password);
-    		  if(eXoChatList.conn == null || !eXoChatList.conn.isConnected())
+    		  if(eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
     		    	return;
 	    	
-    		eXoChatList._delegate = thisClass;
-	    	Intent next = new Intent(eXoApplicationsController.this, eXoChatList.class);
+    		eXoChatListController._delegate = thisClass;
+	    	Intent next = new Intent(eXoApplicationsController.this, eXoChatListController.class);
 	    	eXoApplicationsController.this.startActivity(next);
 	    }
 	}
 
 	private void connectToChatServer(String host, int port, String userName, String password)
 	 {
-	    if(eXoChatList.conn != null && eXoChatList.conn.isConnected())
+	    if(eXoChatListController.conn != null && eXoChatListController.conn.isConnected())
 	    	return;
 	    
 		ConnectionConfiguration config = new ConnectionConfiguration(host, port, "Work");
-		eXoChatList.conn = new XMPPConnection(config);
+		eXoChatListController.conn = new XMPPConnection(config);
 
 	    try {
-	    	eXoChatList.conn.connect();
-	    	eXoChatList.conn.login(userName, password);
+	    	eXoChatListController.conn.connect();
+	    	eXoChatListController.conn.login(userName, password);
 	    	
 	    	runOnUiThread(new Runnable() {
 				

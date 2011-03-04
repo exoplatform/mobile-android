@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 /** Class Must extends with Dialog */
 /** Implement onClickListener to dismiss dialog when OK Button is pressed */
-public class eXoLanguageSetting extends Dialog implements OnClickListener {
+public class eXoLanguageSettingDialog extends Dialog implements OnClickListener {
 	Context myContext;
 	Button btnClose;
 	Button btnUserGuide;
@@ -28,7 +28,7 @@ public class eXoLanguageSetting extends Dialog implements OnClickListener {
 	
 	Activity _activity;	
 
-	public eXoLanguageSetting(Context context, int pageID, Activity activity) {
+	public eXoLanguageSettingDialog(Context context, int pageID, Activity activity) {
 		super(context);
 		
 		myContext = context;
@@ -123,12 +123,12 @@ public class eXoLanguageSetting extends Dialog implements OnClickListener {
 			}
 			else if(pageIDForChangeLanguage == 3)
 			{
-				eXoChatList controller = (eXoChatList)_activity;
+				eXoChatListController controller = (eXoChatListController)_activity;
 				controller.changeLanguage(AppController.bundle);
 			}
 			else if(pageIDForChangeLanguage == 4)
 			{
-				eXoChat controller = (eXoChat)_activity;
+				eXoChatController controller = (eXoChatController)_activity;
 				controller.changeLanguage(AppController.bundle);
 			}
 			else if(pageIDForChangeLanguage == 5)

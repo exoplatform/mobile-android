@@ -164,7 +164,7 @@ public class AppController extends Activity
         {	
         	public void onClick(View v) 
 			{
-        		eXoLanguageSetting customizeDialog = new eXoLanguageSetting(AppController.this, 0, thisClass);
+        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(AppController.this, 0, thisClass);
         		customizeDialog.show();
 			}	
 		});
