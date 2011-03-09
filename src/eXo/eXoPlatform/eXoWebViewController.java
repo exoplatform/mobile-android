@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+//Display gadget
 public class eXoWebViewController extends Activity
 {
 	Button _btnClose;

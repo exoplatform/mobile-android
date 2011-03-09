@@ -8,18 +8,20 @@ import org.apache.http.client.ClientProtocolException;
 
 import eXo.eXoPlatform.AppController;
 
+//	File info
 public class eXoFile {
 
-	public String		urlStr;
-	public String		fileName;
-	public String		contentType;
-	public boolean 		isFolder;
+	public String		urlStr;		//File URL
+	public String		fileName;	//File name
+	public String		contentType;	//File content type
+	public boolean 		isFolder;	//is folder
 	
+//	Default constructors
 	public eXoFile()
 	{
 		
 	}
-	
+//	Construtor
 	public eXoFile(String urlString, String file_Name)
 	{
 		HttpURLConnection con = null;

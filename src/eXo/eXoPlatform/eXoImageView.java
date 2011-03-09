@@ -25,15 +25,16 @@ import android.widget.Toast;
 
 public class eXoImageView extends Activity {
 	
-	private EditText txtFileName;
-	private ImageView imgView;
-	private Button btnUploadImage;
+	private EditText txtFileName;	//Edit image name
+	private ImageView imgView;	//Image view
+	private Button btnUploadImage;	//upload image
 	
-	private String fileName;
+	private String fileName;	//Name for image
 	
-	public static Uri imageUri;
+	public static Uri imageUri;	//Image Uri
    
 	/** Called when the activity is first created. */
+//	Constructor
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +67,7 @@ public class eXoImageView extends Activity {
         
         
     }
-    
+//    Keydown listioner
 	 public boolean onKeyDown(int keyCode, KeyEvent event) {
 	      //Save data to the server once the user hits the back button
 	      if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -74,22 +75,20 @@ public class eXoImageView extends Activity {
 	      }
 	      return false;
 	  }
-	 
+//	 Display taken photo
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode== 0 && resultCode == Activity.RESULT_OK)
         {
         	Bitmap _bitmap = (Bitmap) data.getExtras().get("data");
         	imgView.setImageBitmap(_bitmap);
-
-    		
         }
 }
-    
+//    Set image for image view
     public void setImage(Bitmap bmp)
     {
     	imgView.setImageBitmap(bmp);
     }
-    
+//    Save file into SDCard
     private boolean saveToLocal(AuthScope auth, UsernamePasswordCredentials credential, Uri uri, String path, String file)
 	{
 	    boolean returnValue = false;
@@ -130,8 +129,7 @@ public class eXoImageView extends Activity {
 		return returnValue;
 	        
 	}
-	   
-    
+//	Send file to server
     private boolean putFileToServerFromLocal(AuthScope auth, UsernamePasswordCredentials credential, String url, String path, String file, String fileType)
 	{
 		boolean returnValue = false;

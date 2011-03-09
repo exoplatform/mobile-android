@@ -3,14 +3,15 @@ package eXo.eXoPlatform;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import eXo.eXoPlatform.AppController;
-
+// Hold activing account
 public class eXoAccount extends Activity
 {
+//	Instance
 	public static eXoAccount _instance;
-	
+//	Username/password
 	private String _strUserName;
 	private String _strPassword;
-	
+//	Singleton constructor
 	public static eXoAccount instance()
 	{
 		if(_instance == null)
@@ -22,7 +23,7 @@ public class eXoAccount extends Activity
 			return _instance;
 		}
 	}
-	
+//	Singleton constructor
 	public static eXoAccount newInstance()
 	{
 		if(_instance != null)
@@ -32,13 +33,7 @@ public class eXoAccount extends Activity
 		_instance = new eXoAccount();
 		return _instance;
 	}
-	
-//	public eXoAccount(String username, String password)
-//	{
-//		_strUserName = username;
-//		_strPassword = password;
-//	}
-	
+//	Gettors and settors
 	public void setUserName(String username)
 	{
 		SharedPreferences sharedPreference = getSharedPreferences(AppController.EXO_PREFERENCE, 0); 

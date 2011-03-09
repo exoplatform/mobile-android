@@ -38,30 +38,31 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+//Chat list view controller
 public class eXoChatListController extends Activity{
 	
-	private static Button btnClose;
-	private static Button _btnLanguageHelp;
-	private static TextView tvTitle;
-	private ListView lvChatList;
-	eXoChatListController thisClass;
-	static eXoApplicationsController _delegate;
+	private static Button btnClose;	//Close view
+	private static Button _btnLanguageHelp;	//Setting
+	private static TextView tvTitle;	//Title
+	private ListView lvChatList;	//Chat list view
+	eXoChatListController thisClass;	//Instance
+	static eXoApplicationsController _delegate;	//Main app view controller
 
-	public static XMPPConnection conn;
-	public static List<ChatMember> listChatRosterEntry;
-	public static ArrayList<List<eXoChatMessageContent>> arrListChat = null;
-	private String fromChatStr;
-	public static int posOfChatingMember;
-	
+	public static XMPPConnection conn;	//Interact with server
+	public static List<ChatMember> listChatRosterEntry;	//Roster array
+	public static ArrayList<List<eXoChatMessageContent>> arrListChat = null;	//Chat message array
+	private String fromChatStr;	//Source
+	public static int posOfChatingMember;	//User index
+//	Update roster
 	private Handler mHandler = new Handler();
 	public static RosterListener rosterListener;
 	public static PacketListener packetListener;
 	
 	String strCannotBackToPreviousPage;
+//	Chat user info
 	public class ChatMember
 	{
-		String address;
+		String address;	
 		boolean isOnline;
 		
 		public ChatMember(String addr, boolean bool)
@@ -78,7 +79,7 @@ public class eXoChatListController extends Activity{
 			
 		}
 	}
-
+//	Constructor
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -245,7 +246,7 @@ public class eXoChatListController extends Activity{
 		}
 		
 	}
-	
+//	Keydown listener
 	 public boolean onKeyDown(int keyCode, KeyEvent event) {
 	      //Save data to the server once the user hits the back button
 	      if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -253,7 +254,7 @@ public class eXoChatListController extends Activity{
 	      }
 	      return false;
 	  }
-	 
+//	 Set adapter for Chat list view
 	private void setListAdapter() 
     {
     	listChatRosterEntry = getListChat();
@@ -261,7 +262,7 @@ public class eXoChatListController extends Activity{
         lvChatList.setAdapter(chatsAdapter);      
         lvChatList.setOnItemClickListener(chatsAdapter);
     }
-	
+	//Set roster array
 	private void setArrayListChat()
     {
     	if(arrListChat == null)
@@ -276,7 +277,7 @@ public class eXoChatListController extends Activity{
     	}
     		
     }
-	
+//	Connect to chat server (Open file)
 	 public static void connectToChatServer(String host, int port, String userName, String password)
 	 {
 	    if(conn != null && conn.isConnected())
@@ -295,7 +296,7 @@ public class eXoChatListController extends Activity{
 			}
 	    	
 	    }
-	
+//	Get chat user list
 	 public List<ChatMember> getListChat()
 	    {
 	    	List<ChatMember> list = new ArrayList<ChatMember>();
@@ -318,7 +319,7 @@ public class eXoChatListController extends Activity{
 			
 	    	return list;
 	    }
-	 
+//	 Create adapter for Chat user
 	class eXoChatListAdapter extends BaseAdapter implements AdapterView.OnItemClickListener 
 	{
 		
@@ -380,7 +381,7 @@ public class eXoChatListController extends Activity{
 	    }
 	   
 	}
-	
+//	Set language
 	 public void changeLanguage(ResourceBundle resourceBundle)
 	 {
 		 

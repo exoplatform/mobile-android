@@ -24,16 +24,14 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-
-
-
+//interact with server
 public class eXoConnection
 {
 	public static int splitLinesAt = 76;
-	public List<Cookie> _sessionCookies;
-	public	String _strCookie = "";
-	public String _strFirstLoginContent;
-	public String _fullDomainStr;
+	public List<Cookie> _sessionCookies;	//Cookie array
+	public	String _strCookie = "";	//Cookie string
+	public String _strFirstLoginContent;	//String data for the first time login
+	public String _fullDomainStr;	//Host
 	
 	public static byte[] zeroPad(int length, byte[] bytes) 
 	{
@@ -42,6 +40,7 @@ public class eXoConnection
         return padded;
     }
 	
+//	Get string data for the first time login
 	public String getFirstLoginContent()
 	{
 		return _strFirstLoginContent;
@@ -58,7 +57,7 @@ public class eXoConnection
         return lines;
  
     }
-	
+//	Encode String to Base64String
 	public static String stringEncodedWithBase64(String str)
 	{
 		String base64code = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz" + "0123456789" + "+/";
@@ -94,7 +93,7 @@ public class eXoConnection
         //replace encoded padding nulls with "="
         return splitLines(encoded.substring(0, encoded.length() - paddingCount) + "==".substring(0, paddingCount));
 	}
-	
+//	Convert stream to String
 	public static String convertStreamToString(InputStream is) {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		StringBuilder sb = new StringBuilder();
@@ -124,7 +123,7 @@ public class eXoConnection
 		}
 		return sb.toString();
 	}
-		
+//		Get sub URL path
 	public String getExtend(String domain)
 	{
 //		if(domain.indexOf("http://platform.demo.exoplatform") >= 0)
@@ -186,7 +185,7 @@ public class eXoConnection
 		return context;
 		*/
 	}
-
+//	Send request with authentication
 	public String sendAuthentication(String domain, String username, String password)
 	{
 		try
@@ -280,7 +279,7 @@ public class eXoConnection
 		
 		return "ERROR";
 	}
-	
+//	Standalone gadget requset
 	public String loginForStandaloneGadget(String domain, String username, String password)
 	{
 		try
@@ -396,8 +395,7 @@ public class eXoConnection
 		
 		return "ERROR";
 	}
-	
-	
+//		Normal gadget request
 	public String sendRequestToGetGadget(String urlStr, String username, String password)
 	{
 		try
@@ -464,14 +462,14 @@ public class eXoConnection
 		}
 
 	}
-	
+//	Send request with authentication	
 	public String stringOfAuthorizationHeaderWithUserNameAndPassword(String username, String password)
 	{
 		String s = "Basic ";
 		String strAuthor = s + stringEncodedWithBase64(username + ":" + password);
 		return strAuthor.substring(0, strAuthor.length() - 2);
 	}
-	
+//	Get input stream from URL with authentication
 	public InputStream sendRequestWithAuthorization(String urlStr)
 	{
 
@@ -519,7 +517,7 @@ public class eXoConnection
 	    
 		return ipstr;
 	}
-	
+//	Get string data with authentication request
 	public String sendRequestWithAuthorizationReturnString(String urlStr)
 	{
 		StringBuffer buf = new StringBuffer();
@@ -563,7 +561,7 @@ public class eXoConnection
 	    
 		return buf.toString();
 	}
-	
+//	Get input stream from URL	
 	public InputStream sendRequest(String strUrlRequest)
 	{
 		InputStream ipstr = null;
@@ -591,7 +589,7 @@ public class eXoConnection
 		}
 		return ipstr;
 	}
-	
+//	Get string input stream from URL
 	public String sendRequestAndReturnString(String strUrlRequest)
 	{
 		return convertStreamToString(sendRequest(strUrlRequest));

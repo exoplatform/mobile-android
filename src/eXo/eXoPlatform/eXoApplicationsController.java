@@ -29,30 +29,34 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//Main app view controller
 public class eXoApplicationsController extends Activity 
 {
-	ListView _lstvApps;
-	ListView _lstvGadgets;
-	TextView txtVieweXoAppsTittle;
-	TextView txtVieweXoGadgetsTittle;
+	ListView _lstvApps;	//eXo Apps view
+	ListView _lstvGadgets;	//Gadgets view
+	TextView txtVieweXoAppsTittle;	//eXo app title
+	TextView txtVieweXoGadgetsTittle;	//Gadgets title
 	
-	Button _btnSignOut;
-	Button  _btnLanguageHelp;
+	Button _btnSignOut;	//Signout button
+	Button  _btnLanguageHelp;	//Setting
 	
 	public	static short webViewMode;//0: view gadget, 1: View file, 2: view help;
 	
-	String fileTittle;
-	String chatTittle;
+	String fileTittle;	//File app name
+	String chatTittle;	//Chat app name
 	
-	private static eXoApp exoapp;
-	private static eXoAppsAdapter exoAppsAdapter;
-	ProgressDialog _progressDialog;
-	eXoApplicationsController thisClass;
+	private static eXoApp exoapp;	//eXo app
+	private static eXoAppsAdapter exoAppsAdapter;	//eXo app adapter
 	
-	public static List<GateInDbItem> arrGadgets;
-	public static GateInDbItem gadgetTab;
+	ProgressDialog _progressDialog;	//Progress dialog
+	eXoApplicationsController thisClass; //Instance
+	
+	public static List<GateInDbItem> arrGadgets;	//Gadgets array
+	public static GateInDbItem gadgetTab;	//Dashboard tab
 	
 	Thread thread;
+	
+//	Localization strings
 	TextView textViewFileDescription;
 	TextView textViewChatDescription;
 	TextView labelFileName;
@@ -60,7 +64,7 @@ public class eXoApplicationsController extends Activity
 	
 	String strCannotBackToPreviousPage;
 	String strChatServer;
-	
+//	Constructor
 	@Override
     public void onCreate(Bundle icicle) 
     {
@@ -123,7 +127,7 @@ public class eXoApplicationsController extends Activity
         AppController._progressDialog.dismiss();
         
     } 
-	
+//	Kewdown listener
 	 public boolean onKeyDown(int keyCode, KeyEvent event) {
 	      //Save data to the server once the user hits the back button
 	      if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -132,7 +136,7 @@ public class eXoApplicationsController extends Activity
 	      }
 	      return false;
 	  }
-	 
+//	 Create adapter for eXo app
 	 public void createAdapter()
 	 {
 		 List<eXoApp> exoapps = new ArrayList<eXoApp>(2);
@@ -143,25 +147,6 @@ public class eXoApplicationsController extends Activity
 	     _lstvApps.setOnItemClickListener(exoAppsAdapter);
 	 }
 	 
-//	public boolean onCreateOptionsMenu(Menu menu) { 
-//	    MenuInflater inflater = getMenuInflater(); 
-//	    inflater.inflate(R.menu.menu, menu); 
-//	    MenuItem mnItem = menu.getItem(0);
-//	    mnItem.setTitle(settingTittle);
-//	    
-//	    return true; 
-//	} 
-	
-//	public boolean onOptionsItemSelected(MenuItem item) { 
-//	    
-//		Intent next = new Intent(eXoApplicationsController.this, eXoSetting.class);
-//		eXoApplicationsController.this.startActivity(next);
-//		
-//		
-//		return true; 
-//	} 
-
-	
 	//eXoAppsAdapter - it was used to be Data Source for Applications List View
 	class eXoAppsAdapter extends BaseAdapter implements AdapterView.OnItemClickListener 
 	{
@@ -321,7 +306,7 @@ public class eXoApplicationsController extends Activity
 	    	eXoApplicationsController.this.startActivity(next);
 	    }
 	}
-
+//	Connect to Openfile server
 	private void connectToChatServer(String host, int port, String userName, String password)
 	 {
 	    if(eXoChatListController.conn != null && eXoChatListController.conn.isConnected())
@@ -424,8 +409,7 @@ public class eXoApplicationsController extends Activity
     		
 	    }
 	}
-
-	
+//	Set language
 	public void changeLanguage(ResourceBundle resourceBundle)
     {
 		

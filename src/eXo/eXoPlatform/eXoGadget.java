@@ -2,13 +2,14 @@ package eXo.eXoPlatform;
 
 import android.graphics.Bitmap;
 
+//gadget info
 public class eXoGadget {
-	public final String _strGadgetName;
-	public final String _strGadgetDescription;
-	public String _strGadgetUrl;
-	public final Bitmap _btmGadgetIcon;
-	public final String _strGadgetID;
-	
+	public final String _strGadgetName;	//Gadget name
+	public final String _strGadgetDescription;	//Gadget description
+	public String _strGadgetUrl;	//Gadget url
+	public final Bitmap _btmGadgetIcon;	//Gadget icon
+	public final String _strGadgetID;	//Gadget ID
+//	Constructor
 	public eXoGadget(String gadgetName, String gadgetDescription, String gadgetUrl, Bitmap gadgetIcon, String gadgetID) 
 	{
 		_strGadgetName = gadgetName;
@@ -17,7 +18,7 @@ public class eXoGadget {
 		_btmGadgetIcon = gadgetIcon;
 		_strGadgetID = gadgetID;
 	}
-	
+//	Gettors
 	public String getGadgetName()
 	{
 		return _strGadgetName;

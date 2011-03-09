@@ -1,9 +1,10 @@
 package eXo.eXoPlatform;
-
+// Standalone gadget info
 public class eXoStandAloneGadget {
 
-	public String _strGadgetID;
-	public String _urlContent;
+	public String _strGadgetID;	//Gadget ID
+	public String _urlContent;	//Gadget URL
+	
 	
 	public eXoStandAloneGadget()
 	{

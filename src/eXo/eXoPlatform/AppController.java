@@ -29,9 +29,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+//Login page
 public class AppController extends Activity 
 {
-    /** Called when the activity is first created. */	
+    /** Called when the activity is first created. */
+//	References keys
 	public static final String EXO_PREFERENCE = "exo_preference";
 	public static final String EXO_PRF_DOMAIN = "exo_prf_domain";
 	public static final String EXO_PRF_USERNAME = "exo_prf_username";
@@ -39,23 +41,24 @@ public class AppController extends Activity
 	public static final String EXO_PRF_LANGUAGE = "exo_prf_language";
 	public static final String EXO_PRF_LOCALIZE = "exo_prf_localize";
 	
+//	Authentication
 	public static AuthScope auth = null;
 	public static UsernamePasswordCredentials credential = null;
+//	Preferences
 	public static SharedPreferences sharedPreference;
+//	Localization
 	public static ResourceBundle bundle;
 
-	
 	private Runnable viewOrders;
 	
-	String _strDomain = "";
-	String _strUserName = "";
-	String _strPassword = "";
-	
+	String _strDomain = "";	//Host		
+	String _strUserName = "";	//Username	
+	String _strPassword = "";	//Password
+//	Standalone gadget content
 	private String _strContentForStandaloneURL;
-	
-	//private eXoConnection _eXoConnection = new eXoConnection();
+//	Connect to server
 	public static eXoConnection _eXoConnection = new eXoConnection();
-	
+//	UI component
 	TextView _txtViewDomain;
 	TextView _txtViewUserName;
 	TextView _txtViewPassword;
@@ -64,9 +67,9 @@ public class AppController extends Activity
 	EditText _edtxPassword;
 	Button _btnSignIn;
 	Button _btnLanguageHelp;
-	
 	TextView _txtvTitleBar;
 	
+//	Connection status
 	String strWait;
 	String strSigning;
 	String strNetworkConnextionFailed;
@@ -74,13 +77,15 @@ public class AppController extends Activity
 	String strCannotBackToPreviousPage;
 	String strLoadingDataFromServer;
 	
-	
+//	Point to itself
 	public static AppController thisClass;
+//	Next activity
 	Intent next;
+//	Get data thread
 	Thread thread;
-
+//	Login progress dialog
 	public static ProgressDialog _progressDialog = null; 	
-	
+//	Constructor
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -170,7 +175,7 @@ public class AppController extends Activity
 		});
 
     }
-     
+//  Key down listener    
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //Save data to the server once the user hits the back button
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -179,9 +184,8 @@ public class AppController extends Activity
        
         return false;
     }
-    
-    private Runnable returnRes = new Runnable() 
-    {
+//  Login successful
+    private Runnable returnRes = new Runnable() {
     	public void run() 
     	{
     		
@@ -197,7 +201,7 @@ public class AppController extends Activity
     		
         }
     };
-    
+//    Network connection is failed 
     private Runnable returnResFaileConnection = new Runnable() 
     {
     	public void run() 
@@ -221,7 +225,7 @@ public class AppController extends Activity
     			
         }
     };
-    
+//    Invalid username/password
     private Runnable returnResFaileUserNamePassword = new Runnable() 
     {
     	public void run() 
@@ -245,7 +249,7 @@ public class AppController extends Activity
     			
         }
     };
-        
+//    Login progress    
     public void signInProgress()
     {	
     	
@@ -300,7 +304,7 @@ public class AppController extends Activity
 			runOnUiThread(returnResFaileConnection);
 		}
     }
-   
+//   Get gadget list
     public List<eXoGadget> getGadgetsList()
 	{
 		List<eXoGadget> arrGadgets = new ArrayList<eXoGadget>();
@@ -374,7 +378,7 @@ public class AppController extends Activity
         
         return arrGadgets;
 	}
-	
+//	Parser gadget string data	
     public String getStringForGadget(String gadgetStr, String startStr, String endStr)
     {
     	String returnValue = "";
@@ -393,7 +397,7 @@ public class AppController extends Activity
     		
     	return returnValue;
     }
-
+//	Get gadget list with URL
     public List<eXoGadget> listOfGadgetsWithURL(String url)
     {
     	List<eXoGadget> arrTmpGadgets = new ArrayList<eXoGadget>();
@@ -498,7 +502,7 @@ public class AppController extends Activity
     		
     	return arrTmpGadgets;
     }
-
+//	Get gadget tab list
     public List<GateInDbItem>listOfGadgets()
     {    	
     	_strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN, "exo_prf_domain");
@@ -570,7 +574,7 @@ public class AppController extends Activity
     	
     	return null;
     }
-
+//	Get needed string
 	private String parseUrl(String urlStr, String neededStr, boolean offset, String enddedStr)
 	{
 		String str;
@@ -584,7 +588,7 @@ public class AppController extends Activity
 		
 		return str;
 	}
-   
+//   Standalone gadgets
 	private HashMap<String,String> listOfStandaloneGadgetsURL()
 	{
 		HashMap<String, String> mapOfURLs = new HashMap<String,String>();
@@ -632,21 +636,20 @@ public class AppController extends Activity
 		}
 		return mapOfURLs;
 	}
-	
-	
+//		Check if it is a  standalone gadget
 	private boolean isAGadgetIDString(String potentialIDString) 
 	{
 		if ((potentialIDString.charAt(8) == '-') && (potentialIDString.charAt(13) == '-')) return true;
 		return false;
 	}
-	
+//	Show user guide
 	public void showUserGuide()
 	{
 		eXoApplicationsController.webViewMode = 2;
 		Intent next = new Intent(thisClass, eXoWebViewController.class);
     	thisClass.startActivity(next);
 	}
-	
+//	Generate authntication
 	private void createAuthorization(String url, int port)
     {
     	auth = new AuthScope(url, port);
@@ -654,7 +657,7 @@ public class AppController extends Activity
 		String password = sharedPreference.getString(EXO_PRF_PASSWORD, "");
 		credential = new UsernamePasswordCredentials(userName, password);
     }
-    
+//    Set language
     public void changeLanguage(ResourceBundle resourceBundle)
     {
     	

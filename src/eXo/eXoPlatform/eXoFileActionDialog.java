@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+//File action list
 public class eXoFileActionDialog extends Dialog implements OnClickListener {
 	
 	public class FileActionDescription extends Object
@@ -43,27 +43,29 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
 		
 	}
 	
-	static Thread thread;
-	Button _btnClose;
-	ListView _lvFileAction;
-	TextView _txtvFileName;
-	Context thisClass;
-	private eXoFile myFile;
+	static Thread thread;	
+	Button _btnClose;	//Close dialog
+	ListView _lvFileAction;	//List of action
+	TextView _txtvFileName;	//File's name
+	Context thisClass;	//instance
+	private eXoFile myFile;	//Current file
 	//copyMoveFileMode: 1-copy, 2-move;
 	public static short copyMoveFileMode = 0;
-	public static eXoFile copyMoveFile = null;
+	public static eXoFile copyMoveFile = null;	//Copy/move file
 	
+//	Localization string
 	String strClose = "";
-	String strTakePicture = "";
+	String strTakePicture = "";	
 	String strCopy = "";
 	String strMove = "";
 	String strDelete = "";
 	String strRename = "";
 	String strPaste = "";
-	 
-	FileActionDescription[] fileActionList = null;
 	String strCannotBackToPreviousPage;
-
+	
+	FileActionDescription[] fileActionList = null;	
+		
+//	Constructor
 	public eXoFileActionDialog(Context context, eXoFile file) {
 		super(context);
 	
@@ -234,16 +236,16 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
 		_lvFileAction.setAdapter(test);
         
 	}
-	
-	 public boolean onKeyDown(int keyCode, KeyEvent event) {
+//	Keydown listener
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	      //Save data to the server once the user hits the back button
 	      if ((keyCode == KeyEvent.KEYCODE_BACK)) {
 	          Toast.makeText(thisClass, strCannotBackToPreviousPage ,Toast.LENGTH_LONG).show();
 	      }
 	      return false;
 	  }
-	 
-	 static Runnable reloadFileAdapter = new Runnable() {
+//	 Get file list
+	static Runnable reloadFileAdapter = new Runnable() {
 			
 			public void run() {
 				// TODO Auto-generated method stub
@@ -252,8 +254,8 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
 			}
 		};
 		
-		
-		static Runnable dismissProgressDialog = new Runnable() {
+//	Progress dialog
+	static Runnable dismissProgressDialog = new Runnable() {
 			
 			public void run() {
 				// TODO Auto-generated method stub
@@ -261,18 +263,8 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
 				thread.stop();
 			}
 		};
-		
-//	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//	        if (requestCode== 0 && resultCode == Activity.RESULT_OK)
-//	        {
-//	        	eXoFilesController.setVieweXoImage(true);
-//	        	eXoFilesController._uri = data.getData();
-//	        	Bitmap bmp = (Bitmap) data.getExtras().get("data");
-//	        	eXoFilesController.imgView.setImageBitmap(bmp);	    		
-//	        }
-//		}
-	 
-	 public  void changeLanguage(ResourceBundle resourceBundle)
+//	Set language	
+	public  void changeLanguage(ResourceBundle resourceBundle)
 	 {
 
 		 try {

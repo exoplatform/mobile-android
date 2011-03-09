@@ -30,25 +30,26 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//Chat windows view controller
 public class eXoChatController extends Activity{
-	
+//	List message content for each user 
 	public static List<eXoChatMessageContent> listChatContent = new ArrayList<eXoChatMessageContent>();
-	public static String currentChatStr = "";
-	EditText messageEditText;
-	Button sendMessageBtn;
-	static ListView conversationView;
-	Button btnClose;
-	Button _btnLanguageHelp;
-	TextView tvCurrentChat;
+	public static String currentChatStr = "";	//Current chat user
+	EditText messageEditText;	//Chat text field
+	Button sendMessageBtn;	//Send button
+	static ListView conversationView;	//Chat conversation
+	Button btnClose;	//Close button
+	Button _btnLanguageHelp;	//Setting button
+	TextView tvCurrentChat;	//Current chat name
 
-	public static eXoChatController thisClass;
-	static eXoApplicationsController _delegate;
-	
-	public static PacketListener packetListener;
+	public static eXoChatController thisClass;	//Instance
+	static eXoApplicationsController _delegate;	//Main app view controller
+	//Receive message
+	public static PacketListener packetListener;	
 	private static Handler mHandler;
 	private static Runnable runnable;
 	
-	private String fromChatStr;
+	private String fromChatStr;	//Source
 	String strCannotBackToPreviousPage;
 	
 	/** Called when the activity is first created. */
@@ -189,7 +190,7 @@ public class eXoChatController extends Activity{
         setListAdapter();
        
 	}
-    
+//    Keydown listener  
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //Save data to the server once the user hits the back button
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -197,7 +198,7 @@ public class eXoChatController extends Activity{
         }
         return false;
     }
-    
+//    Create adapter for conversation list
     public static void setListAdapter() 
     {
     	BaseAdapter adapter = new BaseAdapter() {
@@ -247,7 +248,7 @@ public class eXoChatController extends Activity{
 		};
     	conversationView.setAdapter(adapter);
     }
-     
+//     Set language
     public void changeLanguage(ResourceBundle resourceBundle)
     {
     	

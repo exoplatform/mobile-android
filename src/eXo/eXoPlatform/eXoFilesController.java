@@ -84,7 +84,7 @@ public class eXoFilesController extends Activity
 	static String strDownloadFileIntoSDCard;
 	
 	static Thread thread;
-	
+//	Constructor
 	@Override
     public void onCreate(Bundle icicle) 
     {
@@ -206,7 +206,7 @@ public class eXoFilesController extends Activity
 
         
     } 
-
+//	Keydown listener
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	      //Save data to the server once the user hits the back button
 	      if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -214,7 +214,7 @@ public class eXoFilesController extends Activity
 	      }
 	      return false;
 	  }
-	
+//	Save file to SDCard
 	static Runnable cannotAceesSDCard = new Runnable() {
 		
 		public void run() {
@@ -224,7 +224,7 @@ public class eXoFilesController extends Activity
 			toast.show();
 		}
 	};
-	
+//	Refresh files view
 	Runnable reloadFileAdapter = new Runnable() {
 		
 		public void run() {
@@ -235,7 +235,7 @@ public class eXoFilesController extends Activity
 			
 		}
 	};
-	
+//	Dismiss progress dialog
 	public static Runnable dismissProgressDialog = new Runnable() {
 		
 		public void run() {
@@ -257,7 +257,7 @@ public class eXoFilesController extends Activity
 			
 		}
 	};
-	
+//	Back to parent directory or close file view
 	public Runnable closeBackRunnable = new Runnable() {
 		
 		public void run() {
@@ -278,7 +278,7 @@ public class eXoFilesController extends Activity
 				}	
 		}
 	};
-	
+//	Goto sub directory or view file
 	public static Runnable fileItemClickRunnable = new Runnable() {
 		
 		public void run() {
@@ -354,14 +354,14 @@ public class eXoFilesController extends Activity
 		    	}	
 		}
 	};
-	
+//	Take a photo
 	public static void takePicture()
     {
     	Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         thisClass.startActivityForResult(intent, 0);
 	        
     }
-	   
+//	   Take photo app
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == 0 && resultCode == Activity.RESULT_OK)
         {
@@ -377,7 +377,7 @@ public class eXoFilesController extends Activity
         }
         	
 	}
-
+//	Show/hide taken photo
 	private void setVieweXoImage(boolean isVieweXoImage)
 	{
 		int viewImageMode;
@@ -404,7 +404,7 @@ public class eXoFilesController extends Activity
 		_btnCancelUploadImage.setVisibility(viewImageMode);
 		_btnCloseBack.setVisibility(viewFileMode);
 	}
-	
+//	Get file/folder icon form URL
 	static private Bitmap fileFolderIcon(eXoFile file)
 	{
 		String contentType = "unknown.png";
@@ -435,7 +435,7 @@ public class eXoFilesController extends Activity
 		
 		return bmp;
 	}
-		
+//		Get file array from URL
 	public static List<eXoFile> getPersonalDriveContent(String url)
 	{
 		List<eXoFile> arrFilesTmp = new ArrayList <eXoFile>();
@@ -483,7 +483,7 @@ public class eXoFilesController extends Activity
 		
 		return arrFilesTmp;
 	}
-
+//	Show progress dialog
 	public static void  showProgressDialog(boolean isloadingData)
 	{
 		String strLoadingDataFromServer = "";
@@ -500,7 +500,7 @@ public class eXoFilesController extends Activity
 		
        _progressDialog = ProgressDialog.show(thisClass, null, strLoadingDataFromServer);
 	}
-	
+//	Create file adapter
 	public static void createExoFilesAdapter()
 	{	
    		BaseAdapter test = new BaseAdapter() {
@@ -640,8 +640,7 @@ public class eXoFilesController extends Activity
 		_lstvFiles.setAdapter(test);      
    		//_lstvFiles.setOnItemClickListener(test);
 	}
-	
-
+//	Save file to SDCard
 	private static boolean saveFileToLocal(AuthScope auth, UsernamePasswordCredentials credential, String url, String path, String file, boolean isTakeImage)
 	{
 	    boolean returnValue = false;
@@ -701,7 +700,7 @@ public class eXoFilesController extends Activity
 		return returnValue;
 	        
 	}
-	   
+//	   Get InputStream from URL with authentication 
 	public static InputStream getInputStreamFromServer(AuthScope auth, UsernamePasswordCredentials credential, String url)
 	{
 		InputStream is = null;
@@ -723,7 +722,7 @@ public class eXoFilesController extends Activity
 	    return is;
 	    	
 	}
-	    
+//	Delete file/folder method
 	public static boolean deleteMethod(AuthScope auth, UsernamePasswordCredentials credential, String url)
 	{
 		boolean returnValue = false;
@@ -744,7 +743,7 @@ public class eXoFilesController extends Activity
 			
 	    return returnValue;
 	}
-	    
+//	Send file to server
 	public static boolean putFileToServerFromLocal(AuthScope auth, UsernamePasswordCredentials credential, String url, String path, String file, String fileType)
 	{
 		boolean returnValue = false;
@@ -782,7 +781,7 @@ public class eXoFilesController extends Activity
 			
 	    return returnValue;
 	}
-	
+//	Copy file/folder method
 	public static boolean copyMethod(AuthScope auth, UsernamePasswordCredentials credential, String source, String destination)
 	{
 		boolean returnValue = false;
@@ -813,7 +812,7 @@ public class eXoFilesController extends Activity
 			
 	    return returnValue;
 	}
-
+//	Move file/folder method
 	public static boolean moveMethod(AuthScope auth, UsernamePasswordCredentials credential, String source, String destination)
 	{
 		boolean returnValue = false;
@@ -823,7 +822,7 @@ public class eXoFilesController extends Activity
 		
 		return returnValue;
 	}
-	
+//	Get folder name from given URL
     private String getFolderNameFromUrl(String url)
     {
     	String folder = "";
@@ -833,8 +832,7 @@ public class eXoFilesController extends Activity
     	
     	return folder;
     }
-   
-
+//   Endcode URL
     public String encodeUrl(String urlString)
     {
         
@@ -858,7 +856,7 @@ public class eXoFilesController extends Activity
     	
         return urlString;
     }
-    
+//   Set language 
     public void changeLanguage(ResourceBundle resourceBundle)
     {
     	String strCloseBack = "";

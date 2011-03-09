@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 /** Class Must extends with Dialog */
 /** Implement onClickListener to dismiss dialog when OK Button is pressed */
+//Display language setting & user guide page
 public class eXoLanguageSettingDialog extends Dialog implements OnClickListener {
 	Context myContext;
 	Button btnClose;
@@ -27,7 +28,7 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 	TextView changeLanguageTittle; 
 	
 	Activity _activity;	
-
+//	Constructor
 	public eXoLanguageSettingDialog(Context context, int pageID, Activity activity) {
 		super(context);
 		
@@ -69,7 +70,7 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 	    
 	}
 
-	
+//	Show user guide or change language
 	public void onClick(View v) {
 		/** When OK Button is clicked, dismiss the dialog */
 		if (v == btnClose)
@@ -93,7 +94,7 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 		}
 		
 	}
-
+//	Change language
 	private void updateLocallize(String localize)
 	{
 		try 
@@ -149,7 +150,7 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 		}
 		   
 	}
-	   
+//	Set language   
 	public void changeLanguage(ResourceBundle resourceBundle)
 	   {
 		   

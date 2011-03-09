@@ -1,7 +1,5 @@
 package eXo.eXoPlatform;
 
-
-
 import java.util.ResourceBundle;
 
 import org.apache.http.HttpResponse;
@@ -25,28 +23,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
 
-
-
+//Gadget view controller
 public class eXoGadgetViewController extends Activity 
 {
     /** Called when the activity is first created. */	
 		
-	Button _btnClose;
-	Button _btnLanguageHelp;
-	TextView _txtvTitleBar;
+	Button _btnClose;	//Close button
+	Button _btnLanguageHelp;	//Setting button
+	TextView _txtvTitleBar;	//Gadget title
 	
-	ListView _lstvGadgets;
+	ListView _lstvGadgets;	//Gadget list view
 	
+//	Localization strings 
 	String strCannotBackToPreviousPage;
 	String strConnectionTimedOut;
 	
-	eXoGadgetViewController thisClass;
-	static eXoApplicationsController _delegate;
+	eXoGadgetViewController thisClass;	//Instance
+	static eXoApplicationsController _delegate;	//Main app view controller
 	
-	public static eXoGadget currentGadget;
-	public static Cookie cookie = null;
+	public static eXoGadget currentGadget;	//Current gadget
+	public static Cookie cookie = null;	//Cookie
 
-	
+//	Constructor
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -163,8 +161,7 @@ public class eXoGadgetViewController extends Activity
         changeLanguage(AppController.bundle);
         
     }
-    
-    
+//    Keydown listener
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //Save data to the server once the user hits the back button
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -172,7 +169,7 @@ public class eXoGadgetViewController extends Activity
         }
         return false;
     }
-
+//	Set language
     public void changeLanguage(ResourceBundle resourceBundle)
     {
     	
