@@ -5,7 +5,7 @@
       android:versionName="1.0">
     <application 
     	android:icon="@drawable/icon57x57" 
-    	android:debuggable="true"
+    	android:debuggable="false"
     	>
         <activity android:name=".AppController"
                   android:label="eXo Platform"
