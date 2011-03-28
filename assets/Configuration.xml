@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>  
-    <resources>  
-        <array name="ServerList">  
-            <item>http://mobile.demo.exoplatform.org</item>  
-            <item>http://platform.demo.exoplatform.org</item>  
-            <item>http://int.exoplatform.org</item>  
-        </array>
-    </resources>

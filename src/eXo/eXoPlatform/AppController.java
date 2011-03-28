@@ -1,5 +1,10 @@
 package eXo.eXoPlatform;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,13 +12,28 @@ import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
+
+import eXo.eXoPlatform.Configuration.ServerObj;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -26,12 +46,150 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 //Login page
 public class AppController extends Activity 
 {
+	class ServerObj {
+		String   _strServerName;
+	    String   _strServerUrl;
+	    boolean  _bSystemServer;
+	}
+	
+	class Configuration {
+		ArrayList<ServerObj> _arrServerList;
+
+		public ArrayList<ServerObj> getDefaultServerList() {
+			
+			ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
+			 XmlResourceParser parser = getResources().getXml(R.xml.defaultconfiguaration);
+		        
+		        try {
+		            int eventType = parser.getEventType();
+
+		            while (eventType != XmlPullParser.END_DOCUMENT) {
+		                String name = null;
+
+		                switch (eventType){
+		                    case XmlPullParser.START_TAG:
+		                        name = parser.getName().toLowerCase();
+
+		                        if (name.equalsIgnoreCase("server")) {
+		                        	ServerObj serverObj = new ServerObj();
+		                            for (int i = 0;i < parser.getAttributeCount();i++) {
+		                                String attribute = parser.getAttributeName(i).toLowerCase();
+		                                if (attribute.equalsIgnoreCase("name")) {
+		                                    serverObj._strServerName = parser.getAttributeValue(i);
+		                                }
+		                                else if(attribute.equalsIgnoreCase("serverURL"))
+		                                {
+		                                	serverObj._strServerUrl = parser.getAttributeValue(i);
+		                                }
+		                            }
+		                            serverObj._bSystemServer = true;
+		                            arrServerList.add(serverObj);
+		                        }
+
+		                        break;
+		                    case XmlPullParser.END_TAG:
+		                        name = parser.getName();
+		                        break;
+		                }
+
+		                try {
+		                	eventType = parser.next();
+						} catch (Exception e) {
+							// TODO: handle exception
+							eventType = 0;
+						}
+		                
+		            }
+		        }
+		        catch (XmlPullParserException e) {
+		            throw new RuntimeException("Cannot parse XML");
+		        }
+		        
+			return arrServerList;
+			
+		}
+		
+		public boolean createXmlDataWithServerList(ArrayList<ServerObj> objList, String fileName)
+		{
+			boolean returnValue = false;
+			String path = Environment.getExternalStorageDirectory() + "/" + fileName;
+	        File newxmlfile = new File(path);
+			try
+			{
+				newxmlfile.createNewFile();
+
+			}catch(IOException e){
+				
+	            Log.e("IOException", "exception in createNewFile() method");
+	            return returnValue;
+			}
+
+	    //we have to bind the new file with a FileOutputStream
+	    FileOutputStream fileos = null;        
+
+	    try{
+	            fileos = new FileOutputStream(newxmlfile);
+
+	    }catch(FileNotFoundException e){
+
+	            Log.e("FileNotFoundException", "can't create FileOutputStream");
+	    }
+
+	    //we create a XmlSerializer in order to write xml data
+	    XmlSerializer serializer = Xml.newSerializer();
+	    try {
+	    	//we set the FileOutputStream as output for the serializer, using UTF-8 encoding
+	    	serializer.setOutput(fileos, "UTF-8");
+
+	        //Write <?xml declaration with encoding (if encoding not null) and standalone flag (if standalone not null)
+	        serializer.startDocument(null, Boolean.valueOf(true));
+
+	        //set indentation option
+//	        serializer.setFeature(name, state)("http://xmlpull.org/v1/doc/features.htmlindent-output", true);
+
+	        //start a tag called "root"
+	        serializer.startTag(null, "xml");
+	        serializer.startTag(null, "Servers");
+	        
+	        //i indent code just to have a view similar to xml-tree
+	        for(int i = 0; i < objList.size(); i++)
+	        {
+	        	ServerObj serverObj = objList.get(i);		        
+	        	serializer.startTag(null, "server");
+		        serializer.attribute(null, "name", serverObj._strServerName);
+		        serializer.attribute(null, "serverURL", serverObj._strServerUrl);
+		        serializer.endTag(null, "server");
+	        }
+	        
+	        serializer.endTag(null, "Servers");
+	        serializer.endTag(null, "xml");
+
+	        serializer.endDocument();
+
+	        //write xml data into the FileOutputStream
+	        serializer.flush();
+	        //finally we close the file stream
+
+	        fileos.close();
+	            
+	    } catch (Exception e) {
+
+	    	Log.e("Exception","error occurred while creating xml file");
+	    }
+		
+        return returnValue;
+        }
+
+	}
+	
     /** Called when the activity is first created. */
 //	References keys
 	public static final String EXO_PREFERENCE = "exo_preference";
@@ -95,6 +253,27 @@ public class AppController extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.login);
 
+        String appVer = "";
+        try
+        {
+            appVer = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+        }
+        catch (NameNotFoundException e)
+        {
+//            Log.v(tag, e.getMessage());
+        }
+
+        if(appVer.equalsIgnoreCase(""))
+        {
+        	
+        }
+        else
+        {
+        	
+        }
+        
+	
+		
         String strLocalize;
     	
         thisClass = this;
