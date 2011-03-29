@@ -306,7 +306,8 @@ public class eXoApplicationsController extends Activity
 	    	eXoApplicationsController.this.startActivity(next);
 	    }
 	}
-//	Connect to Openfile server
+
+	//	Connect to Openfile server
 	private void connectToChatServer(String host, int port, String userName, String password)
 	 {
 	    if(eXoChatListController.conn != null && eXoChatListController.conn.isConnected())

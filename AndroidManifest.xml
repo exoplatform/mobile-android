@@ -21,6 +21,7 @@
         <activity android:name=".eXoChatController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
         <activity android:name=".eXoChatListController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
         <activity android:name=".eXoGadgetViewController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
+        <activity android:name=".eXoSetting" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
         	
     </application>
     <uses-sdk android:minSdkVersion="7" />

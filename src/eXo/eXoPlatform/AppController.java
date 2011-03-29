@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,12 +21,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
+
+import eXo.eXoPlatform.eXoApplicationsController.eXoAppsAdapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,11 +39,19 @@ import android.os.Environment;
 import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Context;
@@ -54,62 +66,70 @@ import android.graphics.BitmapFactory;
 //Login page
 public class AppController extends Activity 
 {
+//	Server info object
 	class ServerObj {
-		String   _strServerName;
-	    String   _strServerUrl;
-	    boolean  _bSystemServer;
+		String   _strServerName;//Name of server
+	    String   _strServerUrl;//URL of server
+	    boolean  _bSystemServer;//Is default server
 	}
 	
+//	Actions with server configuration files
 	class Configuration {
+		
 		ArrayList<ServerObj> _arrServerList;
-
-		public String getDefaultServerVersion()
+		
+		public Configuration()
 		{
-			 XmlResourceParser parser = getResources().getXml(R.xml.defaultconfiguaration);
-		        
-		        try {
-		            int eventType = parser.getEventType();
+			_arrServerList = new ArrayList<ServerObj>();
+		}
+//		Constructor
+		
+//		Get app's current version
+		public String getAppVersion()
+		{
+			String filePath = "/sdcard/eXo/DefaultServerList.xml";
+			File file = new File(filePath);
+			if(!file.exists())
+			{
+				createXmlDataWithServerList(getDefaultServerList(), "DefaultServerList.xml", "0");
+				return "0";
+			}
+			
+			InputStream obj_is = null;
+			Document obj_doc = null;
+			DocumentBuilderFactory doc_build_fact = null;
+			DocumentBuilder doc_builder = null;
+			try {
+				obj_is = new FileInputStream(filePath);
+				doc_build_fact = DocumentBuilderFactory.newInstance();
+				doc_builder = doc_build_fact.newDocumentBuilder();
 
-		            while (eventType != XmlPullParser.END_DOCUMENT) {
-		                String name = null;
+				obj_doc = doc_builder.parse(obj_is);
 
-		                switch (eventType){
-		                    case XmlPullParser.START_TAG:
-		                        name = parser.getName().toLowerCase();
-
-		                        if (name.equalsIgnoreCase("version")) {
-		                        	
-		                            for (int i = 0;i < parser.getAttributeCount();i++) {
-		                                String attribute = parser.getAttributeName(i).toLowerCase();
-		                                if (attribute.equalsIgnoreCase("number")) {
-		                                	return parser.getAttributeValue(i);
-		                                	 
-		                                }
-		                            }
-		                        }
-
-		                        break;
-		                    case XmlPullParser.END_TAG:
-		                        name = parser.getName();
-		                        break;
+				NodeList obj_nod_list = null;
+				if(null != obj_doc)
+				{
+					org.w3c.dom.Element feed =  obj_doc.getDocumentElement();
+					obj_nod_list = feed.getElementsByTagName("version");
+					
+					for (int i = 0; i < obj_nod_list.getLength(); i++) {
+		                Node itemNode = obj_nod_list.item(i);
+		                if (itemNode.getNodeType() == Node.ELEMENT_NODE)
+		                {
+		                    Element itemElement = (Element) itemNode;
+		                    return itemElement.getAttribute("number"); 
 		                }
-
-		                try {
-		                	eventType = parser.next();
-						} catch (Exception e) {
-							// TODO: handle exception
-							eventType = 0;
-						}
-		                
 		            }
-		        }
-		        catch (XmlPullParserException e) {
-		            throw new RuntimeException("Cannot parse XML");
-		        }
-		        
-			return null;
+				} 
+
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+					        
+			return "0";
 		}
 		
+//		Get default server list
 		public ArrayList<ServerObj> getDefaultServerList() {
 			
 			ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
@@ -160,11 +180,34 @@ public class AppController extends Activity
 		            throw new RuntimeException("Cannot parse XML");
 		        }
 		        
+		        String filePath = "/sdcard/eXo/DefaultServerList.xml";
+				File file = new File(filePath);
+				if(!file.exists())
+				{
+					try {
+						
+						this.createXmlDataWithServerList(arrServerList, "DefaultServerList.xml", "0");
+						
+					} catch (Exception e) {
+						// TODO: handle exception
+						
+					}
+					
+				}
+				
 			return arrServerList;
 			
 		}
 		
-		public ArrayList<ServerObj> getDeletedServerList() {
+//		Get added/deleted servers
+		public ArrayList<ServerObj> getServerListWithFileName(String name) {
+			
+			String filePath = "/sdcard/eXo/" + name;
+			File file = new File(filePath);
+			if(!file.exists())
+			{
+				return null;
+			}
 			
 			ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
 			InputStream obj_is = null;
@@ -172,7 +215,7 @@ public class AppController extends Activity
 			DocumentBuilderFactory doc_build_fact = null;
 			DocumentBuilder doc_builder = null;
 			try {
-				obj_is = new FileInputStream("/sdcard/deletedServerList.xml");
+				obj_is = new FileInputStream(filePath);
 				doc_build_fact = DocumentBuilderFactory.newInstance();
 				doc_builder = doc_build_fact.newDocumentBuilder();
 
@@ -182,16 +225,23 @@ public class AppController extends Activity
 				if(null != obj_doc)
 				{
 					org.w3c.dom.Element feed =  obj_doc.getDocumentElement();
-					obj_nod_list = feed.getElementsByTagName("servers");
-					for(int i = 0; i < obj_nod_list.getLength(); i++)
-					{
-						Node node = obj_nod_list.item(i);
-						
-						ServerObj serverObj = new ServerObj();
-						NamedNodeMap attributes = node.getAttributes();
-						
-						 
-					}
+					obj_nod_list = feed.getElementsByTagName("server");
+					
+					for (int i = 0; i < obj_nod_list.getLength(); i++) {
+		                Node itemNode = obj_nod_list.item(i);
+		                if (itemNode.getNodeType() == Node.ELEMENT_NODE)
+		                {
+		                    Element itemElement = (Element) itemNode;
+		                    
+		                    ServerObj serverObj = new ServerObj();
+		                    serverObj._strServerName = itemElement.getAttribute("name");
+		                    serverObj._strServerUrl = itemElement.getAttribute("serverURL");
+		                    serverObj._bSystemServer = false;
+		                    
+		                    arrServerList.add(serverObj);
+		                }
+		            } 
+					
 				} 
 
 			} catch (Exception e) {
@@ -202,10 +252,11 @@ public class AppController extends Activity
 			
 		}
 		
-		public boolean createXmlDataWithServerList(ArrayList<ServerObj> objList, String fileName)
+//		Create user configuration file: deleted & added servers
+		public boolean createXmlDataWithServerList(ArrayList<ServerObj> objList, String fileName, String appVersion)
 		{
 			boolean returnValue = false;
-			String path = Environment.getExternalStorageDirectory() + "/" + fileName;
+			String path = Environment.getExternalStorageDirectory() + "/eXo/" + fileName;
 	        File newxmlfile = new File(path);
 			try
 			{
@@ -242,6 +293,13 @@ public class AppController extends Activity
 
 	        //start a tag called "root"
 	        serializer.startTag(null, "xml");
+	        if(fileName.equalsIgnoreCase("DefaultServerList.xml"))
+	        {
+	        	serializer.startTag(null, "version");
+	        	serializer.attribute(null, "number", appVersion);
+	        	serializer.endTag(null, "version");
+	        }
+	        	
 	        serializer.startTag(null, "Servers");
 	        
 	        //i indent code just to have a view similar to xml-tree
@@ -302,15 +360,15 @@ public class AppController extends Activity
 //	Connect to server
 	public static eXoConnection _eXoConnection = new eXoConnection();
 //	UI component
-	TextView _txtViewDomain;
+	Button _btnAccount;
+	Button _btnServer;
+	Button _btnLogIn;
 	TextView _txtViewUserName;
 	TextView _txtViewPassword;
-	EditText _edtxDomain;
 	EditText _edtxUserName;
 	EditText _edtxPassword;
-	Button _btnSignIn;
-	Button _btnLanguageHelp;
-	TextView _txtvTitleBar;
+	static ListView _listViewServer;
+	
 	
 //	Connection status
 	String strWait;
@@ -328,6 +386,7 @@ public class AppController extends Activity
 	Thread thread;
 //	Login progress dialog
 	public static ProgressDialog _progressDialog = null; 	
+
 //	Constructor
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -337,9 +396,14 @@ public class AppController extends Activity
 //        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.login);
-
+        
+//        File file = new File(Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml");
+//        file.delete();
+        
+        Configuration conf = new Configuration();
+        
         String appVer = "";
-        String currentVer = "";
+        String oldVer = conf.getAppVersion();
         try
         {
             appVer = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
@@ -349,14 +413,51 @@ public class AppController extends Activity
 //            Log.v(tag, e.getMessage());
         }
 
-        if(appVer.compareToIgnoreCase(currentVer) > 0)
+        ArrayList<ServerObj> defaultServerList = conf.getDefaultServerList();
+        
+        if(appVer.compareToIgnoreCase(oldVer) > 0)
         {
         	
+        	ArrayList<ServerObj> deletedDefaultServers = conf.getServerListWithFileName("DeletedDefaultServerList.xml");
+        	
+        	ArrayList<ServerObj> tmp = new ArrayList<ServerObj>();
+        	if(deletedDefaultServers == null)
+        		tmp = defaultServerList;
+        	else
+        	{
+        		for(int i = 0; i < defaultServerList.size(); i++)
+            	{
+            		ServerObj newServerObj = defaultServerList.get(i);
+            		boolean isDeleted = false;
+            		for(int j = 0; j < deletedDefaultServers.size(); j++)
+            		{
+            			ServerObj deletedServerObj = deletedDefaultServers.get(i);
+            			if(newServerObj._strServerName.equalsIgnoreCase(deletedServerObj._strServerName)
+            					&& newServerObj._strServerUrl.equalsIgnoreCase(deletedServerObj._strServerUrl))
+            			{
+            				isDeleted = true;
+            				break;
+            			}
+            		}
+            		if(!isDeleted)
+            			tmp.add(newServerObj);
+            	}
+        	}
+        	
+        	conf.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
         }
         else
         {
         	
         }
+        
+        ArrayList<ServerObj> userServerList = conf.getServerListWithFileName("UserServerList.xml");
+        defaultServerList = conf.getServerListWithFileName("DefaultServerList.xml");
+        
+        if(userServerList != null)
+        	conf._arrServerList.addAll(userServerList);
+        if(defaultServerList != null)
+        	conf._arrServerList.addAll(defaultServerList);
         
         String strLocalize;
     	
@@ -377,23 +478,25 @@ public class AppController extends Activity
 			// TODO: handle exception
 		}
         
-        _txtViewDomain = (TextView) findViewById(R.id.TextView_Domain);
         _txtViewUserName = (TextView) findViewById(R.id.TextView_UserName);
         _txtViewPassword = (TextView) findViewById(R.id.TextView_Password);
         
-        _edtxDomain = (EditText) findViewById(R.id.EditText_Domain);
+        
         _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
         _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
         
-        _btnSignIn = (Button) findViewById(R.id.Button_SignIn);
-        _btnLanguageHelp = (Button) findViewById(R.id.Button_Language_Help);
-        _txtvTitleBar = (TextView) findViewById(R.id.TextView_TitleBar);
+        _btnAccount = (Button) findViewById(R.id.Button_Account);
+        _btnServer = (Button) findViewById(R.id.Button_Server);
+        _btnLogIn = (Button) findViewById(R.id.Button_Login);
         
+        _listViewServer = (ListView)findViewById(R.id.ListView_Servers);
+        _listViewServer.setVisibility(View.INVISIBLE);
+                
         _strDomain = sharedPreference.getString(EXO_PRF_DOMAIN, "");
         _strUserName = sharedPreference.getString(EXO_PRF_USERNAME, "");
         _strPassword = sharedPreference.getString(EXO_PRF_PASSWORD, "");
 
-        _edtxDomain.setText(_strDomain);
+        
     	_edtxUserName.setText(_strUserName);
     	_edtxPassword.setText(_strPassword);
     	
@@ -401,8 +504,40 @@ public class AppController extends Activity
     	
     	
         changeLanguage(bundle);
+
+        _btnAccount.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				_txtViewUserName.setVisibility(View.VISIBLE);
+				_edtxUserName.setVisibility(View.VISIBLE);
+				
+				_txtViewPassword.setVisibility(View.VISIBLE);
+				_edtxPassword.setVisibility(View.VISIBLE);
+				
+				_btnLogIn.setVisibility(View.VISIBLE);
+				
+				_listViewServer.setVisibility(View.INVISIBLE);
+			}
+		});
         
-       _btnSignIn.setOnClickListener(new View.OnClickListener() 
+        _btnServer.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				_txtViewUserName.setVisibility(View.INVISIBLE);
+				_edtxUserName.setVisibility(View.INVISIBLE);
+				
+				_txtViewPassword.setVisibility(View.INVISIBLE);
+				_edtxPassword.setVisibility(View.INVISIBLE);
+				
+				_btnLogIn.setVisibility(View.INVISIBLE);
+				
+				_listViewServer.setVisibility(View.VISIBLE);
+			}
+		});
+        
+       _btnLogIn.setOnClickListener(new View.OnClickListener() 
         {	
         	public void onClick(View v) 
 			{
@@ -411,7 +546,6 @@ public class AppController extends Activity
                     public void run()
                     {
                     	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    	imm.hideSoftInputFromWindow(_edtxDomain.getWindowToken(), 0);
                     	imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
                     	imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
 
@@ -428,25 +562,91 @@ public class AppController extends Activity
 			}	
 		});     
         
-        _btnLanguageHelp.setOnClickListener(new View.OnClickListener() 
-        {	
-        	public void onClick(View v) 
-			{
-        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(AppController.this, 0, thisClass);
-        		customizeDialog.show();
-			}	
-		});
-
+       createServersAdapter(conf._arrServerList);
     }
-//  Key down listener    
+
+    //  Key down listener    
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //Save data to the server once the user hits the back button
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
         }
        
         return false;
     }
+    
+    public boolean onCreateOptionsMenu(Menu menu){
+
+    	menu.add(0, 1, 0, "Setting");
+
+//    	menu.add(0, 2, 0, "Delete Contact");
+//    	menu.add(0, 3, 0, "Exit");
+
+    	return true;
+
+    	}
+
+    public boolean onOptionsItemSelected (MenuItem item){
+
+    	int selectedItemIndex = item.getItemId();
+    	
+    	if(selectedItemIndex == 1)
+    	{
+//    		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(AppController.this, 0, thisClass);
+//    		customizeDialog.show();
+    		
+    		Intent next = new Intent(AppController.this, eXoSetting.class);
+    		startActivity(next);
+    	}
+    	
+    	return false;
+}
+	
+//	Create file adapter
+	public static void createServersAdapter(List<ServerObj> serverObjs)
+	{	
+		
+		final List<ServerObj> serverObjsTmp = serverObjs;
+		
+   		BaseAdapter serverAdapter = new BaseAdapter() {
+			
+			  public View getView(int position, View convertView, ViewGroup parent) 
+			    {
+			    	LayoutInflater inflater = thisClass.getLayoutInflater();
+			    	View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
+			    	
+			    	ServerObj serverObj = serverObjsTmp.get(position);
+			    	
+			    	TextView serverName = (TextView)rowView.findViewById(R.id.TextView_ServerName);
+			    	serverName.setText(serverObj._strServerName);
+			    	
+			    	TextView txtvUrl = (TextView)rowView.findViewById(R.id.TextView_URL);
+			    	txtvUrl.setText(serverObj._strServerUrl);
+
+			        return(rowView);
+			    }
+
+			   
+			public long getItemId(int position) {
+				// TODO Auto-generated method stub
+				return position;
+			}
+			
+			public Object getItem(int position) {
+				// TODO Auto-generated method stub
+				return position;
+			}
+			
+			public int getCount() {
+				// TODO Auto-generated method stub
+				return serverObjsTmp.size();
+			}
+		};
+		
+		_listViewServer.setAdapter(serverAdapter);      
+   		//_lstvFiles.setOnItemClickListener(test);
+	}
+
 //  Login successful
     private Runnable returnRes = new Runnable() {
     	public void run() 
@@ -464,7 +664,8 @@ public class AppController extends Activity
     		
         }
     };
-//    Network connection is failed 
+
+    //    Network connection is failed 
     private Runnable returnResFaileConnection = new Runnable() 
     {
     	public void run() 
@@ -488,7 +689,8 @@ public class AppController extends Activity
     			
         }
     };
-//    Invalid username/password
+
+    //    Invalid username/password
     private Runnable returnResFaileUserNamePassword = new Runnable() 
     {
     	public void run() 
@@ -512,11 +714,12 @@ public class AppController extends Activity
     			
         }
     };
-//    Login progress    
+
+    //    Login progress    
     public void signInProgress()
     {	
     	
-    	_strDomain = _edtxDomain.getText().toString();
+    	_strDomain = "";
 
     	try {
     		
@@ -567,7 +770,8 @@ public class AppController extends Activity
 			runOnUiThread(returnResFaileConnection);
 		}
     }
-//   Get gadget list
+
+    //   Get gadget list
     public List<eXoGadget> getGadgetsList()
 	{
 		List<eXoGadget> arrGadgets = new ArrayList<eXoGadget>();
@@ -641,7 +845,8 @@ public class AppController extends Activity
         
         return arrGadgets;
 	}
-//	Parser gadget string data	
+
+    //	Parser gadget string data	
     public String getStringForGadget(String gadgetStr, String startStr, String endStr)
     {
     	String returnValue = "";
@@ -660,7 +865,8 @@ public class AppController extends Activity
     		
     	return returnValue;
     }
-//	Get gadget list with URL
+
+    //	Get gadget list with URL
     public List<eXoGadget> listOfGadgetsWithURL(String url)
     {
     	List<eXoGadget> arrTmpGadgets = new ArrayList<eXoGadget>();
@@ -765,7 +971,8 @@ public class AppController extends Activity
     		
     	return arrTmpGadgets;
     }
-//	Get gadget tab list
+
+    //	Get gadget tab list
     public List<GateInDbItem>listOfGadgets()
     {    	
     	_strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN, "exo_prf_domain");
@@ -837,7 +1044,8 @@ public class AppController extends Activity
     	
     	return null;
     }
-//	Get needed string
+
+    //	Get needed string
 	private String parseUrl(String urlStr, String neededStr, boolean offset, String enddedStr)
 	{
 		String str;
@@ -851,7 +1059,8 @@ public class AppController extends Activity
 		
 		return str;
 	}
-//   Standalone gadgets
+
+	//   Standalone gadgets
 	private HashMap<String,String> listOfStandaloneGadgetsURL()
 	{
 		HashMap<String, String> mapOfURLs = new HashMap<String,String>();
@@ -899,20 +1108,23 @@ public class AppController extends Activity
 		}
 		return mapOfURLs;
 	}
-//		Check if it is a  standalone gadget
+
+	//	Check if it is a  standalone gadget
 	private boolean isAGadgetIDString(String potentialIDString) 
 	{
 		if ((potentialIDString.charAt(8) == '-') && (potentialIDString.charAt(13) == '-')) return true;
 		return false;
 	}
-//	Show user guide
+
+	//	Show user guide
 	public void showUserGuide()
 	{
 		eXoApplicationsController.webViewMode = 2;
 		Intent next = new Intent(thisClass, eXoWebViewController.class);
     	thisClass.startActivity(next);
 	}
-//	Generate authntication
+
+	//	Generate authntication
 	private void createAuthorization(String url, int port)
     {
     	auth = new AuthScope(url, port);
@@ -920,20 +1132,17 @@ public class AppController extends Activity
 		String password = sharedPreference.getString(EXO_PRF_PASSWORD, "");
 		credential = new UsernamePasswordCredentials(userName, password);
     }
-//    Set language
+
+	//    Set language
     public void changeLanguage(ResourceBundle resourceBundle)
     {
     	
     	String strSignIn = "";
-    	String strDomain = "";
     	String strUserName = "";
     	String strPassword  = "";
-    	String strTitleBar = "";
     	
     	try {
-    		strTitleBar = new String(resourceBundle.getString("SignInInformation").getBytes("ISO-8859-1"), "UTF-8"); 
     		strSignIn = new String(resourceBundle.getString("SignInButton").getBytes("ISO-8859-1"), "UTF-8");
-    		strDomain = new String(resourceBundle.getString("DomainCellTitle").getBytes("ISO-8859-1"), "UTF-8");
     		strUserName = new String(resourceBundle.getString("UserNameCellTitle").getBytes("ISO-8859-1"), "UTF-8");
         	strPassword = new String(resourceBundle.getString("PasswordCellTitle").getBytes("ISO-8859-1"), "UTF-8");
         	strWait = new String(resourceBundle.getString("PleaseWait").getBytes("ISO-8859-1"), "UTF-8");
@@ -947,11 +1156,8 @@ public class AppController extends Activity
 			// TODO: handle exception
 		}
     	
-		_btnSignIn.setText(strSignIn);
-		_txtViewDomain.setText(strDomain);
+		_btnLogIn.setText(strSignIn);
 		_txtViewUserName.setText(strUserName);
-		_txtvTitleBar.setText(strTitleBar);
-	
 		_txtViewPassword.setText(strPassword);
 			
     }

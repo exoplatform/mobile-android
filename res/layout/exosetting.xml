@@ -4,22 +4,33 @@
   	android:layout_width="wrap_content"
   	android:layout_height="wrap_content">
   	
- 	<Button 
- 		android:text="Back" 
- 		android:id="@+id/back" 
- 		android:layout_width="wrap_content" 
- 		android:layout_height="wrap_content"
- 		/>
+  	 <ImageView 
+		android:layout_x="0sp" 
+		android:layout_y="0sp" 
+		android:id="@+id/ImageView01" 
+		android:layout_width="wrap_content" 
+		android:layout_height="40sp"
+		android:background="@drawable/navigationbar"
+		/>
+	<Button
+		android:id="@+id/Button_Home"
+		android:layout_x="02sp" 
+		android:layout_y="05sp" 
+		android:layout_width="30sp"
+		android:layout_height="30sp"
+		android:background="@drawable/home"
+		/>
+  	
+  	
  	<TextView 
- 		android:text="Change language" 
- 		android:id="@+id/changeLanguage" 
+ 		android:text="Language" 
+ 		android:id="@+id/TextView_Language" 
  		android:layout_width="wrap_content" 
  		android:layout_height="wrap_content"
  		android:layout_x="20sp"
-		android:layout_y="50sp"
- 		
+		android:layout_y="50sp"	
  	/>	
-
+ 	
 	<RadioGroup
   		android:layout_width="fill_parent"
    		android:layout_height="wrap_content"
@@ -28,21 +39,48 @@
 		android:layout_y="70sp"
    		>
    		<RadioButton
-    		android:id="@+id/english"
+    		android:id="@+id/RadioButton_English"
     		android:layout_width="wrap_content"
     		android:layout_height="wrap_content"
     		android:text="English" />
    		<RadioButton
-    		android:id="@+id/french"
+    		android:id="@+id/RadioButton_French"
     		android:layout_width="wrap_content"
     		android:layout_height="wrap_content"
     		android:text="French" />
-   		<RadioButton
-    		android:id="@+id/vietnamese"
-    		android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:text="Vietnamese" />
 	</RadioGroup>
  
+ 	<TextView 
+ 		android:text="Server List" 
+ 		android:id="@+id/TextView_Server_List" 
+ 		android:layout_width="wrap_content" 
+ 		android:layout_height="wrap_content"
+ 		android:layout_x="20sp"
+		android:layout_y="170sp"	
+ 	/>
+ 	<ListView
+		android:id="@+id/ListView_Servers"
+		android:layout_x="10sp"
+		android:layout_y="190sp"
+		android:layout_width="300sp"
+		android:layout_height="120sp"
+		/>
+		
+ 	<Button 
+ 		android:text="Modify the List" 
+ 		android:id="@+id/Button_Modify_The_List"
+ 		android:layout_x="60sp"
+		android:layout_y="320sp" 
+ 		android:layout_width="200sp" 
+ 		android:layout_height="40sp"
+ 		/>
 
+	<Button 
+ 		android:text="User Guide" 
+ 		android:id="@+id/Button_User_Guide"
+ 		android:layout_x="20sp"
+		android:layout_y="380sp" 
+ 		android:layout_width="280sp" 
+ 		android:layout_height="40sp"
+ 		/>
 </AbsoluteLayout>

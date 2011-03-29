@@ -404,7 +404,8 @@ public class eXoFilesController extends Activity
 		_btnCancelUploadImage.setVisibility(viewImageMode);
 		_btnCloseBack.setVisibility(viewFileMode);
 	}
-//	Get file/folder icon form URL
+
+	//	Get file/folder icon form URL
 	static private Bitmap fileFolderIcon(eXoFile file)
 	{
 		String contentType = "unknown.png";
@@ -435,7 +436,8 @@ public class eXoFilesController extends Activity
 		
 		return bmp;
 	}
-//		Get file array from URL
+
+	//		Get file array from URL
 	public static List<eXoFile> getPersonalDriveContent(String url)
 	{
 		List<eXoFile> arrFilesTmp = new ArrayList <eXoFile>();
@@ -500,6 +502,7 @@ public class eXoFilesController extends Activity
 		
        _progressDialog = ProgressDialog.show(thisClass, null, strLoadingDataFromServer);
 	}
+	
 //	Create file adapter
 	public static void createExoFilesAdapter()
 	{	
@@ -640,6 +643,7 @@ public class eXoFilesController extends Activity
 		_lstvFiles.setAdapter(test);      
    		//_lstvFiles.setOnItemClickListener(test);
 	}
+
 //	Save file to SDCard
 	private static boolean saveFileToLocal(AuthScope auth, UsernamePasswordCredentials credential, String url, String path, String file, boolean isTakeImage)
 	{

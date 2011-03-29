@@ -7,75 +7,23 @@
     android:background="@drawable/background"
     >
 		
-	<ImageView 
-		android:layout_x="0sp" 
-		android:layout_y="0sp" 
-		android:id="@+id/ImageView01" 
-		android:layout_width="wrap_content" 
-		android:layout_height="40sp"
-		android:background="@drawable/navigationbar"
-		/>
-		
-	<TextView 
-		android:id="@+id/TextView_TitleBar"
-		android:textSize="18sp" 
-		android:text="Sign in information" 
-		android:layout_x="0sp"
-		android:layout_y="40sp" 
-		android:layout_width="fill_parent" 
-		android:layout_height="40sp" 
+	<Button
+		android:id="@+id/Button_Account"
+		android:layout_width="40sp"
+		android:layout_height="50sp"
+		android:layout_x="10sp"
+		android:layout_y="100sp"
+		android:background="@drawable/account"
 		/>
 		
 	<Button
-		android:id="@+id/Button_Language_Help"
-		android:layout_width="30sp"
-		android:layout_height="30sp"
-		android:layout_x="5sp"
-		android:layout_y="05sp"
-		android:background="@drawable/setting1"
+		android:id="@+id/Button_Server"
+		android:layout_width="40sp"
+		android:layout_height="50sp"
+		android:layout_x="60sp"
+		android:layout_y="100sp"
+		android:background="@drawable/server"
 		/>
-	
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="130sp"
-		android:layout_height="40sp"
-		android:layout_x="190sp"
-		android:layout_y="0sp"
-		>
-		
-		 <TextView android:id="@+id/EditText_Tmp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="3"
-            android:layout_weight="1"
-            android:layout_gravity="bottom"
-        />
-        
-		<Button
-			android:id="@+id/Button_SignIn"
-			android:layout_width="wrap_content"
-			android:layout_height="38sp"
-			android:layout_marginTop="01sp"
-			android:layout_gravity="center"
-		/>
-	</LinearLayout>	
-	
-    <TextView
-		android:id="@+id/TextView_Domain"
-		android:layout_width="70sp"
-		android:layout_height="wrap_content"
-		android:text="Host"
-		android:layout_x="0sp"
-		android:layout_y="80sp"
-		/>	
-	<EditText
-		android:id="@+id/EditText_Domain"
-		android:layout_width="250sp"
-		android:layout_height="wrap_content"
-		android:layout_x="70sp"
-		android:layout_y="80sp"
-		android:maxLines="2"
-		/>	
 	
 	<TextView
 		android:id="@+id/TextView_UserName"
@@ -83,7 +31,7 @@
 		android:layout_height="wrap_content"
 		android:text="UserName"
 		android:layout_x="0sp"
-		android:layout_y="150sp"
+		android:layout_y="180sp"
 		/>
 	<EditText
 		android:id="@+id/EditText_UserName"
@@ -91,7 +39,7 @@
 		android:layout_height="wrap_content"
 		android:maxLines="1"
         android:layout_x="70sp"
-		android:layout_y="150sp"
+		android:layout_y="170sp"
 		/>
 		      	 
 	<TextView
@@ -100,15 +48,32 @@
         android:layout_height="wrap_content"
         android:text="Password"
         android:layout_x="0sp"
-		android:layout_y="200sp"
+		android:layout_y="230sp"
     	/>
 	<EditText android:id="@+id/EditText_Password"
 	  	android:layout_width="250sp"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:layout_x="70sp"
-		android:layout_y="200sp"
+		android:layout_y="220sp"
         android:password="true"
-        />        
+        /> 
+        
+    <ListView
+		android:id="@+id/ListView_Servers"
+		android:layout_x="10sp"
+		android:layout_y="160sp"
+		android:layout_width="300sp"
+		android:layout_height="120sp"
+		/>
+       
+   	<Button
+		android:id="@+id/Button_Login"
+		android:layout_width="280sp"
+		android:layout_height="40sp"
+		android:layout_x="20sp"
+		android:layout_y="320sp"
+		android:text="Login"
+		/>       
 
 </AbsoluteLayout>
