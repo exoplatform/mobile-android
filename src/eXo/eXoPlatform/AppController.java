@@ -740,7 +740,7 @@ public class AppController extends Activity
         	
         	//String strResult = "NO";
         	String strResult = _eXoConnection.sendAuthentication(_strDomain, _strUserName, _strPassword);
-        	if(strResult == "YES")
+        	if(strResult.equalsIgnoreCase("YES"))
         	{
         		
         		SharedPreferences.Editor editor = sharedPreference.edit();
@@ -753,7 +753,7 @@ public class AppController extends Activity
         		
         		runOnUiThread(returnRes);
         	}
-        	else if(strResult == "NO")
+        	else if(strResult.equalsIgnoreCase("NO"))
         	{
         		runOnUiThread(returnResFaileUserNamePassword);
         	}

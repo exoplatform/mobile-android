@@ -51,7 +51,7 @@ public class eXoImageView extends Activity {
             public void onClick(View v ){
             	
             	fileName = txtFileName.getText().toString(); 
-            	if(fileName == null || fileName == "")
+            	if(fileName == null || fileName.equalsIgnoreCase(""))
             	{
             		fileName = txtFileName.getHint().toString();
             	}

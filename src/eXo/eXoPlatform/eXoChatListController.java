@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -292,7 +293,7 @@ public class eXoChatListController extends Activity{
 				
 			} catch (XMPPException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 	    	
 	    }
@@ -394,7 +395,7 @@ public class eXoChatListController extends Activity{
 			 strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage").getBytes("ISO-8859-1"), "UTF-8");
 		 } catch (Exception e) {
 			 // TODO: handle exception
-			 e.printStackTrace();
+			
 		 }
 	    	
 		 btnClose.setText(strcloseBtn);
