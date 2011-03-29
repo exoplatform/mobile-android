@@ -1,6 +1,7 @@
 package eXo.eXoPlatform;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,17 +16,16 @@ import java.util.ResourceBundle;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
-
-import eXo.eXoPlatform.Configuration.ServerObj;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -63,6 +63,53 @@ public class AppController extends Activity
 	class Configuration {
 		ArrayList<ServerObj> _arrServerList;
 
+		public String getDefaultServerVersion()
+		{
+			 XmlResourceParser parser = getResources().getXml(R.xml.defaultconfiguaration);
+		        
+		        try {
+		            int eventType = parser.getEventType();
+
+		            while (eventType != XmlPullParser.END_DOCUMENT) {
+		                String name = null;
+
+		                switch (eventType){
+		                    case XmlPullParser.START_TAG:
+		                        name = parser.getName().toLowerCase();
+
+		                        if (name.equalsIgnoreCase("version")) {
+		                        	
+		                            for (int i = 0;i < parser.getAttributeCount();i++) {
+		                                String attribute = parser.getAttributeName(i).toLowerCase();
+		                                if (attribute.equalsIgnoreCase("number")) {
+		                                	return parser.getAttributeValue(i);
+		                                	 
+		                                }
+		                            }
+		                        }
+
+		                        break;
+		                    case XmlPullParser.END_TAG:
+		                        name = parser.getName();
+		                        break;
+		                }
+
+		                try {
+		                	eventType = parser.next();
+						} catch (Exception e) {
+							// TODO: handle exception
+							eventType = 0;
+						}
+		                
+		            }
+		        }
+		        catch (XmlPullParserException e) {
+		            throw new RuntimeException("Cannot parse XML");
+		        }
+		        
+			return null;
+		}
+		
 		public ArrayList<ServerObj> getDefaultServerList() {
 			
 			ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
@@ -117,6 +164,44 @@ public class AppController extends Activity
 			
 		}
 		
+		public ArrayList<ServerObj> getDeletedServerList() {
+			
+			ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
+			InputStream obj_is = null;
+			Document obj_doc = null;
+			DocumentBuilderFactory doc_build_fact = null;
+			DocumentBuilder doc_builder = null;
+			try {
+				obj_is = new FileInputStream("/sdcard/deletedServerList.xml");
+				doc_build_fact = DocumentBuilderFactory.newInstance();
+				doc_builder = doc_build_fact.newDocumentBuilder();
+
+				obj_doc = doc_builder.parse(obj_is);
+
+				NodeList obj_nod_list = null;
+				if(null != obj_doc)
+				{
+					org.w3c.dom.Element feed =  obj_doc.getDocumentElement();
+					obj_nod_list = feed.getElementsByTagName("servers");
+					for(int i = 0; i < obj_nod_list.getLength(); i++)
+					{
+						Node node = obj_nod_list.item(i);
+						
+						ServerObj serverObj = new ServerObj();
+						NamedNodeMap attributes = node.getAttributes();
+						
+						 
+					}
+				} 
+
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+					        
+			return arrServerList;
+			
+		}
+		
 		public boolean createXmlDataWithServerList(ArrayList<ServerObj> objList, String fileName)
 		{
 			boolean returnValue = false;
@@ -125,7 +210,7 @@ public class AppController extends Activity
 			try
 			{
 				newxmlfile.createNewFile();
-
+				
 			}catch(IOException e){
 				
 	            Log.e("IOException", "exception in createNewFile() method");
@@ -254,6 +339,7 @@ public class AppController extends Activity
         setContentView(R.layout.login);
 
         String appVer = "";
+        String currentVer = "";
         try
         {
             appVer = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
@@ -263,7 +349,7 @@ public class AppController extends Activity
 //            Log.v(tag, e.getMessage());
         }
 
-        if(appVer.equalsIgnoreCase(""))
+        if(appVer.compareToIgnoreCase(currentVer) > 0)
         {
         	
         }
@@ -272,8 +358,6 @@ public class AppController extends Activity
         	
         }
         
-	
-		
         String strLocalize;
     	
         thisClass = this;
