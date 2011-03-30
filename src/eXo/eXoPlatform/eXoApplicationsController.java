@@ -49,7 +49,7 @@ public class eXoApplicationsController extends Activity
 	private static eXoAppsAdapter exoAppsAdapter;	//eXo app adapter
 	
 	ProgressDialog _progressDialog;	//Progress dialog
-	eXoApplicationsController thisClass; //Instance
+	static eXoApplicationsController eXoApplicationsControllerInstance; //Instance
 	
 	public static List<GateInDbItem> arrGadgets;	//Gadgets array
 	public static GateInDbItem gadgetTab;	//Dashboard tab
@@ -73,7 +73,7 @@ public class eXoApplicationsController extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.appsview);
         
-        thisClass = this;
+        eXoApplicationsControllerInstance = this;
         
         txtVieweXoAppsTittle = (TextView) findViewById(R.id.TextView_AppsTitle);
         txtVieweXoGadgetsTittle = (TextView) findViewById(R.id.TextView_GadgetsTitle);
@@ -101,8 +101,8 @@ public class eXoApplicationsController extends Activity
         	public void onClick(View v) 
 			{
         		
-        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoApplicationsController.this, 1, thisClass);
-        		customizeDialog.show();
+//        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoApplicationsController.this, 1, eXoApplicationsControllerInstance);
+//        		customizeDialog.show();
 			}	
 		});
         
@@ -252,7 +252,7 @@ public class eXoApplicationsController extends Activity
 				strLoadingDataFromServer = "";
 			}
 	         
-	        _progressDialog = ProgressDialog.show(thisClass, null, strLoadingDataFromServer);
+	        _progressDialog = ProgressDialog.show(eXoApplicationsControllerInstance, null, strLoadingDataFromServer);
             
             thread =  new Thread(loadingDataRunnable, "LoadDingData"); 
             thread.start();
@@ -273,7 +273,7 @@ public class eXoApplicationsController extends Activity
 	    	}
 	    	
 	    	eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(eXoFilesController.myFile.urlStr);
-	    	eXoFilesController._delegate = thisClass;
+	    	eXoFilesController._delegate = eXoApplicationsControllerInstance;
 	    	Intent next = new Intent(eXoApplicationsController.this, eXoFilesController.class);
 	    	eXoApplicationsController.this.startActivity(next);
     		
@@ -301,7 +301,7 @@ public class eXoApplicationsController extends Activity
     		  if(eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
     		    	return;
 	    	
-    		eXoChatListController._delegate = thisClass;
+    		eXoChatListController._delegate = eXoApplicationsControllerInstance;
 	    	Intent next = new Intent(eXoApplicationsController.this, eXoChatListController.class);
 	    	eXoApplicationsController.this.startActivity(next);
 	    }
@@ -404,7 +404,7 @@ public class eXoApplicationsController extends Activity
 	    
 	    public void launchGadget()
 	    {
-	    	eXoGadgetViewController._delegate = thisClass;
+	    	eXoGadgetViewController._delegate = eXoApplicationsControllerInstance;
 	    	Intent next = new Intent(eXoApplicationsController.this, eXoGadgetViewController.class);
 	    	eXoApplicationsController.this.startActivity(next);
     		

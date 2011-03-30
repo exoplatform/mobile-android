@@ -46,7 +46,7 @@ public class eXoChatListController extends Activity{
 	private static Button _btnLanguageHelp;	//Setting
 	private static TextView tvTitle;	//Title
 	private ListView lvChatList;	//Chat list view
-	eXoChatListController thisClass;	//Instance
+	static eXoChatListController eXoChatListControllerInstance;	//Instance
 	static eXoApplicationsController _delegate;	//Main app view controller
 
 	public static XMPPConnection conn;	//Interact with server
@@ -88,7 +88,7 @@ public class eXoChatListController extends Activity{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.exochatlist);
         
-        thisClass = this;
+		eXoChatListControllerInstance = this;
         
         btnClose = (Button) findViewById(R.id.ButtonClose);
         btnClose.setOnClickListener(new OnClickListener() {
@@ -109,9 +109,9 @@ public class eXoChatListController extends Activity{
         	public void onClick(View v) 
 			{
         		
-        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoChatListController.this, 3, thisClass);
-        		customizeDialog.setTitle("User guide & language setting");
-        		customizeDialog.show();
+//        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoChatListController.this, 3, eXoChatListControllerInstance);
+//        		customizeDialog.setTitle("User guide & language setting");
+//        		customizeDialog.show();
 			}	
 		});
         

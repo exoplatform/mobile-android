@@ -131,7 +131,7 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
 						    		int index = myFile.urlStr.lastIndexOf("/");
 						    		myFile.urlStr = myFile.urlStr.substring(0, index);
 						    		eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(myFile.urlStr);
-						    		eXoFilesController.thisClass.runOnUiThread(reloadFileAdapter);
+						    		eXoFilesController.eXoFilesControllerInstance.runOnUiThread(reloadFileAdapter);
 						   			
 								}
 								else if(pos == 4)//Paste copy, move file 
@@ -171,7 +171,7 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
 								}
 				        	 
 				        	 dismiss();
-				        	 eXoFilesController.thisClass.runOnUiThread(dismissProgressDialog);
+				        	 eXoFilesController.eXoFilesControllerInstance.runOnUiThread(dismissProgressDialog);
 				        	 
 				        	 }
 				         };

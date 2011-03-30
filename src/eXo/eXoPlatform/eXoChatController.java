@@ -42,7 +42,7 @@ public class eXoChatController extends Activity{
 	Button _btnLanguageHelp;	//Setting button
 	TextView tvCurrentChat;	//Current chat name
 
-	public static eXoChatController thisClass;	//Instance
+	public static eXoChatController eXoChatControllerInstance;	//Instance
 	static eXoApplicationsController _delegate;	//Main app view controller
 	//Receive message
 	public static PacketListener packetListener;	
@@ -59,7 +59,7 @@ public class eXoChatController extends Activity{
 //        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.exochat);
-        thisClass = this;
+        eXoChatControllerInstance = this;
         messageEditText = (EditText) findViewById(R.id.message);
         
         conversationView = (ListView) findViewById(R.id.chatContent);
@@ -127,9 +127,9 @@ public class eXoChatController extends Activity{
         {	
         	public void onClick(View v) 
 			{
-        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoChatController.this, 4, thisClass);
-        		customizeDialog.setTitle("User guide & language setting");
-        		customizeDialog.show();
+//        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoChatController.this, 4, eXoChatControllerInstance);
+//        		customizeDialog.setTitle("User guide & language setting");
+//        		customizeDialog.show();
 			}	
 		});
         
@@ -205,7 +205,7 @@ public class eXoChatController extends Activity{
 			
     		public View getView(int position, View convertView, ViewGroup parent) 
     	    {
-    	    	LayoutInflater inflater = thisClass.getLayoutInflater();
+    	    	LayoutInflater inflater = eXoChatControllerInstance.getLayoutInflater();
     	    	View rowView = inflater.inflate(R.layout.exochatmessagecontentitem, parent, false);
     	    	bindView(rowView, listChatContent.get(position));
     	        return(rowView);

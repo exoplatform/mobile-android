@@ -74,7 +74,7 @@ public class eXoFilesController extends Activity
 	boolean				_copyFile;
 	boolean				_moveFile;
 	
-	static eXoFilesController thisClass;
+	static eXoFilesController eXoFilesControllerInstance;
 	static eXoApplicationsController _delegate;
 	static public eXoFile myFile;
 	static public int positionOfFileItem = 0;
@@ -89,11 +89,13 @@ public class eXoFilesController extends Activity
     public void onCreate(Bundle icicle) 
     {
         super.onCreate(icicle);
-        thisClass = this;
+        
 //        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.exofilesview);
 		
+        eXoFilesControllerInstance = this;
+        
     	_btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
     	_btnUploadImage.setOnClickListener( new OnClickListener(){
             public void onClick(View v ){
@@ -185,8 +187,8 @@ public class eXoFilesController extends Activity
         _btnLanguageHelp.setOnClickListener(new View.OnClickListener() {	
         	public void onClick(View v) 
 			{
-        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoFilesController.this, 2, thisClass);
-        		customizeDialog.show();
+//        		eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoFilesController.this, 2, eXoFilesControllerInstance);
+//        		customizeDialog.show();
 			}	
 		});
         
@@ -219,7 +221,7 @@ public class eXoFilesController extends Activity
 		
 		public void run() {
 			// TODO Auto-generated method stub
-			Toast toast = Toast.makeText(thisClass, "SDCard is not available", Toast.LENGTH_SHORT);
+			Toast toast = Toast.makeText(eXoFilesControllerInstance, "SDCard is not available", Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 			toast.show();
 		}
@@ -243,13 +245,13 @@ public class eXoFilesController extends Activity
 			
 			if(arrFiles.isEmpty())
 			{
-				 thisClass.imgViewEmptyPage.setVisibility(View.VISIBLE);
-				 thisClass._textViewEmptyPage.setVisibility(View.VISIBLE);
+				eXoFilesControllerInstance.imgViewEmptyPage.setVisibility(View.VISIBLE);
+				eXoFilesControllerInstance._textViewEmptyPage.setVisibility(View.VISIBLE);
 			}
 			else
 			{
-				thisClass.imgViewEmptyPage.setVisibility(View.INVISIBLE);
-				thisClass._textViewEmptyPage.setVisibility(View.INVISIBLE);
+				eXoFilesControllerInstance.imgViewEmptyPage.setVisibility(View.INVISIBLE);
+				eXoFilesControllerInstance._textViewEmptyPage.setVisibility(View.INVISIBLE);
 			}
 				
 			_progressDialog.dismiss();
@@ -310,7 +312,7 @@ public class eXoFilesController extends Activity
 			    		//_strCurrentDirectory = _strCurrentDirectory + "/" + myFile.fileName;
 			    		eXoApplicationsController.webViewMode = 1;
 			    		
-			    		AlertDialog.Builder builder = new AlertDialog.Builder(thisClass); 
+			    		AlertDialog.Builder builder = new AlertDialog.Builder(eXoFilesControllerInstance); 
 //		    	        builder.setMessage("Do you want to download " + myFile.fileName.replace("%20", " ") + " into sdcard?");
 			    		builder.setMessage(strDownloadFileIntoSDCard);
 		    	        builder.setCancelable(false); 
@@ -327,7 +329,7 @@ public class eXoFilesController extends Activity
 				    	        		int index = myFile.urlStr.lastIndexOf("/");
 				    	        		myFile.urlStr = myFile.urlStr.substring(0, index);
 							 			
-						        	 thisClass.runOnUiThread(dismissProgressDialog);
+				    	        		eXoFilesControllerInstance.runOnUiThread(dismissProgressDialog);
 						        	 }
 						         };
 					            
@@ -358,7 +360,7 @@ public class eXoFilesController extends Activity
 	public static void takePicture()
     {
     	Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        thisClass.startActivityForResult(intent, 0);
+    	eXoFilesControllerInstance.startActivityForResult(intent, 0);
 	        
     }
 //	   Take photo app
@@ -429,7 +431,7 @@ public class eXoFilesController extends Activity
 		
 		Bitmap bmp = null;
 		try {
-			bmp = BitmapFactory.decodeStream(thisClass.getAssets().open(contentType));
+			bmp = BitmapFactory.decodeStream(eXoFilesControllerInstance.getAssets().open(contentType));
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -500,7 +502,7 @@ public class eXoFilesController extends Activity
 			strLoadingDataFromServer = "";
 		}
 		
-       _progressDialog = ProgressDialog.show(thisClass, null, strLoadingDataFromServer);
+       _progressDialog = ProgressDialog.show(eXoFilesControllerInstance, null, strLoadingDataFromServer);
 	}
 	
 //	Create file adapter
@@ -510,7 +512,7 @@ public class eXoFilesController extends Activity
 			
 			  public View getView(int position, View convertView, ViewGroup parent) 
 			    {
-			    	LayoutInflater inflater = thisClass.getLayoutInflater();
+			    	LayoutInflater inflater = eXoFilesControllerInstance.getLayoutInflater();
 			    	final View rowView = inflater.inflate(R.layout.fileitem, parent, false);
 			    	final int pos = position;
 			    	
@@ -525,7 +527,7 @@ public class eXoFilesController extends Activity
 				        	 
 				        	 if(!myFile.isFolder)
 				        	 {
-				        		 thisClass.runOnUiThread(fileItemClickRunnable);
+				        		 eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
 				        	 }
 				        	 else
 				        	 {
@@ -536,9 +538,9 @@ public class eXoFilesController extends Activity
 						        	 
 						        	 arrFiles = getPersonalDriveContent(myFile.urlStr);
 						        	 
-						        	 thisClass.runOnUiThread(fileItemClickRunnable);
+						        	 eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
 						        	    	
-						        	 thisClass.runOnUiThread(dismissProgressDialog);
+						        	 eXoFilesControllerInstance.runOnUiThread(dismissProgressDialog);
 						        	 }
 						         };
 					            
@@ -567,9 +569,9 @@ public class eXoFilesController extends Activity
 					        	 myFile = arrFiles.get(positionOfFileItem);
 					        	 if(myFile.isFolder)
 					        		 arrFiles = getPersonalDriveContent(myFile.urlStr);
-					        	thisClass.runOnUiThread(fileItemClickRunnable);
+					        	 eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
 					        	    	
-					        	 thisClass.runOnUiThread(dismissProgressDialog);
+					        	 eXoFilesControllerInstance.runOnUiThread(dismissProgressDialog);
 					        	 }
 					         };
 				            
@@ -591,7 +593,7 @@ public class eXoFilesController extends Activity
 							// TODO Auto-generated method stub
 							positionOfFileItem = pos;
 //							myFile = arrFiles.get(positionOfFileItem);
-							eXoFileActionDialog fileActionDialog = new eXoFileActionDialog(thisClass, arrFiles.get(positionOfFileItem));
+							eXoFileActionDialog fileActionDialog = new eXoFileActionDialog(eXoFilesControllerInstance, arrFiles.get(positionOfFileItem));
 							//fileAction.setTitle("User guide & language setting");
 							fileActionDialog.show();
 							
@@ -653,7 +655,7 @@ public class eXoFilesController extends Activity
 	   		
 	   		InputStream is;
 	   		if(isTakeImage)
-	   			is = thisClass.getContentResolver().openInputStream(_uri);
+	   			is = eXoFilesControllerInstance.getContentResolver().openInputStream(_uri);
 	   		else
 	   			is = getInputStreamFromServer(auth, credential, url);
 		   	
@@ -697,7 +699,7 @@ public class eXoFilesController extends Activity
 			String str = e.toString();
 			Log.e(str, msg);
 			
-			thisClass.runOnUiThread(cannotAceesSDCard);
+			eXoFilesControllerInstance.runOnUiThread(cannotAceesSDCard);
 			
 		}
 	    	

@@ -20,6 +20,7 @@ import android.widget.Toast;
 //Display gadget
 public class eXoWebViewController extends Activity
 {
+	static eXoWebViewController eXoWebViewControllerInstance;	//Instance
 	Button _btnClose;
 	WebView _wvGadget;
 	TextView _txtvTitleBar;
@@ -33,6 +34,7 @@ public class eXoWebViewController extends Activity
 		 requestWindowFeature(Window.FEATURE_NO_TITLE);
 		 setContentView(R.layout.webview);
 		 
+		 eXoWebViewControllerInstance = this;
 		
 		 setupCookies();
 		 

@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,14 +21,12 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
-import eXo.eXoPlatform.eXoApplicationsController.eXoAppsAdapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -46,11 +43,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -379,9 +374,9 @@ public class AppController extends Activity
 	String strLoadingDataFromServer;
 	
 //	Point to itself
-	public static AppController thisClass;
-//	Next activity
-	Intent next;
+	public static AppController appControllerInstance;
+	public static Configuration configurationInstance;
+
 //	Get data thread
 	Thread thread;
 //	Login progress dialog
@@ -400,10 +395,10 @@ public class AppController extends Activity
 //        File file = new File(Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml");
 //        file.delete();
         
-        Configuration conf = new Configuration();
+        configurationInstance = new Configuration();
         
         String appVer = "";
-        String oldVer = conf.getAppVersion();
+        String oldVer = configurationInstance.getAppVersion();
         try
         {
             appVer = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
@@ -413,12 +408,12 @@ public class AppController extends Activity
 //            Log.v(tag, e.getMessage());
         }
 
-        ArrayList<ServerObj> defaultServerList = conf.getDefaultServerList();
+        ArrayList<ServerObj> defaultServerList = configurationInstance.getDefaultServerList();
         
         if(appVer.compareToIgnoreCase(oldVer) > 0)
         {
         	
-        	ArrayList<ServerObj> deletedDefaultServers = conf.getServerListWithFileName("DeletedDefaultServerList.xml");
+        	ArrayList<ServerObj> deletedDefaultServers = configurationInstance.getServerListWithFileName("DeletedDefaultServerList.xml");
         	
         	ArrayList<ServerObj> tmp = new ArrayList<ServerObj>();
         	if(deletedDefaultServers == null)
@@ -444,24 +439,24 @@ public class AppController extends Activity
             	}
         	}
         	
-        	conf.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
+        	configurationInstance.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
         }
         else
         {
         	
         }
         
-        ArrayList<ServerObj> userServerList = conf.getServerListWithFileName("UserServerList.xml");
-        defaultServerList = conf.getServerListWithFileName("DefaultServerList.xml");
+        ArrayList<ServerObj> userServerList = configurationInstance.getServerListWithFileName("UserServerList.xml");
+        defaultServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
         
         if(userServerList != null)
-        	conf._arrServerList.addAll(userServerList);
+        	configurationInstance._arrServerList.addAll(userServerList);
         if(defaultServerList != null)
-        	conf._arrServerList.addAll(defaultServerList);
+        	configurationInstance._arrServerList.addAll(defaultServerList);
         
         String strLocalize;
     	
-        thisClass = this;
+        appControllerInstance = this;
         if(sharedPreference == null)
         	sharedPreference = getSharedPreferences(EXO_PREFERENCE, 0);
 
@@ -562,7 +557,7 @@ public class AppController extends Activity
 			}	
 		});     
         
-       createServersAdapter(conf._arrServerList);
+       createServersAdapter(configurationInstance._arrServerList);
     }
 
     //  Key down listener    
@@ -574,7 +569,8 @@ public class AppController extends Activity
        
         return false;
     }
-    
+   
+//    Create Setting Menu
     public boolean onCreateOptionsMenu(Menu menu){
 
     	menu.add(0, 1, 0, "Setting");
@@ -586,6 +582,7 @@ public class AppController extends Activity
 
     	}
 
+//    Menu action
     public boolean onOptionsItemSelected (MenuItem item){
 
     	int selectedItemIndex = item.getItemId();
@@ -602,8 +599,8 @@ public class AppController extends Activity
     	return false;
 }
 	
-//	Create file adapter
-	public static void createServersAdapter(List<ServerObj> serverObjs)
+//	Create server list adapter
+	public void createServersAdapter(List<ServerObj> serverObjs)
 	{	
 		
 		final List<ServerObj> serverObjsTmp = serverObjs;
@@ -612,7 +609,7 @@ public class AppController extends Activity
 			
 			  public View getView(int position, View convertView, ViewGroup parent) 
 			    {
-			    	LayoutInflater inflater = thisClass.getLayoutInflater();
+			    	LayoutInflater inflater = appControllerInstance.getLayoutInflater();
 			    	View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
 			    	
 			    	ServerObj serverObj = serverObjsTmp.get(position);
@@ -672,7 +669,7 @@ public class AppController extends Activity
     	{
     		_progressDialog.dismiss();
     		
-    		AlertDialog.Builder builder = new AlertDialog.Builder(thisClass); 
+    		AlertDialog.Builder builder = new AlertDialog.Builder(appControllerInstance); 
 	        builder.setMessage(strNetworkConnextionFailed); 
 	        builder.setCancelable(false); 
 	        
@@ -697,7 +694,7 @@ public class AppController extends Activity
     	{
     		_progressDialog.dismiss();
     		
-    		AlertDialog.Builder builder = new AlertDialog.Builder(thisClass); 
+    		AlertDialog.Builder builder = new AlertDialog.Builder(appControllerInstance); 
 	        builder.setMessage(strUserNamePasswordFailed); 
 	        builder.setCancelable(false); 
 	        
@@ -1120,8 +1117,8 @@ public class AppController extends Activity
 	public void showUserGuide()
 	{
 		eXoApplicationsController.webViewMode = 2;
-		Intent next = new Intent(thisClass, eXoWebViewController.class);
-    	thisClass.startActivity(next);
+		Intent next = new Intent(appControllerInstance, eXoWebViewController.class);
+		startActivity(next);
 	}
 
 	//	Generate authntication
@@ -1136,7 +1133,6 @@ public class AppController extends Activity
 	//    Set language
     public void changeLanguage(ResourceBundle resourceBundle)
     {
-    	
     	String strSignIn = "";
     	String strUserName = "";
     	String strPassword  = "";
@@ -1158,9 +1154,7 @@ public class AppController extends Activity
     	
 		_btnLogIn.setText(strSignIn);
 		_txtViewUserName.setText(strUserName);
-		_txtViewPassword.setText(strPassword);
-			
+		_txtViewPassword.setText(strPassword);	
     }
-    
    
 }

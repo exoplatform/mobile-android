@@ -38,7 +38,7 @@ public class eXoGadgetViewController extends Activity
 	String strCannotBackToPreviousPage;
 	String strConnectionTimedOut;
 	
-	eXoGadgetViewController thisClass;	//Instance
+	static eXoGadgetViewController eXoGadgetViewControllerInstance;	//Instance
 	static eXoApplicationsController _delegate;	//Main app view controller
 	
 	public static eXoGadget currentGadget;	//Current gadget
@@ -57,7 +57,7 @@ public class eXoGadgetViewController extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.exogadgetview);
         
-        thisClass = this;
+        eXoGadgetViewControllerInstance = this;
 
         _btnClose = (Button) findViewById(R.id.Button_Close);
         _btnClose.setOnClickListener(new View.OnClickListener() {
@@ -73,8 +73,8 @@ public class eXoGadgetViewController extends Activity
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoGadgetViewController.this, 6, thisClass);
-        		customizeDialog.show();
+//				eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoGadgetViewController.this, 6, eXoGadgetViewControllerInstance);
+//        		customizeDialog.show();
 				
 			}
 		});
@@ -88,7 +88,7 @@ public class eXoGadgetViewController extends Activity
         	 
         	public View getView(int position, View convertView, ViewGroup parent) 
 		    {
-        		LayoutInflater inflater = thisClass.getLayoutInflater();
+        		LayoutInflater inflater = eXoGadgetViewControllerInstance.getLayoutInflater();
 			   	View rowView = inflater.inflate(R.layout.rowinlistview, parent, false);
 			   	
         		GateInDbItem gadgetTab = eXoApplicationsController.gadgetTab;
