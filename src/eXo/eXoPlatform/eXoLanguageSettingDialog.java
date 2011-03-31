@@ -110,10 +110,15 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 				if(!isExisted)
 				{
 //					Create new server
+					myServerObj._bSystemServer = false;
 					AppController.configurationInstance._arrServerList.add(myServerObj);
+					
 					eXoModifyServerList.eXoModifyServerListInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
 					eXoSetting.eXoSettingInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
 					AppController.appControllerInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
+					
+					AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrServerList, "UserSeverList.xml", "");
+					
 				}
 			}
 			else //Update server
@@ -152,9 +157,21 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 			else	//Delete sever
 			{
 				AppController.configurationInstance._arrServerList.remove(selectedServerIndex);
+				
 				eXoModifyServerList.eXoModifyServerListInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
 				eXoSetting.eXoSettingInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
 				AppController.appControllerInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
+				
+				if(myServerObj._bSystemServer)
+				{
+					AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrServerList, "UserSeverList.xml", "");
+				}
+				else
+				{
+					AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrServerList, "UserSeverList.xml", "");
+				}
+				
+				
 			}
 		}
 		

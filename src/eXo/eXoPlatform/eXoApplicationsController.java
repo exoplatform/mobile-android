@@ -342,7 +342,7 @@ public class eXoApplicationsController extends Activity
 				String str = e.toString();
 				String msg = e.getMessage();
 				Log.e(str, msg);
-				e.printStackTrace();
+//				e.printStackTrace();
 				Toast.makeText(eXoApplicationsController.this, strChatServer, Toast.LENGTH_SHORT).show();
 			}
 	    	

@@ -86,7 +86,7 @@ public class eXoChatController extends Activity{
             	
                 // Send a message using content of the edit text widget
                 String msg = messageEditText.getText().toString();
-                if(msg != null && msg != "")
+                if(msg != null && msg.equalsIgnoreCase(""))
                 {
                 	try {
                 		

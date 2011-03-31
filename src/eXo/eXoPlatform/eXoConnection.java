@@ -108,7 +108,7 @@ public class eXoConnection
 		} 
 		catch (IOException e) 
 		{
-			e.printStackTrace();
+//			e.printStackTrace();
 		} 
 		finally 
 		{
