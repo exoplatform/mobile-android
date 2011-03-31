@@ -71,7 +71,12 @@ public class AppController extends Activity
 //	Actions with server configuration files
 	class Configuration {
 		
+		ArrayList<ServerObj> _arrUserServerList;
+		ArrayList<ServerObj> _arrDefaulServerList;
+		ArrayList<ServerObj> _arrDeletedServerList;
 		ArrayList<ServerObj> _arrServerList;
+		
+		String version;
 		
 		public Configuration()
 		{
@@ -79,7 +84,7 @@ public class AppController extends Activity
 		}
 //		Constructor
 		
-//		Get app's current version
+//		Get app's current version, create DefaultServerList.xml if needed
 		public String getAppVersion()
 		{
 			String filePath = "/sdcard/eXo/DefaultServerList.xml";
@@ -127,7 +132,7 @@ public class AppController extends Activity
 //		Get default server list
 		public ArrayList<ServerObj> getDefaultServerList() {
 			
-			ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
+			ArrayList<ServerObj> arrServerList = getServerListWithFileName("");
 			 XmlResourceParser parser = getResources().getXml(R.xml.defaultconfiguaration);
 		        
 		        try {
@@ -197,14 +202,15 @@ public class AppController extends Activity
 //		Get added/deleted servers
 		public ArrayList<ServerObj> getServerListWithFileName(String name) {
 			
+			ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
+			
 			String filePath = "/sdcard/eXo/" + name;
 			File file = new File(filePath);
 			if(!file.exists())
 			{
-				return null;
+				return arrServerList;
 			}
 			
-			ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
 			InputStream obj_is = null;
 			Document obj_doc = null;
 			DocumentBuilderFactory doc_build_fact = null;
@@ -232,6 +238,8 @@ public class AppController extends Activity
 		                    serverObj._strServerName = itemElement.getAttribute("name");
 		                    serverObj._strServerUrl = itemElement.getAttribute("serverURL");
 		                    serverObj._bSystemServer = false;
+		                    if(name.equalsIgnoreCase("DefaultServerList.xml"))
+		                    	serverObj._bSystemServer = true;
 		                    
 		                    arrServerList.add(serverObj);
 		                }
@@ -392,7 +400,7 @@ public class AppController extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.login);
         
-//        File file = new File(Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml");
+//        File file = new File(Environment.getExternalStorageDirectory() + "/eXo/UserServerList.xml");
 //        file.delete();
         
         configurationInstance = new Configuration();
@@ -408,12 +416,13 @@ public class AppController extends Activity
 //            Log.v(tag, e.getMessage());
         }
 
-        ArrayList<ServerObj> defaultServerList = configurationInstance.getDefaultServerList();
+        ArrayList<ServerObj> defaultServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
         
+        configurationInstance._arrDeletedServerList = configurationInstance.getServerListWithFileName("DeletedDefaultServerList.xml");
         if(appVer.compareToIgnoreCase(oldVer) > 0)
         {
         	
-        	ArrayList<ServerObj> deletedDefaultServers = configurationInstance.getServerListWithFileName("DeletedDefaultServerList.xml");
+        	ArrayList<ServerObj> deletedDefaultServers = configurationInstance._arrDeletedServerList;
         	
         	ArrayList<ServerObj> tmp = new ArrayList<ServerObj>();
         	if(deletedDefaultServers == null)
@@ -440,19 +449,21 @@ public class AppController extends Activity
         	}
         	
         	configurationInstance.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
+        	configurationInstance.version = appVer;
         }
         else
         {
         	
         }
         
-        ArrayList<ServerObj> userServerList = configurationInstance.getServerListWithFileName("UserServerList.xml");
-        defaultServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
+        configurationInstance._arrUserServerList = configurationInstance.getServerListWithFileName("UserServerList.xml");
+        configurationInstance._arrDefaulServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
         
-        if(userServerList != null)
-        	configurationInstance._arrServerList.addAll(userServerList);
-        if(defaultServerList != null)
-        	configurationInstance._arrServerList.addAll(defaultServerList);
+        if(configurationInstance._arrDefaulServerList.size() > 0)
+        	configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
+        if(configurationInstance._arrUserServerList.size() > 0)
+        	configurationInstance._arrServerList.addAll(configurationInstance._arrUserServerList);
+        	
         
         String strLocalize;
     	
@@ -600,7 +611,7 @@ public class AppController extends Activity
 }
 	
 //	Create server list adapter
-	public void createServersAdapter(List<ServerObj> serverObjs)
+	public void createServersAdapter(ArrayList<ServerObj> serverObjs)
 	{	
 		
 		final List<ServerObj> serverObjsTmp = serverObjs;

@@ -1,5 +1,6 @@
 package eXo.eXoPlatform;
 
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import eXo.eXoPlatform.AppController.Configuration;
@@ -13,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /** Class Must extends with Dialog */
 /** Implement onClickListener to dismiss dialog when OK Button is pressed */
@@ -91,6 +93,7 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 					myServerObj._strServerUrl.equalsIgnoreCase(""))
 			{
 				//Server name or server url is empty
+				Toast.makeText(eXoSetting.eXoSettingInstance, "Server name or url is empty. Please enter it again", Toast.LENGTH_LONG).show();
 				return;
 			}
 			if(isNewServer)
@@ -103,6 +106,7 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 							myServerObj._strServerUrl.equalsIgnoreCase(tmp._strServerUrl))
 					{
 						isExisted = true;
+						Toast.makeText(eXoSetting.eXoSettingInstance, "The server's existed", Toast.LENGTH_LONG).show();
 						break;
 						//New server is the same with the old one
 					}
@@ -111,19 +115,14 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 				{
 //					Create new server
 					myServerObj._bSystemServer = false;
-					AppController.configurationInstance._arrServerList.add(myServerObj);
-					
-					eXoModifyServerList.eXoModifyServerListInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
-					eXoSetting.eXoSettingInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
-					AppController.appControllerInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
-					
-					AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrServerList, "UserSeverList.xml", "");
+					AppController.configurationInstance._arrUserServerList.add(myServerObj);
+					AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrUserServerList, "UserServerList.xml", "");
 					
 				}
 			}
 			else //Update server
 			{
-				boolean isExisted = false;
+				boolean isExisted = true;
 				for(int i = 0; i < conf._arrServerList.size(); i++)
 				{
 					ServerObj tmp = conf._arrServerList.get(i);
@@ -136,47 +135,66 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 					if(myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName) &&
 							myServerObj._strServerUrl.equalsIgnoreCase(tmp._strServerUrl))
 					{
-						isExisted = true;
+						isExisted = false;
+						Toast.makeText(eXoSetting.eXoSettingInstance, "The server's existed", Toast.LENGTH_LONG).show();
 						break;
 						//updated server is the same with the old one
 					}
-					
 				}
 				if(isExisted)
 				{
-//					update server
+					//Remove the old server
+					AppController.configurationInstance._arrServerList.remove(selectedServerIndex);
+					serverObj._strServerName = myServerObj._strServerName;
+					serverObj._strServerUrl = myServerObj._strServerUrl;
+					AppController.configurationInstance._arrServerList.add(selectedServerIndex, serverObj);
+					if(serverObj._bSystemServer)//Update default server
+					{
+						AppController.configurationInstance._arrDefaulServerList.remove(selectedServerIndex);
+						AppController.configurationInstance._arrDefaulServerList.add(selectedServerIndex, serverObj);
+						AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrDefaulServerList, "DefaultSeverList.xml", AppController.configurationInstance.version);
+					}
+					else//update user server
+					{
+						int index = selectedServerIndex - AppController.configurationInstance._arrDefaulServerList.size();
+						AppController.configurationInstance._arrUserServerList.remove(index);
+						AppController.configurationInstance._arrUserServerList.add(index, serverObj);
+						AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrUserServerList, "UserServerList.xml", "");
+					}
 				}
 			}
 		}
 		else if(v == btnDeleteCancel)
 		{
-			if(isNewServer)	//Cancel
+			if(!isNewServer)	//Delete sever
 			{
-				
-			}
-			else	//Delete sever
-			{
-				AppController.configurationInstance._arrServerList.remove(selectedServerIndex);
-				
-				eXoModifyServerList.eXoModifyServerListInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
-				eXoSetting.eXoSettingInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
-				AppController.appControllerInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
-				
-				if(myServerObj._bSystemServer)
+				if(serverObj._bSystemServer)
 				{
-					AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrServerList, "UserSeverList.xml", "");
+					AppController.configurationInstance._arrDefaulServerList.remove(selectedServerIndex);
+					AppController.configurationInstance._arrDeletedServerList.add(serverObj);
+					AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrDeletedServerList, "DeletedDefaultServerList.xml", "");
+					AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrDefaulServerList, "DefaultServerList.xml", AppController.configurationInstance.version);
 				}
 				else
 				{
-					AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrServerList, "UserSeverList.xml", "");
+					int index = selectedServerIndex - AppController.configurationInstance._arrDefaulServerList.size();
+					AppController.configurationInstance._arrUserServerList.remove(index);
+					AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrUserServerList, "UserServerList.xml", "");
 				}
-				
-				
 			}
 		}
 		
-		dismiss();
+		AppController.configurationInstance._arrServerList = new ArrayList<ServerObj>();
+		if(AppController.configurationInstance._arrDefaulServerList.size() > 0)
+			AppController.configurationInstance._arrServerList.addAll(AppController.configurationInstance._arrDefaulServerList);
+		if(AppController.configurationInstance._arrUserServerList.size() > 0)
+			AppController.configurationInstance._arrServerList.addAll(AppController.configurationInstance._arrUserServerList);
 		
+		eXoModifyServerList.eXoModifyServerListInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
+		eXoSetting.eXoSettingInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
+		AppController.appControllerInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
+		
+		dismiss();
 	}
 
 	//	Set language   
@@ -218,5 +236,4 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 			btnDeleteCancel.setText(strDeleteCancelButton);
 		   
 	   }
-
 }
