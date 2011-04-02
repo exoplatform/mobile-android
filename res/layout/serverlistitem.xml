@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
+  android:layout_width="320sp"
   android:layout_height="wrap_content">
 
 	<TextView
@@ -12,7 +12,14 @@
 		
 	<TextView
 		android:id="@+id/TextView_URL" 
-		android:layout_width="wrap_content" 
+		android:layout_width="160sp" 
 		android:layout_height="40sp"
 		/>		
+	<ImageView
+		android:id="@+id/ImageView_Checked"
+		 android:paddingTop="10sp"
+		android:layout_width="20sp" 
+		android:layout_height="20sp"
+		android:background="@drawable/checked"
+	/>
 </LinearLayout>

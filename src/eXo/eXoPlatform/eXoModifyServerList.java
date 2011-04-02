@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -86,12 +87,15 @@ public class eXoModifyServerList extends Activity {
 			    	LayoutInflater inflater = eXoModifyServerListInstance.getLayoutInflater();
 			    	View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
 			    	
+			    	
 			    	ServerObj serverObj = serverObjsTmp.get(position);
 			    	
 			    	TextView serverName = (TextView)rowView.findViewById(R.id.TextView_ServerName);
 			    	serverName.setText(serverObj._strServerName);
 			    	
 			    	TextView txtvUrl = (TextView)rowView.findViewById(R.id.TextView_URL);
+			    	txtvUrl.setWidth(300);
+			    	
 			    	txtvUrl.setText(serverObj._strServerUrl);
 
 			    	rowView.setOnClickListener(new View.OnClickListener() {

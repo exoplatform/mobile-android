@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class eXoSetting extends Activity {
 
@@ -73,8 +75,16 @@ public class eXoSetting extends Activity {
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent next = new Intent(eXoSetting.this, eXoModifyServerList.class);
-				eXoSetting.this.startActivity(next);
+				if(!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)))
+				{
+					Toast.makeText(eXoSettingInstance, "You dont't have permission for this because SDCard is not available!", Toast.LENGTH_LONG);
+				}
+				else
+				{
+					Intent next = new Intent(eXoSetting.this, eXoModifyServerList.class);
+					eXoSetting.this.startActivity(next);
+				}
+				
 			}
 		});
 	    

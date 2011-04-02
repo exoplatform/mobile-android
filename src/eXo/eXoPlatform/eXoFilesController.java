@@ -324,7 +324,7 @@ public class eXoFilesController extends Activity
 						         {
 						         public void run()
 						         {
-						        	 saveFileToLocal(AppController.auth, AppController.credential, myFile.urlStr, localFilePath, myFile.fileName.replace("%20", " "), false);
+						        	 eXoFilesControllerInstance.saveFileToLocal(AppController.auth, AppController.credential, myFile.urlStr, localFilePath, myFile.fileName.replace("%20", " "), false);
 				    	        		
 				    	        		int index = myFile.urlStr.lastIndexOf("/");
 				    	        		myFile.urlStr = myFile.urlStr.substring(0, index);
@@ -645,9 +645,10 @@ public class eXoFilesController extends Activity
 		_lstvFiles.setAdapter(test);      
    		//_lstvFiles.setOnItemClickListener(test);
 	}
-
+	
+	
 //	Save file to SDCard
-	private static boolean saveFileToLocal(AuthScope auth, UsernamePasswordCredentials credential, String url, String path, String file, boolean isTakeImage)
+	private boolean saveFileToLocal(AuthScope auth, UsernamePasswordCredentials credential, String url, String path, String file, boolean isTakeImage)
 	{
 	    boolean returnValue = false;
 	    	
@@ -659,27 +660,10 @@ public class eXoFilesController extends Activity
 	   		else
 	   			is = getInputStreamFromServer(auth, credential, url);
 		   	
-	   		File f = new File(path);
-	   		if(!f.exists())
-	   		{
-	   			boolean isMade = f.mkdir();
-	   			if(!isMade)
-	   			{
-	   				
-	   			}
-	   		}
+	   		AppController.configurationInstance.createLocalFileDirectory(path, true);
+	   		AppController.configurationInstance.createLocalFileDirectory(path + "/" + file, true);
 	   		
-	   		f = new File(path, file);
-	   		if(!f.exists())
-	   		{
-	   			boolean isMade = f.createNewFile();
-	   			if(!isMade)
-	   			{
-	   				
-	   			}
-	   		}
-	   		
-	   		FileOutputStream fos = new FileOutputStream(f);
+	   		FileOutputStream fos = new FileOutputStream(new File(path, file));
 //	   	 this.openFileOutput(path + file, MODE_PRIVATE);
 	   		byte[] buffer = new byte[1024];
 	   		

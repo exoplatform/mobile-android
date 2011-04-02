@@ -46,6 +46,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,46 +85,75 @@ public class AppController extends Activity
 		}
 //		Constructor
 		
+		public boolean createLocalFileDirectory(String path, boolean isFolder)
+		{
+			boolean returnValue = false;
+			
+			File f = new File(path);
+			try {
+				if(!f.exists())
+		   		{
+		   			if(isFolder)
+		   				returnValue = f.mkdir();
+		   			else
+		   				returnValue = f.createNewFile();
+		   		}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+	   		
+	   		
+			return returnValue;
+		}
+		
 //		Get app's current version, create DefaultServerList.xml if needed
 		public String getAppVersion()
 		{
-			String filePath = "/sdcard/eXo/DefaultServerList.xml";
-			File file = new File(filePath);
-			if(!file.exists())
+			if(!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED)))
 			{
-				createXmlDataWithServerList(getDefaultServerList(), "DefaultServerList.xml", "0");
 				return "0";
 			}
-			
-			InputStream obj_is = null;
-			Document obj_doc = null;
-			DocumentBuilderFactory doc_build_fact = null;
-			DocumentBuilder doc_builder = null;
-			try {
-				obj_is = new FileInputStream(filePath);
-				doc_build_fact = DocumentBuilderFactory.newInstance();
-				doc_builder = doc_build_fact.newDocumentBuilder();
-
-				obj_doc = doc_builder.parse(obj_is);
-
-				NodeList obj_nod_list = null;
-				if(null != obj_doc)
+			else
+			{
+				String filePath = "/sdcard/eXo/DefaultServerList.xml";
+				createLocalFileDirectory("/sdcard/eXo", true);
+				File file = new File(filePath);
+				if(!file.exists())
 				{
-					org.w3c.dom.Element feed =  obj_doc.getDocumentElement();
-					obj_nod_list = feed.getElementsByTagName("version");
-					
-					for (int i = 0; i < obj_nod_list.getLength(); i++) {
-		                Node itemNode = obj_nod_list.item(i);
-		                if (itemNode.getNodeType() == Node.ELEMENT_NODE)
-		                {
-		                    Element itemElement = (Element) itemNode;
-		                    return itemElement.getAttribute("number"); 
-		                }
-		            }
-				} 
+					createXmlDataWithServerList(getDefaultServerList(), "DefaultServerList.xml", "0");
+					return "0";
+				}
+				
+				InputStream obj_is = null;
+				Document obj_doc = null;
+				DocumentBuilderFactory doc_build_fact = null;
+				DocumentBuilder doc_builder = null;
+				try {
+					obj_is = new FileInputStream(filePath);
+					doc_build_fact = DocumentBuilderFactory.newInstance();
+					doc_builder = doc_build_fact.newDocumentBuilder();
 
-			} catch (Exception e) {
-				// TODO: handle exception
+					obj_doc = doc_builder.parse(obj_is);
+
+					NodeList obj_nod_list = null;
+					if(null != obj_doc)
+					{
+						org.w3c.dom.Element feed =  obj_doc.getDocumentElement();
+						obj_nod_list = feed.getElementsByTagName("version");
+						
+						for (int i = 0; i < obj_nod_list.getLength(); i++) {
+			                Node itemNode = obj_nod_list.item(i);
+			                if (itemNode.getNodeType() == Node.ELEMENT_NODE)
+			                {
+			                    Element itemElement = (Element) itemNode;
+			                    return itemElement.getAttribute("number"); 
+			                }
+			            }
+					} 
+
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 			}
 					        
 			return "0";
@@ -416,54 +446,64 @@ public class AppController extends Activity
 //            Log.v(tag, e.getMessage());
         }
 
-        ArrayList<ServerObj> defaultServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
         
-        configurationInstance._arrDeletedServerList = configurationInstance.getServerListWithFileName("DeletedDefaultServerList.xml");
-        if(appVer.compareToIgnoreCase(oldVer) > 0)
+//        If SDCard is not available
+        if(!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED)))
         {
-        	
-        	ArrayList<ServerObj> deletedDefaultServers = configurationInstance._arrDeletedServerList;
-        	
-        	ArrayList<ServerObj> tmp = new ArrayList<ServerObj>();
-        	if(deletedDefaultServers == null)
-        		tmp = defaultServerList;
-        	else
-        	{
-        		for(int i = 0; i < defaultServerList.size(); i++)
-            	{
-            		ServerObj newServerObj = defaultServerList.get(i);
-            		boolean isDeleted = false;
-            		for(int j = 0; j < deletedDefaultServers.size(); j++)
-            		{
-            			ServerObj deletedServerObj = deletedDefaultServers.get(i);
-            			if(newServerObj._strServerName.equalsIgnoreCase(deletedServerObj._strServerName)
-            					&& newServerObj._strServerUrl.equalsIgnoreCase(deletedServerObj._strServerUrl))
-            			{
-            				isDeleted = true;
-            				break;
-            			}
-            		}
-            		if(!isDeleted)
-            			tmp.add(newServerObj);
-            	}
-        	}
-        	
-        	configurationInstance.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
-        	configurationInstance.version = appVer;
+        	configurationInstance._arrDefaulServerList = configurationInstance.getDefaultServerList();
+        	if(configurationInstance._arrDefaulServerList.size() > 0)
+            	configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
         }
         else
         {
-        	
+        	ArrayList<ServerObj> defaultServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
+            
+            configurationInstance._arrDeletedServerList = configurationInstance.getServerListWithFileName("DeletedDefaultServerList.xml");
+            if(appVer.compareToIgnoreCase(oldVer) > 0)
+            {
+            	
+            	ArrayList<ServerObj> deletedDefaultServers = configurationInstance._arrDeletedServerList;
+            	
+            	ArrayList<ServerObj> tmp = new ArrayList<ServerObj>();
+            	if(deletedDefaultServers == null)
+            		tmp = defaultServerList;
+            	else
+            	{
+            		for(int i = 0; i < defaultServerList.size(); i++)
+                	{
+                		ServerObj newServerObj = defaultServerList.get(i);
+                		boolean isDeleted = false;
+                		for(int j = 0; j < deletedDefaultServers.size(); j++)
+                		{
+                			ServerObj deletedServerObj = deletedDefaultServers.get(i);
+                			if(newServerObj._strServerName.equalsIgnoreCase(deletedServerObj._strServerName)
+                					&& newServerObj._strServerUrl.equalsIgnoreCase(deletedServerObj._strServerUrl))
+                			{
+                				isDeleted = true;
+                				break;
+                			}
+                		}
+                		if(!isDeleted)
+                			tmp.add(newServerObj);
+                	}
+            	}
+            	
+            	configurationInstance.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
+            	configurationInstance.version = appVer;
+            }
+            else
+            {
+            	
+            }
+            
+            configurationInstance._arrUserServerList = configurationInstance.getServerListWithFileName("UserServerList.xml");
+            configurationInstance._arrDefaulServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
+        
+            if(configurationInstance._arrDefaulServerList.size() > 0)
+            	configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
+            if(configurationInstance._arrUserServerList.size() > 0)
+            	configurationInstance._arrServerList.addAll(configurationInstance._arrUserServerList);
         }
-        
-        configurationInstance._arrUserServerList = configurationInstance.getServerListWithFileName("UserServerList.xml");
-        configurationInstance._arrDefaulServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
-        
-        if(configurationInstance._arrDefaulServerList.size() > 0)
-        	configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
-        if(configurationInstance._arrUserServerList.size() > 0)
-        	configurationInstance._arrServerList.addAll(configurationInstance._arrUserServerList);
-        	
         
         String strLocalize;
     	
@@ -622,6 +662,10 @@ public class AppController extends Activity
 			    {
 			    	LayoutInflater inflater = appControllerInstance.getLayoutInflater();
 			    	View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
+			    	
+			    	ImageView imgView = new ImageView(appControllerInstance);
+			    	imgView.setImageResource(R.drawable.checked);
+			    	
 			    	
 			    	ServerObj serverObj = serverObjsTmp.get(position);
 			    	
