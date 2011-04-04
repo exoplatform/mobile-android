@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,8 +46,7 @@ public class eXoModifyServerList extends Activity {
 			}
 		});
         
-        listViewServer = (ListView)findViewById(R.id.ListView_Server_List);
-     
+        listViewServer = (ListView)findViewById(R.id.ListView_Server_List); 
         createServersAdapter(AppController.configurationInstance._arrServerList);
     }
 
@@ -94,9 +94,11 @@ public class eXoModifyServerList extends Activity {
 			    	serverName.setText(serverObj._strServerName);
 			    	
 			    	TextView txtvUrl = (TextView)rowView.findViewById(R.id.TextView_URL);
-			    	txtvUrl.setWidth(300);
-			    	
 			    	txtvUrl.setText(serverObj._strServerUrl);
+			    	
+			        LinearLayout.LayoutParams layout = (LinearLayout.LayoutParams)txtvUrl.getLayoutParams();
+			        layout.width = 180;
+			        txtvUrl.setLayoutParams(layout);
 
 			    	rowView.setOnClickListener(new View.OnClickListener() {
 						

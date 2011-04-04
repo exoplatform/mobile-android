@@ -119,7 +119,7 @@ public class eXoGadgetViewController extends Activity
 					        	return;
 					        }
 					    } catch (Exception e) {
-								// TODO: handle exception
+								
 					    	return;
 					    }
 						
@@ -184,7 +184,7 @@ public class eXoGadgetViewController extends Activity
         	
 //        	
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
     	
 		_btnClose.setText(strClose);

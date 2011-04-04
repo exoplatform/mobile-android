@@ -120,7 +120,7 @@ public class eXoImageView extends Activity {
 	        returnValue = true;
 	            
 		} catch (Exception e) {
-				// TODO: handle exception
+				
 //			String msg = e.getMessage();
 //			String str = e.toString();
 //			Log.d(str, msg);
@@ -153,7 +153,7 @@ public class eXoImageView extends Activity {
 	        }
 	        	
 	    } catch (Exception e) {
-	    	// TODO: handle exception
+	    	
 //			String msg = e.getMessage();
 //			String str = e.toString();
 //			Log.d(msg, str);

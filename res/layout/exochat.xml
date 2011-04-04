@@ -1,90 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/background"
-    >
-    
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="40sp"
-        android:background="@drawable/navigationbar"
-      	 >
-      	 
-        <Button android:id="@+id/Close"
-            android:layout_marginLeft="2sp"
-			android:layout_marginTop="02sp"
-			android:layout_width="70sp"
-			android:text="Close"
-			android:layout_height="38sp"
-        	/>
-        
-    	<Button
-			android:id="@+id/Button_Language_Help"
-			android:layout_width="30sp"
-			android:layout_height="30sp"
-			android:layout_marginLeft="215sp"
-			android:layout_marginTop="02sp"
-			android:background="@drawable/setting1"
-		/>
-		
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@drawable/background">
+
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="40sp"
+		android:background="@drawable/navigationbar">
+
+		<Button android:id="@+id/Close" android:layout_marginLeft="2sp"
+			android:layout_marginTop="02sp" android:layout_width="70sp"
+			android:text="Close" android:layout_height="38sp" />
+
+		<Button android:id="@+id/Button_Language_Help"
+			android:layout_width="30sp" android:layout_height="30sp"
+			android:layout_marginLeft="215sp" android:layout_marginTop="02sp"
+			android:background="@drawable/setting1" />
+
 	</LinearLayout>
-	
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="320sp"
-        android:layout_height="40sp"
-      	 >
-        <TextView
-			android:layout_marginLeft="0sp"
-			android:layout_marginTop="0sp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/TextViewCurrentChat"
-			android:textSize="18sp"
-		/>
-	
+
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="320sp" android:layout_height="40sp">
+		<TextView android:layout_marginLeft="0sp"
+			android:layout_marginTop="0sp" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/TextViewCurrentChat"
+			android:textSize="18sp" />
+
 	</LinearLayout>
-	
-    <LinearLayout
-    	android:orientation="vertical"
-    	android:paddingTop="0sp"
-    	android:paddingLeft="2sp"
-    	android:layout_width="316sp"
-    	android:layout_height="320sp"
-    	android:layout_weight="1"
-    	>
-   		<ListView android:id="@+id/chatContent"
-      		android:layout_width="fill_parent"
-       		android:layout_height="fill_parent"
-       		android:transcriptMode="alwaysScroll"
-     		android:stackFromBottom="true"
-			android:layout_weight="1"
-		/>
+
+	<LinearLayout android:orientation="vertical"
+		android:paddingTop="0sp" android:paddingLeft="2sp"
+		android:layout_width="316sp" android:layout_height="320sp"
+		android:layout_weight="1">
+		<ListView android:id="@+id/chatContent" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:transcriptMode="alwaysScroll"
+			android:stackFromBottom="true" android:layout_weight="1" />
 	</LinearLayout>
-	
-    
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10px"
-        >
-        <EditText android:id="@+id/message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="3"
-            android:layout_weight="1"
-            android:layout_gravity="bottom"
-        />
-        <Button android:id="@+id/Send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-        />
-    </LinearLayout>
+
+
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:paddingTop="10px">
+		<EditText android:id="@+id/message" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:maxLines="3"
+			android:layout_weight="1" android:layout_gravity="bottom" />
+		<Button android:id="@+id/Send" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_gravity="bottom" />
+	</LinearLayout>
 </LinearLayout>
 

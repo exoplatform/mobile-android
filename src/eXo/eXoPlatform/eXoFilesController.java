@@ -275,7 +275,7 @@ public class eXoFilesController extends Activity
 			   		else
 			   			_btnCloseBack.setText( new String(AppController.bundle.getString("BackButton").getBytes("ISO-8859-1"), "UTF-8"));
 				} catch (Exception e) {
-					// TODO: handle exception
+					
 					//_btnCloseBack.setText("");
 				}	
 		}
@@ -294,11 +294,11 @@ public class eXoFilesController extends Activity
 			  } 
 			  catch (Exception e) 
 			  {
-				// TODO: handle exception
+				
 				  try {
 					  _btnCloseBack.setText(new String(AppController.bundle.getString("CloseButton").getBytes("ISO-8859-1"), "UTF-8"));
 				} catch (Exception e2) {
-					// TODO: handle exception
+					
 				}
 			  }
 			  		if(myFile.isFolder)
@@ -433,7 +433,7 @@ public class eXoFilesController extends Activity
 		try {
 			bmp = BitmapFactory.decodeStream(eXoFilesControllerInstance.getAssets().open(contentType));
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 		
 		return bmp;
@@ -498,7 +498,7 @@ public class eXoFilesController extends Activity
         		strLoadingDataFromServer = new String(AppController.bundle.getString("FileProcessing").getBytes("ISO-8859-1"), "UTF-8");
        	 
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 			strLoadingDataFromServer = "";
 		}
 		
@@ -678,7 +678,7 @@ public class eXoFilesController extends Activity
 	        returnValue = true;
 	            
 		} catch (Exception e) {
-				// TODO: handle exception
+				
 			String msg = e.getMessage();
 			String str = e.toString();
 			Log.e(str, msg);
@@ -705,7 +705,7 @@ public class eXoFilesController extends Activity
 	    	is = response.getEntity().getContent();
 	    		
 	    } catch (Exception e) {
-	    	// TODO: handle exception
+	    	
 	    }
 //	    	client.getConnectionManager().shutdown();
 	    	
@@ -728,7 +728,7 @@ public class eXoFilesController extends Activity
 	        	returnValue = true;
 	        }
 	    } catch (Exception e) {
-				// TODO: handle exception
+				
 		}
 			
 	    return returnValue;
@@ -743,7 +743,7 @@ public class eXoFilesController extends Activity
 //	    try {
 //	    	url = URLEncoder.encode(url, "UTF-8");	
 //		} catch (Exception e) {
-//			// TODO: handle exception
+//			
 //		}
 	    
 	    HttpPut post = new HttpPut(url);
@@ -763,7 +763,7 @@ public class eXoFilesController extends Activity
 	        }
 	        	
 	    } catch (Exception e) {
-	    	// TODO: handle exception
+	    	
 			String msg = e.getMessage();
 			String str = e.toString();
 			Log.d(msg, str);
@@ -794,7 +794,7 @@ public class eXoFilesController extends Activity
 	        }
 	        	
 	    } catch (Exception e) {
-	    	// TODO: handle exception
+	    	
 			String msg = e.getMessage();
 			String str = e.toString();
 			Log.d(msg, str);
@@ -861,7 +861,7 @@ public class eXoFilesController extends Activity
         	strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage").getBytes("ISO-8859-1"), "UTF-8");
         	strDownloadFileIntoSDCard = new String(resourceBundle.getString("DownloadFileInToSDCard").getBytes("ISO-8859-1"), "UTF-8");
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
     	
 		_btnCloseBack.setText(strCloseBack);

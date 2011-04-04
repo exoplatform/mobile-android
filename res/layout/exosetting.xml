@@ -1,86 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-  	xmlns:android="http://schemas.android.com/apk/res/android"
-  	android:layout_width="wrap_content"
-  	android:layout_height="wrap_content">
-  	
-  	 <ImageView 
-		android:layout_x="0sp" 
-		android:layout_y="0sp" 
-		android:id="@+id/ImageView01" 
-		android:layout_width="wrap_content" 
-		android:layout_height="40sp"
-		android:background="@drawable/navigationbar"
-		/>
-	<Button
-		android:id="@+id/Button_Home"
-		android:layout_x="02sp" 
-		android:layout_y="05sp" 
-		android:layout_width="30sp"
-		android:layout_height="30sp"
-		android:background="@drawable/home"
-		/>
-  	
-  	
- 	<TextView 
- 		android:text="Language" 
- 		android:id="@+id/TextView_Language" 
- 		android:layout_width="wrap_content" 
- 		android:layout_height="wrap_content"
- 		android:layout_x="20sp"
-		android:layout_y="50sp"	
- 	/>	
- 	
-	<RadioGroup
-  		android:layout_width="fill_parent"
-   		android:layout_height="wrap_content"
-   		android:orientation="vertical"
-		android:layout_x="40sp"
-		android:layout_y="70sp"
-   		>
-   		<RadioButton
-    		android:id="@+id/RadioButton_English"
-    		android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:text="English" />
-   		<RadioButton
-    		android:id="@+id/RadioButton_French"
-    		android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:text="French" />
-	</RadioGroup>
- 
- 	<TextView 
- 		android:text="Server List" 
- 		android:id="@+id/TextView_Server_List" 
- 		android:layout_width="wrap_content" 
- 		android:layout_height="wrap_content"
- 		android:layout_x="20sp"
-		android:layout_y="170sp"	
- 	/>
- 	<ListView
-		android:id="@+id/ListView_Servers"
-		android:layout_x="10sp"
-		android:layout_y="190sp"
-		android:layout_width="300sp"
-		android:layout_height="120sp"
-		/>
-		
- 	<Button 
- 		android:text="Modify the List" 
- 		android:id="@+id/Button_Modify_The_List"
- 		android:layout_x="60sp"
-		android:layout_y="320sp" 
- 		android:layout_width="200sp" 
- 		android:layout_height="40sp"
- 		/>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content">
 
-	<Button 
- 		android:text="User Guide" 
- 		android:id="@+id/Button_User_Guide"
- 		android:layout_x="20sp"
-		android:layout_y="380sp" 
- 		android:layout_width="280sp" 
- 		android:layout_height="40sp"
- 		/>
+	<ImageView android:layout_x="0sp" android:layout_y="0sp"
+		android:id="@+id/ImageView01" android:layout_width="wrap_content"
+		android:layout_height="40sp" android:background="@drawable/navigationbar" />
+	<Button android:id="@+id/Button_Home" android:layout_x="02sp"
+		android:layout_y="05sp" android:layout_width="30sp"
+		android:layout_height="30sp" android:background="@drawable/home" />
+
+
+	<TextView android:text="Language" android:id="@+id/TextView_Language"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_x="20sp" android:layout_y="50sp" />
+
+	<RadioGroup android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:orientation="vertical"
+		android:layout_x="40sp" android:layout_y="70sp">
+		<RadioButton android:id="@+id/RadioButton_English"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:text="English" />
+		<RadioButton android:id="@+id/RadioButton_French"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:text="French" />
+	</RadioGroup>
+
+	<TextView android:text="Server List" android:id="@+id/TextView_Server_List"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_x="20sp" android:layout_y="170sp" />
+	<ListView android:id="@+id/ListView_Servers" android:layout_x="10sp"
+		android:layout_y="190sp" android:layout_width="300sp"
+		android:layout_height="120sp" />
+
+	<Button android:text="Modify the List" android:id="@+id/Button_Modify_The_List"
+		android:layout_x="60sp" android:layout_y="320sp" android:layout_width="200sp"
+		android:layout_height="40sp" />
+
+	<Button android:text="User Guide" android:id="@+id/Button_User_Guide"
+		android:layout_x="20sp" android:layout_y="380sp" android:layout_width="280sp"
+		android:layout_height="40sp" />
 </AbsoluteLayout>

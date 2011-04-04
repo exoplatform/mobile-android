@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -82,7 +83,7 @@ public class eXoSetting extends Activity {
 				else
 				{
 					Intent next = new Intent(eXoSetting.this, eXoModifyServerList.class);
-					eXoSetting.this.startActivity(next);
+					eXoSettingInstance.startActivity(next);
 				}
 				
 			}
@@ -147,6 +148,9 @@ public class eXoSetting extends Activity {
 			    	
 			    	TextView txtvUrl = (TextView)rowView.findViewById(R.id.TextView_URL);
 			    	txtvUrl.setText(serverObj._strServerUrl);
+			    	LinearLayout.LayoutParams layout = (LinearLayout.LayoutParams)txtvUrl.getLayoutParams();
+			        layout.width = 160;
+			        txtvUrl.setLayoutParams(layout);
 
 			        return(rowView);
 			    }
@@ -225,7 +229,7 @@ public class eXoSetting extends Activity {
 		}
 		catch (Exception e) 
 		{
-			// TODO: handle exception
+			
 		}
 		   
 	}
@@ -249,7 +253,7 @@ public class eXoSetting extends Activity {
    			strCloseModifyServerLisrButton = new String(resourceBundle.getString("ModifyServerList").getBytes("ISO-8859-1"), "UTF-8");
    			strUserGuideButton = new String(resourceBundle.getString("UserGuide").getBytes("ISO-8859-1"), "UTF-8");
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
    	
 		myOptionEnglish.setText(strmyOptionEnglish);

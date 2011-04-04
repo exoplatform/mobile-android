@@ -1,26 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-  	xmlns:android="http://schemas.android.com/apk/res/android"
-  	android:layout_width="wrap_content"
-  	android:layout_height="wrap_content"
-  	>
-	
-	<TextView 
-		android:id="@+id/TextView_Name"
-		android:layout_x="1sp"
-		android:layout_y="2sp"
-		android:layout_width="50sp" 
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:textColor="#ff000000"
-		/>
-		
-	<TextView 
-		 android:id="@+id/TextView_Content"
-		 android:layout_x="60sp" 
-		 android:layout_width="256sp" 
-		 android:layout_height="wrap_content"
-		 android:textColor="#ff000000"
-		 />
-		 
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+	<TextView android:id="@+id/TextView_Name" android:layout_x="1sp"
+		android:layout_y="2sp" android:layout_width="50sp"
+		android:layout_height="wrap_content" android:gravity="center"
+		android:textColor="#ff000000" />
+
+	<TextView android:id="@+id/TextView_Content" android:layout_x="60sp"
+		android:layout_width="256sp" android:layout_height="wrap_content"
+		android:textColor="#ff000000" />
+
 </AbsoluteLayout>

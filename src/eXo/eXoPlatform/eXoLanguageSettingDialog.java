@@ -168,6 +168,17 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 		{
 			if(!isNewServer)	//Delete sever
 			{
+				int currentServerIndex = AppController.appControllerInstance._intDomainIndex;
+				if(currentServerIndex == selectedServerIndex)
+				{
+					AppController.appControllerInstance._intDomainIndex = -1;
+					AppController.appControllerInstance._strDomain = "";
+				}
+				else if(currentServerIndex > selectedServerIndex)
+				{
+					AppController.appControllerInstance._intDomainIndex = currentServerIndex - 1;
+				}
+					
 				if(serverObj._bSystemServer)
 				{
 					AppController.configurationInstance._arrDefaulServerList.remove(selectedServerIndex);
@@ -225,7 +236,7 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
 	   			strOKButton = new String(resourceBundle.getString("OK").getBytes("ISO-8859-1"), "UTF-8");
 	   			
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 			}
 	   	
 			txtvTittle.setText(strTittle);

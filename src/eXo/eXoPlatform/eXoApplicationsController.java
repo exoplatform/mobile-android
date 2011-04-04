@@ -248,7 +248,7 @@ public class eXoApplicationsController extends Activity
 	        	 strLoadingDataFromServer = new String(AppController.bundle.getString("LoadingDataFromServer").getBytes("ISO-8859-1"), "UTF-8");
 	        	 
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				strLoadingDataFromServer = "";
 			}
 	         
@@ -291,7 +291,7 @@ public class eXoApplicationsController extends Activity
         	try {
         		url = new URI(urlStr);
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 			}
         	
         	String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME, "exo_prf_username");
@@ -429,7 +429,7 @@ public class eXoApplicationsController extends Activity
         	strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage").getBytes("ISO-8859-1"), "UTF-8");
         	strChatServer = new String(resourceBundle.getString("ChatServer").getBytes("ISO-8859-1"), "UTF-8");
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 		
 		_btnSignOut.setText(strSignOut);

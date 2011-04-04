@@ -99,7 +99,7 @@ public class eXoChatController extends Activity{
             			setListAdapter();
                 		
 					} catch (Exception e) {
-						// TODO: handle exception
+						
 					}
                 }
                 	
@@ -259,7 +259,7 @@ public class eXoChatController extends Activity{
     		strcloseBtn = new String(resourceBundle.getString("CloseButton").getBytes("ISO-8859-1"), "UTF-8");
     		strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage").getBytes("ISO-8859-1"), "UTF-8");	
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
     	
     	

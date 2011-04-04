@@ -1,79 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="280sp"
-  android:layout_height="260sp"
-  android:background="@drawable/background"
-  >
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="280sp" android:layout_height="260sp"
+	android:background="@drawable/background">
 
-	<ImageView 
-		android:layout_x="0sp" 
-		android:layout_y="0sp" 
-		android:id="@+id/ImageView01" 
-		android:layout_width="280sp" 
-		android:layout_height="40sp"
-		android:background="@drawable/navigationbar"
-		/>
+	<ImageView android:layout_x="0sp" android:layout_y="0sp"
+		android:id="@+id/ImageView01" android:layout_width="280sp"
+		android:layout_height="40sp" android:background="@drawable/navigationbar" />
 
- 	<TextView 
- 		android:id="@+id/TextView_Title" 
- 		android:layout_width="270sp" 
- 		android:layout_height="30sp"
- 		android:layout_x="5sp"
-		android:layout_y="5sp"
-		android:textSize="18sp"
-		android:textColor="#FF000000"
-		android:gravity="center"
- 	/>	
-		
- 	<TextView 
- 		android:id="@+id/TextView_Server_Name" 
- 		android:layout_width="wrap_content" 
- 		android:layout_height="20sp"
- 		android:layout_x="5sp"
-		android:layout_y="50sp"
-		android:textSize="18sp"
- 	/>
- 	<EditText 
-		android:id="@+id/EditText_Server_Name" 
-		android:layout_x="5sp" 
-		android:layout_y="80sp" 
-		android:layout_height="40sp" 
-		android:layout_width="270sp"
-		android:textColor="#FF000000"
-		/>
-		
-	<TextView 
- 		android:id="@+id/TextView_Server_URL" 
- 		android:layout_width="wrap_content" 
- 		android:layout_height="20sp"
- 		android:layout_x="5sp"
-		android:layout_y="130sp"
-		android:textSize="18sp"
- 		/>
- 	<EditText 
-		android:id="@+id/EditText_Server_URL" 
-		android:layout_x="5sp" 
-		android:layout_y="160sp" 
-		android:layout_height="40sp" 
-		android:layout_width="270sp"
-		android:textColor="#FF000000"
-		/>
-		
- 	<Button 
- 		android:id="@+id/Button_Delete_Cancel" 
- 		android:layout_width="100sp" 
- 		android:layout_height="40sp"
- 		android:layout_x="20sp"
-		android:layout_y="210sp"
- 	/>
+	<TextView android:id="@+id/TextView_Title"
+		android:layout_width="270sp" android:layout_height="30sp"
+		android:layout_x="5sp" android:layout_y="5sp" android:textSize="18sp"
+		android:textColor="#FF000000" android:gravity="center" />
 
-	<Button 
- 		android:id="@+id/Button_OK" 
- 		android:layout_width="100sp" 
- 		android:layout_height="40sp"
- 		android:layout_x="160sp"
-		android:layout_y="210sp"
- 	/>
-		
+	<TextView android:id="@+id/TextView_Server_Name"
+		android:layout_width="wrap_content" android:layout_height="20sp"
+		android:layout_x="5sp" android:layout_y="50sp" android:textSize="18sp" />
+	<EditText android:id="@+id/EditText_Server_Name"
+		android:layout_x="5sp" android:layout_y="80sp" android:layout_height="40sp"
+		android:layout_width="270sp" android:textColor="#FF000000" />
+
+	<TextView android:id="@+id/TextView_Server_URL"
+		android:layout_width="wrap_content" android:layout_height="20sp"
+		android:layout_x="5sp" android:layout_y="130sp" android:textSize="18sp" />
+	<EditText android:id="@+id/EditText_Server_URL"
+		android:layout_x="5sp" android:layout_y="160sp" android:layout_height="40sp"
+		android:layout_width="270sp" android:textColor="#FF000000" />
+
+	<Button android:id="@+id/Button_Delete_Cancel"
+		android:layout_width="100sp" android:layout_height="40sp"
+		android:layout_x="20sp" android:layout_y="210sp" />
+
+	<Button android:id="@+id/Button_OK" android:layout_width="100sp"
+		android:layout_height="40sp" android:layout_x="160sp"
+		android:layout_y="210sp" />
+
 </AbsoluteLayout>

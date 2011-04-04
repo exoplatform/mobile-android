@@ -35,6 +35,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.util.Xml;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,11 +43,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +65,7 @@ import android.graphics.BitmapFactory;
 //Login page
 public class AppController extends Activity 
 {
-//	Server info object
+//Server info object
 	class ServerObj {
 		String   _strServerName;//Name of server
 	    String   _strServerUrl;//URL of server
@@ -99,7 +102,7 @@ public class AppController extends Activity
 		   				returnValue = f.createNewFile();
 		   		}
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 			}
 	   		
 	   		
@@ -152,7 +155,7 @@ public class AppController extends Activity
 					} 
 
 				} catch (Exception e) {
-					// TODO: handle exception
+					
 				}
 			}
 					        
@@ -200,7 +203,7 @@ public class AppController extends Activity
 		                try {
 		                	eventType = parser.next();
 						} catch (Exception e) {
-							// TODO: handle exception
+							
 							eventType = 0;
 						}
 		                
@@ -219,7 +222,7 @@ public class AppController extends Activity
 						this.createXmlDataWithServerList(arrServerList, "DefaultServerList.xml", "0");
 						
 					} catch (Exception e) {
-						// TODO: handle exception
+						
 						
 					}
 					
@@ -278,7 +281,7 @@ public class AppController extends Activity
 				} 
 
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 			}
 					        
 			return arrServerList;
@@ -370,6 +373,7 @@ public class AppController extends Activity
 //	References keys
 	public static final String EXO_PREFERENCE = "exo_preference";
 	public static final String EXO_PRF_DOMAIN = "exo_prf_domain";
+	public static final String EXO_PRF_DOMAIN_INDEX = "exo_prf_domain_index";
 	public static final String EXO_PRF_USERNAME = "exo_prf_username";
 	public static final String EXO_PRF_PASSWORD = "exo_prf_password";
 	public static final String EXO_PRF_LANGUAGE = "exo_prf_language";
@@ -385,7 +389,9 @@ public class AppController extends Activity
 
 	private Runnable viewOrders;
 	
-	String _strDomain = "";	//Host		
+	String _strDomain = "";	//Host	
+	String _strDomainIndex = "";//Active host index
+	int _intDomainIndex;
 	String _strUserName = "";	//Username	
 	String _strPassword = "";	//Password
 //	Standalone gadget content
@@ -433,6 +439,9 @@ public class AppController extends Activity
 //        File file = new File(Environment.getExternalStorageDirectory() + "/eXo/UserServerList.xml");
 //        file.delete();
         
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int width = display.getWidth(); 
+        int height = display.getHeight();
         configurationInstance = new Configuration();
         
         String appVer = "";
@@ -521,7 +530,7 @@ public class AppController extends Activity
         	bundle = new PropertyResourceBundle(getAssets().open(strLocalize));
     		
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
         
         _txtViewUserName = (TextView) findViewById(R.id.TextView_UserName);
@@ -539,6 +548,7 @@ public class AppController extends Activity
         _listViewServer.setVisibility(View.INVISIBLE);
                 
         _strDomain = sharedPreference.getString(EXO_PRF_DOMAIN, "");
+        _strDomainIndex = sharedPreference.getString(EXO_PRF_DOMAIN_INDEX, "");
         _strUserName = sharedPreference.getString(EXO_PRF_USERNAME, "");
         _strPassword = sharedPreference.getString(EXO_PRF_PASSWORD, "");
 
@@ -660,6 +670,8 @@ public class AppController extends Activity
 			
 			  public View getView(int position, View convertView, ViewGroup parent) 
 			    {
+				  	final int pos = position;
+				  	
 			    	LayoutInflater inflater = appControllerInstance.getLayoutInflater();
 			    	View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
 			    	
@@ -667,14 +679,43 @@ public class AppController extends Activity
 			    	imgView.setImageResource(R.drawable.checked);
 			    	
 			    	
-			    	ServerObj serverObj = serverObjsTmp.get(position);
+			    	final ServerObj serverObj = serverObjsTmp.get(position);
 			    	
-			    	TextView serverName = (TextView)rowView.findViewById(R.id.TextView_ServerName);
-			    	serverName.setText(serverObj._strServerName);
+			    	TextView txtvServerName = (TextView)rowView.findViewById(R.id.TextView_ServerName);
+			    	txtvServerName.setText(serverObj._strServerName);
+			    	LinearLayout.LayoutParams layout = (LinearLayout.LayoutParams)txtvServerName.getLayoutParams();
+			      layout.width = 120;
+			      txtvServerName.setLayoutParams(layout);
 			    	
 			    	TextView txtvUrl = (TextView)rowView.findViewById(R.id.TextView_URL);
 			    	txtvUrl.setText(serverObj._strServerUrl);
+			    	layout = (LinearLayout.LayoutParams)txtvUrl.getLayoutParams();
+			    	_intDomainIndex = -1;
+			    	try {
+			    		_intDomainIndex = Integer.parseInt(_strDomainIndex);
+					} catch (NumberFormatException e) {
+						
+					}
+			    	
+			    	if(_intDomainIndex == position)
+			    		layout.width = 160;
+			    	else
+			    		layout.width = 180;
+			    	
+			        txtvUrl.setLayoutParams(layout);
 
+			        rowView.setOnClickListener(new View.OnClickListener() {
+						
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							_strDomainIndex = String.valueOf(pos);
+							_intDomainIndex = Integer.parseInt(_strDomainIndex);
+							_strDomain = serverObj._strServerUrl;
+							createServersAdapter(configurationInstance._arrServerList);
+							
+						}
+					});
+			        
 			        return(rowView);
 			    }
 
@@ -770,12 +811,9 @@ public class AppController extends Activity
     //    Login progress    
     public void signInProgress()
     {	
-    	
-    	_strDomain = "";
 
     	try {
-    		
-    		
+    				
     		if(_strDomain.indexOf("http://") == -1)
         	{
         		_strDomain = "http://" + _strDomain;
@@ -797,6 +835,7 @@ public class AppController extends Activity
         		
         		SharedPreferences.Editor editor = sharedPreference.edit();
         		editor.putString(EXO_PRF_DOMAIN, _strDomain);
+        		editor.putString(EXO_PRF_DOMAIN_INDEX, _strDomainIndex);
         		editor.putString(EXO_PRF_USERNAME, _strUserName);
         		editor.putString(EXO_PRF_PASSWORD, _strPassword);
         		editor.commit();
@@ -815,7 +854,7 @@ public class AppController extends Activity
         	}
         	
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 //			String msg = e.getMessage();
 //			String str = e.toString();
 //			Log.v(str, msg);
@@ -974,17 +1013,17 @@ public class AppController extends Activity
 					try {
 						imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
 					} catch (Exception e2) {
-						// TODO: handle exception
+						
 						imgGadgetIcon = null;
 					}
 				}
 				
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 				try {
 					imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
 				} catch (Exception e2) {
-					// TODO: handle exception
+					
 					imgGadgetIcon = null;
 				}
 				
@@ -1204,7 +1243,7 @@ public class AppController extends Activity
         	strLoadingDataFromServer = new String(resourceBundle.getString("LoadingDataFromServer").getBytes("ISO-8859-1"), "UTF-8");
         	
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
     	
 		_btnLogIn.setText(strSignIn);
