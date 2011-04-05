@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/Login" android:padding="10dip" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<Button android:id="@+id/Button_Account" android:layout_width="40dip"
+		android:layout_below="@id/Login" android:layout_height="50dip"
+		android:layout_marginLeft="10dip" android:background="@drawable/account" />
+
+	<Button android:id="@+id/Button_Server" android:layout_below="@id/Login"
+		android:layout_width="40dip" android:layout_height="50dip"
+		android:layout_marginLeft="60dip" android:background="@drawable/server" />
+
+	<TextView android:id="@+id/TextView_UserName"
+		android:layout_width="fill_parent" android:layout_height="30dip"
+		android:text="UserName" android:gravity="bottom" android:layout_below="@id/Button_Server" />
+
+	<EditText android:id="@+id/EditText_UserName"
+		android:layout_below="@id/TextView_UserName" android:layout_width="fill_parent"
+		android:layout_height="40dip" android:maxLines="1" />
+
+	<TextView android:id="@+id/TextView_Password"
+		android:layout_width="fill_parent" android:layout_height="30dip"
+		android:text="Password" android:gravity="bottom" android:layout_below="@id/EditText_UserName" />
+
+	<EditText android:id="@+id/EditText_Password"
+		android:layout_below="@id/TextView_Password" android:layout_width="fill_parent"
+		android:layout_height="40dip" android:maxLines="1" android:password="true" />
+
+	<ListView android:id="@+id/ListView_Servers"
+		android:layout_below="@id/Button_Account" android:layout_width="fill_parent"
+		android:layout_marginLeft="10dip" android:layout_marginRight="10dip"
+		android:layout_alignParentBottom="true" android:layout_marginTop="10dip"
+		android:layout_marginBottom="60dip" />
+
+	<Button android:id="@+id/Button_Login" android:layout_width="fill_parent"
+		android:layout_alignParentBottom="true" android:layout_marginBottom="5dip"
+		android:layout_height="40sp" android:layout_marginLeft="10dip"
+		android:layout_marginRight="10dip" android:text="Login" />
+
+</RelativeLayout>
+

@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="320sp"
-  android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="320sp" android:layout_height="wrap_content">
 
-	<TextView
-		android:id="@+id/TextView_ServerName" 
-		android:layout_width="140dp" 
-		android:layout_height="40dp"
-		/>
-		
-	<TextView
-		android:id="@+id/TextView_URL" 
-		android:layout_width="160dp" 
-		android:layout_height="40dp"
-		/>		
-	<ImageView
-		android:id="@+id/ImageView_Checked"
-		android:layout_marginTop="5dp"
-		android:layout_width="20dp" 
-		android:layout_height="30dp"
-		android:background="@drawable/checked"
-	/>
+	<TextView android:id="@+id/TextView_ServerName"
+		android:layout_width="140dp" android:layout_height="40dp" />
+
+	<TextView android:id="@+id/TextView_URL" android:layout_width="160dp"
+		android:layout_height="40dp" />
+	<ImageView android:id="@+id/ImageView_Checked"
+		android:layout_marginTop="5dp" android:layout_width="20dp"
+		android:layout_height="30dp" android:background="@drawable/checked" />
 </LinearLayout>

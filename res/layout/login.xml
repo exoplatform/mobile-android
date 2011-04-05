@@ -1,79 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/MainLayout"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/background"
-    >
-		
-	<Button
-		android:id="@+id/Button_Account"
-		android:layout_width="40sp"
-		android:layout_height="50sp"
-		android:layout_x="10sp"
-		android:layout_y="100sp"
-		android:background="@drawable/account"
-		/>
-		
-	<Button
-		android:id="@+id/Button_Server"
-		android:layout_width="40sp"
-		android:layout_height="50sp"
-		android:layout_x="60sp"
-		android:layout_y="100sp"
-		android:background="@drawable/server"
-		/>
-	
-	<TextView
-		android:id="@+id/TextView_UserName"
-		android:layout_width="70sp"
-		android:layout_height="wrap_content"
-		android:text="UserName"
-		android:layout_x="0sp"
-		android:layout_y="180sp"
-		/>
-	<EditText
-		android:id="@+id/EditText_UserName"
-		android:layout_width="250sp"
-		android:layout_height="wrap_content"
-		android:maxLines="1"
-        android:layout_x="70sp"
-		android:layout_y="170sp"
-		/>
-		      	 
-	<TextView
-		android:id="@+id/TextView_Password"
-        android:layout_width="70sp"
-        android:layout_height="wrap_content"
-        android:text="Password"
-        android:layout_x="0sp"
-		android:layout_y="230sp"
-    	/>
+	android:id="@+id/MainLayout" android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:background="@drawable/background">
+
+	<Button android:id="@+id/Button_Account" android:layout_width="40sp"
+		android:layout_height="50sp" android:layout_x="10sp" android:layout_y="100sp"
+		android:background="@drawable/account" />
+
+	<Button android:id="@+id/Button_Server" android:layout_width="40sp"
+		android:layout_height="50sp" android:layout_x="60sp" android:layout_y="100sp"
+		android:background="@drawable/server" />
+
+	<TextView android:id="@+id/TextView_UserName"
+		android:layout_width="70sp" android:layout_height="wrap_content"
+		android:text="UserName" android:layout_x="0sp" android:layout_y="180sp" />
+	<EditText android:id="@+id/EditText_UserName"
+		android:layout_width="250sp" android:layout_height="wrap_content"
+		android:maxLines="1" android:layout_x="70sp" android:layout_y="170sp" />
+
+	<TextView android:id="@+id/TextView_Password"
+		android:layout_width="70sp" android:layout_height="wrap_content"
+		android:text="Password" android:layout_x="0sp" android:layout_y="230sp" />
 	<EditText android:id="@+id/EditText_Password"
-	  	android:layout_width="250sp"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:layout_x="70sp"
-		android:layout_y="220sp"
-        android:password="true"
-        /> 
-        
-    <ListView
-		android:id="@+id/ListView_Servers"
-		android:layout_x="10sp"
-		android:layout_y="160sp"
-		android:layout_width="300sp"
-		android:layout_height="120sp"
-		/>
-       
-   	<Button
-		android:id="@+id/Button_Login"
-		android:layout_width="280sp"
-		android:layout_height="40sp"
-		android:layout_x="20sp"
-		android:layout_y="320sp"
-		android:text="Login"
-		/>       
+		android:layout_width="250sp" android:layout_height="wrap_content"
+		android:maxLines="1" android:layout_x="70sp" android:layout_y="220sp"
+		android:password="true" />
+
+	<ListView android:id="@+id/ListView_Servers" android:layout_x="10sp"
+		android:layout_y="160sp" android:layout_width="300sp"
+		android:layout_height="120sp" />
+
+	<Button android:id="@+id/Button_Login" android:layout_width="280sp"
+		android:layout_height="40sp" android:layout_x="20sp" android:layout_y="320sp"
+		android:text="Login" />
 
 </AbsoluteLayout>
