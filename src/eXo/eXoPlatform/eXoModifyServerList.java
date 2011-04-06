@@ -15,8 +15,10 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class eXoModifyServerList extends Activity {
@@ -90,10 +92,13 @@ public class eXoModifyServerList extends Activity {
         TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
         txtvUrl.setText(serverObj._strServerUrl);
 
-        LinearLayout.LayoutParams layout = (LinearLayout.LayoutParams) txtvUrl.getLayoutParams();
-        layout.width = 180;
-        txtvUrl.setLayoutParams(layout);
+//        RelativeLayout.LayoutParams layout = (RelativeLayout.LayoutParams) txtvUrl.getLayoutParams();
+//        layout.width = RelativeLayout.LayoutParams.FILL_PARENT;
+//        txtvUrl.setLayoutParams(layout);
 
+        ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
+        imgView.setVisibility(View.INVISIBLE);
+        
         rowView.setOnClickListener(new View.OnClickListener() {
 
           public void onClick(View v) {

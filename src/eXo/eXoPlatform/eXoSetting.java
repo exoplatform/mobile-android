@@ -17,9 +17,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -149,10 +151,13 @@ public class eXoSetting extends Activity {
 
         TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
         txtvUrl.setText(serverObj._strServerUrl);
-        LinearLayout.LayoutParams layout = (LinearLayout.LayoutParams) txtvUrl.getLayoutParams();
-        layout.width = 160;
-        txtvUrl.setLayoutParams(layout);
+//        RelativeLayout.LayoutParams layout = (RelativeLayout.LayoutParams) txtvUrl.getLayoutParams();
+//        layout.width = RelativeLayout.LayoutParams.FILL_PARENT;
+//        txtvUrl.setLayoutParams(layout);
 
+        ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
+        imgView.setVisibility(View.INVISIBLE);
+        
         return (rowView);
       }
 
