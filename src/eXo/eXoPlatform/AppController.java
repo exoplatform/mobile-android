@@ -37,9 +37,12 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.View.OnTouchListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -59,7 +62,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 //Login page
-public class AppController extends Activity {
+public class AppController extends Activity implements OnTouchListener {
   // Server info object
   class ServerObj {
     String  _strServerName; // Name of server
@@ -452,6 +455,18 @@ public class AppController extends Activity {
     
     this.setContentView(R.layout.login);
 
+    RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout_Login);
+    layout.setOnClickListener(new View.OnClickListener() {
+      
+      public void onClick(View v) {
+        // TODO Auto-generated method stub
+        Log.e("", "");
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
+        
+      }
+    });
     configurationInstance = new Configuration();
 
     String appVer = "";
@@ -510,9 +525,11 @@ public class AppController extends Activity {
         configurationInstance._arrServerList.addAll(configurationInstance._arrUserServerList);
     }
 
+    
     String strLocalize;
 
     appControllerInstance = this;
+    
     if (sharedPreference == null)
       sharedPreference = getSharedPreferences(EXO_PREFERENCE, 0);
 
@@ -533,6 +550,8 @@ public class AppController extends Activity {
 
     _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
     _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
+    _edtxPassword.setImeOptions(EditorInfo.IME_ACTION_DONE);
+    _edtxPassword.setImeActionLabel("Connect", EditorInfo.IME_ACTION_DONE);
 
     _btnAccount = (Button) findViewById(R.id.Button_Account);
     _btnServer = (Button) findViewById(R.id.Button_Server);
@@ -607,6 +626,26 @@ public class AppController extends Activity {
     });
 
     createServersAdapter(configurationInstance._arrServerList);
+  }
+
+  public boolean onTouch(View v, MotionEvent event)
+  {
+   int action = event.getAction();
+   if (action == MotionEvent.ACTION_DOWN)
+   {
+    
+   }
+   else if (action == MotionEvent.ACTION_MOVE)
+   {
+    // movement: cancel the touch press
+    
+   }
+   else if (action == MotionEvent.ACTION_UP)
+   {
+    
+   }
+
+   return true;
   }
 
   // Key down listener

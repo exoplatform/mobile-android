@@ -26,6 +26,7 @@ public class eXoModifyServerList extends Activity {
   static eXoModifyServerList eXoModifyServerListInstance;
 
   Button                     btnHome;
+  Button btnAddNewServer;
 
   ListView                   listViewServer;
 
@@ -48,6 +49,19 @@ public class eXoModifyServerList extends Activity {
       }
     });
 
+    
+    btnAddNewServer = (Button) findViewById(R.id.Button_Add);
+    btnAddNewServer.setOnClickListener(new View.OnClickListener() {
+
+      public void onClick(View v) {
+
+        eXoLanguageSettingDialog.isNewServer = true;
+        eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoModifyServerList.this);
+        customizeDialog.show();
+      }
+    });
+
+    
     listViewServer = (ListView) findViewById(R.id.ListView_Server_List);
     createServersAdapter(AppController.configurationInstance._arrServerList);
   }
@@ -91,10 +105,6 @@ public class eXoModifyServerList extends Activity {
 
         TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
         txtvUrl.setText(serverObj._strServerUrl);
-
-//        RelativeLayout.LayoutParams layout = (RelativeLayout.LayoutParams) txtvUrl.getLayoutParams();
-//        layout.width = RelativeLayout.LayoutParams.FILL_PARENT;
-//        txtvUrl.setLayoutParams(layout);
 
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
         imgView.setVisibility(View.INVISIBLE);
