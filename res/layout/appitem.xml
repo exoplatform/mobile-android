@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="100dip">
+  
+  <RelativeLayout
+  android:id="@+id/RelativeLayout_View0"
+  	android:layout_width="wrap_content"
+  	android:layout_height="100dip"
+  	>
+	<ImageButton 
+	android:id="@+id/ImageButton_Icon" 
+	android:layout_width="40dip"
+	android:background="@drawable/server"
+	android:layout_marginTop="20dip" 
+	android:layout_marginLeft="20dip"
+	android:layout_height="40dip"/>
+	
+	<ImageView 
+	android:layout_height="20dip" 
+	android:layout_width="20dip" 
+	android:layout_marginLeft="-10dip"
+	android:layout_marginTop="10dip"
+	android:layout_toRightOf="@id/ImageButton_Icon"
+	android:background="@drawable/account" 
+	android:id="@+id/ImageView01"/>
+	
+	
+	<TextView
+	android:text="@+id/TextView_Title" 
+	android:layout_below="@id/ImageButton_Icon" 
+	android:id="@+id/TextView01" 
+	android:layout_height="30dip" 
+	android:layout_width="50dip"/>
+	</RelativeLayout>
+	
+	<RelativeLayout
+	android:id="@+id/RelativeLayout_View1"
+	android:layout_toRightOf="@id/RelativeLayout_View0"
+  	android:layout_width="wrap_content"
+  	android:layout_height="100dip">
+	<ImageButton 
+	android:id="@+id/ImageButton_Icon" 
+	android:layout_width="40dip"
+	android:background="@drawable/server"
+	android:layout_marginTop="20dip" 
+	android:layout_marginLeft="20dip"
+	android:layout_height="40dip"/>
+	
+	<ImageView 
+	android:layout_height="20dip" 
+	android:layout_width="20dip" 
+	android:layout_marginLeft="-10dip"
+	android:layout_marginTop="10dip"
+	android:layout_toRightOf="@id/ImageButton_Icon"
+	android:background="@drawable/account" 
+	android:id="@+id/ImageView01"/>
+	
+	
+	<TextView
+	android:text="@+id/TextView_Title" 
+	android:layout_below="@id/ImageButton_Icon" 
+	android:id="@+id/TextView01" 
+	android:layout_height="30dip" 
+	android:layout_width="wrap_content"/>
+	</RelativeLayout>
+	
+	<RelativeLayout
+	android:id="@+id/RelativeLayout_View2"
+	android:layout_toRightOf="@id/RelativeLayout_View1"
+  	android:layout_width="wrap_content"
+  	android:layout_height="100dip">
+	<ImageButton 
+	android:id="@+id/ImageButton_Icon" 
+	android:layout_width="40dip"
+	android:background="@drawable/server"
+	android:layout_marginTop="20dip" 
+	android:layout_marginLeft="20dip"
+	android:layout_height="40dip"/>
+	
+	<ImageView 
+	android:layout_height="20dip" 
+	android:layout_width="20dip" 
+	android:layout_marginLeft="-10dip"
+	android:layout_marginTop="10dip"
+	android:layout_toRightOf="@id/ImageButton_Icon"
+	android:background="@drawable/account" 
+	android:id="@+id/ImageView01"/>
+	
+	
+	<TextView
+	android:text="@+id/TextView_Title" 
+	android:layout_below="@id/ImageButton_Icon" 
+	android:id="@+id/TextView01" 
+	android:layout_height="30dip" 
+	android:layout_width="50dip"/>
+	</RelativeLayout>
+		
+</RelativeLayout>
