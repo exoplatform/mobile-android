@@ -612,7 +612,12 @@ public class AppController extends Activity implements OnTouchListener {
             imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
             imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
 
-            signInProgress();
+            Intent next = new Intent(AppController.this,
+                                     eXoApplicationsController2.class);
+
+            startActivity(next);
+
+//            signInProgress();
           }
         };
 
@@ -771,7 +776,7 @@ public class AppController extends Activity implements OnTouchListener {
                                                       listOfGadgets();
                                                       Intent next = new Intent(AppController.this,
                                                                                eXoApplicationsController.class);
-
+                                                      
                                                       startActivity(next);
 
                                                       thread.stop();
@@ -831,7 +836,6 @@ public class AppController extends Activity implements OnTouchListener {
 
   // Login progress
   public void signInProgress() {
-
     try {
 
       if (_strDomain.indexOf("http://") == -1) {

@@ -13,6 +13,9 @@
 		<activity android:name=".eXoApplicationsController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
+		<activity android:name=".eXoApplicationsController2"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
 		<activity android:name=".eXoWebViewController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
