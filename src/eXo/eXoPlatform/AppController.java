@@ -390,7 +390,7 @@ public class AppController extends Activity implements OnTouchListener {
   // Active host index
   String                                    _strDomainIndex      = "";
 
-  int                                       _intDomainIndex;
+  static int                                _intDomainIndex;
 
   // Username
   String                                    _strUserName         = "";

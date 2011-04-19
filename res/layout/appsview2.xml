@@ -10,9 +10,10 @@
 		android:layout_height="40dip" android:background="@drawable/navigationbar" />
 
 	<Button android:id="@+id/Button_SignOut"
-	android:layout_marginLeft="0dip"
-	android:layout_marginTop="5dip"
-		android:layout_width="wrap_content"
+		android:layout_marginLeft="5dip"
+		android:layout_marginTop="5dip"
+		android:layout_width="30dip"
+		android:background="@drawable/logout"
 		android:layout_height="30dip" />
 
 	<Button
@@ -35,7 +36,7 @@
   			android:id="@+id/TableLayout01" 
   			android:layout_width="fill_parent" 
   			android:layout_height="wrap_content" 
-  			android:stretchColumns="*">
+  			android:stretchColumns="0,1,2">
  
   </TableLayout>
 </ScrollView>

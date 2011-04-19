@@ -4,9 +4,10 @@
 	<ImageView android:id="@+id/ImageView_Navigationbar"
 		android:layout_width="fill_parent" android:layout_height="40dip"
 		android:background="@drawable/navigationbar" />
-	<Button android:id="@+id/Button_Home" android:layout_marginLeft="5dip"
+	<Button android:id="@+id/Button_Home" android:layout_marginTop="5dip"
+		android:layout_marginLeft="5dip"
 		android:layout_marginRight="5dip" android:layout_width="30dip"
-		android:layout_height="30sp" android:background="@drawable/home" />
+		android:layout_height="30sp" android:background="@drawable/back" />
 		
 	<Button android:id="@+id/Button_Add" 
 	android:layout_alignParentRight="true"

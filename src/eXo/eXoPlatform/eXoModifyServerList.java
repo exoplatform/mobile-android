@@ -107,7 +107,10 @@ public class eXoModifyServerList extends Activity {
         txtvUrl.setText(serverObj._strServerUrl);
 
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-        imgView.setVisibility(View.INVISIBLE);
+        if (AppController._intDomainIndex == position)
+          imgView.setVisibility(View.VISIBLE);
+        else
+          imgView.setVisibility(View.INVISIBLE);
         
         rowView.setOnClickListener(new View.OnClickListener() {
 

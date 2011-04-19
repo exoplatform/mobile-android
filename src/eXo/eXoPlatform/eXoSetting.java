@@ -156,9 +156,14 @@ public class eXoSetting extends Activity {
 //        txtvUrl.setLayoutParams(layout);
 
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-        imgView.setVisibility(View.INVISIBLE);
+        
+        if (AppController._intDomainIndex == position)
+          imgView.setVisibility(View.VISIBLE);
+        else
+          imgView.setVisibility(View.INVISIBLE);
         
         return (rowView);
+        
       }
 
       public long getItemId(int position) {

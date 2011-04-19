@@ -8,7 +8,7 @@
 		
 	<Button android:id="@+id/Button_Home" android:layout_marginLeft="02dip"
 		android:layout_marginTop="05dip" android:layout_width="30dip"
-		android:layout_height="30dip" android:background="@drawable/home" />
+		android:layout_height="30dip" android:background="@drawable/back" />
 
 	<TextView android:text="Language" android:id="@+id/TextView_Language"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"

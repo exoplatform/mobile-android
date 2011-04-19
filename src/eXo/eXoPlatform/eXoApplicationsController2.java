@@ -39,9 +39,10 @@ public class eXoApplicationsController2 extends Activity {
   Button            btnHome;
   Button            btnAdd;
   
+  TableLayout table;
   int counter = 0;
 
-  ArrayList<ImageButton> array = new ArrayList<ImageButton>();
+  ArrayList<RelativeLayout> array = new ArrayList<RelativeLayout>();
   
 
   @Override
@@ -54,10 +55,24 @@ public class eXoApplicationsController2 extends Activity {
     
     eXoApplicationsController2Instance = this;
     
-    for(int i = 0; i < 11; i++)
+    table = (TableLayout) findViewById(R.id.TableLayout01);
+    
+    for(int i = 0; i < 3; i++)
     {
-        ImageButton t = new ImageButton(eXoApplicationsController2Instance);
-//        t.setBackgroundResource(R.drawable.server);
+      RelativeLayout t = new RelativeLayout(eXoApplicationsController2Instance);
+//      t.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+      
+      Button btn = new Button(eXoApplicationsController2Instance);
+//      btn.setBackgroundResource(R.drawable.server);
+      
+      LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+      lp.setMargins(100, 50, 20, 20);
+      btn.setLayoutParams(lp);
+      btn.invalidate();
+      
+      t.addView(btn);
+      
+      
         array.add(t);
     }
     
@@ -77,11 +92,11 @@ public class eXoApplicationsController2 extends Activity {
         // TODO Auto-generated method stub
 
 //        ImageButton t = new ImageButton(eXoApplicationsController2Instance);
+//        t.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 //        array.add(t);
       
         // get a reference for the TableLayout
-        TableLayout table = (TableLayout) findViewById(R.id.TableLayout01);
-        table.removeAllViews();
+//        table.removeAllViewsInLayout();
         
         int count = array.size();
         int numberOfRow = count/3;
@@ -98,9 +113,10 @@ public class eXoApplicationsController2 extends Activity {
             int index = i*3 + j;
             if(index < count)
             {
-              ImageButton btn = array.get(index);
+              RelativeLayout btn = array.get(index);
               row.addView(btn, j);
             }
+            
             
           }
           
@@ -144,6 +160,7 @@ public class eXoApplicationsController2 extends Activity {
  * */
  
       }
+      
     });
     
   }
