@@ -41,6 +41,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -575,7 +576,7 @@ public class AppController extends Activity implements OnTouchListener {
     _btnAccount.setOnClickListener(new View.OnClickListener() {
 
       public void onClick(View v) {
-
+        
         _txtViewUserName.setVisibility(View.VISIBLE);
         _edtxUserName.setVisibility(View.VISIBLE);
 
@@ -592,6 +593,10 @@ public class AppController extends Activity implements OnTouchListener {
 
       public void onClick(View v) {
 
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
+        
         _txtViewUserName.setVisibility(View.INVISIBLE);
         _edtxUserName.setVisibility(View.INVISIBLE);
 
@@ -612,12 +617,8 @@ public class AppController extends Activity implements OnTouchListener {
             imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
             imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
 
-            Intent next = new Intent(AppController.this,
-                                     eXoApplicationsController2.class);
-
-            startActivity(next);
-
-//            signInProgress();
+            signInProgress();
+                      
           }
         };
 
@@ -697,8 +698,8 @@ public class AppController extends Activity implements OnTouchListener {
 
     final List<ServerObj> serverObjsTmp = serverObjs;
 
-    BaseAdapter serverAdapter = new BaseAdapter() {
-
+    final BaseAdapter serverAdapter = new BaseAdapter() {
+      
       public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
 
@@ -734,11 +735,24 @@ public class AppController extends Activity implements OnTouchListener {
 
           public void onClick(View v) {
 
+            int count = _listViewServer.getCount();
+            
+            View rowView =  getView(_intDomainIndex, null, _listViewServer); 
+              
+            ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
+            imgView.setVisibility(View.INVISIBLE);
+            
             _strDomainIndex = String.valueOf(pos);
-            _intDomainIndex = Integer.parseInt(_strDomainIndex);
+            _intDomainIndex = pos;
             _strDomain = serverObj._strServerUrl;
-            createServersAdapter(configurationInstance._arrServerList);
-
+//            createServersAdapter(configurationInstance._arrServerList);
+            
+            rowView = getView(_intDomainIndex, null, _listViewServer); 
+            imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
+            imgView.setVisibility(View.VISIBLE);
+            
+            notifyDataSetChanged();
+          
           }
         });
 

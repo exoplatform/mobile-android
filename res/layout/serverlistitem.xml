@@ -33,6 +33,7 @@
     		android:layout_alignParentRight="true"
     		android:layout_toLeftOf="@+id/TextView_URL"
     		android:background="@drawable/checked"
+    		android:tag="2"
     	/>
     </RelativeLayout>
 </RelativeLayout>
