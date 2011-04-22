@@ -1,44 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="250sp"
-  android:layout_height="242sp"
-  android:background="@drawable/background"
-  >
-  
-  <ImageView 
-		android:layout_x="01sp" 
-		android:layout_y="0sp" 
-		android:id="@+id/ImageView01" 
-		android:layout_width="248sp" 
-		android:layout_height="40sp"
-		android:background="@drawable/navigationbar"
-		/>
-		
-  	<Button 
- 		android:id="@+id/Button_Close"
- 		android:layout_x="179sp"
- 		android:layout_y="02sp"
- 		android:layout_width="70sp" 
- 		android:layout_height="38sp"
- 	/>
- 		
- 	<TextView 
- 		android:id="@+id/TextView_FileName" 
- 		android:layout_width="170sp" 
- 		android:layout_height="30sp"
- 		android:layout_x="05sp" 
- 		android:layout_y="07sp"
- 		android:textSize="18sp"
- 		android:maxLines="1"
- 		android:textColor="#FF000000"
- 		/>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="250sp" android:layout_height="242sp"
+	android:background="@drawable/background">
 
-	<ListView 
-		android:layout_x="0sp"
-		android:layout_y="40sp" 
-		android:layout_width="250sp" 
-		android:layout_height="wrap_content" 
-		android:id="@+id/ListView0_FileAction" 
-		/>
+	<ImageView android:layout_x="01sp" android:layout_y="0sp"
+		android:id="@+id/ImageView01" android:layout_width="248sp"
+		android:layout_height="40sp" android:background="@drawable/navigationbar" />
+
+	<Button android:id="@+id/Button_Close" android:layout_x="179sp"
+		android:layout_y="02sp" android:layout_width="70sp"
+		android:layout_height="38sp" />
+
+	<TextView android:id="@+id/TextView_FileName"
+		android:layout_width="170sp" android:layout_height="30sp"
+		android:layout_x="05sp" android:layout_y="07sp" android:textSize="18sp"
+		android:maxLines="1" android:textColor="#FF000000" />
+
+	<ListView android:layout_x="0sp" android:layout_y="40sp"
+		android:layout_width="250sp" android:layout_height="wrap_content"
+		android:id="@+id/ListView0_FileAction" />
 </AbsoluteLayout>

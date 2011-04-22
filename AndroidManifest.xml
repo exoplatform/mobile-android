@@ -1,31 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="eXo.eXoPlatform"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <application 
-    	android:icon="@drawable/icon57x57" 
-    	android:debuggable="true"
-    	>
-        <activity android:name=".AppController"
-                  android:label="eXo Platform"
-                  android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".eXoApplicationsController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
-        <activity android:name=".eXoWebViewController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
-        <activity android:name=".eXoFilesController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
-        <activity android:name=".eXoChatController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
-        <activity android:name=".eXoChatListController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
-        <activity android:name=".eXoGadgetViewController" android:configChanges="keyboardHidden|orientation" android:screenOrientation="portrait"/>
-        	
-    </application>
-    <uses-sdk android:minSdkVersion="7" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    
+	package="eXo.eXoPlatform" android:versionCode="2" android:versionName="1.1.1">
+	<application android:icon="@drawable/icon57x57"
+		android:debuggable="false">
+		<activity android:name=".AppController" android:label="eXo Platform"
+			android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".eXoApplicationsController"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".eXoApplicationsController2"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".eXoWebViewController"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".eXoFilesController"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".eXoChatController"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".eXoChatListController"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".eXoGadgetViewController"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".eXoSetting" android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".eXoModifyServerList"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+	</application>
+	<uses-sdk android:minSdkVersion="7"/>
+	
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 </manifest> 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/MainLayout" android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:background="@drawable/background">
+
+	<ImageView android:layout_marginLeft="0dip" android:layout_marginTop="0dip"
+		android:id="@+id/ImageView_NavigationBar" android:layout_width="fill_parent"
+		android:layout_height="40dip" android:background="@drawable/navigationbar" />
+
+	<Button android:id="@+id/Button_SignOut"
+		android:layout_marginLeft="5dip"
+		android:layout_marginTop="5dip"
+		android:layout_width="30dip"
+		android:background="@drawable/logout"
+		android:layout_height="30dip" />
+
+	<Button
+		android:id="@+id/Button_Add"
+		android:layout_toRightOf="@id/Button_SignOut" 
+		android:layout_marginLeft="10dip"
+		android:layout_marginTop="5dip"
+		android:layout_width="wrap_content" 
+		android:layout_height="30dip" 
+		android:text="Add row"
+		/>
+ 
+	<ScrollView 
+		android:id="@+id/ScrollView01" 
+		android:layout_below="@id/ImageView_NavigationBar"
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent">
+ 
+  		<TableLayout 
+  			android:id="@+id/TableLayout01" 
+  			android:layout_width="fill_parent" 
+  			android:layout_height="wrap_content" 
+  			android:stretchColumns="0,1,2">
+ 
+  </TableLayout>
+</ScrollView>
+
+</RelativeLayout>

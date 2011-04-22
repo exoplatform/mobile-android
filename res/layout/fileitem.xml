@@ -1,33 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
-  
-  <ImageView
-		android:id="@+id/icon"
-		android:layout_x="2sp"
-		android:layout_y="2sp"
-		android:layout_width="40sp"
-		android:layout_height="40sp"
-	/>
-	
-	<TextView
-		android:id="@+id/label"
-		android:layout_x="60sp"
-		android:layout_y="15sp"
-		android:layout_width="210sp"
-		android:layout_height="20sp"
-		android:textSize="14sp"
-	/>
-	
-	<Button 
- 		android:id="@+id/Button_FileAction" 
- 		android:layout_width="30sp" 
- 		android:layout_height="30sp"
- 		android:layout_x="285sp" 
- 		android:layout_y="5sp"
- 		android:background="@drawable/setting"
- 	/>
- 	
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+	<ImageView android:id="@+id/icon" android:layout_x="2sp"
+		android:layout_y="2sp" android:layout_width="40sp"
+		android:layout_height="40sp" />
+
+	<TextView android:id="@+id/label" android:layout_x="60sp"
+		android:layout_y="15sp" android:layout_width="210sp"
+		android:layout_height="20sp" android:textSize="14sp" />
+
+	<Button android:id="@+id/Button_FileAction"
+		android:layout_width="30sp" android:layout_height="30sp"
+		android:layout_x="285sp" android:layout_y="5sp" android:background="@drawable/setting" />
+
 </AbsoluteLayout>

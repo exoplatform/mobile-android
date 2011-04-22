@@ -1,84 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="250sp"
-  android:layout_height="220sp"
-  android:background="@drawable/background"
-  >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="280dip" android:layout_height="260dip"
+	android:background="@drawable/background">
 
-	<ImageView 
-		android:layout_x="01sp" 
-		android:layout_y="0sp" 
-		android:id="@+id/ImageView01" 
-		android:layout_width="248sp" 
-		android:layout_height="40sp"
-		android:background="@drawable/navigationbar"
-		/>
+	<ImageView
+		android:id="@+id/ImageView_Navigationbar" android:layout_width="fill_parent"
+		android:layout_height="40dip" android:background="@drawable/navigationbar" />
 
- 	<TextView 
- 		android:id="@+id/changeLanguage" 
- 		android:layout_width="170sp" 
- 		android:layout_height="30sp"
- 		android:layout_x="10sp"
-		android:layout_y="07sp"
-		android:textSize="18sp"
-		android:textColor="#FF000000"
- 	/>	
-	
-	<Button 
- 		android:id="@+id/Button_Close" 
- 		android:gravity="center_horizontal"
- 		android:layout_width="70sp" 
- 		android:layout_height="40sp"
- 		android:layout_x="180sp"
-		android:layout_y="2sp"
- 	/>
+	<TextView android:id="@+id/TextView_Title"
+		android:layout_width="fill_parent" android:layout_height="30dip"
+		android:layout_marginTop="10dip" android:textSize="18dip"
+		android:textColor="#FF000000" android:gravity="center" />
 
-	<RadioGroup
-  		android:layout_width="210sp"
-   		android:layout_height="wrap_content"
-   		android:orientation="vertical"
-		android:layout_x="20sp"
-		android:layout_y="60sp"
-   		>
-   		<RadioButton
-    		android:id="@+id/english"
-    		android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:text="English" />
-   		<RadioButton
-    		android:id="@+id/french"
-    		android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:text="French" />
-	</RadioGroup>
- 	
- 	<Button 
- 		android:id="@+id/Button_Help" 
- 		android:gravity="center_horizontal"
- 		android:layout_width="200sp" 
- 		android:layout_height="40sp"
- 		android:layout_x="25sp"
-		android:layout_y="180sp"
-		android:text="Help"
- 	/>
- 	
-	<ImageView 
-		android:layout_width="40sp"
-		android:layout_height="30sp" 
-		android:layout_x="180sp" 
-		android:layout_y="65sp"  
-		android:id="@+id/ImageView_EN"
-		android:background="@drawable/en"
-	/>
-	
-	<ImageView 
-		android:layout_width="40sp"
-		android:layout_height="30sp" 
-		android:layout_x="180sp" 
-		android:layout_y="115sp"  
-		android:id="@+id/ImageView_FR"
-		android:background="@drawable/fr"
-	/>
-	
-</AbsoluteLayout>
+	<TextView android:id="@+id/TextView_Server_Name"
+		android:layout_width="fill_parent" android:layout_height="20dip"
+		android:layout_marginTop="10dip"
+		android:layout_below="@id/ImageView_Navigationbar" android:textSize="18dip" />
+	<EditText android:id="@+id/EditText_Server_Name"
+		android:layout_below="@id/TextView_Server_Name" android:layout_height="40dip"
+		android:inputType="textNoSuggestions"
+		android:layout_width="fill_parent" android:textColor="#FF000000" />
+
+	<TextView android:id="@+id/TextView_Server_URL"
+	android:layout_below="@id/EditText_Server_Name"
+		android:layout_width="fill_parent" android:layout_height="20dip"
+		android:layout_marginTop="10dip" android:textSize="18dip" />
+	<EditText android:id="@+id/EditText_Server_URL"
+	android:layout_below="@id/TextView_Server_URL"
+	android:inputType="textUri"
+		android:layout_marginTop="10dip" android:layout_height="40dip"
+		android:layout_width="fill_parent" android:textColor="#FF000000" />
+
+	<Button android:id="@+id/Button_Delete_Cancel"
+	android:layout_alignParentBottom="true"
+		android:layout_width="100dip" android:layout_height="40dip"
+		android:layout_marginLeft="20dip" />
+
+	<Button android:id="@+id/Button_OK" android:layout_width="100dip"
+	android:layout_alignParentBottom="true"
+	android:layout_alignParentRight="true"
+	android:layout_marginRight="20dip"
+		android:layout_height="40dip"
+		 />
+
+</RelativeLayout>

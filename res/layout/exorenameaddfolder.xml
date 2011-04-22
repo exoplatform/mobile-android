@@ -1,40 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
-  	
-  	<TextView 
-  		android:text="Rename, add new folder" 
-  		android:id="@+id/TextView_RenameAddFolder" 
-  		android:layout_width="320sp" 
-  		android:layout_height="40sp"
-  		android:layout_x="0sp"
-  		android:layout_y="10sp"
-  	/>
-  	<EditText 
-  		android:id="@+id/EditText_RenameAddFolder" 
-  		android:layout_width="320sp" 
-  		android:layout_height="40sp"
-  		android:layout_x="0sp"
-  		android:layout_y="50sp"
-  	/>
-	<Button 
-		android:text="OK" 
-		android:id="@+id/Button_OK" 
-		android:layout_width="100sp" 
-		android:layout_height="40sp"
-		android:layout_x="50sp"
-  		android:layout_y="100sp"
-	/>
-	<Button 
-		android:text="Cancel" 
-		android:id="@+id/Button_Cancel" 
-		android:layout_width="100sp" 
-		android:layout_height="40sp"
-		android:layout_x="170sp"
-  		android:layout_y="100sp"
-	/>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+	<TextView android:text="Rename, add new folder" android:id="@+id/TextView_RenameAddFolder"
+		android:layout_width="320sp" android:layout_height="40sp"
+		android:layout_x="0sp" android:layout_y="10sp" />
+	<EditText android:id="@+id/EditText_RenameAddFolder"
+		android:layout_width="320sp" android:layout_height="40sp"
+		android:layout_x="0sp" android:layout_y="50sp" />
+	<Button android:text="OK" android:id="@+id/Button_OK"
+		android:layout_width="100sp" android:layout_height="40sp"
+		android:layout_x="50sp" android:layout_y="100sp" />
+	<Button android:text="Cancel" android:id="@+id/Button_Cancel"
+		android:layout_width="100sp" android:layout_height="40sp"
+		android:layout_x="170sp" android:layout_y="100sp" />
 
 
 </AbsoluteLayout>
