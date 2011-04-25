@@ -167,8 +167,8 @@ public class eXoApplicationsController2 extends Activity {
 //  Reorder menu
     if (selectedItemIndex == 1) {
       
-      Intent next = new Intent(eXoApplicationsController2.this, BasicItemActivity.class);
-      startActivity(next);
+     // Intent next = new Intent(eXoApplicationsController2.this, BasicItemActivity.class);
+      //startActivity(next);
     }
 //    Add item
     else

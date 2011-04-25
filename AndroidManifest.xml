@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="eXo.eXoPlatform" android:versionCode="2" android:versionName="1.1.1">
 	<application android:icon="@drawable/icon57x57"
-		android:theme="@style/Theme.GreenDroid"
-		android:name=".CatalogApplication"
 		android:debuggable="false">
 		
 		<activity android:name=".AppController" android:label="eXo Platform"
@@ -37,9 +35,6 @@
 		<activity android:name=".eXoSetting" android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 		<activity android:name=".eXoModifyServerList"
-			android:configChanges="keyboardHidden|orientation"
-			android:screenOrientation="portrait" />
-		<activity android:name=".BasicItemActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 	</application>
