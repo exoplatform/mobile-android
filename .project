@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>eXoMobile</name>
+	<name>exo-mobile-android</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -36,4 +36,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>GreenDroid_src</name>
+			<type>2</type>
+			<locationURI>_android_GreenDroid_612cb559/src</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

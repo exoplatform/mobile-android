@@ -11,7 +11,7 @@
 	<TextView android:layout_x="0sp" android:layout_y="380sp"
 		android:layout_width="320sp" android:layout_height="40sp"
 		android:id="@+id/TextView_EmptyPage" android:textSize="18sp"
-		android:gravity="center_horizontal" android:textColor="@color/black" />
+		android:gravity="center_horizontal" android:textColor="#000000" />
 	<ImageView android:layout_x="0sp" android:layout_y="0sp"
 		android:id="@+id/ImageView01" android:layout_width="wrap_content"
 		android:layout_height="40sp" android:background="@drawable/navigationbar" />

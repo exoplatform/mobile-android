@@ -41,7 +41,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -617,7 +616,12 @@ public class AppController extends Activity implements OnTouchListener {
             imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
             imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
 
-            signInProgress();
+            Intent next = new Intent(AppController.this,
+                                     eXoApplicationsController2.class);
+            
+            startActivity(next);
+            
+//            signInProgress(); 
                       
           }
         };
@@ -735,7 +739,8 @@ public class AppController extends Activity implements OnTouchListener {
 
           public void onClick(View v) {
 
-            int count = _listViewServer.getCount();
+            if(_intDomainIndex == -1)
+              _intDomainIndex = pos;
             
             View rowView =  getView(_intDomainIndex, null, _listViewServer); 
               
@@ -745,7 +750,6 @@ public class AppController extends Activity implements OnTouchListener {
             _strDomainIndex = String.valueOf(pos);
             _intDomainIndex = pos;
             _strDomain = serverObj._strServerUrl;
-//            createServersAdapter(configurationInstance._arrServerList);
             
             rowView = getView(_intDomainIndex, null, _listViewServer); 
             imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
