@@ -1,27 +1,51 @@
 package eXo.eXoPlatform;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+
+import eXo.eXoPlatform.eXoApplicationsController.eXoAppsAdapter;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.View.OnTouchListener;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class eXoApplicationsController2 extends Activity {
+public class eXoApplicationsController2 extends Activity implements OnTouchListener {
 
   // App item object
   class AppItem {
@@ -46,11 +70,22 @@ public class eXoApplicationsController2 extends Activity {
 
   Button            btnHome;
   Button            btnAdd;
+  Button            btnDone;
+  
+  Timer             timer;
   
   GridView gridview;
-  
-  int counter = 0;
+  RotateAnimation anim;
+  int timerCounter = 0;
+  int itemMoveIndex = -1;
+  boolean isDeleteItem = false;
 
+  private BaseAdapter adapter;
+  
+  String strChatServer;
+  
+  // Standalone gadget content
+  private String                            _strContentForStandaloneURL;
   ArrayList<AppItem> array = new ArrayList<AppItem>();
   
 
@@ -82,7 +117,32 @@ public class eXoApplicationsController2 extends Activity {
         AppItem item = new AppItem(bm, "New");
         array.add(item);
         
-        createAdapter();
+        adapter.notifyDataSetChanged();
+//        createAdapter();
+      }
+      
+    });
+    
+    btnDone = (Button)findViewById(R.id.Button_Done);
+    btnDone.setVisibility(View.INVISIBLE);
+    btnDone.setOnClickListener(new View.OnClickListener() {
+      
+      public void onClick(View v) {
+        
+        btnDone.setVisibility(View.INVISIBLE);
+        
+        for(int i = 0; i < array.size(); i++)
+        {
+          
+          View view = adapter.getView(i, null, gridview);
+          view.clearAnimation();
+          ImageView ivIcon = (ImageView)view.findViewById(R.id.icon_image);
+          ivIcon.setOnClickListener(null);
+          
+          isDeleteItem = false;
+          timerCounter = 0;
+        }
+        adapter.notifyDataSetChanged();
       }
       
     });
@@ -108,26 +168,44 @@ public class eXoApplicationsController2 extends Activity {
 //  Create GridView Apdapter
   private void createAdapter()
   {
-    BaseAdapter adapter = new BaseAdapter()
+    adapter = new BaseAdapter()
     {
         public View getView(int position, View convertView, ViewGroup parent) {
           // TODO Auto-generated method stub
           View v;
-          if(convertView == null)
+          final int pos = position;
+          
+          AppItem item = array.get(position);
+          LayoutInflater li = getLayoutInflater();
+          v = li.inflate(R.layout.appitem, null);
+          v.setOnTouchListener(eXoApplicationsController2Instance);
+          TextView tv = (TextView)v.findViewById(R.id.icon_text);
+          tv.setText(item._name);
+          ImageView iv = (ImageView)v.findViewById(R.id.icon_image);
+          iv.setImageBitmap(item._icon);
+          
+          ImageView ivDelete = (ImageView)v.findViewById(R.id.icon_delete);
+          if(isDeleteItem)
           {
-            AppItem item = array.get(position);
-            LayoutInflater li = getLayoutInflater();
-            v = li.inflate(R.layout.appitem, null);
-            TextView tv = (TextView)v.findViewById(R.id.icon_text);
-            tv.setText(item._name);
-            ImageView iv = (ImageView)v.findViewById(R.id.icon_image);
-//            iv.setImageResource(R.drawable.server);
-            iv.setImageBitmap(item._icon);
+            ivDelete.setVisibility(View.VISIBLE);
+            v.startAnimation(anim);
           }
           else
           {
-            v = convertView;
+            ivDelete.setVisibility(View.INVISIBLE);
+            v.clearAnimation();
           }
+            
+          ivDelete.setOnClickListener(new View.OnClickListener() {
+            
+            public void onClick(View v) {
+             
+              array.remove(pos);
+              adapter.notifyDataSetChanged();
+              
+            }
+          });
+          
           return v;
         }
         
@@ -167,8 +245,8 @@ public class eXoApplicationsController2 extends Activity {
 //  Reorder menu
     if (selectedItemIndex == 1) {
       
-     // Intent next = new Intent(eXoApplicationsController2.this, BasicItemActivity.class);
-      //startActivity(next);
+      Intent next = new Intent(eXoApplicationsController2.this, BasicItemActivity.class);
+      startActivity(next);
     }
 //    Add item
     else
@@ -179,8 +257,6 @@ public class eXoApplicationsController2 extends Activity {
     return false;
   }
 
-  
-  
   // Change language
   private void updateLocallize(String localize) {
     try {
@@ -220,8 +296,564 @@ public class eXoApplicationsController2 extends Activity {
                                                                 .getBytes("ISO-8859-1"), "UTF-8");
       strUserGuideButton = new String(resourceBundle.getString("UserGuide").getBytes("ISO-8859-1"),
                                       "UTF-8");
+      strChatServer = new String(resourceBundle.getString("ChatServer").getBytes("ISO-8859-1"),
+      "UTF-8");
+      
+      
+      
     } catch (Exception e) {
 
     }
   }
+
+  public boolean onTouch(View v, MotionEvent event) {
+
+    int eventaction = event.getAction();
+      
+    
+      timer = new Timer();
+      final Handler handler = new Handler();
+      
+      switch (eventaction) {
+          case MotionEvent.ACTION_DOWN: 
+          {
+              // finger touches the screen
+            TimerTask timeTask = new TimerTask() {
+              @Override
+              public void run() {
+                
+                handler.post(mUpdateTimeTask);
+              }
+            };
+            
+            timer.schedule(timeTask, 0, 1000);
+              break;
+          }
+          case MotionEvent.ACTION_MOVE:
+          {
+              // finger moves on the screen
+            timer.cancel();
+              break;
+          }
+          case MotionEvent.ACTION_UP:
+          {
+              // finger leaves the screen
+            timer.cancel();
+//            timer = null;
+            handler.removeCallbacks(mUpdateTimeTask);
+            
+            
+            if(timerCounter <= 3)
+            {
+              for(int i = 0; i < array.size(); i++)
+              {
+                  View view = gridview.getChildAt(i);
+                  if(view == v)
+                  {
+                    AppItem item = array.get(i);
+                    if(item._name.equalsIgnoreCase("files"))
+                    {
+                      launchFilesApp();
+                    }
+                    else if(item._name.equalsIgnoreCase("dashboard"))
+                    {
+                      launchDashboardApp();
+                    }
+                    else
+                    {
+                      launchMessengerApp(); 
+                    }
+                  }
+              }
+              
+            }
+              break;
+          }
+      }
+      
+      return true; 
+    }
+
+  public Runnable mUpdateTimeTask = new Runnable() {
+    
+    public void run() {
+      // TODO Auto-generated method stub
+      timerCounter++;
+      if(timerCounter > 3)
+      {
+       timer.cancel();
+       btnDone.setVisibility(View.VISIBLE);
+       // Start animating the image
+      for(int i = 0; i < array.size(); i++)
+      {
+        final int pos = i;
+        View view = gridview.getChildAt(i);
+        final ImageView ivIcon = (ImageView)view.findViewById(R.id.icon_image);
+        ivIcon.setOnClickListener(new View.OnClickListener() {
+          
+          public void onClick(View v) {
+            // TODO Auto-generated method stub
+            if(itemMoveIndex == -1)
+            {
+              itemMoveIndex = pos;
+              ivIcon.setBackgroundResource(R.drawable.imageborder); 
+            }
+            else
+            {
+              for(int j = 0; j < array.size(); j++)
+              {
+                View view2 = gridview.getChildAt(j);
+                view2.findViewById(R.id.icon_image).setBackgroundDrawable(null);
+                  
+              }
+              
+              AppItem item = array.get(pos);
+              array.set(pos, array.get(itemMoveIndex));
+              array.set(itemMoveIndex, item);
+              
+              itemMoveIndex = -1;
+              
+              adapter.notifyDataSetChanged();
+              
+            }
+            
+          }
+        });
+        
+        ImageView iv = (ImageView)view.findViewById(R.id.icon_delete);
+        iv.setVisibility(View.VISIBLE);
+        isDeleteItem = true;
+        
+        anim = new RotateAnimation(-2f, 2f, 50f, 50f);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.setRepeatCount(Animation.INFINITE);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setDuration(100);
+        view.startAnimation(anim);
+      }
+       
+      } 
+    
+    }
+  
+  };
+
+  public void launchFilesApp() {
+    String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
+                                                               "exo_prf_username");
+    String domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
+                                                             "exo_prf_domain");
+
+    if (eXoFilesController.myFile == null) {
+      eXoFilesController.myFile = new eXoFile();
+      eXoFilesController.myFile.fileName = userName;
+      eXoFilesController.myFile.urlStr = domain
+          + "/rest/private/jcr/repository/collaboration/Users/" + userName;
+      eXoFilesController._rootUrl = eXoFilesController.myFile.urlStr;
+    }
+
+    eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(eXoFilesController.myFile.urlStr);
+    eXoFilesController._delegate = eXoApplicationsController2Instance;
+    Intent next = new Intent(eXoApplicationsController2.this, eXoFilesController.class);
+    startActivity(next);
+
+  }
+
+  public void launchMessengerApp() {
+
+    SharedPreferences sharedPreference = getSharedPreferences(AppController.EXO_PREFERENCE, 0);
+    String urlStr = sharedPreference.getString(AppController.EXO_PRF_DOMAIN, "exo_prf_domain");
+
+    URI url = null;
+
+    try {
+      url = new URI(urlStr);
+    } catch (Exception e) {
+
+    }
+
+    String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
+                                                               "exo_prf_username");
+    String password = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
+                                                               "exo_prf_password");
+
+    connectToChatServer(url.getHost(), 5222, userName, password);
+    if (eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
+      return;
+
+    eXoChatListController._delegate = eXoApplicationsController2Instance;
+    Intent next = new Intent(eXoApplicationsController2.this, eXoChatListController.class);
+    startActivity(next);
+  }
+
+  public void launchDashboardApp() 
+  {
+    
+  }
+  
+//Connect to Openfile server
+  private void connectToChatServer(String host, int port, String userName, String password) {
+    if (eXoChatListController.conn != null && eXoChatListController.conn.isConnected())
+      return;
+
+    ConnectionConfiguration config = new ConnectionConfiguration(host, port, "Work");
+    eXoChatListController.conn = new XMPPConnection(config);
+
+    try {
+      eXoChatListController.conn.connect();
+      eXoChatListController.conn.login(userName, password);
+
+//      runOnUiThread(new Runnable() {
+//
+//        public void run() {
+//
+//          // icon.setBackgroundResource(R.drawable.onlineicon);
+//          List<eXoApp> exoapps = new ArrayList<eXoApp>(2);
+//          exoapps.add(new eXoApp(fileTittle, ""));
+//          exoapps.add(new eXoApp(chatTittle, ""));
+//          exoAppsAdapter = new eXoAppsAdapter(exoapps);
+//          _lstvApps.setAdapter(exoAppsAdapter);
+//          _lstvApps.setOnItemClickListener(exoAppsAdapter);
+//
+//        }
+//      });
+
+      // exoAppsAdapter.notifyDataSetChanged();
+
+    } catch (XMPPException e) {
+
+      String str = e.toString();
+      String msg = e.getMessage();
+      Log.e(str, msg);
+      // e.printStackTrace();
+      Toast.makeText(eXoApplicationsController2.this, strChatServer, Toast.LENGTH_SHORT).show();
+    }
+
+  }
+
+  // Get gadget list
+  public List<eXoGadget> getGadgetsList() {
+    List<eXoGadget> arrGadgets = new ArrayList<eXoGadget>();
+    String _strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
+                                                          "exo_prf_domain");
+    String strHomeUrl = _strDomain + "/portal/private/classic";
+    String strContent = AppController._eXoConnection.sendRequestAndReturnString(strHomeUrl);
+
+    String strGadgetMark = "eXo.gadget.UIGadget.createGadget";
+    String title;
+    String url;
+    String description;
+    Bitmap bmp;
+
+    int indexStart;
+    int indexEnd;
+    String tmpStr = strContent;
+    indexStart = tmpStr.indexOf(strGadgetMark);
+
+    while (indexStart >= 0) {
+      tmpStr = tmpStr.substring(indexStart + 1);
+      indexEnd = tmpStr.indexOf(strGadgetMark);
+      String tmpStr2;
+
+      if (indexEnd < 0)
+        tmpStr2 = tmpStr;
+      else
+        tmpStr2 = tmpStr.substring(0, indexEnd);
+
+      // Get title
+      title = parseUrl(tmpStr2, "\"title\":\"", true, "\"");
+
+      // Get description
+      description = parseUrl(tmpStr2, "\"description\":\"", true, "\"");
+
+      // Get url
+      url = _strDomain + "/eXoGadgetServer/gadgets/ifr?container=default&mid=0&nocache=0";
+
+      // Get country
+      url += parseUrl(tmpStr2, "&country=", false, "&");
+
+      // Get view
+      url += parseUrl(tmpStr2, "&view=", false, "&");
+
+      // Get language
+      url += parseUrl(tmpStr2, "&lang=", false, "&");
+
+      url += "&parent=" + _strDomain + "&st=";
+
+      // Get token
+      url += parseUrl(tmpStr2, "default:", false, "\"");
+
+      // Get xml url
+      url += parseUrl(tmpStr2, "&url=", false, "\"");
+
+      // Get bitmap
+      String bmpUrl = parseUrl(tmpStr2, "\"thumbnail\":\"", true, "\"");
+      bmpUrl = bmpUrl.replace("localhost", _strDomain);
+      bmp = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
+
+      eXoGadget tempGadget = new eXoGadget(title, description, url, bmp, null);
+      arrGadgets.add(tempGadget);
+
+      indexStart = indexEnd;
+
+    }
+
+    return arrGadgets;
+  }
+
+  // Parser gadget string data
+  public String getStringForGadget(String gadgetStr, String startStr, String endStr) {
+    String returnValue = "";
+    int index1;
+    int index2;
+
+    index1 = gadgetStr.indexOf(startStr);
+
+    if (index1 > 0) {
+      String tmpStr = gadgetStr.substring(index1 + startStr.length());
+      index2 = tmpStr.indexOf(endStr);
+      if (index2 > 0)
+        returnValue = tmpStr.substring(0, index2);
+    }
+
+    return returnValue;
+  }
+
+  // Get gadget list with URL
+  public List<eXoGadget> listOfGadgetsWithURL(String url) {
+    List<eXoGadget> arrTmpGadgets = new ArrayList<eXoGadget>();
+
+    String strGadgetName;
+    String strGadgetDescription;
+    Bitmap imgGadgetIcon = null;
+
+    String domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
+                                                             "exo_prf_domain");
+    String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
+                                                               "exo_prf_domain");
+    String password = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
+                                                               "exo_prf_domain");
+
+    String strContent = "";
+
+    int indexOfSocial = domain.indexOf("social");
+    if (indexOfSocial > 0) {
+      // dataReply = [[_delegate getConnection]
+      // sendRequestToSocialToGetGadget:[url absoluteString]];
+    } else {
+      strContent = AppController._eXoConnection.sendRequestToGetGadget(url, userName, password);
+    }
+
+    _strContentForStandaloneURL = new String(strContent);
+
+    int index1;
+    int index2;
+
+    index1 = strContent.indexOf("eXo.gadget.UIGadget.createGadget");
+
+    do {
+      if (index1 < 0)
+        return null;
+      strContent = strContent.substring(index1 + 32);
+      index2 = strContent.indexOf("'/eXoGadgetServer/gadgets',");
+      if (index2 < 0)
+        return null;
+      String tmpStr = strContent.substring(0, index2 + 45);
+
+      strGadgetName = getStringForGadget(tmpStr, "\"title\":\"", "\",");
+      strGadgetDescription = getStringForGadget(tmpStr, "\"description\":\"", "\",");
+      String gadgetIconUrl = getStringForGadget(tmpStr, "\"thumbnail\":\"", "\",");
+      String gadgetID = getStringForGadget(tmpStr, "'content-", "'");
+
+      gadgetIconUrl = gadgetIconUrl.replace("http://localhost:8080", domain);
+
+      try {
+        imgGadgetIcon = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
+        if (imgGadgetIcon == null) {
+          try {
+            imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
+          } catch (Exception e2) {
+
+            imgGadgetIcon = null;
+          }
+        }
+
+      } catch (Exception e) {
+
+        try {
+          imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
+        } catch (Exception e2) {
+
+          imgGadgetIcon = null;
+        }
+
+      }
+
+      String gadgetUrl = domain;
+
+      gadgetUrl += getStringForGadget(tmpStr, "'home', '", "',") + "/";
+      gadgetUrl += "ifr?container=default&mid=1&nocache=0&lang="
+          + getStringForGadget(tmpStr, "&lang=", "\",") + "&debug=1&st=default";
+
+      String token = ":" + getStringForGadget(tmpStr, "\"default:", "\",");
+      token = token.replace(":", "%3A");
+      token = token.replace("/", "%2F");
+      token = token.replace("+", "%2B");
+
+      gadgetUrl += token + "&url=";
+
+      String gadgetXmlFile = getStringForGadget(tmpStr, "\"url\":\"", "\",");
+      gadgetXmlFile = gadgetXmlFile.replace(":", "%3A");
+      gadgetXmlFile = gadgetXmlFile.replace("/", "%2F");
+
+      gadgetUrl += gadgetXmlFile;
+
+      eXoGadget gadget = new eXoGadget(strGadgetName,
+                                       strGadgetDescription,
+                                       gadgetUrl,
+                                       imgGadgetIcon,
+                                       gadgetID);
+
+      arrTmpGadgets.add(gadget);
+
+      strContent = strContent.substring(index2 + 35);
+      index1 = strContent.indexOf("eXo.gadget.UIGadget.createGadget");
+
+    } while (index1 > 0);
+
+    return arrTmpGadgets;
+  }
+
+  // Get gadget tab list
+  public List<GateInDbItem> listOfGadgets() {
+    String _strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
+                                                          "exo_prf_domain");
+    // List<GateInDbItem> arrTmpGadgets = new ArrayList<GateInDbItem>();
+
+    eXoApplicationsController.arrGadgets = new ArrayList<GateInDbItem>();
+
+    String strContent = AppController._eXoConnection.getFirstLoginContent();
+
+    int index1;
+    int index2;
+    int index3;
+
+    index1 = strContent.indexOf("DashboardIcon TBIcon");
+
+    if (index1 < 0)
+      return null;
+
+    strContent = strContent.substring(index1 + 20);
+    index1 = strContent.indexOf("TBIcon");
+
+    if (index1 < 0)
+      return null;
+
+    strContent = strContent.substring(0, index1);
+
+    do {
+      index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
+      index2 = strContent.indexOf("\" >");
+      if (index1 < 0 && index2 < 0)
+        return null;
+      String gadgetTabUrlStr = strContent.substring(index1 + 32, index2);
+
+      strContent = strContent.substring(index2 + 3);
+      index3 = strContent.indexOf("</a>");
+      if (index3 < 0)
+        return null;
+      String gadgetTabName = strContent.substring(0, index3);
+      List<eXoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
+
+      HashMap<String, String> mapOfURLs = listOfStandaloneGadgetsURL();
+
+      if (arrTmpGadgetsInItem != null) {
+        for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) {
+          eXoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
+
+          String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
+
+          if (urlStandalone != null) {
+            tmpGadget._strGadgetUrl = urlStandalone;
+          }
+        }
+
+        GateInDbItem tmpGateInDbItem = new GateInDbItem(gadgetTabName,
+                                                        gadgetTabUrlStr,
+                                                        arrTmpGadgetsInItem);
+        // arrTmpGadgets.add(tmpGateInDbItem);
+        eXoApplicationsController.arrGadgets.add(tmpGateInDbItem);
+
+        strContent = strContent.substring(index3);
+        index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
+      }
+
+    } while (index1 > 0);
+
+    return null;
+  }
+
+  // Get needed string
+  private String parseUrl(String urlStr, String neededStr, boolean offset, String enddedStr) {
+    String str;
+    int idx = urlStr.indexOf(neededStr);
+    String tmp = urlStr.substring(idx + neededStr.length());
+    idx = tmp.indexOf(enddedStr);
+    if (!offset)
+      str = neededStr + tmp.substring(0, idx);
+    else
+      str = tmp.substring(0, idx);
+
+    return str;
+  }
+
+  // Standalone gadgets
+  private HashMap<String, String> listOfStandaloneGadgetsURL() {
+    HashMap<String, String> mapOfURLs = new HashMap<String, String>();
+    String strContent = _strContentForStandaloneURL;
+
+    int index1;
+    int index2;
+
+    String[] arrParagraphs = strContent.split("<div class=\"UIGadget\" id=\"");
+
+    for (int i = 1; i < arrParagraphs.length; i++) {
+      String tmpStr1 = arrParagraphs[i];
+
+      String idString = tmpStr1.substring(0, 36);
+
+      if (this.isAGadgetIDString(idString)) {
+
+        index1 = tmpStr1.indexOf("standalone");
+        if (index1 >= 0) {
+          index2 = tmpStr1.indexOf("<a style=\"display:none\" href=\"");
+          String strStandaloneUrl = "";
+          if (index2 >= 0) {
+            int mark = 0;
+            for (int j = index2 + 30; j < tmpStr1.length(); j++) {
+              if (tmpStr1.charAt(j) == '"') {
+                mark = j;
+                break;
+              }
+            }
+            strStandaloneUrl = tmpStr1.substring(index2 + 30, mark);
+          }
+
+          if (strStandaloneUrl.length() > 0) {
+            mapOfURLs.put(idString, strStandaloneUrl);
+          }
+        }
+      }
+    }
+    return mapOfURLs;
+  }
+
+  // Check if it is a standalone gadget
+  private boolean isAGadgetIDString(String potentialIDString) {
+    if ((potentialIDString.charAt(8) == '-') && (potentialIDString.charAt(13) == '-'))
+      return true;
+    return false;
+  }
+
+  
 }

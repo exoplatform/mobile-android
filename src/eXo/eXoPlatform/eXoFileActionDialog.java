@@ -255,7 +255,7 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
 
                                           public void run() {
 
-                                            eXoFilesController.createExoFilesAdapter();
+                                            eXoFilesController.eXoFilesControllerInstance.fileAdapter.notifyDataSetChanged();
 
                                           }
                                         };

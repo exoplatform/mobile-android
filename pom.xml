@@ -12,7 +12,7 @@
 	<artifactId>exo-mobile-android</artifactId>
 	<version>1.1.1-SNAPSHOT</version>
 	<packaging>apk</packaging>
-	<name>eXo Mobile Android</name>
+	<name>eXo Mobile Android</name> 
 	<description>eXo Mobile Android projects.</description>
 	<scm>
 		<connection>scm:svn:https://svn.exoplatform.org/projects/mobile/trunk/exo-mobile-android</connection>
@@ -50,6 +50,14 @@
 			<artifactId>commons-lang</artifactId>
 			<version>${commons-lang.version}</version>
 		</dependency>
+		<dependency>
+			<groupid>com.greendroid</groupid>
+			<artifactid>greendroid</artifactid>
+			<version>67aa3ed</version>
+			<type>apklib</type>
+</dependency>
+
+		
 	</dependencies>
 	<build>
 		<plugins>
@@ -59,7 +67,7 @@
 				<version>${maven-android-plugin.plugin-version}</version>
 				<configuration>
 					<deleteConflictingFiles>true</deleteConflictingFiles>
-				</configuration>
+				</configuration> 
 				<extensions>true</extensions>
 			</plugin>
 		</plugins>

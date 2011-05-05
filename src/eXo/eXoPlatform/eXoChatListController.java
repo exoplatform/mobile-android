@@ -54,7 +54,7 @@ public class eXoChatListController extends Activity {
 
   static eXoChatListController                         eXoChatListControllerInstance; // Instance
 
-  static eXoApplicationsController                     _delegate;                    // Main
+  static eXoApplicationsController2                     _delegate;                    // Main
                                                                                       // app
                                                                                       // view
                                                                                       // controller
@@ -119,8 +119,8 @@ public class eXoChatListController extends Activity {
 
       public void onClick(View v) {
 
-        Intent next = new Intent(eXoChatListController.this, eXoApplicationsController.class);
-        eXoChatListController.this.startActivity(next);
+        Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
+        startActivity(next);
         // eXoChatList.this.finish();
 
       }
@@ -405,6 +405,6 @@ public class eXoChatListController extends Activity {
     tvTitle.setText(strTitle);
 
     _delegate.changeLanguage(resourceBundle);
-    _delegate.createAdapter();
+//    _delegate.createAdapter();
   }
 }

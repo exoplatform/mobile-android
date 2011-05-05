@@ -61,7 +61,7 @@ public class eXoChatController extends Activity {
 
   public static eXoChatController           eXoChatControllerInstance;                               // Instance
 
-  static eXoApplicationsController          _delegate;                                               // Main
+  static eXoApplicationsController2          _delegate;                                               // Main
                                                                                                       // app
                                                                                                       // view
                                                                                                       // controller
@@ -284,7 +284,7 @@ public class eXoChatController extends Activity {
     btnClose.setText(strcloseBtn);
 
     _delegate.changeLanguage(resourceBundle);
-    _delegate.createAdapter();
+//    _delegate.createAdapter();
 
   }
 }

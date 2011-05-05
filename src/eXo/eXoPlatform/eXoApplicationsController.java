@@ -289,7 +289,7 @@ public class eXoApplicationsController extends Activity {
       }
 
       eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(eXoFilesController.myFile.urlStr);
-      eXoFilesController._delegate = eXoApplicationsControllerInstance;
+//      eXoFilesController._delegate = eXoApplicationsControllerInstance;
       Intent next = new Intent(eXoApplicationsController.this, eXoFilesController.class);
       eXoApplicationsController.this.startActivity(next);
 
@@ -317,7 +317,7 @@ public class eXoApplicationsController extends Activity {
       if (eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
         return;
 
-      eXoChatListController._delegate = eXoApplicationsControllerInstance;
+//      eXoChatListController._delegate = eXoApplicationsController2Instance;
       Intent next = new Intent(eXoApplicationsController.this, eXoChatListController.class);
       eXoApplicationsController.this.startActivity(next);
     }

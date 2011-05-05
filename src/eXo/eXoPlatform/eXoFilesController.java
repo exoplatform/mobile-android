@@ -88,13 +88,15 @@ public class eXoFilesController extends Activity {
 
   static eXoFilesController        eXoFilesControllerInstance;
 
-  static eXoApplicationsController _delegate;
+  static eXoApplicationsController2 _delegate;
 
   static public eXoFile            myFile;
 
   static public int                positionOfFileItem = 0;
 
   public static List<eXoFile>      arrFiles;
+  
+  public BaseAdapter               fileAdapter;
 
   String                           strCannotBackToPreviousPage;
 
@@ -232,7 +234,7 @@ public class eXoFilesController extends Activity {
   }
 
   // Save file to SDCard
-  static Runnable        cannotAceesSDCard     = new Runnable() {
+  Runnable        cannotAceesSDCard     = new Runnable() {
 
                                                  public void run() {
 
@@ -250,7 +252,7 @@ public class eXoFilesController extends Activity {
                                                  public void run() {
 
                                                    // Files List
-                                                   createExoFilesAdapter();
+                                                   fileAdapter.notifyDataSetChanged();
                                                    setVieweXoImage(false);
 
                                                  }
@@ -276,15 +278,14 @@ public class eXoFilesController extends Activity {
                                                };
 
   // Back to parent directory or close file view
-  public Runnable        closeBackRunnable     = new Runnable() {
+  Runnable        closeBackRunnable     = new Runnable() {
 
                                                  public void run() {
 
                                                    _textViewFolder.setText(getFolderNameFromUrl(myFile.urlStr));
 
                                                    // Files List
-
-                                                   createExoFilesAdapter();
+                                                   fileAdapter.notifyDataSetChanged();
                                                    try {
                                                      if (myFile.urlStr.equalsIgnoreCase(_rootUrl))
                                                        _btnCloseBack.setText(new String(AppController.bundle.getString("CloseButton")
@@ -302,7 +303,7 @@ public class eXoFilesController extends Activity {
                                                };
 
   // Goto sub directory or view file
-  public static Runnable fileItemClickRunnable = new Runnable() {
+  Runnable fileItemClickRunnable = new Runnable() {
 
                                                  public void run() {
 
@@ -326,7 +327,7 @@ public class eXoFilesController extends Activity {
                                                    if (myFile.isFolder) {
                                                      _textViewFolder.setText(myFile.fileName.replace("%20",
                                                                                                      " "));
-                                                     createExoFilesAdapter();
+                                                     fileAdapter.notifyDataSetChanged();
 
                                                    } else {
                                                      // _strCurrentDirectory =
@@ -536,8 +537,8 @@ public class eXoFilesController extends Activity {
   }
 
   // Create file adapter
-  public static void createExoFilesAdapter() {
-    BaseAdapter test = new BaseAdapter() {
+  public void createExoFilesAdapter() {
+     fileAdapter = new BaseAdapter() {
 
       public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = eXoFilesControllerInstance.getLayoutInflater();
@@ -653,7 +654,7 @@ public class eXoFilesController extends Activity {
       }
     };
 
-    _lstvFiles.setAdapter(test);
+    _lstvFiles.setAdapter(fileAdapter);
     // _lstvFiles.setOnItemClickListener(test);
   }
 
@@ -899,7 +900,7 @@ public class eXoFilesController extends Activity {
     _textViewEmptyPage.setText(strEmptyPage);
 
     _delegate.changeLanguage(resourceBundle);
-    _delegate.createAdapter();
+//    _delegate.createAdapter();
 
   }
 

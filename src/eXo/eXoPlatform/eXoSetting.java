@@ -155,7 +155,7 @@ public class eXoSetting extends Activity {
 
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
         
-        if (AppController._intDomainIndex == position)
+        if (AppController.appControllerInstance._intDomainIndex == position)
           imgView.setVisibility(View.VISIBLE);
         else
           imgView.setVisibility(View.INVISIBLE);

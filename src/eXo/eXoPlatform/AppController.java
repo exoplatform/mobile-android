@@ -390,7 +390,7 @@ public class AppController extends Activity implements OnTouchListener {
   // Active host index
   String                                    _strDomainIndex      = "";
 
-  static int                                _intDomainIndex;
+  int                                       _intDomainIndex;
 
   // Username
   String                                    _strUserName         = "";
@@ -616,12 +616,7 @@ public class AppController extends Activity implements OnTouchListener {
             imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
             imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
 
-            Intent next = new Intent(AppController.this,
-                                     eXoApplicationsController2.class);
-            
-            startActivity(next);
-            
-//            signInProgress(); 
+            signInProgress(); 
                       
           }
         };
@@ -793,7 +788,7 @@ public class AppController extends Activity implements OnTouchListener {
                                                       // = listOfGadgets();
                                                       listOfGadgets();
                                                       Intent next = new Intent(AppController.this,
-                                                                               eXoApplicationsController.class);
+                                                                               eXoApplicationsController2.class);
                                                       
                                                       startActivity(next);
 
