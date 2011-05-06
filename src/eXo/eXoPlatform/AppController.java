@@ -459,8 +459,7 @@ public class AppController extends Activity implements OnTouchListener {
     layout.setOnClickListener(new View.OnClickListener() {
       
       public void onClick(View v) {
-        // TODO Auto-generated method stub
-        Log.e("", "");
+        
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
@@ -786,13 +785,15 @@ public class AppController extends Activity implements OnTouchListener {
 
                                                       // eXoApplicationsController.arrGadgets
                                                       // = listOfGadgets();
-                                                      listOfGadgets();
+//                                                      listOfGadgets();
                                                       Intent next = new Intent(AppController.this,
                                                                                eXoApplicationsController2.class);
                                                       
                                                       startActivity(next);
 
                                                       thread.stop();
+                                                      
+                                                      _progressDialog.dismiss();
 
                                                     }
                                                   };

@@ -13,16 +13,11 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
-import eXo.eXoPlatform.eXoApplicationsController.eXoAppsAdapter;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -35,8 +30,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -73,9 +66,11 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
   Button            btnDone;
   
   Timer             timer;
+  Handler           handler;
   
   GridView gridview;
-  RotateAnimation anim;
+  View myView;
+  TranslateAnimation anim;
   int timerCounter = 0;
   int itemMoveIndex = -1;
   boolean isDeleteItem = false;
@@ -103,7 +98,7 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
     btnHome.setOnClickListener(new View.OnClickListener() {
       
       public void onClick(View v) {
-        // TODO Auto-generated method stub
+
         finish(); 
       }
     });
@@ -171,7 +166,7 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
     adapter = new BaseAdapter()
     {
         public View getView(int position, View convertView, ViewGroup parent) {
-          // TODO Auto-generated method stub
+
           View v;
           final int pos = position;
           
@@ -210,17 +205,16 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
         }
         
         public long getItemId(int position) {
-          // TODO Auto-generated method stub
+
           return 0;
         }
         
         public Object getItem(int position) {
-          // TODO Auto-generated method stub
           return null;
         }
         
         public int getCount() {
-          // TODO Auto-generated method stub
+          
           return array.size();
         }
       };
@@ -308,11 +302,12 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
 
   public boolean onTouch(View v, MotionEvent event) {
 
+    myView = v;
     int eventaction = event.getAction();
-      
-    
-      timer = new Timer();
-      final Handler handler = new Handler();
+      if(timer == null)
+        timer = new Timer();
+      if(handler == null)
+        handler = new Handler();
       
       switch (eventaction) {
           case MotionEvent.ACTION_DOWN: 
@@ -333,15 +328,14 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
           {
               // finger moves on the screen
             timer.cancel();
+            handler.removeCallbacks(mUpdateTimeTask);
               break;
           }
           case MotionEvent.ACTION_UP:
           {
               // finger leaves the screen
             timer.cancel();
-//            timer = null;
             handler.removeCallbacks(mUpdateTimeTask);
-            
             
             if(timerCounter <= 3)
             {
@@ -367,6 +361,9 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
               }
               
             }
+            
+            timer = null;
+            handler = null;
               break;
           }
       }
@@ -374,25 +371,32 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
       return true; 
     }
 
-  public Runnable mUpdateTimeTask = new Runnable() {
+  Runnable mUpdateTimeTask = new Runnable() {
     
     public void run() {
-      // TODO Auto-generated method stub
+
       timerCounter++;
+      Log.i("hehe", "" + timerCounter);
       if(timerCounter > 3)
       {
-       timer.cancel();
+        timer.cancel();
+        handler.removeCallbacks(mUpdateTimeTask);
+        
+        timer = null;
+        handler = null;
+        
        btnDone.setVisibility(View.VISIBLE);
        // Start animating the image
       for(int i = 0; i < array.size(); i++)
       {
         final int pos = i;
         View view = gridview.getChildAt(i);
+        view.setOnTouchListener(null);
         final ImageView ivIcon = (ImageView)view.findViewById(R.id.icon_image);
         ivIcon.setOnClickListener(new View.OnClickListener() {
           
           public void onClick(View v) {
-            // TODO Auto-generated method stub
+            
             if(itemMoveIndex == -1)
             {
               itemMoveIndex = pos;
@@ -424,11 +428,16 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
         iv.setVisibility(View.VISIBLE);
         isDeleteItem = true;
         
-        anim = new RotateAnimation(-2f, 2f, 50f, 50f);
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setRepeatCount(Animation.INFINITE);
-        anim.setRepeatMode(Animation.REVERSE);
-        anim.setDuration(100);
+        if(anim == null)
+        {
+          anim = new TranslateAnimation(-1f, 0f, 1f, 0f);
+//          anim.setInterpolator(new BounceInterpolator());
+//          AccelerateDecelerateInterpolator, AccelerateInterpolator, AnticipateInterpolator, AnticipateOvershootInterpolator, BounceInterpolator, CycleInterpolator, DecelerateInterpolator, LinearInterpolator, OvershootInterpolator 
+          anim.setRepeatCount(Animation.INFINITE);
+          anim.setRepeatMode(Animation.REVERSE);
+          anim.setDuration(100); 
+        }
+        
         view.startAnimation(anim);
       }
        

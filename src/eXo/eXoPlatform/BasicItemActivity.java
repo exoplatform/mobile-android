@@ -92,7 +92,6 @@ public class BasicItemActivity extends GDListActivity {
     }
 
     public static void finishBasicItemActivity() {
-      // TODO Auto-generated method stub
       basicItemActivityInstance.finish();
     }
 }

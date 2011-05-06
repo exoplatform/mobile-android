@@ -55,9 +55,7 @@
 			<artifactId>greendroid</artifactId>
 			<version>67aa3ed</version>
 			<type>apklib</type>
-</dependency>
-
-		
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
