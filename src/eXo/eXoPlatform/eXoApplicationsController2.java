@@ -108,12 +108,12 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
       
       public void onClick(View v) {
         
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.onlinechat);
-        AppItem item = new AppItem(bm, "New");
-        array.add(item);
+//        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.onlinechat);
+//        AppItem item = new AppItem(bm, "New");
+//        array.add(item);
+//        
+//        adapter.notifyDataSetChanged();
         
-        adapter.notifyDataSetChanged();
-//        createAdapter();
       }
       
     });
@@ -182,7 +182,8 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
           ImageView ivDelete = (ImageView)v.findViewById(R.id.icon_delete);
           if(isDeleteItem)
           {
-            ivDelete.setVisibility(View.VISIBLE);
+//            ivDelete.setVisibility(View.VISIBLE);
+            ivDelete.setVisibility(View.INVISIBLE);
             v.startAnimation(anim);
           }
           else
@@ -337,7 +338,7 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
             timer.cancel();
             handler.removeCallbacks(mUpdateTimeTask);
             
-            if(timerCounter <= 3)
+            if(timerCounter < 3)
             {
               for(int i = 0; i < array.size(); i++)
               {
@@ -377,7 +378,7 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
 
       timerCounter++;
       Log.i("hehe", "" + timerCounter);
-      if(timerCounter > 3)
+      if(timerCounter >= 3)
       {
         timer.cancel();
         handler.removeCallbacks(mUpdateTimeTask);
@@ -418,14 +419,13 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
               itemMoveIndex = -1;
               
               adapter.notifyDataSetChanged();
-              
             }
-            
           }
         });
         
         ImageView iv = (ImageView)view.findViewById(R.id.icon_delete);
-        iv.setVisibility(View.VISIBLE);
+//        iv.setVisibility(View.VISIBLE);
+        iv.setVisibility(View.INVISIBLE);
         isDeleteItem = true;
         
         if(anim == null)
