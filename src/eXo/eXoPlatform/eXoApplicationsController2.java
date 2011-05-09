@@ -14,6 +14,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -64,6 +65,7 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
   Button            btnHome;
   Button            btnAdd;
   Button            btnDone;
+  public List<GateInDbItem> arrGadgets;                       // Gadgets array
   
   Timer             timer;
   Handler           handler;
@@ -78,6 +80,9 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
   private BaseAdapter adapter;
   
   String strChatServer;
+  
+  ProgressDialog                   _progressDialog;                  // Progress dialog
+  Thread                           thread;
   
   // Standalone gadget content
   private String                            _strContentForStandaloneURL;
@@ -346,18 +351,8 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
                   if(view == v)
                   {
                     AppItem item = array.get(i);
-                    if(item._name.equalsIgnoreCase("files"))
-                    {
-                      launchFilesApp();
-                    }
-                    else if(item._name.equalsIgnoreCase("dashboard"))
-                    {
-                      launchDashboardApp();
-                    }
-                    else
-                    {
-                      launchMessengerApp(); 
-                    }
+                  
+                    launchApp(item._name);
                   }
               }
               
@@ -447,7 +442,65 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
   
   };
 
-  public void launchFilesApp() {
+  private Runnable dismissProgressDialog = new Runnable() {
+
+    public void run() {
+
+      _progressDialog.dismiss();
+      
+      thread.stop();
+      thread = null;
+
+    }
+  };
+ 
+  public void launchApp(String featureName) {
+
+    final String str = featureName;
+    
+    Runnable loadingDataRunnable = new Runnable() {
+      public void run() {
+
+        if (str.equalsIgnoreCase("files")) {
+          launchFilesApp();
+        }
+        else if (str.equalsIgnoreCase("chats")) 
+        {
+          launchMessengerApp();
+        }
+        else if(str.equalsIgnoreCase("dashboard"))
+        {
+          launchDashboardApp();
+        }
+
+        runOnUiThread(dismissProgressDialog);
+      }
+    };
+
+    String strLoadingDataFromServer = "";
+    try {
+
+      strLoadingDataFromServer = new String(AppController.bundle.getString("LoadingDataFromServer")
+                                                                .getBytes("ISO-8859-1"),
+                                            "UTF-8");
+
+    } catch (Exception e) {
+
+      strLoadingDataFromServer = "";
+    }
+
+    _progressDialog = ProgressDialog.show(eXoApplicationsController2Instance,
+                                          null,
+                                          strLoadingDataFromServer);
+
+    thread = new Thread(loadingDataRunnable, "LoadDingData");
+    thread.start();
+
+  }
+
+
+  
+ public void launchFilesApp() {
     String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
                                                                "exo_prf_username");
     String domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
@@ -490,6 +543,7 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
     if (eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
       return;
 
+
     eXoChatListController._delegate = eXoApplicationsController2Instance;
     Intent next = new Intent(eXoApplicationsController2.this, eXoChatListController.class);
     startActivity(next);
@@ -497,6 +551,10 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
 
   public void launchDashboardApp() 
   {
+    listOfGadgets();
+    
+    Intent next = new Intent(eXoApplicationsController2.this, eXoDashboard.class);
+    startActivity(next);
     
   }
   
@@ -737,9 +795,8 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
   public List<GateInDbItem> listOfGadgets() {
     String _strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
                                                           "exo_prf_domain");
-    // List<GateInDbItem> arrTmpGadgets = new ArrayList<GateInDbItem>();
-
-    eXoApplicationsController.arrGadgets = new ArrayList<GateInDbItem>();
+   
+    arrGadgets = new ArrayList<GateInDbItem>();
 
     String strContent = AppController._eXoConnection.getFirstLoginContent();
 
@@ -791,7 +848,7 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
                                                         gadgetTabUrlStr,
                                                         arrTmpGadgetsInItem);
         // arrTmpGadgets.add(tmpGateInDbItem);
-        eXoApplicationsController.arrGadgets.add(tmpGateInDbItem);
+        arrGadgets.add(tmpGateInDbItem);
 
         strContent = strContent.substring(index3);
         index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");

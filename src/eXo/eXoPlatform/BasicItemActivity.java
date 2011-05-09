@@ -48,10 +48,15 @@ public class BasicItemActivity extends GDListActivity {
         
         items.add(new SeparatorItem("Class 1"));
         items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
-        items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
+        items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
+        items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
+        
+//        items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
         
         items.add(new SeparatorItem("Class 2"));
         items.add(new DrawableItem("Trikes", R.drawable.class2));
+        items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
+        items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
         items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
         
         items.add(new SeparatorItem("Class 3"));
@@ -79,19 +84,20 @@ public class BasicItemActivity extends GDListActivity {
         final ItemAdapter adapter = new ItemAdapter(this, items);
         setListAdapter(adapter);
         
-        mHandler.postDelayed(new Runnable() {
-            public void run() {
-                adapter.remove(item1);
-                adapter.remove(item2);
-                adapter.remove(item3);
-                adapter.remove(progressItem);
-                adapter.insert(new ThumbnailItem("Ultralight aviation", "List of French 'ULM' classes", R.drawable.ic_gdcatalog), 0);
-                adapter.notifyDataSetChanged();
-            }
-        },8000);
+//        mHandler.postDelayed(new Runnable() {
+//            public void run() {
+//                adapter.remove(item1);
+//                adapter.remove(item2);
+//                adapter.remove(item3);
+//                adapter.remove(progressItem);
+//                adapter.insert(new ThumbnailItem("Ultralight aviation", "List of French 'ULM' classes", R.drawable.ic_gdcatalog), 0);
+//                adapter.notifyDataSetChanged();
+//            }
+//        },8000);
     }
 
-    public static void finishBasicItemActivity() {
+    public static void finishMe() {
       basicItemActivityInstance.finish();
+      basicItemActivityInstance = null;
     }
 }

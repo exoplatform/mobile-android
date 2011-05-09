@@ -42,6 +42,9 @@
 		<activity android:name=".BasicItemActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
+			<activity android:name=".eXoDashboard"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
 	</application>
 	<uses-sdk android:minSdkVersion="7"/>
 	
