@@ -17,11 +17,8 @@ package eXo.eXoPlatform;
 
 import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;
-import greendroid.widget.item.DescriptionItem;
-import greendroid.widget.item.DrawableItem;
 import greendroid.widget.item.Item;
 import greendroid.widget.item.SeparatorItem;
-import greendroid.widget.item.TextItem;
 import greendroid.widget.item.ThumbnailItem;
 
 import java.util.ArrayList;
@@ -34,7 +31,7 @@ import android.webkit.CookieSyncManager;
 public class eXoDashboard extends GDListActivity {
     
   public static eXoDashboard eXoDashboardInstance;
-  List<GateInDbItem> arrGadgets;
+  public static List<GateInDbItem> arrGadgets;
     
     
     @Override
@@ -52,6 +49,7 @@ public class eXoDashboard extends GDListActivity {
         for(int i = 0; i < arrGadgets.size(); i++)
         {
           GateInDbItem gadgetTab = arrGadgets.get(i);
+          
           items.add(new SeparatorItem(gadgetTab._strDbItemName));
           for(int j = 0; j < gadgetTab._arrGadgetsInItem.size(); j++)
           {

@@ -76,6 +76,14 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
   int timerCounter = 0;
   int itemMoveIndex = -1;
   boolean isDeleteItem = false;
+  
+  public static short              webViewMode;                       // 0: view
+  // gadget,
+  // 1: View
+  // file,
+  // 2: view
+  // help;
+
 
   private BaseAdapter adapter;
   

@@ -52,11 +52,11 @@ public class eXoWebViewController extends Activity {
     _wvGadget.getSettings().setBuiltInZoomControls(false);
 
     String url = null;
-    if (eXoApplicationsController.webViewMode == 0) {
+    if (eXoApplicationsController2.webViewMode == 0) {
       url = eXoGadgetViewController.currentGadget.getGadgetUrl();
       String titlebar = eXoGadgetViewController.currentGadget._strGadgetName;
       _txtvTitleBar.setText(titlebar.replace("%20", " "));
-    } else if (eXoApplicationsController.webViewMode == 1) {
+    } else if (eXoApplicationsController2.webViewMode == 1) {
       //			 
       // url = eXoFilesController._strCurrentDirectory;
       // String fileName = eXoFilesController.myFile.fileName;
@@ -84,7 +84,7 @@ public class eXoWebViewController extends Activity {
       // _wvGadget.loadUrl(eXoFilesController._strCurrentDirectory);
 
       // _wvGadget.loadUrl("http://globaltvlive.files.wordpress.com/2007/04/jesu-angel.jpg");
-    } else if (eXoApplicationsController.webViewMode == 2) {
+    } else if (eXoApplicationsController2.webViewMode == 2) {
       _txtvTitleBar.setText("User guide");
       String locallize = AppController.sharedPreference.getString(AppController.EXO_PRF_LOCALIZE,
                                                                   "exo_prf_localize");
