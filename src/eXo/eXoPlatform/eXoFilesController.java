@@ -102,7 +102,7 @@ public class eXoFilesController extends Activity {
 
   static String                    strDownloadFileIntoSDCard;
 
-  static Thread                    thread;
+  Thread                    thread;
 
   // Constructor
   @Override
@@ -259,7 +259,7 @@ public class eXoFilesController extends Activity {
                                                };
 
   // Dismiss progress dialog
-  public static Runnable dismissProgressDialog = new Runnable() {
+  public Runnable dismissProgressDialog = new Runnable() {
 
                                                  public void run() {
 

@@ -41,7 +41,7 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
 
   }
 
-  static Thread           thread;
+  Thread           thread;
 
   Button                  _btnClose;                  // Close dialog
 
@@ -251,7 +251,7 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
   }
 
   // Get file list
-  static Runnable reloadFileAdapter     = new Runnable() {
+  Runnable reloadFileAdapter     = new Runnable() {
 
                                           public void run() {
 
@@ -261,7 +261,7 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
                                         };
 
   // Progress dialog
-  static Runnable dismissProgressDialog = new Runnable() {
+  Runnable dismissProgressDialog = new Runnable() {
 
                                           public void run() {
 
