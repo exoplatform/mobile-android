@@ -29,13 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Window;
 
 public class BasicItemActivity extends GDListActivity {
     
   public static BasicItemActivity basicItemActivityInstance;
-    private final Handler mHandler = new Handler();
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,16 +82,6 @@ public class BasicItemActivity extends GDListActivity {
         final ItemAdapter adapter = new ItemAdapter(this, items);
         setListAdapter(adapter);
         
-//        mHandler.postDelayed(new Runnable() {
-//            public void run() {
-//                adapter.remove(item1);
-//                adapter.remove(item2);
-//                adapter.remove(item3);
-//                adapter.remove(progressItem);
-//                adapter.insert(new ThumbnailItem("Ultralight aviation", "List of French 'ULM' classes", R.drawable.ic_gdcatalog), 0);
-//                adapter.notifyDataSetChanged();
-//            }
-//        },8000);
     }
 
     public static void finishMe() {

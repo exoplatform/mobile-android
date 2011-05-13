@@ -5,6 +5,10 @@
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:background="@drawable/background">
 
+	<include 
+    	android:id="@+id/Navigation_Bar" 
+		layout="@layout/gd_content_dashboard"/>	
+
 	<ImageView android:layout_x="0sp" android:layout_y="80sp"
 		android:id="@+id/ImageViewEmptyPage" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:background="@drawable/emptypage" />
@@ -12,9 +16,9 @@
 		android:layout_width="320sp" android:layout_height="40sp"
 		android:id="@+id/TextView_EmptyPage" android:textSize="18sp"
 		android:gravity="center_horizontal" android:textColor="#000000" />
-	<ImageView android:layout_x="0sp" android:layout_y="0sp"
+	<!--<ImageView android:layout_x="0sp" android:layout_y="0sp"
 		android:id="@+id/ImageView01" android:layout_width="wrap_content"
-		android:layout_height="40sp" android:background="@drawable/navigationbar" />
+		android:layout_height="40sp" android:background="@drawable/navigationbar" />-->
 
 	<Button android:id="@+id/Button_Close" android:layout_x="2sp"
 		android:layout_y="02sp" android:layout_width="wrap_content"

@@ -575,6 +575,9 @@ public class AppController extends Activity implements OnTouchListener {
 
       public void onClick(View v) {
         
+        v.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneon);
+        _btnServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
+        
         _txtViewUserName.setVisibility(View.VISIBLE);
         _edtxUserName.setVisibility(View.VISIBLE);
 
@@ -594,6 +597,9 @@ public class AppController extends Activity implements OnTouchListener {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
+        
+        v.setBackgroundResource(R.drawable.authenticateserversiconiphoneon);
+        _btnAccount.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneoff);
         
         _txtViewUserName.setVisibility(View.INVISIBLE);
         _edtxUserName.setVisibility(View.INVISIBLE);

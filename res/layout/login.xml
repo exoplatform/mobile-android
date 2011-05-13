@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/RelativeLayout_Login"
+	android:id="@+id/RelativeLayout_Login"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
 	<Button android:id="@+id/Button_Account" android:layout_width="40dip"
 		android:layout_height="50dip"
 		android:layout_marginTop="60dip"
-		android:layout_marginLeft="10dip" android:background="@drawable/account" />
+		android:layout_marginLeft="10dip" android:background="@drawable/authenticatecredentialsiconiphoneon" />
 
 	<Button android:id="@+id/Button_Server" android:layout_toRightOf="@id/Button_Account"
 	android:layout_marginTop="60dip"
 		android:layout_width="40dip" android:layout_height="50dip"
-		android:layout_marginLeft="10dip" android:background="@drawable/server" />
+		android:layout_marginLeft="10dip" android:background="@drawable/authenticateserversiconiphoneoff" />
 
 	<TextView android:id="@+id/TextView_UserName"
 		android:layout_width="fill_parent" android:layout_height="20dip"
