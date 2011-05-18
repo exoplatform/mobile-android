@@ -862,7 +862,7 @@ public class AppController extends Activity implements OnTouchListener {
         _strDomain = "http://" + _strDomain;
       }
 
-      URL url = new URL(_strDomain);
+      URL url = new URL(_strDomain); 
       // HttpURLConnection con = (HttpURLConnection) url.openConnection();
       // int code = con.getResponseCode();
 

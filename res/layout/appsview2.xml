@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:delusions= "http://schemas.android.com/apk/res/eXo.eXoPlatform.MyActionBar"
 	android:id="@+id/MainLayout" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	>
 
-	<include 
+ 	<eXo.eXoPlatform.MyActionBar
+        android:id="@+id/My_Action_Bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+        
+	<!--<include 
     	android:id="@+id/Navigation_Bar" 
 		layout="@layout/gd_content_dashboard"/>	
 
-	<Button
+	--><Button
 		android:id="@+id/Button_Done"
 		android:layout_alignParentLeft="true"
 		android:layout_marginLeft="5dip"

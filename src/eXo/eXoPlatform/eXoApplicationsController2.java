@@ -107,6 +107,9 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
     
     eXoApplicationsController2Instance = this;
     
+    final MyActionBar myActionBar = (MyActionBar) findViewById(R.id.My_Action_Bar);
+    myActionBar.setBackgroundResource(R.drawable.navigationbar);
+    
     btnHome = (Button)findViewById(R.id.Button_SignOut);
     btnHome.setOnClickListener(new View.OnClickListener() {
       

@@ -6,13 +6,17 @@
 		android:name=".CatalogApplication"
 		android:debuggable="true">
 		
-		<activity android:name=".AppController" android:label="eXo Platform"
+		<activity android:name=".Test" android:label="eXo Platform"
 			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		
+		<activity android:name=".AppController"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
 		<activity android:name=".eXoApplicationsController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />

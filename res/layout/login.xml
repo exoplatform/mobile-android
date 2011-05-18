@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/RelativeLayout_Login"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="fill_parent"
+	android:background="@drawable/background2">
 
 	<Button android:id="@+id/Button_Account" android:layout_width="40dip"
 		android:layout_height="50dip"
