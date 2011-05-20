@@ -15,6 +15,7 @@
  */
 package eXo.eXoPlatform;
 
+import greendroid.app.GDActivity;
 import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.DescriptionItem;
@@ -87,5 +88,7 @@ public class BasicItemActivity extends GDListActivity {
     public static void finishMe() {
       basicItemActivityInstance.finish();
       basicItemActivityInstance = null;
+      
+      
     }
 }

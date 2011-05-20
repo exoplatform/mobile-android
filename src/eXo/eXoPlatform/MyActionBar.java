@@ -10,9 +10,7 @@ import android.widget.*;
 
 public class MyActionBar extends RelativeLayout {
 
-    private static final String TAG = "LabeledNumberInput";
-
-    private ImageButton btnHomeBack;
+  private ImageButton btnHomeBack;
     private ImageButton btn1;
     private ImageButton btn0;
     private TextView tvTitle;

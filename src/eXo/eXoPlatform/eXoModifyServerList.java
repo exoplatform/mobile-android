@@ -3,8 +3,14 @@ package eXo.eXoPlatform;
 import java.util.List;
 
 import eXo.eXoPlatform.AppController.ServerObj;
+import greendroid.app.GDActivity;
+import greendroid.widget.ActionBarItem;
+import greendroid.widget.LoaderActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,52 +22,80 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class eXoModifyServerList extends Activity {
+public class eXoModifyServerList extends GDActivity {
 
-  static eXoModifyServerList eXoModifyServerListInstance;
+  public static eXoModifyServerList eXoModifyServerListInstance;
 
-  Button                     btnHome;
-  Button btnAddNewServer;
-
-  ListView                   listViewServer;
-
+    ListView                   listViewServer;
+  
+  private final Handler mHandler = new Handler();
+  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.exomodifyserverlist);
+    setActionBarContentView(R.layout.exomodifyserverlist);
 
     eXoModifyServerListInstance = this;
 
-    btnHome = (Button) findViewById(R.id.Button_Home);
-    btnHome.setOnClickListener(new View.OnClickListener() {
-
-      public void onClick(View v) {
-
-        finish();
-      }
-    });
-
-    
-    btnAddNewServer = (Button) findViewById(R.id.Button_Add);
-    btnAddNewServer.setOnClickListener(new View.OnClickListener() {
-
-      public void onClick(View v) {
-
-        eXoLanguageSettingDialog.isNewServer = true;
-        eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoModifyServerList.this);
-        customizeDialog.show();
-      }
-    });
-
+    addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
     
     listViewServer = (ListView) findViewById(R.id.ListView_Server_List);
     createServersAdapter(AppController.configurationInstance._arrServerList);
   }
 
+
+  @Override
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+
+      switch (item.getItemId()) {
+      
+      case R.drawable.gd_action_bar_add:
+        eXoLanguageSettingDialog.isNewServer = true;
+        eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoModifyServerList.this);
+        customizeDialog.show();
+      break;
+      
+          case R.id.action_bar_locate:
+//              startActivity(new Intent(this, TabbedActionBarActivity.class));
+              break;
+
+          case R.id.action_bar_refresh:
+              final LoaderActionBarItem loaderItem = (LoaderActionBarItem) item;
+              mHandler.postDelayed(new Runnable() {
+                  public void run() {
+                      loaderItem.setLoading(false);
+                  }
+              }, 2000);
+              Toast.makeText(this, R.string.refresh_pressed, Toast.LENGTH_SHORT).show();
+              break;
+
+          case R.id.action_bar_export:
+              Toast.makeText(this, R.string.custom_drawable, Toast.LENGTH_SHORT).show();
+              break;
+
+          default:
+              return super.onHandleActionBarItemClick(item, position);
+      }
+
+      return true;
+  }
+
+  public void finishMe()
+  {
+//    finish();
+    
+    Intent next = new Intent(eXoModifyServerList.this, eXoSetting.class);
+    startActivity(next);
+    
+    eXoModifyServerListInstance = null;
+    GDActivity.TYPE = 1;
+  }
+  
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
     menu.add(0, 1, 0, "Add a Server");

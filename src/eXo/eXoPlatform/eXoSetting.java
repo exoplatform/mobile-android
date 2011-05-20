@@ -5,6 +5,8 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import eXo.eXoPlatform.AppController.ServerObj;
+import greendroid.app.GDActivity;
+import greendroid.widget.ActionBar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,11 +25,9 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class eXoSetting extends Activity {
+public class eXoSetting extends GDActivity {
 
-  static eXoSetting eXoSettingInstance;
-
-  Button            btnHome;
+  public static eXoSetting eXoSettingInstance;
 
   Button            btnModifyTheList;
 
@@ -53,7 +53,7 @@ public class eXoSetting extends Activity {
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.exosetting);
+    setActionBarContentView(R.layout.exosetting);
 
     eXoSettingInstance = this;
 
@@ -62,20 +62,11 @@ public class eXoSetting extends Activity {
 
     btnModifyTheList = (Button) findViewById(R.id.Button_Modify_The_List);
     btnUserGuide = (Button) findViewById(R.id.Button_User_Guide);
-    btnHome = (Button) findViewById(R.id.Button_Home);
 
     myOptionEnglish = (RadioButton) findViewById(R.id.RadioButton_English);
     myOptionFrench = (RadioButton) findViewById(R.id.RadioButton_French);
 
     listViewServer = (ListView) findViewById(R.id.ListView_Servers);
-
-    btnHome.setOnClickListener(new View.OnClickListener() {
-
-      public void onClick(View v) {
-
-        finish();
-      }
-    });
 
     btnModifyTheList.setOnClickListener(new View.OnClickListener() {
 
@@ -85,8 +76,11 @@ public class eXoSetting extends Activity {
           String msg = "You dont't have permission for this because SDCard is not available!";
           Toast.makeText(eXoSettingInstance, msg, Toast.LENGTH_LONG);
         } else {
+          
+          GDActivity.TYPE = 1;
+          
           Intent next = new Intent(eXoSetting.this, eXoModifyServerList.class);
-          eXoSettingInstance.startActivity(next);
+          startActivity(next);
         }
 
       }
@@ -129,6 +123,17 @@ public class eXoSetting extends Activity {
 
     createServersAdapter(AppController.configurationInstance._arrServerList);
 
+  }
+  
+  public void finishMe()
+  {
+//    finish();
+    
+    Intent next = new Intent(eXoSetting.this, AppController.class);
+    startActivity(next);
+    
+    eXoSettingInstance = null;
+    GDActivity.TYPE = 0;
   }
 
   // Create server list adapter

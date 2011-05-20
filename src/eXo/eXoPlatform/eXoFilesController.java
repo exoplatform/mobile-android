@@ -1,5 +1,7 @@
 package eXo.eXoPlatform;
 
+import greendroid.app.GDActivity;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -42,7 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.apache.commons.lang.StringEscapeUtils;
 
-public class eXoFilesController extends Activity {
+public class eXoFilesController extends GDActivity {
 
   static final String              FILE_CONTENT_TYPE  = "image/bmp image/cgm image/gif image/jpeg image/png image/tiff image/x-icon "
                                                           + "video/mpeg video/quicktime video/x-msvideo "
@@ -86,7 +88,7 @@ public class eXoFilesController extends Activity {
 
   boolean                          _moveFile;
 
-  static eXoFilesController        eXoFilesControllerInstance;
+  public static eXoFilesController        eXoFilesControllerInstance;
 
   static eXoApplicationsController2 _delegate;
 
@@ -111,7 +113,9 @@ public class eXoFilesController extends Activity {
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.exofilesview);
+//    setContentView(R.layout.exofilesview);
+    
+    setActionBarContentView(R.layout.exofilesview);
 
     eXoFilesControllerInstance = this;
 
@@ -172,29 +176,7 @@ public class eXoFilesController extends Activity {
     _btnCloseBack = (Button) findViewById(R.id.Button_Close);
     _btnCloseBack.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
-
-        Runnable loadingDataRunnable = new Runnable() {
-          public void run() {
-
-            if (myFile.urlStr.equalsIgnoreCase(_rootUrl)) {
-              eXoFilesController.this.finish();
-            } else {
-              int index = myFile.urlStr.lastIndexOf("/");
-              myFile.urlStr = myFile.urlStr.substring(0, index);
-              arrFiles = getPersonalDriveContent(myFile.urlStr);
-
-              runOnUiThread(closeBackRunnable);
-            }
-
-            runOnUiThread(dismissProgressDialog);
-          }
-        };
-
-        showProgressDialog(true);
-
-        thread = new Thread(null, loadingDataRunnable, "CloseBackFileItem");
-        thread.start();
-
+        finishMe();
       }
     });
 
@@ -223,6 +205,35 @@ public class eXoFilesController extends Activity {
 
   }
 
+  public void finishMe()
+  {
+    Runnable loadingDataRunnable = new Runnable() {
+      public void run() {
+
+        if (myFile.urlStr.equalsIgnoreCase(_rootUrl)) {
+          
+          GDActivity.TYPE = 0;
+          eXoFilesControllerInstance = null;
+          finish();
+          
+        } else {
+          int index = myFile.urlStr.lastIndexOf("/");
+          myFile.urlStr = myFile.urlStr.substring(0, index);
+          arrFiles = getPersonalDriveContent(myFile.urlStr);
+
+          runOnUiThread(closeBackRunnable);
+        }
+
+        runOnUiThread(dismissProgressDialog);
+      }
+    };
+
+    showProgressDialog(true);
+
+    thread = new Thread(null, loadingDataRunnable, "CloseBackFileItem");
+    thread.start(); 
+    
+  }
   // Keydown listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     // Save data to the server once the user hits the back button
@@ -267,8 +278,12 @@ public class eXoFilesController extends Activity {
                                                      eXoFilesControllerInstance.imgViewEmptyPage.setVisibility(View.VISIBLE);
                                                      eXoFilesControllerInstance._textViewEmptyPage.setVisibility(View.VISIBLE);
                                                    } else {
-                                                     eXoFilesControllerInstance.imgViewEmptyPage.setVisibility(View.INVISIBLE);
-                                                     eXoFilesControllerInstance._textViewEmptyPage.setVisibility(View.INVISIBLE);
+                                                     if(eXoFilesControllerInstance != null)
+                                                     {
+                                                       eXoFilesControllerInstance.imgViewEmptyPage.setVisibility(View.INVISIBLE);
+                                                       eXoFilesControllerInstance._textViewEmptyPage.setVisibility(View.INVISIBLE); 
+                                                     }
+                                                     
                                                    }
 
                                                    _progressDialog.dismiss();

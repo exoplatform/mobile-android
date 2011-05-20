@@ -1,11 +1,14 @@
 package eXo.eXoPlatform;
 
+import greendroid.app.GDActivity;
+
 import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.http.cookie.Cookie;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,10 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 //Display gadget
-public class eXoWebViewController extends Activity {
-  static eXoWebViewController eXoWebViewControllerInstance; // Instance
-
-  Button                      _btnClose;
+public class eXoWebViewController extends GDActivity {
+  public static eXoWebViewController eXoWebViewControllerInstance; // Instance
 
   WebView                     _wvGadget;
 
@@ -34,7 +35,7 @@ public class eXoWebViewController extends Activity {
     super.onCreate(icicle);
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.webview);
+    setActionBarContentView(R.layout.webview);
 
     eXoWebViewControllerInstance = this;
 
@@ -97,28 +98,25 @@ public class eXoWebViewController extends Activity {
     }
 
     _wvGadget.loadUrl(url);
-
-    _btnClose = (Button) findViewById(R.id.Button_Back);
-    _btnClose.setOnClickListener(new View.OnClickListener() {
-
-      public void onClick(View v) {
-
-        if (eXoApplicationsController.webViewMode == 1) {
-          int index = eXoFilesController.myFile.urlStr.lastIndexOf("/");
-          eXoFilesController.myFile.urlStr = eXoFilesController.myFile.urlStr.substring(0, index);
-
-        }
-
-        eXoWebViewController.this.finish();
-        // Intent next = new Intent(eXoWebViewController.this,
-        // eXoApplicationsController.class);
-        // eXoWebViewController.this.startActivity(next);
-      }
-    });
-
+    
     changeLanguage(AppController.bundle);
   }
 
+  public void finishMe()
+  {
+    if (eXoApplicationsController.webViewMode == 1) {
+      int index = eXoFilesController.myFile.urlStr.lastIndexOf("/");
+      eXoFilesController.myFile.urlStr = eXoFilesController.myFile.urlStr.substring(0, index);
+
+    }
+
+    Intent next = new Intent(eXoWebViewController.this, eXoSetting.class);
+    startActivity(next);
+    
+    eXoWebViewControllerInstance = null;
+    GDActivity.TYPE = 1;
+    
+  }
   private void setupCookies() {
     List<Cookie> cookies = AppController._eXoConnection._sessionCookies;// .authenticateAndReturnCookies();
 
@@ -158,7 +156,5 @@ public class eXoWebViewController extends Activity {
     } catch (Exception e) {
 
     }
-
-    _btnClose.setText(str_btnBack);
   }
 }

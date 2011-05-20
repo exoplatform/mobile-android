@@ -1,5 +1,7 @@
 package eXo.eXoPlatform;
 
+import greendroid.app.GDActivity;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,7 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 //Chat list view controller
-public class eXoChatListController extends Activity {
+public class eXoChatListController extends GDActivity {
 
   private static Button                                btnClose;                     // Close
                                                                                       // view
@@ -52,7 +54,7 @@ public class eXoChatListController extends Activity {
                                                                                       // list
                                                                                       // view
 
-  static eXoChatListController                         eXoChatListControllerInstance; // Instance
+  public static eXoChatListController                  eXoChatListControllerInstance; // Instance
 
   static eXoApplicationsController2                     _delegate;                    // Main
                                                                                       // app
@@ -110,7 +112,8 @@ public class eXoChatListController extends Activity {
     super.onCreate(savedInstanceState);
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.exochatlist);
+    
+    setActionBarContentView(R.layout.exochatlist);
 
     eXoChatListControllerInstance = this;
 
@@ -119,8 +122,9 @@ public class eXoChatListController extends Activity {
 
       public void onClick(View v) {
 
-        Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
-        startActivity(next);
+        finishMe();
+//        Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
+//        startActivity(next);
         // eXoChatList.this.finish();
 
       }
@@ -258,6 +262,14 @@ public class eXoChatListController extends Activity {
     }
 
   }
+  
+ public void finishMe()
+ {
+   Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
+   startActivity(next);
+   eXoChatListControllerInstance = null;
+   GDActivity.TYPE = 0;
+ }
 
   // Keydown listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {

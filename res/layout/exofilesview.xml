@@ -3,13 +3,13 @@
 <AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/MainLayout" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="@drawable/background">
+	android:background="@drawable/background"><!--
 
 	<include 
     	android:id="@+id/Navigation_Bar" 
 		layout="@layout/gd_content_dashboard"/>	
 
-	<ImageView android:layout_x="0sp" android:layout_y="80sp"
+	--><ImageView android:layout_x="0sp" android:layout_y="80sp"
 		android:id="@+id/ImageViewEmptyPage" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:background="@drawable/emptypage" />
 	<TextView android:layout_x="0sp" android:layout_y="380sp"

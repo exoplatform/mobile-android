@@ -165,7 +165,7 @@ public class eXoConnection {
       HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
       HttpConnectionParams.setSoTimeout(httpParameters, 60000);
       HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-
+      
       DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 
       HttpGet httpGet = new HttpGet(redirectStr);

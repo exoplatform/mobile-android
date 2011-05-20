@@ -1,5 +1,7 @@
 package eXo.eXoPlatform;
 
+import greendroid.app.GDActivity;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -52,6 +54,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -60,6 +63,9 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 //Login page
 public class AppController extends Activity implements OnTouchListener {
@@ -114,8 +120,9 @@ public class AppController extends Activity implements OnTouchListener {
       if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {
         return "0";
       } else {
-        String filePath = "/sdcard/eXo/DefaultServerList.xml";
-        createLocalFileDirectory("/sdcard/eXo", true);
+        
+        String filePath = Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml";
+        createLocalFileDirectory(Environment.getExternalStorageDirectory() + "/eXo", true);
         File file = new File(filePath);
         if (!file.exists()) {
           createXmlDataWithServerList(getDefaultServerList(), "DefaultServerList.xml", "0");
@@ -203,7 +210,7 @@ public class AppController extends Activity implements OnTouchListener {
         throw new RuntimeException("Cannot parse XML");
       }
 
-      String filePath = "/sdcard/eXo/DefaultServerList.xml";
+      String filePath = Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml";
       File file = new File(filePath);
       if (!file.exists()) {
         try {
@@ -225,7 +232,7 @@ public class AppController extends Activity implements OnTouchListener {
 
       ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
 
-      String filePath = "/sdcard/eXo/" + name;
+      String filePath = Environment.getExternalStorageDirectory() + "/eXo/" + name;
       File file = new File(filePath);
       if (!file.exists()) {
         return arrServerList;
@@ -405,15 +412,16 @@ public class AppController extends Activity implements OnTouchListener {
   public static eXoConnection               _eXoConnection       = new eXoConnection();
 
   // UI component
+  
+  ImageView                                  _imageAccount;
+  ImageView                                 _imageServer;
+  RelativeLayout                            _imagePanelBackground;
+  
   Button                                    _btnAccount;
 
   Button                                    _btnServer;
 
   Button                                    _btnLogIn;
-
-  TextView                                  _txtViewUserName;
-
-  TextView                                  _txtViewPassword;
 
   EditText                                  _edtxUserName;
 
@@ -455,6 +463,10 @@ public class AppController extends Activity implements OnTouchListener {
     
     this.setContentView(R.layout.login);
 
+//    String path = Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml";
+//    File file = new File(path);
+//    boolean deleted = file.delete();
+        
     RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout_Login);
     layout.setOnClickListener(new View.OnClickListener() {
       
@@ -544,8 +556,12 @@ public class AppController extends Activity implements OnTouchListener {
 
     }
 
-    _txtViewUserName = (TextView) findViewById(R.id.TextView_UserName);
-    _txtViewPassword = (TextView) findViewById(R.id.TextView_Password);
+    _imageAccount = (ImageView) findViewById(R.id.Image_Account);
+    _imageServer = (ImageView) findViewById(R.id.Image_Server);
+    _imagePanelBackground = (RelativeLayout) findViewById(R.id.Image_Panel_Background);
+    
+//    _txtViewUserName = (TextView) findViewById(R.id.TextView_UserName);
+//    _txtViewPassword = (TextView) findViewById(R.id.TextView_Password);
 
     _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
     _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
@@ -575,15 +591,17 @@ public class AppController extends Activity implements OnTouchListener {
 
       public void onClick(View v) {
         
-        v.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneon);
-        _btnServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
+        v.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
+        _imageAccount.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneon);
         
-        _txtViewUserName.setVisibility(View.VISIBLE);
+        _btnServer.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
+        _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
+        
+//        _imagePanelBackground.setVisibility(View.VISIBLE);
+        
         _edtxUserName.setVisibility(View.VISIBLE);
-
-        _txtViewPassword.setVisibility(View.VISIBLE);
         _edtxPassword.setVisibility(View.VISIBLE);
-
+        
         _btnLogIn.setVisibility(View.VISIBLE);
 
         _listViewServer.setVisibility(View.INVISIBLE);
@@ -598,13 +616,16 @@ public class AppController extends Activity implements OnTouchListener {
         imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
         
-        v.setBackgroundResource(R.drawable.authenticateserversiconiphoneon);
-        _btnAccount.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneoff);
+        v.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
+        _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneon);
         
-        _txtViewUserName.setVisibility(View.INVISIBLE);
+        _btnAccount.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
+        _imageAccount.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneoff);
+        
+//        _imagePanelBackground.setVisibility(View.INVISIBLE);
+        
         _edtxUserName.setVisibility(View.INVISIBLE);
 
-        _txtViewPassword.setVisibility(View.INVISIBLE);
         _edtxPassword.setVisibility(View.INVISIBLE);
 
         _btnLogIn.setVisibility(View.INVISIBLE);
@@ -671,8 +692,8 @@ public class AppController extends Activity implements OnTouchListener {
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
 
-    menu.add(0, 1, 0, "Setting");
-
+//    menu.add(0, 1, 0, "Setting");
+    menu.add(0, 1, 0, "Setting").setIcon(R.drawable.optionsettingsbutton);
     // menu.add(0, 2, 0, "Delete Contact");
     // menu.add(0, 3, 0, "Exit");
 
@@ -690,6 +711,8 @@ public class AppController extends Activity implements OnTouchListener {
       // eXoLanguageSettingDialog(AppController.this, 0, thisClass);
       // customizeDialog.show();
 
+      GDActivity.TYPE = 1;
+      
       Intent next = new Intent(AppController.this, eXoSetting.class);
       startActivity(next);
     }
@@ -729,9 +752,9 @@ public class AppController extends Activity implements OnTouchListener {
         }
 
         if (_intDomainIndex == position)
-          imgView.setVisibility(View.VISIBLE);
+          imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
         else
-          imgView.setVisibility(View.INVISIBLE);
+          imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneoff);
 
         // txtvUrl.setLayoutParams(layout);
 
@@ -745,7 +768,7 @@ public class AppController extends Activity implements OnTouchListener {
             View rowView =  getView(_intDomainIndex, null, _listViewServer); 
               
             ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-            imgView.setVisibility(View.INVISIBLE);
+            imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneoff);
             
             _strDomainIndex = String.valueOf(pos);
             _intDomainIndex = pos;
@@ -753,7 +776,7 @@ public class AppController extends Activity implements OnTouchListener {
             
             rowView = getView(_intDomainIndex, null, _listViewServer); 
             imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-            imgView.setVisibility(View.VISIBLE);
+            imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
             
             notifyDataSetChanged();
           
@@ -1224,7 +1247,7 @@ public class AppController extends Activity implements OnTouchListener {
 
   // Show user guide
   public void showUserGuide() {
-    eXoApplicationsController.webViewMode = 2;
+    eXoApplicationsController2.webViewMode = 2;
     Intent next = new Intent(appControllerInstance, eXoWebViewController.class);
     startActivity(next);
   }
@@ -1266,8 +1289,8 @@ public class AppController extends Activity implements OnTouchListener {
     }
 
     _btnLogIn.setText(strSignIn);
-    _txtViewUserName.setText(strUserName);
-    _txtViewPassword.setText(strPassword);
+//    _txtViewUserName.setText(strUserName);
+//    _txtViewPassword.setText(strPassword);
   }
 
 }

@@ -1,5 +1,10 @@
 package eXo.eXoPlatform;
 
+import greendroid.app.GDActivity;
+import greendroid.widget.ActionBarItem;
+import greendroid.widget.LoaderActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +44,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class eXoApplicationsController2 extends Activity implements OnTouchListener {
+public class eXoApplicationsController2 extends GDActivity implements OnTouchListener {
 
   // App item object
   class AppItem {
@@ -69,6 +74,7 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
   
   Timer             timer;
   Handler           handler;
+  private final Handler mHandler = new Handler();
   
   GridView gridview;
   View myView;
@@ -103,12 +109,16 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.appsview2);
+//    setContentView(R.layout.appsview2);
+    setActionBarContentView(R.layout.appsview2);
+    
+    addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
+    addActionBarItem(Type.SignOut, R.drawable.gd_action_bar_signout);
     
     eXoApplicationsController2Instance = this;
     
-    final MyActionBar myActionBar = (MyActionBar) findViewById(R.id.My_Action_Bar);
-    myActionBar.setBackgroundResource(R.drawable.navigationbar);
+//    final MyActionBar myActionBar = (MyActionBar) findViewById(R.id.My_Action_Bar);
+//    myActionBar.setBackgroundResource(R.drawable.navigationbar);
     
     btnHome = (Button)findViewById(R.id.Button_SignOut);
     btnHome.setOnClickListener(new View.OnClickListener() {
@@ -268,6 +278,37 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
     return false;
   }
 
+
+  @Override
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+
+      switch (item.getItemId()) {
+          case R.id.action_bar_locate:
+//              startActivity(new Intent(this, TabbedActionBarActivity.class));
+              break;
+
+          case R.id.action_bar_refresh:
+              final LoaderActionBarItem loaderItem = (LoaderActionBarItem) item;
+              mHandler.postDelayed(new Runnable() {
+                  public void run() {
+                      loaderItem.setLoading(false);
+                  }
+              }, 2000);
+              Toast.makeText(this, R.string.refresh_pressed, Toast.LENGTH_SHORT).show();
+              break;
+
+          case R.id.action_bar_export:
+              Toast.makeText(this, R.string.custom_drawable, Toast.LENGTH_SHORT).show();
+              break;
+
+          default:
+              return super.onHandleActionBarItemClick(item, position);
+      }
+
+      return true;
+  }
+
+  
   // Change language
   private void updateLocallize(String localize) {
     try {
@@ -468,7 +509,7 @@ public class eXoApplicationsController2 extends Activity implements OnTouchListe
   public void launchApp(String featureName) {
 
     final String str = featureName;
-    
+    GDActivity.TYPE = 1;
     Runnable loadingDataRunnable = new Runnable() {
       public void run() {
 

@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content" android:layout_height="wrap_content"
 	android:background="@drawable/background">
 
-	<ImageView android:layout_x="0sp" android:layout_y="0sp"
-		android:layout_width="wrap_content" android:layout_height="40sp"
-		android:id="@+id/ImageView_NavigationBar" android:background="@drawable/navigationbar" />
-
-	<Button android:id="@+id/Button_Back" android:layout_x="2sp"
-		android:layout_y="02sp" android:layout_width="wrap_content"
-		android:layout_height="38sp" />
-
-	<TextView android:layout_x="0sp" android:layout_y="40sp"
-		android:layout_width="320sp" android:layout_height="40sp"
+	<TextView android:layout_x="0sp"
+		android:layout_width="fill_parent" android:layout_height="40dip"
 		android:id="@+id/TextView_TitleBar" android:textSize="18sp" />
 
 	<WebView android:id="@+id/WebView_01" android:scrollbars="vertical"
-		android:layout_x="0sp" android:layout_y="80sp" android:layout_width="330sp"
-		android:layout_height="420sp" />
-</AbsoluteLayout>
+		android:layout_below="@id/TextView_TitleBar"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" />
+</RelativeLayout>

@@ -151,7 +151,7 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
             AppController.configurationInstance._arrDefaulServerList.add(selectedServerIndex,
                                                                          serverObj);
             AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrDefaulServerList,
-                                                                            "DefaultSeverList.xml",
+                                                                            "DefaultServerList.xml",
                                                                             AppController.configurationInstance.version);
           } else// update user server
           {
