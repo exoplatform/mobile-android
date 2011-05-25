@@ -317,7 +317,7 @@ public class eXoApplicationsController extends Activity {
       if (eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
         return;
 
-//      eXoChatListController._delegate = eXoApplicationsController2Instance;
+//      eXoChatListController._delegate = eXoApplicationsControllerInstance;
       Intent next = new Intent(eXoApplicationsController.this, eXoChatListController.class);
       eXoApplicationsController.this.startActivity(next);
     }

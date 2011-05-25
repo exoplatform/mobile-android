@@ -42,6 +42,8 @@ public class eXoDashboard extends GDListActivity {
         
         eXoDashboardInstance = this;
         
+        setTitle("Dashboard");
+        
         CookieSyncManager.createInstance(this);
         
         arrGadgets = eXoApplicationsController2.eXoApplicationsController2Instance.arrGadgets;
@@ -55,7 +57,7 @@ public class eXoDashboard extends GDListActivity {
           for(int j = 0; j < gadgetTab._arrGadgetsInItem.size(); j++)
           {
             eXoGadget gadget = gadgetTab._arrGadgetsInItem.get(j);
-//            items.add(new ThumbnailItem(gadget._strGadgetName, gadget._strGadgetDescription, gadget._btmGadgetIcon));
+            items.add(new ThumbnailItem(gadget._strGadgetName, gadget._strGadgetDescription, gadget._btmGadgetIcon));
           }
            
         }

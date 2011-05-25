@@ -3,18 +3,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/MainLayout" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:background="@drawable/androidgeneralbg"
 	>
 
-	<!--<include 
-    	android:id="@+id/Navigation_Bar" 
-		layout="@layout/gd_content_dashboard"/>	
-
-	-->
-	<!--<include 
-    	android:id="@+id/Home_Back" 
-		layout="@layout/homebackbarbutton"/>	
-	
-	-->
 	<Button
 		android:id="@+id/Button_Done"
 		android:layout_alignParentLeft="true"
@@ -23,28 +14,11 @@
 		android:layout_width="wrap_content" 
 		android:layout_height="34dip" 
 		android:text="Done"
+		android:visibility="invisible"
 		/>
-	<Button
-		android:id="@+id/Button_Add"
-		android:layout_alignParentRight="true"
-		android:layout_marginRight="5dip"
-		android:layout_marginTop="5dip"
-		android:layout_width="wrap_content" 
-		android:layout_height="34dip" 
-		android:text=" + "
-		/>
-		
-	<Button android:id="@+id/Button_SignOut"
-		android:layout_toLeftOf="@id/Button_Add"
-		android:layout_marginRight="5dip"
-		android:layout_marginTop="5dip"
-		android:layout_width="30dip"
-		android:background="@drawable/logout"
-		android:layout_height="30dip" />
 	 
 	<GridView 
 		android:id="@+id/gridView1" 
-		android:layout_below="@id/Button_SignOut"
 		android:layout_marginTop="5dip"
 		android:layout_width="fill_parent" 
 		android:layout_weight="1" 

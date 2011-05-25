@@ -39,12 +39,17 @@ public class eXoModifyServerList extends GDActivity {
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.exomodifyserverlist);
-
+    
+    setTitle("Server List");
+    
     eXoModifyServerListInstance = this;
 
     addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
     
     listViewServer = (ListView) findViewById(R.id.ListView_Server_List);
+    listViewServer.setDivider(null);
+    listViewServer.setDividerHeight(0);
+    
     createServersAdapter(AppController.configurationInstance._arrServerList);
   }
 
@@ -126,7 +131,7 @@ public class eXoModifyServerList extends GDActivity {
         final int pos = position;
 
         LayoutInflater inflater = eXoModifyServerListInstance.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
+        View rowView = inflater.inflate(R.layout.serverlistitemforsetting, parent, false);
 
         ServerObj serverObj = serverObjsTmp.get(position);
 

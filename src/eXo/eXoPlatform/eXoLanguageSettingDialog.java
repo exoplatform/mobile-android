@@ -58,6 +58,7 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
     btnDeleteCancel.setOnClickListener(this);
 
     txtvTittle = (TextView) findViewById(R.id.TextView_Title);
+    
     txtvServerName = (TextView) findViewById(R.id.TextView_Server_Name);
     txtvServerUrl = (TextView) findViewById(R.id.TextView_Server_URL);
 
@@ -233,6 +234,7 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
         strDeleteCancelButton = new String(resourceBundle.getString("Delete")
                                                          .getBytes("ISO-8859-1"), "UTF-8");
       }
+      
       strServerName = new String(resourceBundle.getString("NameOfTheServer").getBytes("ISO-8859-1"),
                                  "UTF-8");
       strServerUrl = new String(resourceBundle.getString("URLOfTheSerVer").getBytes("ISO-8859-1"),
@@ -245,6 +247,8 @@ public class eXoLanguageSettingDialog extends Dialog implements OnClickListener 
     }
 
     txtvTittle.setText(strTittle);
+    
+    
     txtvServerName.setText(strServerName);
     txtvServerUrl.setText(strServerUrl);
 

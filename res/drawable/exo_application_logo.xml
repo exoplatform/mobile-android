@@ -17,22 +17,9 @@
 */
 -->
 
-<resources>
-
-	<style name="Theme.eXo" parent="@style/Theme.GreenDroid.NoTitleBar">
-	
-		<item name="gdActionBarTitleColor">@android:color/white</item>
-		<item name="gdActionBarDividerWidth">2px</item>
-		<item name="gdActionBarApplicationDrawable">@drawable/exo_application_logo</item>
-	
-	</style>
-
-    <style name="Theme.GDCatalog.TweakedItems" parent="@style/Theme.eXo">
-        
-        <item name="gdTextAppearanceLarge">@style/TextAppearanceLarge</item>
-        <item name="gdItemViewPreferredHeight">45dp</item>       
-        <item name="gdSeparatorItemViewStyle">@style/SeparatorItemView</item>
-        
-    </style>
-    
-</resources>
+<selector
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<item
+		android:drawable="@drawable/exo_application_logo_normal" />
+		
+</selector>

@@ -67,8 +67,6 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
   
   static eXoApplicationsController2 eXoApplicationsController2Instance;
 
-  Button            btnHome;
-  Button            btnAdd;
   Button            btnDone;
   public List<GateInDbItem> arrGadgets;                       // Gadgets array
   
@@ -120,29 +118,7 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
 //    final MyActionBar myActionBar = (MyActionBar) findViewById(R.id.My_Action_Bar);
 //    myActionBar.setBackgroundResource(R.drawable.navigationbar);
     
-    btnHome = (Button)findViewById(R.id.Button_SignOut);
-    btnHome.setOnClickListener(new View.OnClickListener() {
-      
-      public void onClick(View v) {
-
-        finish(); 
-      }
-    });
-
-    btnAdd = (Button)findViewById(R.id.Button_Add);
-    btnAdd.setOnClickListener(new View.OnClickListener() {
-      
-      public void onClick(View v) {
-        
-//        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.onlinechat);
-//        AppItem item = new AppItem(bm, "New");
-//        array.add(item);
-//        
-//        adapter.notifyDataSetChanged();
-        
-      }
-      
-    });
+  
     
     btnDone = (Button)findViewById(R.id.Button_Done);
     btnDone.setVisibility(View.INVISIBLE);
@@ -170,20 +146,29 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     
     gridview = (GridView)findViewById(R.id.gridView1);   
     
-    Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.files_app_icn);
-    AppItem fileApp = new AppItem(bm, "Files");
-    array.add(fileApp);
+    Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.homeactivitystreamsiconiphone);
+    AppItem activityStreams = new AppItem(bm, "Activity Streams");
+    array.add(activityStreams);
     
-    bm = BitmapFactory.decodeResource(getResources(), R.drawable.onlinechat);
-    AppItem chatApp = new AppItem(bm, "Chats");
+    bm = BitmapFactory.decodeResource(getResources(), R.drawable.homechaticoniphone);
+    AppItem chatApp = new AppItem(bm, "Chat");
     array.add(chatApp);
     
-    bm = BitmapFactory.decodeResource(getResources(), R.drawable.dashboard);
+    bm = BitmapFactory.decodeResource(getResources(), R.drawable.homedocumentsiconiphone);
+    AppItem fileApp = new AppItem(bm, "Documents");
+    array.add(fileApp);
+    
+    bm = BitmapFactory.decodeResource(getResources(), R.drawable.homedashboardiconiphone);
     AppItem dashBoardApp = new AppItem(bm, "Dashboard");
     array.add(dashBoardApp);
     
+    bm = BitmapFactory.decodeResource(getResources(), R.drawable.homesettingsiconiphone);
+    AppItem setting = new AppItem(bm, "Settings");
+    array.add(setting);
+    
     createAdapter();
     
+    changeLanguage(AppController.bundle);
   }
 
 //  Create GridView Apdapter
@@ -252,8 +237,8 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
 
-    menu.add(0, 1, 0, "Reorder Menu").setIcon(R.drawable.server);
-    menu.add(0, 2, 0, "Add item").setIcon(R.drawable.server);
+    menu.add(0, 1, 0, "Reorder Menu");
+    menu.add(0, 2, 0, "Add item");
 
     return true;
 
@@ -281,20 +266,18 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
 
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-
+    
       switch (item.getItemId()) {
-          case R.id.action_bar_locate:
-//              startActivity(new Intent(this, TabbedActionBarActivity.class));
+          case R.drawable.gd_action_bar_signout:
+              finish();
               break;
 
-          case R.id.action_bar_refresh:
-              final LoaderActionBarItem loaderItem = (LoaderActionBarItem) item;
-              mHandler.postDelayed(new Runnable() {
-                  public void run() {
-                      loaderItem.setLoading(false);
-                  }
-              }, 2000);
-              Toast.makeText(this, R.string.refresh_pressed, Toast.LENGTH_SHORT).show();
+          case R.drawable.gd_action_bar_add:
+//            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.onlinechat);
+//          AppItem item = new AppItem(bm, "New");
+//          array.add(item);
+//          
+//          adapter.notifyDataSetChanged();
               break;
 
           case R.id.action_bar_export:
@@ -395,7 +378,7 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
             timer.cancel();
             handler.removeCallbacks(mUpdateTimeTask);
             
-            if(timerCounter < 3)
+            if(timerCounter < 1000)
             {
               for(int i = 0; i < array.size(); i++)
               {
@@ -425,7 +408,7 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
 
       timerCounter++;
       Log.i("hehe", "" + timerCounter);
-      if(timerCounter >= 3)
+      if(timerCounter >= 1000)
       {
         timer.cancel();
         handler.removeCallbacks(mUpdateTimeTask);
@@ -513,10 +496,10 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     Runnable loadingDataRunnable = new Runnable() {
       public void run() {
 
-        if (str.equalsIgnoreCase("files")) {
+        if (str.equalsIgnoreCase("documents")) {
           launchFilesApp();
         }
-        else if (str.equalsIgnoreCase("chats")) 
+        else if (str.equalsIgnoreCase("chat")) 
         {
           launchMessengerApp();
         }
@@ -524,7 +507,12 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
         {
           launchDashboardApp();
         }
+        else if(str.equalsIgnoreCase("settings"))
+        {
+          launchSettingApp();
+        }
 
+        
         runOnUiThread(dismissProgressDialog);
       }
     };
@@ -591,14 +579,21 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     String password = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
                                                                "exo_prf_password");
 
-    connectToChatServer(url.getHost(), 5222, userName, password);
-    if (eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
-      return;
+    if(connectToChatServer(url.getHost(), 5222, userName, password))
+    {
+      eXoChatListController._delegate = eXoApplicationsController2Instance;
+      Intent next = new Intent(eXoApplicationsController2.this, eXoChatListController.class);
+      startActivity(next);  
+    }
+    else
+    {
+      Toast.makeText(eXoApplicationsController2.this, "Can not connect to chat server", Toast.LENGTH_SHORT).show();
+    }
+//    if (eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
+//      return;
 
 
-    eXoChatListController._delegate = eXoApplicationsController2Instance;
-    Intent next = new Intent(eXoApplicationsController2.this, eXoChatListController.class);
-    startActivity(next);
+    
   }
 
   public void launchDashboardApp() 
@@ -610,11 +605,20 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     
   }
   
+  public void launchSettingApp() 
+  {
+    
+    Intent next = new Intent(eXoApplicationsController2.this, eXoSetting.class);
+    startActivity(next);
+    
+  }
+  
+  
 //Connect to Openfile server
-  private void connectToChatServer(String host, int port, String userName, String password) {
+  private boolean connectToChatServer(String host, int port, String userName, String password) {
     if (eXoChatListController.conn != null && eXoChatListController.conn.isConnected())
-      return;
-
+      return true;
+ 
     ConnectionConfiguration config = new ConnectionConfiguration(host, port, "Work");
     eXoChatListController.conn = new XMPPConnection(config);
 
@@ -644,9 +648,16 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
       String str = e.toString();
       String msg = e.getMessage();
       Log.e(str, msg);
+      
+      eXoChatListController.conn.disconnect();
+      eXoChatListController.conn = null;
       // e.printStackTrace();
-      Toast.makeText(eXoApplicationsController2.this, strChatServer, Toast.LENGTH_SHORT).show();
+//      Toast.makeText(eXoApplicationsController2Instance, "Can not connect to chat server", Toast.LENGTH_SHORT).show();
+      
+      return false;
     }
+    
+    return true;
 
   }
 

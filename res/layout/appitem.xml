@@ -28,6 +28,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_marginBottom="20dip"
 	android:text="TextView"
 	android:gravity="center_horizontal"
-	android:textColorHighlight="#656565">
+	android:textColorHighlight="#656565"
+	>
 	</TextView>
 	</LinearLayout>

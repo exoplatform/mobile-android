@@ -55,13 +55,7 @@ public class eXoFilesController extends GDActivity {
 
   static ListView                  _lstvFiles;
 
-  static TextView                  _textViewFolder;
-
-  static Button                    _btnCloseBack;
-
   TextView                         _textViewEmptyPage;
-
-  Button                           _btnLanguageHelp;
 
   // for eXo image View
   EditText                         txtFileName;
@@ -173,27 +167,10 @@ public class eXoFilesController extends GDActivity {
     _textViewEmptyPage = (TextView) findViewById(R.id.TextView_EmptyPage);
     _textViewEmptyPage.setVisibility(View.INVISIBLE);
 
-    _btnCloseBack = (Button) findViewById(R.id.Button_Close);
-    _btnCloseBack.setOnClickListener(new OnClickListener() {
-      public void onClick(View v) {
-        finishMe();
-      }
-    });
-
-    _btnLanguageHelp = (Button) findViewById(R.id.Button_Language_Help);
-    _btnLanguageHelp.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        // eXoLanguageSettingDialog customizeDialog = new
-        // eXoLanguageSettingDialog(eXoFilesController.this, 2,
-        // eXoFilesControllerInstance);
-        // customizeDialog.show();
-      }
-    });
 
     _lstvFiles = (ListView) findViewById(R.id.ListView_Files);
 
-    _textViewFolder = (TextView) findViewById(R.id.TextView_Directoties);
-    _textViewFolder.setText(getFolderNameFromUrl(_rootUrl));
+    setTitle(getFolderNameFromUrl(_rootUrl));
 
     txtFileName = (EditText) findViewById(R.id.EditTextImageName);
 
@@ -297,19 +274,20 @@ public class eXoFilesController extends GDActivity {
 
                                                  public void run() {
 
-                                                   _textViewFolder.setText(getFolderNameFromUrl(myFile.urlStr));
-
+                                                   setTitle(getFolderNameFromUrl(myFile.urlStr));
                                                    // Files List
                                                    fileAdapter.notifyDataSetChanged();
                                                    try {
                                                      if (myFile.urlStr.equalsIgnoreCase(_rootUrl))
-                                                       _btnCloseBack.setText(new String(AppController.bundle.getString("CloseButton")
-                                                                                                            .getBytes("ISO-8859-1"),
-                                                                                        "UTF-8"));
+//                                                       _btnCloseBack.setText(new String(AppController.bundle.getString("CloseButton")
+//                                                                                                            .getBytes("ISO-8859-1"),
+//                                                                                        "UTF-8"));
+                                                       ;
                                                      else
-                                                       _btnCloseBack.setText(new String(AppController.bundle.getString("BackButton")
-                                                                                                            .getBytes("ISO-8859-1"),
-                                                                                        "UTF-8"));
+//                                                       _btnCloseBack.setText(new String(AppController.bundle.getString("BackButton")
+//                                                                                                            .getBytes("ISO-8859-1"),
+//                                                                                        "UTF-8"));
+                                                       ;
                                                    } catch (Exception e) {
 
                                                      // _btnCloseBack.setText("");
@@ -326,22 +304,24 @@ public class eXoFilesController extends GDActivity {
                                                    // arrFiles.get(positionOfFileItem);
 
                                                    try {
-                                                     _btnCloseBack.setText(new String(AppController.bundle.getString("BackButton")
-                                                                                                          .getBytes("ISO-8859-1"),
-                                                                                      "UTF-8"));
+//                                                     _btnCloseBack.setText(new String(AppController.bundle.getString("BackButton")
+//                                                                                                          .getBytes("ISO-8859-1"),
+//                                                                                      "UTF-8"));
+                                                     ;
                                                    } catch (Exception e) {
 
                                                      try {
-                                                       _btnCloseBack.setText(new String(AppController.bundle.getString("CloseButton")
-                                                                                                            .getBytes("ISO-8859-1"),
-                                                                                        "UTF-8"));
+//                                                       _btnCloseBack.setText(new String(AppController.bundle.getString("CloseButton")
+//                                                                                                            .getBytes("ISO-8859-1"),
+//                                                                                        "UTF-8"));
+                                                       ;
                                                      } catch (Exception e2) {
 
                                                      }
                                                    }
                                                    if (myFile.isFolder) {
-                                                     _textViewFolder.setText(myFile.fileName.replace("%20",
-                                                                                                     " "));
+                                                     
+                                                     setTitle(myFile.fileName.replace("%20"," "));
                                                      fileAdapter.notifyDataSetChanged();
 
                                                    } else {
@@ -443,7 +423,6 @@ public class eXoFilesController extends GDActivity {
     }
 
     _lstvFiles.setVisibility(viewFileMode);
-    _textViewFolder.setVisibility(viewFileMode);
     // _btnCloseBack.setVisibility(viewFileMode);
 
     // for eXo image View
@@ -451,7 +430,6 @@ public class eXoFilesController extends GDActivity {
     imgView.setVisibility(viewImageMode);
     _btnUploadImage.setVisibility(viewImageMode);
     _btnCancelUploadImage.setVisibility(viewImageMode);
-    _btnCloseBack.setVisibility(viewFileMode);
   }
 
   // Get file/folder icon form URL
@@ -908,8 +886,7 @@ public class eXoFilesController extends GDActivity {
     } catch (Exception e) {
 
     }
-
-    _btnCloseBack.setText(strCloseBack);
+    
     _btnUploadImage.setText(strUploadFile);
     _btnCancelUploadImage.setText(strCancel);
     _textViewEmptyPage.setText(strEmptyPage);

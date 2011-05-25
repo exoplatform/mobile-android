@@ -5,7 +5,7 @@
 
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="40sp"
-		android:background="@drawable/navigationbar">
+		>
 
 		<Button android:id="@+id/Close" android:layout_marginLeft="2sp"
 			android:layout_marginTop="02sp" android:layout_width="70sp"

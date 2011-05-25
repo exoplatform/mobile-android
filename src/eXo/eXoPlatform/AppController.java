@@ -49,6 +49,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -64,8 +65,11 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.NinePatch;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.NinePatchDrawable;
 
 //Login page
 public class AppController extends Activity implements OnTouchListener {
@@ -413,7 +417,7 @@ public class AppController extends Activity implements OnTouchListener {
 
   // UI component
   
-  ImageView                                  _imageAccount;
+  ImageView                                 _imageAccount;
   ImageView                                 _imageServer;
   RelativeLayout                            _imagePanelBackground;
   
@@ -422,6 +426,8 @@ public class AppController extends Activity implements OnTouchListener {
   Button                                    _btnServer;
 
   Button                                    _btnLogIn;
+  
+  TextView                                  _tvLogIn;
 
   EditText                                  _edtxUserName;
 
@@ -559,9 +565,6 @@ public class AppController extends Activity implements OnTouchListener {
     _imageAccount = (ImageView) findViewById(R.id.Image_Account);
     _imageServer = (ImageView) findViewById(R.id.Image_Server);
     _imagePanelBackground = (RelativeLayout) findViewById(R.id.Image_Panel_Background);
-    
-//    _txtViewUserName = (TextView) findViewById(R.id.TextView_UserName);
-//    _txtViewPassword = (TextView) findViewById(R.id.TextView_Password);
 
     _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
     _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
@@ -571,9 +574,12 @@ public class AppController extends Activity implements OnTouchListener {
     _btnAccount = (Button) findViewById(R.id.Button_Account);
     _btnServer = (Button) findViewById(R.id.Button_Server);
     _btnLogIn = (Button) findViewById(R.id.Button_Login);
-
+//    _tvLogIn =  (TextView) findViewById(R.id.TextView_Login);
+    
     _listViewServer = (ListView) findViewById(R.id.ListView_Servers);
     _listViewServer.setVisibility(View.INVISIBLE);
+    _listViewServer.setDivider(null);
+    _listViewServer.setDividerHeight(0);
 
     _strDomain = sharedPreference.getString(EXO_PRF_DOMAIN, "");
     _strDomainIndex = sharedPreference.getString(EXO_PRF_DOMAIN_INDEX, "");
@@ -597,12 +603,12 @@ public class AppController extends Activity implements OnTouchListener {
         _btnServer.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
         _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
         
-//        _imagePanelBackground.setVisibility(View.VISIBLE);
         
         _edtxUserName.setVisibility(View.VISIBLE);
         _edtxPassword.setVisibility(View.VISIBLE);
         
         _btnLogIn.setVisibility(View.VISIBLE);
+//        _tvLogIn.setVisibility(View.VISIBLE);
 
         _listViewServer.setVisibility(View.INVISIBLE);
       }
@@ -622,13 +628,13 @@ public class AppController extends Activity implements OnTouchListener {
         _btnAccount.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
         _imageAccount.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneoff);
         
-//        _imagePanelBackground.setVisibility(View.INVISIBLE);
         
         _edtxUserName.setVisibility(View.INVISIBLE);
 
         _edtxPassword.setVisibility(View.INVISIBLE);
 
         _btnLogIn.setVisibility(View.INVISIBLE);
+//        _tvLogIn.setVisibility(View.INVISIBLE);
 
         _listViewServer.setVisibility(View.VISIBLE);
       }
@@ -762,7 +768,7 @@ public class AppController extends Activity implements OnTouchListener {
 
           public void onClick(View v) {
 
-            if(_intDomainIndex == -1)
+            if(_intDomainIndex < 0)
               _intDomainIndex = pos;
             
             View rowView =  getView(_intDomainIndex, null, _listViewServer); 
@@ -1112,75 +1118,6 @@ public class AppController extends Activity implements OnTouchListener {
     } while (index1 > 0);
 
     return arrTmpGadgets;
-  }
-
-  // Get gadget tab list
-  public List<GateInDbItem> listOfGadgets() {
-    _strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
-                                                          "exo_prf_domain");
-    // List<GateInDbItem> arrTmpGadgets = new ArrayList<GateInDbItem>();
-
-    eXoApplicationsController.arrGadgets = new ArrayList<GateInDbItem>();
-
-    String strContent = AppController._eXoConnection.getFirstLoginContent();
-
-    int index1;
-    int index2;
-    int index3;
-
-    index1 = strContent.indexOf("DashboardIcon TBIcon");
-
-    if (index1 < 0)
-      return null;
-
-    strContent = strContent.substring(index1 + 20);
-    index1 = strContent.indexOf("TBIcon");
-
-    if (index1 < 0)
-      return null;
-
-    strContent = strContent.substring(0, index1);
-
-    do {
-      index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
-      index2 = strContent.indexOf("\" >");
-      if (index1 < 0 && index2 < 0)
-        return null;
-      String gadgetTabUrlStr = strContent.substring(index1 + 32, index2);
-
-      strContent = strContent.substring(index2 + 3);
-      index3 = strContent.indexOf("</a>");
-      if (index3 < 0)
-        return null;
-      String gadgetTabName = strContent.substring(0, index3);
-      List<eXoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
-
-      HashMap<String, String> mapOfURLs = listOfStandaloneGadgetsURL();
-
-      if (arrTmpGadgetsInItem != null) {
-        for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) {
-          eXoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
-
-          String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
-
-          if (urlStandalone != null) {
-            tmpGadget._strGadgetUrl = urlStandalone;
-          }
-        }
-
-        GateInDbItem tmpGateInDbItem = new GateInDbItem(gadgetTabName,
-                                                        gadgetTabUrlStr,
-                                                        arrTmpGadgetsInItem);
-        // arrTmpGadgets.add(tmpGateInDbItem);
-        eXoApplicationsController.arrGadgets.add(tmpGateInDbItem);
-
-        strContent = strContent.substring(index3);
-        index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
-      }
-
-    } while (index1 > 0);
-
-    return null;
   }
 
   // Get needed string
