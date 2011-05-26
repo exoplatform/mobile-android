@@ -25,9 +25,15 @@ import greendroid.widget.item.ThumbnailItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.webkit.CookieSyncManager;
+import android.widget.Toast;
 
 public class eXoDashboard extends GDListActivity {
     
@@ -63,10 +69,37 @@ public class eXoDashboard extends GDListActivity {
         }
         
         final ItemAdapter adapter = new ItemAdapter(this, items);
+        
         setListAdapter(adapter);
     }
         
+    public void showGadget(eXoGadget gadget)
+    {
+      
+      eXoApplicationsController2.webViewMode = 0;
+      DefaultHttpClient client = new DefaultHttpClient();
 
+      HttpGet get = new HttpGet(gadget._strGadgetUrl);
+      try {
+        HttpResponse response = client.execute(get);
+        int status = response.getStatusLine().getStatusCode();
+        if (status < 200 || status >= 300) {
+          Toast.makeText(this, "Connection timed out", Toast.LENGTH_LONG).show();
+          return;
+        }
+      } catch (Exception e) {
+
+        return;
+      }
+
+      eXoWebViewController._titlebar = gadget._strGadgetName;
+      eXoWebViewController._url = gadget._strGadgetUrl;
+      
+      Intent next = new Intent(this, eXoWebViewController.class);
+      startActivity(next);
+       
+    }
+    
     public void finishMe() {
       eXoDashboardInstance.finish();
       eXoDashboardInstance = null;

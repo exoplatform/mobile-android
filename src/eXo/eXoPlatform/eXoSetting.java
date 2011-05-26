@@ -126,8 +126,18 @@ public class eXoSetting extends GDActivity {
   }
   
   public void finishMe()
-  {    
-    Intent next = new Intent(eXoSetting.this, AppController.class);
+  {  
+    Intent next;
+    
+    if(eXoApplicationsController2.eXoApplicationsController2Instance != null)
+    {
+      next = new Intent(eXoSetting.this, eXoApplicationsController2.class);
+    }
+    else
+    {
+      next = new Intent(eXoSetting.this, AppController.class);
+    }
+    
     startActivity(next);
     
     eXoSettingInstance = null;

@@ -10,6 +10,7 @@ import org.apache.http.cookie.Cookie;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -25,8 +26,9 @@ public class eXoWebViewController extends GDActivity {
   public static eXoWebViewController eXoWebViewControllerInstance; // Instance
 
   WebView                     _wvGadget;
-
-  TextView                    _txtvTitleBar;
+  
+  public static String               _url;
+  public static String               _titlebar;
 
   String                      strCannotBackToPreviousPage;
 
@@ -38,11 +40,10 @@ public class eXoWebViewController extends GDActivity {
     setActionBarContentView(R.layout.webview);
 
     eXoWebViewControllerInstance = this;
-
+    
     setupCookies();
 
-    _wvGadget = (WebView) findViewById(R.id.WebView_01);
-    _txtvTitleBar = (TextView) findViewById(R.id.TextView_TitleBar);
+    _wvGadget = (WebView) findViewById(R.id.WebView);
 
     _wvGadget.getSettings().setJavaScriptEnabled(true);
     _wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
@@ -52,52 +53,31 @@ public class eXoWebViewController extends GDActivity {
 
     _wvGadget.getSettings().setBuiltInZoomControls(false);
 
-    String url = null;
     if (eXoApplicationsController2.webViewMode == 0) {
-      url = eXoGadgetViewController.currentGadget.getGadgetUrl();
-      String titlebar = eXoGadgetViewController.currentGadget._strGadgetName;
-      _txtvTitleBar.setText(titlebar.replace("%20", " "));
+
+      
+      
     } else if (eXoApplicationsController2.webViewMode == 1) {
-      //			 
-      // url = eXoFilesController._strCurrentDirectory;
-      // String fileName = eXoFilesController.myFile.fileName;
-      // // url = "file:///data/data/eXo.eXoMobile/files/" + fileName;
-      url = "file:///sdcard/eXo/" + eXoFilesController.myFile.fileName;
-      _txtvTitleBar.setText(eXoFilesController.myFile.fileName);
-      // _wvGadget.loadUrl(url);
-
-      // String host =
-      // AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
-      // "exo_prf_domain");
-      // String strUserName =
-      // AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
-      // "exo_prf_username");
-      // String strPassword =
-      // AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
-      // "exo_prf_password");
-      //			
-      // String[] test = _wvGadget.getHttpAuthUsernamePassword(host, "123");
-      // WebViewDatabase.getInstance(this).clearHttpAuthUsernamePassword();
-      // String[] test2 = _wvGadget.getHttpAuthUsernamePassword(host, "123");
-      // _wvGadget.setHttpAuthUsernamePassword(host, "123", strUserName,
-      // strPassword);
-      // String[] test3 = _wvGadget.getHttpAuthUsernamePassword(host, "123");
-      // _wvGadget.loadUrl(eXoFilesController._strCurrentDirectory);
-
-      // _wvGadget.loadUrl("http://globaltvlive.files.wordpress.com/2007/04/jesu-angel.jpg");
+     
+      _url = Environment.getExternalStorageDirectory() + "/eXo/" + eXoFilesController.myFile.fileName;
+      _titlebar = eXoFilesController.myFile.fileName;
+      
     } else if (eXoApplicationsController2.webViewMode == 2) {
-      _txtvTitleBar.setText("User guide");
+      
+      _titlebar = "User guide";
+      
       String locallize = AppController.sharedPreference.getString(AppController.EXO_PRF_LOCALIZE,
                                                                   "exo_prf_localize");
       if (locallize.equalsIgnoreCase("LocalizeEN.properties"))
-        url = "file:///android_asset/HowtoUse-EN.htm";
+        _url = "file:///android_asset/HowtoUse-EN.htm";
       else if (locallize.equalsIgnoreCase("LocalizeFR.properties"))
-        url = "file:///android_asset/HowtoUse-FR.htm";
+        _url = "file:///android_asset/HowtoUse-FR.htm";
       else
-        url = "file:///android_asset/HowtoUse-VN.htm";
+        _url = "file:///android_asset/HowtoUse-VN.htm";
     }
-
-    _wvGadget.loadUrl(url);
+    
+    setTitle(_titlebar.replace("%20", " "));
+    _wvGadget.loadUrl(_url);
     
     changeLanguage(AppController.bundle);
   }
@@ -109,10 +89,17 @@ public class eXoWebViewController extends GDActivity {
       eXoFilesController.myFile.urlStr = eXoFilesController.myFile.urlStr.substring(0, index);
 
     }
+    else if (eXoApplicationsController.webViewMode == 2)
+    {
+      Intent next = new Intent(eXoWebViewController.this, eXoSetting.class);
+      startActivity(next);  
+    }
+    else
+    {
+      Intent next = new Intent(eXoWebViewController.this, eXoDashboard.class);
+      startActivity(next);
+    }
 
-    Intent next = new Intent(eXoWebViewController.this, eXoSetting.class);
-    startActivity(next);
-    
     eXoWebViewControllerInstance = null;
     GDActivity.TYPE = 1;
     

@@ -269,7 +269,8 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     
       switch (item.getItemId()) {
           case R.drawable.gd_action_bar_signout:
-              finish();
+              Intent next = new Intent(eXoApplicationsController2Instance, AppController.class);
+              startActivity(next);
               break;
 
           case R.drawable.gd_action_bar_add:
@@ -487,6 +488,7 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
       thread = null;
 
     }
+    
   };
  
   public void launchApp(String featureName) {
@@ -512,7 +514,6 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
           launchSettingApp();
         }
 
-        
         runOnUiThread(dismissProgressDialog);
       }
     };
@@ -587,7 +588,9 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     }
     else
     {
-      Toast.makeText(eXoApplicationsController2.this, "Can not connect to chat server", Toast.LENGTH_SHORT).show();
+      
+//      showToast("Can not connect to chat server");
+      
     }
 //    if (eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
 //      return;
@@ -599,9 +602,16 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
   public void launchDashboardApp() 
   {
     listOfGadgets();
+    if(arrGadgets.size() > 0)
+    {
+      Intent next = new Intent(eXoApplicationsController2.this, eXoDashboard.class);
+      startActivity(next);  
+    }
+    else
+    {
+//      Toast.makeText(this, "No gadget", Toast.LENGTH_LONG).show();
+    }
     
-    Intent next = new Intent(eXoApplicationsController2.this, eXoDashboard.class);
-    startActivity(next);
     
   }
   
@@ -613,6 +623,31 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     
   }
   
+  public void showToast(String msg)
+  {
+    
+//    runOnUiThread(dismissProgressDialog);
+    
+    final Toast toast = new Toast(this);
+    final String strMsg = msg;
+    
+    toast.setDuration(Toast.LENGTH_LONG);
+    toast.setText(strMsg);
+    toast.show();  
+    
+//    runOnUiThread(new Runnable() {
+//      
+//      public void run() {
+//        // TODO Auto-generated method stub
+//        toast.setDuration(Toast.LENGTH_LONG);
+//        toast.setText(strMsg);
+//        toast.show();  
+//      }
+//    });
+    
+    
+    
+  }
   
 //Connect to Openfile server
   private boolean connectToChatServer(String host, int port, String userName, String password) {

@@ -23,7 +23,7 @@ public class eXoApplication extends GDApplication {
 
     @Override
     public Class<?> getHomeActivityClass() {
-        return CatalogActivity.class;
+        return AppController.class;
     }
     
     @Override
