@@ -1,5 +1,7 @@
 package eXo.eXoPlatform;
 
+import greendroid.app.GDActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -31,7 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 //Chat windows view controller
-public class eXoChatController extends Activity {
+public class eXoChatController extends GDActivity {
   // List message content for each user
   public static List<eXoChatMessageContent> listChatContent = new ArrayList<eXoChatMessageContent>();
 
@@ -48,17 +50,6 @@ public class eXoChatController extends Activity {
 
   static ListView                           conversationView;                                        // Chat
                                                                                                       // conversation
-
-  Button                                    btnClose;                                                // Close
-                                                                                                      // button
-
-  Button                                    _btnLanguageHelp;                                        // Setting
-                                                                                                      // button
-
-  TextView                                  tvCurrentChat;                                           // Current
-                                                                                                      // chat
-                                                                                                      // name
-
   public static eXoChatController           eXoChatControllerInstance;                               // Instance
 
   static eXoApplicationsController2          _delegate;                                               // Main
@@ -83,14 +74,18 @@ public class eXoChatController extends Activity {
     super.onCreate(savedInstanceState);
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.exochat);
+    
+    setActionBarContentView(R.layout.exochat);
     eXoChatControllerInstance = this;
+    
     messageEditText = (EditText) findViewById(R.id.message);
 
     conversationView = (ListView) findViewById(R.id.chatContent);
-    tvCurrentChat = (TextView) findViewById(R.id.TextViewCurrentChat);
+    conversationView.setDivider(null);
+    conversationView.setDividerHeight(0);
+   
     String currentChatNickName = currentChatStr.substring(0, currentChatStr.lastIndexOf("@"));
-    tvCurrentChat.setText(currentChatNickName);
+    setTitle(currentChatNickName);
 
     if (mHandler == null)
       mHandler = new Handler();
@@ -110,7 +105,7 @@ public class eXoChatController extends Activity {
 
         // Send a message using content of the edit text widget
         String msg = messageEditText.getText().toString();
-        if (msg != null && msg.equalsIgnoreCase("")) {
+        if (msg != null && !msg.equalsIgnoreCase("")) {
           try {
 
             Message message = new Message(currentChatStr, Message.Type.chat);
@@ -126,35 +121,6 @@ public class eXoChatController extends Activity {
           }
         }
 
-      }
-    });
-
-    btnClose = (Button) findViewById(R.id.Close);
-    btnClose.setOnClickListener(new OnClickListener() {
-
-      public void onClick(View v) {
-
-        currentChatStr = "";
-        // eXoChatList.arrListChat.set(eXoChatList.posOfChatingMember,
-        // listChatContent);
-        eXoChatListController.conn.removePacketListener(packetListener);
-        // eXoChatList.conn.addPacketListener(eXoChatList.packetListener, new
-        // MessageTypeFilter(Message.Type.chat));
-
-        // eXoChat.this.finish();
-        Intent next = new Intent(eXoChatController.this, eXoChatListController.class);
-        eXoChatController.this.startActivity(next);
-      }
-    });
-
-    _btnLanguageHelp = (Button) findViewById(R.id.Button_Language_Help);
-    _btnLanguageHelp.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        // eXoLanguageSettingDialog customizeDialog = new
-        // eXoLanguageSettingDialog(eXoChatController.this, 4,
-        // eXoChatControllerInstance);
-        // customizeDialog.setTitle("User guide & language setting");
-        // customizeDialog.show();
       }
     });
 
@@ -235,9 +201,9 @@ public class eXoChatController extends Activity {
         name.setText(msgContent.name);
 
         if (msgContent.name.equalsIgnoreCase("Me")) {
-          view.setBackgroundResource(R.drawable.chatbackgroundwhite);
+//          view.setBackgroundResource(R.drawable.chatbackgroundwhite);
         } else {
-          view.setBackgroundResource(R.drawable.chatbackgroundwhite);
+//          view.setBackgroundResource(R.drawable.chatbackgroundwhite);
           // view.setBackgroundResource(0xFFFFFFFF);
         }
         TextView content = (TextView) view.findViewById(R.id.TextView_Content);
@@ -281,10 +247,28 @@ public class eXoChatController extends Activity {
     }
 
     sendMessageBtn.setText(strsendMessageBtn);
-    btnClose.setText(strcloseBtn);
+   
 
     _delegate.changeLanguage(resourceBundle);
 //    _delegate.createAdapter();
 
+  }
+
+
+  public void finishMe()
+  {
+    currentChatStr = "";
+    // eXoChatList.arrListChat.set(eXoChatList.posOfChatingMember,
+    // listChatContent);
+    eXoChatListController.conn.removePacketListener(packetListener);
+    // eXoChatList.conn.addPacketListener(eXoChatList.packetListener, new
+    // MessageTypeFilter(Message.Type.chat));
+
+    // eXoChat.this.finish();
+    GDActivity.TYPE = 1;
+    Intent next = new Intent(eXoChatController.this, eXoChatListController.class);
+    eXoChatController.this.startActivity(next);
+    
+    eXoChatControllerInstance = null;
   }
 }

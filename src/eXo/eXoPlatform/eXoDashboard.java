@@ -101,7 +101,10 @@ public class eXoDashboard extends GDListActivity {
     }
     
     public void finishMe() {
-      eXoDashboardInstance.finish();
+      
+      Intent next = new Intent(eXoDashboard.this, eXoApplicationsController2.class);
+      startActivity(next);
+      
       eXoDashboardInstance = null;
       GDActivity.TYPE = 0;
     }

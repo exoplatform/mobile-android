@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/MainLayout" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="@drawable/background">
+	android:background="@drawable/androidgeneralbg">
 	
-	<!--<include 
-    	android:id="@+id/Navigation_Bar" 
-		layout="@layout/gd_content_dashboard"/>	
-	
-	--><Button android:id="@+id/ButtonClose" android:layout_x="02sp"
-		android:layout_y="02sp" android:layout_width="wrap_content"
-		android:layout_height="38sp" />
+	<ListView android:id="@+id/ListViewChatList" 
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:cacheColorHint="#00000000" />
 
-	<Button android:id="@+id/Button_Language_Help"
-		android:layout_width="30sp" android:layout_height="30sp"
-		android:layout_x="285sp" android:layout_y="05sp" android:background="@drawable/setting1" />
-
-	<TextView android:layout_x="0sp" android:layout_y="40sp"
-		android:layout_width="320sp" android:layout_height="40sp"
-		android:id="@+id/TextViewChatList" android:textSize="18sp" />
-
-	<ListView android:id="@+id/ListViewChatList" android:layout_x="0sp"
-		android:layout_y="80sp" android:layout_width="320sp"
-		android:layout_height="380sp" />
-
-</AbsoluteLayout>
+</RelativeLayout>

@@ -43,14 +43,9 @@ import android.widget.Toast;
 //Chat list view controller
 public class eXoChatListController extends GDActivity {
 
-  private static Button                                btnClose;                     // Close
-                                                                                      // view
+  
 
-  private static Button                                _btnLanguageHelp;             // Setting
-
-  private static TextView                              tvTitle;                      // Title
-
-  private ListView                                     lvChatList;                   // Chat
+   private ListView                                     lvChatList;                   // Chat
                                                                                       // list
                                                                                       // view
 
@@ -84,6 +79,8 @@ public class eXoChatListController extends GDActivity {
   public static RosterListener                         rosterListener;
 
   public static PacketListener                         packetListener;
+  
+  eXoChatListAdapter                                   chatsAdapter;
 
   String                                               strCannotBackToPreviousPage;
 
@@ -117,33 +114,6 @@ public class eXoChatListController extends GDActivity {
 
     eXoChatListControllerInstance = this;
 
-    btnClose = (Button) findViewById(R.id.ButtonClose);
-    btnClose.setOnClickListener(new OnClickListener() {
-
-      public void onClick(View v) {
-
-        finishMe();
-//        Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
-//        startActivity(next);
-        // eXoChatList.this.finish();
-
-      }
-    });
-
-    _btnLanguageHelp = (Button) findViewById(R.id.Button_Language_Help);
-    _btnLanguageHelp.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-
-        // eXoLanguageSettingDialog customizeDialog = new
-        // eXoLanguageSettingDialog(eXoChatListController.this, 3,
-        // eXoChatListControllerInstance);
-        // customizeDialog.setTitle("User guide & language setting");
-        // customizeDialog.show();
-      }
-    });
-
-    tvTitle = (TextView) findViewById(R.id.TextViewChatList);
-
     lvChatList = (ListView) findViewById(R.id.ListViewChatList);
 
     // Add a packet listener to get messages sent to us
@@ -168,7 +138,8 @@ public class eXoChatListController extends GDActivity {
               arrListChat.set(i, str);
 
               if (fromName.equalsIgnoreCase(eXoChatController.currentChatStr)) {
-                eXoChatController.setListAdapter();
+//                eXoChatController.setListAdapter();
+                chatsAdapter.notifyDataSetChanged();
               } else {
                 runOnUiThread(new Runnable() {
 
@@ -265,10 +236,12 @@ public class eXoChatListController extends GDActivity {
   
  public void finishMe()
  {
+   GDActivity.TYPE = 0;
+   
    Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
    startActivity(next);
    eXoChatListControllerInstance = null;
-   GDActivity.TYPE = 0;
+   
  }
 
   // Keydown listener
@@ -284,7 +257,7 @@ public class eXoChatListController extends GDActivity {
   // Set adapter for Chat list view
   private void setListAdapter() {
     listChatRosterEntry = getListChat();
-    eXoChatListAdapter chatsAdapter = new eXoChatListAdapter(listChatRosterEntry);
+    chatsAdapter = new eXoChatListAdapter(listChatRosterEntry);
     lvChatList.setAdapter(chatsAdapter);
     lvChatList.setOnItemClickListener(chatsAdapter);
   }
@@ -385,6 +358,9 @@ public class eXoChatListController extends GDActivity {
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+      
+      GDActivity.TYPE = 1;
+      
       posOfChatingMember = position;
       eXoChatController.currentChatStr = listChatRosterEntry.get(position).address;
       eXoChatController.listChatContent = arrListChat.get(position);
@@ -401,20 +377,16 @@ public class eXoChatListController extends GDActivity {
   public void changeLanguage(ResourceBundle resourceBundle) {
 
     String strTitle = "";
-    String strcloseBtn = "";
 
     try {
       strTitle = new String(resourceBundle.getString("ChatTitle").getBytes("ISO-8859-1"), "UTF-8");
-      strcloseBtn = new String(resourceBundle.getString("CloseButton").getBytes("ISO-8859-1"),
-                               "UTF-8");
       strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage")
                                                              .getBytes("ISO-8859-1"), "UTF-8");
     } catch (Exception e) {
 
     }
 
-    btnClose.setText(strcloseBtn);
-    tvTitle.setText(strTitle);
+    setTitle(strTitle);
 
     _delegate.changeLanguage(resourceBundle);
 //    _delegate.createAdapter();

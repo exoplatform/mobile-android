@@ -269,6 +269,13 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     
       switch (item.getItemId()) {
           case R.drawable.gd_action_bar_signout:
+            
+            if (eXoChatListController.conn != null && eXoChatListController.conn.isAuthenticated()) {
+              eXoChatListController.conn.getRoster()
+                                        .removeRosterListener(eXoChatListController.rosterListener);
+              eXoChatListController.conn.disconnect();
+            }
+            
               Intent next = new Intent(eXoApplicationsController2Instance, AppController.class);
               startActivity(next);
               break;

@@ -84,12 +84,12 @@ public class eXoWebViewController extends GDActivity {
 
   public void finishMe()
   {
-    if (eXoApplicationsController.webViewMode == 1) {
+    if (eXoApplicationsController2.webViewMode == 1) {
       int index = eXoFilesController.myFile.urlStr.lastIndexOf("/");
       eXoFilesController.myFile.urlStr = eXoFilesController.myFile.urlStr.substring(0, index);
 
     }
-    else if (eXoApplicationsController.webViewMode == 2)
+    else if (eXoApplicationsController2.webViewMode == 2)
     {
       Intent next = new Intent(eXoWebViewController.this, eXoSetting.class);
       startActivity(next);  
