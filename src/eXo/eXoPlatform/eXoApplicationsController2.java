@@ -27,6 +27,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -171,6 +172,17 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     changeLanguage(AppController.bundle);
   }
 
+  // Key down listener
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    // Save data to the server once the user hits the back button
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
+//      Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
+
+    }
+
+    return false;
+  }
+  
 //  Create GridView Apdapter
   private void createAdapter()
   {
@@ -395,7 +407,8 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
                   {
                     AppItem item = array.get(i);
                   
-                    launchApp(item._name);
+//                    v.setVisibility(View.INVISIBLE);
+                    launchApp(v, item._name);
                   }
               }
               
@@ -498,7 +511,7 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     
   };
  
-  public void launchApp(String featureName) {
+  public void launchApp(View v, String featureName) {
 
     final String str = featureName;
     GDActivity.TYPE = 1;
@@ -545,9 +558,7 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     thread.start();
 
   }
-
-
-  
+ 
  public void launchFilesApp() {
     String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
                                                                "exo_prf_username");

@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,6 +124,17 @@ public class eXoSetting extends GDActivity {
 
     createServersAdapter(AppController.configurationInstance._arrServerList);
 
+  }
+  
+  // Key down listener
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    // Save data to the server once the user hits the back button
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
+//      Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
+
+    }
+
+    return false;
   }
   
   public void finishMe()

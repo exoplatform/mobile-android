@@ -1,6 +1,7 @@
 package eXo.eXoPlatform;
 
 import greendroid.app.GDActivity;
+import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -233,6 +234,25 @@ public class eXoChatListController extends GDActivity {
     }
 
   }
+  
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+    switch (position) {
+        case 0: 
+            // your method here
+            break;
+ 
+        case 1: 
+            // your method here
+            break;
+ 
+        default: 
+            // home button is clicked
+          finishMe();
+          break;
+    }
+    
+    return true;
+}
   
  public void finishMe()
  {

@@ -30,6 +30,7 @@ import org.xmlpull.v1.XmlSerializer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Environment;
@@ -642,6 +643,9 @@ public class AppController extends Activity implements OnTouchListener {
 
     _btnLogIn.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
+        
+        _btnLogIn.setVisibility(View.INVISIBLE);
+        
         viewOrders = new Runnable() {
           public void run() {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -651,6 +655,8 @@ public class AppController extends Activity implements OnTouchListener {
             signInProgress(); 
                       
           }
+          
+          
         };
 
         thread = new Thread(null, viewOrders, "SigningIn");
@@ -687,9 +693,10 @@ public class AppController extends Activity implements OnTouchListener {
 
   // Key down listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
+    
     if (keyCode == KeyEvent.KEYCODE_BACK) {
-      Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
+//      Back to home application
+      moveTaskToBack(true);
     }
 
     return false;
@@ -829,6 +836,7 @@ public class AppController extends Activity implements OnTouchListener {
                                                       thread.stop();
                                                       
                                                       _progressDialog.dismiss();
+                                                      _btnLogIn.setVisibility(View.VISIBLE);
 
                                                     }
                                                   };
@@ -854,6 +862,7 @@ public class AppController extends Activity implements OnTouchListener {
                                                       alert.show();
 
                                                       thread.stop();
+                                                      _btnLogIn.setVisibility(View.VISIBLE);
 
                                                     }
                                                   };
@@ -879,6 +888,7 @@ public class AppController extends Activity implements OnTouchListener {
                                                       alert.show();
 
                                                       thread.stop();
+                                                      _btnLogIn.setVisibility(View.VISIBLE);
 
                                                     }
                                                   };
@@ -925,6 +935,7 @@ public class AppController extends Activity implements OnTouchListener {
       // Log.v(str, msg);
       runOnUiThread(returnResFaileConnection);
     }
+    
   }
 
   // Get gadget list

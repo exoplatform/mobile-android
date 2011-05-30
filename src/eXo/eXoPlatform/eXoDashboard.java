@@ -31,6 +31,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.webkit.CookieSyncManager;
 import android.widget.Toast;
@@ -73,6 +74,17 @@ public class eXoDashboard extends GDListActivity {
         setListAdapter(adapter);
     }
         
+    // Key down listener
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+      // Save data to the server once the user hits the back button
+      if (keyCode == KeyEvent.KEYCODE_BACK) {
+//        Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
+
+      }
+
+      return false;
+    }
+    
     public void showGadget(eXoGadget gadget)
     {
       
@@ -108,4 +120,5 @@ public class eXoDashboard extends GDListActivity {
       eXoDashboardInstance = null;
       GDActivity.TYPE = 0;
     }
+
 }

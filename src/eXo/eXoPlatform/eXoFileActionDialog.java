@@ -241,15 +241,6 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
 
   }
 
-  // Keydown listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-      Toast.makeText(thisClass, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
-    }
-    return false;
-  }
-
   // Get file list
   Runnable reloadFileAdapter     = new Runnable() {
 

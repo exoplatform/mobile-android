@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +54,17 @@ public class eXoModifyServerList extends GDActivity {
     createServersAdapter(AppController.configurationInstance._arrServerList);
   }
 
+  // Key down listener
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    // Save data to the server once the user hits the back button
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
+//      Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
 
+    }
+
+    return false;
+  }
+  
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 

@@ -82,6 +82,7 @@ public class eXoWebViewController extends GDActivity {
     changeLanguage(AppController.bundle);
   }
 
+  
   public void finishMe()
   {
     if (eXoApplicationsController2.webViewMode == 1) {
@@ -104,6 +105,7 @@ public class eXoWebViewController extends GDActivity {
     GDActivity.TYPE = 1;
     
   }
+ 
   private void setupCookies() {
     List<Cookie> cookies = AppController._eXoConnection._sessionCookies;// .authenticateAndReturnCookies();
 
