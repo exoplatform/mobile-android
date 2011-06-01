@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="eXo.eXoPlatform" android:versionCode="2" android:versionName="1.1.1">
+	package="eXo.eXoPlatform" android:versionCode="2" android:versionName="2.0">
 	<application android:icon="@drawable/icon57x57"
 		android:theme="@style/Theme.eXo"
 		android:name=".eXoApplication"
