@@ -111,7 +111,7 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
 //    setContentView(R.layout.appsview2);
     setActionBarContentView(R.layout.appsview2);
     
-    addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
+//    addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
     addActionBarItem(Type.SignOut, R.drawable.gd_action_bar_signout);
     
     eXoApplicationsController2Instance = this;
@@ -353,8 +353,6 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
                                       "UTF-8");
       strChatServer = new String(resourceBundle.getString("ChatServer").getBytes("ISO-8859-1"),
       "UTF-8");
-      
-      
       
     } catch (Exception e) {
 
