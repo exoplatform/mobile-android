@@ -145,16 +145,16 @@ public class ActivityStreamBrowser extends GDActivity {
 //        textViewMessage.setText(activity._strMessage);
         textViewMessage.setText(mock.arrayOfActivities.get(position).title);
         
-        Button buttonComment = (Button) findViewById(R.id.button_Comment);
-        buttonComment.setText(mock.arrayOfActivities.get(position).nbComments);
+        Button buttonComment = (Button) rowView.findViewById(R.id.button_Comment);
+        buttonComment.setText(Integer.toString(mock.arrayOfActivities.get(position).nbComments));
         
-        Button buttonLike = (Button) findViewById(R.id.button_Like);
-        buttonLike.setText(mock.arrayOfActivities.get(position).nbLikes);
+        Button buttonLike = (Button) rowView.findViewById(R.id.button_Like);
+        buttonLike.setText(Integer.toString(mock.arrayOfActivities.get(position).nbLikes));
         
-        TextView textViewTime = (TextView) findViewById(R.id.textView_Time);
+        TextView textViewTime = (TextView) rowView.findViewById(R.id.textView_Time);
         textViewTime.setText(mock.arrayOfActivities.get(position).postedTime/60 + "minutes ago");
         
-        TextView textViewShowMore = (TextView) findViewById(R.id.textView_Show_More);
+        TextView textViewShowMore = (TextView) rowView.findViewById(R.id.textView_Show_More);
         
         rowView.setOnClickListener(new View.OnClickListener() {
           
