@@ -43,9 +43,16 @@
 		<activity android:name=".BasicItemActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-			<activity android:name=".eXoDashboard"
+		<activity android:name=".eXoDashboard"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
+		<activity android:name=".ActivityStreamBrowser"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".ActivityStreamDisplay"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+			
 	</application>
 	<uses-sdk android:minSdkVersion="7"/>
 	

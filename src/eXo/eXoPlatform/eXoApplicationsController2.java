@@ -119,7 +119,6 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
 //    final MyActionBar myActionBar = (MyActionBar) findViewById(R.id.My_Action_Bar);
 //    myActionBar.setBackgroundResource(R.drawable.navigationbar);
     
-  
     
     btnDone = (Button)findViewById(R.id.Button_Done);
     btnDone.setVisibility(View.INVISIBLE);
@@ -531,6 +530,10 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
         {
           launchSettingApp();
         }
+        else if(str.equalsIgnoreCase("Activity Streams"))
+        {
+          launchActivityStreamApp();
+        }
 
         runOnUiThread(dismissProgressDialog);
       }
@@ -636,6 +639,14 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     
     Intent next = new Intent(eXoApplicationsController2.this, eXoSetting.class);
     startActivity(next);
+    
+  }
+  
+  public void launchActivityStreamApp() 
+  {
+    
+    Intent next = new Intent(eXoApplicationsController2.this, ActivityStreamBrowser.class);
+    eXoApplicationsController2Instance.startActivity(next);
     
   }
   
