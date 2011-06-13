@@ -9,16 +9,20 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 //Chat list view controller
 public class ActivityStreamBrowser extends GDActivity {
@@ -82,32 +86,39 @@ public class ActivityStreamBrowser extends GDActivity {
     
   }
   
+  @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
-        case 0: 
-            // your method here
-            break;
- 
-        case 1: 
-            // your method here
-            break;
- 
-        default: 
-            // home button is clicked
-          finishMe();
-          break;
-    }
     
-    return true;
-}
-  
+      switch (item.getItemId()) {
+          case R.drawable.gd_action_bar_signout:
+            
+            
+              break;
+
+          case R.drawable.gd_action_bar_add:
+
+              break;
+
+          case R.id.action_bar_export:
+
+              break;
+
+          default:
+              Log.e("12312", "13123");
+      }
+
+      return true;
+  }
+
  public void finishMe()
  {
-//   GDActivity.TYPE = 0;
+   
+   Log.e("Close", "313");
+   GDActivity.TYPE = 0;
 //   
-//   Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
-//   startActivity(next);
-//   eXoChatListControllerInstance = null;
+   Intent next = new Intent(activityStreamBrowserInstance, eXoApplicationsController2.class);
+   startActivity(next);
+   activityStreamBrowserInstance = null;
    
  }
 
@@ -133,44 +144,71 @@ public class ActivityStreamBrowser extends GDActivity {
         LayoutInflater inflater = getLayoutInflater();
         View rowView = inflater.inflate(R.layout.activitybrowserviewcell, parent, false);
                 
-        
         ImageView imageViewAvatar = (ImageView) rowView.findViewById(R.id.imageView_Avatar); 
-        imageViewAvatar.setImageBitmap( BitmapFactory.decodeResource(getResources(), R.drawable.homeactivitystreamsiconiphone));
         
         TextView textViewName = (TextView) rowView.findViewById(R.id.textView_Name);
 //        textViewName.setText(activity._strName);
-        textViewName.setText(mock.arrayOfActivities.get(position).userID);
-        
+                
         TextView textViewMessage = (TextView) rowView.findViewById(R.id.textView_Message);
 //        textViewMessage.setText(activity._strMessage);
-        textViewMessage.setText(mock.arrayOfActivities.get(position).title);
         
         Button buttonComment = (Button) rowView.findViewById(R.id.button_Comment);
-        buttonComment.setText(Integer.toString(mock.arrayOfActivities.get(position).nbComments));
         
         Button buttonLike = (Button) rowView.findViewById(R.id.button_Like);
-        buttonLike.setText(Integer.toString(mock.arrayOfActivities.get(position).nbLikes));
         
         TextView textViewTime = (TextView) rowView.findViewById(R.id.textView_Time);
-        textViewTime.setText(mock.arrayOfActivities.get(position).postedTime/60 + "minutes ago");
         
         TextView textViewShowMore = (TextView) rowView.findViewById(R.id.textView_Show_More);
+        
+        if(position < mock.arrayOfActivities.size())
+        {
+          imageViewAvatar.setImageBitmap( BitmapFactory.decodeResource(getResources(), R.drawable.homeactivitystreamsiconiphone));
+          textViewName.setText(mock.arrayOfActivities.get(position).userID);
+          textViewMessage.setText(mock.arrayOfActivities.get(position).title);
+          buttonComment.setText(Integer.toString(mock.arrayOfActivities.get(position).nbComments));
+          buttonLike.setText(Integer.toString(mock.arrayOfActivities.get(position).nbLikes));
+          textViewTime.setText(mock.arrayOfActivities.get(position).postedTime/60 + "minutes ago");
+        }
+        else
+        {
+          textViewShowMore.setVisibility(View.VISIBLE);
+          
+          LayoutParams params = rowView.getLayoutParams();
+          params.height = 40;
+          rowView.setLayoutParams(params);
+          
+          imageViewAvatar.setVisibility(View.INVISIBLE);
+          textViewName.setVisibility(View.INVISIBLE);
+          textViewMessage.setVisibility(View.INVISIBLE);
+          buttonComment.setVisibility(View.INVISIBLE);
+          buttonLike.setVisibility(View.INVISIBLE);
+          textViewTime.setVisibility(View.INVISIBLE);
+        }
+        
+         
         
         rowView.setOnClickListener(new View.OnClickListener() {
           
           public void onClick(View v) {
             
-            GDActivity.TYPE = 1;
-            
-//          posOfChatingMember = position;
-//          eXoChatController.currentChatStr = listChatRosterEntry.get(position).address;
-//          eXoChatController.listChatContent = arrListChat.get(position);
-//          conn.removePacketListener(packetListener);
-  //
-//          eXoChatController._delegate = _delegate;
-          Intent next = new Intent(ActivityStreamBrowser.this, ActivityStreamDisplay.class);
-          startActivity(next);
-            
+            if(pos == mock.arrayOfActivities.size())
+            {
+              Log.e("Show more", "No more activity");
+            }
+            else
+            {
+              GDActivity.TYPE = 1;
+              
+//            posOfChatingMember = position;
+//            eXoChatController.currentChatStr = listChatRosterEntry.get(position).address;
+//            eXoChatController.listChatContent = arrListChat.get(position);
+//            conn.removePacketListener(packetListener);
+    //
+//            eXoChatController._delegate = _delegate;
+              
+              Intent next = new Intent(ActivityStreamBrowser.this, ActivityStreamDisplay.class);
+              startActivity(next);  
+            }
           }
         });
         
@@ -185,12 +223,13 @@ public class ActivityStreamBrowser extends GDActivity {
       
       public Object getItem(int position) {
         // TODO Auto-generated method stub
-        return mock.arrayOfActivities.get(position);
+//        return mock.arrayOfActivities.get(position);
+        return null;
       }
       
       public int getCount() {
         // TODO Auto-generated method stub
-        return mock.arrayOfActivities.size();
+        return mock.arrayOfActivities.size() + 1;
       }
             
     };

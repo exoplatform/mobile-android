@@ -6,9 +6,11 @@ import greendroid.widget.ActionBarItem;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,16 +98,17 @@ public class ActivityStreamDisplay extends GDActivity {
     
     return true;
 }
-  
- public void finishMe()
- {
-//   GDActivity.TYPE = 0;
-//   
-//   Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
-//   startActivity(next);
-//   eXoChatListControllerInstance = null;
-   
- }
+  public void finishMe()
+  {
+    
+    GDActivity.TYPE = 1;
+//    
+    Intent next = new Intent(activityStreamDisplayInstance, ActivityStreamBrowser.class);
+    startActivity(next);
+    activityStreamDisplayInstance = null;
+    
+  }
+
 
   // Keydown listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {

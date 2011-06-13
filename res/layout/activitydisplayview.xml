@@ -99,7 +99,8 @@
   		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_below="@id/RelativeLayout_Like"
-		android:layout_above="@id/RelativeLayout_Comment_EditText">
+		android:layout_above="@id/RelativeLayout_Comment_EditText"
+		>
 		
 		<ListView 
     		android:id="@+id/listView_Comment" 
