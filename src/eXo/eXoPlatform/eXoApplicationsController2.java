@@ -645,7 +645,8 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
   public void launchActivityStreamApp() 
   {
     
-    Intent next = new Intent(eXoApplicationsController2.this, ActivityStreamBrowser.class);
+//    Intent next = new Intent(eXoApplicationsController2.this, TestActivityBrowserView.class);
+    Intent next = new Intent(eXoApplicationsController2.this, AsyncImageViewListActivity.class);
     eXoApplicationsController2Instance.startActivity(next);
     
   }

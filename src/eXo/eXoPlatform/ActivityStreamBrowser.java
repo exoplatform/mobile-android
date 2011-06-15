@@ -185,8 +185,6 @@ public class ActivityStreamBrowser extends GDActivity {
           textViewTime.setVisibility(View.INVISIBLE);
         }
         
-         
-        
         rowView.setOnClickListener(new View.OnClickListener() {
           
           public void onClick(View v) {
@@ -198,13 +196,6 @@ public class ActivityStreamBrowser extends GDActivity {
             else
             {
               GDActivity.TYPE = 1;
-              
-//            posOfChatingMember = position;
-//            eXoChatController.currentChatStr = listChatRosterEntry.get(position).address;
-//            eXoChatController.listChatContent = arrListChat.get(position);
-//            conn.removePacketListener(packetListener);
-    //
-//            eXoChatController._delegate = _delegate;
               
               Intent next = new Intent(ActivityStreamBrowser.this, ActivityStreamDisplay.class);
               startActivity(next);  

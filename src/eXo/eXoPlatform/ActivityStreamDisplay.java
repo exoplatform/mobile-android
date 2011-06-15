@@ -103,7 +103,7 @@ public class ActivityStreamDisplay extends GDActivity {
     
     GDActivity.TYPE = 1;
 //    
-    Intent next = new Intent(activityStreamDisplayInstance, ActivityStreamBrowser.class);
+    Intent next = new Intent(activityStreamDisplayInstance, AsyncImageViewListActivity.class);
     startActivity(next);
     activityStreamDisplayInstance = null;
     
