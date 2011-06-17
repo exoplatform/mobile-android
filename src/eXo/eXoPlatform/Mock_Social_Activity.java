@@ -16,13 +16,8 @@
  */
 package eXo.eXoPlatform;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-
-import android.R.bool;
 
 /**
  * Created by The eXo Platform SAS
@@ -32,37 +27,6 @@ import android.R.bool;
  */
 public class Mock_Social_Activity {
 
-
-//======================== INNER CLASS =========================
-//==============================================================
-  public class Mock_Activity {
-    
-    String userID;
-    String imageUrl;
-    String title;
-    String body;
-    Date lastUpdateDate;
-    long postedTime;
-    int nbLikes;
-    int nbComments;
-    
-    public Mock_Activity(String _userID, String _imageUrl, String _title, String _body, long _postedTime, int _numberOfLikes, int _numberOfComments)
-    {
-      this.userID = _userID;
-      this.imageUrl = _imageUrl;
-      this.title = _title;
-      this.postedTime = _postedTime;
-      this.body = _body;
-      this.nbLikes = _numberOfLikes;
-      this.nbComments = _numberOfComments;
-    }
-
-    public String datePrepared() // Method to calcul the date information (ie : 2minutes ago, 2 days ago...)
-    {
-      return "datePrepared not Implemented";
-    }
-
-}
 
 //======================== INNER CLASS =========================
 //==============================================================
@@ -141,10 +105,10 @@ public class Mock_Social_Activity {
       Mock_Activity act_02 =  new Mock_Activity("32D52", mStrings[1], "This is a normal message, with some content. And a second sentence.", "", 3600, 1, 1);
       Mock_Activity act_03 =  new Mock_Activity("32D52", mStrings[2], "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", "", 3600, 1, 1);
       Mock_Activity act_04 =  new Mock_Activity("32D52", mStrings[3], "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", "", 3600, 1, 1);
-      Mock_Activity act_05 =  new Mock_Activity("32D52", mStrings[4], "This is a short message", "", 3600, 1, 1);
-      Mock_Activity act_06 =  new Mock_Activity("32D52", mStrings[5], "This is a short message", "", 3600, 1, 1);
-      Mock_Activity act_07 =  new Mock_Activity("32D52", mStrings[6], "This is a short message", "", 3600, 0, 0);
-      Mock_Activity act_08 =  new Mock_Activity("32D52", mStrings[7], "This is a short message", "", 3600, 2, 0);
+      Mock_Activity act_05 =  new Mock_Activity("32D52", mStrings[4], "This is a short message", "", 360000000, 1, 1);
+      Mock_Activity act_06 =  new Mock_Activity("32D52", mStrings[5], "This is a short message", "", 360000000, 1, 1);
+      Mock_Activity act_07 =  new Mock_Activity("32D52", mStrings[6], "This is a short message", "", 3600000, 0, 0);
+      Mock_Activity act_08 =  new Mock_Activity("32D52", mStrings[7], "This is a short message", "", 3600000, 2, 0);
       Mock_Activity act_09 =  new Mock_Activity("32D52", mStrings[8], "This is a short message", "", 3600, 20, 0);
       Mock_Activity act_010 =  new Mock_Activity("32D52", mStrings[9], "This is a short message", "", 3600, 200, 0);
       Mock_Activity act_011 =  new Mock_Activity("32D52", mStrings[10], "This is a short message", "", 3600, 2000, 0);
