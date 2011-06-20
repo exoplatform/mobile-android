@@ -16,8 +16,11 @@
 package eXo.eXoPlatform;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import com.cyrilmottier.android.greendroid.R;
 
@@ -45,6 +48,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class AsyncImageViewListActivity extends GDListActivity implements OnScrollListener {
@@ -64,7 +68,6 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
         setListAdapter(new MyAdapter(this, mock));
 //        getListView().setOnScrollListener(this);
     }
-
      
     private static class MyAdapter extends BaseAdapter implements ImageProcessor {
 
@@ -72,6 +75,8 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
         
         ArrayList<String>               _arrayOfSectionsTitle;
         HashMap<String, ArrayList<Mock_Activity>>  _sortedActivities;
+        
+        ArrayList<Mock_Activity> _arrayOfActivityListView = new ArrayList<Mock_Activity>();
 
         private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final Rect mRectSrc = new Rect();
@@ -83,8 +88,8 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
             public AsyncImageView imageViewAvatar;
             public TextView textViewName;
             public TextView textViewMessage;
-            public Button buttonComment;
-            public Button buttonLike;
+            public TextView buttonComment;
+            public TextView buttonLike;
             public TextView textViewTime;
             public TextView textViewShowMore;
             
@@ -103,6 +108,49 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
             mock = _mock;
             
             sortActivities();
+            
+            for(int i = 0; i < _arrayOfSectionsTitle.size(); i++)
+            {
+             String strHeader = _arrayOfSectionsTitle.get(i);
+             Mock_Activity activity = new Mock_Activity();
+             activity.isHeader = true;
+             activity.title = _arrayOfSectionsTitle.get(i);
+             _arrayOfActivityListView.add(activity);
+             ArrayList<Mock_Activity> array = _sortedActivities.get(strHeader);
+             for(int j = 0; j < array.size(); j++)
+             {
+               _arrayOfActivityListView.add(array.get(j));
+             }
+             
+            }
+//            int index = 0;
+//            Iterator<Entry<String, ArrayList<Mock_Activity>>> iter = _sortedActivities.entrySet().iterator();
+//            while (iter.hasNext()){
+//              Mock_Activity activity = new Mock_Activity();
+//              activity.isHeader = true;
+//              activity.title = _arrayOfSectionsTitle.get(index);
+//              index++;
+//              _arrayOfActivityListView.add(activity);
+//              Entry<String, ArrayList<Mock_Activity>> entry = iter.next();
+//              ArrayList<Mock_Activity> array = entry.getValue();
+//              for(int i = 0; i < array.size(); i++)
+//              {
+//                _arrayOfActivityListView.add(array.get(i));
+//              }
+//              
+//            }
+            
+            Mock_Activity activity = new Mock_Activity();
+            activity.isShowMore = true;
+            _arrayOfActivityListView.add(activity);
+            
+//            int count = 0;
+//            for(int i = 0; i < _arrayOfSectionsTitle.size(); i++)
+//            {
+//              sectionIndex.add(count + i);
+//              String strKey = _arrayOfSectionsTitle.get(i);
+//              count += _sortedActivities.get(strKey).size();
+//            }
             
 //            mImageForPosition = context.getString(R.string.image_for_position);
 
@@ -127,14 +175,15 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
 
         public int getCount() {
           
-          int count = 0;
-          for(int i = 0; i < _arrayOfSectionsTitle.size(); i++)
-          {
-            String strKey = _arrayOfSectionsTitle.get(i);
-            count += _sortedActivities.get(strKey).size();
-          }
-            return mock.mStrings.length;
-//          return count + _arrayOfSectionsTitle.size();
+//          int count = 0;
+//          for(int i = 0; i < _arrayOfSectionsTitle.size(); i++)
+//          {
+//            String strKey = _arrayOfSectionsTitle.get(i);
+//            count += _sortedActivities.get(strKey).size() + 1;
+//          }
+////            return mock.mStrings.length;
+//          return count + 1;
+          return _arrayOfActivityListView.size();
         }
 
         public Object getItem(int position) {
@@ -147,83 +196,98 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
 
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            ViewHolder holder;
-
-            if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.activitybrowserviewcell, parent, false);
-                holder = new ViewHolder();
-                
-                holder.imageViewAvatar = (AsyncImageView) convertView.findViewById(R.id.imageView_Avatar); 
-                holder.imageViewAvatar.setImageProcessor(this);
-                
-                holder.textViewName = (TextView) convertView.findViewById(R.id.textView_Name);
-                        
-                holder.textViewMessage = (TextView) convertView.findViewById(R.id.textView_Message);
-                
-                holder.buttonComment = (Button) convertView.findViewById(R.id.button_Comment);
-                
-                holder.buttonLike = (Button) convertView.findViewById(R.id.button_Like);
-                
-                holder.textViewTime = (TextView) convertView.findViewById(R.id.textView_Time);
-                
-                holder.textViewShowMore = (TextView) convertView.findViewById(R.id.textView_Show_More);
-                
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            BUILDER.setLength(0);
-            BUILDER.append(mock.mStrings[position]);
-//            BUILDER.append(BASE_URL_PREFIX);
-//            BUILDER.append(position);
-//            BUILDER.append(BASE_URL_SUFFIX);
-            holder.imageViewAvatar.setUrl(BUILDER.toString());
-
-            if(position < mock.arrayOfActivities.size())
-            {
-              holder.textViewName.setText(mock.arrayOfActivities.get(position).userID);
-              holder.textViewMessage.setText(mock.arrayOfActivities.get(position).title);
-              holder.buttonComment.setText(Integer.toString(mock.arrayOfActivities.get(position).nbComments));
-              holder.buttonLike.setText(Integer.toString(mock.arrayOfActivities.get(position).nbLikes));
-              holder.textViewTime.setText(getPostedTimeString(mock.arrayOfActivities.get(position).postedTime));
-            }
-            else
-            {
-              holder.textViewShowMore.setVisibility(View.VISIBLE);
-              
-              LayoutParams params = convertView.getLayoutParams();
-              params.height = 40;
-              convertView.setLayoutParams(params);
-              
-              holder.imageViewAvatar.setVisibility(View.INVISIBLE);
-              holder.textViewName.setVisibility(View.INVISIBLE);
-              holder.textViewMessage.setVisibility(View.INVISIBLE);
-              holder.buttonComment.setVisibility(View.INVISIBLE);
-              holder.buttonLike.setVisibility(View.INVISIBLE);
-              holder.textViewTime.setVisibility(View.INVISIBLE);
-            }
+            ViewHolder holder = null;
             
-            final int pos = position;
-            convertView.setOnClickListener(new View.OnClickListener() {
-              
-              public void onClick(View v) {
+            Mock_Activity activity = _arrayOfActivityListView.get(position);
+//             if (convertView == null) {
+               if(activity.isHeader)
+               {
+                 convertView = mInflater.inflate(R.layout.activityheadersection, parent, false);
+                 TextView title = (TextView) convertView.findViewById(R.id.textView_Section_Title);
+                 title.setText(activity.title);
+               }
+               else
+               {
+                 convertView = mInflater.inflate(R.layout.activitybrowserviewcell, parent, false);
+                 holder = new ViewHolder();
+                 
+                 holder.imageViewAvatar = (AsyncImageView) convertView.findViewById(R.id.imageView_Avatar); 
+                 holder.imageViewAvatar.setImageProcessor(this);
+                 
+                 holder.textViewName = (TextView) convertView.findViewById(R.id.textView_Name);
+                         
+                 holder.textViewMessage = (TextView) convertView.findViewById(R.id.textView_Message);
+                 
+                 holder.buttonComment = (TextView) convertView.findViewById(R.id.button_Comment);
+                 
+                 holder.buttonLike = (TextView) convertView.findViewById(R.id.button_Like);
+                 
+                 holder.textViewTime = (TextView) convertView.findViewById(R.id.textView_Time);
+                 
+                 holder.textViewShowMore = (TextView) convertView.findViewById(R.id.textView_Show_More);
+                 
+                 if(activity.isShowMore)
+                 {
+                   holder.textViewShowMore.setVisibility(View.VISIBLE);
+                   
+                   LayoutParams params = convertView.getLayoutParams();
+                   params.height = 40;
+                   convertView.setLayoutParams(params);
+                   
+                   holder.imageViewAvatar.setVisibility(View.INVISIBLE);
+                   holder.textViewName.setVisibility(View.INVISIBLE);
+                   holder.textViewMessage.setVisibility(View.INVISIBLE);
+                   holder.buttonComment.setVisibility(View.INVISIBLE);
+                   holder.buttonLike.setVisibility(View.INVISIBLE);
+                   holder.textViewTime.setVisibility(View.INVISIBLE);
+                   RelativeLayout showMoreBg = (RelativeLayout) convertView.findViewById(R.id.relativeLayout_Content);
+                   showMoreBg.setBackgroundDrawable(null);
+                   
+                   convertView.setOnClickListener(new View.OnClickListener() {
+                     
+                     public void onClick(View v) {
+                   
+                       Log.e("Show more", "No more activity");
+                       
+                     }
+                   });  
+                 
+                 }
+                 else
+                 {
+                   BUILDER.setLength(0);
+                   BUILDER.append(mock.mStrings[position]);
+                   holder.imageViewAvatar.setUrl(BUILDER.toString());
+                   
+                   holder.textViewName.setText(activity.userID);
+                   holder.textViewMessage.setText(activity.title);
+                   holder.buttonComment.setText(Integer.toString(activity.nbComments));
+                   holder.buttonLike.setText(Integer.toString(activity.nbLikes));
+                   holder.textViewTime.setText(getPostedTimeString(activity.postedTime));
+                   
+                   final int pos = position;
+                   
+                   convertView.setOnClickListener(new View.OnClickListener() {
+                     
+                     public void onClick(View v) {
+                   
+                       GDActivity.TYPE = 1;
+                       
+                       Intent next = new Intent(asyncImageViewListActivityInstance, ActivityStreamDisplay.class);
+                       asyncImageViewListActivityInstance.startActivity(next);  
+                     }
+                   });  
+                 
+                 }
+//                 convertView.setTag(holder);
+               }
+
+//           } else {
+////               holder = (ViewHolder) convertView.getTag();
+//           }
+
             
-                if(pos == mock.arrayOfActivities.size())
-                {
-                  Log.e("Show more", "No more activity");
-                }
-                else
-                {
-                  GDActivity.TYPE = 1;
-                  
-                  Intent next = new Intent(asyncImageViewListActivityInstance, ActivityStreamDisplay.class);
-                  asyncImageViewListActivityInstance.startActivity(next);  
-                }
-              }
-            });
-            
-            return convertView;
+           return convertView;
         }
 
         public Bitmap processImage(Bitmap bitmap) {
@@ -246,6 +310,7 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
          * @return String
          */
         public String getPostedTimeString(long postedTime) {
+//          long currentTime = new Date().getTime();
           long time = (new Date().getTime() - postedTime) / 1000;
           long value;
           if (time < 60) {
@@ -277,7 +342,6 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
                         } else {
                           value = Math.round(time / 2592000);
                           return "About " + String.valueOf(value) + " Months";
-                                  
                         }
                       }
                     }

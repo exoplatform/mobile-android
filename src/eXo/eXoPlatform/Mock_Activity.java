@@ -35,6 +35,13 @@ public class Mock_Activity {
   int nbLikes;
   int nbComments;
   String postedTimeInWords;
+  boolean isShowMore;
+  boolean isHeader;
+  
+  public Mock_Activity()
+  {
+    
+  }
   
   public Mock_Activity(String _userID, String _imageUrl, String _title, String _body, long _postedTime, int _numberOfLikes, int _numberOfComments)
   {
@@ -50,6 +57,16 @@ public class Mock_Activity {
   public String datePrepared() // Method to calcul the date information (ie : 2minutes ago, 2 days ago...)
   {
     return "datePrepared not Implemented";
+  }
+  
+  public void setShowMore(boolean showMore)
+  {
+    this.isShowMore = showMore;
+  }
+  
+  public void setHeader(boolean header)
+  {
+    this.isHeader = header;
   }
 
 }

@@ -101,9 +101,9 @@ public class Mock_Social_Activity {
     }
     else
     {
-      Mock_Activity act_01 =  new Mock_Activity("32D52", mStrings[0], "This is a short message", "", 3600, 1, 1);
-      Mock_Activity act_02 =  new Mock_Activity("32D52", mStrings[1], "This is a normal message, with some content. And a second sentence.", "", 3600, 1, 1);
-      Mock_Activity act_03 =  new Mock_Activity("32D52", mStrings[2], "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", "", 3600, 1, 1);
+      Mock_Activity act_01 =  new Mock_Activity("32D52", mStrings[2], "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", "", 1308498368787l, 1, 1);
+      Mock_Activity act_02 =  new Mock_Activity("32D52", mStrings[1], "This is a normal message, with some content. And a second sentence.", "", 1308498368787l, 1, 1);
+      Mock_Activity act_03 =  new Mock_Activity("32D52", mStrings[0], "This is a short message", "", 1239467890000l, 1, 1);
       Mock_Activity act_04 =  new Mock_Activity("32D52", mStrings[3], "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", "", 3600, 1, 1);
       Mock_Activity act_05 =  new Mock_Activity("32D52", mStrings[4], "This is a short message", "", 360000000, 1, 1);
       Mock_Activity act_06 =  new Mock_Activity("32D52", mStrings[5], "This is a short message", "", 360000000, 1, 1);
@@ -111,27 +111,25 @@ public class Mock_Social_Activity {
       Mock_Activity act_08 =  new Mock_Activity("32D52", mStrings[7], "This is a short message", "", 3600000, 2, 0);
       Mock_Activity act_09 =  new Mock_Activity("32D52", mStrings[8], "This is a short message", "", 3600, 20, 0);
       Mock_Activity act_010 =  new Mock_Activity("32D52", mStrings[9], "This is a short message", "", 3600, 200, 0);
-      Mock_Activity act_011 =  new Mock_Activity("32D52", mStrings[10], "This is a short message", "", 3600, 2000, 0);
-      Mock_Activity act_012 =  new Mock_Activity("32D52", mStrings[11], "This is a short message", "", 3600, 0, 0);
-      Mock_Activity act_013 =  new Mock_Activity("32D52", mStrings[12], "This is a short message", "", 3600, 0, 2);
-      Mock_Activity act_014 =  new Mock_Activity("32D52", mStrings[13], "This is a short message", "", 3600, 0, 20);
-      Mock_Activity act_015 =  new Mock_Activity("32D52", mStrings[14], "This is a short message", "", 3600, 0, 200);
-      Mock_Activity act_016 =  new Mock_Activity("32D52", mStrings[15], "This is a short message", "", 3600, 0, 2000);
-      Mock_Activity act_017 =  new Mock_Activity("32D52", mStrings[16], "This is a short message", "", 3600, 1, 1);
-      Mock_Activity act_018 =  new Mock_Activity("32D52", mStrings[17], "This is a short message", "", 30, 1, 1);
-      Mock_Activity act_019 =  new Mock_Activity("32D52", mStrings[18], "This is a short message", "", 60, 1, 1);
-      Mock_Activity act_020 =  new Mock_Activity("32D52", mStrings[19], "This is a short message", "", 600, 1, 1);
-      Mock_Activity act_021 =  new Mock_Activity("32D52", mStrings[20], "This is a short message", "", 3600, 1, 1);
-      Mock_Activity act_022 =  new Mock_Activity("32D52", mStrings[21], "This is a short message", "", 7200, 1, 1);
-      Mock_Activity act_023 =  new Mock_Activity("32D52", mStrings[22], "This is a short message", "", 86400, 1, 1);
-      Mock_Activity act_024 =  new Mock_Activity("32D52", mStrings[23], "This is a short message", "", 172800, 1, 1);
-      Mock_Activity act_025 =  new Mock_Activity("32D52", mStrings[24], "This is a short message", "", 864000, 1, 1);
-      Mock_Activity act_026 =  new Mock_Activity("32D52", mStrings[25], "This is a short message", "", 2592000, 1, 1);
-      Mock_Activity act_027 =  new Mock_Activity("32D52", mStrings[26], "This is a short message", "", 5184000, 1, 1);
+//      Mock_Activity act_011 =  new Mock_Activity("32D52", mStrings[10], "This is a short message", "", 3600, 2000, 0);
+//      Mock_Activity act_012 =  new Mock_Activity("32D52", mStrings[11], "This is a short message", "", 3600, 0, 0);
+//      Mock_Activity act_013 =  new Mock_Activity("32D52", mStrings[12], "This is a short message", "", 3600, 0, 2);
+//      Mock_Activity act_014 =  new Mock_Activity("32D52", mStrings[13], "This is a short message", "", 3600, 0, 20);
+//      Mock_Activity act_015 =  new Mock_Activity("32D52", mStrings[14], "This is a short message", "", 3600, 0, 200);
+//      Mock_Activity act_016 =  new Mock_Activity("32D52", mStrings[15], "This is a short message", "", 3600, 0, 2000);
+//      Mock_Activity act_017 =  new Mock_Activity("32D52", mStrings[16], "This is a short message", "", 3600, 1, 1);
+//      Mock_Activity act_018 =  new Mock_Activity("32D52", mStrings[17], "This is a short message", "", 30, 1, 1);
+//      Mock_Activity act_019 =  new Mock_Activity("32D52", mStrings[18], "This is a short message", "", 60, 1, 1);
+//      Mock_Activity act_020 =  new Mock_Activity("32D52", mStrings[19], "This is a short message", "", 600, 1, 1);
+//      Mock_Activity act_021 =  new Mock_Activity("32D52", mStrings[20], "This is a short message", "", 3600, 1, 1);
+//      Mock_Activity act_022 =  new Mock_Activity("32D52", mStrings[21], "This is a short message", "", 7200, 1, 1);
+//      Mock_Activity act_023 =  new Mock_Activity("32D52", mStrings[22], "This is a short message", "", 86400, 1, 1);
+//      Mock_Activity act_024 =  new Mock_Activity("32D52", mStrings[23], "This is a short message", "", 172800, 1, 1);
+//      Mock_Activity act_025 =  new Mock_Activity("32D52", mStrings[24], "This is a short message", "", 864000, 1, 1);
+//      Mock_Activity act_026 =  new Mock_Activity("32D52", mStrings[25], "This is a short message", "", 2592000, 1, 1);
+//      Mock_Activity act_027 =  new Mock_Activity("32D52", mStrings[26], "This is a short message", "", 5184000, 1, 1);
       
-      arrayOfActivities = Arrays.asList(new Mock_Activity[] {act_01, act_02, act_03, act_04, act_05, act_06, act_07, act_08, 
-          act_09, act_010, act_011, act_012, act_013, act_014, act_015, act_016, act_017, act_018, act_019,
-          act_020, act_021, act_022, act_023, act_024, act_025, act_026, act_027});
+      arrayOfActivities = Arrays.asList(new Mock_Activity[] {act_01, act_02, act_03, act_04, act_05, act_06, act_07, act_08, act_09, act_010});
     }
     
   }

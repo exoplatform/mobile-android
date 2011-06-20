@@ -9,76 +9,77 @@
 		android:id="@+id/imageView_Avatar"
 		android:layout_height="50dip" 
     	android:layout_width="40dip" 
-    	android:layout_marginLeft="10dip"
+    	android:layout_marginLeft="2dip"
     	android:layout_marginTop="10dip"
     	android:layout_alignParentLeft="true" />
-    <!--<ImageView
-     	android:id="@+id/imageView_Avatar" 
-    	android:layout_height="50dip" 
-    	android:layout_width="40dip" 
-    	android:layout_marginLeft="10dip"
-    	android:layout_marginTop="10dip"
-    	android:layout_alignParentLeft="true"
-    	/>-->
-    
-    <TextView 
-    	android:id="@+id/textView_Name"
-    	android:layout_height="20dip" 
-    	android:text="Name" 
-    	android:layout_marginLeft="10dip"
-    	android:layout_marginTop="10dip"
-    	android:layout_toRightOf="@id/imageView_Avatar" 
-    	android:layout_width="fill_parent"
-    	/>
-    
-    <TextView 
-    	android:id="@+id/textView_Message"
+    <RelativeLayout
+    	android:id="@+id/relativeLayout_Content"
     	android:layout_height="wrap_content" 
-    	android:text="Test message" 
-    	android:layout_marginLeft="10dip"
+    	android:layout_marginLeft="2dip"
     	android:layout_marginTop="10dip"
-    	android:layout_below="@id/textView_Name"
     	android:layout_toRightOf="@id/imageView_Avatar" 
     	android:layout_width="fill_parent"
-    	/>
+    	android:background="@drawable/socialactivityarowseractivitybg"
+    	>
+    
+    	<TextView 
+    		android:id="@+id/textView_Name"
+    		android:layout_height="20dip" 
+    		android:text="Name" 
+    		android:layout_marginLeft="10dip"
+    		android:layout_marginTop="0dip"
+    		android:layout_toRightOf="@id/imageView_Avatar" 
+    		android:layout_width="fill_parent"
+    		/>
+    
+    	<TextView 
+    		android:id="@+id/textView_Message"
+    		android:layout_height="wrap_content" 
+    		android:text="Test message" 
+    		android:layout_marginLeft="10dip"
+    		android:layout_marginTop="10dip"
+    		android:layout_below="@id/textView_Name"
+    		android:layout_toRightOf="@id/imageView_Avatar" 
+    		android:layout_width="fill_parent"
+    		/>
     	
-    <Button 
-    	android:id="@+id/button_Comment" 
-    	android:layout_height="wrap_content" 
-    	android:text="Comment"
-    	android:layout_width="wrap_content"
-    	android:layout_marginLeft="10dip"
-    	android:layout_marginTop="10dip"
-    	android:layout_marginRight="10dip"
-    	android:layout_alignParentRight="true"
-    	android:layout_below="@id/textView_Message"
-    	android:background="@drawable/comment"
-    	/>
+    	<TextView 
+    		android:id="@+id/button_Comment" 
+    		android:layout_height="wrap_content" 
+    		android:text="Comment"
+    		android:layout_width="wrap_content"
+    		android:layout_marginLeft="0dip"
+    		android:layout_marginTop="20dip"
+    		android:layout_marginRight="10dip"
+    		android:layout_alignParentRight="true"
+    		android:layout_below="@id/textView_Message"
+    		android:background="@drawable/socialactivitybrowsercommentbutton"
+    		/>
     			
-    <Button 
-    	android:id="@+id/button_Like" 
-    	android:layout_height="wrap_content" 
-    	android:text="Likesasdas"
-    	android:layout_width="wrap_content"
-    	android:layout_marginLeft="10dip"
-    	android:layout_marginTop="10dip"
-    	android:layout_toLeftOf="@id/button_Comment"
-    	android:layout_below="@id/textView_Message" 
-    	android:background="@drawable/like"
-    	/>
+   		<TextView 
+    		android:id="@+id/button_Like" 
+    		android:layout_height="wrap_content" 
+    		android:text="Like"
+    		android:layout_width="wrap_content"
+    		android:layout_marginLeft="10dip"
+    		android:layout_marginTop="20dip"
+    		android:layout_toLeftOf="@id/button_Comment"
+    		android:layout_below="@id/textView_Message" 
+    		android:background="@drawable/socialactivitybrowserlikebutton"
+    		/>
     	
-    <TextView 
-    	android:id="@+id/textView_Time"
-    	android:layout_height="wrap_content" 
-    	android:text="20 Minutes Ago" 
-    	android:layout_below="@id/textView_Message"
-    	android:layout_marginLeft="10dip"
-    	android:layout_marginTop="30dip"
-    	android:layout_toRightOf="@id/imageView_Avatar" 
-    	android:layout_width="wrap_content"
-    	/>
-  
-	<TextView 
+    	<TextView 
+    		android:id="@+id/textView_Time"
+    		android:layout_height="wrap_content" 
+    		android:text="20 Minutes Ago" 
+    		android:layout_below="@id/textView_Message"
+    		android:layout_marginLeft="10dip"
+    		android:layout_marginTop="20dip"
+    		android:layout_toRightOf="@id/imageView_Avatar" 
+    		android:layout_width="120dip"
+    		/>
+  </RelativeLayout>
+  <TextView 
     	android:id="@+id/textView_Show_More"
     	android:layout_height="fill_parent" 
     	android:text="Show more"
@@ -87,5 +88,5 @@
     	android:layout_width="fill_parent"
     	android:visibility="invisible"
     	/>
-  
+  	
 </eXo.eXoPlatform.ActivityStreamBrowserCellView>
