@@ -89,7 +89,7 @@
     		android:id="@+id/editText_Comment" 
     		android:layout_height="wrap_content" 
     		android:layout_width="fill_parent"
-    		android:maxLines="3"
+    		android:maxLines="3" android:editable="false"
     		android:hint="Your comment..."
     	/>
 	</RelativeLayout>
