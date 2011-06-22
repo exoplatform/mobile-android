@@ -21,39 +21,48 @@
 
 		<TextView android:id="@+id/textView_Name"
 			android:layout_height="20dip" android:text="Name"
-			android:layout_marginLeft="10dip" android:layout_marginTop="2dip"
+			android:layout_marginLeft="10dip" android:layout_marginTop="10dip"
+			android:layout_below="@id/relativeLayout_Content"
 			android:layout_toRightOf="@id/imageView_Avatar_wrap"
-			android:layout_width="fill_parent" />
+			android:layout_width="fill_parent" 
+			android:textColor="#000000"
+			android:textStyle="bold"/>
 
 		<TextView android:id="@+id/textView_Message"
 			android:layout_height="wrap_content" android:text="Test message"
 			android:layout_marginLeft="10dip" android:layout_marginTop="10dip"
 			android:layout_below="@id/textView_Name" android:layout_toRightOf="@id/imageView_Avatar_wrap"
-			android:layout_width="fill_parent" />
+			android:layout_width="fill_parent" 
+			android:textColor="#000000"/>
 
 		<TextView android:id="@+id/button_Comment"
 			android:layout_height="wrap_content" android:text="Comment"
 			android:layout_width="wrap_content" android:layout_marginLeft="0dip"
 			android:layout_marginTop="20dip" android:layout_marginRight="10dip"
 			android:layout_alignParentRight="true" android:layout_below="@id/textView_Message"
-			android:background="@drawable/socialactivitybrowsercommentbutton" />
+			android:background="@drawable/socialactivitybrowsercommentbutton"
+			android:textColor="#000000" />
 
 		<TextView android:id="@+id/button_Like"
 			android:layout_height="wrap_content" android:text="Like"
 			android:layout_width="wrap_content" android:layout_marginLeft="10dip"
 			android:layout_marginTop="20dip" android:layout_toLeftOf="@id/button_Comment"
-			android:layout_below="@id/textView_Message" android:background="@drawable/socialactivitybrowserlikebutton" />
+			android:layout_below="@id/textView_Message" android:background="@drawable/socialactivitybrowserlikebutton" 
+			android:textColor="#000000"/>
 
 		<TextView android:id="@+id/textView_Time"
 			android:layout_height="wrap_content" android:text="20 Minutes Ago"
 			android:layout_below="@id/textView_Message"
 			android:layout_marginLeft="10dip" android:layout_marginTop="20dip"
 			android:layout_toRightOf="@id/imageView_Avatar_wrap"
-			android:layout_width="120dip" />
+			android:layout_width="120dip"
+			android:textColor="#000000" />
 	</RelativeLayout>
 	<TextView android:id="@+id/textView_Show_More"
 		android:layout_height="fill_parent" android:text="Show more"
 		android:gravity="center" android:textStyle="bold"
-		android:layout_width="fill_parent" android:visibility="invisible" />
+		android:layout_width="fill_parent" android:visibility="invisible" 
+		android:background="#E9E9E9"
+		android:textColor="#000000"/>
 
 </eXo.eXoPlatform.ActivityStreamBrowserCellView>

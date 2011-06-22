@@ -2,6 +2,7 @@ package eXo.eXoPlatform;
 
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
+import greendroid.widget.AsyncImageView;
 import greendroid.widget.ActionBarItem.Type;
 
 import java.util.ArrayList;
@@ -71,7 +72,9 @@ public class ActivityStreamDisplay extends GDActivity implements
     
     selectedActivity = AsyncImageViewListActivity.asyncImageViewListActivityInstance.selectedActivity;
     
-    ImageView imageView_Avatar = (ImageView) findViewById(R.id.imageView_Avatar);
+    AsyncImageView imageView_Avatar = (AsyncImageView) findViewById(R.id.imageView_Avatar);
+    imageView_Avatar.setUrl(selectedActivity.imageUrl);
+    
     TextView textView_Name = (TextView) findViewById(R.id.textView_Name);
     textView_Name.setText(selectedActivity.userID);
     TextView textView_Message = (TextView) findViewById(R.id.textView_Message);
@@ -80,7 +83,35 @@ public class ActivityStreamDisplay extends GDActivity implements
     textView_Time.setText(AsyncImageViewListActivity.asyncImageViewListActivityInstance.getPostedTimeString(selectedActivity.postedTime));
     
 		_lvActivityDisplayComment = (ListView) findViewById(R.id.listView_Comment);
+		_lvActivityDisplayComment.setDivider(null);
+		_lvActivityDisplayComment.setDividerHeight(0);
 
+		TextView textView_Like_Count = (TextView) findViewById(R.id.textView_Like_Count);
+		String str = "";
+		int count = activityDetail.arrLikes.size();
+		
+		if(count == 0)
+		{
+		  str = "There is no one likes this";
+		}
+		else if(count == 1)
+		{
+		  Mock_Activity activity = (Mock_Activity) activityDetail.arrLikes.get(0);
+      str = activity.userID + " likes this";
+		}
+		else if(count < 4)
+		{
+		  for(int i = 0; i < count - 1; i++)
+	    {
+	      Mock_Activity activity = (Mock_Activity) activityDetail.arrLikes.get(i);
+	      str += activity.userID + " ";
+	    }
+		  Mock_Activity activity = (Mock_Activity) activityDetail.arrLikes.get(count - 1);
+		  str += "and " + activity.userID + " like this";
+		}
+		
+		textView_Like_Count.setText(str);
+		
 		changeLanguage(AppController.bundle);
 		
 		createActivityAdapter();
@@ -146,12 +177,12 @@ public class ActivityStreamDisplay extends GDActivity implements
 
 				Mock_Activity activity = activityDetail.arrComments.get(position);
 
-				ImageView imageViewAvatar = (ImageView) rowView
+				AsyncImageView imageViewAvatar = (AsyncImageView) rowView
 						.findViewById(R.id.imageView_Avatar);
-				// imageViewAvatar.setImageBitmap(activity._bmAvatar);
-				imageViewAvatar.setImageBitmap(BitmapFactory.decodeResource(
-						getResources(),
-						R.drawable.homeactivitystreamsiconiphone));
+				 imageViewAvatar.setUrl(activity.imageUrl);
+//				imageViewAvatar.setImageBitmap(BitmapFactory.decodeResource(
+//						getResources(),
+//						R.drawable.homeactivitystreamsiconiphone));
 
 				TextView textViewName = (TextView) rowView.findViewById(R.id.textView_Name);
 				textViewName.setText(activity.userID);

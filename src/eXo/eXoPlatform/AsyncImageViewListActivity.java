@@ -63,6 +63,9 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
         
         mock = new Mock_Social_Activity(false);
         
+        getListView().setDivider(null);
+        getListView().setDividerHeight(0);
+        
         setListAdapter(new MyAdapter(this, mock));
 //        getListView().setOnScrollListener(this);
     }
