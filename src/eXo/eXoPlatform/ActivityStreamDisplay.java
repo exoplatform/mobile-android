@@ -46,12 +46,12 @@ public class ActivityStreamDisplay extends GDActivity implements
 	public static ActivityStreamDisplay activityStreamDisplayInstance; // Instance
 
 	private BaseAdapter adapter;
-
+	  
 	private EditText editTextComment;
 
-	// ArrayList<ActivityDisplayInfo> _arrActivity = new
-	// ArrayList<ActivityDisplayInfo>();
-	Mock_Social_Activity mock;
+	 Mock_Activity_Detail activityDetail;
+	 Mock_Activity selectedActivity;
+	 Mock_Social_Activity mock;
 
 	// Constructor
 	@Override
@@ -65,24 +65,24 @@ public class ActivityStreamDisplay extends GDActivity implements
 
 		activityStreamDisplayInstance = this;
 
+		mock = new Mock_Social_Activity(true);
+		
+		activityDetail = mock.activityDetail;
+    
+    selectedActivity = AsyncImageViewListActivity.asyncImageViewListActivityInstance.selectedActivity;
+    
+    ImageView imageView_Avatar = (ImageView) findViewById(R.id.imageView_Avatar);
+    TextView textView_Name = (TextView) findViewById(R.id.textView_Name);
+    textView_Name.setText(selectedActivity.userID);
+    TextView textView_Message = (TextView) findViewById(R.id.textView_Message);
+    textView_Message.setText(selectedActivity.title);
+    TextView textView_Time = (TextView) findViewById(R.id.textView_Time);
+    textView_Time.setText(AsyncImageViewListActivity.asyncImageViewListActivityInstance.getPostedTimeString(selectedActivity.postedTime));
+    
 		_lvActivityDisplayComment = (ListView) findViewById(R.id.listView_Comment);
 
 		changeLanguage(AppController.bundle);
-		// for (int i = 0; i < 5; i++) {
-		//
-		// ActivityDisplayInfo activity = new ActivityDisplayInfo();
-		//
-		// activity._bmAvatar = BitmapFactory.decodeResource(getResources(),
-		// R.drawable.homeactivitystreamsiconiphone);
-		// activity._strName = "Some text";
-		// activity._strMessage = "A seconline of text";
-		//
-		// _arrActivity.add(activity);
-		//
-		// }
-
-		mock = new Mock_Social_Activity(true);
-
+		
 		createActivityAdapter();
 		initTextComment();
 	}
@@ -142,10 +142,9 @@ public class ActivityStreamDisplay extends GDActivity implements
 				final int pos = position;
 
 				LayoutInflater inflater = getLayoutInflater();
-				View rowView = inflater.inflate(
-						R.layout.activitydisplayviewcell, parent, false);
+				View rowView = inflater.inflate(R.layout.activitydisplayviewcell, parent, false);
 
-				// ActivityDisplayInfo activity = _arrActivity.get(position);
+				Mock_Activity activity = activityDetail.arrComments.get(position);
 
 				ImageView imageViewAvatar = (ImageView) rowView
 						.findViewById(R.id.imageView_Avatar);
@@ -154,15 +153,12 @@ public class ActivityStreamDisplay extends GDActivity implements
 						getResources(),
 						R.drawable.homeactivitystreamsiconiphone));
 
-				TextView textViewName = (TextView) rowView
-						.findViewById(R.id.textView_Name);
-				textViewName
-						.setText(mock.arrayOfActivityComments.get(position).statusID);
+				TextView textViewName = (TextView) rowView.findViewById(R.id.textView_Name);
+				textViewName.setText(activity.userID);
 
 				TextView textViewMessage = (TextView) rowView
 						.findViewById(R.id.textView_Message);
-				textViewMessage.setText(mock.arrayOfActivityComments
-						.get(position).title);
+				textViewMessage.setText(activity.title);
 
 				// Button buttonComment = (Button)
 				// findViewById(R.id.button_Comment);
@@ -183,12 +179,13 @@ public class ActivityStreamDisplay extends GDActivity implements
 
 			public Object getItem(int position) {
 				// TODO Auto-generated method stub
-				return mock.arrayOfActivityComments.get(position);
+				return mock.activityDetail.arrComments.get(position);
 			}
 
 			public int getCount() {
 				// TODO Auto-generated method stub
-				return mock.arrayOfActivityComments.size();
+			  Log.e("Count", Integer.toString(mock.activityDetail.arrComments.size()));
+				return mock.activityDetail.arrComments.size();
 			}
 		};
 
@@ -217,7 +214,6 @@ public class ActivityStreamDisplay extends GDActivity implements
 		// _delegate.createAdapter();
 	}
 
-	@Override
 	public void onClick(View view) {
 		// TODO Auto-generated method stub
 		if (view == editTextComment) {

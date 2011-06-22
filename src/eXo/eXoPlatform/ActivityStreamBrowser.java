@@ -21,9 +21,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 //Chat list view controller
 public class ActivityStreamBrowser extends GDActivity {
@@ -45,8 +43,7 @@ public class ActivityStreamBrowser extends GDActivity {
 
 	public static ActivityStreamBrowser activityStreamBrowserInstance; // Instance
 
-	static eXoApplicationsController2 _delegate; // Main
-													// app
+	static eXoApplicationsController2 _delegate; // Main app
 	private BaseAdapter adapter;
 
 	// ArrayList<ActivityInfo> _arrActivity = new ArrayList<ActivityInfo>();
@@ -84,7 +81,7 @@ public class ActivityStreamBrowser extends GDActivity {
 
 		mock = new Mock_Social_Activity(false);
 
-//		createActivityAdapter();
+		createActivityAdapter();
 
 	}
 

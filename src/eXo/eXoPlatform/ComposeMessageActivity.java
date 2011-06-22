@@ -70,7 +70,6 @@ public class ComposeMessageActivity extends GDActivity implements
 
 	}
 
-	@Override
 	public void onClick(View view) {
 		if (view == sendButton) {
 

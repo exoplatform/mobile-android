@@ -16,6 +16,7 @@
  */
 package eXo.eXoPlatform;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,35 +27,11 @@ import java.util.List;
  * Jun 9, 2011  
  */
 public class Mock_Social_Activity {
-
-
-//======================== INNER CLASS =========================
-//==============================================================
-  public class Mock_Activity_Comment {
-    
-    String userID;
-    String statusID;
-    String title;
-    long postedTime;
-    
-    public Mock_Activity_Comment(String _userID, String _statusID, String _title, long _postedTime)
-    {
-      this.userID = _userID;
-      this.statusID = _statusID;
-      this.title = _title;
-      this.postedTime = _postedTime;
-    }
-
-    public String datePrepared() // Method to calcul the date information (ie : 2minutes ago, 2 days ago...)
-    {
-      return "datePrepared not Implemented";
-    }
-
-}
-
   
   List<Mock_Activity> arrayOfActivities;
   List<Mock_Activity_Comment> arrayOfActivityComments;
+  Mock_Activity_Detail activityDetail;
+
   public String[] mStrings={
       "http://a3.twimg.com/profile_images/670625317/aam-logo-v3-twitter.png",
       "http://a3.twimg.com/profile_images/740897825/AndroidCast-350_normal.png",
@@ -88,16 +65,27 @@ public class Mock_Social_Activity {
   {
     if(isComment)
     {
-      Mock_Activity_Comment act_cm_01 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
-      Mock_Activity_Comment act_cm_02 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a normal message, with some content. And a second sentence.", 360);
-      Mock_Activity_Comment act_cm_03 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
-      Mock_Activity_Comment act_cm_04 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
-      Mock_Activity_Comment act_cm_05 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
-      Mock_Activity_Comment act_cm_06 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
-      Mock_Activity_Comment act_cm_07 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
-      Mock_Activity_Comment act_cm_08 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
+      Mock_Activity act_01 =  new Mock_Activity("32D51", mStrings[0], "", "", 0, 0, 0);
+      Mock_Activity act_02 =  new Mock_Activity("32D52", mStrings[1], "", "", 0, 0, 0);
+      Mock_Activity act_03 =  new Mock_Activity("32D53", mStrings[2], "This is a short message", "", 1239467890000l, 0, 0);
+      Mock_Activity act_04 =  new Mock_Activity("32D54", mStrings[3], "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", "", 3600, 1, 1);
+      Mock_Activity act_05 =  new Mock_Activity("32D55", mStrings[4], "This is a short message", "", 1308498368787l, 0, 0);
       
-      arrayOfActivityComments = Arrays.asList(new Mock_Activity_Comment[] {act_cm_01, act_cm_02, act_cm_03, act_cm_04, act_cm_05, act_cm_06, act_cm_07, act_cm_08});
+//      Mock_Activity_Comment act_cm_01 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
+//      Mock_Activity_Comment act_cm_02 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a normal message, with some content. And a second sentence.", 360);
+//      Mock_Activity_Comment act_cm_03 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
+//      Mock_Activity_Comment act_cm_04 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
+//      Mock_Activity_Comment act_cm_05 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
+//      Mock_Activity_Comment act_cm_06 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
+//      Mock_Activity_Comment act_cm_07 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
+//      Mock_Activity_Comment act_cm_08 =  new Mock_Activity_Comment("32D52", "A1ED2", "This is a short message", 3600);
+      
+      List<Mock_Activity> arrLikes = Arrays.asList(new Mock_Activity[] {act_01, act_02});
+      List<Mock_Activity> arrComments = Arrays.asList(new Mock_Activity[] {act_03, act_04, act_05});
+      
+//      arrayOfActivityComments = Arrays.asList(new Mock_Activity_Comment[] {act_cm_01, act_cm_02, act_cm_03, act_cm_04, act_cm_05, act_cm_06, act_cm_07, act_cm_08});
+      
+      activityDetail = new Mock_Activity_Detail("1234", new ArrayList<Mock_Activity>(arrLikes), new ArrayList<Mock_Activity>(arrComments));
     }
     else
     {
