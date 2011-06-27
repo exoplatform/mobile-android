@@ -26,246 +26,230 @@ import android.widget.TextView;
 //Chat list view controller
 public class ActivityStreamBrowser extends GDActivity {
 
-	// Activity cell info object
-	class ActivityInfo {
+  // Activity cell info object
+  class ActivityInfo {
 
-		Bitmap _bmAvatar; // Avatar
-		String _strName; // Name
-		String _strMessage; // Message
+    Bitmap _bmAvatar;  // Avatar
 
-		ActivityInfo() {
+    String _strName;   // Name
 
-		}
+    String _strMessage; // Message
 
-	}
+    ActivityInfo() {
 
-	private ListView _lvActivity;
+    }
 
-	public static ActivityStreamBrowser activityStreamBrowserInstance; // Instance
+  }
 
-	static eXoApplicationsController2 _delegate; // Main app
-	private BaseAdapter adapter;
+  private ListView                    _lvActivity;
 
-	// ArrayList<ActivityInfo> _arrActivity = new ArrayList<ActivityInfo>();
-	Mock_Social_Activity mock;
+  public static ActivityStreamBrowser activityStreamBrowserInstance; // Instance
 
-	// Constructor
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		// requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+  static eXoApplicationsController2   _delegate;                    // Main app
 
-		setActionBarContentView(R.layout.activitybrowserview);
+  private BaseAdapter                 adapter;
 
-		addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
-		// setContentView(R.layout.socialbrowserview);
+  // ArrayList<ActivityInfo> _arrActivity = new ArrayList<ActivityInfo>();
+  Mock_Social_Activity                mock;
 
-		activityStreamBrowserInstance = this;
+  // Constructor
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		_lvActivity = (ListView) findViewById(R.id.listView_Avtivity);
+    setActionBarContentView(R.layout.activitybrowserview);
 
-		changeLanguage(AppController.bundle);
-		// for (int i = 0; i < 5; i++) {
-		//
-		// ActivityInfo activity = new ActivityInfo();
-		//
-		// activity._bmAvatar = BitmapFactory.decodeResource(getResources(),
-		// R.drawable.homeactivitystreamsiconiphone);
-		// activity._strName = "Name";
-		// activity._strMessage = "Hi all. This message is for testing";
-		//
-		// _arrActivity.add(activity);
-		//
-		// }
+    addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
+    // setContentView(R.layout.socialbrowserview);
 
-		mock = new Mock_Social_Activity(false);
+    activityStreamBrowserInstance = this;
 
-		createActivityAdapter();
+    _lvActivity = (ListView) findViewById(R.id.listView_Avtivity);
 
-	}
+    changeLanguage(AppController.bundle);
+    // for (int i = 0; i < 5; i++) {
+    //
+    // ActivityInfo activity = new ActivityInfo();
+    //
+    // activity._bmAvatar = BitmapFactory.decodeResource(getResources(),
+    // R.drawable.homeactivitystreamsiconiphone);
+    // activity._strName = "Name";
+    // activity._strMessage = "Hi all. This message is for testing";
+    //
+    // _arrActivity.add(activity);
+    //
+    // }
 
-	@Override
-	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+    mock = new Mock_Social_Activity(false);
 
-		switch (item.getItemId()) {
-		case R.drawable.gd_action_bar_signout:
+    createActivityAdapter();
 
-			break;
+  }
 
-		case R.drawable.gd_action_bar_add:
+  @Override
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
-			break;
+    switch (item.getItemId()) {
+    case R.drawable.gd_action_bar_signout:
 
-		case R.id.action_bar_export:
+      break;
 
-			break;
+    case R.drawable.gd_action_bar_add:
 
-		case R.drawable.gd_action_bar_compose:
-			Intent intent = new Intent(this, ComposeMessageActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.putExtra(eXoConstants.COMPOSE_TYPE, 0);
-			startActivity(intent);
+      break;
 
-			break;
+    case R.id.action_bar_export:
 
-		default:
-			Log.e("12312", "13123");
-		}
+      break;
 
-		return true;
-	}
+    case R.drawable.gd_action_bar_compose:
+      Intent intent = new Intent(this, ComposeMessageActivity.class);
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      intent.putExtra(eXoConstants.COMPOSE_TYPE, 0);
+      startActivity(intent);
 
-	public void finishMe() {
+      break;
 
-		Log.e("Close", "313");
-		GDActivity.TYPE = 0;
-		//
-		Intent next = new Intent(activityStreamBrowserInstance,
-				eXoApplicationsController2.class);
-		startActivity(next);
-		activityStreamBrowserInstance = null;
+    default:
+      Log.e("12312", "13123");
+    }
 
-	}
+    return true;
+  }
 
-	// Keydown listener
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// Save data to the server once the user hits the back button
-		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-			// Toast.makeText(eXoChatListController.this,
-			// strCannotBackToPreviousPage, Toast.LENGTH_SHORT)
-			// .show();
-		}
-		return false;
-	}
+  public void finishMe() {
 
-	// Create activity browser adapter
-	public void createActivityAdapter() {
-		adapter = new BaseAdapter() {
+    Log.e("Close", "313");
+    GDActivity.TYPE = 0;
+    //
+    Intent next = new Intent(activityStreamBrowserInstance, eXoApplicationsController2.class);
+    startActivity(next);
+    activityStreamBrowserInstance = null;
 
-			public View getView(int position, View convertView, ViewGroup parent) {
-				// TODO Auto-generated method stub
-				final int pos = position;
+  }
 
-				LayoutInflater inflater = getLayoutInflater();
-				View rowView = inflater.inflate(
-						R.layout.activitybrowserviewcell, parent, false);
+  // Keydown listener
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    // Save data to the server once the user hits the back button
+    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+      // Toast.makeText(eXoChatListController.this,
+      // strCannotBackToPreviousPage, Toast.LENGTH_SHORT)
+      // .show();
+    }
+    return false;
+  }
 
-				ImageView imageViewAvatar = (ImageView) rowView
-						.findViewById(R.id.imageView_Avatar);
+  // Create activity browser adapter
+  public void createActivityAdapter() {
+    adapter = new BaseAdapter() {
 
-				TextView textViewName = (TextView) rowView
-						.findViewById(R.id.textView_Name);
-				// textViewName.setText(activity._strName);
+      public View getView(int position, View convertView, ViewGroup parent) {
+        // TODO Auto-generated method stub
+        final int pos = position;
 
-				TextView textViewMessage = (TextView) rowView
-						.findViewById(R.id.textView_Message);
-				// textViewMessage.setText(activity._strMessage);
+        LayoutInflater inflater = getLayoutInflater();
+        View rowView = inflater.inflate(R.layout.activitybrowserviewcell, parent, false);
 
-				Button buttonComment = (Button) rowView
-						.findViewById(R.id.button_Comment);
+        ImageView imageViewAvatar = (ImageView) rowView.findViewById(R.id.imageView_Avatar);
 
-				Button buttonLike = (Button) rowView
-						.findViewById(R.id.button_Like);
+        TextView textViewName = (TextView) rowView.findViewById(R.id.textView_Name);
+        // textViewName.setText(activity._strName);
 
-				TextView textViewTime = (TextView) rowView
-						.findViewById(R.id.textView_Time);
+        TextView textViewMessage = (TextView) rowView.findViewById(R.id.textView_Message);
+        // textViewMessage.setText(activity._strMessage);
 
-				TextView textViewShowMore = (TextView) rowView
-						.findViewById(R.id.textView_Show_More);
+        Button buttonComment = (Button) rowView.findViewById(R.id.button_Comment);
 
-				if (position < mock.arrayOfActivities.size()) {
-					imageViewAvatar.setImageBitmap(BitmapFactory
-							.decodeResource(getResources(),
-									R.drawable.homeactivitystreamsiconiphone));
-					textViewName
-							.setText(mock.arrayOfActivities.get(position).userID);
-					textViewMessage.setText(mock.arrayOfActivities
-							.get(position).title);
-					buttonComment
-							.setText(Integer.toString(mock.arrayOfActivities
-									.get(position).nbComments));
-					buttonLike.setText(Integer.toString(mock.arrayOfActivities
-							.get(position).nbLikes));
-					textViewTime
-							.setText(mock.arrayOfActivities.get(position).postedTime
-									/ 60 + "minutes ago");
-				} else {
-					textViewShowMore.setVisibility(View.VISIBLE);
+        Button buttonLike = (Button) rowView.findViewById(R.id.button_Like);
 
-					LayoutParams params = rowView.getLayoutParams();
-					params.height = 40;
-					rowView.setLayoutParams(params);
+        TextView textViewTime = (TextView) rowView.findViewById(R.id.textView_Time);
 
-					imageViewAvatar.setVisibility(View.INVISIBLE);
-					textViewName.setVisibility(View.INVISIBLE);
-					textViewMessage.setVisibility(View.INVISIBLE);
-					buttonComment.setVisibility(View.INVISIBLE);
-					buttonLike.setVisibility(View.INVISIBLE);
-					textViewTime.setVisibility(View.INVISIBLE);
-				}
+        TextView textViewShowMore = (TextView) rowView.findViewById(R.id.textView_Show_More);
 
-				rowView.setOnClickListener(new View.OnClickListener() {
+        if (position < mock.arrayOfActivities.size()) {
+          imageViewAvatar.setImageBitmap(BitmapFactory.decodeResource(getResources(),
+                                                                      R.drawable.homeactivitystreamsiconiphone));
+          textViewName.setText(mock.arrayOfActivities.get(position).userID);
+          textViewMessage.setText(mock.arrayOfActivities.get(position).title);
+          buttonComment.setText(Integer.toString(mock.arrayOfActivities.get(position).nbComments));
+          buttonLike.setText(Integer.toString(mock.arrayOfActivities.get(position).nbLikes));
+          textViewTime.setText(mock.arrayOfActivities.get(position).postedTime / 60 + "minutes ago");
+        } else {
+          textViewShowMore.setVisibility(View.VISIBLE);
 
-					public void onClick(View v) {
+          LayoutParams params = rowView.getLayoutParams();
+          params.height = 40;
+          rowView.setLayoutParams(params);
 
-						if (pos == mock.arrayOfActivities.size()) {
-							Log.e("Show more", "No more activity");
-						} else {
-							GDActivity.TYPE = 1;
+          imageViewAvatar.setVisibility(View.INVISIBLE);
+          textViewName.setVisibility(View.INVISIBLE);
+          textViewMessage.setVisibility(View.INVISIBLE);
+          buttonComment.setVisibility(View.INVISIBLE);
+          buttonLike.setVisibility(View.INVISIBLE);
+          textViewTime.setVisibility(View.INVISIBLE);
+        }
 
-							Intent next = new Intent(
-									ActivityStreamBrowser.this,
-									ActivityStreamDisplay.class);
-							startActivity(next);
-						}
-					}
-				});
+        rowView.setOnClickListener(new View.OnClickListener() {
 
-				return (rowView);
+          public void onClick(View v) {
 
-			}
+            if (pos == mock.arrayOfActivities.size()) {
+              Log.e("Show more", "No more activity");
+            } else {
+              GDActivity.TYPE = 1;
 
-			public long getItemId(int position) {
-				// TODO Auto-generated method stub
-				return position;
-			}
+              Intent next = new Intent(ActivityStreamBrowser.this, ActivityStreamDisplay.class);
+              startActivity(next);
+            }
+          }
+        });
 
-			public Object getItem(int position) {
-				// TODO Auto-generated method stub
-				// return mock.arrayOfActivities.get(position);
-				return null;
-			}
+        return (rowView);
 
-			public int getCount() {
-				// TODO Auto-generated method stub
-				return mock.arrayOfActivities.size() + 1;
-			}
+      }
 
-		};
+      public long getItemId(int position) {
+        // TODO Auto-generated method stub
+        return position;
+      }
 
-		_lvActivity.setAdapter(adapter);
-	}
+      public Object getItem(int position) {
+        // TODO Auto-generated method stub
+        // return mock.arrayOfActivities.get(position);
+        return null;
+      }
 
-	// Set language
-	public void changeLanguage(ResourceBundle resourceBundle) {
+      public int getCount() {
+        // TODO Auto-generated method stub
+        return mock.arrayOfActivities.size() + 1;
+      }
 
-		String strTitle = "Activity Stream";
+    };
 
-		try {
-			// strTitle = new
-			// String(resourceBundle.getString("ActivityStream").getBytes("ISO-8859-1"),
-			// "UTF-8");
-			// strCannotBackToPreviousPage = new
-			// String(resourceBundle.getString("CannotBackToPreviousPage")
-			// .getBytes("ISO-8859-1"), "UTF-8");
-		} catch (Exception e) {
+    _lvActivity.setAdapter(adapter);
+  }
 
-		}
+  // Set language
+  public void changeLanguage(ResourceBundle resourceBundle) {
 
-		setTitle(strTitle);
+    String strTitle = "Activity Stream";
 
-		// _delegate.changeLanguage(resourceBundle);
-		// _delegate.createAdapter();
-	}
+    try {
+      // strTitle = new
+      // String(resourceBundle.getString("ActivityStream").getBytes("ISO-8859-1"),
+      // "UTF-8");
+      // strCannotBackToPreviousPage = new
+      // String(resourceBundle.getString("CannotBackToPreviousPage")
+      // .getBytes("ISO-8859-1"), "UTF-8");
+    } catch (Exception e) {
+
+    }
+
+    setTitle(strTitle);
+
+    // _delegate.changeLanguage(resourceBundle);
+    // _delegate.createAdapter();
+  }
 }

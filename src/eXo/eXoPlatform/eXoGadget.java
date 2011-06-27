@@ -13,7 +13,8 @@ public class eXoGadget {
   public final Bitmap _btmGadgetIcon;       // Gadget icon
 
   public final String _strGadgetID;         // Gadget ID
-                                             // Constructor
+
+  // Constructor
 
   public eXoGadget(String gadgetName,
                    String gadgetDescription,

@@ -31,23 +31,29 @@ public class eXoSetting extends GDActivity {
 
   public static eXoSetting eXoSettingInstance;
 
-  Button            btnUserGuide;
+  Button                   btnUserGuide;
 
-  View              vEngLish, vFrench;
-  TextView          txtvEnglish, txtvFrench;
-  ImageView         imgViewECheckMark, imgViewFCheckMark;
+  View                     vEngLish, vFrench;
 
-  int               pageIDForChangeLanguage;         // 0: AppController, 1:
-                                                     // eXoApplicationController
+  TextView                 txtvEnglish, txtvFrench;
+
+  ImageView                imgViewECheckMark, imgViewFCheckMark;
+
+  int                      pageIDForChangeLanguage;             // 0:
+                                                                 // AppController,
+                                                                 // 1:
+
+  // eXoApplicationController
 
   // 2: eXoFileController, 3: eXoChatList, 4: eXoChat
   // 5: eXoWebView
 
-  TextView          txtvLanguage;                   // Language label
+  TextView                 txtvLanguage;                        // Language
+                                                                 // label
 
-  TextView          txtvServer;                     // Server label
+  TextView                 txtvServer;                          // Server label
 
-  static ListView   listViewServer;
+  static ListView          listViewServer;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +64,7 @@ public class eXoSetting extends GDActivity {
     setActionBarContentView(R.layout.exosetting);
 
     eXoSettingInstance = this;
-    
+
     setTitle("Setting");
 
     txtvLanguage = (TextView) findViewById(R.id.TextView_Language);
@@ -68,13 +74,12 @@ public class eXoSetting extends GDActivity {
 
     vEngLish = (View) findViewById(R.id.View_English);
     txtvEnglish = (TextView) findViewById(R.id.TextView_English);
-    imgViewECheckMark = (ImageView ) findViewById(R.id.ImageView_CheckMark_EN);
-    
+    imgViewECheckMark = (ImageView) findViewById(R.id.ImageView_CheckMark_EN);
+
     vFrench = (View) findViewById(R.id.View_French);
     txtvFrench = (TextView) findViewById(R.id.TextView_French);
-    imgViewFCheckMark = (ImageView ) findViewById(R.id.ImageView_CheckMark_FR);
-    
-    
+    imgViewFCheckMark = (ImageView) findViewById(R.id.ImageView_CheckMark_FR);
+
     listViewServer = (ListView) findViewById(R.id.ListView_Servers);
     listViewServer.setDivider(null);
     listViewServer.setDividerHeight(0);
@@ -93,7 +98,7 @@ public class eXoSetting extends GDActivity {
 
         imgViewECheckMark.setVisibility(View.VISIBLE);
         imgViewFCheckMark.setVisibility(View.INVISIBLE);
-        
+
         updateLocallize("LocalizeEN.properties");
       }
     });
@@ -104,20 +109,17 @@ public class eXoSetting extends GDActivity {
 
         imgViewECheckMark.setVisibility(View.INVISIBLE);
         imgViewFCheckMark.setVisibility(View.VISIBLE);
-        
+
         updateLocallize("LocalizeFR.properties");
       }
     });
 
     String locallize = AppController.sharedPreference.getString(AppController.EXO_PRF_LOCALIZE,
                                                                 "exo_prf_localize");
-    if (locallize.equalsIgnoreCase("LocalizeFR.properties"))
-    {
+    if (locallize.equalsIgnoreCase("LocalizeFR.properties")) {
       imgViewFCheckMark.setVisibility(View.VISIBLE);
       imgViewECheckMark.setVisibility(View.INVISIBLE);
-    }      
-    else
-    {
+    } else {
       imgViewECheckMark.setVisibility(View.VISIBLE);
       imgViewFCheckMark.setVisibility(View.INVISIBLE);
     }
@@ -125,33 +127,30 @@ public class eXoSetting extends GDActivity {
     createServersAdapter(AppController.configurationInstance._arrServerList);
 
   }
-  
+
   // Key down listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     // Save data to the server once the user hits the back button
     if (keyCode == KeyEvent.KEYCODE_BACK) {
-//      Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
+      // Toast.makeText(AppController.this, strCannotBackToPreviousPage,
+      // Toast.LENGTH_LONG).show();
 
     }
 
     return false;
   }
-  
-  public void finishMe()
-  {  
+
+  public void finishMe() {
     Intent next;
-    
-    if(eXoApplicationsController2.eXoApplicationsController2Instance != null)
-    {
+
+    if (eXoApplicationsController2.eXoApplicationsController2Instance != null) {
       next = new Intent(eXoSetting.this, eXoApplicationsController2.class);
-    }
-    else
-    {
+    } else {
       next = new Intent(eXoSetting.this, AppController.class);
     }
-    
+
     startActivity(next);
-    
+
     eXoSettingInstance = null;
     GDActivity.TYPE = 0;
   }
@@ -164,57 +163,55 @@ public class eXoSetting extends GDActivity {
     BaseAdapter serverAdapter = new BaseAdapter() {
 
       public View getView(int position, View convertView, ViewGroup parent) {
-        
-          LayoutInflater inflater = eXoSettingInstance.getLayoutInflater();
-          View rowView = inflater.inflate(R.layout.serverlistitemforsetting, parent, false);
 
-          TextView tvModifyTheList = (TextView) rowView.findViewById(R.id.TextView_Modify_The_List);
-          TextView serverName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
-          TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
-          ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-          
-          if(position < serverObjsTmp.size())
-          {
-            ServerObj serverObj = serverObjsTmp.get(position);
-            
-            serverName.setText(serverObj._strServerName);
-            txtvUrl.setText(serverObj._strServerUrl);
-            
-            if (AppController.appControllerInstance._intDomainIndex == position)
-              imgView.setVisibility(View.VISIBLE);
-            else
-              imgView.setVisibility(View.INVISIBLE);
+        LayoutInflater inflater = eXoSettingInstance.getLayoutInflater();
+        View rowView = inflater.inflate(R.layout.serverlistitemforsetting, parent, false);
 
-          }
-          
-          if(position == serverObjsTmp.size())
-          {
-            
-            tvModifyTheList.setText("Modify the List");
-            tvModifyTheList.setOnClickListener(new View.OnClickListener() {
-              
-              public void onClick(View v) {
-                if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {
-                  String msg = "You dont't have permission for this because SDCard is not available!";
-                  Toast.makeText(eXoSettingInstance, msg, Toast.LENGTH_LONG);
-                } else {
-                  
-                  GDActivity.TYPE = 1;
-                  
-                  Intent next = new Intent(eXoSetting.this, eXoModifyServerList.class);
-                  startActivity(next);
-                }
-              }
-            });
-            
-            tvModifyTheList.setVisibility(View.VISIBLE);
-            serverName.setVisibility(View.INVISIBLE);
+        TextView tvModifyTheList = (TextView) rowView.findViewById(R.id.TextView_Modify_The_List);
+        TextView serverName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
+        TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
+        ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
+
+        if (position < serverObjsTmp.size()) {
+          ServerObj serverObj = serverObjsTmp.get(position);
+
+          serverName.setText(serverObj._strServerName);
+          txtvUrl.setText(serverObj._strServerUrl);
+
+          if (AppController.appControllerInstance._intDomainIndex == position)
+            imgView.setVisibility(View.VISIBLE);
+          else
             imgView.setVisibility(View.INVISIBLE);
-            txtvUrl.setVisibility(View.INVISIBLE);
-          }
-          
-          return (rowView);
-        
+
+        }
+
+        if (position == serverObjsTmp.size()) {
+
+          tvModifyTheList.setText("Modify the List");
+          tvModifyTheList.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+              if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {
+                String msg = "You dont't have permission for this because SDCard is not available!";
+                Toast.makeText(eXoSettingInstance, msg, Toast.LENGTH_LONG);
+              } else {
+
+                GDActivity.TYPE = 1;
+
+                Intent next = new Intent(eXoSetting.this, eXoModifyServerList.class);
+                startActivity(next);
+              }
+            }
+          });
+
+          tvModifyTheList.setVisibility(View.VISIBLE);
+          serverName.setVisibility(View.INVISIBLE);
+          imgView.setVisibility(View.INVISIBLE);
+          txtvUrl.setVisibility(View.INVISIBLE);
+        }
+
+        return (rowView);
+
       }
 
       public long getItemId(int position) {
@@ -289,10 +286,8 @@ public class eXoSetting extends GDActivity {
                                      "UTF-8");
       strServerTittle = new String(resourceBundle.getString("Server").getBytes("ISO-8859-1"),
                                    "UTF-8");
-      strEnglish = new String(resourceBundle.getString("English").getBytes("ISO-8859-1"),
-                                      "UTF-8");
-      strFrench = new String(resourceBundle.getString("French").getBytes("ISO-8859-1"),
-                                     "UTF-8");
+      strEnglish = new String(resourceBundle.getString("English").getBytes("ISO-8859-1"), "UTF-8");
+      strFrench = new String(resourceBundle.getString("French").getBytes("ISO-8859-1"), "UTF-8");
       strCloseModifyServerLisrButton = new String(resourceBundle.getString("ModifyServerList")
                                                                 .getBytes("ISO-8859-1"), "UTF-8");
       strUserGuideButton = new String(resourceBundle.getString("UserGuide").getBytes("ISO-8859-1"),
@@ -300,10 +295,10 @@ public class eXoSetting extends GDActivity {
     } catch (Exception e) {
 
     }
-    
+
     txtvEnglish.setText(strEnglish);
     txtvFrench.setText(strFrench);
-    
+
     btnUserGuide.setText(strUserGuideButton);
 
     txtvServer.setText(strServerTittle);

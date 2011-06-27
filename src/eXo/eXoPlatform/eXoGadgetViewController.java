@@ -28,16 +28,20 @@ public class eXoGadgetViewController extends Activity {
   /** Called when the activity is first created. */
 
   Button                           _btnClose;                      // Close
-                                                                    // button
+
+  // button
 
   Button                           _btnLanguageHelp;               // Setting
-                                                                    // button
+
+  // button
 
   TextView                         _txtvTitleBar;                  // Gadget
-                                                                    // title
+
+  // title
 
   ListView                         _lstvGadgets;                   // Gadget
-                                                                    // list view
+
+  // list view
 
   // Localization strings
   String                           strCannotBackToPreviousPage;
@@ -47,11 +51,13 @@ public class eXoGadgetViewController extends Activity {
   static eXoGadgetViewController   eXoGadgetViewControllerInstance; // Instance
 
   static eXoApplicationsController _delegate;                      // Main app
-                                                                    // view
-                                                                    // controller
+
+  // view
+  // controller
 
   public static eXoGadget          currentGadget;                  // Current
-                                                                    // gadget
+
+  // gadget
 
   public static Cookie             cookie = null;                  // Cookie
 

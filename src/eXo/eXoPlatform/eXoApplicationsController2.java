@@ -49,58 +49,69 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
 
   // App item object
   class AppItem {
-    Bitmap  _icon; // feature's icon
-    int _badgeCount; //  number of notification
-    String  _name; // feature's name
-    
-    public AppItem()
-    {
-      
+    Bitmap _icon;      // feature's icon
+
+    int    _badgeCount; // number of notification
+
+    String _name;      // feature's name
+
+    public AppItem() {
+
     }
-    
-    public AppItem(Bitmap bm, String name)
-    {
+
+    public AppItem(Bitmap bm, String name) {
       _icon = bm;
       _name = name;
     }
   }
-  
-  
+
   static eXoApplicationsController2 eXoApplicationsController2Instance;
 
-  Button            btnDone;
-  public List<GateInDbItem> arrGadgets;                       // Gadgets array
-  
-  Timer             timer;
-  Handler           handler;
-  private final Handler mHandler = new Handler();
-  
-  GridView gridview;
-  View myView;
-  TranslateAnimation anim;
-  int timerCounter = 0;
-  int itemMoveIndex = -1;
-  boolean isDeleteItem = false;
-  
-  public static short              webViewMode;                       // 0: view
+  Button                            btnDone;
+
+  public List<GateInDbItem>         arrGadgets;                              // Gadgets
+                                                                              // array
+
+  Timer                             timer;
+
+  Handler                           handler;
+
+  private final Handler             mHandler      = new Handler();
+
+  GridView                          gridview;
+
+  View                              myView;
+
+  TranslateAnimation                anim;
+
+  int                               timerCounter  = 0;
+
+  int                               itemMoveIndex = -1;
+
+  boolean                           isDeleteItem  = false;
+
+  public static short               webViewMode;                             // 0:
+                                                                              // view
+
   // gadget,
   // 1: View
   // file,
   // 2: view
   // help;
 
+  private BaseAdapter               adapter;
 
-  private BaseAdapter adapter;
-  
-  String strChatServer;
-  
-  ProgressDialog                   _progressDialog;                  // Progress dialog
-  Thread                           thread;
-  
+  String                            strChatServer;
+
+  ProgressDialog                    _progressDialog;                         // Progress
+                                                                              // dialog
+
+  Thread                            thread;
+
   // Standalone gadget content
-  private String                            _strContentForStandaloneURL;
-  ArrayList<AppItem> array = new ArrayList<AppItem>();
-  
+  private String                    _strContentForStandaloneURL;
+
+  ArrayList<AppItem>                array         = new ArrayList<AppItem>();
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -108,66 +119,66 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-//    setContentView(R.layout.appsview2);
+    // setContentView(R.layout.appsview2);
     setActionBarContentView(R.layout.appsview2);
-    
-//    addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
+
+    // addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
     addActionBarItem(Type.SignOut, R.drawable.gd_action_bar_signout);
-    
+
     eXoApplicationsController2Instance = this;
-    
-//    final MyActionBar myActionBar = (MyActionBar) findViewById(R.id.My_Action_Bar);
-//    myActionBar.setBackgroundResource(R.drawable.navigationbar);
-    
-    
-    btnDone = (Button)findViewById(R.id.Button_Done);
+
+    // final MyActionBar myActionBar = (MyActionBar)
+    // findViewById(R.id.My_Action_Bar);
+    // myActionBar.setBackgroundResource(R.drawable.navigationbar);
+
+    btnDone = (Button) findViewById(R.id.Button_Done);
     btnDone.setVisibility(View.INVISIBLE);
     btnDone.setOnClickListener(new View.OnClickListener() {
-      
+
       public void onClick(View v) {
-        
+
         btnDone.setVisibility(View.INVISIBLE);
-        
-        for(int i = 0; i < array.size(); i++)
-        {
-          
+
+        for (int i = 0; i < array.size(); i++) {
+
           View view = adapter.getView(i, null, gridview);
           view.clearAnimation();
-          ImageView ivIcon = (ImageView)view.findViewById(R.id.icon_image);
+          ImageView ivIcon = (ImageView) view.findViewById(R.id.icon_image);
           ivIcon.setOnClickListener(null);
-          
+
           isDeleteItem = false;
           timerCounter = 0;
         }
         adapter.notifyDataSetChanged();
       }
-      
+
     });
-    
-    gridview = (GridView)findViewById(R.id.gridView1);   
-    
-    Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.homeactivitystreamsiconiphone);
+
+    gridview = (GridView) findViewById(R.id.gridView1);
+
+    Bitmap bm = BitmapFactory.decodeResource(getResources(),
+                                             R.drawable.homeactivitystreamsiconiphone);
     AppItem activityStreams = new AppItem(bm, "Activity Streams");
     array.add(activityStreams);
-    
+
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homechaticoniphone);
     AppItem chatApp = new AppItem(bm, "Chat");
     array.add(chatApp);
-    
+
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homedocumentsiconiphone);
     AppItem fileApp = new AppItem(bm, "Documents");
     array.add(fileApp);
-    
+
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homedashboardiconiphone);
     AppItem dashBoardApp = new AppItem(bm, "Dashboard");
     array.add(dashBoardApp);
-    
+
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homesettingsiconiphone);
     AppItem setting = new AppItem(bm, "Settings");
     array.add(setting);
-    
+
     createAdapter();
-    
+
     changeLanguage(AppController.bundle);
   }
 
@@ -175,76 +186,72 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     // Save data to the server once the user hits the back button
     if (keyCode == KeyEvent.KEYCODE_BACK) {
-//      Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
+      // Toast.makeText(AppController.this, strCannotBackToPreviousPage,
+      // Toast.LENGTH_LONG).show();
 
     }
 
     return false;
   }
-  
-//  Create GridView Apdapter
-  private void createAdapter()
-  {
-    adapter = new BaseAdapter()
-    {
-        public View getView(int position, View convertView, ViewGroup parent) {
 
-          View v;
-          final int pos = position;
-          
-          AppItem item = array.get(position);
-          LayoutInflater li = getLayoutInflater();
-          v = li.inflate(R.layout.appitem, null);
-          v.setOnTouchListener(eXoApplicationsController2Instance);
-          TextView tv = (TextView)v.findViewById(R.id.icon_text);
-          tv.setText(item._name);
-          ImageView iv = (ImageView)v.findViewById(R.id.icon_image);
-          iv.setImageBitmap(item._icon);
-          
-          ImageView ivDelete = (ImageView)v.findViewById(R.id.icon_delete);
-          if(isDeleteItem)
-          {
-//            ivDelete.setVisibility(View.VISIBLE);
-            ivDelete.setVisibility(View.INVISIBLE);
-            v.startAnimation(anim);
-          }
-          else
-          {
-            ivDelete.setVisibility(View.INVISIBLE);
-            v.clearAnimation();
-          }
-            
-          ivDelete.setOnClickListener(new View.OnClickListener() {
-            
-            public void onClick(View v) {
-             
-              array.remove(pos);
-              adapter.notifyDataSetChanged();
-              
-            }
-          });
-          
-          return v;
-        }
-        
-        public long getItemId(int position) {
+  // Create GridView Apdapter
+  private void createAdapter() {
+    adapter = new BaseAdapter() {
+      public View getView(int position, View convertView, ViewGroup parent) {
 
-          return 0;
+        View v;
+        final int pos = position;
+
+        AppItem item = array.get(position);
+        LayoutInflater li = getLayoutInflater();
+        v = li.inflate(R.layout.appitem, null);
+        v.setOnTouchListener(eXoApplicationsController2Instance);
+        TextView tv = (TextView) v.findViewById(R.id.icon_text);
+        tv.setText(item._name);
+        ImageView iv = (ImageView) v.findViewById(R.id.icon_image);
+        iv.setImageBitmap(item._icon);
+
+        ImageView ivDelete = (ImageView) v.findViewById(R.id.icon_delete);
+        if (isDeleteItem) {
+          // ivDelete.setVisibility(View.VISIBLE);
+          ivDelete.setVisibility(View.INVISIBLE);
+          v.startAnimation(anim);
+        } else {
+          ivDelete.setVisibility(View.INVISIBLE);
+          v.clearAnimation();
         }
-        
-        public Object getItem(int position) {
-          return null;
-        }
-        
-        public int getCount() {
-          
-          return array.size();
-        }
-      };
-      
-      gridview.setAdapter(adapter);
+
+        ivDelete.setOnClickListener(new View.OnClickListener() {
+
+          public void onClick(View v) {
+
+            array.remove(pos);
+            adapter.notifyDataSetChanged();
+
+          }
+        });
+
+        return v;
+      }
+
+      public long getItemId(int position) {
+
+        return 0;
+      }
+
+      public Object getItem(int position) {
+        return null;
+      }
+
+      public int getCount() {
+
+        return array.size();
+      }
+    };
+
+    gridview.setAdapter(adapter);
   }
-  
+
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -259,58 +266,56 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
   public boolean onOptionsItemSelected(MenuItem item) {
 
     int selectedItemIndex = item.getItemId();
-//  Reorder menu
+    // Reorder menu
     if (selectedItemIndex == 1) {
-      
+
       Intent next = new Intent(eXoApplicationsController2.this, BasicItemActivity.class);
       startActivity(next);
     }
-//    Add item
-    else
-    {
-      
+    // Add item
+    else {
+
     }
 
     return false;
   }
 
-
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    
-      switch (item.getItemId()) {
-          case R.drawable.gd_action_bar_signout:
-            
-            if (eXoChatListController.conn != null && eXoChatListController.conn.isAuthenticated()) {
-              eXoChatListController.conn.getRoster()
-                                        .removeRosterListener(eXoChatListController.rosterListener);
-              eXoChatListController.conn.disconnect();
-            }
-            
-              Intent next = new Intent(eXoApplicationsController2Instance, AppController.class);
-              startActivity(next);
-              break;
 
-          case R.drawable.gd_action_bar_add:
-//            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.onlinechat);
-//          AppItem item = new AppItem(bm, "New");
-//          array.add(item);
-//          
-//          adapter.notifyDataSetChanged();
-              break;
+    switch (item.getItemId()) {
+    case R.drawable.gd_action_bar_signout:
 
-          case R.id.action_bar_export:
-              Toast.makeText(this, R.string.custom_drawable, Toast.LENGTH_SHORT).show();
-              break;
-
-          default:
-              return super.onHandleActionBarItemClick(item, position);
+      if (eXoChatListController.conn != null && eXoChatListController.conn.isAuthenticated()) {
+        eXoChatListController.conn.getRoster()
+                                  .removeRosterListener(eXoChatListController.rosterListener);
+        eXoChatListController.conn.disconnect();
       }
 
-      return true;
+      Intent next = new Intent(eXoApplicationsController2Instance, AppController.class);
+      startActivity(next);
+      break;
+
+    case R.drawable.gd_action_bar_add:
+      // Bitmap bm = BitmapFactory.decodeResource(getResources(),
+      // R.drawable.onlinechat);
+      // AppItem item = new AppItem(bm, "New");
+      // array.add(item);
+      //          
+      // adapter.notifyDataSetChanged();
+      break;
+
+    case R.id.action_bar_export:
+      Toast.makeText(this, R.string.custom_drawable, Toast.LENGTH_SHORT).show();
+      break;
+
+    default:
+      return super.onHandleActionBarItemClick(item, position);
+    }
+
+    return true;
   }
 
-  
   // Change language
   private void updateLocallize(String localize) {
     try {
@@ -321,7 +326,6 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
       AppController.bundle = new PropertyResourceBundle(this.getAssets().open(localize));
       changeLanguage(AppController.bundle);
 
-     
     } catch (Exception e) {
 
     }
@@ -351,8 +355,8 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
       strUserGuideButton = new String(resourceBundle.getString("UserGuide").getBytes("ISO-8859-1"),
                                       "UTF-8");
       strChatServer = new String(resourceBundle.getString("ChatServer").getBytes("ISO-8859-1"),
-      "UTF-8");
-      
+                                 "UTF-8");
+
     } catch (Exception e) {
 
     }
@@ -362,152 +366,149 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
 
     myView = v;
     int eventaction = event.getAction();
-      if(timer == null)
-        timer = new Timer();
-      if(handler == null)
-        handler = new Handler();
-      
-      switch (eventaction) {
-          case MotionEvent.ACTION_DOWN: 
-          {
-              // finger touches the screen
-            TimerTask timeTask = new TimerTask() {
-              @Override
-              public void run() {
-                
-                handler.post(mUpdateTimeTask);
-              }
-            };
-            
-            timer.schedule(timeTask, 0, 1000);
-              break;
-          }
-          case MotionEvent.ACTION_MOVE:
-          {
-              // finger moves on the screen
-            timer.cancel();
-            handler.removeCallbacks(mUpdateTimeTask);
-              break;
-          }
-          case MotionEvent.ACTION_UP:
-          {
-              // finger leaves the screen
-            timer.cancel();
-            handler.removeCallbacks(mUpdateTimeTask);
-            
-            if(timerCounter < 1000)
-            {
-              for(int i = 0; i < array.size(); i++)
-              {
-                  View view = gridview.getChildAt(i);
-                  if(view == v)
-                  {
-                    AppItem item = array.get(i);
-                  
-//                    v.setVisibility(View.INVISIBLE);
-                    launchApp(v, item._name);
-                  }
-              }
-              
-            }
-            
-            timer = null;
-            handler = null;
-              break;
-          }
-      }
-      
-      return true; 
-    }
+    if (timer == null)
+      timer = new Timer();
+    if (handler == null)
+      handler = new Handler();
 
-  Runnable mUpdateTimeTask = new Runnable() {
-    
-    public void run() {
+    switch (eventaction) {
+    case MotionEvent.ACTION_DOWN: {
+      // finger touches the screen
+      TimerTask timeTask = new TimerTask() {
+        @Override
+        public void run() {
 
-      timerCounter++;
-      Log.i("hehe", "" + timerCounter);
-      if(timerCounter >= 1000)
-      {
-        timer.cancel();
-        handler.removeCallbacks(mUpdateTimeTask);
-        
-        timer = null;
-        handler = null;
-        
-       btnDone.setVisibility(View.VISIBLE);
-       // Start animating the image
-      for(int i = 0; i < array.size(); i++)
-      {
-        final int pos = i;
-        View view = gridview.getChildAt(i);
-        view.setOnTouchListener(null);
-        final ImageView ivIcon = (ImageView)view.findViewById(R.id.icon_image);
-        ivIcon.setOnClickListener(new View.OnClickListener() {
-          
-          public void onClick(View v) {
-            
-            if(itemMoveIndex == -1)
-            {
-              itemMoveIndex = pos;
-              ivIcon.setBackgroundResource(R.drawable.imageborder); 
-            }
-            else
-            {
-              for(int j = 0; j < array.size(); j++)
-              {
-                View view2 = gridview.getChildAt(j);
-                view2.findViewById(R.id.icon_image).setBackgroundDrawable(null);
-                  
-              }
-              
-              AppItem item = array.get(pos);
-              array.set(pos, array.get(itemMoveIndex));
-              array.set(itemMoveIndex, item);
-              
-              itemMoveIndex = -1;
-              
-              adapter.notifyDataSetChanged();
-            }
-          }
-        });
-        
-        ImageView iv = (ImageView)view.findViewById(R.id.icon_delete);
-//        iv.setVisibility(View.VISIBLE);
-        iv.setVisibility(View.INVISIBLE);
-        isDeleteItem = true;
-        
-        if(anim == null)
-        {
-          anim = new TranslateAnimation(-1f, 0f, 1f, 0f);
-//          anim.setInterpolator(new BounceInterpolator());
-//          AccelerateDecelerateInterpolator, AccelerateInterpolator, AnticipateInterpolator, AnticipateOvershootInterpolator, BounceInterpolator, CycleInterpolator, DecelerateInterpolator, LinearInterpolator, OvershootInterpolator 
-          anim.setRepeatCount(Animation.INFINITE);
-          anim.setRepeatMode(Animation.REVERSE);
-          anim.setDuration(100); 
+          handler.post(mUpdateTimeTask);
         }
-        
-        view.startAnimation(anim);
-      }
-       
-      } 
-    
+      };
+
+      timer.schedule(timeTask, 0, 1000);
+      break;
     }
-  
-  };
+    case MotionEvent.ACTION_MOVE: {
+      // finger moves on the screen
+      timer.cancel();
+      handler.removeCallbacks(mUpdateTimeTask);
+      break;
+    }
+    case MotionEvent.ACTION_UP: {
+      // finger leaves the screen
+      timer.cancel();
+      handler.removeCallbacks(mUpdateTimeTask);
+
+      if (timerCounter < 1000) {
+        for (int i = 0; i < array.size(); i++) {
+          View view = gridview.getChildAt(i);
+          if (view == v) {
+            AppItem item = array.get(i);
+
+            // v.setVisibility(View.INVISIBLE);
+            launchApp(v, item._name);
+          }
+        }
+
+      }
+
+      timer = null;
+      handler = null;
+      break;
+    }
+    }
+
+    return true;
+  }
+
+  Runnable         mUpdateTimeTask       = new Runnable() {
+
+                                           public void run() {
+
+                                             timerCounter++;
+                                             Log.i("hehe", "" + timerCounter);
+                                             if (timerCounter >= 1000) {
+                                               timer.cancel();
+                                               handler.removeCallbacks(mUpdateTimeTask);
+
+                                               timer = null;
+                                               handler = null;
+
+                                               btnDone.setVisibility(View.VISIBLE);
+                                               // Start animating the image
+                                               for (int i = 0; i < array.size(); i++) {
+                                                 final int pos = i;
+                                                 View view = gridview.getChildAt(i);
+                                                 view.setOnTouchListener(null);
+                                                 final ImageView ivIcon = (ImageView) view.findViewById(R.id.icon_image);
+                                                 ivIcon.setOnClickListener(new View.OnClickListener() {
+
+                                                   public void onClick(View v) {
+
+                                                     if (itemMoveIndex == -1) {
+                                                       itemMoveIndex = pos;
+                                                       ivIcon.setBackgroundResource(R.drawable.imageborder);
+                                                     } else {
+                                                       for (int j = 0; j < array.size(); j++) {
+                                                         View view2 = gridview.getChildAt(j);
+                                                         view2.findViewById(R.id.icon_image)
+                                                              .setBackgroundDrawable(null);
+
+                                                       }
+
+                                                       AppItem item = array.get(pos);
+                                                       array.set(pos, array.get(itemMoveIndex));
+                                                       array.set(itemMoveIndex, item);
+
+                                                       itemMoveIndex = -1;
+
+                                                       adapter.notifyDataSetChanged();
+                                                     }
+                                                   }
+                                                 });
+
+                                                 ImageView iv = (ImageView) view.findViewById(R.id.icon_delete);
+                                                 // iv.setVisibility(View.VISIBLE);
+                                                 iv.setVisibility(View.INVISIBLE);
+                                                 isDeleteItem = true;
+
+                                                 if (anim == null) {
+                                                   anim = new TranslateAnimation(-1f, 0f, 1f, 0f);
+                                                   // anim.setInterpolator(new
+                                                   // BounceInterpolator());
+                                                   // AccelerateDecelerateInterpolator,
+                                                   // AccelerateInterpolator,
+                                                   // AnticipateInterpolator,
+                                                   // AnticipateOvershootInterpolator,
+                                                   // BounceInterpolator,
+                                                   // CycleInterpolator,
+                                                   // DecelerateInterpolator,
+                                                   // LinearInterpolator,
+                                                   // OvershootInterpolator
+                                                   anim.setRepeatCount(Animation.INFINITE);
+                                                   anim.setRepeatMode(Animation.REVERSE);
+                                                   anim.setDuration(100);
+                                                 }
+
+                                                 view.startAnimation(anim);
+                                               }
+
+                                             }
+
+                                           }
+
+                                         };
 
   private Runnable dismissProgressDialog = new Runnable() {
 
-    public void run() {
+                                           public void run() {
 
-      _progressDialog.dismiss();
-      
-      thread.stop();
-      thread = null;
+                                             _progressDialog.dismiss();
 
-    }
-    
-  };
- 
+                                             thread.stop();
+                                             thread = null;
+
+                                           }
+
+                                         };
+
   public void launchApp(View v, String featureName) {
 
     final String str = featureName;
@@ -517,21 +518,13 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
 
         if (str.equalsIgnoreCase("documents")) {
           launchFilesApp();
-        }
-        else if (str.equalsIgnoreCase("chat")) 
-        {
+        } else if (str.equalsIgnoreCase("chat")) {
           launchMessengerApp();
-        }
-        else if(str.equalsIgnoreCase("dashboard"))
-        {
+        } else if (str.equalsIgnoreCase("dashboard")) {
           launchDashboardApp();
-        }
-        else if(str.equalsIgnoreCase("settings"))
-        {
+        } else if (str.equalsIgnoreCase("settings")) {
           launchSettingApp();
-        }
-        else if(str.equalsIgnoreCase("Activity Streams"))
-        {
+        } else if (str.equalsIgnoreCase("Activity Streams")) {
           launchActivityStreamApp();
         }
 
@@ -543,8 +536,7 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     try {
 
       strLoadingDataFromServer = new String(AppController.bundle.getString("LoadingDataFromServer")
-                                                                .getBytes("ISO-8859-1"),
-                                            "UTF-8");
+                                                                .getBytes("ISO-8859-1"), "UTF-8");
 
     } catch (Exception e) {
 
@@ -559,8 +551,8 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     thread.start();
 
   }
- 
- public void launchFilesApp() {
+
+  public void launchFilesApp() {
     String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
                                                                "exo_prf_username");
     String domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
@@ -599,89 +591,76 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     String password = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
                                                                "exo_prf_password");
 
-    if(connectToChatServer(url.getHost(), 5222, userName, password))
-    {
+    if (connectToChatServer(url.getHost(), 5222, userName, password)) {
       eXoChatListController._delegate = eXoApplicationsController2Instance;
       Intent next = new Intent(eXoApplicationsController2.this, eXoChatListController.class);
-      startActivity(next);  
-    }
-    else
-    {
-      
-//      showToast("Can not connect to chat server");
-      
-    }
-//    if (eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
-//      return;
+      startActivity(next);
+    } else {
 
+      // showToast("Can not connect to chat server");
 
-    
+    }
+    // if (eXoChatListController.conn == null ||
+    // !eXoChatListController.conn.isConnected())
+    // return;
+
   }
 
-  public void launchDashboardApp() 
-  {
+  public void launchDashboardApp() {
     listOfGadgets();
-    if(arrGadgets.size() > 0)
-    {
+    if (arrGadgets.size() > 0) {
       Intent next = new Intent(eXoApplicationsController2.this, eXoDashboard.class);
-      startActivity(next);  
+      startActivity(next);
+    } else {
+      // Toast.makeText(this, "No gadget", Toast.LENGTH_LONG).show();
     }
-    else
-    {
-//      Toast.makeText(this, "No gadget", Toast.LENGTH_LONG).show();
-    }
-    
-    
+
   }
-  
-  public void launchSettingApp() 
-  {
-    
+
+  public void launchSettingApp() {
+
     Intent next = new Intent(eXoApplicationsController2.this, eXoSetting.class);
     startActivity(next);
-    
+
   }
-  
-  public void launchActivityStreamApp() 
-  {
-    
-//    Intent next = new Intent(eXoApplicationsController2.this, TestActivityBrowserView.class);
+
+  public void launchActivityStreamApp() {
+
+    // Intent next = new Intent(eXoApplicationsController2.this,
+    // TestActivityBrowserView.class);
     Intent next = new Intent(eXoApplicationsController2.this, AsyncImageViewListActivity.class);
     eXoApplicationsController2Instance.startActivity(next);
-    
+
   }
-  
-  public void showToast(String msg)
-  {
-    
-//    runOnUiThread(dismissProgressDialog);
-    
+
+  public void showToast(String msg) {
+
+    // runOnUiThread(dismissProgressDialog);
+
     final Toast toast = new Toast(this);
     final String strMsg = msg;
-    
+
     toast.setDuration(Toast.LENGTH_LONG);
     toast.setText(strMsg);
-    toast.show();  
-    
-//    runOnUiThread(new Runnable() {
-//      
-//      public void run() {
-//        // TODO Auto-generated method stub
-//        toast.setDuration(Toast.LENGTH_LONG);
-//        toast.setText(strMsg);
-//        toast.show();  
-//      }
-//    });
-    
-    
-    
+    toast.show();
+
+    // runOnUiThread(new Runnable() {
+    //      
+    // public void run() {
+    // // TODO Auto-generated method stub
+    // toast.setDuration(Toast.LENGTH_LONG);
+    // toast.setText(strMsg);
+    // toast.show();
+    // }
+    // });
+
   }
-  
-//Connect to Openfile server
+
+  // Connect to Openfile server
   private boolean connectToChatServer(String host, int port, String userName, String password) {
     if (eXoChatListController.conn != null && eXoChatListController.conn.isConnected())
       return true;
- 
+
     ConnectionConfiguration config = new ConnectionConfiguration(host, port, "Work");
     eXoChatListController.conn = new XMPPConnection(config);
 
@@ -689,20 +668,20 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
       eXoChatListController.conn.connect();
       eXoChatListController.conn.login(userName, password);
 
-//      runOnUiThread(new Runnable() {
-//
-//        public void run() {
-//
-//          // icon.setBackgroundResource(R.drawable.onlineicon);
-//          List<eXoApp> exoapps = new ArrayList<eXoApp>(2);
-//          exoapps.add(new eXoApp(fileTittle, ""));
-//          exoapps.add(new eXoApp(chatTittle, ""));
-//          exoAppsAdapter = new eXoAppsAdapter(exoapps);
-//          _lstvApps.setAdapter(exoAppsAdapter);
-//          _lstvApps.setOnItemClickListener(exoAppsAdapter);
-//
-//        }
-//      });
+      // runOnUiThread(new Runnable() {
+      //
+      // public void run() {
+      //
+      // // icon.setBackgroundResource(R.drawable.onlineicon);
+      // List<eXoApp> exoapps = new ArrayList<eXoApp>(2);
+      // exoapps.add(new eXoApp(fileTittle, ""));
+      // exoapps.add(new eXoApp(chatTittle, ""));
+      // exoAppsAdapter = new eXoAppsAdapter(exoapps);
+      // _lstvApps.setAdapter(exoAppsAdapter);
+      // _lstvApps.setOnItemClickListener(exoAppsAdapter);
+      //
+      // }
+      // });
 
       // exoAppsAdapter.notifyDataSetChanged();
 
@@ -711,15 +690,16 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
       String str = e.toString();
       String msg = e.getMessage();
       Log.e(str, msg);
-      
+
       eXoChatListController.conn.disconnect();
       eXoChatListController.conn = null;
       // e.printStackTrace();
-//      Toast.makeText(eXoApplicationsController2Instance, "Can not connect to chat server", Toast.LENGTH_SHORT).show();
-      
+      // Toast.makeText(eXoApplicationsController2Instance,
+      // "Can not connect to chat server", Toast.LENGTH_SHORT).show();
+
       return false;
     }
-    
+
     return true;
 
   }
@@ -728,7 +708,7 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
   public List<eXoGadget> getGadgetsList() {
     List<eXoGadget> arrGadgets = new ArrayList<eXoGadget>();
     String _strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
-                                                          "exo_prf_domain");
+                                                                 "exo_prf_domain");
     String strHomeUrl = _strDomain + "/portal/private/classic";
     String strContent = AppController._eXoConnection.sendRequestAndReturnString(strHomeUrl);
 
@@ -920,8 +900,8 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
   // Get gadget tab list
   public List<GateInDbItem> listOfGadgets() {
     String _strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
-                                                          "exo_prf_domain");
-   
+                                                                 "exo_prf_domain");
+
     arrGadgets = new ArrayList<GateInDbItem>();
 
     String strContent = AppController._eXoConnection.getFirstLoginContent();
@@ -1047,5 +1027,4 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     return false;
   }
 
-  
 }

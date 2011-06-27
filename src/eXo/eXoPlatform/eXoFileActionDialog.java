@@ -41,7 +41,7 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
 
   }
 
-  Thread           thread;
+  Thread                  thread;
 
   Button                  _btnClose;                  // Close dialog
 
@@ -244,22 +244,22 @@ public class eXoFileActionDialog extends Dialog implements OnClickListener {
   // Get file list
   Runnable reloadFileAdapter     = new Runnable() {
 
-                                          public void run() {
+                                   public void run() {
 
-                                            eXoFilesController.eXoFilesControllerInstance.fileAdapter.notifyDataSetChanged();
+                                     eXoFilesController.eXoFilesControllerInstance.fileAdapter.notifyDataSetChanged();
 
-                                          }
-                                        };
+                                   }
+                                 };
 
   // Progress dialog
   Runnable dismissProgressDialog = new Runnable() {
 
-                                          public void run() {
+                                   public void run() {
 
-                                            eXoFilesController._progressDialog.dismiss();
-                                            thread.stop();
-                                          }
-                                        };
+                                     eXoFilesController._progressDialog.dismiss();
+                                     thread.stop();
+                                   }
+                                 };
 
   // Set language
   public void changeLanguage(ResourceBundle resourceBundle) {

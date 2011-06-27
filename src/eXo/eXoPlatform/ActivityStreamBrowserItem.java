@@ -42,45 +42,62 @@ import com.cyrilmottier.android.greendroid.R;
  */
 public class ActivityStreamBrowserItem extends greendroid.widget.item.Item {
 
-    public Bitmap bmAvatar;
-    public String strName;
-    public String strMessage;
-    public int nbComment;
-    public int nbLike;
-    public String strTime;
-    public boolean isShowMore;
-    /**
-     * @hide
-     */
-    public ActivityStreamBrowserItem() {
-    }
+  public Bitmap  bmAvatar;
 
-    public ActivityStreamBrowserItem(Bitmap _bmAvatar, String _strName, String _strMessage, int _nbComment, int _nbLike, String _strTime, boolean _isShowMore) {
-      super();
-      
-      this.bmAvatar = _bmAvatar;
-      this.strName = _strName;
-      this.strMessage = _strMessage;
-      this.nbComment = _nbComment;
-      this.nbLike = _nbLike;
-      this.strTime = _strTime;
-      this.isShowMore = _isShowMore;
+  public String  strName;
+
+  public String  strMessage;
+
+  public int     nbComment;
+
+  public int     nbLike;
+
+  public String  strTime;
+
+  public boolean isShowMore;
+
+  /**
+   * @hide
+   */
+  public ActivityStreamBrowserItem() {
   }
-    
-    @Override
-    public ItemView newView(Context context, ViewGroup parent) {
-//        return createCellFromXml(context, R.layout.activitybrowserviewcell, parent);
-      return (ItemView)LayoutInflater.from(context).inflate(R.layout.activitybrowserviewcell, parent, false);
-    }
 
-    @Override
-    public void inflate(Resources r, XmlPullParser parser, AttributeSet attrs) throws XmlPullParserException,
-            IOException {
-         super.inflate(r, parser, attrs);
+  public ActivityStreamBrowserItem(Bitmap _bmAvatar,
+                                   String _strName,
+                                   String _strMessage,
+                                   int _nbComment,
+                                   int _nbLike,
+                                   String _strTime,
+                                   boolean _isShowMore) {
+    super();
 
-//        TypedArray a = r.obtainAttributes(attrs, R.styleable.ThumbnailItem);
-//        drawableId = a.getResourceId(R.styleable.ThumbnailItem_thumbnail, drawableId);
-//        a.recycle();
-    }
+    this.bmAvatar = _bmAvatar;
+    this.strName = _strName;
+    this.strMessage = _strMessage;
+    this.nbComment = _nbComment;
+    this.nbLike = _nbLike;
+    this.strTime = _strTime;
+    this.isShowMore = _isShowMore;
+  }
+
+  @Override
+  public ItemView newView(Context context, ViewGroup parent) {
+    // return createCellFromXml(context, R.layout.activitybrowserviewcell,
+    // parent);
+    return (ItemView) LayoutInflater.from(context).inflate(R.layout.activitybrowserviewcell,
+                                                           parent,
+                                                           false);
+  }
+
+  @Override
+  public void inflate(Resources r, XmlPullParser parser, AttributeSet attrs) throws XmlPullParserException,
+                                                                            IOException {
+    super.inflate(r, parser, attrs);
+
+    // TypedArray a = r.obtainAttributes(attrs, R.styleable.ThumbnailItem);
+    // drawableId = a.getResourceId(R.styleable.ThumbnailItem_thumbnail,
+    // drawableId);
+    // a.recycle();
+  }
 
 }

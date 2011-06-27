@@ -19,32 +19,44 @@ package eXo.eXoPlatform;
 import java.util.Date;
 
 /**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          exo@exoplatform.com
- * Jun 16, 2011  
+ * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
+ * 16, 2011
  */
 public class Mock_Activity {
-  
-  String userID;
-  String imageUrl;
-  String title;
-  String body;
-  Date lastUpdateDate;
-  long postedTime;
-  int nbLikes;
-  int nbComments;
-  String postedTimeInWords;
+
+  String  userID;
+
+  String  imageUrl;
+
+  String  title;
+
+  String  body;
+
+  Date    lastUpdateDate;
+
+  long    postedTime;
+
+  int     nbLikes;
+
+  int     nbComments;
+
+  String  postedTimeInWords;
+
   boolean isShowMore;
+
   boolean isHeader;
-  
-  public Mock_Activity()
-  {
-    
+
+  public Mock_Activity() {
+
   }
-  
-  public Mock_Activity(String _userID, String _imageUrl, String _title, String _body, long _postedTime, int _numberOfLikes, int _numberOfComments)
-  {
+
+  public Mock_Activity(String _userID,
+                       String _imageUrl,
+                       String _title,
+                       String _body,
+                       long _postedTime,
+                       int _numberOfLikes,
+                       int _numberOfComments) {
     this.userID = _userID;
     this.imageUrl = _imageUrl;
     this.title = _title;
@@ -54,18 +66,17 @@ public class Mock_Activity {
     this.nbComments = _numberOfComments;
   }
 
-  public String datePrepared() // Method to calcul the date information (ie : 2minutes ago, 2 days ago...)
+  public String datePrepared() // Method to calcul the date information (ie :
+                               // 2minutes ago, 2 days ago...)
   {
     return "datePrepared not Implemented";
   }
-  
-  public void setShowMore(boolean showMore)
-  {
+
+  public void setShowMore(boolean showMore) {
     this.isShowMore = showMore;
   }
-  
-  public void setHeader(boolean header)
-  {
+
+  public void setHeader(boolean header) {
     this.isHeader = header;
   }
 

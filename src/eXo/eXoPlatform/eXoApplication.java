@@ -21,14 +21,14 @@ import greendroid.app.GDApplication;
 
 public class eXoApplication extends GDApplication {
 
-    @Override
-    public Class<?> getHomeActivityClass() {
-        return AppController.class;
-    }
-    
-    @Override
-    public Intent getMainApplicationIntent() {
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_url)));
-    }
+  @Override
+  public Class<?> getHomeActivityClass() {
+    return AppController.class;
+  }
+
+  @Override
+  public Intent getMainApplicationIntent() {
+    return new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_url)));
+  }
 
 }

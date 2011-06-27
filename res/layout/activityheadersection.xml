@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="40dip"
-  android:background="#E9E9E9">
-  
-    <TextView 
-    	android:layout_height="fill_parent" 
-    	android:layout_width="fill_parent" 
-    	android:id="@+id/textView_Section_Title" 
-    	android:text="TextView" 
-    	android:gravity="bottom"
-    	android:layout_alignParentLeft="true"
-    	android:textColor="#000000"
-    	/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="40dip"
+	android:background="#E9E9E9">
+
+	<TextView android:layout_height="fill_parent"
+		android:layout_width="fill_parent" android:id="@+id/textView_Section_Title"
+		android:text="TextView" android:gravity="bottom"
+		android:layout_alignParentLeft="true" android:textColor="#000000" />
 </RelativeLayout>

@@ -19,26 +19,28 @@ package eXo.eXoPlatform;
 import java.util.ArrayList;
 
 /**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          exo@exoplatform.com
- * Jun 21, 2011  
+ * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
+ * 21, 2011
  */
 public class Mock_Activity_Detail {
-  
-      String activityID;
-      ArrayList<Mock_Activity> arrLikes;
-      ArrayList<Mock_Activity> arrComments;
-  
-      public Mock_Activity_Detail() {
-        
-      }
-      
-      public Mock_Activity_Detail(String _activityID, ArrayList<Mock_Activity> _arrLikes, ArrayList<Mock_Activity> _arrComments) {
-        
-        this.activityID = _activityID;
-        this.arrLikes = _arrLikes;
-        this.arrComments = _arrComments;
-      }  
+
+  String                   activityID;
+
+  ArrayList<Mock_Activity> arrLikes;
+
+  ArrayList<Mock_Activity> arrComments;
+
+  public Mock_Activity_Detail() {
+
+  }
+
+  public Mock_Activity_Detail(String _activityID,
+                              ArrayList<Mock_Activity> _arrLikes,
+                              ArrayList<Mock_Activity> _arrComments) {
+
+    this.activityID = _activityID;
+    this.arrLikes = _arrLikes;
+    this.arrComments = _arrComments;
+  }
 
 }

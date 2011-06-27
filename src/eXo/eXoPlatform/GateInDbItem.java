@@ -10,7 +10,8 @@ public class GateInDbItem {
   public String          _strUrlDbItem;    // Dashboard URL
 
   public List<eXoGadget> _arrGadgetsInItem; // Gadget list
-                                     // Constructor
+
+  // Constructor
 
   public GateInDbItem(String name, String url, List<eXoGadget> arrGadgets) {
 

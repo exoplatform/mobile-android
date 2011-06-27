@@ -37,88 +37,88 @@ import android.webkit.CookieSyncManager;
 import android.widget.Toast;
 
 public class eXoDashboard extends GDListActivity {
-    
-  public static eXoDashboard eXoDashboardInstance;
-  public static List<GateInDbItem> arrGadgets;
-    
-    
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        
-        eXoDashboardInstance = this;
-        
-        setTitle("Dashboard");
-        
-        CookieSyncManager.createInstance(this);
-        
-        arrGadgets = eXoApplicationsController2.eXoApplicationsController2Instance.arrGadgets;
-        List<Item> items = new ArrayList<Item>();
-        
-        for(int i = 0; i < arrGadgets.size(); i++)
-        {
-          GateInDbItem gadgetTab = arrGadgets.get(i);
-          
-          items.add(new SeparatorItem(gadgetTab._strDbItemName));
-          for(int j = 0; j < gadgetTab._arrGadgetsInItem.size(); j++)
-          {
-            eXoGadget gadget = gadgetTab._arrGadgetsInItem.get(j);
-            items.add(new ThumbnailItem(gadget._strGadgetName, gadget._strGadgetDescription, gadget._btmGadgetIcon));
-          }
-           
-        }
-        
-        final ItemAdapter adapter = new ItemAdapter(this, items);
-        
-        setListAdapter(adapter);
-    }
-        
-    // Key down listener
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-      // Save data to the server once the user hits the back button
-      if (keyCode == KeyEvent.KEYCODE_BACK) {
-//        Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
 
+  public static eXoDashboard       eXoDashboardInstance;
+
+  public static List<GateInDbItem> arrGadgets;
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+    eXoDashboardInstance = this;
+
+    setTitle("Dashboard");
+
+    CookieSyncManager.createInstance(this);
+
+    arrGadgets = eXoApplicationsController2.eXoApplicationsController2Instance.arrGadgets;
+    List<Item> items = new ArrayList<Item>();
+
+    for (int i = 0; i < arrGadgets.size(); i++) {
+      GateInDbItem gadgetTab = arrGadgets.get(i);
+
+      items.add(new SeparatorItem(gadgetTab._strDbItemName));
+      for (int j = 0; j < gadgetTab._arrGadgetsInItem.size(); j++) {
+        eXoGadget gadget = gadgetTab._arrGadgetsInItem.get(j);
+        items.add(new ThumbnailItem(gadget._strGadgetName,
+                                    gadget._strGadgetDescription,
+                                    gadget._btmGadgetIcon));
       }
 
-      return false;
     }
-    
-    public void showGadget(eXoGadget gadget)
-    {
-      
-      eXoApplicationsController2.webViewMode = 0;
-      DefaultHttpClient client = new DefaultHttpClient();
 
-      HttpGet get = new HttpGet(gadget._strGadgetUrl);
-      try {
-        HttpResponse response = client.execute(get);
-        int status = response.getStatusLine().getStatusCode();
-        if (status < 200 || status >= 300) {
-          Toast.makeText(this, "Connection timed out", Toast.LENGTH_LONG).show();
-          return;
-        }
-      } catch (Exception e) {
+    final ItemAdapter adapter = new ItemAdapter(this, items);
 
+    setListAdapter(adapter);
+  }
+
+  // Key down listener
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    // Save data to the server once the user hits the back button
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
+      // Toast.makeText(AppController.this, strCannotBackToPreviousPage,
+      // Toast.LENGTH_LONG).show();
+
+    }
+
+    return false;
+  }
+
+  public void showGadget(eXoGadget gadget) {
+
+    eXoApplicationsController2.webViewMode = 0;
+    DefaultHttpClient client = new DefaultHttpClient();
+
+    HttpGet get = new HttpGet(gadget._strGadgetUrl);
+    try {
+      HttpResponse response = client.execute(get);
+      int status = response.getStatusLine().getStatusCode();
+      if (status < 200 || status >= 300) {
+        Toast.makeText(this, "Connection timed out", Toast.LENGTH_LONG).show();
         return;
       }
+    } catch (Exception e) {
 
-      eXoWebViewController._titlebar = gadget._strGadgetName;
-      eXoWebViewController._url = gadget._strGadgetUrl;
-      
-      Intent next = new Intent(this, eXoWebViewController.class);
-      startActivity(next);
-       
+      return;
     }
-    
-    public void finishMe() {
-      
-      Intent next = new Intent(eXoDashboard.this, eXoApplicationsController2.class);
-      startActivity(next);
-      
-      eXoDashboardInstance = null;
-      GDActivity.TYPE = 0;
-    }
+
+    eXoWebViewController._titlebar = gadget._strGadgetName;
+    eXoWebViewController._url = gadget._strGadgetUrl;
+
+    Intent next = new Intent(this, eXoWebViewController.class);
+    startActivity(next);
+
+  }
+
+  public void finishMe() {
+
+    Intent next = new Intent(eXoDashboard.this, eXoApplicationsController2.class);
+    startActivity(next);
+
+    eXoDashboardInstance = null;
+    GDActivity.TYPE = 0;
+  }
 
 }

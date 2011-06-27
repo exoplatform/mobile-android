@@ -38,24 +38,29 @@ public class eXoChatController extends GDActivity {
   public static List<eXoChatMessageContent> listChatContent = new ArrayList<eXoChatMessageContent>();
 
   public static String                      currentChatStr  = "";                                    // Current
-                                                                                                      // chat
-                                                                                                      // user
+
+  // chat
+  // user
 
   EditText                                  messageEditText;                                         // Chat
-                                                                                                      // text
-                                                                                                      // field
+
+  // text
+  // field
 
   Button                                    sendMessageBtn;                                          // Send
-                                                                                                      // button
+
+  // button
 
   static ListView                           conversationView;                                        // Chat
-                                                                                                      // conversation
+
+  // conversation
   public static eXoChatController           eXoChatControllerInstance;                               // Instance
 
-  static eXoApplicationsController2          _delegate;                                               // Main
-                                                                                                      // app
-                                                                                                      // view
-                                                                                                      // controller
+  static eXoApplicationsController2         _delegate;                                               // Main
+
+  // app
+  // view
+  // controller
 
   // Receive message
   public static PacketListener              packetListener;
@@ -74,16 +79,16 @@ public class eXoChatController extends GDActivity {
     super.onCreate(savedInstanceState);
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    
+
     setActionBarContentView(R.layout.exochat);
     eXoChatControllerInstance = this;
-    
+
     messageEditText = (EditText) findViewById(R.id.message);
 
     conversationView = (ListView) findViewById(R.id.chatContent);
     conversationView.setDivider(null);
     conversationView.setDividerHeight(0);
-   
+
     String currentChatNickName = currentChatStr.substring(0, currentChatStr.lastIndexOf("@"));
     setTitle(currentChatNickName);
 
@@ -201,9 +206,9 @@ public class eXoChatController extends GDActivity {
         name.setText(msgContent.name);
 
         if (msgContent.name.equalsIgnoreCase("Me")) {
-//          view.setBackgroundResource(R.drawable.chatbackgroundwhite);
+          // view.setBackgroundResource(R.drawable.chatbackgroundwhite);
         } else {
-//          view.setBackgroundResource(R.drawable.chatbackgroundwhite);
+          // view.setBackgroundResource(R.drawable.chatbackgroundwhite);
           // view.setBackgroundResource(0xFFFFFFFF);
         }
         TextView content = (TextView) view.findViewById(R.id.TextView_Content);
@@ -247,16 +252,13 @@ public class eXoChatController extends GDActivity {
     }
 
     sendMessageBtn.setText(strsendMessageBtn);
-   
 
     _delegate.changeLanguage(resourceBundle);
-//    _delegate.createAdapter();
+    // _delegate.createAdapter();
 
   }
 
-
-  public void finishMe()
-  {
+  public void finishMe() {
     currentChatStr = "";
     // eXoChatList.arrListChat.set(eXoChatList.posOfChatingMember,
     // listChatContent);
@@ -268,7 +270,7 @@ public class eXoChatController extends GDActivity {
     GDActivity.TYPE = 1;
     Intent next = new Intent(eXoChatController.this, eXoChatListController.class);
     eXoChatController.this.startActivity(next);
-    
+
     eXoChatControllerInstance = null;
   }
 }

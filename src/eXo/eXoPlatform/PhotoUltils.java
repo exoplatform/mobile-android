@@ -15,54 +15,54 @@ import android.graphics.Shader.TileMode;
 import android.text.format.DateFormat;
 
 public class PhotoUltils {
-	private static final String[] suffix = { ".jpeg", ".jpg", ".png", ".jpe",
-			".bmp" };
-	private static final String dotSign = ".";
+  private static final String[] suffix  = { ".jpeg", ".jpg", ".png", ".jpe", ".bmp" };
 
-	public static boolean isImages(File file) {
-		String name = file.getName();
-		for (int i = 0; i < suffix.length; i++) {
-			if (name.endsWith(suffix[i]))
-				return true;
-		}
-		return false;
-	}
+  private static final String   dotSign = ".";
 
-	public static String getExtension(String name) {
-		int index = name.indexOf(dotSign);
-		String extension = name.substring(index + 1, name.length());
-		return extension;
-	}
+  public static boolean isImages(File file) {
+    String name = file.getName();
+    for (int i = 0; i < suffix.length; i++) {
+      if (name.endsWith(suffix[i]))
+        return true;
+    }
+    return false;
+  }
 
-	public static String getFileName(String name) {
-		int index = name.indexOf(dotSign);
-		String fileName = name.substring(0, index);
-		return fileName;
-	}
+  public static String getExtension(String name) {
+    int index = name.indexOf(dotSign);
+    String extension = name.substring(index + 1, name.length());
+    return extension;
+  }
 
-	public static void getAllImageFiles(File folder, List<String> all) {
-		if (folder.getName().equals(".thumbnails")) {
-			return;
-		}
-		if (folder.isFile()) {
-			if (isImages(folder))
-				all.add(folder.getAbsolutePath());
-		}
-		if (folder.isDirectory()) {
-			for (File file : folder.listFiles()) {
-				getAllImageFiles(file, all);
-			}
-		}
+  public static String getFileName(String name) {
+    int index = name.indexOf(dotSign);
+    String fileName = name.substring(0, index);
+    return fileName;
+  }
 
-	}
+  public static void getAllImageFiles(File folder, List<String> all) {
+    if (folder.getName().equals(".thumbnails")) {
+      return;
+    }
+    if (folder.isFile()) {
+      if (isImages(folder))
+        all.add(folder.getAbsolutePath());
+    }
+    if (folder.isDirectory()) {
+      for (File file : folder.listFiles()) {
+        getAllImageFiles(file, all);
+      }
+    }
 
-	public static String getDateFormat() {
-		String dateFormat = null;
-		Calendar cal = Calendar.getInstance();
-		long minus = cal.getTimeInMillis();
-		String inFormat = new String("ddMMyyyyhhmmss");
-		dateFormat = (String) DateFormat.format(inFormat, minus);
-		return dateFormat;
-	}
+  }
+
+  public static String getDateFormat() {
+    String dateFormat = null;
+    Calendar cal = Calendar.getInstance();
+    long minus = cal.getTimeInMillis();
+    String inFormat = new String("ddMMyyyyhhmmss");
+    dateFormat = (String) DateFormat.format(inFormat, minus);
+    return dateFormat;
+  }
 
 }

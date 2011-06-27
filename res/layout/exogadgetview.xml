@@ -5,7 +5,7 @@
 
 	<ImageView android:layout_x="0sp" android:layout_y="0sp"
 		android:id="@+id/ImageView01" android:layout_width="wrap_content"
-		android:layout_height="40sp"/>
+		android:layout_height="40sp" />
 
 	<Button android:id="@+id/Button_Close" android:layout_x="02sp"
 		android:layout_y="02sp" android:layout_width="wrap_content"

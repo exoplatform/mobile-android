@@ -31,53 +31,65 @@ import android.widget.Toast;
 //Main app view controller
 public class eXoApplicationsController extends Activity {
   ListView                         _lstvApps;                        // eXo
-                                                                      // Apps
-                                                                      // view
+
+  // Apps
+  // view
 
   ListView                         _lstvGadgets;                     // Gadgets
-                                                                      // view
+
+  // view
 
   TextView                         txtVieweXoAppsTittle;             // eXo app
-                                                                      // title
+
+  // title
 
   TextView                         txtVieweXoGadgetsTittle;          // Gadgets
-                                                                      // title
+
+  // title
 
   Button                           _btnSignOut;                      // Signout
-                                                                      // button
+
+  // button
 
   Button                           _btnLanguageHelp;                 // Setting
 
-  public static short              webViewMode;                       // 0: view
-                                                                      // gadget,
-                                                                      // 1: View
-                                                                      // file,
-                                                                      // 2: view
-                                                                      // help;
+  public static short              webViewMode;                      // 0: view
+
+  // gadget,
+  // 1: View
+  // file,
+  // 2: view
+  // help;
 
   String                           fileTittle;                       // File
-                                                                      // app
-                                                                      // name
+
+  // app
+  // name
 
   String                           chatTittle;                       // Chat
-                                                                      // app
-                                                                      // name
+
+  // app
+  // name
 
   private static eXoApp            exoapp;                           // eXo app
 
   private static eXoAppsAdapter    exoAppsAdapter;                   // eXo app
-                                                                      // adapter
+
+  // adapter
 
   ProgressDialog                   _progressDialog;                  // Progress
-                                                                      // dialog
+
+  // dialog
 
   static eXoApplicationsController eXoApplicationsControllerInstance; // Instance
 
   public static List<GateInDbItem> arrGadgets;                       // Gadgets
-                                                                      // array
+
+  // array
 
   public static GateInDbItem       gadgetTab;                        // Dashboard
-                                                                      // tab
+
+  // tab
 
   Thread                           thread;
 
@@ -289,7 +301,7 @@ public class eXoApplicationsController extends Activity {
       }
 
       eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(eXoFilesController.myFile.urlStr);
-//      eXoFilesController._delegate = eXoApplicationsControllerInstance;
+      // eXoFilesController._delegate = eXoApplicationsControllerInstance;
       Intent next = new Intent(eXoApplicationsController.this, eXoFilesController.class);
       eXoApplicationsController.this.startActivity(next);
 
@@ -317,7 +329,7 @@ public class eXoApplicationsController extends Activity {
       if (eXoChatListController.conn == null || !eXoChatListController.conn.isConnected())
         return;
 
-//      eXoChatListController._delegate = eXoApplicationsControllerInstance;
+      // eXoChatListController._delegate = eXoApplicationsControllerInstance;
       Intent next = new Intent(eXoApplicationsController.this, eXoChatListController.class);
       eXoApplicationsController.this.startActivity(next);
     }

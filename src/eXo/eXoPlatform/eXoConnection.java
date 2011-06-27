@@ -33,7 +33,8 @@ public class eXoConnection {
   public String       _strCookie   = "";    // Cookie string
 
   public String       _strFirstLoginContent; // String data for the first time
-                                             // login
+
+  // login
 
   public String       _fullDomainStr;       // Host
 
@@ -165,7 +166,7 @@ public class eXoConnection {
       HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
       HttpConnectionParams.setSoTimeout(httpParameters, 60000);
       HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-      
+
       DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 
       HttpGet httpGet = new HttpGet(redirectStr);
@@ -176,7 +177,8 @@ public class eXoConnection {
 
       if (!cookies.isEmpty()) {
         for (int i = 0; i < cookies.size(); i++) {
-          strCookie = cookies.get(i).getName().toString() + "=" + cookies.get(i).getValue().toString();
+          strCookie = cookies.get(i).getName().toString() + "="
+              + cookies.get(i).getValue().toString();
         }
       }
 
@@ -256,7 +258,8 @@ public class eXoConnection {
       if (!cookies.isEmpty()) {
         for (int i = 0; i < cookies.size(); i++) {
           strCookie = cookies.get(i).getName().toString() + "=";
-          strCookie = strCookie + cookies.get(i).getValue().toString() + ";domain=mobile.demo.exoplatform.org";
+          strCookie = strCookie + cookies.get(i).getValue().toString()
+              + ";domain=mobile.demo.exoplatform.org";
         }
       }
 

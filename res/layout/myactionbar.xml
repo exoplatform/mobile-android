@@ -1,33 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-    
-    <ImageButton android:id="@+id/Button_Home_Back"
-    	android:text="Button Home_Back"          
-        android:layout_marginLeft="5dp"        
-        android:layout_width="30dp" 
-        android:layout_height="wrap_content"/>
-        
-    <TextView android:id="@+id/TextView_Title"         
-        android:textStyle="bold"
-        android:layout_marginLeft="45dp"
-        android:layout_toLeftOf="@id/Button_Home_Back"
-        android:text="Title"
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content"/>
-    
-    <ImageButton android:id="@+id/Button_1"          
-        android:text="Button 1"         
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="45dp"        
-        android:layout_width="30dp" 
-        android:layout_height="wrap_content"/>
-        
-        
-    <ImageButton android:id="@+id/Button_0"          
-        android:text="Button 0"        
-        android:layout_alignParentRight="true" 
-        android:layout_marginRight="5dp"        
-        android:layout_width="30dp" 
-        android:layout_height="wrap_content"/>
-        
+
+	<ImageButton android:id="@+id/Button_Home_Back"
+		android:text="Button Home_Back" android:layout_marginLeft="5dp"
+		android:layout_width="30dp" android:layout_height="wrap_content" />
+
+	<TextView android:id="@+id/TextView_Title" android:textStyle="bold"
+		android:layout_marginLeft="45dp" android:layout_toLeftOf="@id/Button_Home_Back"
+		android:text="Title" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+
+	<ImageButton android:id="@+id/Button_1" android:text="Button 1"
+		android:layout_alignParentRight="true" android:layout_marginRight="45dp"
+		android:layout_width="30dp" android:layout_height="wrap_content" />
+
+
+	<ImageButton android:id="@+id/Button_0" android:text="Button 0"
+		android:layout_alignParentRight="true" android:layout_marginRight="5dp"
+		android:layout_width="30dp" android:layout_height="wrap_content" />
+
 </merge>

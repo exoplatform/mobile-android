@@ -33,62 +33,62 @@ import android.os.Bundle;
 import android.view.Window;
 
 public class BasicItemActivity extends GDListActivity {
-    
-  public static BasicItemActivity basicItemActivityInstance;
-    
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        
-        basicItemActivityInstance = this;
-        
-        List<Item> items = new ArrayList<Item>();
-        
-        items.add(new SeparatorItem("Class 1"));
-        items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
-        items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
-        items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
-        
-//        items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
-        
-        items.add(new SeparatorItem("Class 2"));
-        items.add(new DrawableItem("Trikes", R.drawable.class2));
-        items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
-        items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
-        items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
-        
-        items.add(new SeparatorItem("Class 3"));
-        items.add(new ThumbnailItem("Multi-axis", "Looks like a tiny plane", R.drawable.class3));
-        items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
-        
-        items.add(new SeparatorItem("Class 4"));
-        items.add(new ThumbnailItem("Auto-gyro", "A scary helicopter", R.drawable.class4));
-        items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
-        
-        items.add(new SeparatorItem("Class 5"));
-        items.add(new DrawableItem("Hot air baloon", R.drawable.class5));
-        items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
-        
-        final Item item1 = new SeparatorItem("Class 6");
-        final Item item2 = new TextItem("Airbus/Boeing planes");
-        final Item item3 = new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in.");
-        items.add(item1);
-        items.add(item2);
-        items.add(item3);
-        
-        final ProgressItem progressItem = new ProgressItem("Removing intruders", true);
-        items.add(progressItem);
-        
-        final ItemAdapter adapter = new ItemAdapter(this, items);
-        setListAdapter(adapter);
-        
-    }
 
-    public static void finishMe() {
-      basicItemActivityInstance.finish();
-      basicItemActivityInstance = null;
-      
-      
-    }
+  public static BasicItemActivity basicItemActivityInstance;
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+    basicItemActivityInstance = this;
+
+    List<Item> items = new ArrayList<Item>();
+
+    items.add(new SeparatorItem("Class 1"));
+    items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
+    items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
+    items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
+
+    // items.add(new
+    // DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
+
+    items.add(new SeparatorItem("Class 2"));
+    items.add(new DrawableItem("Trikes", R.drawable.class2));
+    items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
+    items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
+    items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
+
+    items.add(new SeparatorItem("Class 3"));
+    items.add(new ThumbnailItem("Multi-axis", "Looks like a tiny plane", R.drawable.class3));
+    items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
+
+    items.add(new SeparatorItem("Class 4"));
+    items.add(new ThumbnailItem("Auto-gyro", "A scary helicopter", R.drawable.class4));
+    items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
+
+    items.add(new SeparatorItem("Class 5"));
+    items.add(new DrawableItem("Hot air baloon", R.drawable.class5));
+    items.add(new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in."));
+
+    final Item item1 = new SeparatorItem("Class 6");
+    final Item item2 = new TextItem("Airbus/Boeing planes");
+    final Item item3 = new DescriptionItem("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus consequat leo, et tincidunt justo tristique in.");
+    items.add(item1);
+    items.add(item2);
+    items.add(item3);
+
+    final ProgressItem progressItem = new ProgressItem("Removing intruders", true);
+    items.add(progressItem);
+
+    final ItemAdapter adapter = new ItemAdapter(this, items);
+    setListAdapter(adapter);
+
+  }
+
+  public static void finishMe() {
+    basicItemActivityInstance.finish();
+    basicItemActivityInstance = null;
+
+  }
 }

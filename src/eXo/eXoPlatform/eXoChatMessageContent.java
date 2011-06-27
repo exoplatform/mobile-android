@@ -6,7 +6,8 @@ public class eXoChatMessageContent {
   public String name;   // Message owner
 
   public String content; // Content
-                         // Constructor
+
+  // Constructor
   public eXoChatMessageContent(String strName, String strContent) {
     name = strName;
     content = strContent;

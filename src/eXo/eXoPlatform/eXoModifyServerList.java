@@ -29,10 +29,10 @@ public class eXoModifyServerList extends GDActivity {
 
   public static eXoModifyServerList eXoModifyServerListInstance;
 
-    ListView                   listViewServer;
-  
-  private final Handler mHandler = new Handler();
-  
+  ListView                          listViewServer;
+
+  private final Handler             mHandler = new Handler();
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -40,17 +40,17 @@ public class eXoModifyServerList extends GDActivity {
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.exomodifyserverlist);
-    
+
     setTitle("Server List");
-    
+
     eXoModifyServerListInstance = this;
 
     addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
-    
+
     listViewServer = (ListView) findViewById(R.id.ListView_Server_List);
     listViewServer.setDivider(null);
     listViewServer.setDividerHeight(0);
-    
+
     createServersAdapter(AppController.configurationInstance._arrServerList);
   }
 
@@ -58,60 +58,60 @@ public class eXoModifyServerList extends GDActivity {
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     // Save data to the server once the user hits the back button
     if (keyCode == KeyEvent.KEYCODE_BACK) {
-//      Toast.makeText(AppController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
+      // Toast.makeText(AppController.this, strCannotBackToPreviousPage,
+      // Toast.LENGTH_LONG).show();
 
     }
 
     return false;
   }
-  
+
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
-      switch (item.getItemId()) {
-      
-      case R.drawable.gd_action_bar_add:
-        eXoLanguageSettingDialog.isNewServer = true;
-        eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoModifyServerList.this);
-        customizeDialog.show();
+    switch (item.getItemId()) {
+
+    case R.drawable.gd_action_bar_add:
+      eXoLanguageSettingDialog.isNewServer = true;
+      eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoModifyServerList.this);
+      customizeDialog.show();
       break;
-      
-          case R.id.action_bar_locate:
-//              startActivity(new Intent(this, TabbedActionBarActivity.class));
-              break;
 
-          case R.id.action_bar_refresh:
-              final LoaderActionBarItem loaderItem = (LoaderActionBarItem) item;
-              mHandler.postDelayed(new Runnable() {
-                  public void run() {
-                      loaderItem.setLoading(false);
-                  }
-              }, 2000);
-              Toast.makeText(this, R.string.refresh_pressed, Toast.LENGTH_SHORT).show();
-              break;
+    case R.id.action_bar_locate:
+      // startActivity(new Intent(this, TabbedActionBarActivity.class));
+      break;
 
-          case R.id.action_bar_export:
-              Toast.makeText(this, R.string.custom_drawable, Toast.LENGTH_SHORT).show();
-              break;
+    case R.id.action_bar_refresh:
+      final LoaderActionBarItem loaderItem = (LoaderActionBarItem) item;
+      mHandler.postDelayed(new Runnable() {
+        public void run() {
+          loaderItem.setLoading(false);
+        }
+      }, 2000);
+      Toast.makeText(this, R.string.refresh_pressed, Toast.LENGTH_SHORT).show();
+      break;
 
-          default:
-              return super.onHandleActionBarItemClick(item, position);
-      }
+    case R.id.action_bar_export:
+      Toast.makeText(this, R.string.custom_drawable, Toast.LENGTH_SHORT).show();
+      break;
 
-      return true;
+    default:
+      return super.onHandleActionBarItemClick(item, position);
+    }
+
+    return true;
   }
 
-  public void finishMe()
-  {
-//    finish();
-    
+  public void finishMe() {
+    // finish();
+
     Intent next = new Intent(eXoModifyServerList.this, eXoSetting.class);
     startActivity(next);
-    
+
     eXoModifyServerListInstance = null;
     GDActivity.TYPE = 1;
   }
-  
+
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
     menu.add(0, 1, 0, "Add a Server");
@@ -157,7 +157,7 @@ public class eXoModifyServerList extends GDActivity {
           imgView.setVisibility(View.VISIBLE);
         else
           imgView.setVisibility(View.INVISIBLE);
-        
+
         rowView.setOnClickListener(new View.OnClickListener() {
 
           public void onClick(View v) {

@@ -43,43 +43,47 @@ import android.widget.Toast;
 //Chat list view controller
 public class eXoChatListController extends GDActivity {
 
-  
+  private ListView                                     lvChatList;                   // Chat
 
-   private ListView                                     lvChatList;                   // Chat
-                                                                                      // list
-                                                                                      // view
+  // list
+  // view
 
   public static eXoChatListController                  eXoChatListControllerInstance; // Instance
 
-  static eXoApplicationsController2                     _delegate;                    // Main
-                                                                                      // app
-                                                                                      // view
-                                                                                      // controller
+  static eXoApplicationsController2                    _delegate;                    // Main
+
+  // app
+  // view
+  // controller
 
   public static XMPPConnection                         conn;                         // Interact
-                                                                                      // with
-                                                                                      // server
+
+  // with
+  // server
 
   public static List<ChatMember>                       listChatRosterEntry;          // Roster
-                                                                                      // array
+
+  // array
 
   public static ArrayList<List<eXoChatMessageContent>> arrListChat = null;           // Chat
-                                                                                      // message
-                                                                                      // array
+
+  // message
+  // array
 
   private String                                       fromChatStr;                  // Source
 
   public static int                                    posOfChatingMember;           // User
-                                                                                      // index
-                                                                                      // Update
-                                                                                      // roster
+
+  // index
+  // Update
+  // roster
 
   private Handler                                      mHandler    = new Handler();
 
   public static RosterListener                         rosterListener;
 
   public static PacketListener                         packetListener;
-  
+
   eXoChatListAdapter                                   chatsAdapter;
 
   String                                               strCannotBackToPreviousPage;
@@ -109,7 +113,7 @@ public class eXoChatListController extends GDActivity {
     super.onCreate(savedInstanceState);
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    
+
     setActionBarContentView(R.layout.exochatlist);
 
     eXoChatListControllerInstance = this;
@@ -138,7 +142,7 @@ public class eXoChatListController extends GDActivity {
               arrListChat.set(i, str);
 
               if (fromName.equalsIgnoreCase(eXoChatController.currentChatStr)) {
-//                eXoChatController.setListAdapter();
+                // eXoChatController.setListAdapter();
                 chatsAdapter.notifyDataSetChanged();
               } else {
                 runOnUiThread(new Runnable() {
@@ -233,35 +237,34 @@ public class eXoChatListController extends GDActivity {
     }
 
   }
-  
+
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
-        case 0: 
-            // your method here
-            break;
- 
-        case 1: 
-            // your method here
-            break;
- 
-        default: 
-            // home button is clicked
-          finishMe();
-          break;
+    case 0:
+      // your method here
+      break;
+
+    case 1:
+      // your method here
+      break;
+
+    default:
+      // home button is clicked
+      finishMe();
+      break;
     }
-    
+
     return true;
-}
-  
- public void finishMe()
- {
-   GDActivity.TYPE = 0;
-   
-   Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
-   startActivity(next);
-   eXoChatListControllerInstance = null;
-   
- }
+  }
+
+  public void finishMe() {
+    GDActivity.TYPE = 0;
+
+    Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
+    startActivity(next);
+    eXoChatListControllerInstance = null;
+
+  }
 
   // Keydown listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -377,9 +380,9 @@ public class eXoChatListController extends GDActivity {
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      
+
       GDActivity.TYPE = 1;
-      
+
       posOfChatingMember = position;
       eXoChatController.currentChatStr = listChatRosterEntry.get(position).address;
       eXoChatController.listChatContent = arrListChat.get(position);
@@ -408,6 +411,6 @@ public class eXoChatListController extends GDActivity {
     setTitle(strTitle);
 
     _delegate.changeLanguage(resourceBundle);
-//    _delegate.createAdapter();
+    // _delegate.createAdapter();
   }
 }

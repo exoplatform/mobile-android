@@ -40,8 +40,10 @@ public class eXoFile {
       con = (HttpURLConnection) url.openConnection();
 
       con.setRequestMethod("GET");
-//      String authorizationStr = 
-      con.setRequestProperty("Authorization", AppController._eXoConnection.authorizationHeader(strUserName, strPassword));
+      // String authorizationStr =
+      con.setRequestProperty("Authorization",
+                             AppController._eXoConnection.authorizationHeader(strUserName,
+                                                                              strPassword));
 
       contentType = con.getContentType();
 

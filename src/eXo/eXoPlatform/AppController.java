@@ -115,7 +115,7 @@ public class AppController extends Activity implements OnTouchListener {
       if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {
         return "0";
       } else {
-        
+
         String filePath = Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml";
         createLocalFileDirectory(Environment.getExternalStorageDirectory() + "/eXo", true);
         File file = new File(filePath);
@@ -407,17 +407,19 @@ public class AppController extends Activity implements OnTouchListener {
   public static eXoConnection               _eXoConnection       = new eXoConnection();
 
   // UI component
-  
+
   ImageView                                 _imageAccount;
+
   ImageView                                 _imageServer;
+
   RelativeLayout                            _imagePanelBackground;
-  
+
   Button                                    _btnAccount;
 
   Button                                    _btnServer;
 
   Button                                    _btnLogIn;
-  
+
   TextView                                  _tvLogIn;
 
   EditText                                  _edtxUserName;
@@ -457,22 +459,23 @@ public class AppController extends Activity implements OnTouchListener {
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    
+
     this.setContentView(R.layout.login);
 
-//    String path = Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml";
-//    File file = new File(path);
-//    boolean deleted = file.delete();
-        
-    RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayout_Login);
+    // String path = Environment.getExternalStorageDirectory() +
+    // "/eXo/DefaultServerList.xml";
+    // File file = new File(path);
+    // boolean deleted = file.delete();
+
+    RelativeLayout layout = (RelativeLayout) findViewById(R.id.RelativeLayout_Login);
     layout.setOnClickListener(new View.OnClickListener() {
-      
+
       public void onClick(View v) {
-        
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
-        
+
       }
     });
     configurationInstance = new Configuration();
@@ -533,11 +536,10 @@ public class AppController extends Activity implements OnTouchListener {
         configurationInstance._arrServerList.addAll(configurationInstance._arrUserServerList);
     }
 
-    
     String strLocalize;
 
     appControllerInstance = this;
-    
+
     if (sharedPreference == null)
       sharedPreference = getSharedPreferences(EXO_PREFERENCE, 0);
 
@@ -565,8 +567,8 @@ public class AppController extends Activity implements OnTouchListener {
     _btnAccount = (Button) findViewById(R.id.Button_Account);
     _btnServer = (Button) findViewById(R.id.Button_Server);
     _btnLogIn = (Button) findViewById(R.id.Button_Login);
-//    _tvLogIn =  (TextView) findViewById(R.id.TextView_Login);
-    
+    // _tvLogIn = (TextView) findViewById(R.id.TextView_Login);
+
     _listViewServer = (ListView) findViewById(R.id.ListView_Servers);
     _listViewServer.setVisibility(View.INVISIBLE);
     _listViewServer.setDivider(null);
@@ -587,19 +589,18 @@ public class AppController extends Activity implements OnTouchListener {
     _btnAccount.setOnClickListener(new View.OnClickListener() {
 
       public void onClick(View v) {
-        
+
         v.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
         _imageAccount.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneon);
-        
+
         _btnServer.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
         _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
-        
-        
+
         _edtxUserName.setVisibility(View.VISIBLE);
         _edtxPassword.setVisibility(View.VISIBLE);
-        
+
         _btnLogIn.setVisibility(View.VISIBLE);
-//        _tvLogIn.setVisibility(View.VISIBLE);
+        // _tvLogIn.setVisibility(View.VISIBLE);
 
         _listViewServer.setVisibility(View.INVISIBLE);
       }
@@ -612,20 +613,19 @@ public class AppController extends Activity implements OnTouchListener {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
-        
+
         v.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
         _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneon);
-        
+
         _btnAccount.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
         _imageAccount.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneoff);
-        
-        
+
         _edtxUserName.setVisibility(View.INVISIBLE);
 
         _edtxPassword.setVisibility(View.INVISIBLE);
 
         _btnLogIn.setVisibility(View.INVISIBLE);
-//        _tvLogIn.setVisibility(View.INVISIBLE);
+        // _tvLogIn.setVisibility(View.INVISIBLE);
 
         _listViewServer.setVisibility(View.VISIBLE);
       }
@@ -633,20 +633,19 @@ public class AppController extends Activity implements OnTouchListener {
 
     _btnLogIn.setOnClickListener(new View.OnClickListener() {
       public void onClick(View v) {
-        
+
         _btnLogIn.setVisibility(View.INVISIBLE);
-        
+
         viewOrders = new Runnable() {
           public void run() {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
             imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
 
-            signInProgress(); 
-                      
+            signInProgress();
+
           }
-          
-          
+
         };
 
         thread = new Thread(null, viewOrders, "SigningIn");
@@ -661,31 +660,25 @@ public class AppController extends Activity implements OnTouchListener {
     createServersAdapter(configurationInstance._arrServerList);
   }
 
-  public boolean onTouch(View v, MotionEvent event)
-  {
-   int action = event.getAction();
-   if (action == MotionEvent.ACTION_DOWN)
-   {
-    
-   }
-   else if (action == MotionEvent.ACTION_MOVE)
-   {
-    // movement: cancel the touch press
-    
-   }
-   else if (action == MotionEvent.ACTION_UP)
-   {
-    
-   }
+  public boolean onTouch(View v, MotionEvent event) {
+    int action = event.getAction();
+    if (action == MotionEvent.ACTION_DOWN) {
 
-   return true;
+    } else if (action == MotionEvent.ACTION_MOVE) {
+      // movement: cancel the touch press
+
+    } else if (action == MotionEvent.ACTION_UP) {
+
+    }
+
+    return true;
   }
 
   // Key down listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    
+
     if (keyCode == KeyEvent.KEYCODE_BACK) {
-//      Back to home application
+      // Back to home application
       moveTaskToBack(true);
     }
 
@@ -695,7 +688,7 @@ public class AppController extends Activity implements OnTouchListener {
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
 
-//    menu.add(0, 1, 0, "Setting");
+    // menu.add(0, 1, 0, "Setting");
     menu.add(0, 1, 0, "Setting").setIcon(R.drawable.optionsettingsbutton);
     // menu.add(0, 2, 0, "Delete Contact");
     // menu.add(0, 3, 0, "Exit");
@@ -715,7 +708,7 @@ public class AppController extends Activity implements OnTouchListener {
       // customizeDialog.show();
 
       GDActivity.TYPE = 1;
-      
+
       Intent next = new Intent(AppController.this, eXoSetting.class);
       startActivity(next);
     }
@@ -729,7 +722,7 @@ public class AppController extends Activity implements OnTouchListener {
     final List<ServerObj> serverObjsTmp = serverObjs;
 
     final BaseAdapter serverAdapter = new BaseAdapter() {
-      
+
       public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
 
@@ -765,24 +758,24 @@ public class AppController extends Activity implements OnTouchListener {
 
           public void onClick(View v) {
 
-            if(_intDomainIndex < 0)
+            if (_intDomainIndex < 0)
               _intDomainIndex = pos;
-            
-            View rowView =  getView(_intDomainIndex, null, _listViewServer); 
-              
+
+            View rowView = getView(_intDomainIndex, null, _listViewServer);
+
             ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
             imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneoff);
-            
+
             _strDomainIndex = String.valueOf(pos);
             _intDomainIndex = pos;
             _strDomain = serverObj._strServerUrl;
-            
-            rowView = getView(_intDomainIndex, null, _listViewServer); 
+
+            rowView = getView(_intDomainIndex, null, _listViewServer);
             imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
             imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
-            
+
             notifyDataSetChanged();
-          
+
           }
         });
 
@@ -817,14 +810,14 @@ public class AppController extends Activity implements OnTouchListener {
 
                                                       // eXoApplicationsController.arrGadgets
                                                       // = listOfGadgets();
-//                                                      listOfGadgets();
+                                                      // listOfGadgets();
                                                       Intent next = new Intent(AppController.this,
                                                                                eXoApplicationsController2.class);
-                                                      
+
                                                       startActivity(next);
 
                                                       thread.stop();
-                                                      
+
                                                       _progressDialog.dismiss();
                                                       _btnLogIn.setVisibility(View.VISIBLE);
 
@@ -891,7 +884,7 @@ public class AppController extends Activity implements OnTouchListener {
         _strDomain = "http://" + _strDomain;
       }
 
-      URL url = new URL(_strDomain); 
+      URL url = new URL(_strDomain);
       // HttpURLConnection con = (HttpURLConnection) url.openConnection();
       // int code = con.getResponseCode();
 
@@ -925,7 +918,7 @@ public class AppController extends Activity implements OnTouchListener {
       // Log.v(str, msg);
       runOnUiThread(returnResFaileConnection);
     }
-    
+
   }
 
   // Get gadget list
@@ -1227,8 +1220,8 @@ public class AppController extends Activity implements OnTouchListener {
     }
 
     _btnLogIn.setText(strSignIn);
-//    _txtViewUserName.setText(strUserName);
-//    _txtViewPassword.setText(strPassword);
+    // _txtViewUserName.setText(strUserName);
+    // _txtViewPassword.setText(strPassword);
   }
 
 }
