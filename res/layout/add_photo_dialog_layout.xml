@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="wrap_content"
+	android:minWidth="280dip" android:layout_height="wrap_content"
+	android:padding="5dp" android:background="@drawable/bottom_background_shape">
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+		<TextView style="@style/DialogText.Title" android:text="Add a Photo?"
+			android:layout_gravity="center" android:paddingRight="8dip"
+			android:paddingLeft="8dip" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/activate_dialog_title"
+			android:paddingBottom="3dip" android:paddingTop="3dip"
+			android:textColor="#FAA335" />
+
+	</LinearLayout>
+
+	<Button android:layout_marginTop="15dp" android:id="@+id/add_photo_take_button"
+		android:text="Take a Photo" android:textColor="#FFFFFF"
+		android:padding="7dp" android:background="@drawable/button_background_shape"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+	<Button android:layout_marginTop="15dp" android:id="@+id/add_photo_library_button"
+		android:text="Photo Library" android:textColor="#FFFFFF"
+		android:padding="7dp" android:background="@drawable/button_background_shape"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+	<Button android:layout_marginTop="15dp" android:id="@+id/add_photo_cancel_button"
+		android:text="Cancel" android:textColor="#FFFFFF" android:padding="7dp"
+		android:background="@drawable/button_background_shape"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+
+
+</LinearLayout>

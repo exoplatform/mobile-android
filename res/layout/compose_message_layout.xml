@@ -3,12 +3,15 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:background="@drawable/background2"
 	android:padding="5dp">
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="180dp" android:background="@drawable/compose_background_shape">
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="180dp"
+		android:background="@drawable/compose_background_shape">
 		<EditText android:id="@+id/compose_text_view"
 			android:focusable="true" android:background="@drawable/compose_background_shape"
 			android:textColor="#000000" android:padding="2dp"
 			android:layout_width="fill_parent" android:layout_height="wrap_content" />
+		<LinearLayout android:id="@+id/compose_image_wrap"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"></LinearLayout>
 	</LinearLayout>
 
 	<LinearLayout android:orientation="horizontal"
@@ -16,19 +19,19 @@
 		android:layout_marginTop="2dp" android:layout_marginBottom="2dip"
 		android:padding="2dip">
 
-		<Button android:text="Cancel" android:layout_width="0dip"
-			android:layout_weight="1" android:layout_height="wrap_content"
-			android:singleLine="true" android:id="@+id/compose_cancel_button"
-			android:background="@drawable/button_background_shape"
-			android:textColor="#ffffff" android:paddingBottom="5dip"
-			android:paddingTop="5dip" />
-
 		<Button android:text="Send" android:layout_width="0dip"
 			android:layout_weight="1" android:layout_height="wrap_content"
 			android:singleLine="true" android:id="@+id/compose_send_button"
 			android:background="@drawable/button_background_shape"
-			android:textColor="#ffffff" android:layout_marginLeft="3dip"
-			android:paddingBottom="5dip" android:paddingTop="5dip" />
+			android:textColor="#ffffff" android:paddingBottom="6dip"
+			android:paddingTop="6dip" />
+
+		<Button android:text="Cancel" android:layout_width="0dip"
+			android:layout_weight="1" android:layout_height="wrap_content"
+			android:singleLine="true" android:id="@+id/compose_cancel_button"
+			android:background="@drawable/button_background_shape"
+			android:textColor="#ffffff" android:layout_marginLeft="15dip"
+			android:paddingBottom="6dip" android:paddingTop="6dip" />
 
 	</LinearLayout>
 </LinearLayout>

@@ -15,24 +15,25 @@
  */
 package eXo.eXoPlatform;
 
+import greendroid.app.GDActivity;
+import greendroid.app.GDListActivity;
+import greendroid.image.ImageProcessor;
+import greendroid.widget.ActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.AsyncImageView;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.cyrilmottier.android.greendroid.R;
-
-import greendroid.app.GDActivity;
-import greendroid.app.GDListActivity;
-import greendroid.image.ImageProcessor;
-import greendroid.widget.AsyncImageView;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
@@ -44,9 +45,10 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.cyrilmottier.android.greendroid.R;
 
 public class AsyncImageViewListActivity extends GDListActivity implements OnScrollListener {
 
@@ -60,7 +62,7 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
 
         asyncImageViewListActivityInstance = this;
         setTitle("Activity Streams");
-        
+        addActionBarItem(Type.Compose, R.drawable.gd_action_bar_compose);
         mock = new Mock_Social_Activity(false);
         
         getListView().setDivider(null);
@@ -69,6 +71,26 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
         setListAdapter(new MyAdapter(this, mock));
 //        getListView().setOnScrollListener(this);
     }
+    
+    @Override
+	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+		switch (item.getItemId()) {
+
+		case R.drawable.gd_action_bar_compose:
+			Intent intent = new Intent(this, ComposeMessageActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.putExtra(eXoConstants.COMPOSE_TYPE, 0);
+			startActivity(intent);
+
+			break;
+
+		default:
+			Log.e("12312", "13123");
+
+		}
+		return super.onHandleActionBarItemClick(item, position);
+
+	}
 
     /**
      * Gets prettyTime by timestamp.
@@ -417,4 +439,10 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
       
     }
 
+    @Override
+    	public void onBackPressed() {
+    		// TODO Auto-generated method stub
+    		super.onBackPressed();
+    		finish();
+    	}
 }

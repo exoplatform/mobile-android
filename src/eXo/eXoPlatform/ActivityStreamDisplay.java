@@ -254,4 +254,10 @@ public class ActivityStreamDisplay extends GDActivity implements
 			startActivity(intent);
 		}
 	}
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		finish();
+	}
 }
