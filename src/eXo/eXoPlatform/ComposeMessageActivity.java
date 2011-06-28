@@ -79,12 +79,6 @@ public class ComposeMessageActivity extends GDActivity implements OnClickListene
     return super.onHandleActionBarItemClick(item, position);
   }
 
-  @Override
-  public void onBackPressed() {
-    super.onBackPressed();
-    finish();
-
-  }
 
   public void onClick(View view) {
     if (view == sendButton) {

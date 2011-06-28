@@ -8,6 +8,7 @@ import greendroid.widget.ActionBarItem.Type;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,7 +23,10 @@ import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //Chat list view controller
@@ -43,7 +47,9 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
 
   }
 
-  private ListView                    _lvActivityDisplayComment;
+  // private ListView _lvActivityDisplayComment;
+
+  private LinearLayout                commentLayoutWrap;
 
   public static ActivityStreamDisplay activityStreamDisplayInstance; // Instance
 
@@ -64,7 +70,7 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-    setActionBarContentView(R.layout.activitydisplayview);
+    setActionBarContentView(R.layout.activity_display_view);
     // setContentView(R.layout.socialbrowserview);
 
     activityStreamDisplayInstance = this;
@@ -85,9 +91,12 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
     TextView textView_Time = (TextView) findViewById(R.id.textView_Time);
     textView_Time.setText(AsyncImageViewListActivity.asyncImageViewListActivityInstance.getPostedTimeString(selectedActivity.postedTime));
 
-    _lvActivityDisplayComment = (ListView) findViewById(R.id.listView_Comment);
-    _lvActivityDisplayComment.setDivider(null);
-    _lvActivityDisplayComment.setDividerHeight(0);
+    // _lvActivityDisplayComment = (ListView)
+    // findViewById(R.id.listView_Comment);
+    // _lvActivityDisplayComment.setDivider(null);
+    // _lvActivityDisplayComment.setDividerHeight(0);
+
+    commentLayoutWrap = (LinearLayout) findViewById(R.id.activity_display_comment_wrap);
 
     TextView textView_Like_Count = (TextView) findViewById(R.id.textView_Like_Count);
     String str = "";
@@ -111,7 +120,8 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
 
     changeLanguage(AppController.bundle);
 
-    createActivityAdapter();
+    // createActivityAdapter();
+    createCommentList();
     initTextComment();
   }
 
@@ -158,6 +168,26 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
       // .show();
     }
     return false;
+  }
+
+  // create comment layout list
+
+  private void createCommentList() {
+    if (activityDetail.arrComments != null) {
+
+      LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+
+      for (Mock_Activity activity : activityDetail.arrComments) {
+        CommentItemLayout commentItem = new CommentItemLayout(this);
+        commentItem.comAvatarImage.setUrl(activity.imageUrl);
+        commentItem.comTextViewName.setText(activity.userID);
+        commentItem.comTextViewMessage.setText(activity.title);
+
+        commentLayoutWrap.addView(commentItem, params);
+
+      }
+    }
+
   }
 
   // Create activity browser adapter
@@ -214,7 +244,7 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
       }
     };
 
-    _lvActivityDisplayComment.setAdapter(adapter);
+    // _lvActivityDisplayComment.setAdapter(adapter);
   }
 
   // Set language
@@ -254,5 +284,26 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
     // TODO Auto-generated method stub
     super.onBackPressed();
     finish();
+  }
+  
+  //Comment item layout
+
+  private class CommentItemLayout extends RelativeLayout {
+    private AsyncImageView comAvatarImage;
+
+    private TextView       comTextViewName;
+
+    private TextView       comTextViewMessage;
+
+    public CommentItemLayout(Context context) {
+      super(context);
+
+      LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      View view = inflate.inflate(R.layout.activitydisplayviewcell, this);
+      comAvatarImage = (AsyncImageView) view.findViewById(R.id.imageView_Avatar);
+      comTextViewName = (TextView) view.findViewById(R.id.textView_Name);
+      comTextViewMessage = (TextView) view.findViewById(R.id.textView_Message);
+    }
+
   }
 }

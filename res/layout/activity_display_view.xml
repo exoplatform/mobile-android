@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<ScrollView android:layout_weight="1" android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="fill_parent">
+			<RelativeLayout android:id="@+id/RelativeLayout_Status"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:background="#E9E9E9">
+
+				<RelativeLayout android:background="@drawable/bottom_background_shape"
+					android:id="@+id/imageView_Avatar_wrap" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:layout_marginLeft="2dip"
+					android:layout_marginTop="2dip" android:layout_alignParentLeft="true">
+					<greendroid.widget.AsyncImageView
+						android:padding="1dp" android:layout_centerInParent="true"
+						android:id="@+id/imageView_Avatar" android:layout_height="50dip"
+						android:layout_width="50dip" />
+					<ImageView android:background="@drawable/activity_avatar_shadow"
+						android:layout_centerInParent="true" android:layout_height="48dip"
+						android:layout_width="48dip" />
+				</RelativeLayout>
+
+
+				<TextView android:id="@+id/textView_Name"
+					android:layout_height="20dip" android:text="Name"
+					android:layout_marginLeft="10dip" android:layout_marginTop="2dip"
+					android:layout_toRightOf="@id/imageView_Avatar_wrap"
+					android:layout_width="fill_parent" android:textColor="#000000"
+					android:textStyle="bold" />
+
+				<TextView android:id="@+id/textView_Message"
+					android:layout_height="wrap_content" android:text="Test message"
+					android:layout_marginLeft="10dip" android:layout_marginTop="2dip"
+					android:layout_below="@id/textView_Name" android:layout_toRightOf="@id/imageView_Avatar_wrap"
+					android:layout_width="fill_parent" android:textColor="#000000" />
+
+				<TextView android:id="@+id/textView_Time"
+					android:layout_height="wrap_content" android:text="20 Minutes Ago"
+					android:layout_marginTop="5dip" android:layout_marginLeft="10dip"
+					android:layout_toRightOf="@id/imageView_Avatar_wrap"
+					android:layout_below="@id/textView_Message" android:layout_width="wrap_content"
+					android:textColor="#000000" />
+
+			</RelativeLayout>
+
+			<RelativeLayout android:id="@+id/relativeLayout_Like"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_below="@id/RelativeLayout_Status" android:background="@drawable/socialactivitydetaillikebgselected"
+				android:layout_marginTop="-3dip">
+
+				<ImageView android:id="@+id/imageView_Like"
+					android:layout_height="wrap_content" android:layout_width="wrap_content"
+					android:layout_alignParentRight="true" android:layout_marginTop="20dip"
+					android:src="@drawable/socialactivitybrowserlikebutton" />
+
+				<TextView android:id="@+id/textView_Like_Count"
+					android:layout_height="wrap_content"
+					android:text="Jack Miller, Marry Williams and James David like this."
+					android:layout_marginLeft="10dip" android:layout_marginTop="20dip"
+					android:layout_toLeftOf="@id/imageView_Like" android:layout_width="fill_parent" />
+
+			</RelativeLayout>
+			<LinearLayout android:id="@+id/activity_display_comment_wrap"
+				android:orientation="vertical" android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+			</LinearLayout>
+
+
+		</LinearLayout>
+	</ScrollView>
+
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<EditText android:id="@+id/editText_Comment"
+			android:layout_height="wrap_content" android:layout_width="fill_parent"
+			android:maxLines="3" android:editable="false" android:hint="Your comment..." />
+	</LinearLayout>
+
+</LinearLayout>
