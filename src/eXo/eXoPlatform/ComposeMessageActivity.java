@@ -23,19 +23,21 @@ import android.widget.LinearLayout;
 
 public class ComposeMessageActivity extends GDActivity implements OnClickListener {
 
-  private int          composeType;
+  private int                          composeType;
 
-  private EditText     composeEditText;
+  private EditText                     composeEditText;
 
-  private LinearLayout imageLayoutWrap;
+  private LinearLayout                 imageLayoutWrap;
 
-  private Button       sendButton;
+  private Button                       sendButton;
 
-  private Button       cancelButton;
+  private Button                       cancelButton;
 
-  private String       composeMessage;
+  private String                       composeMessage;
 
-  private String       sdcard_temp_dir;
+  private String                       sdcard_temp_dir;
+
+  public static ComposeMessageActivity composeMessageActivity;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class ComposeMessageActivity extends GDActivity implements OnClickListene
     requestWindowFeature(Window.FEATURE_NO_TITLE);
 
     setActionBarContentView(R.layout.compose_message_layout);
+
+    composeMessageActivity = this;
     composeType = getIntent().getIntExtra(eXoConstants.COMPOSE_TYPE, composeType);
     if (composeType == 0) {
       setTitle("Status Update");
@@ -72,13 +76,12 @@ public class ComposeMessageActivity extends GDActivity implements OnClickListene
     // TODO Auto-generated method stub
     switch (item.getItemId()) {
     case R.drawable.gd_action_bar_take_photo:
-      new AddPhotoDialog(this).show();
+      // new AddPhotoDialog(this).show();
       break;
     }
 
     return super.onHandleActionBarItemClick(item, position);
   }
-
 
   public void onClick(View view) {
     if (view == sendButton) {
@@ -91,8 +94,32 @@ public class ComposeMessageActivity extends GDActivity implements OnClickListene
     }
 
     if (view == cancelButton) {
+      composeMessageActivity = null;
       finish();
     }
+  }
+
+  public void finishMe() {
+    GDActivity.TYPE = 1;
+    if (composeType == 0) {
+      Intent intent = new Intent(composeMessageActivity, AsyncImageViewListActivity.class);
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      startActivity(intent);
+    } else {
+      Intent intent = new Intent(composeMessageActivity, ActivityStreamDisplay.class);
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      startActivity(intent);
+    }
+    composeMessageActivity = null;
+  }
+
+  @Override
+  public void onBackPressed() {
+    // TODO Auto-generated method stub
+    super.onBackPressed();
+    composeMessageActivity = null;
+    finish();
+
   }
 
   private void initCamera() {

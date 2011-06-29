@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#163d8b" android:padding="4dp"
 	android:layout_width="fill_parent" android:layout_height="wrap_content">
 
 	<RelativeLayout android:background="@drawable/bottom_background_shape"
@@ -15,7 +16,7 @@
 			android:layout_width="48dip" />
 	</RelativeLayout>
 
-	<RelativeLayout android:id="@+id/relativeLayout_Content" 
+	<RelativeLayout android:id="@+id/relativeLayout_Content"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
 		android:layout_marginTop="10dip" android:layout_toRightOf="@id/imageView_Avatar_wrap"
 		android:background="@drawable/socialactivityarowseractivitybg">

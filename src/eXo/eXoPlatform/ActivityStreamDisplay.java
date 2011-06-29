@@ -142,17 +142,16 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
 
     default:
       // home button is clicked
-      finishMe();
+      // finishMe();
       break;
     }
 
-    return true;
+    return super.onHandleActionBarItemClick(item, position);
   }
 
   public void finishMe() {
 
     GDActivity.TYPE = 1;
-    //
     Intent next = new Intent(activityStreamDisplayInstance, AsyncImageViewListActivity.class);
     startActivity(next);
     activityStreamDisplayInstance = null;
@@ -160,15 +159,15 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
   }
 
   // Keydown listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-      // Toast.makeText(eXoChatListController.this,
-      // strCannotBackToPreviousPage, Toast.LENGTH_SHORT)
-      // .show();
-    }
-    return false;
-  }
+  // public boolean onKeyDown(int keyCode, KeyEvent event) {
+  // // Save data to the server once the user hits the back button
+  // if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+  // // Toast.makeText(eXoChatListController.this,
+  // // strCannotBackToPreviousPage, Toast.LENGTH_SHORT)
+  // // .show();
+  // }
+  // return false;
+  // }
 
   // create comment layout list
 
@@ -272,21 +271,22 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
   public void onClick(View view) {
     // TODO Auto-generated method stub
     if (view == editTextComment) {
+      // GDActivity.TYPE = 1;
       Intent intent = new Intent(this, ComposeMessageActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      intent.putExtra(eXoConstants.COMPOSE_TYPE, 1);
+      intent.putExtra(eXoConstants.COMPOSE_TYPE, eXoConstants.COMPOSE_COMMENT_TYPE);
       startActivity(intent);
     }
   }
 
   @Override
   public void onBackPressed() {
-    // TODO Auto-generated method stub
     super.onBackPressed();
-    finish();
+    activityStreamDisplayInstance = null;
+    finishFromChild(this);
   }
-  
-  //Comment item layout
+
+  // Comment item layout
 
   private class CommentItemLayout extends RelativeLayout {
     private AsyncImageView comAvatarImage;

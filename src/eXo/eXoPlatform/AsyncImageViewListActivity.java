@@ -79,9 +79,10 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
     switch (item.getItemId()) {
 
     case R.drawable.gd_action_bar_compose:
+      GDActivity.TYPE = 1;
       Intent intent = new Intent(this, ComposeMessageActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      intent.putExtra(eXoConstants.COMPOSE_TYPE, 0);
+      intent.putExtra(eXoConstants.COMPOSE_TYPE, eXoConstants.COMPOSE_POST_TYPE);
       startActivity(intent);
 
       break;
@@ -443,7 +444,7 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
     //      
     Intent next = new Intent(asyncImageViewListActivityInstance, eXoApplicationsController2.class);
     startActivity(next);
-    asyncImageViewListActivityInstance = null;
+//    asyncImageViewListActivityInstance = null;
 
   }
 
