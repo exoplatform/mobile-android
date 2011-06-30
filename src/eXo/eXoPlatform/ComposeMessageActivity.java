@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -27,7 +28,7 @@ public class ComposeMessageActivity extends GDActivity implements OnClickListene
 
   private EditText                     composeEditText;
 
-  private LinearLayout                 imageLayoutWrap;
+//  private LinearLayout                 imageLayoutWrap;
 
   private Button                       sendButton;
 
@@ -36,6 +37,8 @@ public class ComposeMessageActivity extends GDActivity implements OnClickListene
   private String                       composeMessage;
 
   private String                       sdcard_temp_dir;
+
+  private InputMethodManager           inputManager;
 
   public static ComposeMessageActivity composeMessageActivity;
 
@@ -60,8 +63,13 @@ public class ComposeMessageActivity extends GDActivity implements OnClickListene
 
   private void initComponents() {
     composeEditText = (EditText) findViewById(R.id.compose_text_view);
+    composeEditText.requestFocus();
+    inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+    inputManager.showSoftInput(composeEditText, InputMethodManager.SHOW_FORCED);
+    inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,
+                                 InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-    imageLayoutWrap = (LinearLayout) findViewById(R.id.compose_image_wrap);
+//    imageLayoutWrap = (LinearLayout) findViewById(R.id.compose_image_wrap);
 
     sendButton = (Button) findViewById(R.id.compose_send_button);
     sendButton.setOnClickListener(this);
@@ -69,6 +77,12 @@ public class ComposeMessageActivity extends GDActivity implements OnClickListene
     cancelButton = (Button) findViewById(R.id.compose_cancel_button);
     cancelButton.setOnClickListener(this);
 
+  }
+
+  private void hideKeyBoard() {
+    inputManager.hideSoftInputFromInputMethod(composeEditText.getWindowToken(),
+                                              InputMethodManager.HIDE_IMPLICIT_ONLY);
+    inputManager.toggleSoftInput(0, 0);
   }
 
   @Override
@@ -84,6 +98,7 @@ public class ComposeMessageActivity extends GDActivity implements OnClickListene
   }
 
   public void onClick(View view) {
+    
     if (view == sendButton) {
       if (composeType == 0) {
 
@@ -94,12 +109,14 @@ public class ComposeMessageActivity extends GDActivity implements OnClickListene
     }
 
     if (view == cancelButton) {
+      hideKeyBoard();
       composeMessageActivity = null;
       finish();
     }
   }
 
   public void finishMe() {
+    hideKeyBoard();
     GDActivity.TYPE = 1;
     if (composeType == 0) {
       Intent intent = new Intent(composeMessageActivity, AsyncImageViewListActivity.class);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:orientation="vertical" android:background="#08387B"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 	<ScrollView android:layout_weight="1" android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
@@ -14,7 +14,7 @@
 				<RelativeLayout android:background="@drawable/bottom_background_shape"
 					android:id="@+id/imageView_Avatar_wrap" android:layout_height="wrap_content"
 					android:layout_width="wrap_content" android:layout_marginLeft="2dip"
-					android:layout_marginTop="2dip" android:layout_alignParentLeft="true">
+					android:layout_marginTop="5dip" android:layout_alignParentLeft="true">
 					<greendroid.widget.AsyncImageView
 						android:padding="1dp" android:layout_centerInParent="true"
 						android:id="@+id/imageView_Avatar" android:layout_height="50dip"
@@ -27,7 +27,7 @@
 
 				<TextView android:id="@+id/textView_Name"
 					android:layout_height="20dip" android:text="Name"
-					android:layout_marginLeft="10dip" android:layout_marginTop="2dip"
+					android:layout_marginLeft="10dip" android:layout_marginTop="5dip"
 					android:layout_toRightOf="@id/imageView_Avatar_wrap"
 					android:layout_width="fill_parent" android:textColor="#000000"
 					android:textStyle="bold" />
@@ -54,7 +54,8 @@
 
 				<ImageView android:id="@+id/imageView_Like"
 					android:layout_height="wrap_content" android:layout_width="wrap_content"
-					android:layout_alignParentRight="true" android:layout_marginTop="20dip"
+					android:layout_marginRight="3dp" android:layout_alignParentRight="true"
+					android:layout_marginTop="20dip"
 					android:src="@drawable/socialactivitybrowserlikebutton" />
 
 				<TextView android:id="@+id/textView_Like_Count"
@@ -64,6 +65,16 @@
 					android:layout_toLeftOf="@id/imageView_Like" android:layout_width="fill_parent" />
 
 			</RelativeLayout>
+			<LinearLayout android:background="#08387B"
+				android:layout_width="fill_parent" android:layout_height="wrap_content">
+				<LinearLayout android:background="#EDEDF0"
+					android:padding="2dp" android:layout_marginLeft="10dp"
+					android:layout_marginRight="10dp" android:layout_width="fill_parent"
+					android:layout_height="1dp">
+				</LinearLayout>
+
+			</LinearLayout>
+
 			<LinearLayout android:id="@+id/activity_display_comment_wrap"
 				android:orientation="vertical" android:layout_width="fill_parent"
 				android:layout_height="wrap_content">
@@ -72,15 +83,17 @@
 
 		</LinearLayout>
 	</ScrollView>
-
-	<LinearLayout android:background="#FFFFFFFF"
-		android:padding="7dp" android:layout_width="fill_parent"
+	<LinearLayout android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
-		<EditText android:id="@+id/editText_Comment" android:padding="2dp"
-			android:background="@drawable/edit_text_background_shape"
-			android:layout_height="wrap_content" android:focusable="false"
-			android:layout_width="fill_parent" android:editable="false"
-			android:textColorHint="#FFFFFF" android:hint=" Your comment..." />
-	</LinearLayout>
 
+
+
+	</LinearLayout>
+	<EditText android:id="@+id/editText_Comment"
+		android:layout_marginLeft="-7dp" android:layout_marginRight="-7dp"
+		android:layout_marginTop="-7dp" android:layout_marginBottom="-7dp"
+		android:background="@drawable/comment_textfield_background"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:textColor="#FFFFFF" android:editable="false" android:textSize="14dp"
+		android:textColorHint="#FFFFFF" android:hint="Your comment..." />
 </LinearLayout>
