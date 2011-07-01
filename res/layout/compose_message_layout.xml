@@ -5,7 +5,7 @@
 	android:padding="6dp">
 	<LinearLayout android:orientation="vertical"
 		android:padding="10dp" android:layout_width="fill_parent"
-		android:layout_height="150dp" android:background="@drawable/compose_textfield_background">
+		android:layout_height="140dp" android:background="@drawable/compose_textfield_background">
 		<ScrollView android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 			<EditText android:id="@+id/compose_text_view"
@@ -17,7 +17,6 @@
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:layout_margin="5dp">
-
 		<Button android:text="Send" android:layout_width="0dip"
 			android:layout_weight="1" android:layout_height="40dp"
 			android:singleLine="true" android:id="@+id/compose_send_button"
