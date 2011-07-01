@@ -30,7 +30,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private EditText                     composeEditText;
 
-//  private LinearLayout                 imageLayoutWrap;
+  // private LinearLayout imageLayoutWrap;
 
   private Button                       sendButton;
 
@@ -41,7 +41,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   private String                       sdcard_temp_dir;
 
   public static ComposeMessageActivity composeMessageActivity;
-  
+
   private InputMethodManager           inputManager;
 
   @Override
@@ -52,15 +52,15 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     setActionBarContentView(R.layout.compose_message_layout);
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-   
+
     composeMessageActivity = this;
     composeType = getIntent().getIntExtra(eXoConstants.COMPOSE_TYPE, composeType);
     if (composeType == 0) {
       setTitle("Status Update");
-      
+
       addActionBarItem();
       getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_take_photo);
-//      addActionBarItem(Type.TakePhoto, R.drawable.gd_action_bar_take_photo);
+      // addActionBarItem(Type.TakePhoto, R.drawable.gd_action_bar_take_photo);
     } else {
       setTitle("Comment");
     }
@@ -75,8 +75,8 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     inputManager.showSoftInput(composeEditText, InputMethodManager.SHOW_FORCED);
     inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,
                                  InputMethodManager.HIDE_IMPLICIT_ONLY);
-    
-//    imageLayoutWrap = (LinearLayout) findViewById(R.id.compose_image_wrap);
+
+    // imageLayoutWrap = (LinearLayout) findViewById(R.id.compose_image_wrap);
 
     sendButton = (Button) findViewById(R.id.compose_send_button);
     sendButton.setOnClickListener(this);
@@ -85,11 +85,12 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     cancelButton.setOnClickListener(this);
 
   }
-  
+
   private void hideKeyBoard() {
     inputManager.hideSoftInputFromInputMethod(composeEditText.getWindowToken(),
                                               InputMethodManager.HIDE_IMPLICIT_ONLY);
     inputManager.toggleSoftInput(0, 0);
+
   }
 
   @Override
@@ -99,13 +100,13 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     case -1:
       finish();
       break;
-      
+
     case 0:
-   // new AddPhotoDialog(this).show();
+      // new AddPhotoDialog(this).show();
       break;
     }
 
-//    return super.onHandleActionBarItemClick(item, position);
+    // return super.onHandleActionBarItemClick(item, position);
     return true;
   }
 
@@ -127,7 +128,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   }
 
   public void finishMe() {
-//    GDActivity.TYPE = 1;
+    // GDActivity.TYPE = 1;
     hideKeyBoard();
     if (composeType == 0) {
       Intent intent = new Intent(composeMessageActivity, AsyncImageViewListActivity.class);

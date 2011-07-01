@@ -43,7 +43,7 @@
 					android:layout_marginTop="5dip" android:layout_marginLeft="10dip"
 					android:layout_toRightOf="@id/imageView_Avatar_wrap"
 					android:layout_below="@id/textView_Message" android:layout_width="wrap_content"
-					android:textColor="#000000" />
+					android:textSize="13dp" android:textColor="#696969" />
 
 			</RelativeLayout>
 
@@ -52,11 +52,11 @@
 				android:layout_below="@id/RelativeLayout_Status" android:background="@drawable/socialactivitydetaillikebgselected"
 				android:layout_marginTop="-3dip">
 
-				<ImageView android:id="@+id/imageView_Like"
+				<Button android:id="@+id/imageView_Like"
 					android:layout_height="wrap_content" android:layout_width="wrap_content"
 					android:layout_marginRight="3dp" android:layout_alignParentRight="true"
 					android:layout_marginTop="20dip"
-					android:src="@drawable/socialactivitybrowserlikebutton" />
+					android:background="@drawable/activity_like_button_background_shape" />
 
 				<TextView android:id="@+id/textView_Like_Count"
 					android:layout_height="wrap_content"

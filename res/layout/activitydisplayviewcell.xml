@@ -19,7 +19,7 @@
 	<RelativeLayout android:id="@+id/relativeLayout_Content"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
 		android:layout_marginTop="10dip" android:layout_toRightOf="@id/imageView_Avatar_wrap"
-		android:background="@drawable/socialactivityarowseractivitybg">
+		android:background="@drawable/social_activity_browser_bg">
 		<TextView android:id="@+id/textView_Name"
 			android:layout_height="20dip" android:text="Name"
 			android:layout_marginLeft="10dip" android:layout_marginTop="2dip"
