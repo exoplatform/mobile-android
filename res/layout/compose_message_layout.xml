@@ -6,12 +6,14 @@
 	<LinearLayout android:orientation="vertical"
 		android:padding="10dp" android:layout_width="fill_parent"
 		android:layout_height="150dp" android:background="@drawable/compose_textfield_background">
-		<EditText android:id="@+id/compose_text_view"
-			android:focusable="true" android:background="@drawable/compose_background_shape"
-			android:textColor="#000000" android:padding="2dp"
-			android:layout_width="fill_parent" android:layout_height="wrap_content" />
+		<ScrollView android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<EditText android:id="@+id/compose_text_view"
+				android:focusable="true" android:background="@drawable/compose_background_shape"
+				android:textColor="#000000" android:padding="2dp"
+				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+		</ScrollView>
 	</LinearLayout>
-
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:layout_margin="5dp">
