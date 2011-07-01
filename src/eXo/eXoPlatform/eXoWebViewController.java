@@ -1,15 +1,19 @@
 package eXo.eXoPlatform;
 
 import greendroid.app.GDActivity;
+import greendroid.widget.ActionBarItem;
 
 import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.http.cookie.Cookie;
 
+import com.cyrilmottier.android.greendroid.R;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.webkit.CookieManager;
@@ -19,7 +23,7 @@ import android.webkit.WebView;
 import android.widget.Toast;
 
 //Display gadget
-public class eXoWebViewController extends GDActivity {
+public class eXoWebViewController extends MyActionBar {
   public static eXoWebViewController eXoWebViewControllerInstance; // Instance
 
   WebView                            _wvGadget;
@@ -38,6 +42,8 @@ public class eXoWebViewController extends GDActivity {
     setActionBarContentView(R.layout.webview);
 
     eXoWebViewControllerInstance = this;
+    
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     setupCookies();
 
@@ -79,6 +85,15 @@ public class eXoWebViewController extends GDActivity {
     changeLanguage(AppController.bundle);
   }
 
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+
+//    finishMe();
+
+    finish();
+     
+    return true;
+  }
+  
   public void finishMe() {
     if (eXoApplicationsController2.webViewMode == 1) {
       int index = eXoFilesController.myFile.urlStr.lastIndexOf("/");
@@ -93,7 +108,7 @@ public class eXoWebViewController extends GDActivity {
     }
 
     eXoWebViewControllerInstance = null;
-    GDActivity.TYPE = 1;
+//    GDActivity.TYPE = 1;
 
   }
 

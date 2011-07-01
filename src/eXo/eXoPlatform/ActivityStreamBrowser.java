@@ -92,10 +92,7 @@ public class ActivityStreamBrowser extends GDActivity {
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
     switch (item.getItemId()) {
-    case R.drawable.gd_action_bar_signout:
-
-      break;
-
+    
     case R.drawable.gd_action_bar_add:
 
       break;
@@ -122,7 +119,6 @@ public class ActivityStreamBrowser extends GDActivity {
   public void finishMe() {
 
     Log.e("Close", "313");
-    GDActivity.TYPE = 0;
     //
     Intent next = new Intent(activityStreamBrowserInstance, eXoApplicationsController2.class);
     startActivity(next);
@@ -198,7 +194,7 @@ public class ActivityStreamBrowser extends GDActivity {
             if (pos == mock.arrayOfActivities.size()) {
               Log.e("Show more", "No more activity");
             } else {
-              GDActivity.TYPE = 1;
+//              GDActivity.TYPE = 1;
 
               Intent next = new Intent(ActivityStreamBrowser.this, ActivityStreamDisplay.class);
               startActivity(next);

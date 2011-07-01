@@ -2,6 +2,8 @@ package eXo.eXoPlatform;
 
 import java.util.List;
 
+import com.cyrilmottier.android.greendroid.R;
+
 import eXo.eXoPlatform.AppController.ServerObj;
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
@@ -25,7 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class eXoModifyServerList extends GDActivity {
+public class eXoModifyServerList extends MyActionBar {
 
   public static eXoModifyServerList eXoModifyServerListInstance;
 
@@ -41,11 +43,14 @@ public class eXoModifyServerList extends GDActivity {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.exomodifyserverlist);
 
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    addActionBarItem();
+    
+    getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_add);
+    
     setTitle("Server List");
 
     eXoModifyServerListInstance = this;
-
-    addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
 
     listViewServer = (ListView) findViewById(R.id.ListView_Server_List);
     listViewServer.setDivider(null);
@@ -69,30 +74,16 @@ public class eXoModifyServerList extends GDActivity {
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
-    switch (item.getItemId()) {
+    switch (position) {
 
-    case R.drawable.gd_action_bar_add:
+    case -1:
+      finishMe();
+      break;
+
+    case 0:
       eXoLanguageSettingDialog.isNewServer = true;
       eXoLanguageSettingDialog customizeDialog = new eXoLanguageSettingDialog(eXoModifyServerList.this);
       customizeDialog.show();
-      break;
-
-    case R.id.action_bar_locate:
-      // startActivity(new Intent(this, TabbedActionBarActivity.class));
-      break;
-
-    case R.id.action_bar_refresh:
-      final LoaderActionBarItem loaderItem = (LoaderActionBarItem) item;
-      mHandler.postDelayed(new Runnable() {
-        public void run() {
-          loaderItem.setLoading(false);
-        }
-      }, 2000);
-      Toast.makeText(this, R.string.refresh_pressed, Toast.LENGTH_SHORT).show();
-      break;
-
-    case R.id.action_bar_export:
-      Toast.makeText(this, R.string.custom_drawable, Toast.LENGTH_SHORT).show();
       break;
 
     default:
@@ -103,13 +94,13 @@ public class eXoModifyServerList extends GDActivity {
   }
 
   public void finishMe() {
-    // finish();
+     finish();
 
-    Intent next = new Intent(eXoModifyServerList.this, eXoSetting.class);
-    startActivity(next);
-
-    eXoModifyServerListInstance = null;
-    GDActivity.TYPE = 1;
+//    Intent next = new Intent(eXoModifyServerList.this, eXoSetting.class);
+//    startActivity(next);
+//
+//    eXoModifyServerListInstance = null;
+//    GDActivity.TYPE = 1;
   }
 
   // Create Setting Menu

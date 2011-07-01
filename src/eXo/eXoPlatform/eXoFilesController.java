@@ -1,6 +1,7 @@
 package eXo.eXoPlatform;
 
 import greendroid.app.GDActivity;
+import greendroid.widget.ActionBarItem;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,6 +28,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -44,7 +46,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.apache.commons.lang.StringEscapeUtils;
 
-public class eXoFilesController extends GDActivity {
+import com.cyrilmottier.android.greendroid.R;
+
+public class eXoFilesController extends MyActionBar {
 
   static final String               FILE_CONTENT_TYPE  = "image/bmp image/cgm image/gif image/jpeg image/png image/tiff image/x-icon "
                                                            + "video/mpeg video/quicktime video/x-msvideo "
@@ -72,7 +76,7 @@ public class eXoFilesController extends GDActivity {
 
   public static String              _rootUrl;
 
-  public static String              localFilePath      = "/sdcard/eXo/";
+  public static String              localFilePath;      //= "/sdcard/eXo/";
 
   public static Uri                 _uri;
 
@@ -107,11 +111,17 @@ public class eXoFilesController extends GDActivity {
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    // setContentView(R.layout.exofilesview);
 
     setActionBarContentView(R.layout.exofilesview);
 
     eXoFilesControllerInstance = this;
+    
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
+    addActionBarItem();
+    getActionBar().getItem(0).setDrawable(R.drawable.home);
+    
+    
+    localFilePath = Environment.getExternalStorageDirectory() + "/eXo/";
 
     _btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
     _btnUploadImage.setOnClickListener(new OnClickListener() {
@@ -181,13 +191,18 @@ public class eXoFilesController extends GDActivity {
 
   }
 
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+
+    finishMe();
+    return true;
+  }
+  
   public void finishMe() {
     Runnable loadingDataRunnable = new Runnable() {
       public void run() {
 
         if (myFile.urlStr.equalsIgnoreCase(_rootUrl)) {
 
-          GDActivity.TYPE = 0;
           eXoFilesControllerInstance = null;
           finish();
 
@@ -277,12 +292,13 @@ public class eXoFilesController extends GDActivity {
                                             fileAdapter.notifyDataSetChanged();
                                             try {
                                               if (myFile.urlStr.equalsIgnoreCase(_rootUrl))
+                                                getActionBar().getItem(0).setDrawable(R.drawable.home);
                                                 // _btnCloseBack.setText(new
                                                 // String(AppController.bundle.getString("CloseButton")
                                                 // .getBytes("ISO-8859-1"),
                                                 // "UTF-8"));
-                                                ;
                                               else
+                                                getActionBar().getItem(0).setDrawable(R.drawable.back);
                                                 // _btnCloseBack.setText(new
                                                 // String(AppController.bundle.getString("BackButton")
                                                 // .getBytes("ISO-8859-1"),
@@ -304,6 +320,7 @@ public class eXoFilesController extends GDActivity {
                                             // arrFiles.get(positionOfFileItem);
 
                                             try {
+                                              getActionBar().getItem(0).setDrawable(R.drawable.back);
                                               // _btnCloseBack.setText(new
                                               // String(AppController.bundle.getString("BackButton")
                                               // .getBytes("ISO-8859-1"),
@@ -312,6 +329,7 @@ public class eXoFilesController extends GDActivity {
                                             } catch (Exception e) {
 
                                               try {
+                                                getActionBar().getItem(0).setDrawable(R.drawable.home);
                                                 // _btnCloseBack.setText(new
                                                 // String(AppController.bundle.getString("CloseButton")
                                                 // .getBytes("ISO-8859-1"),
@@ -567,7 +585,7 @@ public class eXoFilesController extends GDActivity {
               thread = new Thread(loadingDataRunnable, "fileItemClickOnIcon");
               thread.start();
             }
-
+            
           }
         });
 
@@ -577,10 +595,12 @@ public class eXoFilesController extends GDActivity {
           public void onClick(View v) {
 
             positionOfFileItem = pos;
+            
             Runnable loadingDataRunnable = new Runnable() {
               public void run() {
 
                 myFile = arrFiles.get(positionOfFileItem);
+                
                 if (myFile.isFolder)
                   arrFiles = getPersonalDriveContent(myFile.urlStr);
                 eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
@@ -593,7 +613,6 @@ public class eXoFilesController extends GDActivity {
 
             thread = new Thread(loadingDataRunnable, "fileItemClickOnIcon");
             thread.start();
-
           }
         });
 

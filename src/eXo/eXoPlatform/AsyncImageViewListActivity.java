@@ -50,7 +50,7 @@ import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
 
-public class AsyncImageViewListActivity extends GDListActivity implements OnScrollListener {
+public class AsyncImageViewListActivity extends MyListActivity implements OnScrollListener {
 
   public static AsyncImageViewListActivity asyncImageViewListActivityInstance;
 
@@ -64,7 +64,12 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
 
     asyncImageViewListActivityInstance = this;
     setTitle("Activity Streams");
-    addActionBarItem(Type.Compose, R.drawable.gd_action_bar_compose);
+    
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    addActionBarItem();
+    getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_compose);
+    
+//    addActionBarItem(Type.Compose, R.drawable.gd_action_bar_compose);
     mock = new Mock_Social_Activity(false);
 
     getListView().setDivider(null);
@@ -76,10 +81,12 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
 
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (item.getItemId()) {
+    switch (position) {
 
-    case R.drawable.gd_action_bar_compose:
-      GDActivity.TYPE = 1;
+    case -1:
+      finish();
+      break;
+    case 0:
       Intent intent = new Intent(this, ComposeMessageActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.putExtra(eXoConstants.COMPOSE_TYPE, eXoConstants.COMPOSE_POST_TYPE);
@@ -91,7 +98,7 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
       Log.e("12312", "13123");
 
     }
-    return super.onHandleActionBarItemClick(item, position);
+    return true;
 
   }
 
@@ -330,7 +337,7 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
 
             public void onClick(View v) {
 
-              GDActivity.TYPE = 1;
+//              GDActivity.TYPE = 1;
               selectedActivity = activity;
               Intent next = new Intent(asyncImageViewListActivityInstance,
                                        ActivityStreamDisplay.class);
@@ -440,7 +447,7 @@ public class AsyncImageViewListActivity extends GDListActivity implements OnScro
 
   public void finishMe() {
 
-    GDActivity.TYPE = 0;
+//    GDActivity.TYPE = 0;
     //      
     Intent next = new Intent(asyncImageViewListActivityInstance, eXoApplicationsController2.class);
     startActivity(next);

@@ -8,6 +8,8 @@ import greendroid.widget.ActionBarItem.Type;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import com.cyrilmottier.android.greendroid.R;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,7 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //Chat list view controller
-public class ActivityStreamDisplay extends GDActivity implements OnClickListener {
+public class ActivityStreamDisplay extends MyActionBar implements OnClickListener {
 
   // Activity cell info object
   class ActivityDisplayInfo {
@@ -74,6 +76,8 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
     // setContentView(R.layout.socialbrowserview);
 
     activityStreamDisplayInstance = this;
+    
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     mock = new Mock_Social_Activity(true);
 
@@ -132,6 +136,10 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
+    case -1:
+      finish();
+      // your method here
+      break;
     case 0:
       // your method here
       break;
@@ -151,7 +159,7 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
 
   public void finishMe() {
 
-    GDActivity.TYPE = 1;
+//    GDActivity.TYPE = 1;
     Intent next = new Intent(activityStreamDisplayInstance, AsyncImageViewListActivity.class);
     startActivity(next);
     activityStreamDisplayInstance = null;
@@ -271,7 +279,6 @@ public class ActivityStreamDisplay extends GDActivity implements OnClickListener
   public void onClick(View view) {
     // TODO Auto-generated method stub
     if (view == editTextComment) {
-      // GDActivity.TYPE = 1;
       Intent intent = new Intent(this, ComposeMessageActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.putExtra(eXoConstants.COMPOSE_TYPE, eXoConstants.COMPOSE_COMMENT_TYPE);

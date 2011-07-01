@@ -17,10 +17,9 @@ package eXo.eXoPlatform;
 
 import greendroid.app.GDActivity;
 import greendroid.app.GDListActivity;
-import greendroid.widget.ItemAdapter;
+import greendroid.widget.ActionBarItem;
 import greendroid.widget.item.Item;
 import greendroid.widget.item.SeparatorItem;
-import greendroid.widget.item.ThumbnailItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +28,17 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.cyrilmottier.android.greendroid.R;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.webkit.CookieSyncManager;
 import android.widget.Toast;
 
-public class eXoDashboard extends GDListActivity {
+public class eXoDashboard extends MyListActivity {
 
   public static eXoDashboard       eXoDashboardInstance;
 
@@ -50,6 +52,8 @@ public class eXoDashboard extends GDListActivity {
     eXoDashboardInstance = this;
 
     setTitle("Dashboard");
+    
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     CookieSyncManager.createInstance(this);
 
@@ -62,18 +66,38 @@ public class eXoDashboard extends GDListActivity {
       items.add(new SeparatorItem(gadgetTab._strDbItemName));
       for (int j = 0; j < gadgetTab._arrGadgetsInItem.size(); j++) {
         eXoGadget gadget = gadgetTab._arrGadgetsInItem.get(j);
-        items.add(new ThumbnailItem(gadget._strGadgetName,
-                                    gadget._strGadgetDescription,
-                                    gadget._btmGadgetIcon));
+//        items.add(new ThumbnailItem(gadget._strGadgetName,
+//                                    gadget._strGadgetDescription,
+//                                    gadget._btmGadgetIcon));
       }
 
     }
 
-    final ItemAdapter adapter = new ItemAdapter(this, items);
-
-    setListAdapter(adapter);
+//    final ItemAdapter adapter = new ItemAdapter(this, items);
+//
+//    setListAdapter(adapter);
   }
 
+
+  @Override
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+    switch (position) {
+
+    case -1:
+      finish();
+      break;
+    case 0:
+
+      break;
+
+    default:
+
+    }
+    return true;
+
+  }
+
+  
   // Key down listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     // Save data to the server once the user hits the back button
@@ -118,7 +142,7 @@ public class eXoDashboard extends GDListActivity {
     startActivity(next);
 
     eXoDashboardInstance = null;
-    GDActivity.TYPE = 0;
+//    GDActivity.TYPE = 0;
   }
 
 }

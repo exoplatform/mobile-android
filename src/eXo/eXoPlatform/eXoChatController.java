@@ -1,6 +1,6 @@
 package eXo.eXoPlatform;
 
-import greendroid.app.GDActivity;
+import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
 
-import android.app.Activity;
-import android.content.Intent;
+import com.cyrilmottier.android.greendroid.R;
+
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -33,7 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 //Chat windows view controller
-public class eXoChatController extends GDActivity {
+public class eXoChatController extends MyActionBar {
   // List message content for each user
   public static List<eXoChatMessageContent> listChatContent = new ArrayList<eXoChatMessageContent>();
 
@@ -82,6 +82,10 @@ public class eXoChatController extends GDActivity {
 
     setActionBarContentView(R.layout.exochat);
     eXoChatControllerInstance = this;
+    
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
+    addActionBarItem();
+    getActionBar().getItem(0).setDrawable(R.drawable.back);
 
     messageEditText = (EditText) findViewById(R.id.message);
 
@@ -181,6 +185,25 @@ public class eXoChatController extends GDActivity {
 
   }
 
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+    switch (position) {
+    case 0:
+      finishMe();
+      // your method here
+      break;
+
+    case 1:
+      // your method here
+      break;
+
+    default:
+      // home button is clicked
+      break;
+    }
+
+    return true;
+  }
+  
   // Keydown listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     // Save data to the server once the user hits the back button
@@ -267,10 +290,11 @@ public class eXoChatController extends GDActivity {
     // MessageTypeFilter(Message.Type.chat));
 
     // eXoChat.this.finish();
-    GDActivity.TYPE = 1;
-    Intent next = new Intent(eXoChatController.this, eXoChatListController.class);
-    eXoChatController.this.startActivity(next);
-
-    eXoChatControllerInstance = null;
+//    GDActivity.TYPE = 1;
+    finish();
+//    Intent next = new Intent(eXoChatController.this, eXoChatListController.class);
+//    eXoChatController.this.startActivity(next);
+//
+//    eXoChatControllerInstance = null;
   }
 }

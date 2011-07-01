@@ -707,7 +707,7 @@ public class AppController extends Activity implements OnTouchListener {
       // eXoLanguageSettingDialog(AppController.this, 0, thisClass);
       // customizeDialog.show();
 
-      GDActivity.TYPE = 1;
+//      GDActivity.TYPE = 1;
 
       Intent next = new Intent(AppController.this, eXoSetting.class);
       startActivity(next);

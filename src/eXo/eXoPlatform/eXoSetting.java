@@ -4,15 +4,19 @@ import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import com.cyrilmottier.android.greendroid.R;
+
 import eXo.eXoPlatform.AppController.ServerObj;
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBar;
+import greendroid.widget.ActionBarItem;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +31,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class eXoSetting extends GDActivity {
+public class eXoSetting extends MyActionBar {
 
   public static eXoSetting eXoSettingInstance;
 
@@ -64,7 +68,8 @@ public class eXoSetting extends GDActivity {
     setActionBarContentView(R.layout.exosetting);
 
     eXoSettingInstance = this;
-
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    
     setTitle("Setting");
 
     txtvLanguage = (TextView) findViewById(R.id.TextView_Language);
@@ -128,6 +133,12 @@ public class eXoSetting extends GDActivity {
 
   }
 
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+
+    finish();
+    return true;
+  }
+ 
   // Key down listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     // Save data to the server once the user hits the back button
@@ -152,7 +163,7 @@ public class eXoSetting extends GDActivity {
     startActivity(next);
 
     eXoSettingInstance = null;
-    GDActivity.TYPE = 0;
+//    GDActivity.TYPE = 0;
   }
 
   // Create server list adapter
@@ -196,7 +207,7 @@ public class eXoSetting extends GDActivity {
                 Toast.makeText(eXoSettingInstance, msg, Toast.LENGTH_LONG);
               } else {
 
-                GDActivity.TYPE = 1;
+//                GDActivity.TYPE = 1;
 
                 Intent next = new Intent(eXoSetting.this, eXoModifyServerList.class);
                 startActivity(next);

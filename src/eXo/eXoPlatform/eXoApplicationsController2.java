@@ -18,7 +18,8 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
-import android.app.Activity;
+import com.cyrilmottier.android.greendroid.R;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,7 +46,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class eXoApplicationsController2 extends GDActivity implements OnTouchListener {
+public class eXoApplicationsController2 extends MyActionBar implements OnTouchListener {
 
   // App item object
   class AppItem {
@@ -75,8 +76,6 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
   Timer                             timer;
 
   Handler                           handler;
-
-  private final Handler             mHandler      = new Handler();
 
   GridView                          gridview;
 
@@ -119,18 +118,14 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    // setContentView(R.layout.appsview2);
     setActionBarContentView(R.layout.appsview2);
-
-    // addActionBarItem(Type.Add, R.drawable.gd_action_bar_add);
-    addActionBarItem(Type.SignOut, R.drawable.gd_action_bar_signout);
 
     eXoApplicationsController2Instance = this;
 
-    // final MyActionBar myActionBar = (MyActionBar)
-    // findViewById(R.id.My_Action_Bar);
-    // myActionBar.setBackgroundResource(R.drawable.navigationbar);
-
+    super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
+    addActionBarItem(R.drawable.signout);
+    super.setTitle("eXo");
+    
     btnDone = (Button) findViewById(R.id.Button_Done);
     btnDone.setVisibility(View.INVISIBLE);
     btnDone.setOnClickListener(new View.OnClickListener() {
@@ -280,37 +275,27 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
     return false;
   }
 
-  @Override
+  
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
-    switch (item.getItemId()) {
-    case R.drawable.gd_action_bar_signout:
+    switch (position) {
+    case -1:
 
-      if (eXoChatListController.conn != null && eXoChatListController.conn.isAuthenticated()) {
-        eXoChatListController.conn.getRoster()
-                                  .removeRosterListener(eXoChatListController.rosterListener);
-        eXoChatListController.conn.disconnect();
-      }
-
-      Intent next = new Intent(eXoApplicationsController2Instance, AppController.class);
-      startActivity(next);
       break;
 
-    case R.drawable.gd_action_bar_add:
-      // Bitmap bm = BitmapFactory.decodeResource(getResources(),
-      // R.drawable.onlinechat);
-      // AppItem item = new AppItem(bm, "New");
-      // array.add(item);
-      //          
-      // adapter.notifyDataSetChanged();
+    case 0:
+      finish();
       break;
 
-    case R.id.action_bar_export:
-      Toast.makeText(this, R.string.custom_drawable, Toast.LENGTH_SHORT).show();
+    case 1:
+
+      break;
+    case 2:
+
       break;
 
     default:
-      return super.onHandleActionBarItemClick(item, position);
+      break;
     }
 
     return true;
@@ -512,7 +497,7 @@ public class eXoApplicationsController2 extends GDActivity implements OnTouchLis
   public void launchApp(View v, String featureName) {
 
     final String str = featureName;
-    GDActivity.TYPE = 1;
+//    GDActivity.TYPE = 1;
     Runnable loadingDataRunnable = new Runnable() {
       public void run() {
 

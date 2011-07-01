@@ -22,6 +22,8 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
 
+import com.cyrilmottier.android.greendroid.R;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,7 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 //Chat list view controller
-public class eXoChatListController extends GDActivity {
+public class eXoChatListController extends MyActionBar {
 
   private ListView                                     lvChatList;                   // Chat
 
@@ -117,6 +119,10 @@ public class eXoChatListController extends GDActivity {
     setActionBarContentView(R.layout.exochatlist);
 
     eXoChatListControllerInstance = this;
+    
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
+    addActionBarItem();
+    getActionBar().getItem(0).setDrawable(R.drawable.home);
 
     lvChatList = (ListView) findViewById(R.id.ListViewChatList);
 
@@ -241,6 +247,7 @@ public class eXoChatListController extends GDActivity {
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case 0:
+      finish();
       // your method here
       break;
 
@@ -250,7 +257,6 @@ public class eXoChatListController extends GDActivity {
 
     default:
       // home button is clicked
-      finishMe();
       break;
     }
 
@@ -258,11 +264,11 @@ public class eXoChatListController extends GDActivity {
   }
 
   public void finishMe() {
-    GDActivity.TYPE = 0;
 
-    Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
-    startActivity(next);
-    eXoChatListControllerInstance = null;
+    finish();
+//    Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
+//    startActivity(next);
+//    eXoChatListControllerInstance = null;
 
   }
 
@@ -380,8 +386,6 @@ public class eXoChatListController extends GDActivity {
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-      GDActivity.TYPE = 1;
 
       posOfChatingMember = position;
       eXoChatController.currentChatStr = listChatRosterEntry.get(position).address;
