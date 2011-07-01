@@ -24,9 +24,18 @@
 		<item name="gdActionBarTitleColor">@android:color/white</item>
 		<item name="gdActionBarDividerWidth">2px</item>
 		<item name="gdActionBarApplicationDrawable">@drawable/exo_application_logo</item>
+		<item name="gdActionBarHomeDrawable">@drawable/home</item>
 	
 	</style>
+	
+	<style name="Theme.eXo_Back" parent="@style/Theme.eXo">
+		<item name="gdActionBarHomeDrawable">@drawable/back</item>
+	</style>
 
+	<style name="Theme.eXo_Close" parent="@style/Theme.eXo">
+		<item name="gdActionBarHomeDrawable">@drawable/close</item>
+	</style>
+	
     <style name="Theme.GDCatalog.TweakedItems" parent="@style/Theme.eXo">
         
         <item name="gdTextAppearanceLarge">@style/TextAppearanceLarge</item>

@@ -68,6 +68,8 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   static eXoApplicationsController2 eXoApplicationsController2Instance;
 
+  public static int                sTheme;
+
   Button                            btnDone;
 
   public List<GateInDbItem>         arrGadgets;                              // Gadgets
@@ -551,6 +553,7 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
       eXoFilesController._rootUrl = eXoFilesController.myFile.urlStr;
     }
 
+    sTheme = R.style.Theme_eXo;
     eXoFilesController.arrFiles = eXoFilesController.getPersonalDriveContent(eXoFilesController.myFile.urlStr);
     eXoFilesController._delegate = eXoApplicationsController2Instance;
     Intent next = new Intent(eXoApplicationsController2.this, eXoFilesController.class);
@@ -747,9 +750,9 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
       // Get bitmap
       String bmpUrl = parseUrl(tmpStr2, "\"thumbnail\":\"", true, "\"");
       bmpUrl = bmpUrl.replace("localhost", _strDomain);
-      bmp = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
+//      bmp = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
 
-      eXoGadget tempGadget = new eXoGadget(title, description, url, bmp, null);
+      eXoGadget tempGadget = new eXoGadget(title, description, url, bmpUrl, null, null);
       arrGadgets.add(tempGadget);
 
       indexStart = indexEnd;
@@ -826,10 +829,10 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
       gadgetIconUrl = gadgetIconUrl.replace("http://localhost:8080", domain);
 
       try {
-        imgGadgetIcon = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
+//        imgGadgetIcon = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
         if (imgGadgetIcon == null) {
           try {
-            imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
+//            imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
           } catch (Exception e2) {
 
             imgGadgetIcon = null;
@@ -869,7 +872,8 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
       eXoGadget gadget = new eXoGadget(strGadgetName,
                                        strGadgetDescription,
                                        gadgetUrl,
-                                       imgGadgetIcon,
+                                       gadgetIconUrl,
+                                       null,
                                        gadgetID);
 
       arrTmpGadgets.add(gadget);

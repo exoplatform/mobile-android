@@ -111,15 +111,14 @@ public class eXoFilesController extends MyActionBar {
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+    setTheme(eXoApplicationsController2.sTheme);
     setActionBarContentView(R.layout.exofilesview);
 
     eXoFilesControllerInstance = this;
     
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
-    addActionBarItem();
-    getActionBar().getItem(0).setDrawable(R.drawable.home);
-    
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+//    addActionBarItem();
+//    getActionBar().getItem(0).setDrawable(R.drawable.home);
     
     localFilePath = Environment.getExternalStorageDirectory() + "/eXo/";
 
@@ -179,7 +178,8 @@ public class eXoFilesController extends MyActionBar {
 
     _lstvFiles = (ListView) findViewById(R.id.ListView_Files);
 
-    setTitle(getFolderNameFromUrl(_rootUrl));
+//    setTitle(getFolderNameFromUrl(_rootUrl));
+    setTitle(getFolderNameFromUrl(myFile.urlStr));
 
     txtFileName = (EditText) findViewById(R.id.EditTextImageName);
 
@@ -287,18 +287,28 @@ public class eXoFilesController extends MyActionBar {
 
                                           public void run() {
 
-                                            setTitle(getFolderNameFromUrl(myFile.urlStr));
+//                                            setTitle(getFolderNameFromUrl(myFile.urlStr));
                                             // Files List
-                                            fileAdapter.notifyDataSetChanged();
+//                                            fileAdapter.notifyDataSetChanged();
                                             try {
                                               if (myFile.urlStr.equalsIgnoreCase(_rootUrl))
-                                                getActionBar().getItem(0).setDrawable(R.drawable.home);
+                                              {
+//                                                getActionBar().getItem(0).setDrawable(R.drawable.home);
+//                                                setTheme(R.style.Theme_eXo);
+                                              eXoApplicationsController2.sTheme = R.style.Theme_eXo;
+                                              eXoFilesControllerInstance.finish();
+                                              eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance, eXoFilesControllerInstance.getClass()));
                                                 // _btnCloseBack.setText(new
                                                 // String(AppController.bundle.getString("CloseButton")
                                                 // .getBytes("ISO-8859-1"),
                                                 // "UTF-8"));
+                                              }
                                               else
-                                                getActionBar().getItem(0).setDrawable(R.drawable.back);
+//                                                getActionBar().getItem(0).setDrawable(R.drawable.back);
+//                                              setTheme(R.style.Theme_eXo2);
+                                              eXoApplicationsController2.sTheme = R.style.Theme_eXo_Back;
+                                              eXoFilesControllerInstance.finish();
+                                              eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance, eXoFilesControllerInstance.getClass()));
                                                 // _btnCloseBack.setText(new
                                                 // String(AppController.bundle.getString("BackButton")
                                                 // .getBytes("ISO-8859-1"),
@@ -320,7 +330,11 @@ public class eXoFilesController extends MyActionBar {
                                             // arrFiles.get(positionOfFileItem);
 
                                             try {
-                                              getActionBar().getItem(0).setDrawable(R.drawable.back);
+//                                              getActionBar().getItem(0).setDrawable(R.drawable.back);
+//                                              setTheme(R.style.Theme_eXo2);
+                                              eXoApplicationsController2.sTheme = R.style.Theme_eXo_Back;
+                                              eXoFilesControllerInstance.finish();
+                                              eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance, eXoFilesControllerInstance.getClass()));
                                               // _btnCloseBack.setText(new
                                               // String(AppController.bundle.getString("BackButton")
                                               // .getBytes("ISO-8859-1"),
@@ -329,7 +343,11 @@ public class eXoFilesController extends MyActionBar {
                                             } catch (Exception e) {
 
                                               try {
-                                                getActionBar().getItem(0).setDrawable(R.drawable.home);
+//                                                getActionBar().getItem(0).setDrawable(R.drawable.home);
+//                                                 setTheme(R.style.Theme_eXo);
+                                                eXoApplicationsController2.sTheme = R.style.Theme_eXo;
+                                                eXoFilesControllerInstance.finish();
+                                                eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance, eXoFilesControllerInstance.getClass()));
                                                 // _btnCloseBack.setText(new
                                                 // String(AppController.bundle.getString("CloseButton")
                                                 // .getBytes("ISO-8859-1"),
@@ -341,8 +359,8 @@ public class eXoFilesController extends MyActionBar {
                                             }
                                             if (myFile.isFolder) {
 
-                                              setTitle(myFile.fileName.replace("%20", " "));
-                                              fileAdapter.notifyDataSetChanged();
+//                                              setTitle(myFile.fileName.replace("%20", " "));
+//                                              fileAdapter.notifyDataSetChanged();
 
                                             } else {
                                               // _strCurrentDirectory =

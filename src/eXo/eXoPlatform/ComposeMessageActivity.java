@@ -48,9 +48,8 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-    setActionBarContentView(R.layout.compose_message_layout);
-
+    setTheme(R.style.Theme_eXo_Close);
+    setActionBarContentView(R.layout.compose_message_layout);    
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     composeMessageActivity = this;

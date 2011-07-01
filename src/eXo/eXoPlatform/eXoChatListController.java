@@ -1,6 +1,5 @@
 package eXo.eXoPlatform;
 
-import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
@@ -33,10 +32,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -115,14 +112,13 @@ public class eXoChatListController extends MyActionBar {
     super.onCreate(savedInstanceState);
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-
     setActionBarContentView(R.layout.exochatlist);
 
     eXoChatListControllerInstance = this;
     
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
-    addActionBarItem();
-    getActionBar().getItem(0).setDrawable(R.drawable.home);
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+//    addActionBarItem();
+//    getActionBar().getItem(0).setDrawable(R.drawable.home);
 
     lvChatList = (ListView) findViewById(R.id.ListViewChatList);
 
@@ -246,12 +242,12 @@ public class eXoChatListController extends MyActionBar {
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
-    case 0:
+    case -1:
       finish();
       // your method here
       break;
 
-    case 1:
+    case 0:
       // your method here
       break;
 

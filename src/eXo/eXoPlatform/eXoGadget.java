@@ -10,6 +10,7 @@ public class eXoGadget {
 
   public String       _strGadgetUrl;        // Gadget url
 
+  public String       _strGadgetIcon;       // Gadget icon string
   public final Bitmap _btmGadgetIcon;       // Gadget icon
 
   public final String _strGadgetID;         // Gadget ID
@@ -19,11 +20,13 @@ public class eXoGadget {
   public eXoGadget(String gadgetName,
                    String gadgetDescription,
                    String gadgetUrl,
+                   String strGadgetIcon,
                    Bitmap gadgetIcon,
                    String gadgetID) {
     _strGadgetName = gadgetName;
     _strGadgetDescription = gadgetDescription;
     _strGadgetUrl = gadgetUrl;
+    _strGadgetIcon = strGadgetIcon;
     _btmGadgetIcon = gadgetIcon;
     _strGadgetID = gadgetID;
   }

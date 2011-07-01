@@ -79,13 +79,14 @@ public class eXoChatController extends MyActionBar {
     super.onCreate(savedInstanceState);
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+    setTheme(R.style.Theme_eXo_Back);
+    
     setActionBarContentView(R.layout.exochat);
     eXoChatControllerInstance = this;
     
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
-    addActionBarItem();
-    getActionBar().getItem(0).setDrawable(R.drawable.back);
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+//    addActionBarItem();
+//    getActionBar().getItem(0).setDrawable(R.drawable.back);
 
     messageEditText = (EditText) findViewById(R.id.message);
 
@@ -187,12 +188,12 @@ public class eXoChatController extends MyActionBar {
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
-    case 0:
+    case -1:
       finishMe();
       // your method here
       break;
 
-    case 1:
+    case 0:
       // your method here
       break;
 

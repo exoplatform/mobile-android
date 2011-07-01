@@ -71,7 +71,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     super.onCreate(savedInstanceState);
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+    setTheme(R.style.Theme_eXo_Back);
     setActionBarContentView(R.layout.activity_display_view);
     // setContentView(R.layout.socialbrowserview);
 

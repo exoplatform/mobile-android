@@ -111,7 +111,7 @@ public class MyListActivity extends MyActionBar {
             case Empty:
                 return R.layout.gd_list_content_empty;
             case Normal:
-                return R.layout.gd_list_content_normal;
+                
             default:
                 return R.layout.gd_list_content_normal;
         }

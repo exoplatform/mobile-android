@@ -61,15 +61,16 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    
+    setTheme(R.style.Theme_eXo);
+    
     asyncImageViewListActivityInstance = this;
     setTitle("Activity Streams");
-    
+   
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_compose);
-    
-//    addActionBarItem(Type.Compose, R.drawable.gd_action_bar_compose);
     mock = new Mock_Social_Activity(false);
 
     getListView().setDivider(null);
@@ -95,7 +96,7 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
       break;
 
     default:
-      Log.e("12312", "13123");
+//      Log.e("12312", "13123");
 
     }
     return true;

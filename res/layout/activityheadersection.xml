@@ -6,6 +6,6 @@
 	<TextView android:layout_height="wrap_content"
 		android:padding="5dp" android:layout_marginTop="5dp"
 		android:layout_alignParentRight="true" android:background="#c9c9c9"
-		android:layout_width="150dp" android:id="@+id/textView_Section_Title"
+		android:layout_width="wrap_content" android:id="@+id/textView_Section_Title"
 		android:text="TextView" android:gravity="bottom" android:textColor="#000000" />
 </RelativeLayout>

@@ -979,9 +979,9 @@ public class AppController extends Activity implements OnTouchListener {
       // Get bitmap
       String bmpUrl = parseUrl(tmpStr2, "\"thumbnail\":\"", true, "\"");
       bmpUrl = bmpUrl.replace("localhost", _strDomain);
-      bmp = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
+//      bmp = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
 
-      eXoGadget tempGadget = new eXoGadget(title, description, url, bmp, null);
+      eXoGadget tempGadget = new eXoGadget(title, description, url, bmpUrl, null, null);
       arrGadgets.add(tempGadget);
 
       indexStart = indexEnd;
@@ -1058,7 +1058,7 @@ public class AppController extends Activity implements OnTouchListener {
       gadgetIconUrl = gadgetIconUrl.replace("http://localhost:8080", domain);
 
       try {
-        imgGadgetIcon = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
+//        imgGadgetIcon = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
         if (imgGadgetIcon == null) {
           try {
             imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
@@ -1101,7 +1101,8 @@ public class AppController extends Activity implements OnTouchListener {
       eXoGadget gadget = new eXoGadget(strGadgetName,
                                        strGadgetDescription,
                                        gadgetUrl,
-                                       imgGadgetIcon,
+                                       gadgetIconUrl,
+                                       null,
                                        gadgetID);
 
       arrTmpGadgets.add(gadget);
