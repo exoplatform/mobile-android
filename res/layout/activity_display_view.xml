@@ -66,15 +66,10 @@
 					android:layout_toLeftOf="@id/imageView_Like" android:layout_width="fill_parent" />
 
 			</RelativeLayout>
-			<LinearLayout android:background="#08387B"
-				android:layout_marginTop="5dp" android:layout_width="fill_parent"
+			<LinearLayout android:background="@drawable/activity_detail_like_comment_separator"
+				android:layout_marginTop="5dp" android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp" android:layout_width="fill_parent"
 				android:layout_height="wrap_content">
-				<LinearLayout android:background="#EDEDF0"
-					android:padding="2dp" android:layout_marginLeft="10dp"
-					android:layout_marginRight="10dp" android:layout_width="fill_parent"
-					android:layout_height="1dp">
-				</LinearLayout>
-
 			</LinearLayout>
 
 			<LinearLayout android:id="@+id/activity_display_comment_wrap"

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	android:padding="2dp" android:background="#08387B">
+	android:background="#08387B">
 
 	<TextView android:layout_height="wrap_content"
-		android:padding="5dp" android:layout_marginTop="5dp"
-		android:layout_alignParentRight="true" android:background="#c9c9c9"
-		android:layout_width="wrap_content" android:id="@+id/textView_Section_Title"
+		android:padding="7dp" android:layout_marginTop="5dp"
+		android:layout_alignParentRight="true"
+		android:background="@drawable/social_activity_browse_header_normal_bg"
+		android:layout_width="130dp" android:id="@+id/textView_Section_Title"
 		android:text="TextView" android:gravity="bottom" android:textColor="#000000" />
 </RelativeLayout>

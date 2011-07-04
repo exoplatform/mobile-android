@@ -28,6 +28,7 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -58,19 +59,22 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
 
   Mock_Activity                            selectedActivity;
 
+  private Resources                        resource;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    
+
     setTheme(R.style.Theme_eXo);
-    
+
     asyncImageViewListActivityInstance = this;
     setTitle("Activity Streams");
-   
+
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_compose);
+    resource = getResources();
     mock = new Mock_Social_Activity(false);
 
     getListView().setDivider(null);
@@ -96,7 +100,7 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
       break;
 
     default:
-//      Log.e("12312", "13123");
+      // Log.e("12312", "13123");
 
     }
     return true;
@@ -278,6 +282,11 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
       if (activity.isHeader) {
         convertView = mInflater.inflate(R.layout.activityheadersection, parent, false);
         TextView title = (TextView) convertView.findViewById(R.id.textView_Section_Title);
+        if (position == 0) {
+          title.setBackgroundDrawable(resource.getDrawable(R.drawable.social_activity_browse_header_highlighted_bg));
+        } else {
+          title.setBackgroundDrawable(resource.getDrawable(R.drawable.social_activity_browse_header_normal_bg));
+        }
         title.setText(activity.title);
       } else {
         convertView = mInflater.inflate(R.layout.activitybrowserviewcell, parent, false);
@@ -338,7 +347,7 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
 
             public void onClick(View v) {
 
-//              GDActivity.TYPE = 1;
+              // GDActivity.TYPE = 1;
               selectedActivity = activity;
               Intent next = new Intent(asyncImageViewListActivityInstance,
                                        ActivityStreamDisplay.class);
@@ -448,11 +457,11 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
 
   public void finishMe() {
 
-//    GDActivity.TYPE = 0;
-    //      
+    // GDActivity.TYPE = 0;
+    //
     Intent next = new Intent(asyncImageViewListActivityInstance, eXoApplicationsController2.class);
     startActivity(next);
-//    asyncImageViewListActivityInstance = null;
+    // asyncImageViewListActivityInstance = null;
 
   }
 
