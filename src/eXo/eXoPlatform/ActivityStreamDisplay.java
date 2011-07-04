@@ -76,7 +76,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     // setContentView(R.layout.socialbrowserview);
 
     activityStreamDisplayInstance = this;
-    
+
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     mock = new Mock_Social_Activity(true);
@@ -95,32 +95,47 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     TextView textView_Time = (TextView) findViewById(R.id.textView_Time);
     textView_Time.setText(AsyncImageViewListActivity.asyncImageViewListActivityInstance.getPostedTimeString(selectedActivity.postedTime));
 
-    // _lvActivityDisplayComment = (ListView)
-    // findViewById(R.id.listView_Comment);
-    // _lvActivityDisplayComment.setDivider(null);
-    // _lvActivityDisplayComment.setDividerHeight(0);
-
     commentLayoutWrap = (LinearLayout) findViewById(R.id.activity_display_comment_wrap);
 
     TextView textView_Like_Count = (TextView) findViewById(R.id.textView_Like_Count);
-    String str = "";
+    StringBuffer buffer = new StringBuffer();
     int count = activityDetail.arrLikes.size();
 
     if (count == 0) {
-      str = "There is no one likes this";
+      buffer.append("No like for the moment");
     } else if (count == 1) {
       Mock_Activity activity = (Mock_Activity) activityDetail.arrLikes.get(0);
-      str = activity.userID + " likes this";
+      buffer.append(activity.userID);
+      buffer.append(" liked this");
     } else if (count < 4) {
       for (int i = 0; i < count - 1; i++) {
         Mock_Activity activity = (Mock_Activity) activityDetail.arrLikes.get(i);
-        str += activity.userID + " ";
+        buffer.append(activity.userID);
+        buffer.append(", ");
       }
+      buffer.deleteCharAt(buffer.length() - 2);
       Mock_Activity activity = (Mock_Activity) activityDetail.arrLikes.get(count - 1);
-      str += "and " + activity.userID + " like this";
+      buffer.append("and ");
+      buffer.append(activity.userID);
+      buffer.append(" liked this");
+    } else {
+      for (int i = 0; i < 3; i++) {
+        Mock_Activity activity = (Mock_Activity) activityDetail.arrLikes.get(i);
+        buffer.append(activity.userID);
+        buffer.append(", ");
+      }
+      buffer.deleteCharAt(buffer.length() - 2);
+      int remain = count - 3;
+      buffer.append("and ");
+      buffer.append(remain);
+      if (remain > 1) {
+        buffer.append(" peoples liked this");
+      } else
+        buffer.append(" people liked this");
+
     }
 
-    textView_Like_Count.setText(str);
+    textView_Like_Count.setText(buffer.toString());
 
     changeLanguage(AppController.bundle);
 
@@ -159,25 +174,12 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   public void finishMe() {
 
-//    GDActivity.TYPE = 1;
+    // GDActivity.TYPE = 1;
     Intent next = new Intent(activityStreamDisplayInstance, AsyncImageViewListActivity.class);
     startActivity(next);
     activityStreamDisplayInstance = null;
 
   }
-
-  // Keydown listener
-  // public boolean onKeyDown(int keyCode, KeyEvent event) {
-  // // Save data to the server once the user hits the back button
-  // if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-  // // Toast.makeText(eXoChatListController.this,
-  // // strCannotBackToPreviousPage, Toast.LENGTH_SHORT)
-  // // .show();
-  // }
-  // return false;
-  // }
-
-  // create comment layout list
 
   private void createCommentList() {
     if (activityDetail.arrComments != null) {

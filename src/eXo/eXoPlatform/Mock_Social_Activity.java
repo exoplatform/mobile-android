@@ -106,7 +106,8 @@ public class Mock_Social_Activity {
       // Mock_Activity_Comment act_cm_08 = new Mock_Activity_Comment("32D52",
       // "A1ED2", "This is a short message", 3600);
 
-      List<Mock_Activity> arrLikes = Arrays.asList(new Mock_Activity[] { act_01, act_02 });
+      List<Mock_Activity> arrLikes = Arrays.asList(new Mock_Activity[] { act_01, act_02, act_01,
+          act_02 });
       List<Mock_Activity> arrComments = Arrays.asList(new Mock_Activity[] { act_03, act_04, act_05 });
 
       // arrayOfActivityComments = Arrays.asList(new Mock_Activity_Comment[]

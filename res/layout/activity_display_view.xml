@@ -8,8 +8,8 @@
 		<LinearLayout android:orientation="vertical"
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
 			<RelativeLayout android:id="@+id/RelativeLayout_Status"
-				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:background="#E9E9E9">
+				android:padding="3dp" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:background="#E9E9E9">
 
 				<RelativeLayout android:background="@drawable/bottom_background_shape"
 					android:id="@+id/imageView_Avatar_wrap" android:layout_height="wrap_content"
@@ -25,32 +25,33 @@
 				</RelativeLayout>
 
 
-				<TextView android:id="@+id/textView_Name"
+				<TextView android:id="@+id/textView_Name" android:textSize="15dp"
 					android:layout_height="20dip" android:text="Name"
-					android:layout_marginLeft="10dip" android:layout_marginTop="5dip"
+					android:layout_marginLeft="15dip" android:layout_marginTop="5dip"
 					android:layout_toRightOf="@id/imageView_Avatar_wrap"
 					android:layout_width="fill_parent" android:textColor="#000000"
 					android:textStyle="bold" />
 
 				<TextView android:id="@+id/textView_Message"
-					android:layout_height="wrap_content" android:text="Test message"
-					android:layout_marginLeft="10dip" android:layout_marginTop="2dip"
-					android:layout_below="@id/textView_Name" android:layout_toRightOf="@id/imageView_Avatar_wrap"
+					android:textSize="15dp" android:layout_height="wrap_content"
+					android:text="Test message" android:layout_marginLeft="15dip"
+					android:layout_marginTop="2dip" android:layout_below="@id/textView_Name"
+					android:layout_toRightOf="@id/imageView_Avatar_wrap"
 					android:layout_width="fill_parent" android:textColor="#000000" />
 
 				<TextView android:id="@+id/textView_Time"
 					android:layout_height="wrap_content" android:text="20 Minutes Ago"
-					android:layout_marginTop="5dip" android:layout_marginLeft="10dip"
+					android:layout_marginTop="5dip" android:layout_marginLeft="15dip"
 					android:layout_toRightOf="@id/imageView_Avatar_wrap"
 					android:layout_below="@id/textView_Message" android:layout_width="wrap_content"
-					android:textSize="13dp" android:textColor="#696969" />
+					android:textSize="14dp" android:textColor="#000000" />
 
 			</RelativeLayout>
 
 			<RelativeLayout android:id="@+id/relativeLayout_Like"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
 				android:layout_below="@id/RelativeLayout_Status" android:background="@drawable/socialactivitydetaillikebgselected"
-				android:layout_marginTop="-3dip">
+				android:layout_marginTop="-3dip" android:padding="5dp">
 
 				<Button android:id="@+id/imageView_Like"
 					android:layout_height="wrap_content" android:layout_width="wrap_content"
@@ -61,12 +62,13 @@
 				<TextView android:id="@+id/textView_Like_Count"
 					android:layout_height="wrap_content"
 					android:text="Jack Miller, Marry Williams and James David like this."
-					android:layout_marginLeft="10dip" android:layout_marginTop="20dip"
+					android:layout_marginLeft="5dip" android:layout_marginTop="20dip"
 					android:layout_toLeftOf="@id/imageView_Like" android:layout_width="fill_parent" />
 
 			</RelativeLayout>
 			<LinearLayout android:background="#08387B"
-				android:layout_width="fill_parent" android:layout_height="wrap_content">
+				android:layout_marginTop="5dp" android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
 				<LinearLayout android:background="#EDEDF0"
 					android:padding="2dp" android:layout_marginLeft="10dp"
 					android:layout_marginRight="10dp" android:layout_width="fill_parent"
@@ -76,8 +78,8 @@
 			</LinearLayout>
 
 			<LinearLayout android:id="@+id/activity_display_comment_wrap"
-				android:orientation="vertical" android:layout_width="fill_parent"
-				android:layout_height="wrap_content">
+				android:orientation="vertical" android:padding="3dp"
+				android:layout_width="fill_parent" android:layout_height="wrap_content">
 			</LinearLayout>
 
 
