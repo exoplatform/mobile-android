@@ -1,12 +1,8 @@
 package eXo.eXoPlatform;
 
-import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
 
 import java.io.File;
-
-import com.cyrilmottier.android.greendroid.R;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -16,13 +12,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+
+import com.cyrilmottier.android.greendroid.R;
 
 public class ComposeMessageActivity extends MyActionBar implements OnClickListener {
 
@@ -42,14 +40,16 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   public static ComposeMessageActivity composeMessageActivity;
 
-  private InputMethodManager           inputManager;
+  private int                          width;
+
+  // private InputMethodManager inputManager;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo_Close);
-    setActionBarContentView(R.layout.compose_message_layout);    
+    setTheme(R.style.Theme_eXo_Back);
+    setActionBarContentView(R.layout.compose_message_layout);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     composeMessageActivity = this;
@@ -64,16 +64,21 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       setTitle("Comment");
     }
     initComponents();
+    WindowManager manager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+    Display display = manager.getDefaultDisplay();
+    width = display.getWidth();
 
   }
 
   private void initComponents() {
     composeEditText = (EditText) findViewById(R.id.compose_text_view);
     composeEditText.requestFocus();
-    inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-    inputManager.showSoftInput(composeEditText, InputMethodManager.SHOW_FORCED);
-    inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,
-                                 InputMethodManager.HIDE_IMPLICIT_ONLY);
+    // inputManager = (InputMethodManager)
+    // this.getSystemService(Context.INPUT_METHOD_SERVICE);
+    // inputManager.showSoftInput(composeEditText,
+    // InputMethodManager.SHOW_FORCED);
+    // inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,
+    // InputMethodManager.HIDE_IMPLICIT_ONLY);
 
     // imageLayoutWrap = (LinearLayout) findViewById(R.id.compose_image_wrap);
 
@@ -85,12 +90,12 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   }
 
-  private void hideKeyBoard() {
-    inputManager.hideSoftInputFromInputMethod(composeEditText.getWindowToken(),
-                                              InputMethodManager.HIDE_IMPLICIT_ONLY);
-    inputManager.toggleSoftInput(0, 0);
-
-  }
+  // private void hideKeyBoard() {
+  // inputManager.hideSoftInputFromInputMethod(composeEditText.getWindowToken(),
+  // InputMethodManager.HIDE_IMPLICIT_ONLY);
+  // inputManager.toggleSoftInput(0, 0);
+  //
+  // }
 
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -120,7 +125,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     }
 
     if (view == cancelButton) {
-      hideKeyBoard();
+      // hideKeyBoard();
       composeMessageActivity = null;
       finish();
     }
@@ -128,7 +133,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   public void finishMe() {
     // GDActivity.TYPE = 1;
-    hideKeyBoard();
+    // hideKeyBoard();
     if (composeType == 0) {
       Intent intent = new Intent(composeMessageActivity, AsyncImageViewListActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
