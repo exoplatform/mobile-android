@@ -1,7 +1,5 @@
 package eXo.eXoPlatform;
 
-import greendroid.app.GDActivity;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -60,7 +58,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 //Login page
 public class AppController extends Activity implements OnTouchListener {
@@ -264,7 +261,6 @@ public class AppController extends Activity implements OnTouchListener {
               arrServerList.add(serverObj);
             }
           }
-
         }
 
       } catch (Exception e) {
@@ -272,7 +268,6 @@ public class AppController extends Activity implements OnTouchListener {
       }
 
       return arrServerList;
-
     }
 
     // Create user configuration file: deleted & added servers
@@ -1061,7 +1056,7 @@ public class AppController extends Activity implements OnTouchListener {
 //        imgGadgetIcon = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
         if (imgGadgetIcon == null) {
           try {
-            imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
+//            imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
           } catch (Exception e2) {
 
             imgGadgetIcon = null;
@@ -1071,7 +1066,7 @@ public class AppController extends Activity implements OnTouchListener {
       } catch (Exception e) {
 
         try {
-          imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
+//          imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
         } catch (Exception e2) {
 
           imgGadgetIcon = null;

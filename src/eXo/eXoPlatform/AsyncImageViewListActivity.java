@@ -1,25 +1,7 @@
-/*
- * Copyright (C) 2011 Cyril Mottier (http://www.cyrilmottier.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package eXo.eXoPlatform;
 
-import greendroid.app.GDActivity;
-import greendroid.app.GDListActivity;
 import greendroid.image.ImageProcessor;
 import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.AsyncImageView;
 
 import java.util.ArrayList;
@@ -46,6 +28,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -122,31 +105,31 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
       return "Less Than A Minute";
     } else {
       if (time < 120) {
-        return "About A Minute";
+        return "A Minute Ago";
       } else {
         if (time < 3600) {
           value = Math.round(time / 60);
           return "About " + String.valueOf(value) + " Minutes";
         } else {
           if (time < 7200) {
-            return "About An Hour";
+            return "An Hour Ago";
           } else {
             if (time < 86400) {
               value = Math.round(time / 3600);
-              return "About " + String.valueOf(value) + " Hours";
+              return String.valueOf(value) + " Hours Ago";
             } else {
               if (time < 172800) {
-                return "About A Day";
+                return "A Day Ago";
               } else {
                 if (time < 2592000) {
                   value = Math.round(time / 86400);
-                  return "About " + String.valueOf(value) + " Days";
+                  return String.valueOf(value) + " Days Ago";
                 } else {
                   if (time < 5184000) {
-                    return "About A Month";
+                    return "A Month Ago";
                   } else {
                     value = Math.round(time / 2592000);
-                    return "About " + String.valueOf(value) + " Months";
+                    return String.valueOf(value) + " Months Ago";
                   }
                 }
               }
@@ -159,7 +142,7 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
 
   private class MyAdapter extends BaseAdapter implements ImageProcessor {
 
-    private final StringBuilder               BUILDER                  = new StringBuilder();
+//    private final StringBuilder               BUILDER                  = new StringBuilder();
 
     ArrayList<String>                         _arrayOfSectionsTitle;
 
@@ -253,15 +236,6 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
     }
 
     public int getCount() {
-
-      // int count = 0;
-      // for(int i = 0; i < _arrayOfSectionsTitle.size(); i++)
-      // {
-      // String strKey = _arrayOfSectionsTitle.get(i);
-      // count += _sortedActivities.get(strKey).size() + 1;
-      // }
-      // // return mock.mStrings.length;
-      // return count + 1;
       return _arrayOfActivityListView.size();
     }
 
@@ -278,8 +252,12 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
       ViewHolder holder = null;
 
       final Mock_Activity activity = _arrayOfActivityListView.get(position);
+      
+      RelativeLayout imgShadowView;
+      
       // if (convertView == null) {
       if (activity.isHeader) {
+        
         convertView = mInflater.inflate(R.layout.activityheadersection, parent, false);
         TextView title = (TextView) convertView.findViewById(R.id.textView_Section_Title);
         if (position == 0) {
@@ -295,6 +273,8 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
         holder.imageViewAvatar = (AsyncImageView) convertView.findViewById(R.id.imageView_Avatar);
         holder.imageViewAvatar.setImageProcessor(this);
 
+        imgShadowView = (RelativeLayout) convertView.findViewById(R.id.imageView_Avatar_wrap);
+        
         holder.textViewName = (TextView) convertView.findViewById(R.id.textView_Name);
 
         holder.textViewMessage = (TextView) convertView.findViewById(R.id.textView_Message);
@@ -313,7 +293,7 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
           LayoutParams params = convertView.getLayoutParams();
           params.height = 40;
           convertView.setLayoutParams(params);
-
+          imgShadowView.setVisibility(View.INVISIBLE);
           holder.imageViewAvatar.setVisibility(View.INVISIBLE);
           holder.textViewName.setVisibility(View.INVISIBLE);
           holder.textViewMessage.setVisibility(View.INVISIBLE);
@@ -333,13 +313,29 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
           });
 
         } else {
-          BUILDER.setLength(0);
-          BUILDER.append(mock.mStrings[position]);
-          holder.imageViewAvatar.setUrl(BUILDER.toString());
+//          BUILDER.setLength(0);
+//          BUILDER.append(mock.mStrings[position]);
+          holder.imageViewAvatar.setUrl(activity.imageUrl);
 
           holder.textViewName.setText(activity.userID);
           holder.textViewMessage.setText(activity.title);
+          
+          String strNbComment = Integer.toString(activity.nbComments);
+          if(strNbComment.length() > 2)
+          {
+            LayoutParams params = holder.buttonComment.getLayoutParams();
+            params.width = 50;
+            holder.buttonComment.setLayoutParams(params);
+          }
           holder.buttonComment.setText(Integer.toString(activity.nbComments));
+          
+          String strNbLike = Integer.toString(activity.nbLikes);
+          if(strNbLike.length() > 2)
+          {
+            LayoutParams params = holder.buttonLike.getLayoutParams();
+            params.width = 50;
+            holder.buttonLike.setLayoutParams(params);
+          }
           holder.buttonLike.setText(Integer.toString(activity.nbLikes));
           holder.textViewTime.setText(getPostedTimeString(activity.postedTime));
 

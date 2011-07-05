@@ -842,7 +842,7 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
       } catch (Exception e) {
 
         try {
-          imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
+//          imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
         } catch (Exception e2) {
 
           imgGadgetIcon = null;
