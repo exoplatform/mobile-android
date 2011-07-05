@@ -259,7 +259,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
   // Set language
   public void changeLanguage(ResourceBundle resourceBundle) {
 
-    String strTitle = "Activity Stream";
+    String strTitle = "Activity Detail";
 
     try {
       // strTitle = new
