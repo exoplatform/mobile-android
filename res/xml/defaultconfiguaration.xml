@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<xml>
+	<version number="1.0" />
+	<Languages>
+		<language name="English" ressourceFile="Localize_EN.xml" />
+		<language name="French" ressourceFile="Localize_FR.xml" />
+	</Languages>
+	<Servers>
+		<server name="eXo Intranet" serverURL="http://int.exoplatform.org" />
+		<server name="eXo Mobile" serverURL="http://mobile.demo.exoplatform.org" />
+		<server name="eXo Platform" serverURL="http://platform.demo.exoplatform.org" />
+	</Servers>
+</xml>

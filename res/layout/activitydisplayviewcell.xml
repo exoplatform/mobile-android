@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#08387B" android:padding="4dp"
+	android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+	<RelativeLayout android:background="@drawable/bottom_background_shape"
+		android:id="@+id/imageView_Avatar_wrap" android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:layout_marginLeft="2dip"
+		android:layout_marginTop="10dip" android:layout_alignParentLeft="true">
+		<greendroid.widget.AsyncImageView
+			android:padding="1dp" android:layout_centerInParent="true"
+			android:id="@+id/imageView_Avatar" android:layout_height="50dip"
+			android:layout_width="50dip" />
+		<ImageView android:background="@drawable/activity_avatar_shadow"
+			android:layout_centerInParent="true" android:layout_height="48dip"
+			android:layout_width="48dip" />
+	</RelativeLayout>
+
+	<RelativeLayout android:id="@+id/relativeLayout_Content"
+		android:padding="3dp" android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:layout_marginTop="10dip"
+		android:layout_toRightOf="@id/imageView_Avatar_wrap"
+		android:background="@drawable/social_activity_browser_bg">
+		<TextView android:id="@+id/textView_Name" android:textSize="15dp"
+			android:layout_height="wrap_content" android:text="Name"
+			android:padding="3dp" android:layout_marginLeft="10dip"
+			android:layout_marginTop="2dip" android:layout_width="fill_parent"
+			android:gravity="center_vertical" android:textColor="#000000"
+			android:textStyle="bold" />
+
+		<TextView android:id="@+id/textView_Message" android:padding="3dp"
+			android:textSize="15dp" android:layout_height="wrap_content"
+			android:text="Test message" android:layout_marginLeft="10dip"
+			android:layout_marginTop="10dip" android:layout_below="@id/textView_Name"
+			android:layout_width="fill_parent" android:textColor="#000000" />
+			
+		<TextView android:id="@+id/textView_Time" android:textColor="#696969"
+			android:padding="3dp" android:textSize="13dp" android:layout_height="wrap_content"
+			android:text="20 Minutes Ago" android:layout_below="@id/textView_Message"
+			android:layout_marginLeft="10dip" android:layout_marginTop="10dip"
+			android:layout_width="fill_parent" />
+	</RelativeLayout>
+</RelativeLayout>

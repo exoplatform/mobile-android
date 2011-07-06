@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:background="@drawable/androidgeneralbg">
+
+	<TextView android:text="Language" android:id="@+id/TextView_Language"
+		android:textSize="18dip" android:textStyle="bold" android:textColor="#ffffff"
+		android:gravity="center_vertical" android:layout_width="fill_parent"
+		android:layout_height="40dip" />
+
+	<RelativeLayout android:id="@+id/RelativeLayout_Language"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_below="@id/TextView_Language">
+
+		<View android:id="@+id/View_English" android:layout_width="fill_parent"
+			android:layout_height="40dip" android:background="@drawable/settingcellstreachablebackground" />
+		<ImageView android:id="@+id/ImageView_English"
+			android:layout_width="40dip" android:layout_height="30dip"
+			android:layout_marginTop="5dip" android:layout_marginLeft="10dip"
+			android:background="@drawable/en" />
+		<TextView android:id="@+id/TextView_English"
+			android:layout_toRightOf="@id/ImageView_English"
+			android:layout_width="fill_parent" android:layout_height="40dip"
+			android:gravity="center_vertical" android:layout_marginLeft="10dip"
+			android:textSize="18dip" android:textColor="#000000"
+			android:textStyle="bold" android:text="English" />
+		<ImageView android:id="@+id/ImageView_CheckMark_EN"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_marginTop="5dip" android:layout_marginRight="5dip"
+			android:layout_alignParentRight="true"
+			android:background="@drawable/authenticatecheckmarkiphoneon" />
+
+
+		<View android:id="@+id/View_French" android:layout_width="fill_parent"
+			android:layout_height="40dip" android:layout_below="@id/View_English"
+			android:background="@drawable/settingcellstreachablebackground" />
+		<ImageView android:id="@+id/ImageView_French"
+			android:layout_below="@id/View_English" android:layout_width="40dip"
+			android:layout_height="30dip" android:layout_marginTop="5dip"
+			android:layout_marginLeft="10dip" android:background="@drawable/fr" />
+		<TextView android:id="@+id/TextView_French"
+			android:layout_below="@id/View_English" android:layout_toRightOf="@id/ImageView_French"
+			android:layout_width="fill_parent" android:layout_height="40dip"
+			android:gravity="center_vertical" android:layout_marginLeft="10dip"
+			android:textSize="18dip" android:textColor="#000000"
+			android:textStyle="bold" android:text="French" />
+		<ImageView android:id="@+id/ImageView_CheckMark_FR"
+			android:layout_below="@id/View_English" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_marginTop="5dip"
+			android:layout_marginRight="5dip" android:layout_alignParentRight="true"
+			android:background="@drawable/authenticatecheckmarkiphoneon" />
+
+	</RelativeLayout>
+
+	<TextView android:text="Server List" android:id="@+id/TextView_Server_List"
+		android:textSize="18dip" android:textStyle="bold" android:textColor="#ffffff"
+		android:gravity="center_vertical" android:layout_width="fill_parent"
+		android:layout_height="40dip" android:layout_below="@id/RelativeLayout_Language" />
+
+	<ListView android:id="@+id/ListView_Servers"
+		android:layout_above="@+id/Button_Modify_The_List"
+		android:layout_below="@id/TextView_Server_List"
+		android:layout_marginBottom="70dip" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:cacheColorHint="#00000000" />
+
+
+	<Button android:id="@+id/Button_User_Guide"
+		android:layout_alignParentBottom="true" android:layout_width="fill_parent"
+		android:layout_height="44dip" android:text="User Guide"
+		android:textStyle="bold" android:background="@drawable/settingsuserguidebutton" />
+
+</RelativeLayout>

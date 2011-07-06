@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.exoplatform</groupId>
+		<artifactId>exo.parent</artifactId>
+		<version>8.1</version>
+	</parent>
+	<groupId>org.exoplatform.mobile.platform</groupId>
+	<artifactId>exo-mobile-android</artifactId>
+	<version>1.1.1-SNAPSHOT</version>
+	<packaging>apk</packaging>
+	<name>eXo Mobile Android</name> 
+	<description>eXo Mobile Android projects.</description>
+	<scm>
+		<connection>scm:svn:https://svn.exoplatform.org/projects/mobile/trunk/exo-mobile-android</connection>
+		<developerConnection>scm:svn:https://svn.exoplatform.org/projects/mobile/trunk/exo-mobile-android</developerConnection>
+		<url>https://fisheye.exoplatform.org/browse/mobile/trunk/exo-mobile-android</url>
+	</scm>
+	<properties>
+		<!-- SNAPSHOTS must be deployed in our private repository -->
+		<exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
+		<!-- Runtimes -->
+		<com.google.android.version>2.1.2</com.google.android.version>
+		<!-- Libraries -->
+		<org.jivesoftware.smack.version>3.1.0</org.jivesoftware.smack.version>
+		<commons-lang.version>2.4</commons-lang.version>
+		<!-- Default version of SDK to use -->
+		<android.sdk.platform>7</android.sdk.platform>
+		<!-- Maven Plugins -->
+		<maven-android-plugin.plugin-version>2.9.0-beta-3</maven-android-plugin.plugin-version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<version>${com.google.android.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>jivesoftware</groupId>
+			<artifactId>smack</artifactId>
+			<version>${org.jivesoftware.smack.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons-lang.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.greendroid</groupId>
+			<artifactId>greendroid</artifactId>
+			<version>67aa3ed</version>
+			<type>apklib</type>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>maven-android-plugin</artifactId>
+				<version>${maven-android-plugin.plugin-version}</version>
+				<configuration>
+					<deleteConflictingFiles>true</deleteConflictingFiles>
+				</configuration> 
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+		<sourceDirectory>src</sourceDirectory>
+	</build>
+</project>
