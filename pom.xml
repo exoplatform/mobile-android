@@ -58,15 +58,9 @@
 		<dependency>
 			<groupId>com.greendroid</groupId>
 			<artifactId>greendroid</artifactId>
-			<version>e8a7a6a</version>
+			<version>67aa3ed</version>
 			<type>apklib</type>
 		</dependency>
-                <dependency>
-                        <groupId>com.greendroid</groupId>
-                        <artifactId>greendroid-catalog</artifactId>
-                        <version>e8a7a6a</version>
-                        <type>apklib</type>
-                </dependency>
 	</dependencies>
 	<build>
 		<plugins>
