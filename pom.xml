@@ -33,6 +33,11 @@
 		<maven-android-plugin.plugin-version>2.9.0-beta-3</maven-android-plugin.plugin-version>
 	</properties>
 	<dependencies>
+                <dependency>
+                        <groupId>org.exoplatform.social</groupId>
+                        <artifactId>exo.social.client</artifactId>
+                        <version>1.0.0-alpha1</version>
+                </dependency>
 		<dependency>
 			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
@@ -53,9 +58,15 @@
 		<dependency>
 			<groupId>com.greendroid</groupId>
 			<artifactId>greendroid</artifactId>
-			<version>67aa3ed</version>
+			<version>e8a7a6a</version>
 			<type>apklib</type>
 		</dependency>
+                <dependency>
+                        <groupId>com.greendroid</groupId>
+                        <artifactId>greendroid-catalog</artifactId>
+                        <version>e8a7a6a</version>
+                        <type>apklib</type>
+                </dependency>
 	</dependencies>
 	<build>
 		<plugins>
