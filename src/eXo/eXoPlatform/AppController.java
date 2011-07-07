@@ -461,7 +461,7 @@ public class AppController extends Activity implements OnTouchListener {
     // "/eXo/DefaultServerList.xml";
     // File file = new File(path);
     // boolean deleted = file.delete();
-
+    
     RelativeLayout layout = (RelativeLayout) findViewById(R.id.RelativeLayout_Login);
     layout.setOnClickListener(new View.OnClickListener() {
 

@@ -23,6 +23,16 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.exoplatform.social.client.api.ClientServiceFactory;
+import org.exoplatform.social.client.api.SocialClientContext;
+import org.exoplatform.social.client.api.common.RealtimeListAccess;
+import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.api.model.RestIdentity;
+import org.exoplatform.social.client.api.service.ActivityService;
+import org.exoplatform.social.client.api.service.IdentityService;
+import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+
+import android.util.Log;
 
 //interact with server
 public class eXoConnection {
@@ -126,7 +136,7 @@ public class eXoConnection {
     // return "ERROR";
     //			
     // }
-
+       
     return "/portal/private/intranet";
     /*
      * String context = ""; String strUrlContent = ""; try { URL url = new
@@ -148,7 +158,8 @@ public class eXoConnection {
   }
 
   // Send request with authentication
-  public String sendAuthentication(String domain, String username, String password) {
+  public String sendAuthentication(String domain, String username, String password) {     
+    
     try {
       HttpResponse response;
       HttpEntity entity;

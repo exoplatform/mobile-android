@@ -62,6 +62,7 @@ public class Mock_Social_Activity {
       "http://a1.twimg.com/profile_images/605536070/twitterProfilePhoto_normal.jpg" };
 
   public Mock_Social_Activity(Boolean isComment) {
+    
     if (isComment) {
       Mock_Activity act_01 = new Mock_Activity("32D51", mStrings[0], "", "", 0, 0, 0);
       Mock_Activity act_02 = new Mock_Activity("32D52", mStrings[1], "", "", 0, 0, 0);
@@ -87,24 +88,6 @@ public class Mock_Social_Activity {
                                                0,
                                                0);
 
-      // Mock_Activity_Comment act_cm_01 = new Mock_Activity_Comment("32D52",
-      // "A1ED2", "This is a short message", 3600);
-      // Mock_Activity_Comment act_cm_02 = new Mock_Activity_Comment("32D52",
-      // "A1ED2",
-      // "This is a normal message, with some content. And a second sentence.",
-      // 360);
-      // Mock_Activity_Comment act_cm_03 = new Mock_Activity_Comment("32D52",
-      // "A1ED2", "This is a short message", 3600);
-      // Mock_Activity_Comment act_cm_04 = new Mock_Activity_Comment("32D52",
-      // "A1ED2", "This is a short message", 3600);
-      // Mock_Activity_Comment act_cm_05 = new Mock_Activity_Comment("32D52",
-      // "A1ED2", "This is a short message", 3600);
-      // Mock_Activity_Comment act_cm_06 = new Mock_Activity_Comment("32D52",
-      // "A1ED2", "This is a short message", 3600);
-      // Mock_Activity_Comment act_cm_07 = new Mock_Activity_Comment("32D52",
-      // "A1ED2", "This is a short message", 3600);
-      // Mock_Activity_Comment act_cm_08 = new Mock_Activity_Comment("32D52",
-      // "A1ED2", "This is a short message", 3600);
 
       List<Mock_Activity> arrLikes = Arrays.asList(new Mock_Activity[] { act_01, act_02, act_01,
           act_02 });

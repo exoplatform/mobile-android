@@ -313,6 +313,5 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       comTextViewName = (TextView) view.findViewById(R.id.textView_Name);
       comTextViewMessage = (TextView) view.findViewById(R.id.textView_Message);
     }
-
   }
 }
