@@ -2,10 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="eXo.eXoPlatform" android:versionCode="2" android:versionName="2.0">
 	<application android:icon="@drawable/icon57x57"
-		android:theme="@style/Theme.eXo"
-		android:name=".eXoApplication"
+		android:theme="@style/Theme.eXo" android:name=".eXoApplication"
 		android:debuggable="true">
-		
+
 		<activity android:name=".AppController" android:label="eXo Platform"
 			android:screenOrientation="portrait">
 			<intent-filter>
@@ -13,7 +12,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		
+
 		<activity android:name=".eXoApplicationsController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
@@ -43,8 +42,7 @@
 		<activity android:name=".BasicItemActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".eXoDashboard"
-			android:configChanges="keyboardHidden|orientation"
+		<activity android:name=".eXoDashboard" android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 		<activity android:name=".ActivityStreamBrowser"
 			android:configChanges="keyboardHidden|orientation"
@@ -58,13 +56,16 @@
 		<activity android:name=".AsyncImageViewListActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-			<activity android:name=".ComposeMessageActivity"
+		<activity android:name=".ComposeMessageActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-			
+		<activity android:name=".social.SocialActivity"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+
 	</application>
-	<uses-sdk android:minSdkVersion="7"/>
-	
+	<uses-sdk android:minSdkVersion="7" />
+
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

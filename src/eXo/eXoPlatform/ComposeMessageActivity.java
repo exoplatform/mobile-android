@@ -1,8 +1,10 @@
 package eXo.eXoPlatform;
 
-import greendroid.widget.ActionBarItem;
-
 import java.io.File;
+
+import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.core.model.RestActivityImpl;
+import org.exoplatform.social.client.core.model.RestCommentImpl;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -12,35 +14,34 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.cyrilmottier.android.greendroid.R;
 
+import eXo.eXoPlatform.social.SocialActivity;
+import eXo.eXoPlatform.util.UserTask;
+import eXo.eXoPlatform.util.eXoConstants;
+import greendroid.widget.ActionBarItem;
+
 public class ComposeMessageActivity extends MyActionBar implements OnClickListener {
 
-  private int                          composeType;
+  private int      composeType;
 
-  private EditText                     composeEditText;
+  private EditText composeEditText;
 
   // private LinearLayout imageLayoutWrap;
 
-  private Button                       sendButton;
+  private Button   sendButton;
 
-  private Button                       cancelButton;
+  private Button   cancelButton;
 
-  private String                       composeMessage;
+  private String   composeMessage;
 
-  private String                       sdcard_temp_dir;
-
-  public static ComposeMessageActivity composeMessageActivity;
-
-  private int                          width;
+  private String   sdcard_temp_dir;
 
   // private InputMethodManager inputManager;
 
@@ -52,7 +53,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     setActionBarContentView(R.layout.compose_message_layout);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
-    composeMessageActivity = this;
     composeType = getIntent().getIntExtra(eXoConstants.COMPOSE_TYPE, composeType);
     if (composeType == 0) {
       setTitle("Status Update");
@@ -64,22 +64,13 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       setTitle("Comment");
     }
     initComponents();
-    WindowManager manager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-    Display display = manager.getDefaultDisplay();
-    width = display.getWidth();
 
   }
 
   private void initComponents() {
     composeEditText = (EditText) findViewById(R.id.compose_text_view);
-    composeEditText.requestFocus();
-    // inputManager = (InputMethodManager)
-    // this.getSystemService(Context.INPUT_METHOD_SERVICE);
-    // inputManager.showSoftInput(composeEditText,
-    // InputMethodManager.SHOW_FORCED);
-    // inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,
-    // InputMethodManager.HIDE_IMPLICIT_ONLY);
-
+    // composeEditText.requestFocus();
+    composeMessage = composeEditText.getText().toString();
     // imageLayoutWrap = (LinearLayout) findViewById(R.id.compose_image_wrap);
 
     sendButton = (Button) findViewById(R.id.compose_send_button);
@@ -90,19 +81,12 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   }
 
-  // private void hideKeyBoard() {
-  // inputManager.hideSoftInputFromInputMethod(composeEditText.getWindowToken(),
-  // InputMethodManager.HIDE_IMPLICIT_ONLY);
-  // inputManager.toggleSoftInput(0, 0);
-  //
-  // }
-
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     // TODO Auto-generated method stub
     switch (position) {
     case -1:
-      finish();
+      destroy();
       break;
 
     case 0:
@@ -116,42 +100,55 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   public void onClick(View view) {
     if (view == sendButton) {
-      if (composeType == 0) {
-
-      } else {
-
+      composeMessage = composeEditText.getText().toString();
+    
+      if ((composeMessage != null) && (composeMessage.length() > 0)) {
+        if (composeType == 0) {
+          onPostTask();
+        } else {
+          onCommentTask();
+        }
+        
+      }
+      try {
+        Thread.sleep(1000);
+        destroy();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
 
     }
 
     if (view == cancelButton) {
-      // hideKeyBoard();
-      composeMessageActivity = null;
-      finish();
+
     }
   }
 
-  public void finishMe() {
-    // GDActivity.TYPE = 1;
-    // hideKeyBoard();
-    if (composeType == 0) {
-      Intent intent = new Intent(composeMessageActivity, AsyncImageViewListActivity.class);
-      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      startActivity(intent);
-    } else {
-      Intent intent = new Intent(composeMessageActivity, ActivityStreamDisplay.class);
-      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      startActivity(intent);
-    }
-    composeMessageActivity = null;
+  private void destroy() {
+    super.onDestroy();
+    finish();
   }
 
   @Override
   public void onBackPressed() {
-    // TODO Auto-generated method stub
     super.onBackPressed();
-    composeMessageActivity = null;
-    finish();
+    destroy();
+
+  }
+
+  private void onCommentTask() {
+    RestCommentImpl comment = new RestCommentImpl();
+    comment.setText(composeMessage);
+    RestActivity restActivity = (RestActivity) SocialActivity.activityService.get(ActivityStreamDisplay.selectedStreamInfo.getActivityId());
+
+    SocialActivity.activityService.createComment(restActivity, comment);
+
+  }
+
+  private void onPostTask() {
+    RestActivityImpl activityImlp = new RestActivityImpl();
+    activityImlp.setTitle(composeMessage);
+    SocialActivity.activityService.create(activityImlp);
 
   }
 
@@ -208,5 +205,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       }
     }
   }
+
 
 }

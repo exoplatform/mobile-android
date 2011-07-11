@@ -66,7 +66,7 @@ public class ActivityStreamBrowser extends GDActivity {
 
     activityStreamBrowserInstance = this;
 
-    _lvActivity = (ListView) findViewById(R.id.listView_Avtivity);
+//    _lvActivity = (ListView) findViewById(R.id.listView_Avtivity);
 
     changeLanguage(AppController.bundle);
     // for (int i = 0; i < 5; i++) {

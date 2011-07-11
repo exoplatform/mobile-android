@@ -1,5 +1,6 @@
 package eXo.eXoPlatform;
 
+import eXo.eXoPlatform.social.SocialActivity;
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.LoaderActionBarItem;
@@ -68,7 +69,7 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   static eXoApplicationsController2 eXoApplicationsController2Instance;
 
-  public static int                sTheme;
+  public static int                 sTheme;
 
   Button                            btnDone;
 
@@ -127,7 +128,7 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
     super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
     addActionBarItem(R.drawable.signout);
     super.setTitle("eXo");
-    
+
     btnDone = (Button) findViewById(R.id.Button_Done);
     btnDone.setVisibility(View.INVISIBLE);
     btnDone.setOnClickListener(new View.OnClickListener() {
@@ -277,7 +278,6 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
     return false;
   }
 
-  
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
     switch (position) {
@@ -388,9 +388,10 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
           View view = gridview.getChildAt(i);
           if (view == v) {
             AppItem item = array.get(i);
-
-            // v.setVisibility(View.INVISIBLE);
-            launchApp(v, item._name);
+            if (item._name.equalsIgnoreCase("Activity Streams")) {
+              launchActivityStreamApp();
+            } else
+              launchApp(v, item._name);
           }
         }
 
@@ -499,7 +500,7 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
   public void launchApp(View v, String featureName) {
 
     final String str = featureName;
-//    GDActivity.TYPE = 1;
+    // GDActivity.TYPE = 1;
     Runnable loadingDataRunnable = new Runnable() {
       public void run() {
 
@@ -511,9 +512,11 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
           launchDashboardApp();
         } else if (str.equalsIgnoreCase("settings")) {
           launchSettingApp();
-        } else if (str.equalsIgnoreCase("Activity Streams")) {
-          launchActivityStreamApp();
         }
+
+        // else if (str.equalsIgnoreCase("Activity Streams")) {
+        // launchActivityStreamApp();
+        // }
 
         runOnUiThread(dismissProgressDialog);
       }
@@ -616,7 +619,9 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
 
     // Intent next = new Intent(eXoApplicationsController2.this,
     // TestActivityBrowserView.class);
-    Intent next = new Intent(eXoApplicationsController2.this, AsyncImageViewListActivity.class);
+    // Intent next = new Intent(eXoApplicationsController2.this,
+    // AsyncImageViewListActivity.class);
+    Intent next = new Intent(eXoApplicationsController2.this, SocialActivity.class);
     eXoApplicationsController2Instance.startActivity(next);
 
   }
@@ -633,7 +638,7 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
     toast.show();
 
     // runOnUiThread(new Runnable() {
-    //      
+    //
     // public void run() {
     // // TODO Auto-generated method stub
     // toast.setDuration(Toast.LENGTH_LONG);
@@ -750,7 +755,8 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
       // Get bitmap
       String bmpUrl = parseUrl(tmpStr2, "\"thumbnail\":\"", true, "\"");
       bmpUrl = bmpUrl.replace("localhost", _strDomain);
-//      bmp = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
+      // bmp =
+      // BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
 
       eXoGadget tempGadget = new eXoGadget(title, description, url, bmpUrl, null, null);
       arrGadgets.add(tempGadget);
@@ -829,10 +835,12 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
       gadgetIconUrl = gadgetIconUrl.replace("http://localhost:8080", domain);
 
       try {
-//        imgGadgetIcon = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
+        // imgGadgetIcon =
+        // BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
         if (imgGadgetIcon == null) {
           try {
-//            imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
+            // imgGadgetIcon =
+            // BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
           } catch (Exception e2) {
 
             imgGadgetIcon = null;
@@ -842,7 +850,8 @@ public class eXoApplicationsController2 extends MyActionBar implements OnTouchLi
       } catch (Exception e) {
 
         try {
-//          imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
+          // imgGadgetIcon =
+          // BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
         } catch (Exception e2) {
 
           imgGadgetIcon = null;
