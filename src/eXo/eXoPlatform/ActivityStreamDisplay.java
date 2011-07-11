@@ -33,8 +33,8 @@ import eXo.eXoPlatform.social.SocialStreamUtil;
 import eXo.eXoPlatform.social.eXoSocialActivity;
 import eXo.eXoPlatform.social.eXoSocialComment;
 import eXo.eXoPlatform.social.eXoSocialLike;
-import eXo.eXoPlatform.util.UserTask;
-import eXo.eXoPlatform.util.eXoConstants;
+import eXo.eXoPlatform.utils.UserTask;
+import eXo.eXoPlatform.utils.eXoConstants;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.AsyncImageView;
 

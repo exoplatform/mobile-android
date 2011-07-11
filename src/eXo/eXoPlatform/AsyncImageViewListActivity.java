@@ -1,5 +1,6 @@
 package eXo.eXoPlatform;
 
+import eXo.eXoPlatform.utils.eXoConstants;
 import greendroid.image.ImageProcessor;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.AsyncImageView;

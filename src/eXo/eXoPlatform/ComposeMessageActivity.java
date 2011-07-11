@@ -1,5 +1,9 @@
 package eXo.eXoPlatform;
 
+import eXo.eXoPlatform.social.SocialActivity;
+import eXo.eXoPlatform.utils.eXoConstants;
+import greendroid.widget.ActionBarItem;
+
 import java.io.File;
 
 import org.exoplatform.social.client.api.model.RestActivity;
@@ -21,11 +25,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.cyrilmottier.android.greendroid.R;
-
-import eXo.eXoPlatform.social.SocialActivity;
-import eXo.eXoPlatform.util.UserTask;
-import eXo.eXoPlatform.util.eXoConstants;
-import greendroid.widget.ActionBarItem;
 
 public class ComposeMessageActivity extends MyActionBar implements OnClickListener {
 
