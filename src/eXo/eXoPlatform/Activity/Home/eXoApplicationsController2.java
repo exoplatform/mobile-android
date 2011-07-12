@@ -47,11 +47,11 @@ import eXo.eXoPlatform.Activity.Chat.eXoChatListController;
 import eXo.eXoPlatform.Activity.Dashboard.eXoDashboard;
 import eXo.eXoPlatform.Activity.File.eXoFilesController;
 import eXo.eXoPlatform.Activity.Setting.eXoSetting;
-import eXo.eXoPlatform.Activity.Social.SocialActivity;
 import eXo.eXoPlatform.DataManager.Model.Dashboard.GateInDbItem;
 import eXo.eXoPlatform.DataManager.Model.Dashboard.eXoGadget;
 import eXo.eXoPlatform.DataManager.Model.File.eXoFile;
 import eXo.eXoPlatform.GDSubClasses.MyActionBar;
+import exo.exoplatform.activity.social.SocialActivity;
 import greendroid.widget.ActionBarItem;
 
 public class eXoApplicationsController2 extends MyActionBar implements OnTouchListener {

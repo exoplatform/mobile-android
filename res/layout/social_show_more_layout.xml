@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+	<Button android:id="@+id/social_show_more_btn" android:text="Show More"
+		android:textStyle="bold" android:layout_width="fill_parent"
+		android:padding="7dp" android:layout_height="wrap_content"
+		android:background="#E9E9E9" />
+
+</LinearLayout>
