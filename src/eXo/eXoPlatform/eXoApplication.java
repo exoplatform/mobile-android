@@ -15,10 +15,11 @@
  */
 package eXo.eXoPlatform;
 
+import eXo.eXoPlatform.Activity.Authenticate.AppController;
+import greendroid.app.GDApplication;
 import android.content.Intent;
 import android.net.Uri;
-import greendroid.app.GDApplication;
-
+ 
 public class eXoApplication extends GDApplication {
 
   @Override

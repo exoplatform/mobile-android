@@ -15,7 +15,6 @@
  */
 package eXo.eXoPlatform;
 
-import greendroid.app.GDActivity;
 import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.DescriptionItem;
@@ -29,6 +28,7 @@ import greendroid.widget.item.ThumbnailItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R;
 import android.os.Bundle;
 import android.view.Window;
 
@@ -44,7 +44,7 @@ public class BasicItemActivity extends GDListActivity {
     basicItemActivityInstance = this;
 
     List<Item> items = new ArrayList<Item>();
-
+/*
     items.add(new SeparatorItem("Class 1"));
     items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
     items.add(new ThumbnailItem("Powered paragliding", "aka paramotoring", R.drawable.class1));
@@ -83,7 +83,7 @@ public class BasicItemActivity extends GDListActivity {
 
     final ItemAdapter adapter = new ItemAdapter(this, items);
     setListAdapter(adapter);
-
+*/
   }
 
   public static void finishMe() {

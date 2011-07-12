@@ -2,7 +2,7 @@ package eXo.eXoPlatform;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import eXo.eXoPlatform.AppController;
+import eXo.eXoPlatform.Activity.Authenticate.AppController;
 
 // Hold activing account
 public class eXoAccount extends Activity {
