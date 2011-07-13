@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<exo.exoplatform.social.ActivityStreamBrowserCellView
-	xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/RelativeLayout_Activity_Streams"
-	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	android:background="#08387B">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/RelativeLayout_Activity_Streams" android:layout_width="fill_parent"
+	android:layout_height="wrap_content" android:background="#08387B">
 
 	<RelativeLayout android:background="@drawable/bottom_background_shape"
 		android:id="@+id/imageView_Avatar_wrap" android:layout_height="wrap_content"
@@ -38,17 +37,18 @@
 			android:layout_width="fill_parent" />
 
 		<TextView android:id="@+id/button_Comment" android:textColor="#000000"
-			android:layout_height="wrap_content" android:text="Comment"
-			android:layout_width="wrap_content" android:layout_marginLeft="0dip"
-			android:layout_marginTop="10dip" android:layout_marginRight="10dip"
-			android:layout_alignParentRight="true" android:layout_below="@id/textView_Message"
-			android:background="@drawable/socialactivitybrowsercommentbutton" />
+			android:paddingLeft="2dp" android:layout_height="wrap_content"
+			android:text="1000" android:layout_width="wrap_content"
+			android:layout_marginLeft="0dip" android:layout_marginTop="10dip"
+			android:layout_marginRight="10dip" android:layout_alignParentRight="true"
+			android:layout_below="@id/textView_Message" android:background="@drawable/socialactivitybrowsercommentbutton" />
 
 		<TextView android:id="@+id/button_Like" android:textColor="#000000"
-			android:layout_height="wrap_content" android:text="Like"
-			android:layout_width="wrap_content" android:layout_marginLeft="10dip"
-			android:layout_marginTop="10dip" android:layout_toLeftOf="@id/button_Comment"
-			android:layout_below="@id/textView_Message" android:background="@drawable/socialactivitybrowserlikebutton" />
+			android:paddingLeft="2dp" android:layout_height="wrap_content"
+			android:text="100" android:layout_width="wrap_content"
+			android:layout_marginLeft="10dip" android:layout_marginTop="10dip"
+			android:layout_toLeftOf="@id/button_Comment" android:layout_below="@id/textView_Message"
+			android:background="@drawable/socialactivitybrowserlikebutton" />
 
 		<TextView android:id="@+id/textView_Time" style="@style/textview_time"
 			android:padding="3dp" android:layout_height="wrap_content"
@@ -63,4 +63,4 @@
 		more" android:textStyle="bold"
 		android:background="#E9E9E9" android:textColor="#000000"
 		android:layout_width="fill_parent" android:visibility="invisible" />
-</exo.exoplatform.social.ActivityStreamBrowserCellView>
+</RelativeLayout>
