@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="eXo.eXoPlatform" android:versionCode="2" android:versionName="2.0">
+	package="exo.exoplatform" android:versionCode="2" android:versionName="2.0">
 	<application android:icon="@drawable/icon57x57"
-		android:theme="@style/Theme.eXo" android:name=".eXoApplication"
+		android:theme="@style/Theme.eXo" android:name=".ExoApplication"
 		android:debuggable="true">
 
-		<activity android:name=".Activity.Authenticate.AppController"
+		<activity android:name="exo.exoplatform.controller.AppController"
 			android:label="eXo Platform" android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -13,55 +13,55 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".Activity.Home.eXoApplicationsController"
+		<activity android:name=".controller.ExoApplicationsController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".Activity.Home.eXoApplicationsController2"
+		<activity android:name=".controller.ExoApplicationsController2"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".Activity.Dashboard.eXoWebViewController"
+		<activity android:name=".dashboard.ExoWebViewController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 		<activity android:name=".Activity.File.eXoFilesController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".Activity.Chat.eXoChatController"
+		<activity android:name=".chat.ExoChatController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".Activity.Chat.eXoChatListController"
+		<activity android:name=".chat.ExoChatListController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".Activity.Gadget.eXoGadgetViewController"
+		<activity android:name=".dashboard.ExoGadgetViewController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".Activity.Setting.eXoSetting"
+		<activity android:name=".setting.ExoSetting"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".Activity.Setting.eXoModifyServerList"
+		<activity android:name=".setting.ExoModifyServerList"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".BasicItemActivity"
+		<activity android:name=".widget.BasicItemActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".Activity.Dashboard.eXoDashboard"
+		<activity android:name=".dashboard.ExoDashboard"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name="exo.exoplatform.activity.social.ActivityStreamBrowser"
+		<activity android:name="exo.exoplatform.social.ActivityStreamBrowser"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name="exo.exoplatform.activity.social.ActivityStreamDisplay"
+		<activity android:name="exo.exoplatform.social.ActivityStreamDisplay"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 		<activity android:name=".TestActivityBrowserView"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name="exo.exoplatform.activity.social.AsyncImageViewListActivity"
+		<activity android:name="exo.exoplatform.social.AsyncImageViewListActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name="exo.exoplatform.activity.social.ComposeMessageActivity"
+		<activity android:name="exo.exoplatform.social.ComposeMessageActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name="exo.exoplatform.activity.social.SocialActivity"
+		<activity android:name="exo.exoplatform.social.SocialActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 
