@@ -1,10 +1,13 @@
-package exo.exoplatform.social;
+package org.exoplatform.social;
 
 import java.io.File;
 
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.PhotoUltils;
+import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -22,9 +25,6 @@ import android.widget.EditText;
 
 import com.cyrilmottier.android.greendroid.R;
 
-import exo.exoplatform.utils.PhotoUltils;
-import exo.exoplatform.utils.ExoConstants;
-import exo.exoplatform.widget.MyActionBar;
 import greendroid.widget.ActionBarItem;
 
 public class ComposeMessageActivity extends MyActionBar implements OnClickListener {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package exo.exoplatform.widget;
+package org.exoplatform.widget;
 
 import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;

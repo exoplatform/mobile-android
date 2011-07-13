@@ -1,10 +1,5 @@
-package exo.exoplatform.dashboard;
+package org.exoplatform.dashboard;
 
-import exo.exoplatform.controller.AppController;
-import exo.exoplatform.controller.ExoApplicationsController2;
-import exo.exoplatform.document.ExoFilesController;
-import exo.exoplatform.setting.ExoSetting;
-import exo.exoplatform.widget.MyActionBar;
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 
@@ -12,6 +7,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.http.cookie.Cookie;
+import org.exoplatform.controller.AppController;
+import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.document.ExoFilesController;
+import org.exoplatform.setting.ExoSetting;
+import org.exoplatform.widget.MyActionBar;
 
 import com.cyrilmottier.android.greendroid.R;
 

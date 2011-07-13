@@ -1,4 +1,4 @@
-package exo.exoplatform.social.entity;
+package org.exoplatform.social.entity;
 
 public class ExoSocialLike {
 

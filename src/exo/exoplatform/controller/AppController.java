@@ -1,4 +1,4 @@
-package exo.exoplatform.controller;
+package org.exoplatform.controller;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -9,6 +9,13 @@ import java.util.ResourceBundle;
 
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.exoplatform.R;
+import org.exoplatform.dashboard.ExoGadget;
+import org.exoplatform.dashboard.ExoWebViewController;
+import org.exoplatform.proxy.ExoConnection;
+import org.exoplatform.proxy.ExoServerConfiguration;
+import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.setting.ExoSetting;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -39,13 +46,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import exo.exoplatform.R;
-import exo.exoplatform.dashboard.ExoGadget;
-import exo.exoplatform.dashboard.ExoWebViewController;
-import exo.exoplatform.proxy.ServerObj;
-import exo.exoplatform.proxy.ExoConnection;
-import exo.exoplatform.proxy.ExoServerConfiguration;
-import exo.exoplatform.setting.ExoSetting;
 
 //Login page
 public class AppController extends Activity implements OnTouchListener {

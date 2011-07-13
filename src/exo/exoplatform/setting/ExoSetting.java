@@ -1,20 +1,21 @@
-package exo.exoplatform.setting;
+package org.exoplatform.setting;
 
 import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import org.exoplatform.chat.ExoChatController;
+import org.exoplatform.chat.ExoChatListController;
+import org.exoplatform.controller.AppController;
+import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.dashboard.ExoGadgetViewController;
+import org.exoplatform.dashboard.ExoWebViewController;
+import org.exoplatform.document.ExoFilesController;
+import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.widget.MyActionBar;
+
 import com.cyrilmottier.android.greendroid.R;
 
-import exo.exoplatform.chat.ExoChatController;
-import exo.exoplatform.chat.ExoChatListController;
-import exo.exoplatform.controller.AppController;
-import exo.exoplatform.controller.ExoApplicationsController2;
-import exo.exoplatform.dashboard.ExoGadgetViewController;
-import exo.exoplatform.dashboard.ExoWebViewController;
-import exo.exoplatform.document.ExoFilesController;
-import exo.exoplatform.proxy.ServerObj;
-import exo.exoplatform.widget.MyActionBar;
 import greendroid.widget.ActionBarItem;
 
 import android.content.Intent;

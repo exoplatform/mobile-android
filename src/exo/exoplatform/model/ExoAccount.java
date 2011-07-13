@@ -1,8 +1,9 @@
-package exo.exoplatform.model;
+package org.exoplatform.model;
+
+import org.exoplatform.controller.AppController;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import exo.exoplatform.controller.AppController;
 
 // Hold activing account
 public class ExoAccount extends Activity {

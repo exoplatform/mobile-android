@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package exo.exoplatform.dashboard;
+package org.exoplatform.dashboard;
 
-import exo.exoplatform.controller.ExoApplicationsController2;
-import exo.exoplatform.model.GateInDbItem;
-import exo.exoplatform.widget.MyListActivity;
 import greendroid.image.ImageProcessor;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.AsyncImageView;
@@ -28,6 +25,9 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.model.GateInDbItem;
+import org.exoplatform.widget.MyListActivity;
 
 import com.cyrilmottier.android.greendroid.R;
 

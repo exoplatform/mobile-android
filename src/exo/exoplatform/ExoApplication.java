@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package exo.exoplatform;
+package org.exoplatform;
 
-import exo.exoplatform.controller.AppController;
 import greendroid.app.GDApplication;
+
+import org.exoplatform.controller.AppController;
+
 import android.content.Intent;
 import android.net.Uri;
  

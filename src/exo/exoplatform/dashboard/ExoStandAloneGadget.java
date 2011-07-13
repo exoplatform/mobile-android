@@ -1,4 +1,4 @@
-package exo.exoplatform.dashboard;
+package org.exoplatform.dashboard;
 
 // Standalone gadget info
 public class ExoStandAloneGadget {

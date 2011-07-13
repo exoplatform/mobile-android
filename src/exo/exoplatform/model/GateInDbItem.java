@@ -1,8 +1,9 @@
-package exo.exoplatform.model;
+package org.exoplatform.model;
 
 import java.util.List;
 
-import exo.exoplatform.dashboard.ExoGadget;
+import org.exoplatform.dashboard.ExoGadget;
+
 
 
 //	Dashboard tab

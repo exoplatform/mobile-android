@@ -1,4 +1,4 @@
-package exo.exoplatform.chat;
+package org.exoplatform.chat;
 
 //Message info
 public class ExoChatMessageContent {

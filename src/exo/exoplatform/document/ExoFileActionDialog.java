@@ -1,6 +1,9 @@
-package exo.exoplatform.document;
+package org.exoplatform.document;
 
 import java.util.ResourceBundle;
+
+import org.exoplatform.R;
+import org.exoplatform.controller.AppController;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,8 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import exo.exoplatform.R;
-import exo.exoplatform.controller.AppController;
 
 //File action list
 public class ExoFileActionDialog extends Dialog implements OnClickListener {

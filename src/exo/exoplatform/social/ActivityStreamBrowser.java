@@ -1,15 +1,16 @@
-package exo.exoplatform.social;
+package org.exoplatform.social;
 
-import exo.exoplatform.R;
-import exo.exoplatform.controller.AppController;
-import exo.exoplatform.controller.ExoApplicationsController2;
-import exo.exoplatform.mocks.Mock_Social_Activity;
-import exo.exoplatform.utils.ExoConstants;
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 
 import java.util.ResourceBundle;
+
+import org.exoplatform.R;
+import org.exoplatform.controller.AppController;
+import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.mocks.Mock_Social_Activity;
+import org.exoplatform.utils.ExoConstants;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

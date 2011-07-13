@@ -1,14 +1,21 @@
-package exo.exoplatform.social;
+package org.exoplatform.social;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.exoplatform.controller.AppController;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.model.RestLike;
 import org.exoplatform.social.client.api.model.RestProfile;
+import org.exoplatform.social.entity.ExoSocialComment;
+import org.exoplatform.social.entity.ExoSocialLike;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.MyActionBar;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -28,13 +35,6 @@ import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
 
-import exo.exoplatform.controller.AppController;
-import exo.exoplatform.social.entity.ExoSocialComment;
-import exo.exoplatform.social.entity.ExoSocialLike;
-import exo.exoplatform.utils.SocialActivityUtil;
-import exo.exoplatform.utils.UserTask;
-import exo.exoplatform.utils.ExoConstants;
-import exo.exoplatform.widget.MyActionBar;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.AsyncImageView;
 

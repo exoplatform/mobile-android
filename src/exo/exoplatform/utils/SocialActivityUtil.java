@@ -1,8 +1,9 @@
-package exo.exoplatform.utils;
+package org.exoplatform.utils;
 
 import java.util.ArrayList;
 
-import exo.exoplatform.social.entity.ExoSocialLike;
+import org.exoplatform.social.entity.ExoSocialLike;
+
 
 public class SocialActivityUtil {
 

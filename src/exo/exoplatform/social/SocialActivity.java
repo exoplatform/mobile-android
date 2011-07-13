@@ -1,4 +1,4 @@
-package exo.exoplatform.social;
+package org.exoplatform.social;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,11 @@ import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+import org.exoplatform.social.entity.ExoSocialActivity;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.MyActionBar;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -29,11 +34,6 @@ import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
 
-import exo.exoplatform.social.entity.ExoSocialActivity;
-import exo.exoplatform.utils.SocialActivityUtil;
-import exo.exoplatform.utils.UserTask;
-import exo.exoplatform.utils.ExoConstants;
-import exo.exoplatform.widget.MyActionBar;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.AsyncImageView;
 

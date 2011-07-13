@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package exo.exoplatform.utils;
+package org.exoplatform.utils;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;

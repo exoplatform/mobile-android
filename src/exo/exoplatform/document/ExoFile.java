@@ -1,12 +1,12 @@
-package exo.exoplatform.document;
+package org.exoplatform.document;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.apache.http.client.ClientProtocolException;
+import org.exoplatform.controller.AppController;
 
-import exo.exoplatform.controller.AppController;
 
 //	File info
 public class ExoFile {

@@ -1,4 +1,4 @@
-package exo.exoplatform.proxy;
+package org.exoplatform.proxy;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,8 +23,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.exoplatform.controller.AppController;
 
-import exo.exoplatform.controller.AppController;
 
 
 //interact with server

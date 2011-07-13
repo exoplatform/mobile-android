@@ -1,4 +1,4 @@
-package exo.exoplatform.model;
+package org.exoplatform.model;
 
 //eXo application info
 public class ExoApp extends Object {

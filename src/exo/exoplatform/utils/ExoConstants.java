@@ -1,4 +1,4 @@
-package exo.exoplatform.utils;
+package org.exoplatform.utils;
 
 public class ExoConstants {
 

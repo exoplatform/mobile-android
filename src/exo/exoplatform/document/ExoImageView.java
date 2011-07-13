@@ -1,4 +1,4 @@
-package exo.exoplatform.document;
+package org.exoplatform.document;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,6 +10,8 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.exoplatform.R;
+import org.exoplatform.controller.AppController;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,8 +25,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-import exo.exoplatform.R;
-import exo.exoplatform.controller.AppController;
 
 public class ExoImageView extends Activity {
 

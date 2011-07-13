@@ -1,10 +1,17 @@
-package exo.exoplatform.controller;
+package org.exoplatform.controller;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.exoplatform.R;
+import org.exoplatform.chat.ExoChatListController;
+import org.exoplatform.dashboard.ExoGadgetViewController;
+import org.exoplatform.document.ExoFile;
+import org.exoplatform.document.ExoFilesController;
+import org.exoplatform.model.ExoApp;
+import org.exoplatform.model.GateInDbItem;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -27,13 +34,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import exo.exoplatform.R;
-import exo.exoplatform.chat.ExoChatListController;
-import exo.exoplatform.dashboard.ExoGadgetViewController;
-import exo.exoplatform.document.ExoFile;
-import exo.exoplatform.document.ExoFilesController;
-import exo.exoplatform.model.GateInDbItem;
-import exo.exoplatform.model.ExoApp;
 
 //Main app view controller
 public class ExoApplicationsController extends Activity {

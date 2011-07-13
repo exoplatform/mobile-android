@@ -1,12 +1,13 @@
-package exo.exoplatform.setting;
+package org.exoplatform.setting;
 
 import java.util.List;
 
+import org.exoplatform.controller.AppController;
+import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.widget.MyActionBar;
+
 import com.cyrilmottier.android.greendroid.R;
 
-import exo.exoplatform.controller.AppController;
-import exo.exoplatform.proxy.ServerObj;
-import exo.exoplatform.widget.MyActionBar;
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.LoaderActionBarItem;

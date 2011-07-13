@@ -1,8 +1,14 @@
-package exo.exoplatform.social;
+package org.exoplatform.social;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.mocks.Mock_Activity;
+import org.exoplatform.mocks.Mock_Social_Activity;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.MyListActivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,11 +35,6 @@ import android.widget.AbsListView.OnScrollListener;
 
 import com.cyrilmottier.android.greendroid.R;
 
-import exo.exoplatform.controller.ExoApplicationsController2;
-import exo.exoplatform.mocks.Mock_Activity;
-import exo.exoplatform.mocks.Mock_Social_Activity;
-import exo.exoplatform.utils.ExoConstants;
-import exo.exoplatform.widget.MyListActivity;
 import greendroid.image.ImageProcessor;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.AsyncImageView;

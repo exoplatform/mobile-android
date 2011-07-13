@@ -1,7 +1,12 @@
-package exo.exoplatform.setting;
+package org.exoplatform.setting;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import org.exoplatform.R;
+import org.exoplatform.controller.AppController;
+import org.exoplatform.proxy.ExoServerConfiguration;
+import org.exoplatform.proxy.ServerObj;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,10 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import exo.exoplatform.R;
-import exo.exoplatform.controller.AppController;
-import exo.exoplatform.proxy.ServerObj;
-import exo.exoplatform.proxy.ExoServerConfiguration;
 
 /** Class Must extends with Dialog */
 /** Implement onClickListener to dismiss dialog when OK Button is pressed */

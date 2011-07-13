@@ -5,7 +5,7 @@
  * Jul 12, 2011  
  */
 
-package exo.exoplatform.proxy;
+package org.exoplatform.proxy;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.exoplatform.R;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,7 +32,6 @@ import android.content.res.XmlResourceParser;
 import android.os.Environment;
 import android.util.Log;
 import android.util.Xml;
-import exo.exoplatform.R;
 
 
 public class ExoServerConfiguration {

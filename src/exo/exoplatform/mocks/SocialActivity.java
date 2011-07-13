@@ -1,4 +1,4 @@
-package exo.exoplatform.mocks;
+package org.exoplatform.mocks;
 
 import java.util.Date;
 

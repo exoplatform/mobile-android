@@ -1,4 +1,4 @@
-package exo.exoplatform.dashboard;
+package org.exoplatform.dashboard;
 
 import java.util.ResourceBundle;
 
@@ -6,6 +6,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.exoplatform.R;
+import org.exoplatform.controller.AppController;
+import org.exoplatform.controller.ExoApplicationsController;
+import org.exoplatform.model.GateInDbItem;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,10 +26,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import exo.exoplatform.R;
-import exo.exoplatform.controller.AppController;
-import exo.exoplatform.controller.ExoApplicationsController;
-import exo.exoplatform.model.GateInDbItem;
 
 //Gadget view controller
 public class ExoGadgetViewController extends Activity {

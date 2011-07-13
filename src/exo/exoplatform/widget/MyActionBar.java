@@ -1,4 +1,4 @@
-package exo.exoplatform.widget;
+package org.exoplatform.widget;
 
 import com.cyrilmottier.android.greendroid.R;
 

@@ -1,4 +1,4 @@
-package exo.exoplatform.utils;
+package org.exoplatform.utils;
 
 import java.io.File;
 import java.util.Calendar;

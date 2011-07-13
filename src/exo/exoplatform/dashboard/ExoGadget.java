@@ -1,4 +1,4 @@
-package exo.exoplatform.dashboard;
+package org.exoplatform.dashboard;
 
 import android.graphics.Bitmap;
 

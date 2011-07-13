@@ -1,14 +1,14 @@
-package exo.exoplatform.chat;
+package org.exoplatform.chat;
 
-import exo.exoplatform.controller.AppController;
-import exo.exoplatform.controller.ExoApplicationsController2;
-import exo.exoplatform.widget.MyActionBar;
 import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.exoplatform.controller.AppController;
+import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.widget.MyActionBar;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.filter.MessageTypeFilter;
 import org.jivesoftware.smack.filter.PacketFilter;

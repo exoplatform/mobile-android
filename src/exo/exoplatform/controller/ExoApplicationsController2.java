@@ -1,4 +1,4 @@
-package exo.exoplatform.controller;
+package org.exoplatform.controller;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -9,6 +9,16 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.exoplatform.chat.ExoChatListController;
+import org.exoplatform.dashboard.ExoDashboard;
+import org.exoplatform.dashboard.ExoGadget;
+import org.exoplatform.document.ExoFile;
+import org.exoplatform.document.ExoFilesController;
+import org.exoplatform.model.GateInDbItem;
+import org.exoplatform.setting.ExoSetting;
+import org.exoplatform.social.SocialActivity;
+import org.exoplatform.widget.BasicItemActivity;
+import org.exoplatform.widget.MyActionBar;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -41,16 +51,6 @@ import android.widget.Toast;
 
 import com.cyrilmottier.android.greendroid.R;
 
-import exo.exoplatform.chat.ExoChatListController;
-import exo.exoplatform.dashboard.ExoDashboard;
-import exo.exoplatform.dashboard.ExoGadget;
-import exo.exoplatform.document.ExoFile;
-import exo.exoplatform.document.ExoFilesController;
-import exo.exoplatform.model.GateInDbItem;
-import exo.exoplatform.setting.ExoSetting;
-import exo.exoplatform.social.SocialActivity;
-import exo.exoplatform.widget.BasicItemActivity;
-import exo.exoplatform.widget.MyActionBar;
 import greendroid.widget.ActionBarItem;
 
 public class ExoApplicationsController2 extends MyActionBar implements OnTouchListener {

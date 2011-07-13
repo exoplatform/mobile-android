@@ -1,9 +1,5 @@
-package exo.exoplatform.document;
+package org.exoplatform.document;
 
-import exo.exoplatform.controller.AppController;
-import exo.exoplatform.controller.ExoApplicationsController;
-import exo.exoplatform.controller.ExoApplicationsController2;
-import exo.exoplatform.widget.MyActionBar;
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 
@@ -49,6 +45,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.exoplatform.controller.AppController;
+import org.exoplatform.controller.ExoApplicationsController;
+import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.widget.MyActionBar;
 
 import com.cyrilmottier.android.greendroid.R;
 
