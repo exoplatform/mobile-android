@@ -66,6 +66,12 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   private boolean            liked = false;
 
+  private String             yourCommentText;
+
+  private String             loadingData;
+
+  private String             youText;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -117,19 +123,21 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     textView_Time = (TextView) findViewById(R.id.textView_Time);
     textView_Like_Count = (TextView) findViewById(R.id.textView_Like_Count);
     editTextComment = (EditText) findViewById(R.id.editText_Comment);
+    editTextComment.setHint(yourCommentText);
     editTextComment.setOnClickListener(this);
     likeButton = (Button) findViewById(R.id.like_button);
     likeButton.setOnClickListener(this);
   }
 
   private void setComponentInfo() {
-    imageView_Avatar.setUrl(selectedRestActivity.getPosterIdentity().getProfile().getAvatarUrl());
-
+    // imageView_Avatar.setUrl(selectedRestActivity.getPosterIdentity().getProfile().getAvatarUrl());
+    imageView_Avatar.setUrl("http://a3.twimg.com/profile_images/77641093/AndroidPlanet_normal.png");
     textView_Name.setText(selectedRestActivity.getPosterIdentity().getProfile().getFullName());
 
     textView_Message.setText(Html.fromHtml(selectedRestActivity.getTitle()));
 
-    textView_Time.setText(SocialActivityUtil.getPostedTimeString(selectedRestActivity.getPostedTime()));
+    textView_Time.setText(SocialActivityUtil.getPostedTimeString(selectedRestActivity.getPostedTime(),
+                                                                 AppController.bundle));
   }
 
   private void onLoad() {
@@ -176,10 +184,12 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       for (int i = commentList.size() - 1; i >= 0; i--) {
         ExoSocialComment comment = commentList.get(i);
         CommentItemLayout commentItem = new CommentItemLayout(this);
-        commentItem.comAvatarImage.setUrl(comment.getImageUrl());
+        // commentItem.comAvatarImage.setUrl(comment.getImageUrl());
+        commentItem.comAvatarImage.setUrl("http://a1.twimg.com/profile_images/909231146/Android_Biz_Man_normal.png");
         commentItem.comTextViewName.setText(comment.getCommentName());
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()));
-        commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime()));
+        commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime(),
+                                                                                 AppController.bundle));
         commentLayoutWrap.addView(commentItem, params);
 
       }
@@ -189,26 +199,12 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   // Set language
   public void changeLanguage(ResourceBundle resourceBundle) {
-
-    // String strTitle =
-    // getIntent().getStringExtra(eXoConstants.ACTIVITY_DETAIL_EXTRA);
-    String strTitle = "Activity Detail";
-
-    try {
-      // strTitle = new
-      // String(resourceBundle.getString("ActivityStream").getBytes("ISO-8859-1"),
-      // "UTF-8");
-      // strCannotBackToPreviousPage = new
-      // String(resourceBundle.getString("CannotBackToPreviousPage")
-      // .getBytes("ISO-8859-1"), "UTF-8");
-    } catch (Exception e) {
-
-    }
-
+    String strTitle = resourceBundle.getString("ActivityDetail");
     setTitle(strTitle);
+    yourCommentText = resourceBundle.getString("YourComment");
+    loadingData = resourceBundle.getString("LoadingData");
+    youText = resourceBundle.getString("You");
 
-    // _delegate.changeLanguage(resourceBundle);
-    // _delegate.createAdapter();
   }
 
   public void onClick(View view) {
@@ -219,7 +215,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       startActivity(intent);
     }
     if (view == likeButton) {
-      Object activity = SocialActivity.activityService.get(activityId);
+      RestActivity activity = SocialActivity.activityService.get(activityId);
       if (liked == true) {
         SocialActivity.activityService.unlike(activity);
         liked = false;
@@ -270,7 +266,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
     @Override
     public void onPreExecute() {
-      _progressDialog = ProgressDialog.show(ActivityStreamDisplay.this, null, "Loading Data ...");
+      _progressDialog = ProgressDialog.show(ActivityStreamDisplay.this, null, loadingData);
     }
 
     @Override
@@ -284,7 +280,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
           RestIdentity restId = (RestIdentity) SocialActivity.identityService.get(identity);
           socialLike.setLikeID(identity);
           if (identity.equalsIgnoreCase(SocialActivity.userIdentity)) {
-            socialLike.setLikeName("You");
+            socialLike.setLikeName(youText);
             liked = true;
           } else {
             socialLike.setLikeName(restId.getProfile().getFullName());
@@ -316,7 +312,8 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     @Override
     public void onPostExecute(Integer result) {
       setComponentInfo();
-      textView_Like_Count.setText(SocialActivityUtil.getCommentString(socialLikeList));
+      textView_Like_Count.setText(SocialActivityUtil.getCommentString(socialLikeList,
+                                                                      AppController.bundle));
       createCommentList(socialCommentList);
       _progressDialog.dismiss();
 

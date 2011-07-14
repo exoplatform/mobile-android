@@ -1,7 +1,9 @@
 package org.exoplatform.social;
 
 import java.io.File;
+import java.util.ResourceBundle;
 
+import org.exoplatform.controller.AppController;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
@@ -17,11 +19,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.cyrilmottier.android.greendroid.R;
 
@@ -43,6 +47,18 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private String   sdcard_temp_dir;
 
+  private String   comment;
+
+  private String   statusUpdate;
+
+  private String   sendText;
+
+  private String   cancelText;
+
+  private String   inputTextWarning;
+
+  private String   noService;
+
   // private InputMethodManager inputManager;
 
   @Override
@@ -52,16 +68,15 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     setTheme(R.style.Theme_eXo_Back);
     setActionBarContentView(R.layout.compose_message_layout);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-
+    onChangeLanguage(AppController.bundle);
     composeType = getIntent().getIntExtra(ExoConstants.COMPOSE_TYPE, composeType);
     if (composeType == 0) {
-      setTitle("Status Update");
-
+      setTitle(statusUpdate);
       addActionBarItem();
       getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_take_photo);
       // addActionBarItem(Type.TakePhoto, R.drawable.gd_action_bar_take_photo);
     } else {
-      setTitle("Comment");
+      setTitle(comment);
     }
     initComponents();
 
@@ -69,21 +84,20 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private void initComponents() {
     composeEditText = (EditText) findViewById(R.id.compose_text_view);
-    // composeEditText.requestFocus();
     composeMessage = composeEditText.getText().toString();
     // imageLayoutWrap = (LinearLayout) findViewById(R.id.compose_image_wrap);
 
     sendButton = (Button) findViewById(R.id.compose_send_button);
+    sendButton.setText(sendText);
     sendButton.setOnClickListener(this);
 
     cancelButton = (Button) findViewById(R.id.compose_cancel_button);
+    cancelButton.setText(cancelText);
     cancelButton.setOnClickListener(this);
-
   }
 
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    // TODO Auto-generated method stub
     switch (position) {
     case -1:
       destroy();
@@ -94,7 +108,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       break;
     }
 
-    // return super.onHandleActionBarItemClick(item, position);
     return true;
   }
 
@@ -115,11 +128,18 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
           e.printStackTrace();
         }
 
+      } else {
+        Toast toast = Toast.makeText(ComposeMessageActivity.this,
+                                     inputTextWarning,
+                                     Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
       }
 
     }
 
     if (view == cancelButton) {
+      destroy();
 
     }
   }
@@ -137,19 +157,29 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   }
 
   private void onCommentTask() {
-    RestCommentImpl comment = new RestCommentImpl();
-    comment.setText(composeMessage);
-    RestActivity restActivity = (RestActivity) SocialActivity.activityService.get(ActivityStreamDisplay.selectedRestActivity.getId());
+    try {
+      RestCommentImpl comment = new RestCommentImpl();
+      comment.setText(composeMessage);
+      RestActivity restActivity = (RestActivity) SocialActivity.activityService.get(ActivityStreamDisplay.selectedRestActivity.getId());
 
-    SocialActivity.activityService.createComment(restActivity, comment);
-
+      SocialActivity.activityService.createComment(restActivity, comment);
+    } catch (RuntimeException e) {
+      Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
+      toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+      toast.show();
+    }
   }
 
   private void onPostTask() {
-    RestActivityImpl activityImlp = new RestActivityImpl();
-    activityImlp.setTitle(composeMessage);
-    SocialActivity.activityService.create(activityImlp);
-
+    try {
+      RestActivityImpl activityImlp = new RestActivityImpl();
+      activityImlp.setTitle(composeMessage);
+      SocialActivity.activityService.create(activityImlp);
+    } catch (RuntimeException e) {
+      Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
+      toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+      toast.show();
+    }
   }
 
   private void initCamera() {
@@ -169,6 +199,16 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
       }
     }
+
+  }
+
+  private void onChangeLanguage(ResourceBundle resourceBundle) {
+    comment = resourceBundle.getString("Comment");
+    statusUpdate = resourceBundle.getString("StatusUpdate");
+    sendText = resourceBundle.getString("Send");
+    cancelText = resourceBundle.getString("Cancel");
+    inputTextWarning = resourceBundle.getString("InputTextWarning");
+    noService = resourceBundle.getString("NoService");
 
   }
 

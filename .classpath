@@ -5,7 +5,7 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="smack.jar"/>
 	<classpathentry kind="lib" path="commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="exo.social.client-1.0.0-alpha1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="exo.social.client-1.0.0-alpha1-SNAPSHOT.jar" sourcepath="/home/duongnd/Social lib/exo.social.client-1.0.0-alpha1-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="json_simple-1.1.jar"/>
 	<classpathentry kind="src" path="GreenDroid_src"/>
 	<classpathentry kind="output" path="bin"/>
