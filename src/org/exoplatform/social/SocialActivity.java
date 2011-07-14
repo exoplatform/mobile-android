@@ -1,8 +1,10 @@
 package org.exoplatform.social;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import org.exoplatform.mocks.Mock_Activity;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
@@ -24,11 +26,14 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -87,16 +92,56 @@ public class SocialActivity extends MyActionBar {
     onLoad(number_of_activity);
   }
 
+  private String getActivityStreamHeader(long postedTime)
+  {
+    
+    String returnValue = "";
+    
+    String strSection = SocialActivityUtil.getPostedTimeString(postedTime);
+    // Check activities of today
+    if (strSection.contains("minute") || strSection.contains("minutes") || strSection.contains("hour") || strSection.contains("hours")) {
+
+      // Search the current array of activities for today
+      returnValue = "Today";
+    }
+    else
+    {
+      returnValue = strSection;
+    }
+    
+    return returnValue;
+  }
+  
   private void setActivityList(List<RestActivity> result) {
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     activityStreamWrap.removeAllViews();
+    
+    HashMap<String, String> actHeaderTitle = new HashMap<String, String>();
+    
     itemlist = new ArrayList<SocialActivity.ActivityStreamItem>();
+    
     for (int i = result.size() - 1; i >= 0; i--) {
       final RestActivity streamInfo = result.get(i);
+      
+      String postedTimeTitle = getActivityStreamHeader(streamInfo.getPostedTime());
+      if(actHeaderTitle.get(postedTimeTitle) == null)
+      {
+        
+        TextView header = new TextView(this);
+        header.setText(postedTimeTitle);
+        if(postedTimeTitle.equalsIgnoreCase("Today"))
+          header.setBackgroundDrawable(getResources().getDrawable(R.drawable.social_activity_browse_header_highlighted_bg));
+        else
+          header.setBackgroundDrawable(getResources().getDrawable(R.drawable.social_activity_browse_header_normal_bg));
+        
+        actHeaderTitle.put(postedTimeTitle, "YES");
+        activityStreamWrap.addView(header, params);
+      }
+      
       ActivityStreamItem item = new ActivityStreamItem(this, streamInfo);
       item.setOnClickListener(new OnClickListener() {
 
-        @Override
+        
         public void onClick(View v) {
           // selectedStreamInfo = streamInfo;
           selectedRestActivity = streamInfo;
@@ -114,7 +159,7 @@ public class SocialActivity extends MyActionBar {
         ShowMoreItem showmore = new ShowMoreItem(this);
         showmore.showMoreBtn.setOnClickListener(new OnClickListener() {
 
-          @Override
+
           public void onClick(View v) {
             number_of_activity += 5;
             onLoad(number_of_activity);
@@ -186,6 +231,7 @@ public class SocialActivity extends MyActionBar {
       userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, "root");
       return true;
     } catch (RuntimeException e) {
+      Toast.makeText(this, "Can not connect to server", Toast.LENGTH_LONG).show();
       finish();
       return false;
     }
@@ -204,7 +250,10 @@ public class SocialActivity extends MyActionBar {
     public List<RestActivity> doInBackground(Integer... params) {
 
       int loadSize = params[0];
-
+      Log.e("Param1:", " " + params[0]);
+//      Log.e("Param2:", " " + params[1]);
+      
+      
       ArrayList<ExoSocialActivity> streamInfoList = new ArrayList<ExoSocialActivity>();
 
       RestIdentity identity = (RestIdentity) identityService.get(userIdentity);

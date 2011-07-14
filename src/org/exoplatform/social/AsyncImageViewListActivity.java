@@ -209,7 +209,6 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
         for (int j = 0; j < array.size(); j++) {
           _arrayOfActivityListView.add(array.get(j));
         }
-
       }
 
       Mock_Activity activity = new Mock_Activity();

@@ -61,7 +61,7 @@ public class SocialActivityUtil {
       } else {
         if (time < 3600) {
           value = Math.round(time / 60);
-          return "about " + String.valueOf(value) + " minutes";
+          return "about " + String.valueOf(value) + " minutes ago";
         } else {
           if (time < 7200) {
             return "about an hour ago";
