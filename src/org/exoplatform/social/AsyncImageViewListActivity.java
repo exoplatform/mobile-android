@@ -289,7 +289,7 @@ public class AsyncImageViewListActivity extends MyListActivity implements OnScro
 
         holder.textViewTime = (TextView) convertView.findViewById(R.id.textView_Time);
 
-        holder.textViewShowMore = (TextView) convertView.findViewById(R.id.textView_Show_More);
+//        holder.textViewShowMore = (TextView) convertView.findViewById(R.id.textView_Show_More);
 
         if (activity.isShowMore) {
           holder.textViewShowMore.setVisibility(View.VISIBLE);

@@ -78,7 +78,6 @@ public class SocialActivityUtil {
           buffer.append(String.valueOf(value));
           buffer.append(" ");
           buffer.append(resourceBundle.getString("MinutesAgo"));
-          // return "about " + String.valueOf(value) + " minutes ago";
         } else {
           if (time < 7200) {
             buffer.append(resourceBundle.getString("AboutAnHourAgo"));

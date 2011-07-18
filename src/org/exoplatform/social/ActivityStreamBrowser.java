@@ -168,7 +168,7 @@ public class ActivityStreamBrowser extends GDActivity {
 
         TextView textViewTime = (TextView) rowView.findViewById(R.id.textView_Time);
 
-        TextView textViewShowMore = (TextView) rowView.findViewById(R.id.textView_Show_More);
+//        TextView textViewShowMore = (TextView) rowView.findViewById(R.id.textView_Show_More);
 
         if (position < mock.arrayOfActivities.size()) {
           imageViewAvatar.setImageBitmap(BitmapFactory.decodeResource(getResources(),
@@ -179,7 +179,7 @@ public class ActivityStreamBrowser extends GDActivity {
           buttonLike.setText(Integer.toString(mock.arrayOfActivities.get(position).nbLikes));
           textViewTime.setText(mock.arrayOfActivities.get(position).postedTime / 60 + "minutes ago");
         } else {
-          textViewShowMore.setVisibility(View.VISIBLE);
+//          textViewShowMore.setVisibility(View.VISIBLE);
 
           LayoutParams params = rowView.getLayoutParams();
           params.height = 40;

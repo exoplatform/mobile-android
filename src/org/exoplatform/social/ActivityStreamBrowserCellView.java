@@ -70,7 +70,7 @@ public class ActivityStreamBrowserCellView extends RelativeLayout implements Ite
 
     textViewTime = (TextView) findViewById(R.id.textView_Time);
 
-    textViewShowMore = (TextView) findViewById(R.id.textView_Show_More);
+//    textViewShowMore = (TextView) findViewById(R.id.textView_Show_More);
   }
 
   public void setObject(Item object) {

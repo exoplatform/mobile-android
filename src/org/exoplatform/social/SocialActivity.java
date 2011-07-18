@@ -26,6 +26,7 @@ import org.exoplatform.widget.MyActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
@@ -37,6 +38,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +72,18 @@ public class SocialActivity extends MyActionBar {
 
   private String                              noService;
 
+  private String                              minute;
+
+  private String                              minutes;
+
+  private String                              hour;
+
+  private String                              hours;
+
+  private String                              today;
+
+  private Resources                           resource;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -82,6 +96,7 @@ public class SocialActivity extends MyActionBar {
     setActionBarContentView(R.layout.activitybrowserview);
     onChangeLanguage(AppController.bundle);
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
+    resource = getResources();
     if (createConnetion() == true) {
       onLoad(number_of_activity);
     }
@@ -101,20 +116,17 @@ public class SocialActivity extends MyActionBar {
 
   private String getActivityStreamHeader(long postedTime) {
 
-    String returnValue = "";
-
     String strSection = SocialActivityUtil.getPostedTimeString(postedTime, AppController.bundle);
     // Check activities of today
-    if (strSection.contains("minute") || strSection.contains("minutes")
-        || strSection.contains("hour") || strSection.contains("hours")) {
+    if (strSection.contains(minute) || strSection.contains(minutes) || strSection.contains(hour)
+        || strSection.contains(hours)) {
 
       // Search the current array of activities for today
-      returnValue = "Today";
+      return today;
     } else {
-      returnValue = strSection;
+      return strSection;
     }
 
-    return returnValue;
   }
 
   private void setActivityList(List<RestActivity> result) {
@@ -134,13 +146,16 @@ public class SocialActivity extends MyActionBar {
         TextView header = new TextView(this);
         header.setText(postedTimeTitle);
         header.setTextColor(Color.BLACK);
-        if (postedTimeTitle.equalsIgnoreCase("Today"))
-          header.setBackgroundDrawable(getResources().getDrawable(R.drawable.social_activity_browse_header_highlighted_bg));
+        HeaderLayout headerLayout = new HeaderLayout(this);
+        headerLayout.titleView.setText(postedTimeTitle);
+
+        if (postedTimeTitle.equalsIgnoreCase(today))
+          headerLayout.titleView.setBackgroundDrawable(resource.getDrawable(R.drawable.social_activity_browse_header_highlighted_bg));
         else
-          header.setBackgroundDrawable(getResources().getDrawable(R.drawable.social_activity_browse_header_normal_bg));
+          headerLayout.titleView.setBackgroundDrawable(resource.getDrawable(R.drawable.social_activity_browse_header_normal_bg));
 
         actHeaderTitle.put(postedTimeTitle, "YES");
-        activityStreamWrap.addView(header, params);
+        activityStreamWrap.addView(headerLayout, params);
       }
 
       ActivityStreamItem item = new ActivityStreamItem(this, streamInfo);
@@ -224,24 +239,34 @@ public class SocialActivity extends MyActionBar {
     loadingData = resourceBundle.getString("LoadingData");
     showMoreText = resourceBundle.getString("ShowMore");
     noService = resourceBundle.getString("NoService");
+    minute = resourceBundle.getString("Minute");
+    minutes = resourceBundle.getString("Minutes");
+    hour = resourceBundle.getString("Hour");
+    hours = resourceBundle.getString("Hours");
+    today = resourceBundle.getString("Today");
 
   }
 
   private boolean createConnetion() {
     try {
+      String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
+                                                                 "exo_prf_username");
+      String password = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
+                                                                 "exo_prf_password");
+
       SocialClientContext.setProtocol(ExoConstants.ACTIVITY_PROTOCOL);
       SocialClientContext.setHost(ExoConstants.ACTIVITY_HOST);
       SocialClientContext.setPort(ExoConstants.ACTIVITY_PORT);
       SocialClientContext.setPortalContainerName(ExoConstants.ACTIVITY_PORTAL_CONTAINER);
       SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
       SocialClientContext.setRestVersion(ExoConstants.ACTIVITY_REST_VERSION);
-      SocialClientContext.setUsername("root");
-      SocialClientContext.setPassword("gtn");
+      SocialClientContext.setUsername(userName);
+      SocialClientContext.setPassword(password);
 
       ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
       activityService = clientServiceFactory.createActivityService();
       identityService = clientServiceFactory.createIdentityService();
-      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, "root");
+      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
       return true;
     } catch (RuntimeException e) {
       Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
@@ -362,6 +387,18 @@ public class SocialActivity extends MyActionBar {
       View view = inflate.inflate(R.layout.social_show_more_layout, this);
       showMoreBtn = (Button) view.findViewById(R.id.social_show_more_btn);
       showMoreBtn.setText(showMoreText);
+    }
+
+  }
+
+  private class HeaderLayout extends RelativeLayout {
+    private TextView titleView;
+
+    public HeaderLayout(Context context) {
+      super(context);
+      LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      View view = inflate.inflate(R.layout.activityheadersection, this);
+      titleView = (TextView) view.findViewById(R.id.textView_Section_Title);
     }
 
   }
