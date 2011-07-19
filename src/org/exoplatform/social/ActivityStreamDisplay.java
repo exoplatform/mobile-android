@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +30,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -72,6 +74,10 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   private String             youText;
 
+  private String             noService;
+
+  private String             url;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -85,6 +91,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     // activityId = SocialActivity.selectedStreamInfo.getActivityId();
     activityId = selectedRestActivity.getId();
     changeLanguage(AppController.bundle);
+    url = SocialActivityUtil.getUrl();
     initComponent();
     onLoad();
 
@@ -94,6 +101,12 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
   protected void onResume() {
     super.onResume();
     onReload();
+  }
+
+  private void destroy() {
+    super.onDestroy();
+    onCancelLoad();
+    finish();
   }
 
   private void onReload() {
@@ -130,9 +143,10 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
   }
 
   private void setComponentInfo() {
-    // imageView_Avatar.setUrl(selectedRestActivity.getPosterIdentity().getProfile().getAvatarUrl());
-    imageView_Avatar.setUrl("http://a3.twimg.com/profile_images/77641093/AndroidPlanet_normal.png");
-    textView_Name.setText(selectedRestActivity.getPosterIdentity().getProfile().getFullName());
+    RestProfile profile = selectedRestActivity.getPosterIdentity().getProfile();
+    imageView_Avatar.setUrl(url + profile.getAvatarUrl());
+    // imageView_Avatar.setUrl("http://a3.twimg.com/profile_images/77641093/AndroidPlanet_normal.png");
+    textView_Name.setText(profile.getFullName());
 
     textView_Message.setText(Html.fromHtml(selectedRestActivity.getTitle()));
 
@@ -157,20 +171,10 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     switch (position) {
     case -1:
       finish();
-      // your method here
       break;
     case 0:
-      // your method here
       break;
 
-    case 1:
-      // your method here
-      break;
-
-    default:
-      // home button is clicked
-      // finishMe();
-      break;
     }
 
     return super.onHandleActionBarItemClick(item, position);
@@ -184,8 +188,8 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       for (int i = commentList.size() - 1; i >= 0; i--) {
         ExoSocialComment comment = commentList.get(i);
         CommentItemLayout commentItem = new CommentItemLayout(this);
-        // commentItem.comAvatarImage.setUrl(comment.getImageUrl());
-        commentItem.comAvatarImage.setUrl("http://a1.twimg.com/profile_images/909231146/Android_Biz_Man_normal.png");
+        commentItem.comAvatarImage.setUrl(url + comment.getImageUrl());
+        // commentItem.comAvatarImage.setUrl("http://a1.twimg.com/profile_images/909231146/Android_Biz_Man_normal.png");
         commentItem.comTextViewName.setText(comment.getCommentName());
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()));
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime(),
@@ -204,6 +208,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     yourCommentText = resourceBundle.getString("YourComment");
     loadingData = resourceBundle.getString("LoadingData");
     youText = resourceBundle.getString("You");
+    noService = resourceBundle.getString("NoService");
 
   }
 
@@ -215,14 +220,20 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       startActivity(intent);
     }
     if (view == likeButton) {
-      RestActivity activity = SocialActivity.activityService.get(activityId);
-      if (liked == true) {
-        SocialActivity.activityService.unlike(activity);
-        liked = false;
-      } else {
-        SocialActivity.activityService.like(activity);
+      try {
+        RestActivity activity = SocialActivity.activityService.get(activityId);
+        if (liked == true) {
+          SocialActivity.activityService.unlike(activity);
+          liked = false;
+        } else {
+          SocialActivity.activityService.like(activity);
+        }
+        onReload();
+      } catch (RuntimeException e) {
+        Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
       }
-      onReload();
 
     }
   }

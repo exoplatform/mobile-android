@@ -75,12 +75,7 @@
 
 		</LinearLayout>
 	</ScrollView>
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content">
-
-
-
-	</LinearLayout>
+	
 	<EditText android:id="@+id/editText_Comment"
 		android:layout_marginLeft="-7dp" android:layout_marginRight="-7dp"
 		android:layout_marginTop="-7dp" android:layout_marginBottom="-7dp"

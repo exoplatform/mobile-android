@@ -18,9 +18,9 @@ public class ExoConstants {
 
   public static final int    ACTIVITY_PORT             = 8080;
 
-  public static final String ACTIVITY_PORTAL_CONTAINER = "socialdemo";
+  public static final String ACTIVITY_PORTAL_CONTAINER = "portal";
 
-  public static final String ACTIVITY_REST_CONTEXT     = "rest-socialdemo";
+  public static final String ACTIVITY_REST_CONTEXT     = "rest";
 
   public static final String ACTIVITY_REST_VERSION     = "v1-alpha1";
 

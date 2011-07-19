@@ -39,13 +39,13 @@ public class SocialActivityUtil {
       buffer.append(" ");
       buffer.append(likedThis);
     } else {
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < 4; i++) {
         socialLike = socialLikeList.get(i);
         buffer.append(socialLike.getLikeName());
         buffer.append(", ");
       }
       buffer.deleteCharAt(buffer.length() - 2);
-      int remain = count - 3;
+      int remain = count - 4;
       buffer.append(and);
       buffer.append(" ");
       buffer.append(remain);
@@ -121,4 +121,14 @@ public class SocialActivityUtil {
     return buffer.toString();
   }
 
+  public static String getUrl() {
+    StringBuffer urlBuffer;
+    urlBuffer = new StringBuffer();
+    urlBuffer.append(ExoConstants.ACTIVITY_PROTOCOL);
+    urlBuffer.append("://");
+    urlBuffer.append(ExoConstants.ACTIVITY_HOST);
+    urlBuffer.append(":");
+    urlBuffer.append(ExoConstants.ACTIVITY_PORT);
+    return urlBuffer.toString();
+  }
 }

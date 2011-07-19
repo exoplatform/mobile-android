@@ -84,6 +84,8 @@ public class SocialActivity extends MyActionBar {
 
   private Resources                           resource;
 
+  private String                              url;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -97,6 +99,7 @@ public class SocialActivity extends MyActionBar {
     onChangeLanguage(AppController.bundle);
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     resource = getResources();
+    url = SocialActivityUtil.getUrl();
     if (createConnetion() == true) {
       onLoad(number_of_activity);
     }
@@ -137,7 +140,7 @@ public class SocialActivity extends MyActionBar {
 
     itemlist = new ArrayList<SocialActivity.ActivityStreamItem>();
 
-    for (int i = result.size() - 1; i >= 0; i--) {
+    for (int i = 0; i < result.size(); i++) {
       final RestActivity streamInfo = result.get(i);
 
       String postedTimeTitle = getActivityStreamHeader(streamInfo.getPostedTime());
@@ -260,13 +263,13 @@ public class SocialActivity extends MyActionBar {
       SocialClientContext.setPortalContainerName(ExoConstants.ACTIVITY_PORTAL_CONTAINER);
       SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
       SocialClientContext.setRestVersion(ExoConstants.ACTIVITY_REST_VERSION);
-      SocialClientContext.setUsername(userName);
-      SocialClientContext.setPassword(password);
+      SocialClientContext.setUsername("root");
+      SocialClientContext.setPassword("gtn");
 
       ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
       activityService = clientServiceFactory.createActivityService();
       identityService = clientServiceFactory.createIdentityService();
-      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
+      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, "root");
       return true;
     } catch (RuntimeException e) {
       Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
@@ -366,7 +369,8 @@ public class SocialActivity extends MyActionBar {
       textViewTime = (TextView) view.findViewById(R.id.textView_Time);
       RestProfile profile = streamInfo.getPosterIdentity().getProfile();
       // imageViewAvatar.setUrl(profile.getAvatarUrl());
-      imageViewAvatar.setUrl("http://a3.twimg.com/profile_images/740897825/AndroidCast-350_normal.png");
+      imageViewAvatar.setUrl(url + profile.getAvatarUrl());
+      // imageViewAvatar.setUrl("http://a3.twimg.com/profile_images/740897825/AndroidCast-350_normal.png");
       textViewName.setText(profile.getFullName());
       textViewMessage.setText(Html.fromHtml(streamInfo.getTitle()));
       textViewTime.setText(SocialActivityUtil.getPostedTimeString(streamInfo.getPostedTime(),
