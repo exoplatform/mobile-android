@@ -14,7 +14,7 @@ public class ExoConstants {
 
   public static final String ACTIVITY_PROTOCOL         = "http";
 
-  public static final String ACTIVITY_HOST             = "192.168.1.12";
+  public static final String ACTIVITY_HOST             = "192.168.1.83";
 
   public static final int    ACTIVITY_PORT             = 8080;
 

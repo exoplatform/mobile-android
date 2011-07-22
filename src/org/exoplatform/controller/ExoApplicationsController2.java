@@ -75,31 +75,31 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   public static ExoApplicationsController2 eXoApplicationsController2Instance;
 
-  public static int                 sTheme;
+  public static int                        sTheme;
 
-  Button                            btnDone;
+  Button                                   btnDone;
 
-  public List<GateInDbItem>         arrGadgets;                              // Gadgets
-                                                                              // array
+  public List<GateInDbItem>                arrGadgets;                        // Gadgets
+                                                                               // array
 
-  Timer                             timer;
+  Timer                                    timer;
 
-  Handler                           handler;
+  Handler                                  handler;
 
-  GridView                          gridview;
+  GridView                                 gridview;
 
-  View                              myView;
+  View                                     myView;
 
-  TranslateAnimation                anim;
+  TranslateAnimation                       anim;
 
-  int                               timerCounter  = 0;
+  int                                      timerCounter  = 0;
 
-  int                               itemMoveIndex = -1;
+  int                                      itemMoveIndex = -1;
 
-  boolean                           isDeleteItem  = false;
+  boolean                                  isDeleteItem  = false;
 
-  public static short               webViewMode;                             // 0:
-                                                                              // view
+  public static short                      webViewMode;                       // 0:
+                                                                               // view
 
   // gadget,
   // 1: View
@@ -107,19 +107,29 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
   // 2: view
   // help;
 
-  private BaseAdapter               adapter;
+  private BaseAdapter                      adapter;
 
-  String                            strChatServer;
+  String                                   strChatServer;
 
-  ProgressDialog                    _progressDialog;                         // Progress
-                                                                              // dialog
+  ProgressDialog                           _progressDialog;                   // Progress
+                                                                               // dialog
 
-  Thread                            thread;
+  Thread                                   thread;
 
   // Standalone gadget content
-  private String                    _strContentForStandaloneURL;
+  private String                           _strContentForStandaloneURL;
 
-  ArrayList<AppItem>                array         = new ArrayList<AppItem>();
+  private ArrayList<AppItem>               array;
+
+  private String                           activityStreamsText;
+
+  private String                           chatText;
+
+  private String                           documentText;
+
+  private String                           dashboardText;
+
+  private String                           settingText;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -159,31 +169,41 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     });
 
     gridview = (GridView) findViewById(R.id.gridView1);
+    initComponents();
 
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    initComponents();
+  }
+
+  private void initComponents() {
+    changeLanguage(AppController.bundle);
+    array = new ArrayList<AppItem>();
     Bitmap bm = BitmapFactory.decodeResource(getResources(),
                                              R.drawable.homeactivitystreamsiconiphone);
-    AppItem activityStreams = new AppItem(bm, "Activity Streams");
+    AppItem activityStreams = new AppItem(bm, activityStreamsText);
     array.add(activityStreams);
 
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homechaticoniphone);
-    AppItem chatApp = new AppItem(bm, "Chat");
+    AppItem chatApp = new AppItem(bm, chatText);
     array.add(chatApp);
 
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homedocumentsiconiphone);
-    AppItem fileApp = new AppItem(bm, "Documents");
+    AppItem fileApp = new AppItem(bm, documentText);
     array.add(fileApp);
 
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homedashboardiconiphone);
-    AppItem dashBoardApp = new AppItem(bm, "Dashboard");
+    AppItem dashBoardApp = new AppItem(bm, dashboardText);
     array.add(dashBoardApp);
 
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homesettingsiconiphone);
-    AppItem setting = new AppItem(bm, "Settings");
+    AppItem setting = new AppItem(bm, settingText);
     array.add(setting);
-
+    
     createAdapter();
-
-    changeLanguage(AppController.bundle);
   }
 
   // Key down listener
@@ -350,6 +370,12 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       strChatServer = new String(resourceBundle.getString("ChatServer").getBytes("ISO-8859-1"),
                                  "UTF-8");
 
+      activityStreamsText = resourceBundle.getString("ActivityStream");
+      chatText = resourceBundle.getString("ChatApplication");
+      documentText = resourceBundle.getString("Documents");
+      dashboardText = resourceBundle.getString("Dashboard");
+      settingText = resourceBundle.getString("Settings");
+
     } catch (Exception e) {
 
     }
@@ -394,7 +420,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
           View view = gridview.getChildAt(i);
           if (view == v) {
             AppItem item = array.get(i);
-            if (item._name.equalsIgnoreCase("Activity Streams")) {
+            if (item._name.equalsIgnoreCase(activityStreamsText)) {
               launchActivityStreamApp();
             } else
               launchApp(v, item._name);
@@ -510,13 +536,13 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     Runnable loadingDataRunnable = new Runnable() {
       public void run() {
 
-        if (str.equalsIgnoreCase("documents")) {
+        if (str.equalsIgnoreCase(documentText)) {
           launchFilesApp();
-        } else if (str.equalsIgnoreCase("chat")) {
+        } else if (str.equalsIgnoreCase(chatText)) {
           launchMessengerApp();
-        } else if (str.equalsIgnoreCase("dashboard")) {
+        } else if (str.equalsIgnoreCase(dashboardText)) {
           launchDashboardApp();
-        } else if (str.equalsIgnoreCase("settings")) {
+        } else if (str.equalsIgnoreCase(settingText)) {
           launchSettingApp();
         }
 

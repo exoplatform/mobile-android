@@ -1,6 +1,7 @@
 package org.exoplatform.utils;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 import org.exoplatform.social.entity.ExoSocialLike;
@@ -25,7 +26,7 @@ public class SocialActivityUtil {
       buffer.append(socialLike.getLikeName());
       buffer.append(" ");
       buffer.append(likedThis);
-    } else if (count < 4) {
+    } else if (count < 4 || count == 4) {
       for (int i = 0; i < count - 1; i++) {
         socialLike = socialLikeList.get(i);
         buffer.append(socialLike.getLikeName());
@@ -121,9 +122,52 @@ public class SocialActivityUtil {
     return buffer.toString();
   }
 
+  public static String getHeader(long postedTime, ResourceBundle resourceBundle) {
+
+    long currentTime = System.currentTimeMillis();
+    GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
+    calendar.set(GregorianCalendar.HOUR, 0);
+    calendar.set(GregorianCalendar.MINUTE, 0);
+    calendar.set(GregorianCalendar.SECOND, 0);
+
+    long miliTime = calendar.getTimeInMillis();
+    long time = (currentTime - postedTime) / 1000;
+    String about = resourceBundle.getString("About");
+    StringBuffer buffer = new StringBuffer();
+    long value;
+    if (postedTime > miliTime) {
+      buffer.append(resourceBundle.getString("Today"));
+    } else {
+      if (time < 172800) {
+        buffer.append(resourceBundle.getString("AboutADayAgo"));
+      } else {
+        if (time < 2592000) {
+          value = Math.round(time / 86400);
+          buffer.append(about);
+          buffer.append(" ");
+          buffer.append(String.valueOf(value));
+          buffer.append(" ");
+          buffer.append(resourceBundle.getString("DaysAgo"));
+        } else {
+          if (time < 5184000) {
+            buffer.append(resourceBundle.getString("AboutAMonthAgo"));
+          } else {
+            value = Math.round(time / 2592000);
+            buffer.append(about);
+            buffer.append(" ");
+            buffer.append(String.valueOf(value));
+            buffer.append(" ");
+            buffer.append(resourceBundle.getString("MonthsAgo"));
+          }
+        }
+      }
+    }
+
+    return buffer.toString();
+  }
+
   public static String getUrl() {
-    StringBuffer urlBuffer;
-    urlBuffer = new StringBuffer();
+    StringBuffer urlBuffer = new StringBuffer();
     urlBuffer.append(ExoConstants.ACTIVITY_PROTOCOL);
     urlBuffer.append("://");
     urlBuffer.append(ExoConstants.ACTIVITY_HOST);

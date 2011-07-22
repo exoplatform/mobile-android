@@ -42,8 +42,6 @@ import greendroid.widget.AsyncImageView;
 
 public class ActivityStreamDisplay extends MyActionBar implements OnClickListener {
 
-  // public static eXoSocialActivity selectedStreamInfo;
-
   public static RestActivity selectedRestActivity;
 
   private String             activityId;
@@ -86,9 +84,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     setActionBarContentView(R.layout.activity_display_view);
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    // selectedStreamInfo = SocialActivity.selectedStreamInfo;
     selectedRestActivity = SocialActivity.selectedRestActivity;
-    // activityId = SocialActivity.selectedStreamInfo.getActivityId();
     activityId = selectedRestActivity.getId();
     changeLanguage(AppController.bundle);
     url = SocialActivityUtil.getUrl();
@@ -102,29 +98,20 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     super.onResume();
     onReload();
   }
-
-  private void destroy() {
+  
+  private void destroy(){
     super.onDestroy();
     onCancelLoad();
     finish();
   }
 
   private void onReload() {
-    selectedRestActivity = (RestActivity) SocialActivity.activityService.get(activityId);
-    // selectedStreamInfo = new eXoSocialActivity();
-    // selectedStreamInfo.setActivityId(restActivity.getId());
-    // RestProfile profile = restActivity.getPosterIdentity().getProfile();
-    // selectedStreamInfo.setImageUrl(profile.getAvatarUrl());
-    // selectedStreamInfo.setUserName(profile.getFullName());
-    // selectedStreamInfo.setTitle(restActivity.getTitle());
-    // selectedStreamInfo.setPostedTime(restActivity.getPostedTime());
-    // List<RestLike> likeList = restActivity.getLikes();
-    // selectedStreamInfo.setLikelist(likeList);
-    // selectedStreamInfo.setLikeNumber(likeList.size());
-    // List<RestComment> commentList = restActivity.getAvailableComments();
-    // selectedStreamInfo.setCommentList(commentList);
-    // selectedStreamInfo.setCommentNumber(commentList.size());
-    onLoad();
+    try {
+      selectedRestActivity = (RestActivity) SocialActivity.activityService.get(activityId);
+      onLoad();
+    } catch (RuntimeException e) {
+     destroy();
+    }
 
   }
 
@@ -145,7 +132,6 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
   private void setComponentInfo() {
     RestProfile profile = selectedRestActivity.getPosterIdentity().getProfile();
     imageView_Avatar.setUrl(url + profile.getAvatarUrl());
-    // imageView_Avatar.setUrl("http://a3.twimg.com/profile_images/77641093/AndroidPlanet_normal.png");
     textView_Name.setText(profile.getFullName());
 
     textView_Message.setText(Html.fromHtml(selectedRestActivity.getTitle()));
@@ -170,7 +156,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
-      finish();
+      destroy();
       break;
     case 0:
       break;
@@ -185,11 +171,10 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
       LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
       commentLayoutWrap.removeAllViews();
-      for (int i = commentList.size() - 1; i >= 0; i--) {
+      for (int i = 0; i < commentList.size(); i++) {
         ExoSocialComment comment = commentList.get(i);
         CommentItemLayout commentItem = new CommentItemLayout(this);
         commentItem.comAvatarImage.setUrl(url + comment.getImageUrl());
-        // commentItem.comAvatarImage.setUrl("http://a1.twimg.com/profile_images/909231146/Android_Biz_Man_normal.png");
         commentItem.comTextViewName.setText(comment.getCommentName());
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()));
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime(),
@@ -241,7 +226,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
   @Override
   public void onBackPressed() {
     super.onBackPressed();
-    finishFromChild(this);
+    destroy();
   }
 
   // Comment item layout

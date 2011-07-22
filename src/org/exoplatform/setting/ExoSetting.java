@@ -44,6 +44,8 @@ public class ExoSetting extends MyActionBar {
 
   TextView                 txtvEnglish, txtvFrench;
 
+  private TextView         tvModifyTheList;
+
   ImageView                imgViewECheckMark, imgViewFCheckMark;
 
   int                      pageIDForChangeLanguage;             // 0:
@@ -62,6 +64,8 @@ public class ExoSetting extends MyActionBar {
 
   static ListView          listViewServer;
 
+  private String modifyListText;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -72,8 +76,6 @@ public class ExoSetting extends MyActionBar {
 
     eXoSettingInstance = this;
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    
-    setTitle("Setting");
 
     txtvLanguage = (TextView) findViewById(R.id.TextView_Language);
     txtvServer = (TextView) findViewById(R.id.TextView_Server_List);
@@ -134,6 +136,8 @@ public class ExoSetting extends MyActionBar {
 
     createServersAdapter(AppController.configurationInstance._arrServerList);
 
+    changeLanguage(AppController.bundle);
+
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -141,7 +145,7 @@ public class ExoSetting extends MyActionBar {
     finish();
     return true;
   }
- 
+
   // Key down listener
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     // Save data to the server once the user hits the back button
@@ -166,7 +170,7 @@ public class ExoSetting extends MyActionBar {
     startActivity(next);
 
     eXoSettingInstance = null;
-//    GDActivity.TYPE = 0;
+    // GDActivity.TYPE = 0;
   }
 
   // Create server list adapter
@@ -181,7 +185,8 @@ public class ExoSetting extends MyActionBar {
         LayoutInflater inflater = eXoSettingInstance.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.serverlistitemforsetting, parent, false);
 
-        TextView tvModifyTheList = (TextView) rowView.findViewById(R.id.TextView_Modify_The_List);
+        tvModifyTheList = (TextView) rowView.findViewById(R.id.TextView_Modify_The_List);
+        tvModifyTheList.setText(modifyListText);
         TextView serverName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
         TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
@@ -200,8 +205,7 @@ public class ExoSetting extends MyActionBar {
         }
 
         if (position == serverObjsTmp.size()) {
-
-          tvModifyTheList.setText("Modify the List");
+          
           tvModifyTheList.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -210,7 +214,7 @@ public class ExoSetting extends MyActionBar {
                 Toast.makeText(eXoSettingInstance, msg, Toast.LENGTH_LONG);
               } else {
 
-//                GDActivity.TYPE = 1;
+                // GDActivity.TYPE = 1;
 
                 Intent next = new Intent(ExoSetting.this, ExoModifyServerList.class);
                 startActivity(next);
@@ -262,7 +266,7 @@ public class ExoSetting extends MyActionBar {
       } else if (pageIDForChangeLanguage == 1) {
         ExoApplicationsController2 controller = ExoApplicationsController2.eXoApplicationsController2Instance;
         controller.changeLanguage(AppController.bundle);
-//        controller.createAdapter();
+        // controller.createAdapter();
       } else if (pageIDForChangeLanguage == 2) {
         ExoFilesController controller = ExoFilesController.eXoFilesControllerInstance;
         controller.changeLanguage(AppController.bundle);
@@ -279,6 +283,7 @@ public class ExoSetting extends MyActionBar {
         ExoGadgetViewController controller = ExoGadgetViewController.eXoGadgetViewControllerInstance;
         controller.changeLanguage(AppController.bundle);
       }
+      createServersAdapter(AppController.configurationInstance._arrServerList);
 
     } catch (Exception e) {
 
@@ -309,7 +314,10 @@ public class ExoSetting extends MyActionBar {
     } catch (Exception e) {
 
     }
-
+    String settings = resourceBundle.getString("Settings");
+    setTitle(settings);
+    modifyListText = resourceBundle.getString("ModifyServerList");
+   
     txtvEnglish.setText(strEnglish);
     txtvFrench.setText(strFrench);
 

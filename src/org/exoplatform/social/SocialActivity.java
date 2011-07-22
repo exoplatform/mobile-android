@@ -46,8 +46,6 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class SocialActivity extends MyActionBar {
 
-  // public static eXoSocialActivity selectedStreamInfo;
-
   public static RestActivity                  selectedRestActivity;
 
   public static ActivityService<RestActivity> activityService;
@@ -64,13 +62,23 @@ public class SocialActivity extends MyActionBar {
 
   private boolean                             isShowMore         = false;
 
-  private ArrayList<ActivityStreamItem>       itemlist;
-
   private String                              loadingData;
 
   private String                              showMoreText;
 
   private String                              noService;
+
+  private String                              today;
+
+  private Resources                           resource;
+
+  private String                              domain;
+
+  private String                              protocol;
+
+  private String                              host;
+
+  private int                                 port;
 
   private String                              minute;
 
@@ -79,12 +87,6 @@ public class SocialActivity extends MyActionBar {
   private String                              hour;
 
   private String                              hours;
-
-  private String                              today;
-
-  private Resources                           resource;
-
-  private String                              url;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -99,7 +101,7 @@ public class SocialActivity extends MyActionBar {
     onChangeLanguage(AppController.bundle);
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     resource = getResources();
-    url = SocialActivityUtil.getUrl();
+    parseDomain();
     if (createConnetion() == true) {
       onLoad(number_of_activity);
     }
@@ -138,17 +140,14 @@ public class SocialActivity extends MyActionBar {
 
     HashMap<String, String> actHeaderTitle = new HashMap<String, String>();
 
-    itemlist = new ArrayList<SocialActivity.ActivityStreamItem>();
-
     for (int i = 0; i < result.size(); i++) {
-      final RestActivity streamInfo = result.get(i);
+      final RestActivity activityInfo = result.get(i);
 
-      String postedTimeTitle = getActivityStreamHeader(streamInfo.getPostedTime());
+      // String postedTimeTitle =
+      // SocialActivityUtil.getHeader(activityInfo.getPostedTime(),
+      // AppController.bundle);
+      String postedTimeTitle = getActivityStreamHeader(activityInfo.getPostedTime());
       if (actHeaderTitle.get(postedTimeTitle) == null) {
-
-        TextView header = new TextView(this);
-        header.setText(postedTimeTitle);
-        header.setTextColor(Color.BLACK);
         HeaderLayout headerLayout = new HeaderLayout(this);
         headerLayout.titleView.setText(postedTimeTitle);
 
@@ -161,18 +160,16 @@ public class SocialActivity extends MyActionBar {
         activityStreamWrap.addView(headerLayout, params);
       }
 
-      ActivityStreamItem item = new ActivityStreamItem(this, streamInfo);
+      ActivityStreamItem item = new ActivityStreamItem(this, activityInfo);
       item.setOnClickListener(new OnClickListener() {
 
         public void onClick(View v) {
-          // selectedStreamInfo = streamInfo;
-          selectedRestActivity = streamInfo;
+          selectedRestActivity = activityInfo;
           Intent intent = new Intent(SocialActivity.this, ActivityStreamDisplay.class);
           startActivity(intent);
 
         }
       });
-      itemlist.add(item);
       activityStreamWrap.addView(item, params);
 
     }
@@ -211,7 +208,7 @@ public class SocialActivity extends MyActionBar {
   public void onBackPressed() {
     super.onBackPressed();
     onCancelLoad();
-    finish();
+    destroy();
   }
 
   @Override
@@ -250,6 +247,24 @@ public class SocialActivity extends MyActionBar {
 
   }
 
+  private void parseDomain() {
+    domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
+                                                      "exo_prf_domain");
+    if (domain.endsWith("/")) {
+      domain = domain.substring(0, domain.length() - 1);
+    }
+    String[] domainSplits = domain.split("//");
+    protocol = domainSplits[0].substring(0, domainSplits[0].length() - 1);
+    if (domainSplits[1].contains(":")) {
+      String[] hostAddr = domainSplits[1].split(":");
+      host = hostAddr[0];
+      port = Integer.valueOf(hostAddr[1]);
+    } else {
+      host = domainSplits[1];
+      port = ExoConstants.ACTIVITY_PORT;
+    }
+  }
+
   private boolean createConnetion() {
     try {
       String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
@@ -257,19 +272,19 @@ public class SocialActivity extends MyActionBar {
       String password = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
                                                                  "exo_prf_password");
 
-      SocialClientContext.setProtocol(ExoConstants.ACTIVITY_PROTOCOL);
-      SocialClientContext.setHost(ExoConstants.ACTIVITY_HOST);
-      SocialClientContext.setPort(ExoConstants.ACTIVITY_PORT);
+      SocialClientContext.setProtocol(protocol);
+      SocialClientContext.setHost(host);
+      SocialClientContext.setPort(port);
       SocialClientContext.setPortalContainerName(ExoConstants.ACTIVITY_PORTAL_CONTAINER);
       SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
       SocialClientContext.setRestVersion(ExoConstants.ACTIVITY_REST_VERSION);
-      SocialClientContext.setUsername("root");
-      SocialClientContext.setPassword("gtn");
+      SocialClientContext.setUsername(userName);
+      SocialClientContext.setPassword(password);
 
       ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
       activityService = clientServiceFactory.createActivityService();
       identityService = clientServiceFactory.createIdentityService();
-      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, "root");
+      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
       return true;
     } catch (RuntimeException e) {
       Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
@@ -293,38 +308,12 @@ public class SocialActivity extends MyActionBar {
     public List<RestActivity> doInBackground(Integer... params) {
 
       try {
-        Log.e("Param1:", " " + params[0]);
-        // Log.e("Param2:", " " + params[1]);
 
         int loadSize = params[0];
-
-        // ArrayList<ExoSocialActivity> streamInfoList = new
-        // ArrayList<ExoSocialActivity>();
-
         RestIdentity identity = (RestIdentity) identityService.get(userIdentity);
-
         RealtimeListAccess<RestActivity> list = activityService.getActivityStream(identity);
-
         ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0,
                                                                                          loadSize);
-
-        // for (RestActivity act : activityList) {
-        // eXoSocialActivity streamInfo = new eXoSocialActivity();
-        // RestProfile profile = act.getPosterIdentity().getProfile();
-        // streamInfo.setActivityId(act.getId());
-        // streamInfo.setImageUrl(profile.getAvatarUrl());
-        // streamInfo.setUserName(profile.getFullName());
-        // streamInfo.setTitle(act.getTitle());
-        // streamInfo.setPostedTime(act.getPostedTime());
-        // List<RestLike> likeList = act.getLikes();
-        // streamInfo.setLikelist(likeList);
-        // streamInfo.setLikeNumber(likeList.size());
-        // List<RestComment> commentList = act.getAvailableComments();
-        // streamInfo.setCommentList(commentList);
-        // streamInfo.setCommentNumber(commentList.size());
-        // streamInfoList.add(streamInfo);
-        // }
-
         return activityList;
       } catch (RuntimeException e) {
 
@@ -357,7 +346,7 @@ public class SocialActivity extends MyActionBar {
 
     private TextView       textViewTime;
 
-    private ActivityStreamItem(Context context, RestActivity streamInfo) {
+    private ActivityStreamItem(Context context, RestActivity activityInfo) {
       super(context);
       LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
       View view = inflate.inflate(R.layout.activitybrowserviewcell, this);
@@ -367,16 +356,14 @@ public class SocialActivity extends MyActionBar {
       buttonComment = (TextView) view.findViewById(R.id.button_Comment);
       buttonLike = (TextView) view.findViewById(R.id.button_Like);
       textViewTime = (TextView) view.findViewById(R.id.textView_Time);
-      RestProfile profile = streamInfo.getPosterIdentity().getProfile();
-      // imageViewAvatar.setUrl(profile.getAvatarUrl());
-      imageViewAvatar.setUrl(url + profile.getAvatarUrl());
-      // imageViewAvatar.setUrl("http://a3.twimg.com/profile_images/740897825/AndroidCast-350_normal.png");
+      RestProfile profile = activityInfo.getPosterIdentity().getProfile();
+      imageViewAvatar.setUrl(domain + profile.getAvatarUrl());
       textViewName.setText(profile.getFullName());
-      textViewMessage.setText(Html.fromHtml(streamInfo.getTitle()));
-      textViewTime.setText(SocialActivityUtil.getPostedTimeString(streamInfo.getPostedTime(),
+      textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
+      textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime(),
                                                                   AppController.bundle));
-      buttonComment.setText("" + streamInfo.getAvailableComments().size());
-      buttonLike.setText("" + streamInfo.getLikes().size());
+      buttonComment.setText("" + activityInfo.getAvailableComments().size());
+      buttonLike.setText("" + activityInfo.getLikes().size());
     }
 
   }

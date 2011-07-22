@@ -37,8 +37,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private EditText composeEditText;
 
-  // private LinearLayout imageLayoutWrap;
-
   private Button   sendButton;
 
   private Button   cancelButton;
@@ -59,8 +57,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private String   noService;
 
-  // private InputMethodManager inputManager;
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -74,7 +70,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       setTitle(statusUpdate);
       addActionBarItem();
       getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_take_photo);
-      // addActionBarItem(Type.TakePhoto, R.drawable.gd_action_bar_take_photo);
     } else {
       setTitle(comment);
     }
@@ -85,12 +80,9 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   private void initComponents() {
     composeEditText = (EditText) findViewById(R.id.compose_text_view);
     composeMessage = composeEditText.getText().toString();
-    // imageLayoutWrap = (LinearLayout) findViewById(R.id.compose_image_wrap);
-
     sendButton = (Button) findViewById(R.id.compose_send_button);
     sendButton.setText(sendText);
     sendButton.setOnClickListener(this);
-
     cancelButton = (Button) findViewById(R.id.compose_cancel_button);
     cancelButton.setText(cancelText);
     cancelButton.setOnClickListener(this);
