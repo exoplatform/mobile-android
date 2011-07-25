@@ -83,13 +83,13 @@ public class ExoChatController extends MyActionBar {
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo_Back);
-    
+
     setActionBarContentView(R.layout.exochat);
     eXoChatControllerInstance = this;
-    
+
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-//    addActionBarItem();
-//    getActionBar().getItem(0).setDrawable(R.drawable.back);
+    // addActionBarItem();
+    // getActionBar().getItem(0).setDrawable(R.drawable.back);
 
     messageEditText = (EditText) findViewById(R.id.message);
 
@@ -207,14 +207,12 @@ public class ExoChatController extends MyActionBar {
 
     return true;
   }
-  
-  // Keydown listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-      Toast.makeText(ExoChatController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG).show();
-    }
-    return false;
+
+  @Override
+  public void onBackPressed() {
+    // TODO Auto-generated method stub
+    super.onBackPressed();
+    finish();
   }
 
   // Create adapter for conversation list
@@ -294,11 +292,12 @@ public class ExoChatController extends MyActionBar {
     // MessageTypeFilter(Message.Type.chat));
 
     // eXoChat.this.finish();
-//    GDActivity.TYPE = 1;
+    // GDActivity.TYPE = 1;
     finish();
-//    Intent next = new Intent(eXoChatController.this, eXoChatListController.class);
-//    eXoChatController.this.startActivity(next);
-//
-//    eXoChatControllerInstance = null;
+    // Intent next = new Intent(eXoChatController.this,
+    // eXoChatListController.class);
+    // eXoChatController.this.startActivity(next);
+    //
+    // eXoChatControllerInstance = null;
   }
 }

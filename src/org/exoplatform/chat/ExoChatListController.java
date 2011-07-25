@@ -52,7 +52,7 @@ public class ExoChatListController extends MyActionBar {
 
   public static ExoChatListController                  eXoChatListControllerInstance; // Instance
 
-  public static ExoApplicationsController2                    _delegate;                    // Main
+  public static ExoApplicationsController2             _delegate;                    // Main
 
   // app
   // view
@@ -118,10 +118,10 @@ public class ExoChatListController extends MyActionBar {
     setActionBarContentView(R.layout.exochatlist);
 
     eXoChatListControllerInstance = this;
-    
+
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-//    addActionBarItem();
-//    getActionBar().getItem(0).setDrawable(R.drawable.home);
+    // addActionBarItem();
+    // getActionBar().getItem(0).setDrawable(R.drawable.home);
 
     lvChatList = (ListView) findViewById(R.id.ListViewChatList);
 
@@ -262,23 +262,11 @@ public class ExoChatListController extends MyActionBar {
     return true;
   }
 
-  public void finishMe() {
 
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
     finish();
-//    Intent next = new Intent(eXoChatListController.this, eXoApplicationsController2.class);
-//    startActivity(next);
-//    eXoChatListControllerInstance = null;
-
-  }
-
-  // Keydown listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-      Toast.makeText(ExoChatListController.this, strCannotBackToPreviousPage, Toast.LENGTH_SHORT)
-           .show();
-    }
-    return false;
   }
 
   // Set adapter for Chat list view

@@ -18,11 +18,11 @@
 					android:layout_marginTop="5dip" android:layout_alignParentLeft="true">
 					<greendroid.widget.AsyncImageView
 						android:padding="1dp" android:layout_centerInParent="true"
-						android:id="@+id/imageView_Avatar" android:layout_height="50dip"
-						android:layout_width="50dip" />
+						android:id="@+id/imageView_Avatar" android:layout_height="45dip"
+						android:layout_width="45dip" />
 					<ImageView android:background="@drawable/activity_avatar_shadow"
-						android:layout_centerInParent="true" android:layout_height="48dip"
-						android:layout_width="48dip" />
+						android:layout_centerInParent="true" android:layout_height="43dip"
+						android:layout_width="43dip" />
 				</RelativeLayout>
 
 
@@ -55,7 +55,7 @@
 					android:layout_alignParentRight="true" android:layout_marginTop="20dip"
 					android:background="@drawable/activity_like_button_background_shape" />
 
-				<TextView android:id="@+id/textView_Like_Count"
+				<TextView android:id="@+id/textView_Like_Count" style="@style/textview_like"
 					android:layout_height="wrap_content" android:layout_marginLeft="5dip"
 					android:layout_marginTop="20dip" android:layout_toLeftOf="@id/like_button"
 					android:layout_width="fill_parent" />
@@ -75,7 +75,7 @@
 
 		</LinearLayout>
 	</ScrollView>
-	
+
 	<EditText android:id="@+id/editText_Comment"
 		android:layout_marginLeft="-7dp" android:layout_marginRight="-7dp"
 		android:layout_marginTop="-7dp" android:layout_marginBottom="-7dp"

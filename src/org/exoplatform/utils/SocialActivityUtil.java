@@ -2,13 +2,14 @@ package org.exoplatform.utils;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import org.exoplatform.social.entity.ExoSocialLike;
 
 public class SocialActivityUtil {
 
-  public static String getCommentString(ArrayList<ExoSocialLike> socialLikeList,
+  public static String getCommentString(LinkedList<ExoSocialLike> socialLikeList,
                                         ResourceBundle resourceBundle) {
     String nolike = resourceBundle.getString("NoLike");
     String likedThis = resourceBundle.getString("LikedThis");

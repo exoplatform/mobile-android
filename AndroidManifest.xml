@@ -22,7 +22,7 @@
 		<activity android:name=".dashboard.ExoWebViewController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".Activity.File.eXoFilesController"
+		<activity android:name=".document.ExoFilesController"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 		<activity android:name=".chat.ExoChatController"

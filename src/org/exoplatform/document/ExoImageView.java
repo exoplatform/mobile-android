@@ -75,15 +75,21 @@ public class ExoImageView extends Activity {
 
   }
 
-  // Keydown listioner
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-      Toast.makeText(ExoImageView.this,
-                     "If you want to back, let's use the \"Back\" button on the screen",
-                     Toast.LENGTH_LONG).show();
-    }
-    return false;
+//  // Keydown listioner
+//  public boolean onKeyDown(int keyCode, KeyEvent event) {
+//    // Save data to the server once the user hits the back button
+//    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+//      Toast.makeText(ExoImageView.this,
+//                     "If you want to back, let's use the \"Back\" button on the screen",
+//                     Toast.LENGTH_LONG).show();
+//    }
+//    return false;
+//  }
+  @Override
+  public void onBackPressed() {
+    // TODO Auto-generated method stub
+    super.onBackPressed();
+    finish();
   }
 
   // Display taken photo

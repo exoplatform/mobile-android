@@ -31,39 +31,40 @@ import android.widget.Toast;
 public class ExoGadgetViewController extends Activity {
   /** Called when the activity is first created. */
 
-  Button                           _btnClose;                      // Close
+  Button                                  _btnClose;                      // Close
 
   // button
 
-  Button                           _btnLanguageHelp;               // Setting
+  Button                                  _btnLanguageHelp;               // Setting
 
   // button
 
-  TextView                         _txtvTitleBar;                  // Gadget
+  TextView                                _txtvTitleBar;                  // Gadget
 
   // title
 
-  ListView                         _lstvGadgets;                   // Gadget
+  ListView                                _lstvGadgets;                   // Gadget
 
   // list view
 
   // Localization strings
-  String                           strCannotBackToPreviousPage;
+  String                                  strCannotBackToPreviousPage;
 
-  String                           strConnectionTimedOut;
+  String                                  strConnectionTimedOut;
 
   public static ExoGadgetViewController   eXoGadgetViewControllerInstance; // Instance
 
-  public static ExoApplicationsController _delegate;                      // Main app
+  public static ExoApplicationsController _delegate;                      // Main
+                                                                           // app
 
   // view
   // controller
 
-  public static ExoGadget          currentGadget;                  // Current
+  public static ExoGadget                 currentGadget;                  // Current
 
   // gadget
 
-  public static Cookie             cookie = null;                  // Cookie
+  public static Cookie                    cookie = null;                  // Cookie
 
   // Constructor
   @Override
@@ -181,14 +182,11 @@ public class ExoGadgetViewController extends Activity {
 
   }
 
-  // Keydown listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-      Toast.makeText(ExoGadgetViewController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG)
-           .show();
-    }
-    return false;
+  @Override
+  public void onBackPressed() {
+    // TODO Auto-generated method stub
+    super.onBackPressed();
+    finish();
   }
 
   // Set language
@@ -207,7 +205,7 @@ public class ExoGadgetViewController extends Activity {
       strConnectionTimedOut = new String(resourceBundle.getString("ConnectionTimedOut")
                                                        .getBytes("ISO-8859-1"), "UTF-8");
 
-      //        	
+      //
     } catch (Exception e) {
 
     }

@@ -62,16 +62,11 @@ public class ExoModifyServerList extends MyActionBar {
     createServersAdapter(AppController.configurationInstance._arrServerList);
   }
 
-  // Key down listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
-      // Toast.makeText(AppController.this, strCannotBackToPreviousPage,
-      // Toast.LENGTH_LONG).show();
-
-    }
-
-    return false;
+  @Override
+  public void onBackPressed() {
+    // TODO Auto-generated method stub
+    super.onBackPressed();
+    finish();
   }
 
   @Override
@@ -80,7 +75,7 @@ public class ExoModifyServerList extends MyActionBar {
     switch (position) {
 
     case -1:
-      finishMe();
+      finish();
       break;
 
     case 0:
@@ -96,15 +91,7 @@ public class ExoModifyServerList extends MyActionBar {
     return true;
   }
 
-  public void finishMe() {
-     finish();
-
-//    Intent next = new Intent(eXoModifyServerList.this, eXoSetting.class);
-//    startActivity(next);
-//
-//    eXoModifyServerListInstance = null;
-//    GDActivity.TYPE = 1;
-  }
+  
 
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {

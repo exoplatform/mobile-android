@@ -1,6 +1,5 @@
 package org.exoplatform.document;
 
-import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
@@ -10,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -18,6 +18,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.exoplatform.controller.AppController;
+import org.exoplatform.controller.ExoApplicationsController;
+import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,12 +35,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,69 +47,65 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.exoplatform.controller.AppController;
-import org.exoplatform.controller.ExoApplicationsController;
-import org.exoplatform.controller.ExoApplicationsController2;
-import org.exoplatform.widget.MyActionBar;
 
 import com.cyrilmottier.android.greendroid.R;
 
 public class ExoFilesController extends MyActionBar {
 
-  static final String               FILE_CONTENT_TYPE  = "image/bmp image/cgm image/gif image/jpeg image/png image/tiff image/x-icon "
-                                                           + "video/mpeg video/quicktime video/x-msvideo "
-                                                           + "audio/midi audio/mpeg audio/x-aiff audio/x-mpegurl "
-                                                           + "audio/x-pn-realaudio audio/x-wav "
-                                                           + "application/msword application/pdf application/vnd.ms-excel "
-                                                           + "application/vnd.ms-powerpoint application/zip";
+  static final String                      FILE_CONTENT_TYPE  = "image/bmp image/cgm image/gif image/jpeg image/png image/tiff image/x-icon "
+                                                                  + "video/mpeg video/quicktime video/x-msvideo "
+                                                                  + "audio/midi audio/mpeg audio/x-aiff audio/x-mpegurl "
+                                                                  + "audio/x-pn-realaudio audio/x-wav "
+                                                                  + "application/msword application/pdf application/vnd.ms-excel "
+                                                                  + "application/vnd.ms-powerpoint application/zip";
 
-  static ListView                   _lstvFiles;
+  static ListView                          _lstvFiles;
 
-  TextView                          _textViewEmptyPage;
+  TextView                                 _textViewEmptyPage;
 
   // for eXo image View
-  EditText                          txtFileName;
+  EditText                                 txtFileName;
 
-  ImageView                         imgView;
+  ImageView                                imgView;
 
-  ImageView                         imgViewEmptyPage;
+  ImageView                                imgViewEmptyPage;
 
-  Button                            _btnUploadImage;
+  Button                                   _btnUploadImage;
 
-  Button                            _btnCancelUploadImage;
+  Button                                   _btnCancelUploadImage;
 
-  static ProgressDialog             _progressDialog;
+  static ProgressDialog                    _progressDialog;
 
-  public static String              _rootUrl;
+  public static String                     _rootUrl;
 
-  public static String              localFilePath;      //= "/sdcard/eXo/";
+  public static String                     localFilePath;                                                           // =
+                                                                                                                     // "/sdcard/eXo/";
 
-  public static Uri                 _uri;
+  public static Uri                        _uri;
 
-  boolean                           _deleteFile;
+  boolean                                  _deleteFile;
 
-  boolean                           _copyFile;
+  boolean                                  _copyFile;
 
-  boolean                           _moveFile;
+  boolean                                  _moveFile;
 
-  public static ExoFilesController  eXoFilesControllerInstance;
+  public static ExoFilesController         eXoFilesControllerInstance;
 
   public static ExoApplicationsController2 _delegate;
 
-  static public ExoFile             myFile;
+  static public ExoFile                    myFile;
 
-  static public int                 positionOfFileItem = 0;
+  static public int                        positionOfFileItem = 0;
 
-  public static List<ExoFile>       arrFiles;
+  public static List<ExoFile>              arrFiles;
 
-  public BaseAdapter                fileAdapter;
+  public BaseAdapter                       fileAdapter;
 
-  String                            strCannotBackToPreviousPage;
+  String                                   strCannotBackToPreviousPage;
 
-  static String                     strDownloadFileIntoSDCard;
+  static String                            strDownloadFileIntoSDCard;
 
-  Thread                            thread;
+  Thread                                   thread;
 
   // Constructor
   @Override
@@ -119,11 +118,11 @@ public class ExoFilesController extends MyActionBar {
     setActionBarContentView(R.layout.exofilesview);
 
     eXoFilesControllerInstance = this;
-    
+
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-//    addActionBarItem();
-//    getActionBar().getItem(0).setDrawable(R.drawable.home);
-    
+    // addActionBarItem();
+    // getActionBar().getItem(0).setDrawable(R.drawable.home);
+
     localFilePath = Environment.getExternalStorageDirectory() + "/eXo/";
 
     _btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
@@ -182,7 +181,7 @@ public class ExoFilesController extends MyActionBar {
 
     _lstvFiles = (ListView) findViewById(R.id.ListView_Files);
 
-//    setTitle(getFolderNameFromUrl(_rootUrl));
+    // setTitle(getFolderNameFromUrl(_rootUrl));
     setTitle(getFolderNameFromUrl(myFile.urlStr));
 
     txtFileName = (EditText) findViewById(R.id.EditTextImageName);
@@ -192,32 +191,30 @@ public class ExoFilesController extends MyActionBar {
     changeLanguage(AppController.bundle);
 
     createExoFilesAdapter();
-
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
-    finishMe();
+    destroy();
     return true;
   }
-  
+
+  private void destroy() {
+    if (myFile.urlStr.equalsIgnoreCase(_rootUrl)) {
+      eXoFilesControllerInstance.finish();
+    } else {
+      finishMe();
+    }
+  }
+
   public void finishMe() {
     Runnable loadingDataRunnable = new Runnable() {
       public void run() {
+        int index = myFile.urlStr.lastIndexOf("/");
+        myFile.urlStr = myFile.urlStr.substring(0, index);
+        arrFiles = getPersonalDriveContent(myFile.urlStr);
 
-        if (myFile.urlStr.equalsIgnoreCase(_rootUrl)) {
-
-          eXoFilesControllerInstance = null;
-          finish();
-
-        } else {
-          int index = myFile.urlStr.lastIndexOf("/");
-          myFile.urlStr = myFile.urlStr.substring(0, index);
-          arrFiles = getPersonalDriveContent(myFile.urlStr);
-
-          runOnUiThread(closeBackRunnable);
-        }
-
+        runOnUiThread(closeBackRunnable);
         runOnUiThread(dismissProgressDialog);
       }
     };
@@ -229,15 +226,9 @@ public class ExoFilesController extends MyActionBar {
 
   }
 
-  // Keydown listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-      Toast.makeText(ExoFilesController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG)
-           .show();
-    }
-    return false;
-  }
+  public void onBackPressed() {
+    destroy();
+  };
 
   // Save file to SDCard
   Runnable        cannotAceesSDCard     = new Runnable() {
@@ -269,7 +260,7 @@ public class ExoFilesController extends MyActionBar {
 
                                           public void run() {
 
-                                            if (arrFiles.isEmpty()) {
+                                            if (arrFiles.size() == 0) {
                                               eXoFilesControllerInstance.imgViewEmptyPage.setVisibility(View.VISIBLE);
                                               eXoFilesControllerInstance._textViewEmptyPage.setVisibility(View.VISIBLE);
                                             } else {
@@ -291,33 +282,35 @@ public class ExoFilesController extends MyActionBar {
 
                                           public void run() {
 
-//                                            setTitle(getFolderNameFromUrl(myFile.urlStr));
+                                            // setTitle(getFolderNameFromUrl(myFile.urlStr));
                                             // Files List
-//                                            fileAdapter.notifyDataSetChanged();
+                                            // fileAdapter.notifyDataSetChanged();
                                             try {
-                                              if (myFile.urlStr.equalsIgnoreCase(_rootUrl))
-                                              {
-//                                                getActionBar().getItem(0).setDrawable(R.drawable.home);
-//                                                setTheme(R.style.Theme_eXo);
-                                              ExoApplicationsController2.sTheme = R.style.Theme_eXo;
-                                              eXoFilesControllerInstance.finish();
-                                              eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance, eXoFilesControllerInstance.getClass()));
+                                              if (myFile.urlStr.equalsIgnoreCase(_rootUrl)) {
+                                                // getActionBar().getItem(0).setDrawable(R.drawable.home);
+                                                // setTheme(R.style.Theme_eXo);
+                                                // ExoApplicationsController2.sTheme
+                                                // = R.style.Theme_eXo;
+                                                eXoFilesControllerInstance.finish();
+                                                // eXoFilesControllerInstance.startActivity(new
+                                                // Intent(eXoFilesControllerInstance,
+                                                // eXoFilesControllerInstance.getClass()));
                                                 // _btnCloseBack.setText(new
                                                 // String(AppController.bundle.getString("CloseButton")
                                                 // .getBytes("ISO-8859-1"),
                                                 // "UTF-8"));
-                                              }
-                                              else
-//                                                getActionBar().getItem(0).setDrawable(R.drawable.back);
-//                                              setTheme(R.style.Theme_eXo2);
-                                              ExoApplicationsController2.sTheme = R.style.Theme_eXo_Back;
+                                              } else
+                                                // getActionBar().getItem(0).setDrawable(R.drawable.back);
+                                                // setTheme(R.style.Theme_eXo2);
+                                                ExoApplicationsController2.sTheme = R.style.Theme_eXo_Back;
                                               eXoFilesControllerInstance.finish();
-                                              eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance, eXoFilesControllerInstance.getClass()));
-                                                // _btnCloseBack.setText(new
-                                                // String(AppController.bundle.getString("BackButton")
-                                                // .getBytes("ISO-8859-1"),
-                                                // "UTF-8"));
-                                                ;
+                                              eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance,
+                                                                                                  eXoFilesControllerInstance.getClass()));
+                                              // _btnCloseBack.setText(new
+                                              // String(AppController.bundle.getString("BackButton")
+                                              // .getBytes("ISO-8859-1"),
+                                              // "UTF-8"));
+                                              ;
                                             } catch (Exception e) {
 
                                               // _btnCloseBack.setText("");
@@ -334,11 +327,12 @@ public class ExoFilesController extends MyActionBar {
                                             // arrFiles.get(positionOfFileItem);
 
                                             try {
-//                                              getActionBar().getItem(0).setDrawable(R.drawable.back);
-//                                              setTheme(R.style.Theme_eXo2);
+                                              // getActionBar().getItem(0).setDrawable(R.drawable.back);
+                                              // setTheme(R.style.Theme_eXo2);
                                               ExoApplicationsController2.sTheme = R.style.Theme_eXo_Back;
                                               eXoFilesControllerInstance.finish();
-                                              eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance, eXoFilesControllerInstance.getClass()));
+                                              eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance,
+                                                                                                  eXoFilesControllerInstance.getClass()));
                                               // _btnCloseBack.setText(new
                                               // String(AppController.bundle.getString("BackButton")
                                               // .getBytes("ISO-8859-1"),
@@ -347,11 +341,12 @@ public class ExoFilesController extends MyActionBar {
                                             } catch (Exception e) {
 
                                               try {
-//                                                getActionBar().getItem(0).setDrawable(R.drawable.home);
-//                                                 setTheme(R.style.Theme_eXo);
+                                                // getActionBar().getItem(0).setDrawable(R.drawable.home);
+                                                // setTheme(R.style.Theme_eXo);
                                                 ExoApplicationsController2.sTheme = R.style.Theme_eXo;
                                                 eXoFilesControllerInstance.finish();
-                                                eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance, eXoFilesControllerInstance.getClass()));
+                                                eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance,
+                                                                                                    eXoFilesControllerInstance.getClass()));
                                                 // _btnCloseBack.setText(new
                                                 // String(AppController.bundle.getString("CloseButton")
                                                 // .getBytes("ISO-8859-1"),
@@ -363,8 +358,9 @@ public class ExoFilesController extends MyActionBar {
                                             }
                                             if (myFile.isFolder) {
 
-//                                              setTitle(myFile.fileName.replace("%20", " "));
-//                                              fileAdapter.notifyDataSetChanged();
+                                              // setTitle(myFile.fileName.replace("%20",
+                                              // " "));
+                                              // fileAdapter.notifyDataSetChanged();
 
                                             } else {
                                               // _strCurrentDirectory =
@@ -507,6 +503,7 @@ public class ExoFilesController extends MyActionBar {
 
   // Get file array from URL
   public static List<ExoFile> getPersonalDriveContent(String url) {
+
     List<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
 
     String responseStr = AppController._eXoConnection.sendRequestWithAuthorizationReturnString(url.replace(" ",
@@ -542,7 +539,7 @@ public class ExoFilesController extends MyActionBar {
     if (arrFilesTmp.isEmpty()) {
       // ImageView imgView = new ImageView(thisClass.getApplicationContext());
       // imgView.setImageResource(R.drawable.emptypage);
-      //			
+      //
       // _lstvFiles.addView(imgView, 200, 200);
     }
 
@@ -607,7 +604,7 @@ public class ExoFilesController extends MyActionBar {
               thread = new Thread(loadingDataRunnable, "fileItemClickOnIcon");
               thread.start();
             }
-            
+
           }
         });
 
@@ -617,12 +614,12 @@ public class ExoFilesController extends MyActionBar {
           public void onClick(View v) {
 
             positionOfFileItem = pos;
-            
+
             Runnable loadingDataRunnable = new Runnable() {
               public void run() {
 
                 myFile = arrFiles.get(positionOfFileItem);
-                
+
                 if (myFile.isFolder)
                   arrFiles = getPersonalDriveContent(myFile.urlStr);
                 eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
@@ -802,7 +799,7 @@ public class ExoFilesController extends MyActionBar {
     // try {
     // url = URLEncoder.encode(url, "UTF-8");
     // } catch (Exception e) {
-    //			
+    //
     // }
 
     HttpPut post = new HttpPut(url);

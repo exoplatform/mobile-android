@@ -47,7 +47,7 @@ public class ExoWebViewController extends MyActionBar {
     setActionBarContentView(R.layout.webview);
 
     eXoWebViewControllerInstance = this;
-    
+
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     setupCookies();
@@ -76,12 +76,14 @@ public class ExoWebViewController extends MyActionBar {
 
       String locallize = AppController.sharedPreference.getString(AppController.EXO_PRF_LOCALIZE,
                                                                   "exo_prf_localize");
+
       if (locallize.equalsIgnoreCase("LocalizeEN.properties"))
         _url = "file:///android_asset/HowtoUse-EN.htm";
       else if (locallize.equalsIgnoreCase("LocalizeFR.properties"))
         _url = "file:///android_asset/HowtoUse-FR.htm";
-      else
-        _url = "file:///android_asset/HowtoUse-VN.htm";
+      // else
+      // _url = "file:///android_asset/HowtoUse-VN.htm";
+
     }
 
     setTitle(_titlebar.replace("%20", " "));
@@ -92,13 +94,13 @@ public class ExoWebViewController extends MyActionBar {
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
-//    finishMe();
+    // finishMe();
 
     finish();
-     
+
     return true;
   }
-  
+
   public void finishMe() {
     if (ExoApplicationsController2.webViewMode == 1) {
       int index = ExoFilesController.myFile.urlStr.lastIndexOf("/");
@@ -113,7 +115,7 @@ public class ExoWebViewController extends MyActionBar {
     }
 
     eXoWebViewControllerInstance = null;
-//    GDActivity.TYPE = 1;
+    // GDActivity.TYPE = 1;
 
   }
 
@@ -124,9 +126,16 @@ public class ExoWebViewController extends MyActionBar {
 
       // CookieManager.getInstance().removeSessionCookie();
 
+      System.out.println("Cookies " + cookies.size());
       for (Cookie cookie : cookies) {
-        String cookieString = cookie.getName() + "=" + cookie.getValue();
-        CookieManager.getInstance().setCookie(cookie.getDomain(), cookieString);
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(cookie.getName());
+        buffer.append("=");
+        buffer.append(cookie.getValue());
+        System.out.println("Cookies " + buffer.toString());
+        // String cookieString = cookie.getName() + "=" + cookie.getValue();
+        CookieManager.getInstance().setCookie(cookie.getDomain(), buffer.toString());
       }
 
       // CookieManager.getInstance().setCookie("mobile.demo.exoplatform.org","JSESSIONID="+
@@ -136,13 +145,11 @@ public class ExoWebViewController extends MyActionBar {
     }
   }
 
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-      Toast.makeText(ExoWebViewController.this, strCannotBackToPreviousPage, Toast.LENGTH_LONG)
-           .show();
-    }
-    return false;
+  @Override
+  public void onBackPressed() {
+    // TODO Auto-generated method stub
+    super.onBackPressed();
+    finish();
   }
 
   public void changeLanguage(ResourceBundle resourceBundle) {

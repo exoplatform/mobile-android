@@ -1,6 +1,7 @@
 package org.exoplatform.social;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -86,6 +87,8 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     selectedRestActivity = SocialActivity.selectedRestActivity;
     activityId = selectedRestActivity.getId();
+    // selectedRestActivity = (RestActivity)
+    // SocialActivity.activityService.get(activityId);
     changeLanguage(AppController.bundle);
     url = SocialActivityUtil.getUrl();
     initComponent();
@@ -98,8 +101,8 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     super.onResume();
     onReload();
   }
-  
-  private void destroy(){
+
+  private void destroy() {
     super.onDestroy();
     onCancelLoad();
     finish();
@@ -110,7 +113,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       selectedRestActivity = (RestActivity) SocialActivity.activityService.get(activityId);
       onLoad();
     } catch (RuntimeException e) {
-     destroy();
+      destroy();
     }
 
   }
@@ -254,7 +257,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   private class DetailLoadTask extends UserTask<Void, Void, Integer> {
 
-    private ArrayList<ExoSocialLike>    socialLikeList    = new ArrayList<ExoSocialLike>();
+    private LinkedList<ExoSocialLike> likeLinkedList = new LinkedList<ExoSocialLike>();
 
     private ArrayList<ExoSocialComment> socialCommentList = new ArrayList<ExoSocialComment>();
 
@@ -277,11 +280,12 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
           socialLike.setLikeID(identity);
           if (identity.equalsIgnoreCase(SocialActivity.userIdentity)) {
             socialLike.setLikeName(youText);
+            likeLinkedList.addFirst(socialLike);
             liked = true;
           } else {
             socialLike.setLikeName(restId.getProfile().getFullName());
+            likeLinkedList.add(socialLike);
           }
-          socialLikeList.add(socialLike);
 
         }
       }
@@ -308,7 +312,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     @Override
     public void onPostExecute(Integer result) {
       setComponentInfo();
-      textView_Like_Count.setText(SocialActivityUtil.getCommentString(socialLikeList,
+      textView_Like_Count.setText(SocialActivityUtil.getCommentString(likeLinkedList,
                                                                       AppController.bundle));
       createCommentList(socialCommentList);
       _progressDialog.dismiss();

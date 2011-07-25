@@ -64,7 +64,7 @@ public class ExoSetting extends MyActionBar {
 
   static ListView          listViewServer;
 
-  private String modifyListText;
+  private String           modifyListText;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -146,31 +146,11 @@ public class ExoSetting extends MyActionBar {
     return true;
   }
 
-  // Key down listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
-      // Toast.makeText(AppController.this, strCannotBackToPreviousPage,
-      // Toast.LENGTH_LONG).show();
 
-    }
-
-    return false;
-  }
-
-  public void finishMe() {
-    Intent next;
-
-    if (ExoApplicationsController2.eXoApplicationsController2Instance != null) {
-      next = new Intent(ExoSetting.this, ExoApplicationsController2.class);
-    } else {
-      next = new Intent(ExoSetting.this, AppController.class);
-    }
-
-    startActivity(next);
-
-    eXoSettingInstance = null;
-    // GDActivity.TYPE = 0;
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
+    finish();
   }
 
   // Create server list adapter
@@ -205,7 +185,7 @@ public class ExoSetting extends MyActionBar {
         }
 
         if (position == serverObjsTmp.size()) {
-          
+
           tvModifyTheList.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -317,7 +297,7 @@ public class ExoSetting extends MyActionBar {
     String settings = resourceBundle.getString("Settings");
     setTitle(settings);
     modifyListText = resourceBundle.getString("ModifyServerList");
-   
+
     txtvEnglish.setText(strEnglish);
     txtvFrench.setText(strFrench);
 

@@ -58,20 +58,18 @@ public class ExoDashboard extends MyListActivity {
 
   public static List<GateInDbItem> arrGadgets;
 
-  
-  class DashBoardItem
-  {
-    String strTabName;
+  class DashBoardItem {
+    String    strTabName;
+
     ExoGadget gadget;
-    
-    public DashBoardItem(String _strTabName, ExoGadget _gadget)
-    {
+
+    public DashBoardItem(String _strTabName, ExoGadget _gadget) {
       this.strTabName = _strTabName;
       this.gadget = _gadget;
     }
-    
+
   }
-  
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -80,7 +78,7 @@ public class ExoDashboard extends MyListActivity {
     eXoDashboardInstance = this;
 
     setTitle("Dashboard");
-    
+
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     CookieSyncManager.createInstance(this);
@@ -99,11 +97,10 @@ public class ExoDashboard extends MyListActivity {
 
     }
 
-//    final ItemAdapter adapter = new ItemAdapter(this, items);
-//
+    // final ItemAdapter adapter = new ItemAdapter(this, items);
+    //
     setListAdapter(new MyItemAdapter(this, items));
   }
-
 
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -123,17 +120,11 @@ public class ExoDashboard extends MyListActivity {
 
   }
 
-  
-  // Key down listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
-      // Toast.makeText(AppController.this, strCannotBackToPreviousPage,
-      // Toast.LENGTH_LONG).show();
-
-    }
-
-    return false;
+  @Override
+  public void onBackPressed() {
+    // TODO Auto-generated method stub
+    super.onBackPressed();
+    finish();
   }
 
   public void showGadget(ExoGadget gadget) {
@@ -161,17 +152,16 @@ public class ExoDashboard extends MyListActivity {
     startActivity(next);
 
   }
-  
+
   private class MyItemAdapter extends BaseAdapter implements ImageProcessor {
 
-    
     List<DashBoardItem>    _arrayOfItems;
 
-    private final Paint                       mPaint                   = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint    mPaint    = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private final Rect                        mRectSrc                 = new Rect();
+    private final Rect     mRectSrc  = new Rect();
 
-    private final Rect                        mRectDest                = new Rect();
+    private final Rect     mRectDest = new Rect();
 
     // private final String mImageForPosition;
 
@@ -183,8 +173,7 @@ public class ExoDashboard extends MyListActivity {
 
     private LayoutInflater mInflater;
 
-
-    public MyItemAdapter(Context context,  List<DashBoardItem> items) {
+    public MyItemAdapter(Context context, List<DashBoardItem> items) {
       mInflater = LayoutInflater.from(context);
 
       _arrayOfItems = items;
@@ -227,31 +216,31 @@ public class ExoDashboard extends MyListActivity {
     public View getView(int position, View convertView, ViewGroup parent) {
 
       final DashBoardItem item = _arrayOfItems.get(position);
-      
+
       // if (convertView == null) {
       if (item.strTabName != null) {
         convertView = mInflater.inflate(R.layout.activityheadersection, parent, false);
         TextView title = (TextView) convertView.findViewById(R.id.textView_Section_Title);
         title.setText(item.strTabName);
       } else {
-        
+
         convertView = mInflater.inflate(R.layout.activitydisplayviewcell, parent, false);
 
         AsyncImageView imageViewAvatar = (AsyncImageView) convertView.findViewById(R.id.imageView_Avatar);
         imageViewAvatar.setUrl(item.gadget._strGadgetIcon);
-//        imageViewAvatar.setImageBitmap(item.gadget._btmGadgetIcon);
+        // imageViewAvatar.setImageBitmap(item.gadget._btmGadgetIcon);
         TextView textViewName = (TextView) convertView.findViewById(R.id.textView_Name);
         textViewName.setText(item.gadget._strGadgetName);
 
         TextView textViewMessage = (TextView) convertView.findViewById(R.id.textView_Message);
         textViewMessage.setText(item.gadget._strGadgetDescription);
-        
+
       }
-      
+
       convertView.setOnClickListener(new View.OnClickListener() {
-        
+
         public void onClick(View v) {
-          if(item.strTabName == null)
+          if (item.strTabName == null)
             showGadget(item.gadget);
         }
       });
@@ -273,14 +262,13 @@ public class ExoDashboard extends MyListActivity {
 
   }
 
-
   public void finishMe() {
 
     Intent next = new Intent(ExoDashboard.this, ExoApplicationsController2.class);
     startActivity(next);
 
     eXoDashboardInstance = null;
-//    GDActivity.TYPE = 0;
+    // GDActivity.TYPE = 0;
   }
 
 }
