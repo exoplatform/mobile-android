@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/RelativeLayout_Activity_Streams" android:layout_width="fill_parent"
-	android:layout_height="wrap_content" android:background="#08387B">
+	android:paddingTop="5dp" android:id="@+id/RelativeLayout_Activity_Streams"
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:background="#08387B">
 
 	<RelativeLayout android:background="@drawable/bottom_background_shape"
-		android:id="@+id/imageView_Avatar_wrap" android:layout_height="wrap_content"
-		android:layout_width="wrap_content" android:layout_marginLeft="5dip"
-		android:layout_marginTop="10dip" android:layout_alignParentLeft="true">
+		android:padding="2dp" android:id="@+id/imageView_Avatar_wrap"
+		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:layout_marginLeft="5dip" android:layout_alignParentLeft="true">
 		<greendroid.widget.AsyncImageView
-			android:padding="1dp" android:layout_centerInParent="true"
-			android:id="@+id/imageView_Avatar" android:layout_height="45dip"
-			android:layout_width="45dip" />
+			android:layout_centerInParent="true" android:id="@+id/imageView_Avatar"
+			android:layout_height="45dip" android:layout_width="45dip" />
 		<ImageView android:background="@drawable/activity_avatar_shadow"
 			android:layout_centerInParent="true" android:layout_height="43dip"
 			android:layout_width="43dip" />
@@ -19,28 +19,26 @@
 
 
 	<RelativeLayout android:id="@+id/relativeLayout_Content"
-		android:padding="3dp" android:layout_height="wrap_content"
-		android:layout_marginLeft="2dip" android:layout_marginRight="7dp"
-		android:layout_marginTop="10dip" android:layout_toRightOf="@id/imageView_Avatar_wrap"
+		android:padding="5dp" android:layout_height="wrap_content"
+		android:layout_marginLeft="2dip" android:layout_marginRight="5dp"
+		android:layout_toRightOf="@id/imageView_Avatar_wrap"
 		android:layout_width="fill_parent" android:background="@drawable/social_activity_browser_bg">
 
 		<TextView android:id="@+id/textView_Name" android:textStyle="bold"
-			android:padding="3dp" style="@style/textview_name"
-			android:layout_height="wrap_content" android:text="Name"
-			android:layout_marginLeft="10dip" android:layout_marginTop="5dip"
-			android:layout_width="wrap_content" />
+			style="@style/textview_name" android:layout_height="wrap_content"
+			android:text="Name" android:layout_marginLeft="10dip"
+			android:layout_marginTop="5dip" android:layout_width="wrap_content" />
 
-		<TextView android:id="@+id/textView_Message" android:padding="3dp"
-			style="@style/textview_content" android:layout_height="wrap_content"
-			android:text="Test message" android:layout_marginLeft="10dip"
-			android:layout_marginTop="5dip" android:layout_below="@id/textView_Name"
-			android:layout_width="fill_parent" />
+		<TextView android:id="@+id/textView_Message" style="@style/textview_content"
+			android:layout_height="wrap_content" android:text="Test message"
+			android:layout_marginLeft="10dip" android:layout_marginTop="3dip"
+			android:layout_below="@id/textView_Name" android:layout_width="fill_parent" />
 
 		<TextView android:id="@+id/button_Comment" style="@style/textview_number"
 			android:gravity="center_vertical" android:paddingLeft="2dp"
 			android:layout_height="wrap_content" android:text="1000"
 			android:layout_width="wrap_content" android:layout_marginLeft="0dip"
-			android:layout_marginTop="10dip" android:layout_marginRight="10dip"
+			android:layout_marginTop="7dip" android:layout_marginRight="10dip"
 			android:layout_alignParentRight="true" android:layout_below="@id/textView_Message"
 			android:background="@drawable/socialactivitybrowsercommentbutton" />
 
@@ -48,13 +46,13 @@
 			android:gravity="center_vertical" android:paddingLeft="2dp"
 			android:layout_height="wrap_content" android:text="100"
 			android:layout_width="wrap_content" android:layout_marginLeft="10dip"
-			android:layout_marginTop="10dip" android:layout_toLeftOf="@id/button_Comment"
+			android:layout_marginTop="7dip" android:layout_toLeftOf="@id/button_Comment"
 			android:layout_below="@id/textView_Message" android:background="@drawable/socialactivitybrowserlikebutton" />
 
 		<TextView android:id="@+id/textView_Time" style="@style/textview_time"
-			android:padding="3dp" android:layout_height="wrap_content"
-			android:text="about 15 hours ago" android:layout_below="@id/textView_Message"
-			android:layout_marginLeft="10dip" android:layout_marginTop="10dip"
+			android:layout_height="wrap_content" android:text="about 15 hours ago"
+			android:layout_below="@id/textView_Message"
+			android:layout_marginLeft="10dip" android:layout_marginTop="7dip"
 			android:layout_marginRight="3dip" android:layout_width="wrap_content" />
 	</RelativeLayout>
 

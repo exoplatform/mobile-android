@@ -178,6 +178,12 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     super.onResume();
     initComponents();
   }
+  
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
+    finish();
+  }
 
   private void initComponents() {
     changeLanguage(AppController.bundle);
@@ -204,18 +210,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     array.add(setting);
     
     createAdapter();
-  }
-
-  // Key down listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    // Save data to the server once the user hits the back button
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
-      // Toast.makeText(AppController.this, strCannotBackToPreviousPage,
-      // Toast.LENGTH_LONG).show();
-
-    }
-
-    return false;
   }
 
   // Create GridView Apdapter

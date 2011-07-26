@@ -513,6 +513,7 @@ public class AppController extends Activity implements OnTouchListener {
 
                                                       _progressDialog.dismiss();
                                                       _btnLogIn.setVisibility(View.VISIBLE);
+                                                      finish();
 
                                                     }
                                                   };

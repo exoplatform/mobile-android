@@ -87,8 +87,6 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     selectedRestActivity = SocialActivity.selectedRestActivity;
     activityId = selectedRestActivity.getId();
-    // selectedRestActivity = (RestActivity)
-    // SocialActivity.activityService.get(activityId);
     changeLanguage(AppController.bundle);
     url = SocialActivityUtil.getUrl();
     initComponent();

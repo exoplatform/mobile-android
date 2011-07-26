@@ -9,17 +9,16 @@
 		<LinearLayout android:orientation="vertical"
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
 			<RelativeLayout android:id="@+id/RelativeLayout_Status"
-				android:padding="3dp" android:layout_width="fill_parent"
+				android:padding="2dp" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:background="#E9E9E9">
 
 				<RelativeLayout android:background="@drawable/bottom_background_shape"
+					android:layout_marginTop="5dip" android:padding="2dp"
 					android:id="@+id/imageView_Avatar_wrap" android:layout_height="wrap_content"
-					android:layout_width="wrap_content" android:layout_marginLeft="2dip"
-					android:layout_marginTop="5dip" android:layout_alignParentLeft="true">
+					android:layout_width="wrap_content" android:layout_alignParentLeft="true">
 					<greendroid.widget.AsyncImageView
-						android:padding="1dp" android:layout_centerInParent="true"
-						android:id="@+id/imageView_Avatar" android:layout_height="45dip"
-						android:layout_width="45dip" />
+						android:layout_centerInParent="true" android:id="@+id/imageView_Avatar"
+						android:layout_height="45dip" android:layout_width="45dip" />
 					<ImageView android:background="@drawable/activity_avatar_shadow"
 						android:layout_centerInParent="true" android:layout_height="43dip"
 						android:layout_width="43dip" />
@@ -27,18 +26,18 @@
 
 
 				<TextView android:id="@+id/textView_Name" style="@style/textview_name"
-					android:layout_height="20dip" android:layout_marginLeft="15dip"
+					android:layout_height="wrap_content" android:layout_marginLeft="15dip"
 					android:layout_marginTop="5dip" android:layout_toRightOf="@id/imageView_Avatar_wrap"
 					android:layout_width="fill_parent" android:textStyle="bold" />
 
 				<TextView android:id="@+id/textView_Message" style="@style/textview_content"
 					android:layout_height="wrap_content" android:layout_marginLeft="15dip"
-					android:layout_marginRight="5dip" android:layout_marginTop="5dip"
+					android:layout_marginRight="5dip" android:layout_marginTop="3dip"
 					android:layout_below="@id/textView_Name" android:layout_toRightOf="@id/imageView_Avatar_wrap"
 					android:layout_width="fill_parent" />
 
 				<TextView android:id="@+id/textView_Time"
-					android:layout_height="wrap_content" android:layout_marginTop="5dip"
+					android:layout_height="wrap_content" android:layout_marginTop="7dip"
 					android:layout_marginLeft="15dip" android:layout_toRightOf="@id/imageView_Avatar_wrap"
 					android:layout_below="@id/textView_Message" android:layout_width="wrap_content"
 					style="@style/textview_time" />
@@ -68,7 +67,7 @@
 			</LinearLayout>
 
 			<LinearLayout android:id="@+id/activity_display_comment_wrap"
-				android:orientation="vertical" android:padding="3dp"
+				android:orientation="vertical" android:padding="2dp"
 				android:layout_width="fill_parent" android:layout_height="wrap_content">
 			</LinearLayout>
 
@@ -77,10 +76,10 @@
 	</ScrollView>
 
 	<EditText android:id="@+id/editText_Comment"
-		android:layout_marginLeft="-7dp" android:layout_marginRight="-7dp"
-		android:layout_marginTop="-7dp" android:layout_marginBottom="-7dp"
-		android:background="@drawable/comment_textfield_background"
+		android:layout_marginLeft="-10dp" android:layout_marginRight="-10dp"
+		android:layout_marginTop="-10dp" android:layout_marginBottom="-10dp"
+		android:background="@drawable/commentareabackground"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
-		android:textColor="#FFFFFF" android:editable="false" android:textSize="14dp"
+		android:textColor="#FFFFFF" android:editable="false" android:textSize="12dp"
 		android:textColorHint="#FFFFFF" android:hint="Your comment..." />
 </LinearLayout>
