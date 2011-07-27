@@ -202,11 +202,11 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   }
 
-  // @Override
-  // protected void onResume() {
-  // super.onResume();
-  // initComponents();
-  // }
+  @Override
+  protected void onResume() {
+    super.onResume();
+    initComponents();
+  }
 
   @Override
   public void onBackPressed() {
@@ -356,44 +356,11 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     return true;
   }
 
-  // Change language
-  private void updateLocallize(String localize) {
-    try {
-      SharedPreferences.Editor editor = AppController.sharedPreference.edit();
-      editor.putString(AppController.EXO_PRF_LOCALIZE, localize);
-      editor.commit();
-
-      AppController.bundle = new PropertyResourceBundle(this.getAssets().open(localize));
-      changeLanguage(AppController.bundle);
-
-    } catch (Exception e) {
-
-    }
-
-  }
 
   // Set language
   public void changeLanguage(ResourceBundle resourceBundle) {
-    String strLanguageTittle = "";
-    String strServerTittle = "";
-    String strmyOptionEnglish = "";
-    String strmyOptionFrench = "";
-    String strCloseModifyServerLisrButton = "";
-    String strUserGuideButton = "";
 
     try {
-      strLanguageTittle = new String(resourceBundle.getString("Language").getBytes("ISO-8859-1"),
-                                     "UTF-8");
-      strServerTittle = new String(resourceBundle.getString("Server").getBytes("ISO-8859-1"),
-                                   "UTF-8");
-      strmyOptionEnglish = new String(resourceBundle.getString("English").getBytes("ISO-8859-1"),
-                                      "UTF-8");
-      strmyOptionFrench = new String(resourceBundle.getString("French").getBytes("ISO-8859-1"),
-                                     "UTF-8");
-      strCloseModifyServerLisrButton = new String(resourceBundle.getString("ModifyServerList")
-                                                                .getBytes("ISO-8859-1"), "UTF-8");
-      strUserGuideButton = new String(resourceBundle.getString("UserGuide").getBytes("ISO-8859-1"),
-                                      "UTF-8");
       strChatServer = new String(resourceBundle.getString("ChatServer").getBytes("ISO-8859-1"),
                                  "UTF-8");
 
@@ -675,11 +642,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     startActivity(next);
 
   }
-
-  /*
-   * Check the version of PLF return false if version number is < 3.5 else
-   * return true
-   */
 
   private void parseDomain() {
     String domain = SocialActivityUtil.getDomain();

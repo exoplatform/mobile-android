@@ -496,7 +496,10 @@ public class ExoConnectionUtils {
   public static String sendRequestAndReturnString(String strUrlRequest) {
     return convertStreamToString(sendRequest(strUrlRequest));
   }
-
+  /*
+   * Check the version of PLF return true if version number is >= 3.5 else
+   * return false
+   */
   public static boolean checkPLFVersion() {
     try {
       String versionUrl = SocialActivityUtil.getDomain() + "/portal/rest/platform/version";
@@ -511,7 +514,6 @@ public class ExoConnectionUtils {
       } else
         return true;
     } catch (RuntimeException e) {
-
       return false;
     }
 
