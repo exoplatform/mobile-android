@@ -27,6 +27,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.model.GateInDbItem;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyListActivity;
 
 import com.cyrilmottier.android.greendroid.R;
@@ -149,7 +150,9 @@ public class ExoDashboard extends MyListActivity {
     ExoWebViewController._url = gadget._strGadgetUrl;
 
     Intent next = new Intent(this, ExoWebViewController.class);
+    next.putExtra(ExoConstants.WEB_VIEW_TYPE, 0);
     startActivity(next);
+    finish();
 
   }
 

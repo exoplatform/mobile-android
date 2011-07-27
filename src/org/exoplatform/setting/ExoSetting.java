@@ -12,6 +12,7 @@ import org.exoplatform.dashboard.ExoGadgetViewController;
 import org.exoplatform.dashboard.ExoWebViewController;
 import org.exoplatform.document.ExoFilesController;
 import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
 import com.cyrilmottier.android.greendroid.R;
@@ -66,14 +67,17 @@ public class ExoSetting extends MyActionBar {
 
   private String           modifyListText;
 
+  private int              style;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setActionBarContentView(R.layout.exosetting);
 
+    setTheme(R.style.Theme_eXo);
+    setActionBarContentView(R.layout.exosetting);
     eXoSettingInstance = this;
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
@@ -98,7 +102,11 @@ public class ExoSetting extends MyActionBar {
 
       public void onClick(View v) {
 
-        AppController.appControllerInstance.showUserGuide();
+//        AppController.appControllerInstance.showUserGuide();
+        ExoApplicationsController2.webViewMode = 2;
+        Intent next = new Intent(ExoSetting.this, ExoWebViewController.class);
+        startActivity(next);
+        finish();
       }
     });
 
@@ -145,7 +153,6 @@ public class ExoSetting extends MyActionBar {
     finish();
     return true;
   }
-
 
   @Override
   public void onBackPressed() {
@@ -194,10 +201,9 @@ public class ExoSetting extends MyActionBar {
                 Toast.makeText(eXoSettingInstance, msg, Toast.LENGTH_LONG);
               } else {
 
-                // GDActivity.TYPE = 1;
-
                 Intent next = new Intent(ExoSetting.this, ExoModifyServerList.class);
                 startActivity(next);
+                finish();
               }
             }
           });

@@ -114,7 +114,7 @@ public class ExoFilesController extends MyActionBar {
 
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(ExoApplicationsController2.sTheme);
+    setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.exofilesview);
 
     eXoFilesControllerInstance = this;
@@ -194,8 +194,8 @@ public class ExoFilesController extends MyActionBar {
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-
-    destroy();
+    myFile = null;
+    finish();
     return true;
   }
 
@@ -302,8 +302,9 @@ public class ExoFilesController extends MyActionBar {
                                               } else
                                                 // getActionBar().getItem(0).setDrawable(R.drawable.back);
                                                 // setTheme(R.style.Theme_eXo2);
-                                                ExoApplicationsController2.sTheme = R.style.Theme_eXo_Back;
-                                              eXoFilesControllerInstance.finish();
+                                                // ExoApplicationsController2.sTheme
+                                                // = R.style.Theme_eXo_Back;
+                                                eXoFilesControllerInstance.finish();
                                               eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance,
                                                                                                   eXoFilesControllerInstance.getClass()));
                                               // _btnCloseBack.setText(new
@@ -343,7 +344,8 @@ public class ExoFilesController extends MyActionBar {
                                               try {
                                                 // getActionBar().getItem(0).setDrawable(R.drawable.home);
                                                 // setTheme(R.style.Theme_eXo);
-                                                ExoApplicationsController2.sTheme = R.style.Theme_eXo;
+                                                // ExoApplicationsController2.sTheme
+                                                // = R.style.Theme_eXo;
                                                 eXoFilesControllerInstance.finish();
                                                 eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance,
                                                                                                     eXoFilesControllerInstance.getClass()));

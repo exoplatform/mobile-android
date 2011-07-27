@@ -4,6 +4,10 @@ public class ExoConstants {
 
   public static final String COMPOSE_TYPE              = "COMPOSE_TYPE";
 
+  public static final String SETTING_TYPE              = "SETTING_TYPE";
+  
+  public static final String WEB_VIEW_TYPE              = "WEB_VIEW_TYPE";
+
   public static final String ACTIVITY_DETAIL_EXTRA     = "ACTIVITY_DETAIL_EXTRA";
 
   public static final int    COMPOSE_POST_TYPE         = 0;

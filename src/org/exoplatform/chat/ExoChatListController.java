@@ -382,6 +382,7 @@ public class ExoChatListController extends MyActionBar {
       ExoChatController._delegate = _delegate;
       Intent next = new Intent(ExoChatListController.this, ExoChatController.class);
       ExoChatListController.this.startActivity(next);
+      finish();
     }
 
   }

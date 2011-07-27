@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
+import org.exoplatform.controller.AppController;
 import org.exoplatform.social.entity.ExoSocialLike;
 
 public class SocialActivityUtil {
@@ -165,6 +166,16 @@ public class SocialActivityUtil {
     }
 
     return buffer.toString();
+  }
+
+  public static String getDomain() {
+    String domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
+                                                             "exo_prf_domain");
+    if (domain.endsWith("/")) {
+      domain = domain.substring(0, domain.length() - 1);
+
+    }
+    return domain;
   }
 
   public static String getUrl() {

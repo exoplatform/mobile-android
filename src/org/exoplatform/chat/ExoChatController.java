@@ -18,6 +18,7 @@ import org.jivesoftware.smack.util.StringUtils;
 
 import com.cyrilmottier.android.greendroid.R;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -82,7 +83,7 @@ public class ExoChatController extends MyActionBar {
     super.onCreate(savedInstanceState);
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo_Back);
+    setTheme(R.style.Theme_eXo);
 
     setActionBarContentView(R.layout.exochat);
     eXoChatControllerInstance = this;
@@ -212,7 +213,9 @@ public class ExoChatController extends MyActionBar {
   public void onBackPressed() {
     // TODO Auto-generated method stub
     super.onBackPressed();
-    finish();
+    Intent intent = new Intent(this, ExoChatListController.class);
+    startActivity(intent);
+    finishMe();
   }
 
   // Create adapter for conversation list

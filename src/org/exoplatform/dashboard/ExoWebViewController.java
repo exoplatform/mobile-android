@@ -1,6 +1,5 @@
 package org.exoplatform.dashboard;
 
-import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 
 import java.util.List;
@@ -13,19 +12,15 @@ import org.exoplatform.document.ExoFilesController;
 import org.exoplatform.setting.ExoSetting;
 import org.exoplatform.widget.MyActionBar;
 
-import com.cyrilmottier.android.greendroid.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 
-import android.widget.Toast;
+import com.cyrilmottier.android.greendroid.R;
 
 //Display gadget
 public class ExoWebViewController extends MyActionBar {
@@ -113,16 +108,20 @@ public class ExoWebViewController extends MyActionBar {
       Intent next = new Intent(ExoWebViewController.this, ExoDashboard.class);
       startActivity(next);
     }
-
     eXoWebViewControllerInstance = null;
+    finish();
+
+    
     // GDActivity.TYPE = 1;
 
   }
 
   private void setupCookies() {
+    CookieSyncManager.createInstance(this);
     List<Cookie> cookies = AppController._eXoConnection._sessionCookies;// .authenticateAndReturnCookies();
 
     if (cookies != null) {
+   
 
       // CookieManager.getInstance().removeSessionCookie();
 
@@ -140,8 +139,8 @@ public class ExoWebViewController extends MyActionBar {
 
       // CookieManager.getInstance().setCookie("mobile.demo.exoplatform.org","JSESSIONID="+
       // cookie.getValue()+";domain=mobile.demo.exoplatform.org");
-
       CookieSyncManager.getInstance().sync();
+     
     }
   }
 
@@ -149,7 +148,7 @@ public class ExoWebViewController extends MyActionBar {
   public void onBackPressed() {
     // TODO Auto-generated method stub
     super.onBackPressed();
-    finish();
+    finishMe();
   }
 
   public void changeLanguage(ResourceBundle resourceBundle) {

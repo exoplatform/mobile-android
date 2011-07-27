@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ResourceBundle;
 
 import org.exoplatform.controller.AppController;
+import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
@@ -57,11 +58,13 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private String   noService;
 
+  private Intent   intent;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo_Back);
+    setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.compose_message_layout);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     onChangeLanguage(AppController.bundle);
@@ -92,6 +95,8 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
+      // Intent intent = new Intent(this, ExoApplicationsController2.class);
+      // startActivity(intent);
       destroy();
       break;
 
@@ -106,12 +111,15 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   public void onClick(View view) {
     if (view == sendButton) {
       composeMessage = composeEditText.getText().toString();
-
       if ((composeMessage != null) && (composeMessage.length() > 0)) {
         if (composeType == 0) {
           onPostTask();
+          intent = new Intent(this, SocialActivity.class);
+          startActivity(intent);
         } else {
           onCommentTask();
+          intent = new Intent(this, ActivityStreamDisplay.class);
+          startActivity(intent);
         }
         try {
           Thread.sleep(1000);
@@ -144,6 +152,13 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   @Override
   public void onBackPressed() {
     super.onBackPressed();
+    if (composeType == 0) {
+      intent = new Intent(this, SocialActivity.class);
+      startActivity(intent);
+    } else {
+      intent = new Intent(this, ActivityStreamDisplay.class);
+      startActivity(intent);
+    }
     destroy();
 
   }
@@ -152,9 +167,9 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     try {
       RestCommentImpl comment = new RestCommentImpl();
       comment.setText(composeMessage);
-      RestActivity restActivity = (RestActivity) SocialActivity.activityService.get(ActivityStreamDisplay.selectedRestActivity.getId());
+      RestActivity restActivity = (RestActivity) ExoApplicationsController2.activityService.get(ActivityStreamDisplay.selectedRestActivity.getId());
 
-      SocialActivity.activityService.createComment(restActivity, comment);
+      ExoApplicationsController2.activityService.createComment(restActivity, comment);
     } catch (RuntimeException e) {
       Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
       toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
@@ -166,7 +181,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     try {
       RestActivityImpl activityImlp = new RestActivityImpl();
       activityImlp.setTitle(composeMessage);
-      SocialActivity.activityService.create(activityImlp);
+      ExoApplicationsController2.activityService.create(activityImlp);
     } catch (RuntimeException e) {
       Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
       toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);

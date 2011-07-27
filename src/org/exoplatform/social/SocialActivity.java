@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.exoplatform.controller.AppController;
+import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
@@ -46,47 +47,33 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class SocialActivity extends MyActionBar {
 
-  public static RestActivity                  selectedRestActivity;
+  public static RestActivity selectedRestActivity;
 
-  public static ActivityService<RestActivity> activityService;
+  private LinearLayout       activityStreamWrap;
 
-  public static IdentityService<?>            identityService;
+  private ActivityLoadTask   mLoadTask;
 
-  public static String                        userIdentity;
+  private int                number_of_activity = 20;
 
-  private LinearLayout                        activityStreamWrap;
+  private boolean            isShowMore         = false;
 
-  private ActivityLoadTask                    mLoadTask;
+  private String             loadingData;
 
-  private int                                 number_of_activity = 20;
+  private String             showMoreText;
 
-  private boolean                             isShowMore         = false;
+  private String             noService;
 
-  private String                              loadingData;
+  private String             today;
 
-  private String                              showMoreText;
+  private Resources          resource;
 
-  private String                              noService;
+  private String             minute;
 
-  private String                              today;
+  private String             minutes;
 
-  private Resources                           resource;
+  private String             hour;
 
-  private String                              domain;
-
-  private String                              protocol;
-
-  private String                              host;
-
-  private int                                 port;
-
-  private String                              minute;
-
-  private String                              minutes;
-
-  private String                              hour;
-
-  private String                              hours;
+  private String             hours;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -101,18 +88,15 @@ public class SocialActivity extends MyActionBar {
     onChangeLanguage(AppController.bundle);
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     resource = getResources();
-    parseDomain();
-    if (createConnetion() == true) {
-      onLoad(number_of_activity);
-    }
-
-  }
-
-  @Override
-  protected void onResume() {
-    super.onResume();
     onLoad(number_of_activity);
+
   }
+
+//  @Override
+//  protected void onResume() {
+//    super.onResume();
+//    onLoad(number_of_activity);
+//  }
 
   private void destroy() {
     super.onDestroy();
@@ -167,6 +151,7 @@ public class SocialActivity extends MyActionBar {
           selectedRestActivity = activityInfo;
           Intent intent = new Intent(SocialActivity.this, ActivityStreamDisplay.class);
           startActivity(intent);
+          finish();
 
         }
       });
@@ -224,6 +209,8 @@ public class SocialActivity extends MyActionBar {
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_POST_TYPE);
       startActivity(intent);
+      onCancelLoad();
+      finish();
 
       break;
 
@@ -247,55 +234,6 @@ public class SocialActivity extends MyActionBar {
 
   }
 
-  private void parseDomain() {
-    domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
-                                                      "exo_prf_domain");
-    if (domain.endsWith("/")) {
-      domain = domain.substring(0, domain.length() - 1);
-    }
-    String[] domainSplits = domain.split("//");
-    protocol = domainSplits[0].substring(0, domainSplits[0].length() - 1);
-    if (domainSplits[1].contains(":")) {
-      String[] hostAddr = domainSplits[1].split(":");
-      host = hostAddr[0];
-      port = Integer.valueOf(hostAddr[1]);
-    } else {
-      host = domainSplits[1];
-      port = ExoConstants.ACTIVITY_PORT;
-    }
-  }
-
-  private boolean createConnetion() {
-    try {
-      String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
-                                                                 "exo_prf_username");
-      String password = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
-                                                                 "exo_prf_password");
-
-      SocialClientContext.setProtocol(protocol);
-      SocialClientContext.setHost(host);
-      SocialClientContext.setPort(port);
-      SocialClientContext.setPortalContainerName(ExoConstants.ACTIVITY_PORTAL_CONTAINER);
-      SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
-      SocialClientContext.setRestVersion(ExoConstants.ACTIVITY_REST_VERSION);
-      SocialClientContext.setUsername(userName);
-      SocialClientContext.setPassword(password);
-
-      ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
-      activityService = clientServiceFactory.createActivityService();
-      identityService = clientServiceFactory.createIdentityService();
-      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
-      return true;
-    } catch (RuntimeException e) {
-      Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
-      toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-      toast.show();
-      destroy();
-      return false;
-    }
-
-  }
-
   private class ActivityLoadTask extends UserTask<Integer, Void, List<RestActivity>> {
     private ProgressDialog _progressDialog;
 
@@ -310,8 +248,8 @@ public class SocialActivity extends MyActionBar {
       try {
 
         int loadSize = params[0];
-        RestIdentity identity = (RestIdentity) identityService.get(userIdentity);
-        RealtimeListAccess<RestActivity> list = activityService.getActivityStream(identity);
+        RestIdentity identity = (RestIdentity) ExoApplicationsController2.identityService.get(ExoApplicationsController2.userIdentity);
+        RealtimeListAccess<RestActivity> list = ExoApplicationsController2.activityService.getActivityStream(identity);
         ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0,
                                                                                          loadSize);
         return activityList;
@@ -357,7 +295,7 @@ public class SocialActivity extends MyActionBar {
       buttonLike = (TextView) view.findViewById(R.id.button_Like);
       textViewTime = (TextView) view.findViewById(R.id.textView_Time);
       RestProfile profile = activityInfo.getPosterIdentity().getProfile();
-      imageViewAvatar.setUrl(domain + profile.getAvatarUrl());
+      imageViewAvatar.setUrl(SocialActivityUtil.getDomain() + profile.getAvatarUrl());
       textViewName.setText(profile.getFullName());
       textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
       textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime(),

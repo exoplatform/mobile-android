@@ -72,8 +72,6 @@ public class ExoGadgetViewController extends Activity {
 
     super.onCreate(savedInstanceState);
 
-    CookieSyncManager.createInstance(this);
-
     // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.exogadgetview);
@@ -147,6 +145,7 @@ public class ExoGadgetViewController extends Activity {
 
             Intent next = new Intent(ExoGadgetViewController.this, ExoWebViewController.class);
             ExoGadgetViewController.this.startActivity(next);
+            finish();
           }
         });
 

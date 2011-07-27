@@ -16,6 +16,7 @@ import org.exoplatform.proxy.ExoConnection;
 import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.setting.ExoSetting;
+import org.exoplatform.utils.ExoConstants;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -49,7 +50,7 @@ import android.widget.TextView;
 
 //Login page
 public class AppController extends Activity implements OnTouchListener {
- 
+
   /** Called when the activity is first created. */
   // References keys
   public static final String                EXO_PREFERENCE       = "exo_preference";
@@ -80,12 +81,12 @@ public class AppController extends Activity implements OnTouchListener {
   private Runnable                          viewOrders;
 
   // Host
-  public String                                    _strDomain           = "";
+  public String                             _strDomain           = "";
 
   // Active host index
   String                                    _strDomainIndex      = "";
 
-  public int                                       _intDomainIndex;
+  public int                                _intDomainIndex;
 
   // Username
   String                                    _strUserName         = "";
@@ -137,7 +138,7 @@ public class AppController extends Activity implements OnTouchListener {
   // Point to itself
   public static AppController               appControllerInstance;
 
-  public static ExoServerConfiguration             configurationInstance;
+  public static ExoServerConfiguration      configurationInstance;
 
   // Get data thread
   Thread                                    thread;
@@ -159,7 +160,7 @@ public class AppController extends Activity implements OnTouchListener {
     // "/eXo/DefaultServerList.xml";
     // File file = new File(path);
     // boolean deleted = file.delete();
-    
+
     RelativeLayout layout = (RelativeLayout) findViewById(R.id.RelativeLayout_Login);
     layout.setOnClickListener(new View.OnClickListener() {
 
@@ -400,9 +401,10 @@ public class AppController extends Activity implements OnTouchListener {
       // eXoLanguageSettingDialog(AppController.this, 0, thisClass);
       // customizeDialog.show();
 
-//      GDActivity.TYPE = 1;
+      // GDActivity.TYPE = 1;
 
       Intent next = new Intent(AppController.this, ExoSetting.class);
+      next.putExtra(ExoConstants.SETTING_TYPE, 0);
       startActivity(next);
     }
 
@@ -509,7 +511,7 @@ public class AppController extends Activity implements OnTouchListener {
 
                                                       startActivity(next);
 
-                                                      thread.stop();
+//                                                      thread.stop();
 
                                                       _progressDialog.dismiss();
                                                       _btnLogIn.setVisibility(View.VISIBLE);
@@ -673,7 +675,8 @@ public class AppController extends Activity implements OnTouchListener {
       // Get bitmap
       String bmpUrl = parseUrl(tmpStr2, "\"thumbnail\":\"", true, "\"");
       bmpUrl = bmpUrl.replace("localhost", _strDomain);
-//      bmp = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
+      // bmp =
+      // BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
 
       ExoGadget tempGadget = new ExoGadget(title, description, url, bmpUrl, null, null);
       arrGadgets.add(tempGadget);
@@ -752,10 +755,12 @@ public class AppController extends Activity implements OnTouchListener {
       gadgetIconUrl = gadgetIconUrl.replace("http://localhost:8080", domain);
 
       try {
-//        imgGadgetIcon = BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
+        // imgGadgetIcon =
+        // BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
         if (imgGadgetIcon == null) {
           try {
-//            imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
+            // imgGadgetIcon =
+            // BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
           } catch (Exception e2) {
 
             imgGadgetIcon = null;
@@ -765,7 +770,8 @@ public class AppController extends Activity implements OnTouchListener {
       } catch (Exception e) {
 
         try {
-//          imgGadgetIcon = BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
+          // imgGadgetIcon =
+          // BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
         } catch (Exception e2) {
 
           imgGadgetIcon = null;
@@ -874,8 +880,6 @@ public class AppController extends Activity implements OnTouchListener {
   // Show user guide
   public void showUserGuide() {
     ExoApplicationsController2.webViewMode = 2;
-    Intent next = new Intent(appControllerInstance, ExoWebViewController.class);
-    startActivity(next);
   }
 
   // Generate authntication

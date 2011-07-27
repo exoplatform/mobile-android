@@ -66,6 +66,8 @@ public class ExoModifyServerList extends MyActionBar {
   public void onBackPressed() {
     // TODO Auto-generated method stub
     super.onBackPressed();
+    Intent intent = new Intent(this,ExoSetting.class);
+    startActivity(intent);
     finish();
   }
 

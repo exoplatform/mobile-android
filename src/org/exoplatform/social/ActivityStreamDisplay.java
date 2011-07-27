@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.exoplatform.controller.AppController;
+import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestIdentity;
@@ -75,20 +76,20 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   private String             noService;
 
-  private String             url;
+  private String             domain;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo_Back);
+    setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.activity_display_view);
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     selectedRestActivity = SocialActivity.selectedRestActivity;
     activityId = selectedRestActivity.getId();
     changeLanguage(AppController.bundle);
-    url = SocialActivityUtil.getUrl();
+    domain = SocialActivityUtil.getDomain();
     initComponent();
     onLoad();
 
@@ -108,7 +109,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   private void onReload() {
     try {
-      selectedRestActivity = (RestActivity) SocialActivity.activityService.get(activityId);
+      selectedRestActivity = (RestActivity) ExoApplicationsController2.activityService.get(activityId);
       onLoad();
     } catch (RuntimeException e) {
       destroy();
@@ -132,7 +133,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   private void setComponentInfo() {
     RestProfile profile = selectedRestActivity.getPosterIdentity().getProfile();
-    imageView_Avatar.setUrl(url + profile.getAvatarUrl());
+    imageView_Avatar.setUrl(domain + profile.getAvatarUrl());
     textView_Name.setText(profile.getFullName());
 
     textView_Message.setText(Html.fromHtml(selectedRestActivity.getTitle()));
@@ -175,7 +176,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       for (int i = 0; i < commentList.size(); i++) {
         ExoSocialComment comment = commentList.get(i);
         CommentItemLayout commentItem = new CommentItemLayout(this);
-        commentItem.comAvatarImage.setUrl(url + comment.getImageUrl());
+        commentItem.comAvatarImage.setUrl(domain + comment.getImageUrl());
         commentItem.comTextViewName.setText(comment.getCommentName());
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()));
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime(),
@@ -204,15 +205,16 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_COMMENT_TYPE);
       startActivity(intent);
+      finish();
     }
     if (view == likeButton) {
       try {
-        RestActivity activity = SocialActivity.activityService.get(activityId);
+        RestActivity activity = ExoApplicationsController2.activityService.get(activityId);
         if (liked == true) {
-          SocialActivity.activityService.unlike(activity);
+          ExoApplicationsController2.activityService.unlike(activity);
           liked = false;
         } else {
-          SocialActivity.activityService.like(activity);
+          ExoApplicationsController2.activityService.like(activity);
         }
         onReload();
       } catch (RuntimeException e) {
@@ -227,6 +229,8 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
   @Override
   public void onBackPressed() {
     super.onBackPressed();
+    Intent intent = new Intent(this, SocialActivity.class);
+    startActivity(intent);
     destroy();
   }
 
@@ -255,7 +259,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   private class DetailLoadTask extends UserTask<Void, Void, Integer> {
 
-    private LinkedList<ExoSocialLike> likeLinkedList = new LinkedList<ExoSocialLike>();
+    private LinkedList<ExoSocialLike>   likeLinkedList    = new LinkedList<ExoSocialLike>();
 
     private ArrayList<ExoSocialComment> socialCommentList = new ArrayList<ExoSocialComment>();
 
@@ -274,9 +278,9 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
         for (RestLike like : likeList) {
           ExoSocialLike socialLike = new ExoSocialLike();
           String identity = like.getIdentityId();
-          RestIdentity restId = (RestIdentity) SocialActivity.identityService.get(identity);
+          RestIdentity restId = (RestIdentity) ExoApplicationsController2.identityService.get(identity);
           socialLike.setLikeID(identity);
-          if (identity.equalsIgnoreCase(SocialActivity.userIdentity)) {
+          if (identity.equalsIgnoreCase(ExoApplicationsController2.userIdentity)) {
             socialLike.setLikeName(youText);
             likeLinkedList.addFirst(socialLike);
             liked = true;
@@ -292,7 +296,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
         for (RestComment comment : commentList) {
           ExoSocialComment socialComment = new ExoSocialComment();
           String identity = comment.getIdentityId();
-          RestIdentity restId = (RestIdentity) SocialActivity.identityService.get(identity);
+          RestIdentity restId = (RestIdentity) ExoApplicationsController2.identityService.get(identity);
           RestProfile profile = restId.getProfile();
           socialComment.setCommentId(identity);
           socialComment.setCommentName(profile.getFullName());
