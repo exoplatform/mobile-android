@@ -1,4 +1,4 @@
-package org.exoplatform.proxy;
+package org.exoplatform.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,35 +24,35 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.controller.AppController;
-
-
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 //interact with server
-public class ExoConnection {
-  public static int   splitLinesAt = 76;
+public class ExoConnectionUtils {
+  private static int   splitLinesAt = 76;
 
-  public List<Cookie> _sessionCookies;      // Cookie array
+  public static List<Cookie> _sessionCookies;      // Cookie array
 
-  public String       _strCookie   = "";    // Cookie string
+  public static String       _strCookie   = "";    // Cookie string
 
-  public String       _strFirstLoginContent; // String data for the first time
+  private static String       _strFirstLoginContent; // String data for the first time
 
   // login
 
-  public String       _fullDomainStr;       // Host
+  private static String       _fullDomainStr;       // Host
 
-  public static byte[] zeroPad(int length, byte[] bytes) {
+  private static byte[] zeroPad(int length, byte[] bytes) {
     byte[] padded = new byte[length]; // initialized to zero by JVM
     System.arraycopy(bytes, 0, padded, 0, bytes.length);
     return padded;
   }
 
   // Get string data for the first time login
-  public String getFirstLoginContent() {
+  public static String getFirstLoginContent() {
     return _strFirstLoginContent;
   }
 
-  public static String splitLines(String string) {
+  private static String splitLines(String string) {
     String lines = "";
     for (int i = 0; i < string.length(); i += splitLinesAt) {
       lines += string.substring(i, Math.min(string.length(), i + splitLinesAt));
@@ -119,7 +119,7 @@ public class ExoConnection {
   }
 
   // Get sub URL path
-  public String getExtend(String domain) {
+  private static String getExtend(String domain) {
     // if(domain.indexOf("http://platform.demo.exoplatform") >= 0)
     // {
     // if(domain.equalsIgnoreCase("http://platform.demo.exoplatform.org"))
@@ -127,9 +127,9 @@ public class ExoConnection {
     // return "/portal/private/intranet";
     // }
     // return "ERROR";
-    //			
+    //
     // }
-       
+
     return "/portal/private/intranet";
     /*
      * String context = ""; String strUrlContent = ""; try { URL url = new
@@ -151,8 +151,8 @@ public class ExoConnection {
   }
 
   // Send request with authentication
-  public String sendAuthentication(String domain, String username, String password) {     
-    
+  public static String sendAuthentication(String domain, String username, String password) {
+
     try {
       HttpResponse response;
       HttpEntity entity;
@@ -205,7 +205,7 @@ public class ExoConnection {
       response = httpClient.execute(httpPost);
       entity = response.getEntity();
 
-      this._sessionCookies = new ArrayList<Cookie>(cookies);
+      _sessionCookies = new ArrayList<Cookie>(cookies);
 
       if (entity != null) {
         InputStream instream = entity.getContent();
@@ -231,7 +231,7 @@ public class ExoConnection {
   }
 
   // Standalone gadget requset
-  public String loginForStandaloneGadget(String domain, String username, String password) {
+  private String loginForStandaloneGadget(String domain, String username, String password) {
     try {
       HttpResponse response;
       HttpEntity entity;
@@ -323,7 +323,7 @@ public class ExoConnection {
   }
 
   // Normal gadget request
-  public String sendRequestToGetGadget(String urlStr, String username, String password) {
+  public static String sendRequestToGetGadget(String urlStr, String username, String password) {
     try {
       HttpResponse response;
       HttpEntity entity;
@@ -380,14 +380,14 @@ public class ExoConnection {
   }
 
   // Send request with authentication
-  public String authorizationHeader(String username, String password) {
+  public static String authorizationHeader(String username, String password) {
     String s = "Basic ";
     String strAuthor = s + stringEncodedWithBase64(username + ":" + password);
     return strAuthor.substring(0, strAuthor.length() - 2);
   }
 
   // Get input stream from URL with authentication
-  public InputStream sendRequestWithAuthorization(String urlStr) {
+  private InputStream sendRequestWithAuthorization(String urlStr) {
 
     InputStream ipstr = null;
     try {
@@ -431,7 +431,7 @@ public class ExoConnection {
   }
 
   // Get string data with authentication request
-  public String sendRequestWithAuthorizationReturnString(String urlStr) {
+  public static String sendRequestWithAuthorizationReturnString(String urlStr) {
     StringBuffer buf = new StringBuffer();
     try {
       String strUserName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
@@ -471,7 +471,7 @@ public class ExoConnection {
   }
 
   // Get input stream from URL
-  public InputStream sendRequest(String strUrlRequest) {
+  private static InputStream sendRequest(String strUrlRequest) {
     InputStream ipstr = null;
     try {
       HttpResponse response;
@@ -493,7 +493,27 @@ public class ExoConnection {
   }
 
   // Get string input stream from URL
-  public String sendRequestAndReturnString(String strUrlRequest) {
+  public static String sendRequestAndReturnString(String strUrlRequest) {
     return convertStreamToString(sendRequest(strUrlRequest));
+  }
+
+  public static boolean checkPLFVersion() {
+    try {
+      String versionUrl = SocialActivityUtil.getDomain() + "/portal/rest/platform/version";
+      String result = sendRequestAndReturnString(versionUrl);
+      JSONObject json = (JSONObject) JSONValue.parse(result);
+      String verObject = json.get("platformVersion").toString();
+      int index = verObject.lastIndexOf(".");
+      String verNumber = verObject.substring(0, index);
+      float num = Float.parseFloat(verNumber);
+      if (num < 3.5) {
+        return false;
+      } else
+        return true;
+    } catch (RuntimeException e) {
+
+      return false;
+    }
+
   }
 }

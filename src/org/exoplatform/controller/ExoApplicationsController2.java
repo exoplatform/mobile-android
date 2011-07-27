@@ -25,6 +25,7 @@ import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.VersionService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.BasicItemActivity;
@@ -220,7 +221,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     array = new ArrayList<AppItem>();
     Bitmap bm = BitmapFactory.decodeResource(getResources(),
                                              R.drawable.homeactivitystreamsiconiphone);
-    if (getVersion() == true) {
+    if (ExoConnectionUtils.checkPLFVersion() == true) {
       AppItem activityStreams = new AppItem(bm, activityStreamsText);
       array.add(activityStreams);
     }
@@ -677,21 +678,8 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   /*
    * Check the version of PLF return false if version number is < 3.5 else
-   * return true 
+   * return true
    */
-  private boolean getVersion() {
-    String versionUrl = SocialActivityUtil.getDomain() + "/portal/rest/platform/version";
-    String result = AppController._eXoConnection.sendRequestAndReturnString(versionUrl);
-    JSONObject json = (JSONObject) JSONValue.parse(result);
-    String verObject = json.get("platformVersion").toString();
-    int index = verObject.lastIndexOf(".");
-    String verNumber = verObject.substring(0, index);
-    float num = Float.parseFloat(verNumber);
-    if (num < 3.5) {
-      return false;
-    } else
-      return true;
-  }
 
   private void parseDomain() {
     String domain = SocialActivityUtil.getDomain();
@@ -826,7 +814,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     String _strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
                                                                  "exo_prf_domain");
     String strHomeUrl = _strDomain + "/portal/private/classic";
-    String strContent = AppController._eXoConnection.sendRequestAndReturnString(strHomeUrl);
+    String strContent = ExoConnectionUtils.sendRequestAndReturnString(strHomeUrl);
 
     String strGadgetMark = "eXo.gadget.UIGadget.createGadget";
     String title;
@@ -931,7 +919,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       // dataReply = [[_delegate getConnection]
       // sendRequestToSocialToGetGadget:[url absoluteString]];
     } else {
-      strContent = AppController._eXoConnection.sendRequestToGetGadget(url, userName, password);
+      strContent = ExoConnectionUtils.sendRequestToGetGadget(url, userName, password);
     }
 
     _strContentForStandaloneURL = new String(strContent);
@@ -1025,7 +1013,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
     arrGadgets = new ArrayList<GateInDbItem>();
 
-    String strContent = AppController._eXoConnection.getFirstLoginContent();
+    String strContent = ExoConnectionUtils.getFirstLoginContent();
 
     int index1;
     int index2;

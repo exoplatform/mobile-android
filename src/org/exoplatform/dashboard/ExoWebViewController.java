@@ -10,6 +10,7 @@ import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.document.ExoFilesController;
 import org.exoplatform.setting.ExoSetting;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
@@ -118,7 +119,7 @@ public class ExoWebViewController extends MyActionBar {
 
   private void setupCookies() {
     CookieSyncManager.createInstance(this);
-    List<Cookie> cookies = AppController._eXoConnection._sessionCookies;// .authenticateAndReturnCookies();
+    List<Cookie> cookies = ExoConnectionUtils._sessionCookies;// .authenticateAndReturnCookies();
 
     if (cookies != null) {
    

@@ -12,10 +12,10 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.exoplatform.R;
 import org.exoplatform.dashboard.ExoGadget;
 import org.exoplatform.dashboard.ExoWebViewController;
-import org.exoplatform.proxy.ExoConnection;
 import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.setting.ExoSetting;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 
 import android.app.Activity;
@@ -98,7 +98,7 @@ public class AppController extends Activity implements OnTouchListener {
   private String                            _strContentForStandaloneURL;
 
   // Connect to server
-  public static ExoConnection               _eXoConnection       = new ExoConnection();
+//  public static ExoConnection               _eXoConnection       = new ExoConnection();
 
   // UI component
 
@@ -588,7 +588,7 @@ public class AppController extends Activity implements OnTouchListener {
       _strPassword = _edtxPassword.getText().toString();
 
       // String strResult = "NO";
-      String strResult = _eXoConnection.sendAuthentication(_strDomain, _strUserName, _strPassword);
+      String strResult = ExoConnectionUtils.sendAuthentication(_strDomain, _strUserName, _strPassword);
       if (strResult.equalsIgnoreCase("YES")) {
 
         SharedPreferences.Editor editor = sharedPreference.edit();
@@ -623,7 +623,7 @@ public class AppController extends Activity implements OnTouchListener {
     _strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
                                                           "exo_prf_domain");
     String strHomeUrl = _strDomain + "/portal/private/classic";
-    String strContent = AppController._eXoConnection.sendRequestAndReturnString(strHomeUrl);
+    String strContent = ExoConnectionUtils.sendRequestAndReturnString(strHomeUrl);
 
     String strGadgetMark = "eXo.gadget.UIGadget.createGadget";
     String title;
@@ -728,7 +728,7 @@ public class AppController extends Activity implements OnTouchListener {
       // dataReply = [[_delegate getConnection]
       // sendRequestToSocialToGetGadget:[url absoluteString]];
     } else {
-      strContent = AppController._eXoConnection.sendRequestToGetGadget(url, userName, password);
+      strContent = ExoConnectionUtils.sendRequestToGetGadget(url, userName, password);
     }
 
     _strContentForStandaloneURL = new String(strContent);

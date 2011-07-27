@@ -6,6 +6,7 @@ import java.net.URL;
 
 import org.apache.http.client.ClientProtocolException;
 import org.exoplatform.controller.AppController;
+import org.exoplatform.utils.ExoConnectionUtils;
 
 
 //	File info
@@ -42,7 +43,7 @@ public class ExoFile {
       con.setRequestMethod("GET");
       // String authorizationStr =
       con.setRequestProperty("Authorization",
-                             AppController._eXoConnection.authorizationHeader(strUserName,
+                             ExoConnectionUtils.authorizationHeader(strUserName,
                                                                               strPassword));
 
       contentType = con.getContentType();

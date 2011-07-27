@@ -21,6 +21,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController;
 import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
@@ -508,7 +509,7 @@ public class ExoFilesController extends MyActionBar {
 
     List<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
 
-    String responseStr = AppController._eXoConnection.sendRequestWithAuthorizationReturnString(url.replace(" ",
+    String responseStr = ExoConnectionUtils.sendRequestWithAuthorizationReturnString(url.replace(" ",
                                                                                                            "%20"));
 
     int local1;
