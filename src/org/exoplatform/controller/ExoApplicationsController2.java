@@ -17,11 +17,24 @@ import org.exoplatform.document.ExoFilesController;
 import org.exoplatform.model.GateInDbItem;
 import org.exoplatform.setting.ExoSetting;
 import org.exoplatform.social.SocialActivity;
+import org.exoplatform.social.client.api.ClientServiceFactory;
+import org.exoplatform.social.client.api.SocialClientContext;
+import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.api.service.ActivityService;
+import org.exoplatform.social.client.api.service.IdentityService;
+import org.exoplatform.social.client.api.service.VersionService;
+import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+import org.exoplatform.social.client.core.model.RestActivityImpl;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.BasicItemActivity;
 import org.exoplatform.widget.MyActionBar;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -31,6 +44,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -73,33 +87,33 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     }
   }
 
-  public static ExoApplicationsController2 eXoApplicationsController2Instance;
+  public static ExoApplicationsController2    eXoApplicationsController2Instance;
 
-  public static int                        sTheme;
+  public static int                           sTheme;
 
-  Button                                   btnDone;
+  Button                                      btnDone;
 
-  public List<GateInDbItem>                arrGadgets;                        // Gadgets
-                                                                               // array
+  public List<GateInDbItem>                   arrGadgets;                        // Gadgets
+                                                                                  // array
 
-  Timer                                    timer;
+  Timer                                       timer;
 
-  Handler                                  handler;
+  Handler                                     handler;
 
-  GridView                                 gridview;
+  GridView                                    gridview;
 
-  View                                     myView;
+  View                                        myView;
 
-  TranslateAnimation                       anim;
+  TranslateAnimation                          anim;
 
-  int                                      timerCounter  = 0;
+  int                                         timerCounter  = 0;
 
-  int                                      itemMoveIndex = -1;
+  int                                         itemMoveIndex = -1;
 
-  boolean                                  isDeleteItem  = false;
+  boolean                                     isDeleteItem  = false;
 
-  public static short                      webViewMode;                       // 0:
-                                                                               // view
+  public static short                         webViewMode;                       // 0:
+                                                                                  // view
 
   // gadget,
   // 1: View
@@ -107,29 +121,43 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
   // 2: view
   // help;
 
-  private BaseAdapter                      adapter;
+  private BaseAdapter                         adapter;
 
-  String                                   strChatServer;
+  String                                      strChatServer;
 
-  ProgressDialog                           _progressDialog;                   // Progress
-                                                                               // dialog
+  ProgressDialog                              _progressDialog;                   // Progress
+                                                                                  // dialog
 
-  Thread                                   thread;
+  Thread                                      thread;
 
   // Standalone gadget content
-  private String                           _strContentForStandaloneURL;
+  private String                              _strContentForStandaloneURL;
 
-  private ArrayList<AppItem>               array;
+  private ArrayList<AppItem>                  array;
 
-  private String                           activityStreamsText;
+  private String                              activityStreamsText;
 
-  private String                           chatText;
+  private String                              chatText;
 
-  private String                           documentText;
+  private String                              documentText;
 
-  private String                           dashboardText;
+  private String                              dashboardText;
 
-  private String                           settingText;
+  private String                              settingText;
+
+  private String                              noService;
+
+  private String                              protocol;
+
+  private String                              host;
+
+  private int                                 port;
+
+  public static ActivityService<RestActivity> activityService;
+
+  public static IdentityService<?>            identityService;
+
+  public static String                        userIdentity;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -173,15 +201,17 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    initComponents();
-  }
-  
+  // @Override
+  // protected void onResume() {
+  // super.onResume();
+  // initComponents();
+  // }
+
   @Override
   public void onBackPressed() {
     super.onBackPressed();
+    Intent intent = new Intent(this, AppController.class);
+    startActivity(intent);
     finish();
   }
 
@@ -190,8 +220,10 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     array = new ArrayList<AppItem>();
     Bitmap bm = BitmapFactory.decodeResource(getResources(),
                                              R.drawable.homeactivitystreamsiconiphone);
-    AppItem activityStreams = new AppItem(bm, activityStreamsText);
-    array.add(activityStreams);
+    if (getVersion() == true) {
+      AppItem activityStreams = new AppItem(bm, activityStreamsText);
+      array.add(activityStreams);
+    }
 
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homechaticoniphone);
     AppItem chatApp = new AppItem(bm, chatText);
@@ -208,7 +240,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homesettingsiconiphone);
     AppItem setting = new AppItem(bm, settingText);
     array.add(setting);
-    
+
     createAdapter();
   }
 
@@ -369,6 +401,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       documentText = resourceBundle.getString("Documents");
       dashboardText = resourceBundle.getString("Dashboard");
       settingText = resourceBundle.getString("Settings");
+      noService = resourceBundle.getString("NoService");
 
     } catch (Exception e) {
 
@@ -637,18 +670,82 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
   public void launchSettingApp() {
 
     Intent next = new Intent(ExoApplicationsController2.this, ExoSetting.class);
+    next.putExtra(ExoConstants.SETTING_TYPE, 1);
     startActivity(next);
 
   }
 
+  /*
+   * Check the version of PLF return false if version number is < 3.5 else
+   * return true 
+   */
+  private boolean getVersion() {
+    String versionUrl = SocialActivityUtil.getDomain() + "/portal/rest/platform/version";
+    String result = AppController._eXoConnection.sendRequestAndReturnString(versionUrl);
+    JSONObject json = (JSONObject) JSONValue.parse(result);
+    String verObject = json.get("platformVersion").toString();
+    int index = verObject.lastIndexOf(".");
+    String verNumber = verObject.substring(0, index);
+    float num = Float.parseFloat(verNumber);
+    if (num < 3.5) {
+      return false;
+    } else
+      return true;
+  }
+
+  private void parseDomain() {
+    String domain = SocialActivityUtil.getDomain();
+    String[] domainSplits = domain.split("//");
+    protocol = domainSplits[0].substring(0, domainSplits[0].length() - 1);
+    if (domainSplits[1].contains(":")) {
+      String[] hostAddr = domainSplits[1].split(":");
+      host = hostAddr[0];
+      port = Integer.valueOf(hostAddr[1]);
+    } else {
+      host = domainSplits[1];
+      port = ExoConstants.ACTIVITY_PORT;
+    }
+  }
+
+  private boolean createConnetion() {
+
+    try {
+      parseDomain();
+      String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
+                                                                 "exo_prf_username");
+      String password = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
+                                                                 "exo_prf_password");
+
+      SocialClientContext.setProtocol(protocol);
+      SocialClientContext.setHost(host);
+      SocialClientContext.setPort(port);
+      SocialClientContext.setPortalContainerName(ExoConstants.ACTIVITY_PORTAL_CONTAINER);
+      SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
+      SocialClientContext.setRestVersion(ExoConstants.ACTIVITY_REST_VERSION);
+      SocialClientContext.setUsername(userName);
+      SocialClientContext.setPassword(password);
+
+      ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
+      activityService = clientServiceFactory.createActivityService();
+      identityService = clientServiceFactory.createIdentityService();
+      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
+
+      return true;
+    } catch (RuntimeException e) {
+      return false;
+    }
+  }
+
   public void launchActivityStreamApp() {
 
-    // Intent next = new Intent(eXoApplicationsController2.this,
-    // TestActivityBrowserView.class);
-    // Intent next = new Intent(eXoApplicationsController2.this,
-    // AsyncImageViewListActivity.class);
-    Intent next = new Intent(ExoApplicationsController2.this, SocialActivity.class);
-    eXoApplicationsController2Instance.startActivity(next);
+    if (createConnetion() == true) {
+      Intent next = new Intent(ExoApplicationsController2.this, SocialActivity.class);
+      eXoApplicationsController2Instance.startActivity(next);
+    } else {
+      Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
+      toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+      toast.show();
+    }
 
   }
 
