@@ -25,25 +25,19 @@ import com.cyrilmottier.android.greendroid.R;
 
 //Display gadget
 public class ExoWebViewController extends MyActionBar {
-  public static ExoWebViewController eXoWebViewControllerInstance; // Instance
+  WebView              _wvGadget;
 
-  WebView                            _wvGadget;
+  public static String _url;
 
-  public static String               _url;
+  public static String _titlebar;
 
-  public static String               _titlebar;
-
-  String                             strCannotBackToPreviousPage;
+  String               strCannotBackToPreviousPage;
 
   public void onCreate(Bundle icicle) {
 
     super.onCreate(icicle);
-    // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.webview);
-
-    eXoWebViewControllerInstance = this;
-
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     setupCookies();
@@ -73,6 +67,8 @@ public class ExoWebViewController extends MyActionBar {
 
       String locallize = AppController.sharedPreference.getString(AppController.EXO_PRF_LOCALIZE,
                                                                   "exo_prf_localize");
+      if (locallize == null || locallize.equalsIgnoreCase("exo_prf_localize"))
+        locallize = "LocalizeEN.properties";
 
       if (locallize.equalsIgnoreCase("LocalizeEN.properties"))
         _url = "file:///android_asset/HowtoUse-EN.htm";
@@ -91,8 +87,6 @@ public class ExoWebViewController extends MyActionBar {
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
-    // finishMe();
-    eXoWebViewControllerInstance = null;
     finish();
 
     return true;
@@ -110,11 +104,7 @@ public class ExoWebViewController extends MyActionBar {
       Intent next = new Intent(ExoWebViewController.this, ExoDashboard.class);
       startActivity(next);
     }
-    eXoWebViewControllerInstance = null;
     finish();
-
-    
-    // GDActivity.TYPE = 1;
 
   }
 
@@ -123,32 +113,23 @@ public class ExoWebViewController extends MyActionBar {
     List<Cookie> cookies = ExoConnectionUtils._sessionCookies;// .authenticateAndReturnCookies();
 
     if (cookies != null) {
-   
 
-      // CookieManager.getInstance().removeSessionCookie();
-
-      System.out.println("Cookies " + cookies.size());
       for (Cookie cookie : cookies) {
-
         StringBuffer buffer = new StringBuffer();
         buffer.append(cookie.getName());
         buffer.append("=");
         buffer.append(cookie.getValue());
         System.out.println("Cookies " + buffer.toString());
-        // String cookieString = cookie.getName() + "=" + cookie.getValue();
         CookieManager.getInstance().setCookie(cookie.getDomain(), buffer.toString());
       }
 
-      // CookieManager.getInstance().setCookie("mobile.demo.exoplatform.org","JSESSIONID="+
-      // cookie.getValue()+";domain=mobile.demo.exoplatform.org");
       CookieSyncManager.getInstance().sync();
-     
+
     }
   }
 
   @Override
   public void onBackPressed() {
-    // TODO Auto-generated method stub
     super.onBackPressed();
     finishMe();
   }

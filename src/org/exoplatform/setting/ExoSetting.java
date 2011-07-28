@@ -49,15 +49,6 @@ public class ExoSetting extends MyActionBar {
 
   ImageView                imgViewECheckMark, imgViewFCheckMark;
 
-  int                      pageIDForChangeLanguage;             // 0:
-                                                                 // AppController,
-                                                                 // 1:
-
-  // eXoApplicationController
-
-  // 2: eXoFileController, 3: eXoChatList, 4: eXoChat
-  // 5: eXoWebView
-
   TextView                 txtvLanguage;                        // Language
                                                                  // label
 
@@ -73,7 +64,6 @@ public class ExoSetting extends MyActionBar {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
 
     setTheme(R.style.Theme_eXo);
@@ -102,7 +92,6 @@ public class ExoSetting extends MyActionBar {
 
       public void onClick(View v) {
 
-//        AppController.appControllerInstance.showUserGuide();
         ExoApplicationsController2.webViewMode = 2;
         Intent next = new Intent(ExoSetting.this, ExoWebViewController.class);
         startActivity(next);
@@ -245,30 +234,6 @@ public class ExoSetting extends MyActionBar {
 
       AppController.bundle = new PropertyResourceBundle(this.getAssets().open(localize));
       changeLanguage(AppController.bundle);
-
-      if (pageIDForChangeLanguage == 0) {
-        AppController controller = AppController.appControllerInstance;
-        controller.changeLanguage(AppController.bundle);
-      } else if (pageIDForChangeLanguage == 1) {
-//        ExoApplicationsController2 controller = ExoApplicationsController2.eXoApplicationsController2Instance;
-//        controller.changeLanguage(AppController.bundle);
-        // controller.createAdapter();
-      } else if (pageIDForChangeLanguage == 2) {
-        ExoFilesController controller = ExoFilesController.eXoFilesControllerInstance;
-        controller.changeLanguage(AppController.bundle);
-      } else if (pageIDForChangeLanguage == 3) {
-        ExoChatListController controller = ExoChatListController.eXoChatListControllerInstance;
-        controller.changeLanguage(AppController.bundle);
-      } else if (pageIDForChangeLanguage == 4) {
-        ExoChatController controller = ExoChatController.eXoChatControllerInstance;
-        controller.changeLanguage(AppController.bundle);
-      } else if (pageIDForChangeLanguage == 5) {
-        ExoWebViewController controller = ExoWebViewController.eXoWebViewControllerInstance;
-        controller.changeLanguage(AppController.bundle);
-      } else if (pageIDForChangeLanguage == 6) {
-        ExoGadgetViewController controller = ExoGadgetViewController.eXoGadgetViewControllerInstance;
-        controller.changeLanguage(AppController.bundle);
-      }
       createServersAdapter(AppController.configurationInstance._arrServerList);
 
     } catch (Exception e) {

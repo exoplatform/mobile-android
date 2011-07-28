@@ -96,9 +96,9 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   // array
 
-  Timer                                       timer;
+  // Timer timer;
 
-  Handler                                     handler;
+  // Handler handler;
 
   GridView                                    gridview;
 
@@ -106,7 +106,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   TranslateAnimation                          anim;
 
-  int                                         timerCounter  = 0;
+  // int timerCounter = 0;
 
   int                                         itemMoveIndex = -1;
 
@@ -189,7 +189,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
           ivIcon.setOnClickListener(null);
 
           isDeleteItem = false;
-          timerCounter = 0;
+          // timerCounter = 0;
         }
         adapter.notifyDataSetChanged();
       }
@@ -310,8 +310,8 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
 
-    menu.add(0, 1, 0, "Reorder Menu");
-    menu.add(0, 2, 0, "Add item");
+//    menu.add(0, 1, 0, "Reorder Menu");
+//    menu.add(0, 2, 0, "Add item");
 
     return true;
 
@@ -387,52 +387,26 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
     myView = v;
     int eventaction = event.getAction();
-    if (timer == null)
-      timer = new Timer();
-    if (handler == null)
-      handler = new Handler();
-
     switch (eventaction) {
+
     case MotionEvent.ACTION_DOWN: {
-      // finger touches the screen
-      TimerTask timeTask = new TimerTask() {
-        @Override
-        public void run() {
-
-          handler.post(mUpdateTimeTask);
-        }
-      };
-
-      timer.schedule(timeTask, 0, 1000);
       break;
     }
     case MotionEvent.ACTION_MOVE: {
-      // finger moves on the screen
-      timer.cancel();
-      handler.removeCallbacks(mUpdateTimeTask);
       break;
     }
     case MotionEvent.ACTION_UP: {
-      // finger leaves the screen
-      timer.cancel();
-      handler.removeCallbacks(mUpdateTimeTask);
-
-      if (timerCounter < 1000) {
-        for (int i = 0; i < array.size(); i++) {
-          View view = gridview.getChildAt(i);
-          if (view == v) {
-            AppItem item = array.get(i);
-            if (item._name.equalsIgnoreCase(activityStreamsText)) {
-              launchActivityStreamApp();
-            } else
-              launchApp(v, item._name);
-          }
+      for (int i = 0; i < array.size(); i++) {
+        View view = gridview.getChildAt(i);
+        if (view == v) {
+          AppItem item = array.get(i);
+          if (item._name.equalsIgnoreCase(activityStreamsText)) {
+            launchActivityStreamApp();
+          } else
+            launchApp(v, item._name);
         }
-
       }
 
-      timer = null;
-      handler = null;
       break;
     }
     }
@@ -444,75 +418,54 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
                                            public void run() {
 
-                                             timerCounter++;
-                                             Log.i("hehe", "" + timerCounter);
-                                             if (timerCounter >= 1000) {
-                                               timer.cancel();
-                                               handler.removeCallbacks(mUpdateTimeTask);
+                                             btnDone.setVisibility(View.VISIBLE);
+                                             // Start animating the image
+                                             for (int i = 0; i < array.size(); i++) {
+                                               final int pos = i;
+                                               View view = gridview.getChildAt(i);
+                                               view.setOnTouchListener(null);
+                                               final ImageView ivIcon = (ImageView) view.findViewById(R.id.icon_image);
+                                               ivIcon.setOnClickListener(new View.OnClickListener() {
 
-                                               timer = null;
-                                               handler = null;
+                                                 public void onClick(View v) {
 
-                                               btnDone.setVisibility(View.VISIBLE);
-                                               // Start animating the image
-                                               for (int i = 0; i < array.size(); i++) {
-                                                 final int pos = i;
-                                                 View view = gridview.getChildAt(i);
-                                                 view.setOnTouchListener(null);
-                                                 final ImageView ivIcon = (ImageView) view.findViewById(R.id.icon_image);
-                                                 ivIcon.setOnClickListener(new View.OnClickListener() {
+                                                   if (itemMoveIndex == -1) {
+                                                     itemMoveIndex = pos;
+                                                     ivIcon.setBackgroundResource(R.drawable.imageborder);
+                                                   } else {
+                                                     for (int j = 0; j < array.size(); j++) {
+                                                       View view2 = gridview.getChildAt(j);
+                                                       view2.findViewById(R.id.icon_image)
+                                                            .setBackgroundDrawable(null);
 
-                                                   public void onClick(View v) {
-
-                                                     if (itemMoveIndex == -1) {
-                                                       itemMoveIndex = pos;
-                                                       ivIcon.setBackgroundResource(R.drawable.imageborder);
-                                                     } else {
-                                                       for (int j = 0; j < array.size(); j++) {
-                                                         View view2 = gridview.getChildAt(j);
-                                                         view2.findViewById(R.id.icon_image)
-                                                              .setBackgroundDrawable(null);
-
-                                                       }
-
-                                                       AppItem item = array.get(pos);
-                                                       array.set(pos, array.get(itemMoveIndex));
-                                                       array.set(itemMoveIndex, item);
-
-                                                       itemMoveIndex = -1;
-
-                                                       adapter.notifyDataSetChanged();
                                                      }
+
+                                                     AppItem item = array.get(pos);
+                                                     array.set(pos, array.get(itemMoveIndex));
+                                                     array.set(itemMoveIndex, item);
+
+                                                     itemMoveIndex = -1;
+
+                                                     adapter.notifyDataSetChanged();
                                                    }
-                                                 });
-
-                                                 ImageView iv = (ImageView) view.findViewById(R.id.icon_delete);
-                                                 // iv.setVisibility(View.VISIBLE);
-                                                 iv.setVisibility(View.INVISIBLE);
-                                                 isDeleteItem = true;
-
-                                                 if (anim == null) {
-                                                   anim = new TranslateAnimation(-1f, 0f, 1f, 0f);
-                                                   // anim.setInterpolator(new
-                                                   // BounceInterpolator());
-                                                   // AccelerateDecelerateInterpolator,
-                                                   // AccelerateInterpolator,
-                                                   // AnticipateInterpolator,
-                                                   // AnticipateOvershootInterpolator,
-                                                   // BounceInterpolator,
-                                                   // CycleInterpolator,
-                                                   // DecelerateInterpolator,
-                                                   // LinearInterpolator,
-                                                   // OvershootInterpolator
-                                                   anim.setRepeatCount(Animation.INFINITE);
-                                                   anim.setRepeatMode(Animation.REVERSE);
-                                                   anim.setDuration(100);
                                                  }
+                                               });
 
-                                                 view.startAnimation(anim);
+                                               ImageView iv = (ImageView) view.findViewById(R.id.icon_delete);
+                                               iv.setVisibility(View.INVISIBLE);
+                                               isDeleteItem = true;
+
+                                               if (anim == null) {
+                                                 anim = new TranslateAnimation(-1f, 0f, 1f, 0f);
+                                                 anim.setRepeatCount(Animation.INFINITE);
+                                                 anim.setRepeatMode(Animation.REVERSE);
+                                                 anim.setDuration(100);
                                                }
 
+                                               view.startAnimation(anim);
                                              }
+
+                                             // }
 
                                            }
 
@@ -547,10 +500,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
         } else if (str.equalsIgnoreCase(settingText)) {
           launchSettingApp();
         }
-
-        // else if (str.equalsIgnoreCase("Activity Streams")) {
-        // launchActivityStreamApp();
-        // }
 
         runOnUiThread(dismissProgressDialog);
       }

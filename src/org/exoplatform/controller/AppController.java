@@ -234,8 +234,10 @@ public class AppController extends Activity implements OnTouchListener {
 
     appControllerInstance = this;
 
-    if (sharedPreference == null)
+    if (sharedPreference == null){
       sharedPreference = getSharedPreferences(EXO_PREFERENCE, 0);
+    }
+      
 
     strLocalize = sharedPreference.getString(EXO_PRF_LOCALIZE, "exo_prf_localize");
     if (strLocalize == null || strLocalize.equalsIgnoreCase("exo_prf_localize"))

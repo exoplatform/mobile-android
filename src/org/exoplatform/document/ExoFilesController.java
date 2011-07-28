@@ -547,7 +547,6 @@ public class ExoFilesController extends MyActionBar {
 
             positionOfFileItem = pos;
             myFile = arrFiles.get(positionOfFileItem);
-            System.out.println("Myfile: " + myFile.urlStr + "/n filetype " + myFile.contentType);
 
             if (!myFile.isFolder) {
               eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
