@@ -125,6 +125,7 @@ public class ExoFilesController extends MyActionBar {
     // getActionBar().getItem(0).setDrawable(R.drawable.home);
 
     localFilePath = Environment.getExternalStorageDirectory() + "/eXo/";
+    System.out.println("Local File path " + localFilePath);
 
     _btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
     _btnUploadImage.setOnClickListener(new OnClickListener() {
@@ -325,109 +326,68 @@ public class ExoFilesController extends MyActionBar {
 
                                           public void run() {
 
-                                            // myFile =
-                                            // arrFiles.get(positionOfFileItem);
+                                            // _strCurrentDirectory =
+                                            // _strCurrentDirectory +
+                                            // "/" + myFile.fileName;
+                                            ExoApplicationsController.webViewMode = 1;
 
-                                            try {
-                                              // getActionBar().getItem(0).setDrawable(R.drawable.back);
-                                              // setTheme(R.style.Theme_eXo2);
-                                              ExoApplicationsController2.sTheme = R.style.Theme_eXo_Back;
-                                              eXoFilesControllerInstance.finish();
-                                              eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance,
-                                                                                                  eXoFilesControllerInstance.getClass()));
-                                              // _btnCloseBack.setText(new
-                                              // String(AppController.bundle.getString("BackButton")
-                                              // .getBytes("ISO-8859-1"),
-                                              // "UTF-8"));
-                                              ;
-                                            } catch (Exception e) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(eXoFilesControllerInstance);
+                                            // builder.setMessage("Do you want to download "
+                                            // +
+                                            // myFile.fileName.replace("%20",
+                                            // " ") + " into sdcard?");
+                                            builder.setMessage(strDownloadFileIntoSDCard);
+                                            builder.setCancelable(false);
 
-                                              try {
-                                                // getActionBar().getItem(0).setDrawable(R.drawable.home);
-                                                // setTheme(R.style.Theme_eXo);
-                                                // ExoApplicationsController2.sTheme
-                                                // = R.style.Theme_eXo;
-                                                eXoFilesControllerInstance.finish();
-                                                eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance,
-                                                                                                    eXoFilesControllerInstance.getClass()));
-                                                // _btnCloseBack.setText(new
-                                                // String(AppController.bundle.getString("CloseButton")
-                                                // .getBytes("ISO-8859-1"),
-                                                // "UTF-8"));
-                                                ;
-                                              } catch (Exception e2) {
+                                            builder.setPositiveButton("YES",
+                                                                      new DialogInterface.OnClickListener() {
+                                                                        public void onClick(DialogInterface dialog,
+                                                                                            int id) {
 
-                                              }
-                                            }
-                                            if (myFile.isFolder) {
+                                                                          Runnable loadingDataRunnable = new Runnable() {
+                                                                            public void run() {
+                                                                              eXoFilesControllerInstance.saveFileToLocal(AppController.auth,
+                                                                                                                         AppController.credential,
+                                                                                                                         myFile.urlStr,
+                                                                                                                         localFilePath,
+                                                                                                                         myFile.fileName.replace("%20",
+                                                                                                                                                 " "),
+                                                                                                                         false);
 
-                                              // setTitle(myFile.fileName.replace("%20",
-                                              // " "));
-                                              // fileAdapter.notifyDataSetChanged();
+                                                                              int index = myFile.urlStr.lastIndexOf("/");
+                                                                              myFile.urlStr = myFile.urlStr.substring(0,
+                                                                                                                      index);
 
-                                            } else {
-                                              // _strCurrentDirectory =
-                                              // _strCurrentDirectory +
-                                              // "/" + myFile.fileName;
-                                              ExoApplicationsController.webViewMode = 1;
+                                                                              eXoFilesControllerInstance.runOnUiThread(dismissProgressDialog);
+                                                                            }
+                                                                          };
 
-                                              AlertDialog.Builder builder = new AlertDialog.Builder(eXoFilesControllerInstance);
-                                              // builder.setMessage("Do you want to download "
-                                              // +
-                                              // myFile.fileName.replace("%20",
-                                              // " ") + " into sdcard?");
-                                              builder.setMessage(strDownloadFileIntoSDCard);
-                                              builder.setCancelable(false);
+                                                                          showProgressDialog(true);
 
-                                              builder.setPositiveButton("YES",
-                                                                        new DialogInterface.OnClickListener() {
-                                                                          public void onClick(DialogInterface dialog,
-                                                                                              int id) {
+                                                                          thread = new Thread(loadingDataRunnable,
+                                                                                              "fileItemClickOnIcon");
+                                                                          thread.start();
+                                                                          dialog.dismiss();
 
-                                                                            Runnable loadingDataRunnable = new Runnable() {
-                                                                              public void run() {
-                                                                                eXoFilesControllerInstance.saveFileToLocal(AppController.auth,
-                                                                                                                           AppController.credential,
-                                                                                                                           myFile.urlStr,
-                                                                                                                           localFilePath,
-                                                                                                                           myFile.fileName.replace("%20",
-                                                                                                                                                   " "),
-                                                                                                                           false);
+                                                                        }
+                                                                      });
 
-                                                                                int index = myFile.urlStr.lastIndexOf("/");
-                                                                                myFile.urlStr = myFile.urlStr.substring(0,
-                                                                                                                        index);
+                                            builder.setNegativeButton("NO",
+                                                                      new DialogInterface.OnClickListener() {
+                                                                        public void onClick(DialogInterface dialog,
+                                                                                            int id) {
 
-                                                                                eXoFilesControllerInstance.runOnUiThread(dismissProgressDialog);
-                                                                              }
-                                                                            };
+                                                                          int index = myFile.urlStr.lastIndexOf("/");
+                                                                          myFile.urlStr = myFile.urlStr.substring(0,
+                                                                                                                  index);
+                                                                        }
+                                                                      });
 
-                                                                            showProgressDialog(true);
+                                            AlertDialog alert = builder.create();
+                                            alert.show();
 
-                                                                            thread = new Thread(loadingDataRunnable,
-                                                                                                "fileItemClickOnIcon");
-                                                                            thread.start();
-                                                                            dialog.dismiss();
-
-                                                                          }
-                                                                        });
-
-                                              builder.setNegativeButton("NO",
-                                                                        new DialogInterface.OnClickListener() {
-                                                                          public void onClick(DialogInterface dialog,
-                                                                                              int id) {
-
-                                                                            int index = myFile.urlStr.lastIndexOf("/");
-                                                                            myFile.urlStr = myFile.urlStr.substring(0,
-                                                                                                                    index);
-                                                                          }
-                                                                        });
-
-                                              AlertDialog alert = builder.create();
-                                              alert.show();
-
-                                            }
                                           }
+
                                         };
 
   // Take a photo
@@ -487,7 +447,7 @@ public class ExoFilesController extends MyActionBar {
       contentType = "word.png";
     else if (file.contentType.indexOf("application/pdf") >= 0)
       contentType = "pdf.png";
-    else if (file.contentType.indexOf("application/vnd.ms-excel") >= 0)
+    else if (file.contentType.indexOf("application/xls") >= 0)
       contentType = "xls.png";
     else if (file.contentType.indexOf("application/vnd.ms-powerpoint") >= 0)
       contentType = "ppt.png";
@@ -510,7 +470,7 @@ public class ExoFilesController extends MyActionBar {
     List<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
 
     String responseStr = ExoConnectionUtils.sendRequestWithAuthorizationReturnString(url.replace(" ",
-                                                                                                           "%20"));
+                                                                                                 "%20"));
 
     int local1;
     int local2;
@@ -587,6 +547,7 @@ public class ExoFilesController extends MyActionBar {
 
             positionOfFileItem = pos;
             myFile = arrFiles.get(positionOfFileItem);
+            System.out.println("Myfile: " + myFile.urlStr + "/n filetype " + myFile.contentType);
 
             if (!myFile.isFolder) {
               eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
@@ -595,8 +556,9 @@ public class ExoFilesController extends MyActionBar {
                 public void run() {
 
                   arrFiles = getPersonalDriveContent(myFile.urlStr);
-
-                  eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
+                  eXoFilesControllerInstance.finish();
+                  eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance,
+                                                                      eXoFilesControllerInstance.getClass()));
 
                   eXoFilesControllerInstance.runOnUiThread(dismissProgressDialog);
                 }
@@ -617,24 +579,28 @@ public class ExoFilesController extends MyActionBar {
           public void onClick(View v) {
 
             positionOfFileItem = pos;
+            myFile = arrFiles.get(positionOfFileItem);
 
-            Runnable loadingDataRunnable = new Runnable() {
-              public void run() {
+            if (!myFile.isFolder) {
+              eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
+            } else {
+              Runnable loadingDataRunnable = new Runnable() {
+                public void run() {
 
-                myFile = arrFiles.get(positionOfFileItem);
-
-                if (myFile.isFolder)
                   arrFiles = getPersonalDriveContent(myFile.urlStr);
-                eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
+                  eXoFilesControllerInstance.finish();
+                  eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance,
+                                                                      eXoFilesControllerInstance.getClass()));
 
-                eXoFilesControllerInstance.runOnUiThread(dismissProgressDialog);
-              }
-            };
+                  eXoFilesControllerInstance.runOnUiThread(dismissProgressDialog);
+                }
+              };
 
-            showProgressDialog(true);
+              showProgressDialog(true);
 
-            thread = new Thread(loadingDataRunnable, "fileItemClickOnIcon");
-            thread.start();
+              thread = new Thread(loadingDataRunnable, "fileItemClickOnIcon");
+              thread.start();
+            }
           }
         });
 
@@ -711,8 +677,10 @@ public class ExoFilesController extends MyActionBar {
       else
         is = getInputStreamFromServer(auth, credential, url);
 
-      AppController.configurationInstance.createLocalFileDirectory(path, true);
-      AppController.configurationInstance.createLocalFileDirectory(path + "/" + file, true);
+      // AppController.configurationInstance.createLocalFileDirectory(path,
+      // true);
+      // AppController.configurationInstance.createLocalFileDirectory(path + "/"
+      // + file, true);
 
       FileOutputStream fos = new FileOutputStream(new File(path, file));
       // this.openFileOutput(path + file, MODE_PRIVATE);

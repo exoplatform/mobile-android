@@ -68,7 +68,8 @@ public class ExoWebViewController extends MyActionBar {
 
     } else if (ExoApplicationsController2.webViewMode == 2) {
 
-      _titlebar = "User guide";
+      String userGuider = AppController.bundle.getString("UserGuide");
+      _titlebar = userGuider;
 
       String locallize = AppController.sharedPreference.getString(AppController.EXO_PRF_LOCALIZE,
                                                                   "exo_prf_localize");

@@ -133,7 +133,12 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   private void setComponentInfo() {
     RestProfile profile = selectedRestActivity.getPosterIdentity().getProfile();
-    imageView_Avatar.setUrl(domain + profile.getAvatarUrl());
+    String avatarUrl = profile.getAvatarUrl();
+    if (avatarUrl == null) {
+      imageView_Avatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
+    } else
+      imageView_Avatar.setUrl(domain + avatarUrl);
+
     textView_Name.setText(profile.getFullName());
 
     textView_Message.setText(Html.fromHtml(selectedRestActivity.getTitle()));
@@ -176,7 +181,11 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       for (int i = 0; i < commentList.size(); i++) {
         ExoSocialComment comment = commentList.get(i);
         CommentItemLayout commentItem = new CommentItemLayout(this);
-        commentItem.comAvatarImage.setUrl(domain + comment.getImageUrl());
+        String avatarUrl = comment.getImageUrl();
+        if (avatarUrl == null) {
+          commentItem.comAvatarImage.setImageResource(ExoConstants.DEFAULT_AVATAR);
+        } else
+          commentItem.comAvatarImage.setUrl(domain + avatarUrl);
         commentItem.comTextViewName.setText(comment.getCommentName());
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()));
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime(),

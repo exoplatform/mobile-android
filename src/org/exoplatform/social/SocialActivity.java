@@ -92,11 +92,11 @@ public class SocialActivity extends MyActionBar {
 
   }
 
-//  @Override
-//  protected void onResume() {
-//    super.onResume();
-//    onLoad(number_of_activity);
-//  }
+  // @Override
+  // protected void onResume() {
+  // super.onResume();
+  // onLoad(number_of_activity);
+  // }
 
   private void destroy() {
     super.onDestroy();
@@ -295,7 +295,11 @@ public class SocialActivity extends MyActionBar {
       buttonLike = (TextView) view.findViewById(R.id.button_Like);
       textViewTime = (TextView) view.findViewById(R.id.textView_Time);
       RestProfile profile = activityInfo.getPosterIdentity().getProfile();
-      imageViewAvatar.setUrl(SocialActivityUtil.getDomain() + profile.getAvatarUrl());
+      String avatarUrl = profile.getAvatarUrl();
+      if (avatarUrl == null) {
+        imageViewAvatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
+      } else
+        imageViewAvatar.setUrl(SocialActivityUtil.getDomain() + avatarUrl);
       textViewName.setText(profile.getFullName());
       textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
       textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime(),
