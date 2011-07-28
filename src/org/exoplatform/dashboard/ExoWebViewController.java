@@ -92,7 +92,7 @@ public class ExoWebViewController extends MyActionBar {
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
     // finishMe();
-
+    eXoWebViewControllerInstance = null;
     finish();
 
     return true;

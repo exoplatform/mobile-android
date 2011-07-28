@@ -92,7 +92,7 @@ public class ExoFilesController extends MyActionBar {
 
   public static ExoFilesController         eXoFilesControllerInstance;
 
-  public static ExoApplicationsController2 _delegate;
+//  public static ExoApplicationsController2 _delegate;
 
   static public ExoFile                    myFile;
 
@@ -902,7 +902,7 @@ public class ExoFilesController extends MyActionBar {
     _btnCancelUploadImage.setText(strCancel);
     _textViewEmptyPage.setText(strEmptyPage);
 
-    _delegate.changeLanguage(resourceBundle);
+//    _delegate.changeLanguage(resourceBundle);
     // _delegate.createAdapter();
 
   }

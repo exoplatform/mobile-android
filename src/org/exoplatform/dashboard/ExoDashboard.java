@@ -82,9 +82,7 @@ public class ExoDashboard extends MyListActivity {
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
-    CookieSyncManager.createInstance(this);
-
-    arrGadgets = ExoApplicationsController2.eXoApplicationsController2Instance.arrGadgets;
+    arrGadgets = ExoApplicationsController2.arrGadgets;
     List<DashBoardItem> items = new ArrayList<DashBoardItem>();
 
     for (int i = 0; i < arrGadgets.size(); i++) {

@@ -86,7 +86,7 @@ public class AppController extends Activity implements OnTouchListener {
   // Active host index
   String                                    _strDomainIndex      = "";
 
-  public int                                _intDomainIndex;
+  public static int                                _intDomainIndex;
 
   // Username
   String                                    _strUserName         = "";
@@ -98,7 +98,7 @@ public class AppController extends Activity implements OnTouchListener {
   private String                            _strContentForStandaloneURL;
 
   // Connect to server
-//  public static ExoConnection               _eXoConnection       = new ExoConnection();
+  // public static ExoConnection _eXoConnection = new ExoConnection();
 
   // UI component
 
@@ -511,10 +511,12 @@ public class AppController extends Activity implements OnTouchListener {
 
                                                       startActivity(next);
 
-//                                                      thread.stop();
+                                                      // thread.stop();
 
                                                       _progressDialog.dismiss();
                                                       _btnLogIn.setVisibility(View.VISIBLE);
+                                                      appControllerInstance = null;
+
                                                       finish();
 
                                                     }
@@ -588,7 +590,9 @@ public class AppController extends Activity implements OnTouchListener {
       _strPassword = _edtxPassword.getText().toString();
 
       // String strResult = "NO";
-      String strResult = ExoConnectionUtils.sendAuthentication(_strDomain, _strUserName, _strPassword);
+      String strResult = ExoConnectionUtils.sendAuthentication(_strDomain,
+                                                               _strUserName,
+                                                               _strPassword);
       if (strResult.equalsIgnoreCase("YES")) {
 
         SharedPreferences.Editor editor = sharedPreference.edit();

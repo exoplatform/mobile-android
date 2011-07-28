@@ -60,7 +60,6 @@ public class ExoChatController extends MyActionBar {
   // conversation
   public static ExoChatController           eXoChatControllerInstance;                               // Instance
 
-  static ExoApplicationsController2         _delegate;                                               // Main
 
   // app
   // view
@@ -281,7 +280,6 @@ public class ExoChatController extends MyActionBar {
 
     sendMessageBtn.setText(strsendMessageBtn);
 
-    _delegate.changeLanguage(resourceBundle);
     // _delegate.createAdapter();
 
   }

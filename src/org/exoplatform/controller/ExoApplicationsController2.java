@@ -88,14 +88,13 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     }
   }
 
-  public static ExoApplicationsController2    eXoApplicationsController2Instance;
-
   public static int                           sTheme;
 
   Button                                      btnDone;
 
-  public List<GateInDbItem>                   arrGadgets;                        // Gadgets
-                                                                                  // array
+  public static List<GateInDbItem>            arrGadgets;                 // Gadgets
+
+  // array
 
   Timer                                       timer;
 
@@ -113,8 +112,8 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   boolean                                     isDeleteItem  = false;
 
-  public static short                         webViewMode;                       // 0:
-                                                                                  // view
+  public static short                         webViewMode;                // 0:
+                                                                           // view
 
   // gadget,
   // 1: View
@@ -126,8 +125,8 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   String                                      strChatServer;
 
-  ProgressDialog                              _progressDialog;                   // Progress
-                                                                                  // dialog
+  ProgressDialog                              _progressDialog;            // Progress
+                                                                           // dialog
 
   Thread                                      thread;
 
@@ -168,7 +167,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.appsview2);
 
-    eXoApplicationsController2Instance = this;
+    // eXoApplicationsController2Instance = this;
 
     super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
     addActionBarItem(R.drawable.signout);
@@ -213,6 +212,11 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     super.onBackPressed();
     Intent intent = new Intent(this, AppController.class);
     startActivity(intent);
+    if (ExoChatListController.conn != null) {
+      ExoChatListController.conn.disconnect();
+      ExoChatListController.conn = null;
+    }
+
     finish();
   }
 
@@ -256,7 +260,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
         AppItem item = array.get(position);
         LayoutInflater li = getLayoutInflater();
         v = li.inflate(R.layout.appitem, null);
-        v.setOnTouchListener(eXoApplicationsController2Instance);
+        v.setOnTouchListener(ExoApplicationsController2.this);
         TextView tv = (TextView) v.findViewById(R.id.icon_text);
         tv.setText(item._name);
         ImageView iv = (ImageView) v.findViewById(R.id.icon_image);
@@ -339,6 +343,10 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       break;
 
     case 0:
+      if (ExoChatListController.conn != null) {
+        ExoChatListController.conn.disconnect();
+        ExoChatListController.conn = null;
+      }
       finish();
       break;
 
@@ -355,7 +363,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
     return true;
   }
-
 
   // Set language
   public void changeLanguage(ResourceBundle resourceBundle) {
@@ -560,9 +567,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       strLoadingDataFromServer = "";
     }
 
-    _progressDialog = ProgressDialog.show(eXoApplicationsController2Instance,
-                                          null,
-                                          strLoadingDataFromServer);
+    _progressDialog = ProgressDialog.show(this, null, strLoadingDataFromServer);
 
     thread = new Thread(loadingDataRunnable, "LoadDingData");
     thread.start();
@@ -585,7 +590,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
     sTheme = R.style.Theme_eXo;
     ExoFilesController.arrFiles = ExoFilesController.getPersonalDriveContent(ExoFilesController.myFile.urlStr);
-    ExoFilesController._delegate = eXoApplicationsController2Instance;
     Intent next = new Intent(ExoApplicationsController2.this, ExoFilesController.class);
     startActivity(next);
 
@@ -610,7 +614,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
                                                                "exo_prf_password");
 
     if (connectToChatServer(url.getHost(), 5222, userName, password)) {
-      ExoChatListController._delegate = eXoApplicationsController2Instance;
       Intent next = new Intent(ExoApplicationsController2.this, ExoChatListController.class);
       startActivity(next);
     } else {
@@ -690,7 +693,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
     if (createConnetion() == true) {
       Intent next = new Intent(ExoApplicationsController2.this, SocialActivity.class);
-      eXoApplicationsController2Instance.startActivity(next);
+      startActivity(next);
     } else {
       Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
       toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);

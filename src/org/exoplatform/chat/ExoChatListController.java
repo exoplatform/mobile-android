@@ -52,11 +52,6 @@ public class ExoChatListController extends MyActionBar {
 
   public static ExoChatListController                  eXoChatListControllerInstance; // Instance
 
-  public static ExoApplicationsController2             _delegate;                    // Main
-
-  // app
-  // view
-  // controller
 
   public static XMPPConnection                         conn;                         // Interact
 
@@ -379,7 +374,6 @@ public class ExoChatListController extends MyActionBar {
       ExoChatController.listChatContent = arrListChat.get(position);
       conn.removePacketListener(packetListener);
 
-      ExoChatController._delegate = _delegate;
       Intent next = new Intent(ExoChatListController.this, ExoChatController.class);
       ExoChatListController.this.startActivity(next);
       finish();
@@ -402,7 +396,6 @@ public class ExoChatListController extends MyActionBar {
 
     setTitle(strTitle);
 
-    _delegate.changeLanguage(resourceBundle);
     // _delegate.createAdapter();
   }
 }

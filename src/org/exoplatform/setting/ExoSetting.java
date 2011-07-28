@@ -184,7 +184,7 @@ public class ExoSetting extends MyActionBar {
           serverName.setText(serverObj._strServerName);
           txtvUrl.setText(serverObj._strServerUrl);
 
-          if (AppController.appControllerInstance._intDomainIndex == position)
+          if (AppController._intDomainIndex == position)
             imgView.setVisibility(View.VISIBLE);
           else
             imgView.setVisibility(View.INVISIBLE);
@@ -250,8 +250,8 @@ public class ExoSetting extends MyActionBar {
         AppController controller = AppController.appControllerInstance;
         controller.changeLanguage(AppController.bundle);
       } else if (pageIDForChangeLanguage == 1) {
-        ExoApplicationsController2 controller = ExoApplicationsController2.eXoApplicationsController2Instance;
-        controller.changeLanguage(AppController.bundle);
+//        ExoApplicationsController2 controller = ExoApplicationsController2.eXoApplicationsController2Instance;
+//        controller.changeLanguage(AppController.bundle);
         // controller.createAdapter();
       } else if (pageIDForChangeLanguage == 2) {
         ExoFilesController controller = ExoFilesController.eXoFilesControllerInstance;
