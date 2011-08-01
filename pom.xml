@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.exoplatform.mobile.platform</groupId>
 	<artifactId>exo-mobile-android</artifactId>
-	<version>1.1.1-SNAPSHOT</version>
+	<version>2.0-M4-SNAPSHOT</version>
 	<packaging>apk</packaging>
 	<name>eXo Mobile Android</name> 
 	<description>eXo Mobile Android projects.</description>
