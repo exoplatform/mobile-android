@@ -86,8 +86,9 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     setActionBarContentView(R.layout.activity_display_view);
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    selectedRestActivity = SocialActivity.selectedRestActivity;
-    activityId = selectedRestActivity.getId();
+    addActionBarItem();
+    getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_refresh);
+    activityId = SocialActivity.activityId;
     changeLanguage(AppController.bundle);
     domain = SocialActivityUtil.getDomain();
     initComponent();
@@ -95,11 +96,11 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    onReload();
-  }
+//  @Override
+//  protected void onResume() {
+//    super.onResume();
+//    onLoad();
+//  }
 
   private void destroy() {
     super.onDestroy();
@@ -107,15 +108,10 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     finish();
   }
 
-  private void onReload() {
-    try {
-      selectedRestActivity = (RestActivity) ExoApplicationsController2.activityService.get(activityId);
-      onLoad();
-    } catch (RuntimeException e) {
-      destroy();
-    }
-
-  }
+  // private void onReload() {
+  // onLoad();
+  //
+  // }
 
   private void initComponent() {
     commentLayoutWrap = (LinearLayout) findViewById(R.id.activity_display_comment_wrap);
@@ -166,6 +162,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       destroy();
       break;
     case 0:
+      onLoad();
       break;
 
     }
@@ -225,7 +222,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
         } else {
           ExoApplicationsController2.activityService.like(activity);
         }
-        onReload();
+        onLoad();
       } catch (RuntimeException e) {
         Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
@@ -281,51 +278,59 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
     @Override
     public Integer doInBackground(Void... params) {
-      List<RestLike> likeList = selectedRestActivity.getLikes();
-      List<RestComment> commentList = selectedRestActivity.getAvailableComments();
-      if (likeList != null) {
-        for (RestLike like : likeList) {
-          ExoSocialLike socialLike = new ExoSocialLike();
-          String identity = like.getIdentityId();
-          RestIdentity restId = (RestIdentity) ExoApplicationsController2.identityService.get(identity);
-          socialLike.setLikeID(identity);
-          if (identity.equalsIgnoreCase(ExoApplicationsController2.userIdentity)) {
-            socialLike.setLikeName(youText);
-            likeLinkedList.addFirst(socialLike);
-            liked = true;
-          } else {
-            socialLike.setLikeName(restId.getProfile().getFullName());
-            likeLinkedList.add(socialLike);
+
+      try {
+        selectedRestActivity = (RestActivity) ExoApplicationsController2.activityService.get(activityId);
+        List<RestLike> likeList = selectedRestActivity.getLikes();
+        List<RestComment> commentList = selectedRestActivity.getAvailableComments();
+        if (likeList != null) {
+          for (RestLike like : likeList) {
+            ExoSocialLike socialLike = new ExoSocialLike();
+            String identity = like.getIdentityId();
+            RestIdentity restId = (RestIdentity) ExoApplicationsController2.identityService.get(identity);
+            socialLike.setLikeID(identity);
+            if (identity.equalsIgnoreCase(ExoApplicationsController2.userIdentity)) {
+              socialLike.setLikeName(youText);
+              likeLinkedList.addFirst(socialLike);
+              liked = true;
+            } else {
+              socialLike.setLikeName(restId.getProfile().getFullName());
+              likeLinkedList.add(socialLike);
+            }
+
           }
-
         }
-      }
 
-      if (commentList != null) {
-        for (RestComment comment : commentList) {
-          ExoSocialComment socialComment = new ExoSocialComment();
-          String identity = comment.getIdentityId();
-          RestIdentity restId = (RestIdentity) ExoApplicationsController2.identityService.get(identity);
-          RestProfile profile = restId.getProfile();
-          socialComment.setCommentId(identity);
-          socialComment.setCommentName(profile.getFullName());
-          socialComment.setImageUrl(profile.getAvatarUrl());
-          socialComment.setCommentTitle(comment.getText());
-          socialComment.setPostedTime(comment.getPostedTime());
+        if (commentList != null) {
+          for (RestComment comment : commentList) {
+            ExoSocialComment socialComment = new ExoSocialComment();
+            String identity = comment.getIdentityId();
+            RestIdentity restId = (RestIdentity) ExoApplicationsController2.identityService.get(identity);
+            RestProfile profile = restId.getProfile();
+            socialComment.setCommentId(identity);
+            socialComment.setCommentName(profile.getFullName());
+            socialComment.setImageUrl(profile.getAvatarUrl());
+            socialComment.setCommentTitle(comment.getText());
+            socialComment.setPostedTime(comment.getPostedTime());
 
-          socialCommentList.add(socialComment);
+            socialCommentList.add(socialComment);
+          }
         }
-      }
 
-      return null;
+        return 1;
+      } catch (RuntimeException e) {
+        return 0;
+      }
     }
 
     @Override
     public void onPostExecute(Integer result) {
-      setComponentInfo();
-      textView_Like_Count.setText(SocialActivityUtil.getCommentString(likeLinkedList,
-                                                                      AppController.bundle));
-      createCommentList(socialCommentList);
+      if (result == 1) {
+        setComponentInfo();
+        textView_Like_Count.setText(SocialActivityUtil.getCommentString(likeLinkedList,
+                                                                        AppController.bundle));
+        createCommentList(socialCommentList);
+      }
       _progressDialog.dismiss();
 
     }

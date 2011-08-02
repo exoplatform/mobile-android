@@ -139,6 +139,13 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     }
 
     if (view == cancelButton) {
+      if (composeType == 0) {
+        intent = new Intent(this, SocialActivity.class);
+        startActivity(intent);
+      } else {
+        intent = new Intent(this, ActivityStreamDisplay.class);
+        startActivity(intent);
+      }
       destroy();
 
     }

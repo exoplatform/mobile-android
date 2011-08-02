@@ -47,33 +47,33 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class SocialActivity extends MyActionBar {
 
-  public static RestActivity selectedRestActivity;
+  // public static RestActivity selectedRestActivity;
 
-  private LinearLayout       activityStreamWrap;
+  public static String     activityId;
 
-  private ActivityLoadTask   mLoadTask;
+  private LinearLayout     activityStreamWrap;
 
-  private int                number_of_activity = 20;
+  private ActivityLoadTask mLoadTask;
 
-  private boolean            isShowMore         = false;
+  private int              number_of_activity = 20;
 
-  private String             loadingData;
+  private boolean          isShowMore         = false;
 
-  private String             showMoreText;
+  private String           loadingData;
 
-  private String             noService;
+  private String           showMoreText;
 
-  private String             today;
+  private String           today;
 
-  private Resources          resource;
+  private Resources        resource;
 
-  private String             minute;
+  private String           minute;
 
-  private String             minutes;
+  private String           minutes;
 
-  private String             hour;
+  private String           hour;
 
-  private String             hours;
+  private String           hours;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,10 @@ public class SocialActivity extends MyActionBar {
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
-    getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_compose);
+    getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_refresh);
+    addActionBarItem();
+    getActionBar().getItem(1).setDrawable(R.drawable.gd_action_bar_compose);
+
     setActionBarContentView(R.layout.activitybrowserview);
     onChangeLanguage(AppController.bundle);
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
@@ -148,7 +151,7 @@ public class SocialActivity extends MyActionBar {
       item.setOnClickListener(new OnClickListener() {
 
         public void onClick(View v) {
-          selectedRestActivity = activityInfo;
+          activityId = activityInfo.getId();
           Intent intent = new Intent(SocialActivity.this, ActivityStreamDisplay.class);
           startActivity(intent);
           finish();
@@ -205,6 +208,9 @@ public class SocialActivity extends MyActionBar {
       finish();
       break;
     case 0:
+      onLoad(number_of_activity);
+      break;
+    case 1:
       Intent intent = new Intent(this, ComposeMessageActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_POST_TYPE);
@@ -225,7 +231,6 @@ public class SocialActivity extends MyActionBar {
     setTitle(title);
     loadingData = resourceBundle.getString("LoadingData");
     showMoreText = resourceBundle.getString("ShowMore");
-    noService = resourceBundle.getString("NoService");
     minute = resourceBundle.getString("Minute");
     minutes = resourceBundle.getString("Minutes");
     hour = resourceBundle.getString("Hour");
@@ -254,7 +259,6 @@ public class SocialActivity extends MyActionBar {
                                                                                          loadSize);
         return activityList;
       } catch (RuntimeException e) {
-
         return null;
       }
     }
