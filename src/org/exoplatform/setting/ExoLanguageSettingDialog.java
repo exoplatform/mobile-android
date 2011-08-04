@@ -60,7 +60,7 @@ public class ExoLanguageSettingDialog extends Dialog implements OnClickListener 
     btnDeleteCancel.setOnClickListener(this);
 
     txtvTittle = (TextView) findViewById(R.id.TextView_Title);
-    
+
     txtvServerName = (TextView) findViewById(R.id.TextView_Server_Name);
     txtvServerUrl = (TextView) findViewById(R.id.TextView_Server_URL);
 
@@ -171,12 +171,12 @@ public class ExoLanguageSettingDialog extends Dialog implements OnClickListener 
     } else if (v == btnDeleteCancel) {
       if (!isNewServer) // Delete sever
       {
-        int currentServerIndex = AppController.appControllerInstance._intDomainIndex;
+        int currentServerIndex = AppController._intDomainIndex;
         if (currentServerIndex == selectedServerIndex) {
-          AppController.appControllerInstance._intDomainIndex = -1;
-          AppController.appControllerInstance._strDomain = "";
+          AppController._intDomainIndex = -1;
+          AppController._strDomain = "";
         } else if (currentServerIndex > selectedServerIndex) {
-          AppController.appControllerInstance._intDomainIndex = currentServerIndex - 1;
+          AppController._intDomainIndex = currentServerIndex - 1;
         }
 
         if (serverObj._bSystemServer) {
@@ -206,8 +206,8 @@ public class ExoLanguageSettingDialog extends Dialog implements OnClickListener 
       AppController.configurationInstance._arrServerList.addAll(AppController.configurationInstance._arrUserServerList);
 
     ExoModifyServerList.eXoModifyServerListInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
-    ExoSetting.eXoSettingInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
-    AppController.appControllerInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
+    ExoSetting.eXoSettingInstance.setServerList(AppController.configurationInstance._arrServerList);
+    AppController.createServersAdapter(AppController.configurationInstance._arrServerList);
 
     dismiss();
   }
@@ -236,7 +236,7 @@ public class ExoLanguageSettingDialog extends Dialog implements OnClickListener 
         strDeleteCancelButton = new String(resourceBundle.getString("Delete")
                                                          .getBytes("ISO-8859-1"), "UTF-8");
       }
-      
+
       strServerName = new String(resourceBundle.getString("NameOfTheServer").getBytes("ISO-8859-1"),
                                  "UTF-8");
       strServerUrl = new String(resourceBundle.getString("URLOfTheSerVer").getBytes("ISO-8859-1"),
@@ -249,8 +249,7 @@ public class ExoLanguageSettingDialog extends Dialog implements OnClickListener 
     }
 
     txtvTittle.setText(strTittle);
-    
-    
+
     txtvServerName.setText(strServerName);
     txtvServerUrl.setText(strServerUrl);
 

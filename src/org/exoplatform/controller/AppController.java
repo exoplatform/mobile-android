@@ -40,6 +40,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -81,12 +83,12 @@ public class AppController extends Activity implements OnTouchListener {
   private Runnable                          viewOrders;
 
   // Host
-  public String                             _strDomain           = "";
+  public static String                      _strDomain           = "";
 
   // Active host index
-  String                                    _strDomainIndex      = "";
+  private static String                     _strDomainIndex      = "";
 
-  public static int                                _intDomainIndex;
+  public static int                         _intDomainIndex;
 
   // Username
   String                                    _strUserName         = "";
@@ -134,6 +136,8 @@ public class AppController extends Activity implements OnTouchListener {
   String                                    strCannotBackToPreviousPage;
 
   String                                    strLoadingDataFromServer;
+
+  private String                            settingText;
 
   // Point to itself
   public static AppController               appControllerInstance;
@@ -234,10 +238,9 @@ public class AppController extends Activity implements OnTouchListener {
 
     appControllerInstance = this;
 
-    if (sharedPreference == null){
+    if (sharedPreference == null) {
       sharedPreference = getSharedPreferences(EXO_PREFERENCE, 0);
     }
-      
 
     strLocalize = sharedPreference.getString(EXO_PRF_LOCALIZE, "exo_prf_localize");
     if (strLocalize == null || strLocalize.equalsIgnoreCase("exo_prf_localize"))
@@ -356,6 +359,12 @@ public class AppController extends Activity implements OnTouchListener {
     createServersAdapter(configurationInstance._arrServerList);
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+    changeLanguage(bundle);
+  }
+
   public boolean onTouch(View v, MotionEvent event) {
     int action = event.getAction();
     if (action == MotionEvent.ACTION_DOWN) {
@@ -384,8 +393,9 @@ public class AppController extends Activity implements OnTouchListener {
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
 
+      System.out.println("remove option item ");
     // menu.add(0, 1, 0, "Setting");
-    menu.add(0, 1, 0, "Setting").setIcon(R.drawable.optionsettingsbutton);
+    menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
     // menu.add(0, 2, 0, "Delete Contact");
     // menu.add(0, 3, 0, "Exit");
 
@@ -408,13 +418,14 @@ public class AppController extends Activity implements OnTouchListener {
       Intent next = new Intent(AppController.this, ExoSetting.class);
       next.putExtra(ExoConstants.SETTING_TYPE, 0);
       startActivity(next);
+      
     }
 
     return false;
   }
 
   // Create server list adapter
-  public void createServersAdapter(ArrayList<ServerObj> serverObjs) {
+  public static void createServersAdapter(ArrayList<ServerObj> serverObjs) {
 
     final List<ServerObj> serverObjsTmp = serverObjs;
 
@@ -422,11 +433,10 @@ public class AppController extends Activity implements OnTouchListener {
 
       public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
-
         LayoutInflater inflater = appControllerInstance.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
 
-        final ServerObj serverObj = serverObjsTmp.get(position);
+        final ServerObj serverObj = serverObjsTmp.get(pos);
 
         TextView txtvServerName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
         txtvServerName.setText(serverObj._strServerName);
@@ -444,7 +454,7 @@ public class AppController extends Activity implements OnTouchListener {
 
         }
 
-        if (_intDomainIndex == position)
+        if (_intDomainIndex == pos)
           imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
         else
           imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneoff);
@@ -496,6 +506,7 @@ public class AppController extends Activity implements OnTouchListener {
     };
 
     _listViewServer.setAdapter(serverAdapter);
+
     // _lstvFiles.setOnItemClickListener(test);
   }
 
@@ -919,6 +930,7 @@ public class AppController extends Activity implements OnTouchListener {
                                                              .getBytes("ISO-8859-1"), "UTF-8");
       strLoadingDataFromServer = new String(resourceBundle.getString("LoadingDataFromServer")
                                                           .getBytes("ISO-8859-1"), "UTF-8");
+      settingText = bundle.getString("Settings");
 
     } catch (Exception e) {
 

@@ -19,8 +19,10 @@ import com.cyrilmottier.android.greendroid.R;
 
 import greendroid.widget.ActionBarItem;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.KeyEvent;
@@ -28,10 +30,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,9 +59,11 @@ public class ExoSetting extends MyActionBar {
 
   TextView                 txtvServer;                          // Server label
 
-  static ListView          listViewServer;
+  private ListView         listViewServer;
 
-  private String           modifyListText;
+  private LinearLayout     listServerWrap;
+
+  private Button           modifyServerBtn;
 
   private int              style;
 
@@ -84,9 +91,25 @@ public class ExoSetting extends MyActionBar {
     txtvFrench = (TextView) findViewById(R.id.TextView_French);
     imgViewFCheckMark = (ImageView) findViewById(R.id.ImageView_CheckMark_FR);
 
-    listViewServer = (ListView) findViewById(R.id.ListView_Servers);
-    listViewServer.setDivider(null);
-    listViewServer.setDividerHeight(0);
+    // listViewServer = (ListView) findViewById(R.id.ListView_Servers);
+    // listViewServer.setDivider(null);
+    // listViewServer.setDividerHeight(0);
+
+    listServerWrap = (LinearLayout) findViewById(R.id.listview_server_wrap);
+
+    modifyServerBtn = (Button) findViewById(R.id.modify_server_btn);
+    modifyServerBtn.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {
+          String msg = "You dont't have permission for this because SDCard is not available!";
+          Toast.makeText(eXoSettingInstance, msg, Toast.LENGTH_LONG);
+        } else {
+          Intent next = new Intent(ExoSetting.this, ExoModifyServerList.class);
+          startActivity(next);
+          finish();
+        }
+      }
+    });
 
     btnUserGuide.setOnClickListener(new View.OnClickListener() {
 
@@ -131,7 +154,7 @@ public class ExoSetting extends MyActionBar {
       imgViewFCheckMark.setVisibility(View.INVISIBLE);
     }
 
-    createServersAdapter(AppController.configurationInstance._arrServerList);
+    setServerList(AppController.configurationInstance._arrServerList);
 
     changeLanguage(AppController.bundle);
 
@@ -149,81 +172,24 @@ public class ExoSetting extends MyActionBar {
     finish();
   }
 
-  // Create server list adapter
-  public void createServersAdapter(List<ServerObj> serverObjs) {
+  public void setServerList(List<ServerObj> serverList) {
+    listServerWrap.removeAllViews();
+    LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+    for (int i = 0; i < serverList.size(); i++) {
+      ServerObj serverObj = serverList.get(i);
+      ServerItem serverItem = new ServerItem(this);
+      serverItem.serverName.setText(serverObj._strServerName);
+      serverItem.serverUrl.setText(serverObj._strServerUrl);
+      if (AppController._intDomainIndex == i)
+        serverItem.serverImageView.setVisibility(View.VISIBLE);
+      else
+        serverItem.serverImageView.setVisibility(View.INVISIBLE);
+      listServerWrap.addView(serverItem, params);
 
-    final List<ServerObj> serverObjsTmp = serverObjs;
+    }
 
-    BaseAdapter serverAdapter = new BaseAdapter() {
-
-      public View getView(int position, View convertView, ViewGroup parent) {
-
-        LayoutInflater inflater = eXoSettingInstance.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.serverlistitemforsetting, parent, false);
-
-        tvModifyTheList = (TextView) rowView.findViewById(R.id.TextView_Modify_The_List);
-        tvModifyTheList.setText(modifyListText);
-        TextView serverName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
-        TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
-        ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-
-        if (position < serverObjsTmp.size()) {
-          ServerObj serverObj = serverObjsTmp.get(position);
-
-          serverName.setText(serverObj._strServerName);
-          txtvUrl.setText(serverObj._strServerUrl);
-
-          if (AppController._intDomainIndex == position)
-            imgView.setVisibility(View.VISIBLE);
-          else
-            imgView.setVisibility(View.INVISIBLE);
-
-        }
-
-        if (position == serverObjsTmp.size()) {
-
-          tvModifyTheList.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-              if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {
-                String msg = "You dont't have permission for this because SDCard is not available!";
-                Toast.makeText(eXoSettingInstance, msg, Toast.LENGTH_LONG);
-              } else {
-
-                Intent next = new Intent(ExoSetting.this, ExoModifyServerList.class);
-                startActivity(next);
-                finish();
-              }
-            }
-          });
-
-          tvModifyTheList.setVisibility(View.VISIBLE);
-          serverName.setVisibility(View.INVISIBLE);
-          imgView.setVisibility(View.INVISIBLE);
-          txtvUrl.setVisibility(View.INVISIBLE);
-        }
-
-        return (rowView);
-
-      }
-
-      public long getItemId(int position) {
-
-        return position;
-      }
-
-      public Object getItem(int position) {
-
-        return position;
-      }
-
-      public int getCount() {
-        return serverObjsTmp.size() + 1;
-      }
-    };
-
-    listViewServer.setAdapter(serverAdapter);
   }
+
 
   // Change language
   private void updateLocallize(String localize) {
@@ -234,7 +200,7 @@ public class ExoSetting extends MyActionBar {
 
       AppController.bundle = new PropertyResourceBundle(this.getAssets().open(localize));
       changeLanguage(AppController.bundle);
-      createServersAdapter(AppController.configurationInstance._arrServerList);
+      setServerList(AppController.configurationInstance._arrServerList);
 
     } catch (Exception e) {
 
@@ -250,6 +216,7 @@ public class ExoSetting extends MyActionBar {
     String strFrench = "";
     String strCloseModifyServerLisrButton = "";
     String strUserGuideButton = "";
+    String modifyListText ="";
 
     try {
       strLanguageTittle = new String(resourceBundle.getString("Language").getBytes("ISO-8859-1"),
@@ -268,7 +235,7 @@ public class ExoSetting extends MyActionBar {
     String settings = resourceBundle.getString("Settings");
     setTitle(settings);
     modifyListText = resourceBundle.getString("ModifyServerList");
-
+    modifyServerBtn.setText(modifyListText);
     txtvEnglish.setText(strEnglish);
     txtvFrench.setText(strFrench);
 
@@ -276,6 +243,25 @@ public class ExoSetting extends MyActionBar {
 
     txtvServer.setText(strServerTittle);
     txtvLanguage.setText(strLanguageTittle);
+
+  }
+
+  private class ServerItem extends RelativeLayout {
+
+    private TextView  serverName;
+
+    private TextView  serverUrl;
+
+    private ImageView serverImageView;
+
+    public ServerItem(Context context) {
+      super(context);
+      LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      View view = inflate.inflate(R.layout.serverlistitemforsetting, this);
+      serverName = (TextView) view.findViewById(R.id.TextView_ServerName);
+      serverUrl = (TextView) view.findViewById(R.id.TextView_URL);
+      serverImageView = (ImageView) view.findViewById(R.id.ImageView_Checked);
+    }
 
   }
 }

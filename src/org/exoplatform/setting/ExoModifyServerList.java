@@ -23,12 +23,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 public class ExoModifyServerList extends MyActionBar {
 
@@ -48,10 +51,9 @@ public class ExoModifyServerList extends MyActionBar {
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
-    
     getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_add);
-    
-    setTitle("Server List");
+    String serverListText = AppController.bundle.getString("ServerList");
+    setTitle(serverListText);
 
     eXoModifyServerListInstance = this;
 
@@ -66,7 +68,7 @@ public class ExoModifyServerList extends MyActionBar {
   public void onBackPressed() {
     // TODO Auto-generated method stub
     super.onBackPressed();
-    Intent intent = new Intent(this,ExoSetting.class);
+    Intent intent = new Intent(this, ExoSetting.class);
     startActivity(intent);
     finish();
   }
@@ -93,11 +95,10 @@ public class ExoModifyServerList extends MyActionBar {
     return true;
   }
 
-  
-
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
-    menu.add(0, 1, 0, "Add a Server");
+    String addServer = AppController.bundle.getString("AddAServer");
+    menu.add(0, 1, 0, addServer);
     return true;
   }
 
@@ -136,7 +137,7 @@ public class ExoModifyServerList extends MyActionBar {
         txtvUrl.setText(serverObj._strServerUrl);
 
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-        if (AppController.appControllerInstance._intDomainIndex == position)
+        if (AppController._intDomainIndex == position)
           imgView.setVisibility(View.VISIBLE);
         else
           imgView.setVisibility(View.INVISIBLE);
