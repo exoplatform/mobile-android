@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="org.exoplatform" android:versionCode="2" android:versionName="2.0">
-	<application android:icon="@drawable/icon57x57"
+	<application android:icon="@drawable/application_icon"
 		android:theme="@style/Theme.eXo" android:name=".ExoApplication"
 		android:debuggable="true">
 

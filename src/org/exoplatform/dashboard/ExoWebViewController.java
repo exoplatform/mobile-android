@@ -43,14 +43,15 @@ public class ExoWebViewController extends MyActionBar {
     setupCookies();
 
     _wvGadget = (WebView) findViewById(R.id.WebView);
-
+    _wvGadget.getSettings().setSupportZoom(true);
+//    _wvGadget.getSettings().setUseWideViewPort(true);
     _wvGadget.getSettings().setJavaScriptEnabled(true);
     _wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
     _wvGadget.getSettings().setPluginsEnabled(true);
     _wvGadget.getSettings().setLoadsImagesAutomatically(true);
     _wvGadget.addJavascriptInterface(this, "MainScreen");
 
-    _wvGadget.getSettings().setBuiltInZoomControls(false);
+    _wvGadget.getSettings().setBuiltInZoomControls(true);
 
     if (ExoApplicationsController2.webViewMode == 0) {
 
