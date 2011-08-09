@@ -2,7 +2,7 @@ package org.exoplatform.mocks;
 
 import java.util.Date;
 
-public class SocialActivityMock {
+public class MockSocialActivity {
 
   public String userID;
 
@@ -18,7 +18,7 @@ public class SocialActivityMock {
 
   public int    nbComments; 
 
-  public SocialActivityMock(String userID,
+  public MockSocialActivity(String userID,
                         String title,
                         String body,
                         long postedTime,
