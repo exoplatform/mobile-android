@@ -64,6 +64,12 @@
 		<activity android:name=".social.SocialActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
+		<activity android:name=".social.image.SocialImageLibrary"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".social.image.SelectedImageActivity"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
 
 	</application>
 	<uses-sdk android:minSdkVersion="7" />
@@ -71,6 +77,7 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
 	<uses-feature android:name="android.hardware.camera" />
 	<uses-feature android:name="android.hardware.camera.autofocus" />
 

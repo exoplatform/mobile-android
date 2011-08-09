@@ -34,4 +34,8 @@ public class ExoConstants {
 
   public static final int    DEFAULT_AVATAR            = R.drawable.default_avatar;
 
+  public static final String MOBILE_FOLDER             = "Mobile";
+  
+  public static final String SELECTED_IMAGE_EXTRA = "SELECTED_IMAGE_EXTRA";
+
 }

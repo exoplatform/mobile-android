@@ -1,21 +1,13 @@
 package org.exoplatform.utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.LinearGradient;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.Shader.TileMode;
+
 import android.text.format.DateFormat;
 
 public class PhotoUltils {
-  private static final String[] suffix  = { ".jpeg", ".jpg", ".png", ".jpe", ".bmp" };
+  private static final String[] suffix  = { ".jpeg", ".jpg", ".png", ".jpe", ".bmp",".gif" };
 
   private static final String   dotSign = ".";
 
@@ -40,18 +32,22 @@ public class PhotoUltils {
     return fileName;
   }
 
-  public static void getAllImageFiles(File folder, List<String> all) {
+  public static void getAllImageFiles(File folder, ArrayList<String> all) {
     if (folder.getName().equals(".thumbnails")) {
       return;
     }
     if (folder.isFile()) {
-      if (isImages(folder))
+      if (isImages(folder)) {
         all.add(folder.getAbsolutePath());
+      }
     }
     if (folder.isDirectory()) {
-      for (File file : folder.listFiles()) {
-        getAllImageFiles(file, all);
+      if(folder.listFiles()!=null){
+        for (File file : folder.listFiles()) {
+          getAllImageFiles(file, all);
+        }
       }
+      
     }
 
   }
@@ -60,7 +56,7 @@ public class PhotoUltils {
     String dateFormat = null;
     Calendar cal = Calendar.getInstance();
     long minus = cal.getTimeInMillis();
-    String inFormat = new String("ddMMyyyyhhmmss");
+    String inFormat = new String("dd_MM_yyyy_hh_mm_ss");
     dateFormat = (String) DateFormat.format(inFormat, minus);
     return dateFormat;
   }
