@@ -22,7 +22,7 @@ public class ExoConstants {
 
   public static final String ACTIVITY_HOST             = "192.168.1.83";
 
-  public static final int    ACTIVITY_PORT             = 8080;
+  public static final int    ACTIVITY_PORT             = 80;
 
   public static final String ACTIVITY_PORTAL_CONTAINER = "portal";
 

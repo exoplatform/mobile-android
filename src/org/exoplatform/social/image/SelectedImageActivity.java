@@ -30,10 +30,10 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   private Button    okButton;
 
   private String    filePath = null;
-  
-  private String selectedPhotoTitle;
-  
-  private String okText;
+
+  private String    selectedPhotoTitle;
+
+  private String    okText;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,10 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     switch (position) {
     case -1:
       finish();
-      SocialImageLibrary.socialImageLibrary.finish();
+      if (SocialImageLibrary.socialImageLibrary != null)
+        SocialImageLibrary.socialImageLibrary.finish();
+      if(ComposeMessageActivity.composeMessageActivity!=null)
+        ComposeMessageActivity.composeMessageActivity.finish();
       break;
 
     case 0:
@@ -78,7 +81,7 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     }
     return true;
   }
-  
+
   @Override
   public void onBackPressed() {
     super.onBackPressed();
@@ -92,17 +95,18 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
         File file = new File(filePath);
         ComposeMessageActivity.addImageToMessage(file);
         finish();
-        SocialImageLibrary.socialImageLibrary.finish();
+        if (SocialImageLibrary.socialImageLibrary != null)
+          SocialImageLibrary.socialImageLibrary.finish();
       }
 
     }
   }
-  
+
   private void onChangeLanguage(ResourceBundle resourceBundle) {
     selectedPhotoTitle = resourceBundle.getString("SelectedPhoto");
     setTitle(selectedPhotoTitle);
     okText = resourceBundle.getString("OK");
-    
+
   }
 
 }

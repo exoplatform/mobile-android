@@ -47,7 +47,7 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class SocialActivity extends MyActionBar {
 
-  // public static RestActivity selectedRestActivity;
+  public static SocialActivity socialActivity;
 
   public static String     activityId;
 
@@ -80,6 +80,7 @@ public class SocialActivity extends MyActionBar {
     super.onCreate(savedInstanceState);
 
     setTheme(R.style.Theme_eXo);
+    socialActivity = this;
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
@@ -95,11 +96,11 @@ public class SocialActivity extends MyActionBar {
 
   }
 
-  // @Override
-  // protected void onResume() {
-  // super.onResume();
-  // onLoad(number_of_activity);
-  // }
+  @Override
+  protected void onResume() {
+    super.onResume();
+    onLoad(number_of_activity);
+  }
 
   private void destroy() {
     super.onDestroy();
@@ -154,8 +155,6 @@ public class SocialActivity extends MyActionBar {
           activityId = activityInfo.getId();
           Intent intent = new Intent(SocialActivity.this, ActivityStreamDisplay.class);
           startActivity(intent);
-          finish();
-
         }
       });
       activityStreamWrap.addView(item, params);
@@ -216,7 +215,6 @@ public class SocialActivity extends MyActionBar {
       intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_POST_TYPE);
       startActivity(intent);
       onCancelLoad();
-      finish();
 
       break;
 

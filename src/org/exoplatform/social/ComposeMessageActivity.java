@@ -13,6 +13,7 @@ import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
+import org.exoplatform.social.image.SelectedImageActivity;
 import org.exoplatform.social.image.SocialImageLibrary;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
@@ -118,9 +119,11 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
-      // Intent intent = new Intent(this, ExoApplicationsController2.class);
-      // startActivity(intent);
       destroy();
+      if (SocialActivity.socialActivity != null)
+        SocialActivity.socialActivity.finish();
+      if (ActivityStreamDisplay.activityStreamDisplay != null)
+        ActivityStreamDisplay.activityStreamDisplay.finish();
       break;
 
     case 0:
@@ -137,12 +140,8 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       if ((composeMessage != null) && (composeMessage.length() > 0)) {
         if (composeType == 0) {
           onPostTask();
-          intent = new Intent(this, SocialActivity.class);
-          startActivity(intent);
         } else {
           onCommentTask();
-          intent = new Intent(this, ActivityStreamDisplay.class);
-          startActivity(intent);
         }
         try {
           Thread.sleep(1000);
@@ -162,13 +161,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     }
 
     if (view == cancelButton) {
-      if (composeType == 0) {
-        intent = new Intent(this, SocialActivity.class);
-        startActivity(intent);
-      } else {
-        intent = new Intent(this, ActivityStreamDisplay.class);
-        startActivity(intent);
-      }
       destroy();
 
     }
@@ -182,13 +174,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   @Override
   public void onBackPressed() {
     super.onBackPressed();
-    if (composeType == 0) {
-      intent = new Intent(this, SocialActivity.class);
-      startActivity(intent);
-    } else {
-      intent = new Intent(this, ActivityStreamDisplay.class);
-      startActivity(intent);
-    }
     destroy();
 
   }
@@ -221,7 +206,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private void initCamera() {
     String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-    sdcard_temp_dir = parentPath + PhotoUltils.getDateFormat() + ".png";
+    sdcard_temp_dir = parentPath + PhotoUltils.getImageFileName();
 
     Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
@@ -246,18 +231,29 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   public static void addImageToMessage(File file) {
     try {
+      final String filePath = file.getAbsolutePath();
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inSampleSize = 8;
-      Bitmap bitmap;
-      bitmap = BitmapFactory.decodeStream(new FileInputStream(file), null, options);
+      FileInputStream fis = new FileInputStream(file);
+      Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
+      fis.close();
       ImageView image = new ImageView(composeMessageActivity);
       image.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
       image.setImageBitmap(bitmap);
-      LayoutParams params = new LayoutParams(60, 60);
+      image.setOnClickListener(new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+          Intent intent = new Intent(composeMessageActivity, SelectedImageActivity.class);
+          intent.putExtra(ExoConstants.SELECTED_IMAGE_EXTRA, filePath);
+          composeMessageActivity.startActivity(intent);
+        }
+      });
+      LayoutParams params = new LayoutParams(50, 50);
       params.setMargins(2, 2, 2, 2);
       fileAttachWrap.removeAllViews();
       fileAttachWrap.addView(image, params);
-    } catch (FileNotFoundException e) {
+    } catch (Exception e) {
 
     }
 
@@ -308,8 +304,9 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       }
       if (view == libraryButton) {
         dismiss();
-        Intent intent = new Intent(ComposeMessageActivity.this, SocialImageLibrary.class);
-        startActivity(intent);
+        // Intent intent = new Intent(ComposeMessageActivity.this,
+        // SocialImageLibrary.class);
+        // startActivity(intent);
 
       }
       if (view == cancelButton) {

@@ -625,6 +625,7 @@ public class AppController extends Activity implements OnTouchListener {
       }
 
     } catch (Exception e) {
+      System.out.println("error login" + e.getMessage());
 
       // String msg = e.getMessage();
       // String str = e.toString();

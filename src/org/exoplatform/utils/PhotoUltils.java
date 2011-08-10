@@ -52,13 +52,21 @@ public class PhotoUltils {
 
   }
 
-  public static String getDateFormat() {
+  private static String getDateFormat() {
     String dateFormat = null;
     Calendar cal = Calendar.getInstance();
     long minus = cal.getTimeInMillis();
-    String inFormat = new String("dd_MM_yyyy_hh_mm_ss");
+    String inFormat = new String("yyyy_MM_dd_hh_mm_ss");
     dateFormat = (String) DateFormat.format(inFormat, minus);
     return dateFormat;
+  }
+  
+  public static String getImageFileName(){
+    StringBuffer buffer = new StringBuffer();
+    buffer.append("MobileImage_");
+    buffer.append(getDateFormat());
+    buffer.append(".png");
+    return buffer.toString();
   }
 
 }

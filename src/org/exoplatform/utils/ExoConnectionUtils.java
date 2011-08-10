@@ -29,17 +29,18 @@ import org.json.simple.JSONValue;
 
 //interact with server
 public class ExoConnectionUtils {
-  private static int   splitLinesAt = 76;
+  private static int         splitLinesAt = 76;
 
   public static List<Cookie> _sessionCookies;      // Cookie array
 
   public static String       _strCookie   = "";    // Cookie string
 
-  private static String       _strFirstLoginContent; // String data for the first time
+  private static String      _strFirstLoginContent; // String data for the first
+                                                    // time
 
   // login
 
-  private static String       _fullDomainStr;       // Host
+  private static String      _fullDomainStr;       // Host
 
   private static byte[] zeroPad(int length, byte[] bytes) {
     byte[] padded = new byte[length]; // initialized to zero by JVM
@@ -178,11 +179,14 @@ public class ExoConnectionUtils {
       response = httpClient.execute(httpGet);
       cookiesStore = httpClient.getCookieStore();
       List<Cookie> cookies = cookiesStore.getCookies();
+      System.out.println("cookie" + cookies.size());
 
       if (!cookies.isEmpty()) {
         for (int i = 0; i < cookies.size(); i++) {
           strCookie = cookies.get(i).getName().toString() + "="
               + cookies.get(i).getValue().toString();
+          System.out.println("strCookie" + strCookie);
+
         }
       }
 
@@ -210,6 +214,7 @@ public class ExoConnectionUtils {
       if (entity != null) {
         InputStream instream = entity.getContent();
         _strFirstLoginContent = convertStreamToString(instream);
+        System.out.println("_strFirstLoginContent" + _strFirstLoginContent);
         if (_strFirstLoginContent.contains("Sign in failed. Wrong username or password.")) {
           return "NO";
         } else if (_strFirstLoginContent.contains("error', '/main?url")) {
@@ -496,6 +501,7 @@ public class ExoConnectionUtils {
   public static String sendRequestAndReturnString(String strUrlRequest) {
     return convertStreamToString(sendRequest(strUrlRequest));
   }
+
   /*
    * Check the version of PLF return true if version number is >= 3.5 else
    * return false

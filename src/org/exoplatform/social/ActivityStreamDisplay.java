@@ -43,6 +43,7 @@ import greendroid.widget.ActionBarItem;
 import greendroid.widget.AsyncImageView;
 
 public class ActivityStreamDisplay extends MyActionBar implements OnClickListener {
+  public static ActivityStreamDisplay activityStreamDisplay;
 
   public static RestActivity selectedRestActivity;
 
@@ -88,6 +89,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_refresh);
+    activityStreamDisplay = this;
     activityId = SocialActivity.activityId;
     changeLanguage(AppController.bundle);
     domain = SocialActivityUtil.getDomain();
@@ -96,22 +98,17 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   }
 
-//  @Override
-//  protected void onResume() {
-//    super.onResume();
-//    onLoad();
-//  }
+  @Override
+  protected void onResume() {
+    super.onResume();
+    onLoad();
+  }
 
   private void destroy() {
     super.onDestroy();
     onCancelLoad();
     finish();
   }
-
-  // private void onReload() {
-  // onLoad();
-  //
-  // }
 
   private void initComponent() {
     commentLayoutWrap = (LinearLayout) findViewById(R.id.activity_display_comment_wrap);
@@ -160,6 +157,8 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     switch (position) {
     case -1:
       destroy();
+      if(SocialActivity.socialActivity!=null)
+        SocialActivity.socialActivity.finish();
       break;
     case 0:
       onLoad();
@@ -211,7 +210,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_COMMENT_TYPE);
       startActivity(intent);
-      finish();
+//      finish();
     }
     if (view == likeButton) {
       try {
@@ -235,8 +234,6 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
   @Override
   public void onBackPressed() {
     super.onBackPressed();
-    Intent intent = new Intent(this, SocialActivity.class);
-    startActivity(intent);
     destroy();
   }
 
