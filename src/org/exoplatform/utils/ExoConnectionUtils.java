@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -172,20 +176,31 @@ public class ExoConnectionUtils {
       HttpConnectionParams.setSoTimeout(httpParameters, 60000);
       HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
+      URI uri = null;
+      try {
+        uri = new URI(redirectStr);
+      } catch (URISyntaxException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+
       DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+      
+      // the first time authentication 
+      httpClient.getCredentialsProvider()
+                .setCredentials(new AuthScope(uri.getHost(), uri.getPort()),
+                                new UsernamePasswordCredentials("duongnd", "duongde1506"));
 
-      HttpGet httpGet = new HttpGet(redirectStr);
-
+      HttpGet httpGet = new HttpGet(uri);
       response = httpClient.execute(httpGet);
+      entity = response.getEntity();
       cookiesStore = httpClient.getCookieStore();
       List<Cookie> cookies = cookiesStore.getCookies();
-      System.out.println("cookie" + cookies.size());
 
       if (!cookies.isEmpty()) {
         for (int i = 0; i < cookies.size(); i++) {
           strCookie = cookies.get(i).getName().toString() + "="
               + cookies.get(i).getValue().toString();
-          System.out.println("strCookie" + strCookie);
 
         }
       }
