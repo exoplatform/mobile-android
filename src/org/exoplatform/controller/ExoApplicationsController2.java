@@ -532,8 +532,27 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     if (ExoFilesController.myFile == null) {
       ExoFilesController.myFile = new ExoFile();
       ExoFilesController.myFile.fileName = userName;
+      
       ExoFilesController.myFile.urlStr = domain
-          + "/rest/private/jcr/repository/collaboration/Users/" + userName;
+      + "/rest/private/jcr/repository/collaboration/Users";
+      
+      if(ExoConnectionUtils.checkPLFVersion())
+      {
+          int length = userName.length();
+          for(int i = 1; i < length; i++)
+          {
+              String userNameLevel = userName.substring(0, i);
+              for(int j = 1; j < length; j++)
+              {
+                userNameLevel += "_";
+              }
+
+              ExoFilesController.myFile.urlStr += "/" + userNameLevel;
+          }
+      }
+      
+      ExoFilesController.myFile.urlStr += "/" + userName;
+      
       ExoFilesController._rootUrl = ExoFilesController.myFile.urlStr;
     }
 

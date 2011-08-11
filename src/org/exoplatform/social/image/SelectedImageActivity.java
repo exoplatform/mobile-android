@@ -88,7 +88,7 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     finish();
   }
 
-  @Override
+  
   public void onClick(View view) {
     if (view == okButton) {
       if (filePath != null) {

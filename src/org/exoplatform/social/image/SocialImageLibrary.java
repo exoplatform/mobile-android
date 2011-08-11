@@ -91,7 +91,7 @@ public class SocialImageLibrary extends MyActionBar {
     gridView.setAdapter(adapter);
     gridView.setOnItemClickListener(new OnItemClickListener() {
 
-      @Override
+//      @Override
       public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
         String filePath = listFiles.get(pos);
         Intent intent = new Intent(getApplicationContext(), SelectedImageActivity.class);
@@ -119,22 +119,22 @@ public class SocialImageLibrary extends MyActionBar {
       list = l;
     }
 
-    @Override
+//    @Override
     public int getCount() {
       return list.size();
     }
 
-    @Override
+//    @Override
     public Object getItem(int pos) {
       return pos;
     }
 
-    @Override
+//    @Override
     public long getItemId(int pos) {
       return pos;
     }
 
-    @Override
+//    @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
       if (list.size() > 0) {
         try {

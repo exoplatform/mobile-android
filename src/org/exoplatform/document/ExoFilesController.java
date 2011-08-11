@@ -196,8 +196,7 @@ public class ExoFilesController extends MyActionBar {
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    myFile = null;
-    finish();
+    destroy();
     return true;
   }
 

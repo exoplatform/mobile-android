@@ -242,7 +242,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       image.setImageBitmap(bitmap);
       image.setOnClickListener(new OnClickListener() {
 
-        @Override
         public void onClick(View v) {
           Intent intent = new Intent(composeMessageActivity, SelectedImageActivity.class);
           intent.putExtra(ExoConstants.SELECTED_IMAGE_EXTRA, filePath);
