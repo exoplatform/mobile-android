@@ -176,37 +176,26 @@ public class ExoConnectionUtils {
       HttpConnectionParams.setSoTimeout(httpParameters, 60000);
       HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
-      URI uri = null;
-      try {
-        uri = new URI(redirectStr);
-      } catch (URISyntaxException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-
       DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-      
-      // the first time authentication 
-      httpClient.getCredentialsProvider()
-                .setCredentials(new AuthScope(uri.getHost(), uri.getPort()),
-                                new UsernamePasswordCredentials("duongnd", "duongde1506"));
 
-      HttpGet httpGet = new HttpGet(uri);
+      HttpGet httpGet = new HttpGet(redirectStr);
+
       response = httpClient.execute(httpGet);
-      entity = response.getEntity();
       cookiesStore = httpClient.getCookieStore();
       List<Cookie> cookies = cookiesStore.getCookies();
+      System.out.println("cookie" + cookies.size());
 
       if (!cookies.isEmpty()) {
         for (int i = 0; i < cookies.size(); i++) {
           strCookie = cookies.get(i).getName().toString() + "="
               + cookies.get(i).getValue().toString();
+          System.out.println("strCookie" + strCookie);
 
         }
       }
 
       int indexOfPrivate = redirectStr.indexOf("/classic");
-
+      
       // Request to login
       String loginStr;
       if (indexOfPrivate > 0)
