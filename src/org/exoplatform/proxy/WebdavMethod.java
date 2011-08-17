@@ -17,10 +17,6 @@
 package org.exoplatform.proxy;
 
 import java.net.URI;
-
-import org.apache.http.Header;
-import org.apache.http.HttpRequest;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.FileEntity;
 
@@ -64,28 +60,7 @@ public class WebdavMethod extends HttpRequestBase{
     this.setHeader("Overwrite", "T");
     this.setHeader("Destination", destinationUriStr);
   }
-  
-  public void setMethod(String method)
-  {
-    
-    this.setURI(URI.create(sourceUriStr));
-    
-    if(method.equalsIgnoreCase("UPLOAD"))
-    {
-        
-    }
-    else if(method.equalsIgnoreCase("COPY") || method.equalsIgnoreCase("MOVE"))
-    {
-      this.setHeader("Overwrite", "T");
-      this.setHeader("Destination", destinationUriStr);
-    }
-    else
-    {
-      
-    }
-    
-  }
-  
+   
   @Override
   public String getMethod() {
     // TODO Auto-generated method stub

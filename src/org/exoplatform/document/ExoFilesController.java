@@ -23,6 +23,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController;
 import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.proxy.WebdavMethod;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
@@ -144,23 +145,10 @@ public class ExoFilesController extends MyActionBar {
 
             File file = new File(sdcard_temp_dir);
             System.out.println("uploadFileUrl " + uploadFileUrl);
-            boolean isUploaded = ExoDocumentUtils.putFileToServerFromLocal(uploadFileUrl,
+            boolean isUploaded = ExoDocumentUtils.putFileToServerFromLocal(uploadFileUrl + "/" + file.getName(),
                                                                            file,
                                                                            "image/jpeg");
-            // ExoDocumentUtils.put(file, uploadFileUrl);
-
-            // if (isUploaded == true) {
-            // Toast toast = Toast.makeText(ExoFilesController.this,
-            // "Upload succesfully",
-            // Toast.LENGTH_SHORT);
-            // toast.show();
-            // } else {
-            // Toast toast = Toast.makeText(ExoFilesController.this,
-            // "Upload error",
-            // Toast.LENGTH_SHORT);
-            // toast.show();
-            // }
-
+            
             runOnUiThread(reloadFileAdapter);
             runOnUiThread(dismissProgressDialog);
           }
@@ -425,7 +413,7 @@ public class ExoFilesController extends MyActionBar {
 
   // Take photo app
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == ExoConstants.TAKE_PICTURE_WITH_CAMERA && resultCode == Activity.RESULT_OK) {
+    if (requestCode == ExoConstants.TAKE_PICTURE_WITH_CAMERA || resultCode == Activity.RESULT_OK) {
       File file = new File(sdcard_temp_dir);
       setVieweXoImage(true);
       // _uri = data.getData();
@@ -769,20 +757,21 @@ public class ExoFilesController extends MyActionBar {
 
   // Delete file/folder method
   public static boolean deleteMethod(String url) {
-    boolean returnValue = false;
-
-    HttpDelete delete = new HttpDelete(url);
+    HttpResponse response;
     try {
-      HttpResponse response = ExoConnectionUtils.httpClient.execute(delete);
+
+      WebdavMethod copy = new WebdavMethod("DELETE", url);
+      
+      response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
-        returnValue = true;
-      }
+        return true;
+      } else
+        return false;
+
     } catch (Exception e) {
-
+      return false;
     }
-
-    return returnValue;
   }
 
   // Copy file/folder method
@@ -790,8 +779,9 @@ public class ExoFilesController extends MyActionBar {
 
     HttpResponse response;
     try {
-      HttpCopy copy = new HttpCopy(source, destination);
 
+      WebdavMethod copy = new WebdavMethod("COPY", source, destination);
+      
       response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
@@ -807,12 +797,22 @@ public class ExoFilesController extends MyActionBar {
 
   // Move file/folder method
   public static boolean moveMethod(String source, String destination) {
-    boolean returnValue = false;
-    returnValue = ExoFilesController.copyMethod(source, destination);
-    if (returnValue)
-      returnValue = ExoFilesController.deleteMethod(source);
+    HttpResponse response;
+    try {
 
-    return returnValue;
+      WebdavMethod move = new WebdavMethod("MOVE", source, destination);
+      
+      response = ExoConnectionUtils.httpClient.execute(move);
+      int status = response.getStatusLine().getStatusCode();
+      if (status >= 200 && status < 300) {
+        return true;
+      } else
+        return false;
+
+    } catch (Exception e) {
+      return false;
+    }
+
   }
 
   // Get folder name from given URL
