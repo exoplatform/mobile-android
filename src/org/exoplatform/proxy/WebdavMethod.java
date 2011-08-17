@@ -18,7 +18,11 @@ package org.exoplatform.proxy;
 
 import java.net.URI;
 
+import org.apache.http.Header;
+import org.apache.http.HttpRequest;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.FileEntity;
 
 
 /**
@@ -27,47 +31,48 @@ import org.apache.http.client.methods.HttpRequestBase;
  *          exo@exoplatform.com
  * Aug 17, 2011  
  */
-public class WebdavMethod extends HttpRequestBase {
+public class WebdavMethod extends HttpRequestBase{
 
+  String method;
   String sourceUriStr, destinationUriStr;
+  FileEntity entity;
   
-  //Constructor for delete, upload
-  public WebdavMethod(String url)
+  
+  //Constructor for delete
+  public WebdavMethod(String method, String url)
   {
+    this.method = method;
     this.sourceUriStr = url;
+    this.setURI(URI.create(sourceUriStr));
+  }
+  
+//Constructor for upload
+  public WebdavMethod(String method, String url, FileEntity fileEntity)
+  {
+    this.method = method;
+    this.sourceUriStr = url;
+    this.entity = fileEntity;
   }
 
   //Constructor for copy, move
-  public WebdavMethod(String source, String destination)
+  public WebdavMethod(String method, String source, String destination)
   {
+    this.method = method;
     this.sourceUriStr = source;
     this.destinationUriStr = destination;
-  }
-  
-  public boolean MoveMethod()
-  {
-    return false;
-  }
-  
-  public boolean UploadMethod()
-  {
-    return false;
+    this.setURI(URI.create(sourceUriStr));
+    this.setHeader("Overwrite", "T");
+    this.setHeader("Destination", destinationUriStr);
   }
   
   public void setMethod(String method)
   {
     
-    this.setMethod(method);
-    
     this.setURI(URI.create(sourceUriStr));
     
-    if(method.equalsIgnoreCase("DELETE"))
+    if(method.equalsIgnoreCase("UPLOAD"))
     {
-      
-    }
-    else if(method.equalsIgnoreCase("UPLOAD"))
-    {
-      
+        
     }
     else if(method.equalsIgnoreCase("COPY") || method.equalsIgnoreCase("MOVE"))
     {
@@ -84,7 +89,7 @@ public class WebdavMethod extends HttpRequestBase {
   @Override
   public String getMethod() {
     // TODO Auto-generated method stub
-    return null;
+    return method;
   }
 
 }
