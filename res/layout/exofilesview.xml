@@ -18,14 +18,13 @@
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
 		android:cacheColorHint="#00000000" />
 
-	<EditText android:id="@+id/EditTextImageName"
-		android:layout_marginLeft="5dip" android:layout_marginRight="5dip"
-		android:layout_marginTop="50dip" android:layout_width="fill_parent"
-		android:layout_height="40dip" android:hint="new image.jpg" />
-
+	<!--<EditText android:id="@+id/EditTextImageName" android:layout_marginLeft="5dip" 
+		android:layout_marginRight="5dip" android:layout_marginTop="50dip" android:layout_width="fill_parent" 
+		android:layout_height="40dip" android:hint="new image.jpg" /> -->
 	<ImageView android:id="@+id/ImageView" android:layout_x="40sp"
 		android:layout_y="100sp" android:layout_width="240sp"
-		android:layout_height="340sp" />
+		android:layout_marginBottom="5dp" android:layout_height="340sp"
+		android:layout_centerInParent="true" />
 
 	<Button android:text="Upload" android:id="@+id/ButtonUpImage"
 		android:layout_alignParentBottom="true" android:layout_marginLeft="30dip"
