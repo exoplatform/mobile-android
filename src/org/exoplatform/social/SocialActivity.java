@@ -10,15 +10,13 @@ import java.util.ResourceBundle;
 
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
-import org.exoplatform.social.client.api.ClientServiceFactory;
-import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestIdentity;
+import org.exoplatform.social.client.api.model.RestLike;
 import org.exoplatform.social.client.api.model.RestProfile;
-import org.exoplatform.social.client.api.service.ActivityService;
-import org.exoplatform.social.client.api.service.IdentityService;
-import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+import org.exoplatform.social.entity.ExoSocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.UserTask;
@@ -28,11 +26,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,7 +36,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cyrilmottier.android.greendroid.R;
 
@@ -49,31 +43,31 @@ public class SocialActivity extends MyActionBar {
 
   public static SocialActivity socialActivity;
 
-  public static String     activityId;
+  public static String         activityId;
 
-  private LinearLayout     activityStreamWrap;
+  private LinearLayout         activityStreamWrap;
 
-  private ActivityLoadTask mLoadTask;
+  private ActivityLoadTask     mLoadTask;
 
-  private int              number_of_activity = 20;
+  private int                  number_of_activity = 20;
 
-  private boolean          isShowMore         = false;
+  private boolean              isShowMore         = false;
 
-  private String           loadingData;
+  private String               loadingData;
 
-  private String           showMoreText;
+  private String               showMoreText;
 
-  private String           today;
+  private String               today;
 
-  private Resources        resource;
+  private Resources            resource;
 
-  private String           minute;
+  private String               minute;
 
-  private String           minutes;
+  private String               minutes;
 
-  private String           hour;
+  private String               hour;
 
-  private String           hours;
+  private String               hours;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -122,14 +116,14 @@ public class SocialActivity extends MyActionBar {
 
   }
 
-  private void setActivityList(List<RestActivity> result) {
+  private void setActivityList(ArrayList<ExoSocialActivity> result) {
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     activityStreamWrap.removeAllViews();
 
     HashMap<String, String> actHeaderTitle = new HashMap<String, String>();
 
     for (int i = 0; i < result.size(); i++) {
-      final RestActivity activityInfo = result.get(i);
+      final ExoSocialActivity activityInfo = result.get(i);
 
       // String postedTimeTitle =
       // SocialActivityUtil.getHeader(activityInfo.getPostedTime(),
@@ -152,7 +146,7 @@ public class SocialActivity extends MyActionBar {
       item.setOnClickListener(new OnClickListener() {
 
         public void onClick(View v) {
-          activityId = activityInfo.getId();
+          activityId = activityInfo.getActivityId();
           Intent intent = new Intent(SocialActivity.this, ActivityStreamDisplay.class);
           startActivity(intent);
         }
@@ -237,7 +231,7 @@ public class SocialActivity extends MyActionBar {
 
   }
 
-  private class ActivityLoadTask extends UserTask<Integer, Void, List<RestActivity>> {
+  private class ActivityLoadTask extends UserTask<Integer, Void, ArrayList<ExoSocialActivity>> {
     private ProgressDialog _progressDialog;
 
     @Override
@@ -246,23 +240,40 @@ public class SocialActivity extends MyActionBar {
     }
 
     @Override
-    public List<RestActivity> doInBackground(Integer... params) {
+    public ArrayList<ExoSocialActivity> doInBackground(Integer... params) {
 
       try {
+        ArrayList<ExoSocialActivity> streamInfoList = new ArrayList<ExoSocialActivity>();
 
         int loadSize = params[0];
         RestIdentity identity = (RestIdentity) ExoApplicationsController2.identityService.get(ExoApplicationsController2.userIdentity);
         RealtimeListAccess<RestActivity> list = ExoApplicationsController2.activityService.getActivityStream(identity);
         ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0,
                                                                                          loadSize);
-        return activityList;
+        for (RestActivity act : activityList) {
+          ExoSocialActivity streamInfo = new ExoSocialActivity();
+          RestProfile profile = act.getPosterIdentity().getProfile();
+          streamInfo.setActivityId(act.getId());
+          streamInfo.setImageUrl(profile.getAvatarUrl());
+          streamInfo.setUserName(profile.getFullName());
+          streamInfo.setTitle(act.getTitle());
+          streamInfo.setPostedTime(act.getPostedTime());
+          List<RestLike> likeList = act.getLikes();
+          streamInfo.setLikelist(likeList);
+          streamInfo.setLikeNumber(likeList.size());
+          List<RestComment> commentList = act.getAvailableComments();
+          streamInfo.setCommentList(commentList);
+          streamInfo.setCommentNumber(commentList.size());
+          streamInfoList.add(streamInfo);
+        }
+        return streamInfoList;
       } catch (RuntimeException e) {
         return null;
       }
     }
 
     @Override
-    public void onPostExecute(List<RestActivity> result) {
+    public void onPostExecute(ArrayList<ExoSocialActivity> result) {
 
       if (result != null) {
         setActivityList(result);
@@ -286,7 +297,7 @@ public class SocialActivity extends MyActionBar {
 
     private TextView       textViewTime;
 
-    private ActivityStreamItem(Context context, RestActivity activityInfo) {
+    private ActivityStreamItem(Context context, ExoSocialActivity activityInfo) {
       super(context);
       LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
       View view = inflate.inflate(R.layout.activitybrowserviewcell, this);
@@ -296,18 +307,18 @@ public class SocialActivity extends MyActionBar {
       buttonComment = (TextView) view.findViewById(R.id.button_Comment);
       buttonLike = (TextView) view.findViewById(R.id.button_Like);
       textViewTime = (TextView) view.findViewById(R.id.textView_Time);
-      RestProfile profile = activityInfo.getPosterIdentity().getProfile();
-      String avatarUrl = profile.getAvatarUrl();
+      // RestProfile profile = activityInfo.getPosterIdentity().getProfile();
+      String avatarUrl = activityInfo.getImageUrl();
       if (avatarUrl == null) {
         imageViewAvatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
       } else
         imageViewAvatar.setUrl(SocialActivityUtil.getDomain() + avatarUrl);
-      textViewName.setText(profile.getFullName());
+      textViewName.setText(activityInfo.getUserName());
       textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
       textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime(),
                                                                   AppController.bundle));
-      buttonComment.setText("" + activityInfo.getAvailableComments().size());
-      buttonLike.setText("" + activityInfo.getLikes().size());
+      buttonComment.setText("" + activityInfo.getCommentNumber());
+      buttonLike.setText("" + activityInfo.getLikeNumber());
     }
 
   }
