@@ -33,8 +33,7 @@ public class WebdavMethod extends HttpRequestBase{
   String sourceUriStr, destinationUriStr;
   FileEntity entity;
   
-  
-  //Constructor for delete
+  //Constructor for delete, create new folder
   public WebdavMethod(String method, String url)
   {
     this.method = method;
