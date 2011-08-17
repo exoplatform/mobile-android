@@ -210,7 +210,6 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_COMMENT_TYPE);
       startActivity(intent);
-//      finish();
     }
     if (view == likeButton) {
       try {

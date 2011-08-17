@@ -14,8 +14,6 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -33,18 +31,24 @@ import org.json.simple.JSONValue;
 
 //interact with server
 public class ExoConnectionUtils {
-  private static int         splitLinesAt = 76;
 
-  public static List<Cookie> _sessionCookies;      // Cookie array
+  public static DefaultHttpClient httpClient;
 
-  public static String       _strCookie   = "";    // Cookie string
+  public static HttpURLConnection con;
 
-  private static String      _strFirstLoginContent; // String data for the first
-                                                    // time
+  private static int              splitLinesAt = 76;
+
+  public static List<Cookie>      _sessionCookies;      // Cookie array
+
+  public static String            _strCookie   = "";    // Cookie string
+
+  private static String           _strFirstLoginContent; // String data for the
+                                                         // first
+                                                         // time
 
   // login
 
-  private static String      _fullDomainStr;       // Host
+  private static String           _fullDomainStr;       // Host
 
   private static byte[] zeroPad(int length, byte[] bytes) {
     byte[] padded = new byte[length]; // initialized to zero by JVM
@@ -109,17 +113,16 @@ public class ExoConnectionUtils {
         sb.append(line + "\n");
       }
     } catch (IOException e) {
+      System.out.println("" + e.getMessage());
       // e.printStackTrace();
     } finally {
-      // try
-      // {
-      // is.close();
-      // }
-      // catch (IOException e)
-      // {
-      // e.printStackTrace();
-      // }
+      try {
+        is.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
+//    System.out.println("convertStreamToString "+sb.toString());
     return sb.toString();
   }
 
@@ -176,7 +179,14 @@ public class ExoConnectionUtils {
       HttpConnectionParams.setSoTimeout(httpParameters, 60000);
       HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
-      DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+      URI uri = null;
+      try {
+        uri = new URI(redirectStr);
+      } catch (URISyntaxException e) {
+        return "ERROR";
+      }
+
+      httpClient = new DefaultHttpClient(httpParameters);
 
       HttpGet httpGet = new HttpGet(redirectStr);
 
@@ -195,7 +205,7 @@ public class ExoConnectionUtils {
       }
 
       int indexOfPrivate = redirectStr.indexOf("/classic");
-      
+
       // Request to login
       String loginStr;
       if (indexOfPrivate > 0)
@@ -218,7 +228,6 @@ public class ExoConnectionUtils {
       if (entity != null) {
         InputStream instream = entity.getContent();
         _strFirstLoginContent = convertStreamToString(instream);
-        System.out.println("_strFirstLoginContent" + _strFirstLoginContent);
         if (_strFirstLoginContent.contains("Sign in failed. Wrong username or password.")) {
           return "NO";
         } else if (_strFirstLoginContent.contains("error', '/main?url")) {
@@ -230,6 +239,7 @@ public class ExoConnectionUtils {
       } else {
         return "ERROR";
       }
+      // httpClient.getConnectionManager().shutdown();
     } catch (ClientProtocolException e) {
       return e.getMessage();
     } catch (IOException e) {
@@ -259,7 +269,7 @@ public class ExoConnectionUtils {
       HttpConnectionParams.setSoTimeout(httpParameters, 60000);
       HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
-      DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+      // DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 
       HttpGet httpGet = new HttpGet(redirectStr);
 
@@ -340,7 +350,7 @@ public class ExoConnectionUtils {
       String strCookie = "";
 
       String strRedirectUrl = urlStr;
-      DefaultHttpClient httpClient = new DefaultHttpClient();
+      // DefaultHttpClient httpClient = new DefaultHttpClient();
       HttpGet httpGet = new HttpGet(strRedirectUrl);
 
       response = httpClient.execute(httpGet);
@@ -439,45 +449,66 @@ public class ExoConnectionUtils {
     return ipstr;
   }
 
-  // Get string data with authentication request
-  public static String sendRequestWithAuthorizationReturnString(String urlStr) {
-    StringBuffer buf = new StringBuffer();
+  public static String getDriveContent(String url) {
+
     try {
-      String strUserName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
-                                                                    "exo_prf_username");
-      String strPassword = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
-                                                                    "exo_prf_password");
-
-      urlStr = urlStr.replace(" ", "%20");
-
-      URL url = new URL(urlStr);
-      HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-      // set up url connection to get retrieve information back
-      con.setRequestMethod("GET");
-      con.setDoInput(true);
-
-      // stuff the Authorization request header
-
-      con.setRequestProperty("Authorization", authorizationHeader(strUserName, strPassword));
-      // pull the information back from the URL
-      InputStream ipstr = con.getInputStream();
-
-      int c;
-      while ((c = ipstr.read()) != -1) {
-        buf.append((char) c);
+      HttpGet get = new HttpGet(url);
+      HttpResponse response;
+      response = httpClient.execute(get);
+      HttpEntity entity = response.getEntity();
+      if (entity != null) {
+        InputStream instream = entity.getContent();
+        String strResult = convertStreamToString(instream);
+        return strResult;
+      } else {
+        return null;
       }
 
-      con.disconnect();
-
-    } catch (ClientProtocolException e) {
-      e.getMessage();
-    } catch (IOException e) {
-      e.getMessage();
+    } catch (Exception e) {
+      return null;
     }
 
-    return buf.toString();
   }
+
+  // Get string data with authentication request
+//  public static String sendRequestWithAuthorizationReturnString(String urlStr) {
+//    StringBuffer buf = new StringBuffer();
+//    try {
+//      String strUserName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
+//                                                                    "exo_prf_username");
+//      String strPassword = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
+//                                                                    "exo_prf_password");
+//
+//      urlStr = urlStr.replace(" ", "%20");
+//
+//      URL url = new URL(urlStr);
+//      con = (HttpURLConnection) url.openConnection();
+//
+//      // set up url connection to get retrieve information back
+//      con.setRequestMethod("GET");
+//      con.setDoInput(true);
+//
+//      // stuff the Authorization request header
+//
+//      con.setRequestProperty("Authorization", authorizationHeader(strUserName, strPassword));
+//      // pull the information back from the URL
+//      InputStream ipstr = con.getInputStream();
+//
+//      int c;
+//      while ((c = ipstr.read()) != -1) {
+//        buf.append((char) c);
+//      }
+//
+//      con.disconnect();
+//
+//    } catch (ClientProtocolException e) {
+//      e.getMessage();
+//    } catch (IOException e) {
+//      e.getMessage();
+//    }
+//
+//    return buf.toString();
+//  }
 
   // Get input stream from URL
   private static InputStream sendRequest(String strUrlRequest) {
@@ -485,7 +516,9 @@ public class ExoConnectionUtils {
     try {
       HttpResponse response;
       HttpEntity entity;
-      DefaultHttpClient httpClient = new DefaultHttpClient();
+      // DefaultHttpClient httpClient = new DefaultHttpClient();
+      httpClient.getCredentialsProvider().setCredentials(AppController.auth,
+                                                         AppController.credential);
       HttpGet httpGet = new HttpGet(strUrlRequest);
       httpGet.setHeader("Cookie", _strCookie);
       response = httpClient.execute(httpGet);
@@ -493,6 +526,7 @@ public class ExoConnectionUtils {
       if (entity != null) {
         ipstr = entity.getContent();
       }
+      // httpClient.getConnectionManager().shutdown();
     } catch (ClientProtocolException e) {
       e.getMessage();
     } catch (IOException e) {

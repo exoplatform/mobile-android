@@ -1,5 +1,6 @@
 package org.exoplatform.controller;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,6 +69,8 @@ public class AppController extends Activity implements OnTouchListener {
   public static final String                EXO_PRF_LANGUAGE     = "exo_prf_language";
 
   public static final String                EXO_PRF_LOCALIZE     = "exo_prf_localize";
+
+  public static boolean                     isNewVersion;
 
   // Authentication
   public static AuthScope                   auth                 = null;
@@ -393,7 +396,7 @@ public class AppController extends Activity implements OnTouchListener {
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
 
-      System.out.println("remove option item ");
+    System.out.println("remove option item ");
     // menu.add(0, 1, 0, "Setting");
     menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
     // menu.add(0, 2, 0, "Delete Contact");
@@ -418,7 +421,7 @@ public class AppController extends Activity implements OnTouchListener {
       Intent next = new Intent(AppController.this, ExoSetting.class);
       next.putExtra(ExoConstants.SETTING_TYPE, 0);
       startActivity(next);
-      
+
     }
 
     return false;
@@ -595,7 +598,9 @@ public class AppController extends Activity implements OnTouchListener {
         _strDomain = "http://" + _strDomain;
       }
 
-      URL url = new URL(_strDomain);
+      // URL url = new URL(_strDomain);
+      URI uri = new URI(_strDomain);
+
       // HttpURLConnection con = (HttpURLConnection) url.openConnection();
       // int code = con.getResponseCode();
 
@@ -615,8 +620,8 @@ public class AppController extends Activity implements OnTouchListener {
         editor.putString(EXO_PRF_PASSWORD, _strPassword);
         editor.commit();
 
-        createAuthorization(url.getHost(), url.getPort());
-
+        createAuthorization(uri.getHost(), uri.getPort());
+        isNewVersion = checkNewPLF();
         runOnUiThread(returnRes);
       } else if (strResult.equalsIgnoreCase("NO")) {
         runOnUiThread(returnResFaileUserNamePassword);
@@ -906,6 +911,11 @@ public class AppController extends Activity implements OnTouchListener {
     String userName = sharedPreference.getString(EXO_PRF_USERNAME, "");
     String password = sharedPreference.getString(EXO_PRF_PASSWORD, "");
     credential = new UsernamePasswordCredentials(userName, password);
+  }
+
+  private static boolean checkNewPLF() {
+    return ExoConnectionUtils.checkPLFVersion();
+
   }
 
   // Set language

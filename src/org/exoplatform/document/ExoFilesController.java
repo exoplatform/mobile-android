@@ -3,25 +3,29 @@ package org.exoplatform.document;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.FileEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController;
 import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
@@ -34,6 +38,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,7 +48,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -53,60 +57,64 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class ExoFilesController extends MyActionBar {
 
-  static final String                      FILE_CONTENT_TYPE  = "image/bmp image/cgm image/gif image/jpeg image/png image/tiff image/x-icon "
-                                                                  + "video/mpeg video/quicktime video/x-msvideo "
-                                                                  + "audio/midi audio/mpeg audio/x-aiff audio/x-mpegurl "
-                                                                  + "audio/x-pn-realaudio audio/x-wav "
-                                                                  + "application/msword application/pdf application/vnd.ms-excel "
-                                                                  + "application/vnd.ms-powerpoint application/zip";
+  static final String              FILE_CONTENT_TYPE  = "image/bmp image/cgm image/gif image/jpeg image/png image/tiff image/x-icon "
+                                                          + "video/mpeg video/quicktime video/x-msvideo "
+                                                          + "audio/midi audio/mpeg audio/x-aiff audio/x-mpegurl "
+                                                          + "audio/x-pn-realaudio audio/x-wav "
+                                                          + "application/msword application/pdf application/vnd.ms-excel "
+                                                          + "application/vnd.ms-powerpoint application/zip";
 
-  static ListView                          _lstvFiles;
+  static ListView                  _lstvFiles;
 
-  TextView                                 _textViewEmptyPage;
+  TextView                         _textViewEmptyPage;
 
   // for eXo image View
-  EditText                                 txtFileName;
+  // EditText txtFileName;
 
-  ImageView                                imgView;
+  ImageView                        imgView;
 
-  ImageView                                imgViewEmptyPage;
+  ImageView                        imgViewEmptyPage;
 
-  Button                                   _btnUploadImage;
+  Button                           _btnUploadImage;
 
-  Button                                   _btnCancelUploadImage;
+  Button                           _btnCancelUploadImage;
 
-  static ProgressDialog                    _progressDialog;
+  static ProgressDialog            _progressDialog;
 
-  public static String                     _rootUrl;
+  public static String             _rootUrl;
 
-  public static String                     localFilePath;                                                           // =
-                                                                                                                     // "/sdcard/eXo/";
+  public static String             localFilePath;                                                           // =
+                                                                                                             // "/sdcard/eXo/";
 
-  public static Uri                        _uri;
+  public static Uri                _uri;
 
-  boolean                                  _deleteFile;
+  boolean                          _deleteFile;
 
-  boolean                                  _copyFile;
+  boolean                          _copyFile;
 
-  boolean                                  _moveFile;
+  boolean                          _moveFile;
 
-  public static ExoFilesController         eXoFilesControllerInstance;
+  public static ExoFilesController eXoFilesControllerInstance;
 
-//  public static ExoApplicationsController2 _delegate;
+  // public static ExoApplicationsController2 _delegate;
 
-  static public ExoFile                    myFile;
+  static public ExoFile            myFile;
 
-  static public int                        positionOfFileItem = 0;
+  static public int                positionOfFileItem = 0;
 
-  public static List<ExoFile>              arrFiles;
+  public static List<ExoFile>      arrFiles;
 
-  public BaseAdapter                       fileAdapter;
+  public BaseAdapter               fileAdapter;
 
-  String                                   strCannotBackToPreviousPage;
+  String                           strCannotBackToPreviousPage;
 
-  static String                            strDownloadFileIntoSDCard;
+  static String                    strDownloadFileIntoSDCard;
 
-  Thread                                   thread;
+  Thread                           thread;
+
+  private static String            sdcard_temp_dir;
+
+  public static String             uploadFileUrl;
 
   // Constructor
   @Override
@@ -134,20 +142,24 @@ public class ExoFilesController extends MyActionBar {
         Runnable loadingDataRunnable = new Runnable() {
           public void run() {
 
-            String fileName = txtFileName.getText().toString();
-            if (fileName == null || fileName.equalsIgnoreCase("")) {
-              fileName = txtFileName.getHint().toString();
-            }
+            File file = new File(sdcard_temp_dir);
+            System.out.println("uploadFileUrl " + uploadFileUrl);
+            boolean isUploaded = ExoDocumentUtils.putFileToServerFromLocal(uploadFileUrl,
+                                                                           file,
+                                                                           "image/jpeg");
+            // ExoDocumentUtils.put(file, uploadFileUrl);
 
-            String encodedePath = _uri.getEncodedPath();
-
-            AuthScope auth = AppController.auth;
-            UsernamePasswordCredentials credential = AppController.credential;
-
-            saveFileToLocal(auth, credential, encodedePath, localFilePath, fileName, true);
-
-            String url = myFile.urlStr + "/" + fileName.replace(" ", "%20");
-            putFileToServerFromLocal(auth, credential, url, localFilePath, fileName, "image/jpeg");
+            // if (isUploaded == true) {
+            // Toast toast = Toast.makeText(ExoFilesController.this,
+            // "Upload succesfully",
+            // Toast.LENGTH_SHORT);
+            // toast.show();
+            // } else {
+            // Toast toast = Toast.makeText(ExoFilesController.this,
+            // "Upload error",
+            // Toast.LENGTH_SHORT);
+            // toast.show();
+            // }
 
             runOnUiThread(reloadFileAdapter);
             runOnUiThread(dismissProgressDialog);
@@ -186,7 +198,7 @@ public class ExoFilesController extends MyActionBar {
     // setTitle(getFolderNameFromUrl(_rootUrl));
     setTitle(getFolderNameFromUrl(myFile.urlStr));
 
-    txtFileName = (EditText) findViewById(R.id.EditTextImageName);
+    // txtFileName = (EditText) findViewById(R.id.EditTextImageName);
 
     setVieweXoImage(false);
 
@@ -196,13 +208,22 @@ public class ExoFilesController extends MyActionBar {
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    destroy();
+    myFile = null;
+    _rootUrl = null;
+    Intent intent = new Intent(this, ExoApplicationsController2.class);
+    startActivity(intent);
+    finish();
     return true;
   }
 
   private void destroy() {
     if (myFile.urlStr.equalsIgnoreCase(_rootUrl)) {
       eXoFilesControllerInstance.finish();
+      myFile = null;
+      _rootUrl = null;
+      Intent intent = new Intent(this, ExoApplicationsController2.class);
+      startActivity(intent);
+      finish();
     } else {
       finishMe();
     }
@@ -273,7 +294,7 @@ public class ExoFilesController extends MyActionBar {
                                             }
 
                                             _progressDialog.dismiss();
-                                            thread.stop();
+                                            // thread.stop();
 
                                           }
                                         };
@@ -391,18 +412,35 @@ public class ExoFilesController extends MyActionBar {
 
   // Take a photo
   public static void takePicture() {
-    Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-    eXoFilesControllerInstance.startActivityForResult(intent, 0);
+    String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
+    sdcard_temp_dir = parentPath + PhotoUltils.getImageFileName();
+
+    Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                                         Uri.fromFile(new File(sdcard_temp_dir)));
+    eXoFilesControllerInstance.startActivityForResult(takePictureFromCameraIntent,
+                                                      ExoConstants.TAKE_PICTURE_WITH_CAMERA);
 
   }
 
   // Take photo app
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+    if (requestCode == ExoConstants.TAKE_PICTURE_WITH_CAMERA && resultCode == Activity.RESULT_OK) {
+      File file = new File(sdcard_temp_dir);
       setVieweXoImage(true);
-      _uri = data.getData();
-      Bitmap bmp = (Bitmap) data.getExtras().get("data");
-      imgView.setImageBitmap(bmp);
+      // _uri = data.getData();
+      try {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        FileInputStream fis = new FileInputStream(file);
+        Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
+        fis.close();
+        // Bitmap bmp = (Bitmap) data.getExtras().get("data");
+        imgView.setImageBitmap(bitmap);
+      } catch (Exception e) {
+        // TODO: handle exception
+      }
+
     } else if (resultCode == Activity.RESULT_CANCELED) {
       return;
       // finish();
@@ -426,7 +464,7 @@ public class ExoFilesController extends MyActionBar {
     // _btnCloseBack.setVisibility(viewFileMode);
 
     // for eXo image View
-    txtFileName.setVisibility(viewImageMode);
+    // txtFileName.setVisibility(viewImageMode);
     imgView.setVisibility(viewImageMode);
     _btnUploadImage.setVisibility(viewImageMode);
     _btnCancelUploadImage.setVisibility(viewImageMode);
@@ -467,10 +505,7 @@ public class ExoFilesController extends MyActionBar {
   public static List<ExoFile> getPersonalDriveContent(String url) {
 
     List<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
-
-    String responseStr = ExoConnectionUtils.sendRequestWithAuthorizationReturnString(url.replace(" ",
-                                                                                                 "%20"));
-
+    String responseStr = ExoConnectionUtils.getDriveContent(url.replace(" ", "%20"));
     int local1;
     int local2;
     do {
@@ -715,12 +750,12 @@ public class ExoFilesController extends MyActionBar {
     InputStream is = null;
 
     HttpResponse response = null;
-    DefaultHttpClient client = new DefaultHttpClient();
-    client.getCredentialsProvider().setCredentials(auth, credential);
+    // DefaultHttpClient client = new DefaultHttpClient();
+    // client.getCredentialsProvider().setCredentials(auth, credential);
     HttpGet get = new HttpGet(url);
     try {
 
-      response = client.execute(get);
+      response = ExoConnectionUtils.httpClient.execute(get);
       is = response.getEntity().getContent();
 
     } catch (Exception e) {
@@ -733,111 +768,49 @@ public class ExoFilesController extends MyActionBar {
   }
 
   // Delete file/folder method
-  public static boolean deleteMethod(AuthScope auth,
-                                     UsernamePasswordCredentials credential,
-                                     String url) {
+  public static boolean deleteMethod(String url) {
     boolean returnValue = false;
 
-    DefaultHttpClient client = new DefaultHttpClient();
-    client.getCredentialsProvider().setCredentials(auth, credential);
     HttpDelete delete = new HttpDelete(url);
     try {
-      HttpResponse response = client.execute(delete);
+      HttpResponse response = ExoConnectionUtils.httpClient.execute(delete);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         returnValue = true;
       }
     } catch (Exception e) {
 
-    }
-
-    return returnValue;
-  }
-
-  // Send file to server
-  public static boolean putFileToServerFromLocal(AuthScope auth,
-                                                 UsernamePasswordCredentials credential,
-                                                 String url,
-                                                 String path,
-                                                 String file,
-                                                 String fileType) {
-    boolean returnValue = false;
-
-    DefaultHttpClient client = new DefaultHttpClient();
-    client.getCredentialsProvider().setCredentials(auth, credential);
-    // try {
-    // url = URLEncoder.encode(url, "UTF-8");
-    // } catch (Exception e) {
-    //
-    // }
-
-    HttpPut post = new HttpPut(url);
-
-    File fileManager = new File(path + file);
-    FileEntity entity = new FileEntity(fileManager, fileType);
-    // binary/octet-stream
-
-    post.setEntity(entity);
-
-    try {
-      HttpResponse response = client.execute(post);
-      int status = response.getStatusLine().getStatusCode();
-      if (status >= 200 && status < 300) {
-        returnValue = true;
-      }
-
-    } catch (Exception e) {
-
-      String msg = e.getMessage();
-      String str = e.toString();
-      Log.d(msg, str);
     }
 
     return returnValue;
   }
 
   // Copy file/folder method
-  public static boolean copyMethod(AuthScope auth,
-                                   UsernamePasswordCredentials credential,
-                                   String source,
-                                   String destination) {
-    boolean returnValue = false;
+  public static boolean copyMethod(String source, String destination) {
 
-    DefaultHttpClient client = new DefaultHttpClient();
-    client.getCredentialsProvider().setCredentials(auth, credential);
-
-    HttpPut put = new HttpPut(destination);
-
-    put.setHeader("Destination", source);
-    put.setHeader("Overwrite", "T");
-
+    HttpResponse response;
     try {
+      HttpCopy copy = new HttpCopy(source, destination);
 
-      HttpResponse response = client.execute(put);
+      response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
-        returnValue = true;
-      }
+        return true;
+      } else
+        return false;
 
     } catch (Exception e) {
-
-      String msg = e.getMessage();
-      String str = e.toString();
-      Log.d(msg, str);
+      return false;
     }
 
-    return returnValue;
   }
 
   // Move file/folder method
-  public static boolean moveMethod(AuthScope auth,
-                                   UsernamePasswordCredentials credential,
-                                   String source,
-                                   String destination) {
+  public static boolean moveMethod(String source, String destination) {
     boolean returnValue = false;
-    returnValue = ExoFilesController.copyMethod(auth, credential, source, destination);
+    returnValue = ExoFilesController.copyMethod(source, destination);
     if (returnValue)
-      returnValue = ExoFilesController.deleteMethod(auth, credential, source);
+      returnValue = ExoFilesController.deleteMethod(source);
 
     return returnValue;
   }
@@ -900,9 +873,28 @@ public class ExoFilesController extends MyActionBar {
     _btnCancelUploadImage.setText(strCancel);
     _textViewEmptyPage.setText(strEmptyPage);
 
-//    _delegate.changeLanguage(resourceBundle);
+    // _delegate.changeLanguage(resourceBundle);
     // _delegate.createAdapter();
 
+  }
+
+  private static class HttpCopy extends HttpRequestBase {
+    public static final String METHOD_NAME = "COPY";
+
+    public HttpCopy(URI sourceUrl, URI destinationUrl) {
+      this.setHeader("Destination", destinationUrl.toString());
+      this.setHeader("Overwrite", "T");
+      this.setURI(sourceUrl);
+    }
+
+    public HttpCopy(String sourceUrl, String destinationUrl) {
+      this(URI.create(sourceUrl), URI.create(destinationUrl));
+    }
+
+    @Override
+    public String getMethod() {
+      return METHOD_NAME;
+    }
   }
 
 }

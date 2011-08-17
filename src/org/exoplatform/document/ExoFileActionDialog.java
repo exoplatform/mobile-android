@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import org.exoplatform.R;
 import org.exoplatform.controller.AppController;
 
+import android.R.bool;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -121,6 +122,7 @@ public class ExoFileActionDialog extends Dialog implements OnClickListener {
               public void run() {
                 if (pos == 0)// Take picture
                 {
+                  ExoFilesController.uploadFileUrl = myFile.urlStr;
                   ExoFilesController.takePicture();
                 } else if (pos == 1)// Copy file
                 {
@@ -132,9 +134,7 @@ public class ExoFileActionDialog extends Dialog implements OnClickListener {
                   copyMoveFile = myFile;
                 } else if (pos == 3)// Delete file, folder
                 {
-                  ExoFilesController.deleteMethod(AppController.auth,
-                                                  AppController.credential,
-                                                  myFile.urlStr);
+                  ExoFilesController.deleteMethod(myFile.urlStr);
                   // Files List
                   int index = myFile.urlStr.lastIndexOf("/");
                   myFile.urlStr = myFile.urlStr.substring(0, index);
@@ -147,27 +147,20 @@ public class ExoFileActionDialog extends Dialog implements OnClickListener {
                     // Copy file
                     if (copyMoveFileMode == 1) {
                       int index = copyMoveFile.urlStr.lastIndexOf("/");
-                      String tmpUrl = copyMoveFile.urlStr;
                       String lastPathComponent = copyMoveFile.urlStr.substring(index,
                                                                                copyMoveFile.urlStr.length());
-                      ExoFilesController.copyMethod(AppController.auth,
-                                                    AppController.credential,
-                                                    copyMoveFile.urlStr,
-                                                    myFile.urlStr.concat(lastPathComponent));
-                      copyMoveFile.urlStr = tmpUrl;
-
+                      boolean result = ExoFilesController.copyMethod(copyMoveFile.urlStr,
+                                                                     myFile.urlStr.concat(lastPathComponent));
+                      ExoFilesController.eXoFilesControllerInstance.runOnUiThread(reloadFileAdapter);
+                      System.out.println("result" + result);
                       copyMoveFileMode = 0;
                     } else if (copyMoveFileMode == 2) {
                       if (!copyMoveFile.urlStr.equalsIgnoreCase(myFile.urlStr)) {
                         int index = copyMoveFile.urlStr.lastIndexOf("/");
-                        String tmpUrl = copyMoveFile.urlStr;
                         String lastPathComponent = copyMoveFile.urlStr.substring(index,
                                                                                  copyMoveFile.urlStr.length());
-                        ExoFilesController.moveMethod(AppController.auth,
-                                                      AppController.credential,
-                                                      copyMoveFile.urlStr,
+                        ExoFilesController.moveMethod(copyMoveFile.urlStr,
                                                       myFile.urlStr.concat(lastPathComponent));
-                        copyMoveFile.urlStr = tmpUrl;
 
                         copyMoveFileMode = 0;
                       }

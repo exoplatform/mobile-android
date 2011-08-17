@@ -250,20 +250,24 @@ public class SocialActivity extends MyActionBar {
         RealtimeListAccess<RestActivity> list = ExoApplicationsController2.activityService.getActivityStream(identity);
         ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0,
                                                                                          loadSize);
+        ExoSocialActivity streamInfo = null;
+        RestProfile profile = null;
         for (RestActivity act : activityList) {
-          ExoSocialActivity streamInfo = new ExoSocialActivity();
-          RestProfile profile = act.getPosterIdentity().getProfile();
+          streamInfo = new ExoSocialActivity();
+          profile = act.getPosterIdentity().getProfile();
           streamInfo.setActivityId(act.getId());
           streamInfo.setImageUrl(profile.getAvatarUrl());
           streamInfo.setUserName(profile.getFullName());
           streamInfo.setTitle(act.getTitle());
           streamInfo.setPostedTime(act.getPostedTime());
-          List<RestLike> likeList = act.getLikes();
-          streamInfo.setLikelist(likeList);
-          streamInfo.setLikeNumber(likeList.size());
-          List<RestComment> commentList = act.getAvailableComments();
-          streamInfo.setCommentList(commentList);
-          streamInfo.setCommentNumber(commentList.size());
+          // List<RestLike> likeList = act.getLikes();
+          // streamInfo.setLikelist(likeList);
+          // streamInfo.setLikeNumber(likeList.size());
+          streamInfo.setLikeNumber(act.getLikes().size());
+          // List<RestComment> commentList = act.getAvailableComments();
+          // streamInfo.setCommentList(commentList);
+          // streamInfo.setCommentNumber(commentList.size());
+          streamInfo.setCommentNumber(act.getAvailableComments().size());
           streamInfoList.add(streamInfo);
         }
         return streamInfoList;
