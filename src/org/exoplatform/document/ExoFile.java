@@ -8,7 +8,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.utils.ExoConnectionUtils;
 
-
 //	File info
 public class ExoFile {
 
@@ -22,7 +21,9 @@ public class ExoFile {
 
   // Default constructors
   public ExoFile() {
-
+    urlStr = null;
+    fileName = null;
+    contentType = null;
   }
 
   // Construtor
@@ -43,8 +44,7 @@ public class ExoFile {
       con.setRequestMethod("GET");
       // String authorizationStr =
       con.setRequestProperty("Authorization",
-                             ExoConnectionUtils.authorizationHeader(strUserName,
-                                                                              strPassword));
+                             ExoConnectionUtils.authorizationHeader(strUserName, strPassword));
 
       contentType = con.getContentType();
 

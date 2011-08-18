@@ -37,23 +37,33 @@ public class ExoDocumentUtils {
   }
 
   public static String getDocumentUrl(String userName, String domain) {
-    String url = domain + "/rest/private/jcr/repository/collaboration/Users";
+    StringBuffer buffer = new StringBuffer();
+    buffer.append(domain);
+    buffer.append("/rest/private/jcr/repository/collaboration/Users");
 
     if (AppController.isNewVersion == true) {
       int length = userName.length();
-      for (int i = 1; i < length; i++) {
-        String userNameLevel = userName.substring(0, i);
-        for (int j = 1; j < length; j++) {
-          userNameLevel += "_";
+      if (length < 4) {
+        for (int i = 1; i < length; i++) {
+          String userNameLevel = userName.substring(0, i);
+          buffer.append("/");
+          buffer.append(userNameLevel);
+          buffer.append("___");
         }
-
-        url += "/" + userNameLevel;
+      } else {
+        for (int i = 1; i < 4; i++) {
+          String userNameLevel = userName.substring(0, i);
+          buffer.append("/");
+          buffer.append(userNameLevel);
+          buffer.append("___");
+        }
       }
+
     }
+    buffer.append("/");
+    buffer.append(userName);
 
-    url += "/" + userName;
-
-    return url;
+    return buffer.toString();
   }
 
 }

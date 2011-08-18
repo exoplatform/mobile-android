@@ -558,6 +558,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       // }
 
       ExoFilesController.myFile.urlStr = ExoDocumentUtils.getDocumentUrl(userName, domain);
+      System.out.println("ExoFilesController.myFile.urlStr   " + ExoFilesController.myFile.urlStr);
 
       ExoFilesController._rootUrl = ExoFilesController.myFile.urlStr;
     }
