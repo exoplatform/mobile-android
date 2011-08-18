@@ -969,15 +969,47 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
         return null;
 
       strContent = strContent.substring(index1 + 20);
-      System.out.println("strContent  " + strContent);
+      //System.out.println("strContent  " + strContent);
       index1 = strContent.indexOf("TBIcon");
       if (index1 < 0)
         return null;
 
       strContent = strContent.substring(0, index1);
-      System.out.println("strContent  " + strContent);
+      //System.out.println("strContent  " + strContent);
+      
+  	  String firstChunkForGadget = "<a class=\"ItemIcon DefaultPageIcon\" href=\"";
+  	  String commaChar = "\"";
+  	  String supChar = ">";
+  	  String lastChunkForGadget = "</a>";
 
       do {
+        
+    	//Search for each '<a class="ItemIcon DefaultPageIcon"' in the HTML
+    	int indexStartOfNextGadget = strContent.indexOf(firstChunkForGadget);
+    	
+    	if (indexStartOfNextGadget > 0) {
+          //Remove the ***...<a class="ItemIcon DefaultPageIcon" from the string
+    	  String stringCutted = strContent.substring(indexStartOfNextGadget + firstChunkForGadget.length());
+    	  
+    	  //Search for the next '"' in the string
+          int indexForComma = stringCutted.indexOf(commaChar);
+    	  
+          //Get the URL string
+          String gadgetTabUrlStr = stringCutted.substring(0, indexForComma);
+          
+          //Search for the next '>' in the string
+          int indexForSup = stringCutted.indexOf(supChar);
+          
+          //Remove the '>' from stringCutted
+          stringCutted = stringCutted.substring(indexForSup + supChar.length());
+          
+          //Search for the '</a>'
+          int indexForDashboardNameEnd = stringCutted.indexOf(lastChunkForGadget);
+          
+          //Get the TabName
+          String gadgetTabName = stringCutted.substring(0,indexForDashboardNameEnd);
+          
+    	/*  
         index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
         System.out.println("index1  " + index1);
         index2 = strContent.indexOf("\" >");
@@ -993,6 +1025,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
         if (index3 < 0)
           return null;
         String gadgetTabName = strContent.substring(0, index3);
+        */
         List<ExoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
         System.out.println("arrTmpGadgetsInItem  " + arrTmpGadgetsInItem.size());
 
@@ -1016,9 +1049,16 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
           // arrTmpGadgets.add(tmpGateInDbItem);
           gadgetList.add(tmpGateInDbItem);
 
-          strContent = strContent.substring(index3);
-          index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
+          
+          //Prepare for the next iteration
+          //Remove the last information about the current gadget
+          String toRemoveFromContent = gadgetTabName+"</a>";
+          int range3 = strContent.indexOf(toRemoveFromContent);
+		  strContent = strContent.substring(range3+toRemoveFromContent.length());
+          index1 = strContent.indexOf(firstChunkForGadget);
 
+        }
+          
         }
 
       } while (index1 > 0);
