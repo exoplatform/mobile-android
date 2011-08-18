@@ -4,17 +4,20 @@ import greendroid.widget.ActionBarItem;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.apache.http.HttpResponse;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.document.ExoDocumentUtils;
+import org.exoplatform.proxy.WebdavMethod;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
 import org.exoplatform.social.image.SelectedImageActivity;
-import org.exoplatform.social.image.SocialImageLibrary;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
@@ -22,6 +25,7 @@ import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -58,7 +62,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private String                       composeMessage;
 
-  private String                       sdcard_temp_dir;
+  private String                       sdcard_temp_dir = null;
 
   private String                       comment;
 
@@ -78,7 +82,13 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private String                       photoLibraryText;
 
+  private String                       loadingData;
+
   private Intent                       intent;
+
+  private PostStatusTask               mPostTask;
+
+  private String                       uploadUrl;
 
   public static ComposeMessageActivity composeMessageActivity;
 
@@ -142,14 +152,13 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
           onPostTask();
         } else {
           onCommentTask();
+          try {
+            Thread.sleep(1000);
+            destroy();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
         }
-        try {
-          Thread.sleep(1000);
-          destroy();
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-
       } else {
         Toast toast = Toast.makeText(ComposeMessageActivity.this,
                                      inputTextWarning,
@@ -193,14 +202,8 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   }
 
   private void onPostTask() {
-    try {
-      RestActivityImpl activityImlp = new RestActivityImpl();
-      activityImlp.setTitle(composeMessage);
-      ExoApplicationsController2.activityService.create(activityImlp);
-    } catch (RuntimeException e) {
-      Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
-      toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-      toast.show();
+    if (mPostTask == null || mPostTask.getStatus() == PostStatusTask.Status.FINISHED) {
+      mPostTask = (PostStatusTask) new PostStatusTask().execute();
     }
   }
 
@@ -268,6 +271,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     addPhotoTitle = resourceBundle.getString("AddAPhoto");
     takePhotoText = resourceBundle.getString("TakeAPhoto");
     photoLibraryText = resourceBundle.getString("PhotoLibrary");
+    loadingData = resourceBundle.getString("LoadingData");
 
   }
 
@@ -314,12 +318,75 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     }
   }
 
-  private class PostStatusTask extends UserTask<Void, Void, Void> {
+  private boolean createFolder() {
+    String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
+                                                               "exo_prf_username");
+    String domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
+                                                             "exo_prf_domain");
+    uploadUrl = ExoDocumentUtils.getDocumentUrl(userName, domain);
+    uploadUrl += "/Public/Mobile";
+
+    HttpResponse response;
+    try {
+
+      WebdavMethod copy = new WebdavMethod("MKCOL", uploadUrl);
+
+      response = ExoConnectionUtils.httpClient.execute(copy);
+      int status = response.getStatusLine().getStatusCode();
+      if (status >= 200 && status < 300) {
+        return true;
+      } else
+        return false;
+
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  private class PostStatusTask extends UserTask<Void, Void, Integer> {
+    private ProgressDialog _progressDialog;
 
     @Override
-    public Void doInBackground(Void... params) {
-      // TODO Auto-generated method stub
-      return null;
+    public void onPreExecute() {
+      _progressDialog = ProgressDialog.show(ComposeMessageActivity.this, null, loadingData);
+    }
+
+    @Override
+    public Integer doInBackground(Void... params) {
+
+      try {
+        RestActivityImpl activityImlp = new RestActivityImpl();
+        if (sdcard_temp_dir != null) {
+          createFolder();
+          File file = new File(sdcard_temp_dir);
+          String imageDir = uploadUrl + "/" + file.getName();
+          ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, "image/jpeg");
+          Map<String, String> templateParams = new HashMap<String, String>();
+          templateParams.put("image", imageDir);
+          activityImlp.setTemplateParams(templateParams);
+        }
+
+        activityImlp.setTitle(composeMessage);
+        ExoApplicationsController2.activityService.create(activityImlp);
+        return 1;
+      } catch (RuntimeException e) {
+        return 0;
+      }
+
+    }
+
+    @Override
+    public void onPostExecute(Integer result) {
+      if (result == 1) {
+        Toast toast = Toast.makeText(ComposeMessageActivity.this,
+                                     "post successfully",
+                                     Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
+      }
+      _progressDialog.dismiss();
+      destroy();
+
     }
 
   }

@@ -134,7 +134,6 @@ public class ExoFilesController extends MyActionBar {
     // getActionBar().getItem(0).setDrawable(R.drawable.home);
 
     localFilePath = Environment.getExternalStorageDirectory() + "/eXo/";
-    System.out.println("Local File path " + localFilePath);
 
     _btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
     _btnUploadImage.setOnClickListener(new OnClickListener() {
@@ -145,10 +144,9 @@ public class ExoFilesController extends MyActionBar {
 
             File file = new File(sdcard_temp_dir);
             System.out.println("uploadFileUrl " + uploadFileUrl);
-            boolean isUploaded = ExoDocumentUtils.putFileToServerFromLocal(uploadFileUrl + "/" + file.getName(),
-                                                                           file,
-                                                                           "image/jpeg");
-            
+            ExoDocumentUtils.putFileToServerFromLocal(uploadFileUrl + "/" + file.getName(),
+                                                      file,
+                                                      "image/jpeg");
             runOnUiThread(reloadFileAdapter);
             runOnUiThread(dismissProgressDialog);
           }

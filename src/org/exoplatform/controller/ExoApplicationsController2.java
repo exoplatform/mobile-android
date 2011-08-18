@@ -12,6 +12,7 @@ import java.util.TimerTask;
 import org.exoplatform.chat.ExoChatListController;
 import org.exoplatform.dashboard.ExoDashboard;
 import org.exoplatform.dashboard.ExoGadget;
+import org.exoplatform.document.ExoDocumentUtils;
 import org.exoplatform.document.ExoFile;
 import org.exoplatform.document.ExoFilesController;
 import org.exoplatform.model.GateInDbItem;
@@ -541,22 +542,22 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       ExoFilesController.myFile = new ExoFile();
       ExoFilesController.myFile.fileName = userName;
 
-      ExoFilesController.myFile.urlStr = domain
-          + "/rest/private/jcr/repository/collaboration/Users";
+      // ExoFilesController.myFile.urlStr = domain
+      // + "/rest/private/jcr/repository/collaboration/Users";
+      //
+      // if (AppController.isNewVersion == true) {
+      // int length = userName.length();
+      // for (int i = 1; i < length; i++) {
+      // String userNameLevel = userName.substring(0, i);
+      // for (int j = 1; j < length; j++) {
+      // userNameLevel += "_";
+      // }
+      //
+      // ExoFilesController.myFile.urlStr += "/" + userNameLevel;
+      // }
+      // }
 
-      if (AppController.isNewVersion == true) {
-        int length = userName.length();
-        for (int i = 1; i < length; i++) {
-          String userNameLevel = userName.substring(0, i);
-          for (int j = 1; j < length; j++) {
-            userNameLevel += "_";
-          }
-
-          ExoFilesController.myFile.urlStr += "/" + userNameLevel;
-        }
-      }
-
-      ExoFilesController.myFile.urlStr += "/" + userName;
+      ExoFilesController.myFile.urlStr = ExoDocumentUtils.getDocumentUrl(userName, domain);
 
       ExoFilesController._rootUrl = ExoFilesController.myFile.urlStr;
     }

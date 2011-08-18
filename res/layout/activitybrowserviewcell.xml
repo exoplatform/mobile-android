@@ -31,8 +31,9 @@
 
 		<TextView android:id="@+id/textView_Message" style="@style/textview_content"
 			android:layout_height="wrap_content" android:text="Test message"
-			android:layout_marginLeft="10dip" android:layout_marginTop="3dip"
-			android:layout_below="@id/textView_Name" android:layout_width="fill_parent" />
+			android:maxLines="15" android:layout_marginLeft="10dip"
+			android:layout_marginTop="3dip" android:layout_below="@id/textView_Name"
+			android:layout_width="fill_parent" />
 
 		<TextView android:id="@+id/button_Comment" style="@style/textview_number"
 			android:gravity="center_vertical" android:paddingLeft="2dp"
