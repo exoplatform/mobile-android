@@ -19,17 +19,17 @@
 	<Button android:layout_marginTop="25dp" android:id="@+id/add_photo_take_button"
 		android:text="Take a Photo" android:textColor="#FFFFFF"
 		android:background="@drawable/send_button_background_shape"
-		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+		android:layout_width="fill_parent" android:layout_height="40dp" />
 
 	<Button android:layout_marginTop="15dp" android:id="@+id/add_photo_library_button"
 		android:text="Photo Library" android:textColor="#FFFFFF"
 		android:background="@drawable/send_button_background_shape"
-		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+		android:layout_width="fill_parent" android:layout_height="40dp" />
 
 	<Button android:layout_marginTop="15dp" android:id="@+id/add_photo_cancel_button"
 		android:text="Cancel" android:textColor="#FFFFFF"
 		android:background="@drawable/cancel_button_background_shape"
-		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+		android:layout_width="fill_parent" android:layout_height="40dp" />
 
 
 
