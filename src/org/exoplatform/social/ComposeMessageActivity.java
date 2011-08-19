@@ -329,13 +329,24 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     HttpResponse response;
     try {
 
-      WebdavMethod copy = new WebdavMethod("MKCOL", uploadUrl);
-
+      WebdavMethod copy = new WebdavMethod("HEAD", uploadUrl);
       response = ExoConnectionUtils.httpClient.execute(copy);
+
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
+        
         return true;
+        
       } else
+        
+        copy = new WebdavMethod("MKCOL", uploadUrl);
+        response = ExoConnectionUtils.httpClient.execute(copy);
+        status = response.getStatusLine().getStatusCode();
+        
+        if (status >= 200 && status < 300) {
+          return true;
+        }
+      
         return false;
 
     } catch (Exception e) {
@@ -360,10 +371,15 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
           createFolder();
           File file = new File(sdcard_temp_dir);
           String imageDir = uploadUrl + "/" + file.getName();
-          ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, "image/jpeg");
-          Map<String, String> templateParams = new HashMap<String, String>();
-          templateParams.put("image", imageDir);
-          activityImlp.setTemplateParams(templateParams);
+          if(file != null)
+          {
+            ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, "image/jpeg");
+            Map<String, String> templateParams = new HashMap<String, String>();
+            templateParams.put("image", imageDir);
+            activityImlp.setTemplateParams(templateParams);
+            
+          }
+          
         }
 
         activityImlp.setTitle(composeMessage);

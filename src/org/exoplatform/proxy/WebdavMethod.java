@@ -33,7 +33,7 @@ public class WebdavMethod extends HttpRequestBase{
   String sourceUriStr, destinationUriStr;
   FileEntity entity;
   
-  //Constructor for delete, create new folder
+  //Constructor for delete, create new folder, check reachability url
   public WebdavMethod(String method, String url)
   {
     this.method = method;
@@ -59,7 +59,7 @@ public class WebdavMethod extends HttpRequestBase{
     this.setHeader("Overwrite", "T");
     this.setHeader("Destination", destinationUriStr);
   }
-   
+    
   @Override
   public String getMethod() {
     // TODO Auto-generated method stub
