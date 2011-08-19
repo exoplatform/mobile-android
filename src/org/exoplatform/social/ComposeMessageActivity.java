@@ -22,6 +22,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -89,6 +90,14 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
   private PostStatusTask               mPostTask;
 
   private String                       uploadUrl;
+
+  private String                       okString;
+
+  private String                       suscessString;
+
+  private String                       errorString;
+
+  private String                       warningTitle;
 
   public static ComposeMessageActivity composeMessageActivity;
 
@@ -272,6 +281,10 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     takePhotoText = resourceBundle.getString("TakeAPhoto");
     photoLibraryText = resourceBundle.getString("PhotoLibrary");
     loadingData = resourceBundle.getString("LoadingData");
+    okString = resourceBundle.getString("OK");
+    suscessString = resourceBundle.getString("PostSuccess");
+    errorString = resourceBundle.getString("PostError");
+    warningTitle = resourceBundle.getString("Warning");
 
   }
 
@@ -331,23 +344,21 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
       WebdavMethod copy = new WebdavMethod("HEAD", uploadUrl);
       response = ExoConnectionUtils.httpClient.execute(copy);
-
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
-        
         return true;
-        
-      } else
-        
+
+      } else {
         copy = new WebdavMethod("MKCOL", uploadUrl);
         response = ExoConnectionUtils.httpClient.execute(copy);
         status = response.getStatusLine().getStatusCode();
-        
+
         if (status >= 200 && status < 300) {
           return true;
         }
-      
+
         return false;
+      }
 
     } catch (Exception e) {
       return false;
@@ -371,15 +382,14 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
           createFolder();
           File file = new File(sdcard_temp_dir);
           String imageDir = uploadUrl + "/" + file.getName();
-          if(file != null)
-          {
+          if (file != null) {
             ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, "image/jpeg");
             Map<String, String> templateParams = new HashMap<String, String>();
             templateParams.put("image", imageDir);
             activityImlp.setTemplateParams(templateParams);
-            
+
           }
-          
+
         }
 
         activityImlp.setTitle(composeMessage);
@@ -393,15 +403,16 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
     @Override
     public void onPostExecute(Integer result) {
-      if (result == 1) {
-        Toast toast = Toast.makeText(ComposeMessageActivity.this,
-                                     "post successfully",
-                                     Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.show();
-      }
+      // if (result == 1) {
+      // new WarningDialog(ComposeMessageActivity.this, warningTitle,
+      // suscessString, okString).show();
+      // }
+      // else {
+      // new WarningDialog(ComposeMessageActivity.this, warningTitle,
+      // errorString, okString).show();
+      // }
       _progressDialog.dismiss();
-      destroy();
+       destroy();
 
     }
 

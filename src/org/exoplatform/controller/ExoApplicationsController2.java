@@ -680,24 +680,12 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   public void showToast(String msg) {
 
-    // runOnUiThread(dismissProgressDialog);
-
     final Toast toast = new Toast(this);
     final String strMsg = msg;
 
     toast.setDuration(Toast.LENGTH_LONG);
     toast.setText(strMsg);
     toast.show();
-
-    // runOnUiThread(new Runnable() {
-    //
-    // public void run() {
-    // // TODO Auto-generated method stub
-    // toast.setDuration(Toast.LENGTH_LONG);
-    // toast.setText(strMsg);
-    // toast.show();
-    // }
-    // });
 
   }
 
@@ -731,7 +719,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       // exoAppsAdapter.notifyDataSetChanged();
 
     } catch (XMPPException e) {
-
+      System.out.println("XMPPException " + e.toString() + "   " + e.getMessage());
       String str = e.toString();
       String msg = e.getMessage();
       Log.e(str, msg);
@@ -969,97 +957,96 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
         return null;
 
       strContent = strContent.substring(index1 + 20);
-      //System.out.println("strContent  " + strContent);
+      // System.out.println("strContent  " + strContent);
       index1 = strContent.indexOf("TBIcon");
       if (index1 < 0)
         return null;
 
       strContent = strContent.substring(0, index1);
-      //System.out.println("strContent  " + strContent);
-      
-  	  String firstChunkForGadget = "<a class=\"ItemIcon DefaultPageIcon\" href=\"";
-  	  String commaChar = "\"";
-  	  String supChar = ">";
-  	  String lastChunkForGadget = "</a>";
+      // System.out.println("strContent  " + strContent);
+
+      String firstChunkForGadget = "<a class=\"ItemIcon DefaultPageIcon\" href=\"";
+      String commaChar = "\"";
+      String supChar = ">";
+      String lastChunkForGadget = "</a>";
 
       do {
-        
-    	//Search for each '<a class="ItemIcon DefaultPageIcon"' in the HTML
-    	int indexStartOfNextGadget = strContent.indexOf(firstChunkForGadget);
-    	
-    	if (indexStartOfNextGadget > 0) {
-          //Remove the ***...<a class="ItemIcon DefaultPageIcon" from the string
-    	  String stringCutted = strContent.substring(indexStartOfNextGadget + firstChunkForGadget.length());
-    	  
-    	  //Search for the next '"' in the string
+
+        // Search for each '<a class="ItemIcon DefaultPageIcon"' in the HTML
+        int indexStartOfNextGadget = strContent.indexOf(firstChunkForGadget);
+
+        if (indexStartOfNextGadget > 0) {
+          // Remove the ***...<a class="ItemIcon DefaultPageIcon" from the
+          // string
+          String stringCutted = strContent.substring(indexStartOfNextGadget
+              + firstChunkForGadget.length());
+
+          // Search for the next '"' in the string
           int indexForComma = stringCutted.indexOf(commaChar);
-    	  
-          //Get the URL string
+
+          // Get the URL string
           String gadgetTabUrlStr = stringCutted.substring(0, indexForComma);
-          
-          //Search for the next '>' in the string
+
+          // Search for the next '>' in the string
           int indexForSup = stringCutted.indexOf(supChar);
-          
-          //Remove the '>' from stringCutted
+
+          // Remove the '>' from stringCutted
           stringCutted = stringCutted.substring(indexForSup + supChar.length());
-          
-          //Search for the '</a>'
+
+          // Search for the '</a>'
           int indexForDashboardNameEnd = stringCutted.indexOf(lastChunkForGadget);
-          
-          //Get the TabName
-          String gadgetTabName = stringCutted.substring(0,indexForDashboardNameEnd);
-          
-    	/*  
-        index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
-        System.out.println("index1  " + index1);
-        index2 = strContent.indexOf("\" >");
-        System.out.println("index2  " + index2);
 
-        // if (index1 < 0 && index2 < 0)
-        // return null;
-        String gadgetTabUrlStr = strContent.substring(index1 + 32, index2);
-        System.out.println("gadgetTabUrlStr  " + gadgetTabUrlStr);
-        strContent = strContent.substring(index2 + 3);
-        index3 = strContent.indexOf("</a>");
-        System.out.println("index3  " + index3);
-        if (index3 < 0)
-          return null;
-        String gadgetTabName = strContent.substring(0, index3);
-        */
-        List<ExoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
-        System.out.println("arrTmpGadgetsInItem  " + arrTmpGadgetsInItem.size());
+          // Get the TabName
+          String gadgetTabName = stringCutted.substring(0, indexForDashboardNameEnd);
 
-        HashMap<String, String> mapOfURLs = listOfStandaloneGadgetsURL();
-        System.out.println("mapOfURLs  " + mapOfURLs.size());
+          /*
+           * index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
+           * System.out.println("index1  " + index1); index2 =
+           * strContent.indexOf("\" >"); System.out.println("index2  " +
+           * index2); // if (index1 < 0 && index2 < 0) // return null; String
+           * gadgetTabUrlStr = strContent.substring(index1 + 32, index2);
+           * System.out.println("gadgetTabUrlStr  " + gadgetTabUrlStr);
+           * strContent = strContent.substring(index2 + 3); index3 =
+           * strContent.indexOf("</a>"); System.out.println("index3  " +
+           * index3); if (index3 < 0) return null; String gadgetTabName =
+           * strContent.substring(0, index3);
+           */
+          List<ExoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
+          // System.out.println("arrTmpGadgetsInItem  " +
+          // arrTmpGadgetsInItem.size());
 
-        if (arrTmpGadgetsInItem != null) {
-          for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) {
-            ExoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
+          HashMap<String, String> mapOfURLs = listOfStandaloneGadgetsURL();
+          // System.out.println("mapOfURLs  " + mapOfURLs.size());
 
-            String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
+          if (arrTmpGadgetsInItem != null) {
+            for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) {
+              ExoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
 
-            if (urlStandalone != null) {
-              tmpGadget._strGadgetUrl = urlStandalone;
+              String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
+
+              if (urlStandalone != null) {
+                tmpGadget._strGadgetUrl = urlStandalone;
+              }
             }
+
+            GateInDbItem tmpGateInDbItem = new GateInDbItem(gadgetTabName,
+                                                            gadgetTabUrlStr,
+                                                            arrTmpGadgetsInItem);
+            // arrTmpGadgets.add(tmpGateInDbItem);
+            gadgetList.add(tmpGateInDbItem);
+
+            // Prepare for the next iteration
+            // Remove the last information about the current gadget
+            String toRemoveFromContent = gadgetTabName + "</a>";
+            int range3 = strContent.indexOf(toRemoveFromContent);
+            strContent = strContent.substring(range3 + toRemoveFromContent.length());
+            index1 = strContent.indexOf(firstChunkForGadget);
+
           }
 
-          GateInDbItem tmpGateInDbItem = new GateInDbItem(gadgetTabName,
-                                                          gadgetTabUrlStr,
-                                                          arrTmpGadgetsInItem);
-          // arrTmpGadgets.add(tmpGateInDbItem);
-          gadgetList.add(tmpGateInDbItem);
-
-          
-          //Prepare for the next iteration
-          //Remove the last information about the current gadget
-          String toRemoveFromContent = gadgetTabName+"</a>";
-          int range3 = strContent.indexOf(toRemoveFromContent);
-		  strContent = strContent.substring(range3+toRemoveFromContent.length());
-          index1 = strContent.indexOf(firstChunkForGadget);
-
         }
-          
-        } else {
+
+        else {
           // No gadgets so exit from the loop
           index1 = 0;
         }

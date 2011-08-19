@@ -65,7 +65,7 @@ public class PhotoUltils {
     StringBuffer buffer = new StringBuffer();
     buffer.append("MobileImage_");
     buffer.append(getDateFormat());
-    buffer.append(".jpeg");
+    buffer.append(".png");
     return buffer.toString();
   }
 

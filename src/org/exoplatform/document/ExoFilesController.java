@@ -143,10 +143,9 @@ public class ExoFilesController extends MyActionBar {
           public void run() {
 
             File file = new File(sdcard_temp_dir);
-            System.out.println("uploadFileUrl " + uploadFileUrl);
             ExoDocumentUtils.putFileToServerFromLocal(uploadFileUrl + "/" + file.getName(),
                                                       file,
-                                                      "image/jpeg");
+                                                      "image/png");
             runOnUiThread(reloadFileAdapter);
             runOnUiThread(dismissProgressDialog);
           }
@@ -290,39 +289,16 @@ public class ExoFilesController extends MyActionBar {
 
                                           public void run() {
 
-                                            // setTitle(getFolderNameFromUrl(myFile.urlStr));
-                                            // Files List
-                                            // fileAdapter.notifyDataSetChanged();
                                             try {
                                               if (myFile.urlStr.equalsIgnoreCase(_rootUrl)) {
-                                                // getActionBar().getItem(0).setDrawable(R.drawable.home);
-                                                // setTheme(R.style.Theme_eXo);
-                                                // ExoApplicationsController2.sTheme
-                                                // = R.style.Theme_eXo;
                                                 eXoFilesControllerInstance.finish();
-                                                // eXoFilesControllerInstance.startActivity(new
-                                                // Intent(eXoFilesControllerInstance,
-                                                // eXoFilesControllerInstance.getClass()));
-                                                // _btnCloseBack.setText(new
-                                                // String(AppController.bundle.getString("CloseButton")
-                                                // .getBytes("ISO-8859-1"),
-                                                // "UTF-8"));
                                               } else
-                                                // getActionBar().getItem(0).setDrawable(R.drawable.back);
-                                                // setTheme(R.style.Theme_eXo2);
-                                                // ExoApplicationsController2.sTheme
-                                                // = R.style.Theme_eXo_Back;
                                                 eXoFilesControllerInstance.finish();
                                               eXoFilesControllerInstance.startActivity(new Intent(eXoFilesControllerInstance,
                                                                                                   eXoFilesControllerInstance.getClass()));
-                                              // _btnCloseBack.setText(new
-                                              // String(AppController.bundle.getString("BackButton")
-                                              // .getBytes("ISO-8859-1"),
-                                              // "UTF-8"));
                                               ;
                                             } catch (Exception e) {
 
-                                              // _btnCloseBack.setText("");
                                             }
                                           }
                                         };
@@ -332,16 +308,9 @@ public class ExoFilesController extends MyActionBar {
 
                                           public void run() {
 
-                                            // _strCurrentDirectory =
-                                            // _strCurrentDirectory +
-                                            // "/" + myFile.fileName;
                                             ExoApplicationsController.webViewMode = 1;
 
                                             AlertDialog.Builder builder = new AlertDialog.Builder(eXoFilesControllerInstance);
-                                            // builder.setMessage("Do you want to download "
-                                            // +
-                                            // myFile.fileName.replace("%20",
-                                            // " ") + " into sdcard?");
                                             builder.setMessage(strDownloadFileIntoSDCard);
                                             builder.setCancelable(false);
 
@@ -424,12 +393,10 @@ public class ExoFilesController extends MyActionBar {
         // Bitmap bmp = (Bitmap) data.getExtras().get("data");
         imgView.setImageBitmap(bitmap);
       } catch (Exception e) {
-        // TODO: handle exception
       }
 
     } else if (resultCode == Activity.RESULT_CANCELED) {
       return;
-      // finish();
     }
 
   }
@@ -447,10 +414,6 @@ public class ExoFilesController extends MyActionBar {
     }
 
     _lstvFiles.setVisibility(viewFileMode);
-    // _btnCloseBack.setVisibility(viewFileMode);
-
-    // for eXo image View
-    // txtFileName.setVisibility(viewImageMode);
     imgView.setVisibility(viewImageMode);
     _btnUploadImage.setVisibility(viewImageMode);
     _btnCancelUploadImage.setVisibility(viewImageMode);
@@ -518,13 +481,6 @@ public class ExoFilesController extends MyActionBar {
       }
 
     } while (local1 > 0);
-
-    if (arrFilesTmp.isEmpty()) {
-      // ImageView imgView = new ImageView(thisClass.getApplicationContext());
-      // imgView.setImageResource(R.drawable.emptypage);
-      //
-      // _lstvFiles.addView(imgView, 200, 200);
-    }
 
     return arrFilesTmp;
   }
@@ -736,8 +692,6 @@ public class ExoFilesController extends MyActionBar {
     InputStream is = null;
 
     HttpResponse response = null;
-    // DefaultHttpClient client = new DefaultHttpClient();
-    // client.getCredentialsProvider().setCredentials(auth, credential);
     HttpGet get = new HttpGet(url);
     try {
 
@@ -747,8 +701,6 @@ public class ExoFilesController extends MyActionBar {
     } catch (Exception e) {
 
     }
-    // client.getConnectionManager().shutdown();
-
     return is;
 
   }
@@ -758,9 +710,9 @@ public class ExoFilesController extends MyActionBar {
     HttpResponse response;
     try {
 
-      WebdavMethod copy = new WebdavMethod("DELETE", url);
-      
-      response = ExoConnectionUtils.httpClient.execute(copy);
+      WebdavMethod delete = new WebdavMethod("DELETE", url);
+
+      response = ExoConnectionUtils.httpClient.execute(delete);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
@@ -779,7 +731,7 @@ public class ExoFilesController extends MyActionBar {
     try {
 
       WebdavMethod copy = new WebdavMethod("COPY", source, destination);
-      
+
       response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
@@ -799,7 +751,7 @@ public class ExoFilesController extends MyActionBar {
     try {
 
       WebdavMethod move = new WebdavMethod("MOVE", source, destination);
-      
+
       response = ExoConnectionUtils.httpClient.execute(move);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
@@ -874,25 +826,6 @@ public class ExoFilesController extends MyActionBar {
     // _delegate.changeLanguage(resourceBundle);
     // _delegate.createAdapter();
 
-  }
-
-  private static class HttpCopy extends HttpRequestBase {
-    public static final String METHOD_NAME = "COPY";
-
-    public HttpCopy(URI sourceUrl, URI destinationUrl) {
-      this.setHeader("Destination", destinationUrl.toString());
-      this.setHeader("Overwrite", "T");
-      this.setURI(sourceUrl);
-    }
-
-    public HttpCopy(String sourceUrl, String destinationUrl) {
-      this(URI.create(sourceUrl), URI.create(destinationUrl));
-    }
-
-    @Override
-    public String getMethod() {
-      return METHOD_NAME;
-    }
   }
 
 }

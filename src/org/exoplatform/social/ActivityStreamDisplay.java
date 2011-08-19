@@ -22,6 +22,7 @@ import org.exoplatform.widget.MyActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Gravity;
@@ -45,39 +46,43 @@ import greendroid.widget.AsyncImageView;
 public class ActivityStreamDisplay extends MyActionBar implements OnClickListener {
   public static ActivityStreamDisplay activityStreamDisplay;
 
-  public static RestActivity selectedRestActivity;
+  public static RestActivity          selectedRestActivity;
 
-  private String             activityId;
+  private String                      activityId;
 
-  private LinearLayout       commentLayoutWrap;
+  private LinearLayout                commentLayoutWrap;
 
-  private EditText           editTextComment;
+  private EditText                    editTextComment;
 
-  private AsyncImageView     imageView_Avatar;
+  private AsyncImageView              imageView_Avatar;
 
-  private TextView           textView_Name;
+  private TextView                    textView_Name;
 
-  private TextView           textView_Message;
+  private TextView                    textView_Message;
 
-  private TextView           textView_Time;
+  private TextView                    textView_Time;
 
-  private TextView           textView_Like_Count;
+  private TextView                    textView_Like_Count;
 
-  private DetailLoadTask     mLoadTask;
+  private DetailLoadTask              mLoadTask;
 
-  private Button             likeButton;
+  private Button                      likeButton;
 
-  private boolean            liked = false;
+  private boolean                     liked           = false;
 
-  private String             yourCommentText;
+  private String                      yourCommentText;
 
-  private String             loadingData;
+  private String                      loadingData;
 
-  private String             youText;
+  private String                      youText;
 
-  private String             noService;
+  private String                      noService;
 
-  private String             domain;
+  private String                      domain;
+
+  private int                         likeDrawable    = R.drawable.activity_like_button_background_shape;
+
+  private int                         disLikeDrawable = R.drawable.activity_dislike_button_background_shape;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -125,6 +130,11 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
   }
 
   private void setComponentInfo() {
+    if (liked) {
+      likeButton.setBackgroundResource(disLikeDrawable);
+    } else
+      likeButton.setBackgroundResource(likeDrawable);
+
     RestProfile profile = selectedRestActivity.getPosterIdentity().getProfile();
     String avatarUrl = profile.getAvatarUrl();
     if (avatarUrl == null) {
@@ -157,7 +167,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     switch (position) {
     case -1:
       destroy();
-      if(SocialActivity.socialActivity!=null)
+      if (SocialActivity.socialActivity != null)
         SocialActivity.socialActivity.finish();
       break;
     case 0:

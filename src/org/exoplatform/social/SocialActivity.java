@@ -21,6 +21,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.WarningDialog;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -68,6 +69,12 @@ public class SocialActivity extends MyActionBar {
   private String               hour;
 
   private String               hours;
+
+  private String               okString;
+
+  private String               titleString;
+
+  private String               contentString;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -180,6 +187,7 @@ public class SocialActivity extends MyActionBar {
 
   private void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == ActivityLoadTask.Status.RUNNING) {
+      mLoadTask.onCancelled();
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
@@ -228,7 +236,9 @@ public class SocialActivity extends MyActionBar {
     hour = resourceBundle.getString("Hour");
     hours = resourceBundle.getString("Hours");
     today = resourceBundle.getString("Today");
-
+    okString = resourceBundle.getString("OK");
+    titleString = resourceBundle.getString("Warning");
+    contentString = resourceBundle.getString("ConnectionError");
   }
 
   private class ActivityLoadTask extends UserTask<Integer, Void, ArrayList<ExoSocialActivity>> {
@@ -277,10 +287,21 @@ public class SocialActivity extends MyActionBar {
     }
 
     @Override
+    public void onCancelled() {
+      _progressDialog.dismiss();
+    }
+
+    @Override
     public void onPostExecute(ArrayList<ExoSocialActivity> result) {
 
       if (result != null) {
         setActivityList(result);
+      } else {
+        WarningDialog dialog = new WarningDialog(SocialActivity.this,
+                                                 titleString,
+                                                 contentString,
+                                                 okString);
+        dialog.show();
       }
       _progressDialog.dismiss();
 

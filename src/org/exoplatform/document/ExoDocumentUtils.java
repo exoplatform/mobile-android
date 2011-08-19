@@ -17,12 +17,12 @@ public class ExoDocumentUtils {
     HttpResponse response = null;
     try {
 
-      HttpPut post = new HttpPut(url);
+      HttpPut put = new HttpPut(url);
       FileEntity fileEntity = new FileEntity(fileManager, fileType);
-      post.setEntity(fileEntity);
+      put.setEntity(fileEntity);
       fileEntity.setContentType(fileType);
 
-      response = ExoConnectionUtils.httpClient.execute(post);
+      response = ExoConnectionUtils.httpClient.execute(put);
       int status = response.getStatusLine().getStatusCode();
       System.out.println("status " + status);
       if (status >= 200 && status < 300) {

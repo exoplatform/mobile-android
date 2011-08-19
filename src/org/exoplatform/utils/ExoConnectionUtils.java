@@ -179,13 +179,6 @@ public class ExoConnectionUtils {
       HttpConnectionParams.setSoTimeout(httpParameters, 60000);
       HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
-      URI uri = null;
-      try {
-        uri = new URI(redirectStr);
-      } catch (URISyntaxException e) {
-        return "ERROR";
-      }
-
       httpClient = new DefaultHttpClient(httpParameters);
 
       HttpGet httpGet = new HttpGet(redirectStr);
@@ -193,14 +186,10 @@ public class ExoConnectionUtils {
       response = httpClient.execute(httpGet);
       cookiesStore = httpClient.getCookieStore();
       List<Cookie> cookies = cookiesStore.getCookies();
-      System.out.println("cookie" + cookies.size());
-
       if (!cookies.isEmpty()) {
         for (int i = 0; i < cookies.size(); i++) {
           strCookie = cookies.get(i).getName().toString() + "="
               + cookies.get(i).getValue().toString();
-          System.out.println("strCookie" + strCookie);
-
         }
       }
 

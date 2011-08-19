@@ -221,19 +221,18 @@ public class ExoDashboard extends MyListActivity {
       // if (convertView == null) {
       if (item.strTabName != null) {
         convertView = mInflater.inflate(R.layout.activityheadersection, parent, false);
-        TextView title = (TextView) convertView.findViewById(R.id.textView_Section_Title);
-        title.setText(item.strTabName);
+//        TextView title = (TextView) convertView.findViewById(R.id.textView_Section_Title);
+//        title.setText(item.strTabName);
       } else {
+        convertView = mInflater.inflate(R.layout.gadget_item_layout, parent, false);
 
-        convertView = mInflater.inflate(R.layout.activitydisplayviewcell, parent, false);
-
-        AsyncImageView imageViewAvatar = (AsyncImageView) convertView.findViewById(R.id.imageView_Avatar);
+        AsyncImageView imageViewAvatar = (AsyncImageView) convertView.findViewById(R.id.gadget_image);
         imageViewAvatar.setUrl(item.gadget._strGadgetIcon);
         // imageViewAvatar.setImageBitmap(item.gadget._btmGadgetIcon);
-        TextView textViewName = (TextView) convertView.findViewById(R.id.textView_Name);
+        TextView textViewName = (TextView) convertView.findViewById(R.id.gadget_title);
         textViewName.setText(item.gadget._strGadgetName);
 
-        TextView textViewMessage = (TextView) convertView.findViewById(R.id.textView_Message);
+        TextView textViewMessage = (TextView) convertView.findViewById(R.id.gadget_content);
         textViewMessage.setText(item.gadget._strGadgetDescription);
 
       }
