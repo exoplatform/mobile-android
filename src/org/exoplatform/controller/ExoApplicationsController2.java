@@ -1059,6 +1059,9 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
         }
           
+        } else {
+          // No gadgets so exit from the loop
+          index1 = 0;
         }
 
       } while (index1 > 0);
