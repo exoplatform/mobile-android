@@ -17,12 +17,13 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
 import org.exoplatform.social.image.SelectedImageActivity;
+import org.exoplatform.social.image.SocialImageLibrary;
+import org.exoplatform.social.image.SocialPhotoAlbums;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -320,9 +321,8 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       }
       if (view == libraryButton) {
         dismiss();
-        // Intent intent = new Intent(ComposeMessageActivity.this,
-        // SocialImageLibrary.class);
-        // startActivity(intent);
+        Intent intent = new Intent(ComposeMessageActivity.this, SocialPhotoAlbums.class);
+        startActivity(intent);
 
       }
       if (view == cancelButton) {
@@ -412,7 +412,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       // errorString, okString).show();
       // }
       _progressDialog.dismiss();
-       destroy();
+      destroy();
 
     }
 

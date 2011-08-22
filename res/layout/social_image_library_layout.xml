@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/social_image_gridview" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:columnWidth="120dp"
-	android:numColumns="auto_fit" android:verticalSpacing="10dp"
-	android:horizontalSpacing="10dp" android:stretchMode="columnWidth"
-	android:gravity="center" android:background="#FFFFFF" />
+<!--<GridView xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:id="@+id/social_image_gridview" android:layout_width="fill_parent" 
+	android:layout_height="fill_parent" android:columnWidth="120dp" android:numColumns="auto_fit" 
+	android:verticalSpacing="10dp" android:horizontalSpacing="10dp" android:stretchMode="columnWidth" 
+	android:gravity="center" android:background="#FFFFFF" /> -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:gravity="center_vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<Gallery xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/social_gallery" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" />
+
+</LinearLayout>
+	

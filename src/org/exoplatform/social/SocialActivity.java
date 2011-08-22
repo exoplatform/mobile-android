@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -187,6 +188,7 @@ public class SocialActivity extends MyActionBar {
 
   private void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == ActivityLoadTask.Status.RUNNING) {
+      System.out.println("onCancelLoad");
       mLoadTask.onCancelled();
       mLoadTask.cancel(true);
       mLoadTask = null;
@@ -288,6 +290,7 @@ public class SocialActivity extends MyActionBar {
 
     @Override
     public void onCancelled() {
+      super.onCancelled();
       _progressDialog.dismiss();
     }
 

@@ -60,7 +60,6 @@ public class ExoChatController extends MyActionBar {
   // conversation
   public static ExoChatController           eXoChatControllerInstance;                               // Instance
 
-
   // app
   // view
   // controller
@@ -192,6 +191,9 @@ public class ExoChatController extends MyActionBar {
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
+      if (ExoChatListController.eXoChatListControllerInstance != null) {
+        ExoChatListController.eXoChatListControllerInstance.finish();
+      }
       finishMe();
       // your method here
       break;
@@ -210,10 +212,7 @@ public class ExoChatController extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-    // TODO Auto-generated method stub
     super.onBackPressed();
-    Intent intent = new Intent(this, ExoChatListController.class);
-    startActivity(intent);
     finishMe();
   }
 
@@ -286,19 +285,7 @@ public class ExoChatController extends MyActionBar {
 
   public void finishMe() {
     currentChatStr = "";
-    // eXoChatList.arrListChat.set(eXoChatList.posOfChatingMember,
-    // listChatContent);
     ExoChatListController.conn.removePacketListener(packetListener);
-    // eXoChatList.conn.addPacketListener(eXoChatList.packetListener, new
-    // MessageTypeFilter(Message.Type.chat));
-
-    // eXoChat.this.finish();
-    // GDActivity.TYPE = 1;
     finish();
-    // Intent next = new Intent(eXoChatController.this,
-    // eXoChatListController.class);
-    // eXoChatController.this.startActivity(next);
-    //
-    // eXoChatControllerInstance = null;
   }
 }

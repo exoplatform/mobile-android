@@ -2,11 +2,10 @@ package org.exoplatform.social.image;
 
 import greendroid.widget.ActionBarItem;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import org.exoplatform.R;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.social.ComposeMessageActivity;
 import org.exoplatform.utils.ExoConstants;
@@ -17,8 +16,8 @@ import org.exoplatform.widget.MyActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -27,10 +26,9 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.widget.Gallery;
 import android.widget.ImageView;
-
-import com.cyrilmottier.android.greendroid.R;
+import android.widget.LinearLayout.LayoutParams;
 
 public class SocialImageLibrary extends MyActionBar {
 
@@ -39,7 +37,8 @@ public class SocialImageLibrary extends MyActionBar {
 
   private String                   loadingData;
 
-  private GridView                 gridView;
+  // private GridView gridView;
+  private Gallery                  gallery;
 
   private LoadImageTask            mLoadTask;
 
@@ -47,15 +46,20 @@ public class SocialImageLibrary extends MyActionBar {
 
   public static SocialImageLibrary socialImageLibrary;
 
+  private PhotoInfo                photoInfo;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.social_image_library_layout);
+    photoInfo = SocialPhotoAlbums.photoInfoSelected;
+    setTitle(photoInfo.getAlbumsName());
     onChangeLanguage(AppController.bundle);
-    gridView = (GridView) findViewById(R.id.social_image_gridview);
+    gallery = (Gallery) findViewById(R.id.social_gallery);
     socialImageLibrary = this;
+
     onLoad();
   }
 
@@ -71,7 +75,9 @@ public class SocialImageLibrary extends MyActionBar {
     switch (position) {
     case -1:
       finish();
+      SocialPhotoAlbums.socialPhotoAlbums.finish();
       ComposeMessageActivity.composeMessageActivity.finish();
+
       break;
 
     case 0:
@@ -88,10 +94,10 @@ public class SocialImageLibrary extends MyActionBar {
 
   private void setAdapter(ArrayList<String> list) {
     ImageAdapter adapter = new ImageAdapter(this, list);
-    gridView.setAdapter(adapter);
-    gridView.setOnItemClickListener(new OnItemClickListener() {
+    gallery.setAdapter(adapter);
+    gallery.setOnItemClickListener(new OnItemClickListener() {
 
-//      @Override
+      // @Override
       public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
         String filePath = listFiles.get(pos);
         Intent intent = new Intent(getApplicationContext(), SelectedImageActivity.class);
@@ -102,70 +108,101 @@ public class SocialImageLibrary extends MyActionBar {
   }
 
   private void onChangeLanguage(ResourceBundle resourceBundle) {
-    String title = resourceBundle.getString("PhotoLibrary");
-    setTitle(title);
     loadingData = resourceBundle.getString("LoadingData");
 
   }
 
+  // private class ImageAdapter extends BaseAdapter {
+  //
+  // private Context mContext;
+  //
+  // private ArrayList<String> list;
+  //
+  // public ImageAdapter(Context context, ArrayList<String> l) {
+  // mContext = context;
+  // list = l;
+  // }
+  //
+  // // @Override
+  // public int getCount() {
+  // return list.size();
+  // }
+  //
+  // // @Override
+  // public Object getItem(int pos) {
+  // return pos;
+  // }
+  //
+  // // @Override
+  // public long getItemId(int pos) {
+  // return pos;
+  // }
+  //
+  // // @Override
+  // public View getView(int position, View convertView, ViewGroup viewGroup) {
+  // if (list.size() > 0) {
+  // String filePath = list.get(position);
+  // bitmap = PhotoUltils.shrinkBitmap(filePath, 50, 50);
+  // }
+  //
+  // ImageView imageView;
+  // // if (convertView == null) { // if it's not recycled, initialize some
+  // // // attributes
+  // imageView = new ImageView(mContext);
+  // imageView.setLayoutParams(new GridView.LayoutParams(115, 115));
+  // imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+  // imageView.setPadding(8, 8, 8, 8);
+  // // } else {
+  // // imageView = (ImageView) convertView;
+  // // }
+  // imageView.setImageBitmap(bitmap);
+  // bitmap = null;
+  //
+  // return imageView;
+  // }
+  //
+  // }
   private class ImageAdapter extends BaseAdapter {
+    int                       mGalleryItemBackground;
 
     private Context           mContext;
 
     private ArrayList<String> list;
 
-    public ImageAdapter(Context context, ArrayList<String> l) {
-      mContext = context;
+    public ImageAdapter(Context c, ArrayList<String> l) {
+      mContext = c;
+      TypedArray attr = mContext.obtainStyledAttributes(R.styleable.HelloGallery);
+      mGalleryItemBackground = attr.getResourceId(R.styleable.HelloGallery_android_galleryItemBackground,
+                                                  0);
+      attr.recycle();
       list = l;
     }
 
-//    @Override
     public int getCount() {
       return list.size();
     }
 
-//    @Override
-    public Object getItem(int pos) {
-      return pos;
+    public Object getItem(int position) {
+      return position;
     }
 
-//    @Override
-    public long getItemId(int pos) {
-      return pos;
+    public long getItemId(int position) {
+      return position;
     }
 
-//    @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
+    public View getView(int position, View convertView, ViewGroup parent) {
+      ImageView imageView = new ImageView(mContext);
       if (list.size() > 0) {
-        try {
-          String filePath = list.get(position);
-          File file = new File(filePath);
-          FileInputStream fis = new FileInputStream(file);
-          BitmapFactory.Options options = new BitmapFactory.Options();
-          options.inSampleSize = 8;
-          bitmap = BitmapFactory.decodeStream(fis, null, options);
-          fis.close();
-          fis = null;
-        } catch (Exception e) {
-        }
-      }
-
-      ImageView imageView;
-      if (convertView == null) { // if it's not recycled, initialize some
-                                 // attributes
-        imageView = new ImageView(mContext);
-        imageView.setLayoutParams(new GridView.LayoutParams(115, 115));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setPadding(8, 8, 8, 8);
-      } else {
-        imageView = (ImageView) convertView;
+        String filePath = list.get(position);
+        bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
       }
       imageView.setImageBitmap(bitmap);
-      bitmap = null;
+      imageView.setLayoutParams(new Gallery.LayoutParams(LayoutParams.WRAP_CONTENT, 240));
+      imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+      imageView.setBackgroundResource(mGalleryItemBackground);
 
       return imageView;
     }
-
   }
 
   private class LoadImageTask extends UserTask<Void, Void, ArrayList<String>> {
@@ -180,9 +217,10 @@ public class SocialImageLibrary extends MyActionBar {
     public ArrayList<String> doInBackground(Void... params) {
       ArrayList<String> listResult = new ArrayList<String>();
       if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-        PhotoUltils.getAllImageFiles(new File(Environment.getExternalStorageDirectory() + "/eXo/"),
-                                     listResult);
-        return listResult;
+        // PhotoUltils.getAllImages(Environment.getExternalStorageDirectory(),
+        // listResult);
+
+        return photoInfo.getImageList();
       } else
         return null;
     }

@@ -3,17 +3,15 @@ package org.exoplatform.social.image;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ResourceBundle;
 
 import org.exoplatform.controller.AppController;
 import org.exoplatform.social.ComposeMessageActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.widget.MyActionBar;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,17 +46,8 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   private void init() {
     imageView = (ImageView) findViewById(R.id.social_selected_image);
     filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
-
-    try {
-      FileInputStream fis = new FileInputStream(new File(filePath));
-      BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inSampleSize = 8;
-      Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
-      imageView.setImageBitmap(bitmap);
-      fis.close();
-    } catch (Exception e) {
-    }
-
+    Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
+    imageView.setImageBitmap(bitmap);
     okButton = (Button) findViewById(R.id.social_selected_image_ok_button);
     okButton.setText(okText);
     okButton.setOnClickListener(this);
@@ -72,7 +61,9 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
       finish();
       if (SocialImageLibrary.socialImageLibrary != null)
         SocialImageLibrary.socialImageLibrary.finish();
-      if(ComposeMessageActivity.composeMessageActivity!=null)
+      if (SocialPhotoAlbums.socialPhotoAlbums != null)
+        SocialPhotoAlbums.socialPhotoAlbums.finish();
+      if (ComposeMessageActivity.composeMessageActivity != null)
         ComposeMessageActivity.composeMessageActivity.finish();
       break;
 
@@ -88,7 +79,6 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     finish();
   }
 
-  
   public void onClick(View view) {
     if (view == okButton) {
       if (filePath != null) {
@@ -97,6 +87,8 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
         finish();
         if (SocialImageLibrary.socialImageLibrary != null)
           SocialImageLibrary.socialImageLibrary.finish();
+        if (SocialPhotoAlbums.socialPhotoAlbums != null)
+          SocialPhotoAlbums.socialPhotoAlbums.finish();
       }
 
     }
