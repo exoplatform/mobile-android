@@ -81,6 +81,7 @@ public class ExoDashboard extends MyListActivity {
     setTitle("Dashboard");
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    getListView().setBackgroundColor(Color.rgb(8, 56, 123));
 
     arrGadgets = ExoApplicationsController2.arrGadgets;
     List<DashBoardItem> items = new ArrayList<DashBoardItem>();
@@ -220,9 +221,15 @@ public class ExoDashboard extends MyListActivity {
 
       // if (convertView == null) {
       if (item.strTabName != null) {
-        convertView = mInflater.inflate(R.layout.activityheadersection, parent, false);
-//        TextView title = (TextView) convertView.findViewById(R.id.textView_Section_Title);
-//        title.setText(item.strTabName);
+//         convertView = mInflater.inflate(R.layout.activityheadersection,
+//         parent, false);
+        convertView = new TextView(ExoDashboard.this);
+        convertView.setPadding(7, 7, 7, 7);
+        
+//         TextView title = (TextView)
+//         convertView.findViewById(R.id.textView_Section_Title);
+        ((TextView) convertView).setTextColor(Color.WHITE);
+        ((TextView) convertView).setText(item.strTabName);
       } else {
         convertView = mInflater.inflate(R.layout.gadget_item_layout, parent, false);
 
