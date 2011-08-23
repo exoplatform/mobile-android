@@ -29,7 +29,6 @@ public class WarningDialog extends Dialog implements android.view.View.OnClickLi
     okButton.setOnClickListener(this);
   }
 
-  @Override
   public void onClick(View view) {
     if (view == okButton) {
       dismiss();

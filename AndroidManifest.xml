@@ -70,7 +70,10 @@
 		<activity android:name=".social.image.SelectedImageActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-			<activity android:name=".social.image.SocialPhotoAlbums"
+		<activity android:name=".social.image.SocialPhotoAlbums"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".social.image.CoverFlowExample"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 

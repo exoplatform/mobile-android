@@ -69,13 +69,16 @@ public class SocialPhotoAlbums extends MyActionBar {
         PhotoAlbumsItem item = new PhotoAlbumsItem(this, photoInfo);
         item.setOnClickListener(new OnClickListener() {
 
-          @Override
           public void onClick(View v) {
+//            photoInfoSelected = photoInfo;
+//            Intent intent = new Intent(SocialPhotoAlbums.this, SocialImageLibrary.class);
+//            startActivity(intent);
             photoInfoSelected = photoInfo;
-            Intent intent = new Intent(SocialPhotoAlbums.this, SocialImageLibrary.class);
+            Intent intent = new Intent(SocialPhotoAlbums.this, CoverFlowExample.class);
             startActivity(intent);
           }
         });
+        
         albumLayout.addView(item, params);
       }
     }
