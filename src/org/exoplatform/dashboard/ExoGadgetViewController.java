@@ -9,6 +9,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.exoplatform.R;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController;
+import org.exoplatform.dashboard.entity.ExoGadget;
 import org.exoplatform.model.GateInDbItem;
 
 import android.app.Activity;

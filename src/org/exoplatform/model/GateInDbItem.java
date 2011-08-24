@@ -2,7 +2,7 @@ package org.exoplatform.model;
 
 import java.util.List;
 
-import org.exoplatform.dashboard.ExoGadget;
+import org.exoplatform.dashboard.entity.ExoGadget;
 
 
 

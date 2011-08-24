@@ -26,11 +26,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.dashboard.entity.DashBoardItem;
+import org.exoplatform.dashboard.entity.ExoGadget;
 import org.exoplatform.model.GateInDbItem;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyListActivity;
-
-import com.cyrilmottier.android.greendroid.R;
 
 import android.content.Context;
 import android.content.Intent;
@@ -43,33 +43,21 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.webkit.CookieSyncManager;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.cyrilmottier.android.greendroid.R;
 
 public class ExoDashboard extends MyListActivity {
 
   public static ExoDashboard       eXoDashboardInstance;
 
   public static List<GateInDbItem> arrGadgets;
-
-  class DashBoardItem {
-    String    strTabName;
-
-    ExoGadget gadget;
-
-    public DashBoardItem(String _strTabName, ExoGadget _gadget) {
-      this.strTabName = _strTabName;
-      this.gadget = _gadget;
-    }
-
-  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -97,8 +85,6 @@ public class ExoDashboard extends MyListActivity {
 
     }
 
-    // final ItemAdapter adapter = new ItemAdapter(this, items);
-    //
     setListAdapter(new MyItemAdapter(this, items));
   }
 
@@ -122,7 +108,6 @@ public class ExoDashboard extends MyListActivity {
 
   @Override
   public void onBackPressed() {
-    // TODO Auto-generated method stub
     super.onBackPressed();
     finish();
   }
@@ -164,8 +149,6 @@ public class ExoDashboard extends MyListActivity {
     private final Rect     mRectSrc  = new Rect();
 
     private final Rect     mRectDest = new Rect();
-
-    // private final String mImageForPosition;
 
     private Bitmap         mMask;
 
@@ -219,15 +202,9 @@ public class ExoDashboard extends MyListActivity {
 
       final DashBoardItem item = _arrayOfItems.get(position);
 
-      // if (convertView == null) {
       if (item.strTabName != null) {
-//         convertView = mInflater.inflate(R.layout.activityheadersection,
-//         parent, false);
         convertView = new TextView(ExoDashboard.this);
         convertView.setPadding(7, 7, 7, 7);
-        
-//         TextView title = (TextView)
-//         convertView.findViewById(R.id.textView_Section_Title);
         ((TextView) convertView).setTextColor(Color.WHITE);
         ((TextView) convertView).setText(item.strTabName);
       } else {
@@ -235,7 +212,6 @@ public class ExoDashboard extends MyListActivity {
 
         AsyncImageView imageViewAvatar = (AsyncImageView) convertView.findViewById(R.id.gadget_image);
         imageViewAvatar.setUrl(item.gadget._strGadgetIcon);
-        // imageViewAvatar.setImageBitmap(item.gadget._btmGadgetIcon);
         TextView textViewName = (TextView) convertView.findViewById(R.id.gadget_title);
         textViewName.setText(item.gadget._strGadgetName);
 
@@ -275,7 +251,6 @@ public class ExoDashboard extends MyListActivity {
     startActivity(next);
 
     eXoDashboardInstance = null;
-    // GDActivity.TYPE = 0;
   }
 
 }

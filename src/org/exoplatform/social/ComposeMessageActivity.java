@@ -17,13 +17,13 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
 import org.exoplatform.social.image.SelectedImageActivity;
-import org.exoplatform.social.image.SocialImageLibrary;
 import org.exoplatform.social.image.SocialPhotoAlbums;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -76,8 +76,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private String                       inputTextWarning;
 
-  private String                       noService;
-
   private String                       addPhotoTitle;
 
   private String                       takePhotoText;
@@ -86,15 +84,15 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private String                       loadingData;
 
-  private Intent                       intent;
-
   private PostStatusTask               mPostTask;
 
   private String                       uploadUrl;
 
   private String                       okString;
 
-  private String                       suscessString;
+  private String                       titleString;
+
+  private String                       contentString;
 
   private String                       errorString;
 
@@ -162,12 +160,6 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
           onPostTask();
         } else {
           onCommentTask();
-          try {
-            Thread.sleep(1000);
-            destroy();
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
         }
       } else {
         Toast toast = Toast.makeText(ComposeMessageActivity.this,
@@ -204,10 +196,13 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       RestActivity restActivity = (RestActivity) ExoApplicationsController2.activityService.get(ActivityStreamDisplay.selectedRestActivity.getId());
 
       ExoApplicationsController2.activityService.createComment(restActivity, comment);
+      destroy();
     } catch (RuntimeException e) {
-      Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
-      toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-      toast.show();
+      WarningDialog dialog = new WarningDialog(ComposeMessageActivity.this,
+                                               titleString,
+                                               contentString,
+                                               okString);
+      dialog.show();
     }
   }
 
@@ -277,13 +272,13 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     sendText = resourceBundle.getString("Send");
     cancelText = resourceBundle.getString("Cancel");
     inputTextWarning = resourceBundle.getString("InputTextWarning");
-    noService = resourceBundle.getString("NoService");
     addPhotoTitle = resourceBundle.getString("AddAPhoto");
     takePhotoText = resourceBundle.getString("TakeAPhoto");
     photoLibraryText = resourceBundle.getString("PhotoLibrary");
     loadingData = resourceBundle.getString("LoadingData");
     okString = resourceBundle.getString("OK");
-    suscessString = resourceBundle.getString("PostSuccess");
+    titleString = resourceBundle.getString("Warning");
+    contentString = resourceBundle.getString("ConnectionError");
     errorString = resourceBundle.getString("PostError");
     warningTitle = resourceBundle.getString("Warning");
 
@@ -403,16 +398,12 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
     @Override
     public void onPostExecute(Integer result) {
-      // if (result == 1) {
-      // new WarningDialog(ComposeMessageActivity.this, warningTitle,
-      // suscessString, okString).show();
-      // }
-      // else {
-      // new WarningDialog(ComposeMessageActivity.this, warningTitle,
-      // errorString, okString).show();
-      // }
+      if (result == 1) {
+        destroy();
+      } else {
+        new WarningDialog(ComposeMessageActivity.this, warningTitle, errorString, okString).show();
+      }
       _progressDialog.dismiss();
-      destroy();
 
     }
 

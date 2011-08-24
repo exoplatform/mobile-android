@@ -13,6 +13,14 @@ import org.exoplatform.social.image.PhotoInfo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Bitmap.Config;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.Shader.TileMode;
 import android.text.format.DateFormat;
 
 public class PhotoUltils {
@@ -118,49 +126,55 @@ public class PhotoUltils {
     bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
     return bitmap;
   }
+  public static Bitmap reflectionPhoto(Bitmap originalImage) {
+    // The gap we want between the reflection and the original image
+    final int reflectionGap = 4;
 
-  public static PhotoInfo[] listFilesAsArray(File directory, FilenameFilter[] filter, int recurse) {
-    Collection<PhotoInfo> files = listFiles(directory, filter, recurse);
+    int width = originalImage.getWidth();
+    int height = originalImage.getHeight();
 
-    PhotoInfo[] arr = new PhotoInfo[files.size()];
-    return files.toArray(arr);
+    // This will not scale but will flip on the Y axis
+    Matrix matrix = new Matrix();
+    matrix.preScale(1, -1);
+
+    // Create a Bitmap with the flip matix applied to it.
+    // We only want the bottom half of the image
+    Bitmap reflectionImage = Bitmap.createBitmap(originalImage, 0,
+        height / 2, width, height / 2, matrix, false);
+
+    // Create a new bitmap with same width but taller to fit reflection
+    Bitmap bitmapWithReflection = Bitmap.createBitmap(width,
+        (height + height / 2), Config.ARGB_8888);
+
+    // Create a new Canvas with the bitmap that's big enough for
+    // the image plus gap plus reflection
+    Canvas canvas = new Canvas(bitmapWithReflection);
+    // Draw in the original image
+    canvas.drawBitmap(originalImage, 0, 0, null);
+    // Draw in the gap
+    Paint deafaultPaint = new Paint();
+    canvas
+        .drawRect(0, height, width, height + reflectionGap,
+            deafaultPaint);
+    // Draw in the reflection
+    canvas.drawBitmap(reflectionImage, 0, height + reflectionGap, null);
+
+    // Create a shader that is a linear gradient that covers the reflection
+    Paint paint = new Paint();
+    LinearGradient shader = new LinearGradient(0,
+        originalImage.getHeight(), 0, bitmapWithReflection.getHeight()
+            + reflectionGap, 0x70ffffff, 0x00ffffff, TileMode.CLAMP);
+    // Set the paint to use this shader (linear gradient)
+    paint.setShader(shader);
+    // Set the Transfer mode to be porter duff and destination in
+    paint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
+    // Draw a rectangle using the paint with our linear gradient
+    canvas.drawRect(0, height, width, bitmapWithReflection.getHeight()
+        + reflectionGap, paint);
+
+    return bitmapWithReflection;
   }
-
-  public static Collection<PhotoInfo> listFiles(File directory, FilenameFilter[] filter, int recurse) {
-
-    Vector<PhotoInfo> photoList = new Vector<PhotoInfo>();
-
-    File[] entries = directory.listFiles();
-
-    if (entries != null) {
-      for (File entry : entries) {
-        // if (entry.getName().equals(".thumbnails")) {
-        // break;
-        // }
-        if (entry.getName().startsWith(".")) {
-          break;
-        }
-
-        PhotoInfo info = new PhotoInfo();
-        ArrayList<String> listFile = new ArrayList<String>();
-        for (FilenameFilter filefilter : filter) {
-          if (filter == null || filefilter.accept(directory, entry.getName())) {
-            listFile.add(entry.getAbsolutePath());
-          }
-        }
-        info.setImageList(listFile);
-        info.setAlbumsName(entry.getName());
-        photoList.add(info);
-        if ((recurse <= -1) || (recurse > 0 && entry.isDirectory())) {
-          recurse--;
-          photoList.addAll(listFiles(entry, filter, recurse));
-          recurse++;
-        }
-      }
-    }
-    return photoList;
-  }
-
+    
   public static Set<File> getImageFolder(File directory, FilenameFilter[] filter, int recurse) {
     Set<File> files = new HashSet<File>();
 
@@ -216,29 +230,6 @@ public class PhotoUltils {
 
   }
 
-  public static Collection<File> listAlbumsFiles(File directory,
-                                                 FilenameFilter[] filter,
-                                                 int recurse) {
-
-    Vector<File> files = new Vector<File>();
-
-    File[] entries = directory.listFiles();
-
-    if (entries != null) {
-      for (File entry : entries) {
-        for (FilenameFilter filefilter : filter) {
-          if (filter == null || filefilter.accept(directory, entry.getName())) {
-            files.add(entry);
-          }
-        }
-        if ((recurse <= -1) || (recurse > 0 && entry.isDirectory())) {
-          recurse--;
-          files.addAll(listAlbumsFiles(entry, filter, recurse));
-          recurse++;
-        }
-      }
-    }
-    return files;
-  }
+  
 
 }

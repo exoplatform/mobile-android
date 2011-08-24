@@ -6,20 +6,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController;
 import org.exoplatform.controller.ExoApplicationsController2;
@@ -28,10 +23,10 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.WaitingDialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -80,7 +75,7 @@ public class ExoFilesController extends MyActionBar {
 
   Button                           _btnCancelUploadImage;
 
-  static ProgressDialog            _progressDialog;
+  static WaitingDialog            _progressDialog;
 
   public static String             _rootUrl;
 
@@ -455,33 +450,34 @@ public class ExoFilesController extends MyActionBar {
 
     List<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
     String responseStr = ExoConnectionUtils.getDriveContent(url.replace(" ", "%20"));
-    int local1;
-    int local2;
-    do {
-      local1 = responseStr.indexOf("alt=\"\"> ");
+    if (responseStr != null) {
+      int local1;
+      int local2;
+      do {
+        local1 = responseStr.indexOf("alt=\"\"> ");
 
-      if (local1 > 0) {
-        int local3 = responseStr.indexOf("<a href=\"");
-        int local4 = responseStr.indexOf("\"><img src");
-        String urlStr = responseStr.substring(local3 + 9, local4);
+        if (local1 > 0) {
+          int local3 = responseStr.indexOf("<a href=\"");
+          int local4 = responseStr.indexOf("\"><img src");
+          String urlStr = responseStr.substring(local3 + 9, local4);
 
-        responseStr = responseStr.substring(local1 + 8);
-        local2 = responseStr.indexOf("</a>");
-        String fileName = responseStr.substring(0, local2);
-        if (!fileName.equalsIgnoreCase("..")) {
-          fileName = StringEscapeUtils.unescapeHtml(fileName);
-          fileName = StringEscapeUtils.unescapeJava(fileName);
+          responseStr = responseStr.substring(local1 + 8);
+          local2 = responseStr.indexOf("</a>");
+          String fileName = responseStr.substring(0, local2);
+          if (!fileName.equalsIgnoreCase("..")) {
+            fileName = StringEscapeUtils.unescapeHtml(fileName);
+            fileName = StringEscapeUtils.unescapeJava(fileName);
 
-          ExoFile file = new ExoFile(urlStr, fileName);
-          arrFilesTmp.add(file);
+            ExoFile file = new ExoFile(urlStr, fileName);
+            arrFilesTmp.add(file);
+          }
+
+          if (local2 > 0)
+            responseStr = responseStr.substring(local2);
         }
 
-        if (local2 > 0)
-          responseStr = responseStr.substring(local2);
-      }
-
-    } while (local1 > 0);
-
+      } while (local1 > 0);
+    }
     return arrFilesTmp;
   }
 
@@ -502,9 +498,11 @@ public class ExoFilesController extends MyActionBar {
       strLoadingDataFromServer = "";
     }
 
-    _progressDialog = ProgressDialog.show(eXoFilesControllerInstance,
-                                          null,
-                                          strLoadingDataFromServer);
+//    _progressDialog = ProgressDialog.show(eXoFilesControllerInstance,
+//                                          null,
+//                                          strLoadingDataFromServer);
+    _progressDialog = new WaitingDialog(eXoFilesControllerInstance, null, strLoadingDataFromServer);
+    _progressDialog.show();
   }
 
   // Create file adapter
@@ -800,13 +798,10 @@ public class ExoFilesController extends MyActionBar {
 
   // Set language
   public void changeLanguage(ResourceBundle resourceBundle) {
-    String strCloseBack = "";
     String strUploadFile = "";
     String strCancel = "";
     String strEmptyPage = "";
     try {
-      strCloseBack = new String(resourceBundle.getString("CloseButton").getBytes("ISO-8859-1"),
-                                "UTF-8");
       strUploadFile = new String(resourceBundle.getString("Upload").getBytes("ISO-8859-1"), "UTF-8");
       strCancel = new String(resourceBundle.getString("Cancel").getBytes("ISO-8859-1"), "UTF-8");
       strEmptyPage = new String(resourceBundle.getString("EmptyPage").getBytes("ISO-8859-1"),
@@ -822,9 +817,6 @@ public class ExoFilesController extends MyActionBar {
     _btnUploadImage.setText(strUploadFile);
     _btnCancelUploadImage.setText(strCancel);
     _textViewEmptyPage.setText(strEmptyPage);
-
-    // _delegate.changeLanguage(resourceBundle);
-    // _delegate.createAdapter();
 
   }
 

@@ -31,5 +31,7 @@
 		<item>png</item>
 		<item>jpg</item>
 		<item>jpeg</item>
+		<item>gif</item>
+		<item>jpe</item>
 	</string-array>
 </resources>

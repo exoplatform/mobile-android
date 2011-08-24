@@ -28,7 +28,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
-import android.widget.LinearLayout.LayoutParams;
 
 public class SocialImageLibrary extends MyActionBar {
 
@@ -47,13 +46,15 @@ public class SocialImageLibrary extends MyActionBar {
   public static SocialImageLibrary socialImageLibrary;
 
   private PhotoInfo                photoInfo;
+  
+  private CoverFlow coverFlow;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.social_image_library_layout);
+//    setActionBarContentView(R.layout.social_image_library_layout);
     photoInfo = SocialPhotoAlbums.photoInfoSelected;
     setTitle(photoInfo.getAlbumsName());
     onChangeLanguage(AppController.bundle);
@@ -94,10 +95,15 @@ public class SocialImageLibrary extends MyActionBar {
 
   private void setAdapter(ArrayList<String> list) {
     ImageAdapter adapter = new ImageAdapter(this, list);
-    gallery.setAdapter(adapter);
-    gallery.setOnItemClickListener(new OnItemClickListener() {
+    
+    coverFlow = new CoverFlow(this);
 
-      // @Override
+    coverFlow.setSpacing(-25);
+    coverFlow.setSelection(4, true);
+    coverFlow.setAnimationDuration(1000);
+    coverFlow.setAdapter(adapter);
+    coverFlow.setOnItemClickListener(new OnItemClickListener() {
+
       public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
         String filePath = listFiles.get(pos);
         Intent intent = new Intent(getApplicationContext(), SelectedImageActivity.class);
@@ -105,6 +111,7 @@ public class SocialImageLibrary extends MyActionBar {
         startActivity(intent);
       }
     });
+    setActionBarContentView(coverFlow);
   }
 
   private void onChangeLanguage(ResourceBundle resourceBundle) {
@@ -112,56 +119,7 @@ public class SocialImageLibrary extends MyActionBar {
 
   }
 
-  // private class ImageAdapter extends BaseAdapter {
-  //
-  // private Context mContext;
-  //
-  // private ArrayList<String> list;
-  //
-  // public ImageAdapter(Context context, ArrayList<String> l) {
-  // mContext = context;
-  // list = l;
-  // }
-  //
-  // // @Override
-  // public int getCount() {
-  // return list.size();
-  // }
-  //
-  // // @Override
-  // public Object getItem(int pos) {
-  // return pos;
-  // }
-  //
-  // // @Override
-  // public long getItemId(int pos) {
-  // return pos;
-  // }
-  //
-  // // @Override
-  // public View getView(int position, View convertView, ViewGroup viewGroup) {
-  // if (list.size() > 0) {
-  // String filePath = list.get(position);
-  // bitmap = PhotoUltils.shrinkBitmap(filePath, 50, 50);
-  // }
-  //
-  // ImageView imageView;
-  // // if (convertView == null) { // if it's not recycled, initialize some
-  // // // attributes
-  // imageView = new ImageView(mContext);
-  // imageView.setLayoutParams(new GridView.LayoutParams(115, 115));
-  // imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-  // imageView.setPadding(8, 8, 8, 8);
-  // // } else {
-  // // imageView = (ImageView) convertView;
-  // // }
-  // imageView.setImageBitmap(bitmap);
-  // bitmap = null;
-  //
-  // return imageView;
-  // }
-  //
-  // }
+  
   private class ImageAdapter extends BaseAdapter {
     int                       mGalleryItemBackground;
 
@@ -195,12 +153,16 @@ public class SocialImageLibrary extends MyActionBar {
       if (list.size() > 0) {
         String filePath = list.get(position);
         bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
+        if(bitmap!=null){
+          bitmap =PhotoUltils.reflectionPhoto(bitmap);
+        }
+       
       }
       imageView.setImageBitmap(bitmap);
-      imageView.setLayoutParams(new Gallery.LayoutParams(LayoutParams.WRAP_CONTENT, 240));
+      imageView.setLayoutParams(new Gallery.LayoutParams(280, 240));
       imageView.setScaleType(ImageView.ScaleType.FIT_XY);
       imageView.setBackgroundResource(mGalleryItemBackground);
-
+      bitmap = null;
       return imageView;
     }
   }
@@ -215,7 +177,7 @@ public class SocialImageLibrary extends MyActionBar {
 
     @Override
     public ArrayList<String> doInBackground(Void... params) {
-      ArrayList<String> listResult = new ArrayList<String>();
+//      ArrayList<String> listResult = new ArrayList<String>();
       if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
         // PhotoUltils.getAllImages(Environment.getExternalStorageDirectory(),
         // listResult);

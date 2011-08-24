@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.exoplatform.chat.entity.ChatMember;
+import org.exoplatform.chat.entity.ExoChatMessageContent;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.widget.MyActionBar;
@@ -81,29 +83,12 @@ public class ExoChatListController extends MyActionBar {
 
   public static PacketListener                         packetListener;
 
-  eXoChatListAdapter                                   chatsAdapter;
+  private ExoChatListAdapter                                   chatsAdapter;
 
-  String                                               strCannotBackToPreviousPage;
+  private String                                               strCannotBackToPreviousPage;
 
   // Chat user info
-  public class ChatMember {
-    String  address;
-
-    boolean isOnline;
-
-    public ChatMember(String addr, boolean bool) {
-      address = addr;
-      isOnline = bool;
-
-    }
-
-    public String getChatName() {
-      int index = this.address.indexOf("@");
-      return this.address.substring(0, index);
-
-    }
-  }
-
+  
   // Constructor
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -204,7 +189,7 @@ public class ExoChatListController extends MyActionBar {
                 }
               }
 
-              eXoChatListAdapter chatsAdapter = new eXoChatListAdapter(listChatRosterEntry);
+              ExoChatListAdapter chatsAdapter = new ExoChatListAdapter(listChatRosterEntry);
               lvChatList.setAdapter(chatsAdapter);
               lvChatList.setOnItemClickListener(chatsAdapter);
             }
@@ -267,7 +252,7 @@ public class ExoChatListController extends MyActionBar {
   // Set adapter for Chat list view
   private void setListAdapter() {
     listChatRosterEntry = getListChat();
-    chatsAdapter = new eXoChatListAdapter(listChatRosterEntry);
+    chatsAdapter = new ExoChatListAdapter(listChatRosterEntry);
     lvChatList.setAdapter(chatsAdapter);
     lvChatList.setOnItemClickListener(chatsAdapter);
   }
@@ -326,11 +311,11 @@ public class ExoChatListController extends MyActionBar {
   }
 
   // Create adapter for Chat user
-  class eXoChatListAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
+  private class ExoChatListAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
     private List<ChatMember> arrExoChats;
 
-    public eXoChatListAdapter(List<ChatMember> chats) {
+    public ExoChatListAdapter(List<ChatMember> chats) {
       arrExoChats = chats;
     }
 

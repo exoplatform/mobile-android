@@ -5,35 +5,33 @@ import greendroid.widget.AsyncImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
-import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestIdentity;
-import org.exoplatform.social.client.api.model.RestLike;
 import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.entity.ExoSocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -98,11 +96,11 @@ public class SocialActivity extends MyActionBar {
 
   }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    onLoad(number_of_activity);
-  }
+  // @Override
+  // protected void onResume() {
+  // super.onResume();
+  // onLoad(number_of_activity);
+  // }
 
   private void destroy() {
     super.onDestroy();
@@ -244,11 +242,13 @@ public class SocialActivity extends MyActionBar {
   }
 
   private class ActivityLoadTask extends UserTask<Integer, Void, ArrayList<ExoSocialActivity>> {
-    private ProgressDialog _progressDialog;
+    private SocialWaitingDialog _progressDialog;
 
     @Override
     public void onPreExecute() {
-      _progressDialog = ProgressDialog.show(SocialActivity.this, null, loadingData);
+      _progressDialog = new SocialWaitingDialog(SocialActivity.this, null, loadingData);
+      _progressDialog.show();
+
     }
 
     @Override
@@ -375,6 +375,19 @@ public class SocialActivity extends MyActionBar {
       titleView = (TextView) view.findViewById(R.id.textView_Section_Title);
     }
 
+  }
+
+  private class SocialWaitingDialog extends WaitingDialog {
+    public SocialWaitingDialog(Context context, String titleString, String contentString) {
+      super(context, titleString, contentString);
+    }
+
+    @Override
+    public void onBackPressed() {
+      super.onBackPressed();
+      dismiss();
+      onCancelLoad();
+    }
   }
 
 }

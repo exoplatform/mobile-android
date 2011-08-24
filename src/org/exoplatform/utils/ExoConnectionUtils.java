@@ -122,7 +122,7 @@ public class ExoConnectionUtils {
         e.printStackTrace();
       }
     }
-//    System.out.println("convertStreamToString "+sb.toString());
+    // System.out.println("convertStreamToString "+sb.toString());
     return sb.toString();
   }
 
@@ -224,18 +224,16 @@ public class ExoConnectionUtils {
           return "ERROR";
         } else if (_strFirstLoginContent.contains("eXo.env.portal")) {
           return "YES";
-        }
+        } else
+          return null;
       } else {
-        return "ERROR";
+        return null;
       }
       // httpClient.getConnectionManager().shutdown();
-    } catch (ClientProtocolException e) {
-      return e.getMessage();
-    } catch (IOException e) {
-      return e.getMessage();
+    } catch (Exception e) {
+      return null;
     }
 
-    return "ERROR";
   }
 
   // Standalone gadget requset
@@ -458,46 +456,6 @@ public class ExoConnectionUtils {
     }
 
   }
-
-  // Get string data with authentication request
-//  public static String sendRequestWithAuthorizationReturnString(String urlStr) {
-//    StringBuffer buf = new StringBuffer();
-//    try {
-//      String strUserName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
-//                                                                    "exo_prf_username");
-//      String strPassword = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
-//                                                                    "exo_prf_password");
-//
-//      urlStr = urlStr.replace(" ", "%20");
-//
-//      URL url = new URL(urlStr);
-//      con = (HttpURLConnection) url.openConnection();
-//
-//      // set up url connection to get retrieve information back
-//      con.setRequestMethod("GET");
-//      con.setDoInput(true);
-//
-//      // stuff the Authorization request header
-//
-//      con.setRequestProperty("Authorization", authorizationHeader(strUserName, strPassword));
-//      // pull the information back from the URL
-//      InputStream ipstr = con.getInputStream();
-//
-//      int c;
-//      while ((c = ipstr.read()) != -1) {
-//        buf.append((char) c);
-//      }
-//
-//      con.disconnect();
-//
-//    } catch (ClientProtocolException e) {
-//      e.getMessage();
-//    } catch (IOException e) {
-//      e.getMessage();
-//    }
-//
-//    return buf.toString();
-//  }
 
   // Get input stream from URL
   private static InputStream sendRequest(String strUrlRequest) {

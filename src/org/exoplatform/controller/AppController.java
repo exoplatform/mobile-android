@@ -1,7 +1,6 @@
 package org.exoplatform.controller;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,17 +10,16 @@ import java.util.ResourceBundle;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.exoplatform.R;
-import org.exoplatform.dashboard.ExoGadget;
-import org.exoplatform.dashboard.ExoWebViewController;
+import org.exoplatform.dashboard.entity.ExoGadget;
 import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.setting.ExoSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.WaitingDialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,8 +39,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -121,9 +117,9 @@ public class AppController extends Activity implements OnTouchListener {
 
   TextView                                  _tvLogIn;
 
-  EditText                                  _edtxUserName;
+  private EditText                          _edtxUserName;
 
-  EditText                                  _edtxPassword;
+  private EditText                          _edtxPassword;
 
   static ListView                           _listViewServer;
 
@@ -142,6 +138,10 @@ public class AppController extends Activity implements OnTouchListener {
 
   private String                            settingText;
 
+  private String                            userNameHint;
+
+  private String                            passWordHint;
+
   // Point to itself
   public static AppController               appControllerInstance;
 
@@ -151,7 +151,7 @@ public class AppController extends Activity implements OnTouchListener {
   Thread                                    thread;
 
   // Login progress dialog
-  public static ProgressDialog              _progressDialog      = null;
+  public static WaitingDialog               _progressDialog      = null;
 
   // Constructor
   @Override
@@ -173,9 +173,10 @@ public class AppController extends Activity implements OnTouchListener {
 
       public void onClick(View v) {
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
+        // InputMethodManager imm = (InputMethodManager)
+        // getSystemService(Context.INPUT_METHOD_SERVICE);
+        // imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
+        // imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
 
       }
     });
@@ -262,7 +263,9 @@ public class AppController extends Activity implements OnTouchListener {
     _imagePanelBackground = (RelativeLayout) findViewById(R.id.Image_Panel_Background);
 
     _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
+
     _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
+
     _edtxPassword.setImeOptions(EditorInfo.IME_ACTION_DONE);
     _edtxPassword.setImeActionLabel("Connect", EditorInfo.IME_ACTION_DONE);
 
@@ -280,13 +283,13 @@ public class AppController extends Activity implements OnTouchListener {
     _strDomainIndex = sharedPreference.getString(EXO_PRF_DOMAIN_INDEX, "");
     _strUserName = sharedPreference.getString(EXO_PRF_USERNAME, "");
     _strPassword = sharedPreference.getString(EXO_PRF_PASSWORD, "");
+    
+    changeLanguage(bundle);
+    _edtxUserName.setHint(userNameHint);
+    _edtxPassword.setHint(passWordHint);
 
     _edtxUserName.setText(_strUserName);
     _edtxPassword.setText(_strPassword);
-
-    _edtxUserName.setSingleLine(true);
-
-    changeLanguage(bundle);
 
     _btnAccount.setOnClickListener(new View.OnClickListener() {
 
@@ -353,7 +356,10 @@ public class AppController extends Activity implements OnTouchListener {
         thread = new Thread(null, viewOrders, "SigningIn");
         thread.start();
 
-        _progressDialog = ProgressDialog.show(AppController.this, strWait, strSigning);
+        // _progressDialog = ProgressDialog.show(AppController.this, strWait,
+        // strSigning);
+        _progressDialog = new WaitingDialog(AppController.this, strWait, strSigning);
+        _progressDialog.show();
         // _progressDialog.setIcon(R.drawable.wait);
 
       }
@@ -396,7 +402,6 @@ public class AppController extends Activity implements OnTouchListener {
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
 
-    System.out.println("remove option item ");
     // menu.add(0, 1, 0, "Setting");
     menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
     // menu.add(0, 2, 0, "Delete Contact");
@@ -630,11 +635,6 @@ public class AppController extends Activity implements OnTouchListener {
       }
 
     } catch (Exception e) {
-      System.out.println("error login" + e.getMessage());
-
-      // String msg = e.getMessage();
-      // String str = e.toString();
-      // Log.v(str, msg);
       runOnUiThread(returnResFaileConnection);
     }
 
@@ -652,8 +652,6 @@ public class AppController extends Activity implements OnTouchListener {
     String title;
     String url;
     String description;
-    Bitmap bmp;
-
     int indexStart;
     int indexEnd;
     String tmpStr = strContent;
@@ -921,16 +919,9 @@ public class AppController extends Activity implements OnTouchListener {
   // Set language
   public void changeLanguage(ResourceBundle resourceBundle) {
     String strSignIn = "";
-    String strUserName = "";
-    String strPassword = "";
-
     try {
       strSignIn = new String(resourceBundle.getString("SignInButton").getBytes("ISO-8859-1"),
                              "UTF-8");
-      strUserName = new String(resourceBundle.getString("UserNameCellTitle").getBytes("ISO-8859-1"),
-                               "UTF-8");
-      strPassword = new String(resourceBundle.getString("PasswordCellTitle").getBytes("ISO-8859-1"),
-                               "UTF-8");
       strWait = new String(resourceBundle.getString("PleaseWait").getBytes("ISO-8859-1"), "UTF-8");
       strSigning = new String(resourceBundle.getString("SigningIn").getBytes("ISO-8859-1"), "UTF-8");
       strNetworkConnextionFailed = new String(resourceBundle.getString("NetworkConnectionFailed")
@@ -941,15 +932,19 @@ public class AppController extends Activity implements OnTouchListener {
                                                              .getBytes("ISO-8859-1"), "UTF-8");
       strLoadingDataFromServer = new String(resourceBundle.getString("LoadingDataFromServer")
                                                           .getBytes("ISO-8859-1"), "UTF-8");
-      settingText = bundle.getString("Settings");
+      settingText = resourceBundle.getString("Settings");
+      userNameHint = resourceBundle.getString("UserNameCellTitle");
+      // System.out.println(userNameHint);
+
+      passWordHint = resourceBundle.getString("PasswordCellTitle");
+      // _edtxUserName.setHint(userNameHint);
+      // _edtxPassword.setHint(passWordHint);
 
     } catch (Exception e) {
 
     }
 
     _btnLogIn.setText(strSignIn);
-    // _txtViewUserName.setText(strUserName);
-    // _txtViewPassword.setText(strPassword);
   }
 
 }

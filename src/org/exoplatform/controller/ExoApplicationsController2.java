@@ -1,20 +1,20 @@
 package org.exoplatform.controller;
 
+import greendroid.widget.ActionBarItem;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.exoplatform.chat.ExoChatListController;
 import org.exoplatform.dashboard.ExoDashboard;
-import org.exoplatform.dashboard.ExoGadget;
+import org.exoplatform.dashboard.entity.ExoGadget;
 import org.exoplatform.document.ExoDocumentUtils;
 import org.exoplatform.document.ExoFile;
 import org.exoplatform.document.ExoFilesController;
+import org.exoplatform.model.ExoAppItem;
 import org.exoplatform.model.GateInDbItem;
 import org.exoplatform.setting.ExoSetting;
 import org.exoplatform.social.SocialActivity;
@@ -23,20 +23,17 @@ import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
-import org.exoplatform.social.client.api.service.VersionService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
-import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.BasicItemActivity;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.WaitingDialog;
+import org.exoplatform.widget.WarningDialog;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -44,10 +41,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,27 +62,7 @@ import android.widget.Toast;
 
 import com.cyrilmottier.android.greendroid.R;
 
-import greendroid.widget.ActionBarItem;
-
 public class ExoApplicationsController2 extends MyActionBar implements OnTouchListener {
-
-  // App item object
-  class AppItem {
-    Bitmap _icon;      // feature's icon
-
-    int    _badgeCount; // number of notification
-
-    String _name;      // feature's name
-
-    public AppItem() {
-
-    }
-
-    public AppItem(Bitmap bm, String name) {
-      _icon = bm;
-      _name = name;
-    }
-  }
 
   public static int                           sTheme;
 
@@ -126,7 +101,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   String                                      strChatServer;
 
-  ProgressDialog                              _progressDialog;            // Progress
+  WaitingDialog                               _progressDialog;            // Progress
                                                                            // dialog
 
   Thread                                      thread;
@@ -134,7 +109,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
   // Standalone gadget content
   private String                              _strContentForStandaloneURL;
 
-  private ArrayList<AppItem>                  array;
+  private ArrayList<ExoAppItem>               array;
 
   private String                              activityStreamsText;
 
@@ -146,13 +121,18 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   private String                              settingText;
 
-  private String                              noService;
 
   private String                              protocol;
 
   private String                              host;
 
   private int                                 port;
+  
+  private String               okString;
+
+  private String               titleString;
+
+  private String               contentString;
 
   public static ActivityService<RestActivity> activityService;
 
@@ -227,29 +207,30 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   private void initComponents() {
     changeLanguage(AppController.bundle);
-    array = new ArrayList<AppItem>();
+    array = new ArrayList<ExoAppItem>();
     Bitmap bm = BitmapFactory.decodeResource(getResources(),
                                              R.drawable.homeactivitystreamsiconiphone);
+    ExoAppItem exoAppItem;
     if (AppController.isNewVersion == true) {
-      AppItem activityStreams = new AppItem(bm, activityStreamsText);
-      array.add(activityStreams);
+      exoAppItem = new ExoAppItem(bm, activityStreamsText);
+      array.add(exoAppItem);
     }
 
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homechaticoniphone);
-    AppItem chatApp = new AppItem(bm, chatText);
-    array.add(chatApp);
+    exoAppItem = new ExoAppItem(bm, chatText);
+    array.add(exoAppItem);
 
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homedocumentsiconiphone);
-    AppItem fileApp = new AppItem(bm, documentText);
-    array.add(fileApp);
+    exoAppItem = new ExoAppItem(bm, documentText);
+    array.add(exoAppItem);
 
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homedashboardiconiphone);
-    AppItem dashBoardApp = new AppItem(bm, dashboardText);
-    array.add(dashBoardApp);
+    exoAppItem = new ExoAppItem(bm, dashboardText);
+    array.add(exoAppItem);
 
     bm = BitmapFactory.decodeResource(getResources(), R.drawable.homesettingsiconiphone);
-    AppItem setting = new AppItem(bm, settingText);
-    array.add(setting);
+    exoAppItem = new ExoAppItem(bm, settingText);
+    array.add(exoAppItem);
 
     createAdapter();
   }
@@ -262,7 +243,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
         View v;
         final int pos = position;
 
-        AppItem item = array.get(position);
+        ExoAppItem item = array.get(position);
         LayoutInflater li = getLayoutInflater();
         v = li.inflate(R.layout.appitem, null);
         v.setOnTouchListener(ExoApplicationsController2.this);
@@ -385,7 +366,9 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       documentText = resourceBundle.getString("Documents");
       dashboardText = resourceBundle.getString("Dashboard");
       settingText = resourceBundle.getString("Settings");
-      noService = resourceBundle.getString("NoService");
+      okString = resourceBundle.getString("OK");
+      titleString = resourceBundle.getString("Warning");
+      contentString = resourceBundle.getString("ConnectionError");
 
     } catch (Exception e) {
 
@@ -408,7 +391,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       for (int i = 0; i < array.size(); i++) {
         View view = gridview.getChildAt(i);
         if (view == v) {
-          AppItem item = array.get(i);
+          ExoAppItem item = array.get(i);
           if (item._name.equalsIgnoreCase(activityStreamsText)) {
             launchActivityStreamApp();
           } else
@@ -449,7 +432,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
                                                      }
 
-                                                     AppItem item = array.get(pos);
+                                                     ExoAppItem item = array.get(pos);
                                                      array.set(pos, array.get(itemMoveIndex));
                                                      array.set(itemMoveIndex, item);
 
@@ -525,7 +508,8 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       strLoadingDataFromServer = "";
     }
 
-    _progressDialog = ProgressDialog.show(this, null, strLoadingDataFromServer);
+    _progressDialog = new WaitingDialog(this, null, strLoadingDataFromServer);
+    _progressDialog.show();
 
     thread = new Thread(loadingDataRunnable, "LoadDingData");
     thread.start();
@@ -542,24 +526,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       ExoFilesController.myFile = new ExoFile();
       ExoFilesController.myFile.fileName = userName;
 
-      // ExoFilesController.myFile.urlStr = domain
-      // + "/rest/private/jcr/repository/collaboration/Users";
-      //
-      // if (AppController.isNewVersion == true) {
-      // int length = userName.length();
-      // for (int i = 1; i < length; i++) {
-      // String userNameLevel = userName.substring(0, i);
-      // for (int j = 1; j < length; j++) {
-      // userNameLevel += "_";
-      // }
-      //
-      // ExoFilesController.myFile.urlStr += "/" + userNameLevel;
-      // }
-      // }
-
       ExoFilesController.myFile.urlStr = ExoDocumentUtils.getDocumentUrl(userName, domain);
-      System.out.println("ExoFilesController.myFile.urlStr   " + ExoFilesController.myFile.urlStr);
-
       ExoFilesController._rootUrl = ExoFilesController.myFile.urlStr;
     }
 
@@ -671,9 +638,11 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       Intent next = new Intent(ExoApplicationsController2.this, SocialActivity.class);
       startActivity(next);
     } else {
-      Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
-      toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-      toast.show();
+      WarningDialog dialog = new WarningDialog(ExoApplicationsController2.this,
+                                               titleString,
+                                               contentString,
+                                               okString);
+      dialog.show();
     }
 
   }
@@ -699,40 +668,12 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       ExoChatListController.conn = new XMPPConnection(config);
       ExoChatListController.conn.connect();
       ExoChatListController.conn.login(userName, password);
-      System.out.println("chat   " + ExoChatListController.conn.getHost());
-
-      // runOnUiThread(new Runnable() {
-      //
-      // public void run() {
-      //
-      // // icon.setBackgroundResource(R.drawable.onlineicon);
-      // List<eXoApp> exoapps = new ArrayList<eXoApp>(2);
-      // exoapps.add(new eXoApp(fileTittle, ""));
-      // exoapps.add(new eXoApp(chatTittle, ""));
-      // exoAppsAdapter = new eXoAppsAdapter(exoapps);
-      // _lstvApps.setAdapter(exoAppsAdapter);
-      // _lstvApps.setOnItemClickListener(exoAppsAdapter);
-      //
-      // }
-      // });
-
-      // exoAppsAdapter.notifyDataSetChanged();
 
     } catch (XMPPException e) {
-      System.out.println("XMPPException " + e.toString() + "   " + e.getMessage());
-      String str = e.toString();
-      String msg = e.getMessage();
-      Log.e(str, msg);
-
       ExoChatListController.conn.disconnect();
       ExoChatListController.conn = null;
-      // e.printStackTrace();
-      // Toast.makeText(eXoApplicationsController2Instance,
-      // "Can not connect to chat server", Toast.LENGTH_SHORT).show();
-
       return false;
     }
-
     return true;
 
   }
@@ -749,8 +690,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     String title;
     String url;
     String description;
-    Bitmap bmp;
-
     int indexStart;
     int indexEnd;
     String tmpStr = strContent;
@@ -795,8 +734,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       // Get bitmap
       String bmpUrl = parseUrl(tmpStr2, "\"thumbnail\":\"", true, "\"");
       bmpUrl = bmpUrl.replace("localhost", _strDomain);
-      // bmp =
-      // BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
 
       ExoGadget tempGadget = new ExoGadget(title, description, url, bmpUrl, null, null);
       arrGadgets.add(tempGadget);
@@ -875,12 +812,8 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       gadgetIconUrl = gadgetIconUrl.replace("http://localhost:8080", domain);
 
       try {
-        // imgGadgetIcon =
-        // BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(gadgetIconUrl));
         if (imgGadgetIcon == null) {
           try {
-            // imgGadgetIcon =
-            // BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
           } catch (Exception e2) {
 
             imgGadgetIcon = null;
@@ -888,14 +821,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
         }
 
       } catch (Exception e) {
-
-        try {
-          // imgGadgetIcon =
-          // BitmapFactory.decodeStream(getAssets().open("portletsicon.png"));
-        } catch (Exception e2) {
-
-          imgGadgetIcon = null;
-        }
 
       }
 
@@ -945,116 +870,97 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       ArrayList<GateInDbItem> gadgetList = new ArrayList<GateInDbItem>();
 
       String strContent = ExoConnectionUtils.getFirstLoginContent();
-      // System.out.println("listOfGadgets  "+strContent);
+      if (strContent != null) {
 
-      int index1;
-      int index2;
-      int index3;
 
-      index1 = strContent.indexOf("DashboardIcon TBIcon");
+        int index1;
+        index1 = strContent.indexOf("DashboardIcon TBIcon");
 
-      if (index1 < 0)
-        return null;
+        if (index1 < 0)
+          return null;
 
-      strContent = strContent.substring(index1 + 20);
-      // System.out.println("strContent  " + strContent);
-      index1 = strContent.indexOf("TBIcon");
-      if (index1 < 0)
-        return null;
+        strContent = strContent.substring(index1 + 20);
+        index1 = strContent.indexOf("TBIcon");
+        if (index1 < 0)
+          return null;
 
-      strContent = strContent.substring(0, index1);
-      // System.out.println("strContent  " + strContent);
+        strContent = strContent.substring(0, index1);
 
-      String firstChunkForGadget = "<a class=\"ItemIcon DefaultPageIcon\" href=\"";
-      String commaChar = "\"";
-      String supChar = ">";
-      String lastChunkForGadget = "</a>";
+        String firstChunkForGadget = "<a class=\"ItemIcon DefaultPageIcon\" href=\"";
+        String commaChar = "\"";
+        String supChar = ">";
+        String lastChunkForGadget = "</a>";
 
-      do {
+        do {
 
-        // Search for each '<a class="ItemIcon DefaultPageIcon"' in the HTML
-        int indexStartOfNextGadget = strContent.indexOf(firstChunkForGadget);
+          // Search for each '<a class="ItemIcon DefaultPageIcon"' in the HTML
+          int indexStartOfNextGadget = strContent.indexOf(firstChunkForGadget);
 
-        if (indexStartOfNextGadget > 0) {
-          // Remove the ***...<a class="ItemIcon DefaultPageIcon" from the
-          // string
-          String stringCutted = strContent.substring(indexStartOfNextGadget
-              + firstChunkForGadget.length());
+          if (indexStartOfNextGadget > 0) {
+            // Remove the ***...<a class="ItemIcon DefaultPageIcon" from the
+            // string
+            String stringCutted = strContent.substring(indexStartOfNextGadget
+                + firstChunkForGadget.length());
 
-          // Search for the next '"' in the string
-          int indexForComma = stringCutted.indexOf(commaChar);
+            // Search for the next '"' in the string
+            int indexForComma = stringCutted.indexOf(commaChar);
 
-          // Get the URL string
-          String gadgetTabUrlStr = stringCutted.substring(0, indexForComma);
+            // Get the URL string
+            String gadgetTabUrlStr = stringCutted.substring(0, indexForComma);
 
-          // Search for the next '>' in the string
-          int indexForSup = stringCutted.indexOf(supChar);
+            // Search for the next '>' in the string
+            int indexForSup = stringCutted.indexOf(supChar);
 
-          // Remove the '>' from stringCutted
-          stringCutted = stringCutted.substring(indexForSup + supChar.length());
+            // Remove the '>' from stringCutted
+            stringCutted = stringCutted.substring(indexForSup + supChar.length());
 
-          // Search for the '</a>'
-          int indexForDashboardNameEnd = stringCutted.indexOf(lastChunkForGadget);
+            // Search for the '</a>'
+            int indexForDashboardNameEnd = stringCutted.indexOf(lastChunkForGadget);
 
-          // Get the TabName
-          String gadgetTabName = stringCutted.substring(0, indexForDashboardNameEnd);
+            // Get the TabName
+            String gadgetTabName = stringCutted.substring(0, indexForDashboardNameEnd);
 
-          /*
-           * index1 = strContent.indexOf("ItemIcon DefaultPageIcon\" href=\"");
-           * System.out.println("index1  " + index1); index2 =
-           * strContent.indexOf("\" >"); System.out.println("index2  " +
-           * index2); // if (index1 < 0 && index2 < 0) // return null; String
-           * gadgetTabUrlStr = strContent.substring(index1 + 32, index2);
-           * System.out.println("gadgetTabUrlStr  " + gadgetTabUrlStr);
-           * strContent = strContent.substring(index2 + 3); index3 =
-           * strContent.indexOf("</a>"); System.out.println("index3  " +
-           * index3); if (index3 < 0) return null; String gadgetTabName =
-           * strContent.substring(0, index3);
-           */
-          List<ExoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
-          // System.out.println("arrTmpGadgetsInItem  " +
-          // arrTmpGadgetsInItem.size());
+            List<ExoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
 
-          HashMap<String, String> mapOfURLs = listOfStandaloneGadgetsURL();
-          // System.out.println("mapOfURLs  " + mapOfURLs.size());
+            HashMap<String, String> mapOfURLs = listOfStandaloneGadgetsURL();
 
-          if (arrTmpGadgetsInItem != null) {
-            for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) {
-              ExoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
+            if (arrTmpGadgetsInItem != null) {
+              for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) {
+                ExoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
 
-              String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
+                String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
 
-              if (urlStandalone != null) {
-                tmpGadget._strGadgetUrl = urlStandalone;
+                if (urlStandalone != null) {
+                  tmpGadget._strGadgetUrl = urlStandalone;
+                }
               }
+
+              GateInDbItem tmpGateInDbItem = new GateInDbItem(gadgetTabName,
+                                                              gadgetTabUrlStr,
+                                                              arrTmpGadgetsInItem);
+              // arrTmpGadgets.add(tmpGateInDbItem);
+              gadgetList.add(tmpGateInDbItem);
+
+              // Prepare for the next iteration
+              // Remove the last information about the current gadget
+              String toRemoveFromContent = gadgetTabName + "</a>";
+              int range3 = strContent.indexOf(toRemoveFromContent);
+              strContent = strContent.substring(range3 + toRemoveFromContent.length());
+              index1 = strContent.indexOf(firstChunkForGadget);
+
             }
-
-            GateInDbItem tmpGateInDbItem = new GateInDbItem(gadgetTabName,
-                                                            gadgetTabUrlStr,
-                                                            arrTmpGadgetsInItem);
-            // arrTmpGadgets.add(tmpGateInDbItem);
-            gadgetList.add(tmpGateInDbItem);
-
-            // Prepare for the next iteration
-            // Remove the last information about the current gadget
-            String toRemoveFromContent = gadgetTabName + "</a>";
-            int range3 = strContent.indexOf(toRemoveFromContent);
-            strContent = strContent.substring(range3 + toRemoveFromContent.length());
-            index1 = strContent.indexOf(firstChunkForGadget);
 
           }
 
-        }
+          else {
+            // No gadgets so exit from the loop
+            index1 = 0;
+          }
 
-        else {
-          // No gadgets so exit from the loop
-          index1 = 0;
-        }
-
-      } while (index1 > 0);
+        } while (index1 > 0);
+      }
       return gadgetList;
     } catch (Exception e) {
-
       return null;
     }
 

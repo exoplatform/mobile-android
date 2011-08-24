@@ -70,12 +70,12 @@ public class SocialPhotoAlbums extends MyActionBar {
         item.setOnClickListener(new OnClickListener() {
 
           public void onClick(View v) {
-//            photoInfoSelected = photoInfo;
-//            Intent intent = new Intent(SocialPhotoAlbums.this, SocialImageLibrary.class);
-//            startActivity(intent);
             photoInfoSelected = photoInfo;
-            Intent intent = new Intent(SocialPhotoAlbums.this, CoverFlowExample.class);
+            Intent intent = new Intent(SocialPhotoAlbums.this, SocialImageLibrary.class);
             startActivity(intent);
+//            photoInfoSelected = photoInfo;
+//            Intent intent = new Intent(SocialPhotoAlbums.this, CoverFlowExample.class);
+//            startActivity(intent);
           }
         });
         
@@ -114,7 +114,12 @@ public class SocialPhotoAlbums extends MyActionBar {
         for (final String type : imageTypes) {
           filter[i] = new FilenameFilter() {
             public boolean accept(File dir, String name) {
-              return name.endsWith("." + type);
+              int index = name.lastIndexOf(".");
+              String typeOfFile = name.substring(index + 1);
+//              return name.endsWith("." + type) || name.endsWith("." + typeUpcase);
+              return type.equalsIgnoreCase(typeOfFile);
+              
+//              return name.endsWith("." + type);
             }
           };
           i++;

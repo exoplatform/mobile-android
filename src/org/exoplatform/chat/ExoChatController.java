@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.exoplatform.chat.entity.ExoChatMessageContent;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.widget.MyActionBar;

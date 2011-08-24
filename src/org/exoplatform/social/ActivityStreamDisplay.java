@@ -1,5 +1,8 @@
 package org.exoplatform.social;
 
+import greendroid.widget.ActionBarItem;
+import greendroid.widget.AsyncImageView;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,14 +21,13 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.WarningDialog;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,15 +35,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
-
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.AsyncImageView;
 
 public class ActivityStreamDisplay extends MyActionBar implements OnClickListener {
   public static ActivityStreamDisplay activityStreamDisplay;
@@ -76,9 +74,13 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   private String                      youText;
 
-  private String                      noService;
-
   private String                      domain;
+
+  private String                      okString;
+
+  private String                      titleString;
+
+  private String                      contentString;
 
   private int                         likeDrawable    = R.drawable.activity_like_button_background_shape;
 
@@ -210,7 +212,9 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     yourCommentText = resourceBundle.getString("YourComment");
     loadingData = resourceBundle.getString("LoadingData");
     youText = resourceBundle.getString("You");
-    noService = resourceBundle.getString("NoService");
+    okString = resourceBundle.getString("OK");
+    titleString = resourceBundle.getString("Warning");
+    contentString = resourceBundle.getString("ConnectionError");
 
   }
 
@@ -232,9 +236,11 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
         }
         onLoad();
       } catch (RuntimeException e) {
-        Toast toast = Toast.makeText(this, noService, Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.show();
+        WarningDialog dialog = new WarningDialog(ActivityStreamDisplay.this,
+                                                 titleString,
+                                                 contentString,
+                                                 okString);
+        dialog.show();
       }
 
     }
@@ -336,6 +342,12 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
         textView_Like_Count.setText(SocialActivityUtil.getCommentString(likeLinkedList,
                                                                         AppController.bundle));
         createCommentList(socialCommentList);
+      } else {
+        WarningDialog dialog = new WarningDialog(ActivityStreamDisplay.this,
+                                                 titleString,
+                                                 contentString,
+                                                 okString);
+        dialog.show();
       }
       _progressDialog.dismiss();
 
