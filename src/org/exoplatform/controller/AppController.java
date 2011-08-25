@@ -16,6 +16,7 @@ import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.setting.ExoSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.URLAnalyzer;
 import org.exoplatform.widget.WaitingDialog;
 
 import android.app.Activity;
@@ -28,6 +29,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -162,7 +164,7 @@ public class AppController extends Activity implements OnTouchListener {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
 
     this.setContentView(R.layout.login);
-
+       
     // String path = Environment.getExternalStorageDirectory() +
     // "/eXo/DefaultServerList.xml";
     // File file = new File(path);

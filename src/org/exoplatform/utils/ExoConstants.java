@@ -18,7 +18,8 @@ public class ExoConstants {
 
   public static final int    TAKE_PICTURE_WITH_CAMERA  = 7;
 
-  public static final String ACTIVITY_PROTOCOL         = "http";
+  public static final String HTTP_PROTOCOL         = "http";
+  public static final String HTTPS_PROTOCOL         = "https";
 
   public static final String ACTIVITY_HOST             = "192.168.1.83";
 

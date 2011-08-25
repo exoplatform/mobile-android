@@ -180,7 +180,7 @@ public class SocialActivityUtil {
 
   public static String getUrl() {
     StringBuffer urlBuffer = new StringBuffer();
-    urlBuffer.append(ExoConstants.ACTIVITY_PROTOCOL);
+    urlBuffer.append(ExoConstants.HTTP_PROTOCOL);
     urlBuffer.append("://");
     urlBuffer.append(ExoConstants.ACTIVITY_HOST);
     urlBuffer.append(":");

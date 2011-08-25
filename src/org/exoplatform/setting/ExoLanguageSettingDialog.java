@@ -7,6 +7,7 @@ import org.exoplatform.R;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.utils.URLAnalyzer;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -90,7 +91,10 @@ public class ExoLanguageSettingDialog extends Dialog implements OnClickListener 
     ServerObj myServerObj = new ServerObj();
 
     myServerObj._strServerName = editTextServerName.getText().toString();
-    myServerObj._strServerUrl = editTextServerUrl.getText().toString();
+//    myServerObj._strServerUrl = editTextServerUrl.getText().toString();
+    
+    URLAnalyzer urlAnanyzer = new URLAnalyzer();
+    myServerObj._strServerUrl = urlAnanyzer.parserURL(editTextServerUrl.getText().toString()); 
 
     if (v == btnOK) {
       if (myServerObj._strServerName.equalsIgnoreCase("")
