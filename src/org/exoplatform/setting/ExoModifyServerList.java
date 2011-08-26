@@ -83,8 +83,8 @@ public class ExoModifyServerList extends MyActionBar {
       break;
 
     case 0:
-      ExoLanguageSettingDialog.isNewServer = true;
-      ExoLanguageSettingDialog customizeDialog = new ExoLanguageSettingDialog(ExoModifyServerList.this);
+      AddEditServerDialog.isNewServer = true;
+      AddEditServerDialog customizeDialog = new AddEditServerDialog(ExoModifyServerList.this);
       customizeDialog.show();
       break;
 
@@ -107,8 +107,8 @@ public class ExoModifyServerList extends MyActionBar {
     int selectedItemIndex = item.getItemId();
 
     if (selectedItemIndex == 1) {
-      ExoLanguageSettingDialog.isNewServer = true;
-      ExoLanguageSettingDialog customizeDialog = new ExoLanguageSettingDialog(ExoModifyServerList.this);
+      AddEditServerDialog.isNewServer = true;
+      AddEditServerDialog customizeDialog = new AddEditServerDialog(ExoModifyServerList.this);
       customizeDialog.show();
 
     }
@@ -146,9 +146,9 @@ public class ExoModifyServerList extends MyActionBar {
 
           public void onClick(View v) {
 
-            ExoLanguageSettingDialog.isNewServer = false;
-            ExoLanguageSettingDialog.selectedServerIndex = pos;
-            ExoLanguageSettingDialog customizeDialog = new ExoLanguageSettingDialog(ExoModifyServerList.this);
+            AddEditServerDialog.isNewServer = false;
+            AddEditServerDialog.selectedServerIndex = pos;
+            AddEditServerDialog customizeDialog = new AddEditServerDialog(ExoModifyServerList.this);
             customizeDialog.show();
           }
         });

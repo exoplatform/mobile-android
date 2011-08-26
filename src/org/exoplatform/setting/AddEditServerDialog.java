@@ -22,7 +22,7 @@ import android.widget.Toast;
 /** Class Must extends with Dialog */
 /** Implement onClickListener to dismiss dialog when OK Button is pressed */
 // Display language setting & user guide page
-public class ExoLanguageSettingDialog extends Dialog implements OnClickListener {
+public class AddEditServerDialog extends Dialog implements OnClickListener {
 
   Button         btnOK;
 
@@ -45,7 +45,7 @@ public class ExoLanguageSettingDialog extends Dialog implements OnClickListener 
   ServerObj      serverObj;
 
   // Constructor
-  public ExoLanguageSettingDialog(Context context) {
+  public AddEditServerDialog(Context context) {
 
     super(context);
 

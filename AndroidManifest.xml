@@ -73,9 +73,6 @@
 		<activity android:name=".social.image.SocialPhotoAlbums"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".social.image.CoverFlowExample"
-			android:configChanges="keyboardHidden|orientation"
-			android:screenOrientation="portrait" />
 
 	</application>
 	<uses-sdk android:minSdkVersion="7" />
