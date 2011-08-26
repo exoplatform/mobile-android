@@ -109,8 +109,7 @@ public class ExoLanguageSettingDialog extends Dialog implements OnClickListener 
         boolean isExisted = false;
         for (int i = 0; i < conf._arrServerList.size(); i++) {
           ServerObj tmp = conf._arrServerList.get(i);
-          if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)
-              && myServerObj._strServerUrl.equalsIgnoreCase(tmp._strServerUrl)) {
+          if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
             isExisted = true;
             Toast.makeText(ExoSetting.eXoSettingInstance, "The server's existed", Toast.LENGTH_LONG)
                  .show();
@@ -137,8 +136,7 @@ public class ExoLanguageSettingDialog extends Dialog implements OnClickListener 
             continue;
           }
 
-          if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)
-              && myServerObj._strServerUrl.equalsIgnoreCase(tmp._strServerUrl)) {
+          if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
             isExisted = false;
             Toast.makeText(ExoSetting.eXoSettingInstance, "The server's existed", Toast.LENGTH_LONG)
                  .show();

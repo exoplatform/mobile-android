@@ -36,9 +36,6 @@ public class SocialImageLibrary extends MyActionBar {
 
   private String                   loadingData;
 
-  // private GridView gridView;
-  private Gallery                  gallery;
-
   private LoadImageTask            mLoadTask;
 
   private Bitmap                   bitmap;
@@ -58,7 +55,6 @@ public class SocialImageLibrary extends MyActionBar {
     photoInfo = SocialPhotoAlbums.photoInfoSelected;
     setTitle(photoInfo.getAlbumsName());
     onChangeLanguage(AppController.bundle);
-    gallery = (Gallery) findViewById(R.id.social_gallery);
     socialImageLibrary = this;
 
     onLoad();
