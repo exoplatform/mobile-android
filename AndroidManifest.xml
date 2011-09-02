@@ -3,7 +3,7 @@
 	package="org.exoplatform" android:versionCode="2" android:versionName="2.0">
 	<application android:icon="@drawable/application_icon"
 		android:theme="@style/Theme.eXo" android:name=".ExoApplication"
-		android:debuggable="true">
+		android:debuggable="true" android:label="eXo Application">
 
 		<activity android:name=".controller.AppController"
 			android:label="eXo Platform" android:screenOrientation="portrait">
