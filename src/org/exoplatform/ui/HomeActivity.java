@@ -19,7 +19,7 @@ public class HomeActivity extends MyActionBar {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.appsview2);
-    super.getGDActionBar().setType(greendroid.widget.GDActionBar.Type.Dashboard);
+    super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
     addActionBarItem(R.drawable.signout);
     super.setTitle("eXo");
     init();
