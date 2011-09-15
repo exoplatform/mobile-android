@@ -5,14 +5,15 @@ import greendroid.widget.AsyncImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.ResourceBundle;
 
-import org.exoplatform.controller.AppController;
-import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.model.RestProfile;
+import org.exoplatform.social.client.api.service.ActivityService;
+import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.entity.ExoSocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
@@ -21,7 +22,6 @@ import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -31,7 +31,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -89,7 +88,7 @@ public class SocialActivity extends MyActionBar {
     getActionBar().getItem(1).setDrawable(R.drawable.gd_action_bar_compose);
 
     setActionBarContentView(R.layout.activitybrowserview);
-    onChangeLanguage(AppController.bundle);
+    onChangeLanguage();
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     resource = getResources();
     onLoad(number_of_activity);
@@ -109,7 +108,7 @@ public class SocialActivity extends MyActionBar {
 
   private String getActivityStreamHeader(long postedTime) {
 
-    String strSection = SocialActivityUtil.getPostedTimeString(postedTime, AppController.bundle);
+    String strSection = SocialActivityUtil.getPostedTimeString(postedTime);
     // Check activities of today
     if (strSection.contains(minute) || strSection.contains(minutes) || strSection.contains(hour)
         || strSection.contains(hours)) {
@@ -225,20 +224,20 @@ public class SocialActivity extends MyActionBar {
 
   }
 
-  private void onChangeLanguage(ResourceBundle resourceBundle) {
-
-    String title = resourceBundle.getString("ActivityStream");
+  private void onChangeLanguage() {
+    LocalizationHelper location = LocalizationHelper.getInstance();
+    String title = location.getString("ActivityStream");
     setTitle(title);
-    loadingData = resourceBundle.getString("LoadingData");
-    showMoreText = resourceBundle.getString("ShowMore");
-    minute = resourceBundle.getString("Minute");
-    minutes = resourceBundle.getString("Minutes");
-    hour = resourceBundle.getString("Hour");
-    hours = resourceBundle.getString("Hours");
-    today = resourceBundle.getString("Today");
-    okString = resourceBundle.getString("OK");
-    titleString = resourceBundle.getString("Warning");
-    contentString = resourceBundle.getString("ConnectionError");
+    loadingData = location.getString("LoadingData");
+    showMoreText = location.getString("ShowMore");
+    minute = location.getString("Minute");
+    minutes = location.getString("Minutes");
+    hour = location.getString("Hour");
+    hours = location.getString("Hours");
+    today = location.getString("Today");
+    okString = location.getString("OK");
+    titleString = location.getString("Warning");
+    contentString = location.getString("ConnectionError");
   }
 
   private class ActivityLoadTask extends UserTask<Integer, Void, ArrayList<ExoSocialActivity>> {
@@ -258,8 +257,14 @@ public class SocialActivity extends MyActionBar {
         ArrayList<ExoSocialActivity> streamInfoList = new ArrayList<ExoSocialActivity>();
 
         int loadSize = params[0];
-        RestIdentity identity = (RestIdentity) ExoApplicationsController2.identityService.get(ExoApplicationsController2.userIdentity);
-        RealtimeListAccess<RestActivity> list = ExoApplicationsController2.activityService.getActivityStream(identity);
+        // RestIdentity identity = (RestIdentity)
+        // ExoApplicationsController2.identityService.get(ExoApplicationsController2.userIdentity);
+        ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
+                                                                           .getActivityService();
+        IdentityService<?> identityService = SocialServiceHelper.getInstance().getIdentityService();
+        RestIdentity identity = (RestIdentity) identityService.get(SocialServiceHelper.getInstance()
+                                                                                      .getUserId());
+        RealtimeListAccess<RestActivity> list = activityService.getActivityStream(identity);
         ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0,
                                                                                          loadSize);
         ExoSocialActivity streamInfo = null;
@@ -343,12 +348,10 @@ public class SocialActivity extends MyActionBar {
         imageViewAvatar.setUrl(SocialActivityUtil.getDomain() + avatarUrl);
       textViewName.setText(activityInfo.getUserName());
       textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
-      textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime(),
-                                                                  AppController.bundle));
+      textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
       buttonComment.setText("" + activityInfo.getCommentNumber());
       buttonLike.setText("" + activityInfo.getLikeNumber());
     }
-
   }
 
   private class ShowMoreItem extends LinearLayout {
