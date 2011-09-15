@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestIdentity;
@@ -98,7 +99,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_refresh);
     activityStreamDisplay = this;
     activityId = SocialActivity.activityId;
-    changeLanguage(AppController.bundle);
+    changeLanguage();
     domain = SocialActivityUtil.getDomain();
     initComponent();
     onLoad();
@@ -148,8 +149,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
     textView_Message.setText(Html.fromHtml(selectedRestActivity.getTitle()));
 
-    textView_Time.setText(SocialActivityUtil.getPostedTimeString(selectedRestActivity.getPostedTime(),
-                                                                 AppController.bundle));
+    textView_Time.setText(SocialActivityUtil.getPostedTimeString(selectedRestActivity.getPostedTime()));
   }
 
   private void onLoad() {
@@ -196,8 +196,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
           commentItem.comAvatarImage.setUrl(domain + avatarUrl);
         commentItem.comTextViewName.setText(comment.getCommentName());
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()));
-        commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime(),
-                                                                                 AppController.bundle));
+        commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime()));
         commentLayoutWrap.addView(commentItem, params);
 
       }
@@ -206,15 +205,16 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
   }
 
   // Set language
-  public void changeLanguage(ResourceBundle resourceBundle) {
-    String strTitle = resourceBundle.getString("ActivityDetail");
+  public void changeLanguage() {
+    LocalizationHelper location = LocalizationHelper.getInstance();
+    String strTitle = location.getString("ActivityDetail");
     setTitle(strTitle);
-    yourCommentText = resourceBundle.getString("YourComment");
-    loadingData = resourceBundle.getString("LoadingData");
-    youText = resourceBundle.getString("You");
-    okString = resourceBundle.getString("OK");
-    titleString = resourceBundle.getString("Warning");
-    contentString = resourceBundle.getString("ConnectionError");
+    yourCommentText = location.getString("YourComment");
+    loadingData = location.getString("LoadingData");
+    youText = location.getString("You");
+    okString = location.getString("OK");
+    titleString = location.getString("Warning");
+    contentString = location.getString("ConnectionError");
 
   }
 
@@ -339,8 +339,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     public void onPostExecute(Integer result) {
       if (result == 1) {
         setComponentInfo();
-        textView_Like_Count.setText(SocialActivityUtil.getCommentString(likeLinkedList,
-                                                                        AppController.bundle));
+        textView_Like_Count.setText(SocialActivityUtil.getCommentString(likeLinkedList));
         createCommentList(socialCommentList);
       } else {
         WarningDialog dialog = new WarningDialog(ActivityStreamDisplay.this,
