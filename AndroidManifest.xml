@@ -5,7 +5,7 @@
 		android:theme="@style/Theme.eXo" android:name=".ExoApplication"
 		android:debuggable="true" android:label="eXo Application">
 
-		<activity android:name=".controller.AppController"
+		<activity android:name=".ui.LoginActivity"
 			android:label="eXo Platform" android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -13,7 +13,7 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".controller.ExoApplicationsController"
+		<activity android:name=".ui.HomeActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 		<activity android:name=".controller.ExoApplicationsController2"
