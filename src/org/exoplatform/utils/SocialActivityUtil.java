@@ -125,8 +125,8 @@ public class SocialActivityUtil {
     return buffer.toString();
   }
 
-  public static String getHeader(long postedTime, ResourceBundle resourceBundle) {
-
+  public static String getHeader(long postedTime) {
+    LocalizationHelper location = LocalizationHelper.getInstance();
     long currentTime = System.currentTimeMillis();
     GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
     calendar.set(GregorianCalendar.HOUR, 0);
@@ -135,14 +135,14 @@ public class SocialActivityUtil {
 
     long miliTime = calendar.getTimeInMillis();
     long time = (currentTime - postedTime) / 1000;
-    String about = resourceBundle.getString("About");
+    String about = location.getString("About");
     StringBuffer buffer = new StringBuffer();
     long value;
     if (postedTime > miliTime) {
-      buffer.append(resourceBundle.getString("Today"));
+      buffer.append(location.getString("Today"));
     } else {
       if (time < 172800) {
-        buffer.append(resourceBundle.getString("AboutADayAgo"));
+        buffer.append(location.getString("AboutADayAgo"));
       } else {
         if (time < 2592000) {
           value = Math.round(time / 86400);
@@ -150,17 +150,17 @@ public class SocialActivityUtil {
           buffer.append(" ");
           buffer.append(String.valueOf(value));
           buffer.append(" ");
-          buffer.append(resourceBundle.getString("DaysAgo"));
+          buffer.append(location.getString("DaysAgo"));
         } else {
           if (time < 5184000) {
-            buffer.append(resourceBundle.getString("AboutAMonthAgo"));
+            buffer.append(location.getString("AboutAMonthAgo"));
           } else {
             value = Math.round(time / 2592000);
             buffer.append(about);
             buffer.append(" ");
             buffer.append(String.valueOf(value));
             buffer.append(" ");
-            buffer.append(resourceBundle.getString("MonthsAgo"));
+            buffer.append(location.getString("MonthsAgo"));
           }
         }
       }
