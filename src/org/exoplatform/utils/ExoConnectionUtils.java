@@ -26,6 +26,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.controller.AppController;
+import org.exoplatform.singleton.AccountSetting;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -464,8 +465,10 @@ public class ExoConnectionUtils {
       HttpResponse response;
       HttpEntity entity;
       // DefaultHttpClient httpClient = new DefaultHttpClient();
-      httpClient.getCredentialsProvider().setCredentials(AppController.auth,
-                                                         AppController.credential);
+      httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
+                                                                       .getAuthScope(),
+                                                         AccountSetting.getInstance()
+                                                                       .getCredentials());
       HttpGet httpGet = new HttpGet(strUrlRequest);
       httpGet.setHeader("Cookie", _strCookie);
       response = httpClient.execute(httpGet);
@@ -495,6 +498,7 @@ public class ExoConnectionUtils {
     try {
       String versionUrl = SocialActivityUtil.getDomain() + "/portal/rest/platform/version";
       String result = sendRequestAndReturnString(versionUrl);
+      System.out.println("result " + result);
       JSONObject json = (JSONObject) JSONValue.parse(result);
       String verObject = json.get("platformVersion").toString();
       int index = verObject.lastIndexOf(".");

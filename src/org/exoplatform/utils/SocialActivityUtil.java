@@ -1,22 +1,22 @@
 package org.exoplatform.utils;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
-import org.exoplatform.controller.AppController;
+import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.social.entity.ExoSocialLike;
 
 public class SocialActivityUtil {
 
-  public static String getCommentString(LinkedList<ExoSocialLike> socialLikeList,
-                                        ResourceBundle resourceBundle) {
-    String nolike = resourceBundle.getString("NoLike");
-    String likedThis = resourceBundle.getString("LikedThis");
-    String and = resourceBundle.getString("And");
-    String peoplesLiked = resourceBundle.getString("PeoplesLikedThis");
-    String peopleLiked = resourceBundle.getString("PeopleLikedThis");
+  public static String getCommentString(LinkedList<ExoSocialLike> socialLikeList) {
+    LocalizationHelper location = LocalizationHelper.getInstance();
+    String nolike = location.getString("NoLike");
+    String likedThis = location.getString("LikedThis");
+    String and = location.getString("And");
+    String peoplesLiked = location.getString("PeoplesLikedThis");
+    String peopleLiked = location.getString("PeopleLikedThis");
     StringBuffer buffer = new StringBuffer();
     int count = socialLikeList.size();
     ExoSocialLike socialLike = null;
@@ -62,17 +62,18 @@ public class SocialActivityUtil {
     return buffer.toString();
   }
 
-  public static String getPostedTimeString(long postedTime, ResourceBundle resourceBundle) {
+  public static String getPostedTimeString(long postedTime) {
+    LocalizationHelper location = LocalizationHelper.getInstance();
 
     long time = (System.currentTimeMillis() - postedTime) / 1000;
     long value;
-    String about = resourceBundle.getString("About");
+    String about = location.getString("About");
     StringBuffer buffer = new StringBuffer();
     if (time < 60) {
-      buffer.append(resourceBundle.getString("LessThanAMinute"));
+      buffer.append(location.getString("LessThanAMinute"));
     } else {
       if (time < 120) {
-        buffer.append(resourceBundle.getString("AboutAMinuteAgo"));
+        buffer.append(location.getString("AboutAMinuteAgo"));
       } else {
         if (time < 3600) {
           value = Math.round(time / 60);
@@ -80,10 +81,10 @@ public class SocialActivityUtil {
           buffer.append(" ");
           buffer.append(String.valueOf(value));
           buffer.append(" ");
-          buffer.append(resourceBundle.getString("MinutesAgo"));
+          buffer.append(location.getString("MinutesAgo"));
         } else {
           if (time < 7200) {
-            buffer.append(resourceBundle.getString("AboutAnHourAgo"));
+            buffer.append(location.getString("AboutAnHourAgo"));
           } else {
             if (time < 86400) {
               value = Math.round(time / 3600);
@@ -91,10 +92,10 @@ public class SocialActivityUtil {
               buffer.append(" ");
               buffer.append(String.valueOf(value));
               buffer.append(" ");
-              buffer.append(resourceBundle.getString("HoursAgo"));
+              buffer.append(location.getString("HoursAgo"));
             } else {
               if (time < 172800) {
-                buffer.append(resourceBundle.getString("AboutADayAgo"));
+                buffer.append(location.getString("AboutADayAgo"));
               } else {
                 if (time < 2592000) {
                   value = Math.round(time / 86400);
@@ -102,17 +103,17 @@ public class SocialActivityUtil {
                   buffer.append(" ");
                   buffer.append(String.valueOf(value));
                   buffer.append(" ");
-                  buffer.append(resourceBundle.getString("DaysAgo"));
+                  buffer.append(location.getString("DaysAgo"));
                 } else {
                   if (time < 5184000) {
-                    buffer.append(resourceBundle.getString("AboutAMonthAgo"));
+                    buffer.append(location.getString("AboutAMonthAgo"));
                   } else {
                     value = Math.round(time / 2592000);
                     buffer.append(about);
                     buffer.append(" ");
                     buffer.append(String.valueOf(value));
                     buffer.append(" ");
-                    buffer.append(resourceBundle.getString("MonthsAgo"));
+                    buffer.append(location.getString("MonthsAgo"));
                   }
                 }
               }
@@ -169,8 +170,8 @@ public class SocialActivityUtil {
   }
 
   public static String getDomain() {
-    String domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
-                                                             "exo_prf_domain");
+    String domain = AccountSetting.getInstance().getDomainName();
+    System.out.println("domai" + domain);
     if (domain.endsWith("/")) {
       domain = domain.substring(0, domain.length() - 1);
 

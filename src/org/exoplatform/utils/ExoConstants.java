@@ -38,5 +38,19 @@ public class ExoConstants {
   public static final String MOBILE_FOLDER             = "Mobile";
   
   public static final String SELECTED_IMAGE_EXTRA = "SELECTED_IMAGE_EXTRA";
+  public static final String                EXO_PREFERENCE       = "exo_preference";
+
+  public static final String                EXO_PRF_DOMAIN       = "exo_prf_domain";
+
+  public static final String                EXO_PRF_DOMAIN_INDEX = "exo_prf_domain_index";
+
+  public static final String                EXO_PRF_USERNAME     = "exo_prf_username";
+
+  public static final String                EXO_PRF_PASSWORD     = "exo_prf_password";
+
+  public static final String                EXO_PRF_LANGUAGE     = "exo_prf_language";
+
+  public static final String                EXO_PRF_LOCALIZE     = "exo_prf_localize";
+
 
 }
