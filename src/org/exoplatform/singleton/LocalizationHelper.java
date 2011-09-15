@@ -61,6 +61,10 @@ public class LocalizationHelper {
     resBundle = bl;
   }
 
+  /*
+   * get key name in localization resource
+   * return null if the key is not exist 
+   */
   public String getString(String key) {
     try {
       return resBundle.getString(key);
