@@ -44,7 +44,7 @@ public class ExoServerConfiguration {
 
   public ArrayList<ServerObj> _arrServerList;
 
-  public String               version;
+  public static String               version;
   
   Context             _context;
 
@@ -238,7 +238,7 @@ public class ExoServerConfiguration {
   }
 
   // Create user configuration file: deleted & added servers
-  public boolean createXmlDataWithServerList(ArrayList<ServerObj> objList,
+  public static boolean createXmlDataWithServerList(ArrayList<ServerObj> objList,
                                              String fileName,
                                              String appVersion) {
     boolean returnValue = false;
