@@ -19,7 +19,7 @@
 		<activity android:name=".ui.SettingActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
-		<activity android:name=".ui.ModifyServerActivity"
+		<activity android:name=".ui.SettingServerListEditionActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 		<activity android:name=".controller.ExoApplicationsController2"
