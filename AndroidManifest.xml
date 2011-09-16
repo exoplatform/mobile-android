@@ -5,8 +5,8 @@
 		android:theme="@style/Theme.eXo" android:name=".ExoApplication"
 		android:debuggable="true" android:label="eXo Application">
 
-		<activity android:name=".ui.LoginActivity"
-			android:label="eXo Platform" android:screenOrientation="portrait">
+		<activity android:name=".ui.LoginActivity" android:label="eXo Platform"
+			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -14,6 +14,12 @@
 		</activity>
 
 		<activity android:name=".ui.HomeActivity"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".ui.SettingActivity"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".ui.ModifyServerActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
 		<activity android:name=".controller.ExoApplicationsController2"
