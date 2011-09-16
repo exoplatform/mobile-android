@@ -131,7 +131,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     int selectedItemIndex = item.getItemId();
 
     if (selectedItemIndex == 1) {
-      Intent next = new Intent(LoginActivity.this, ExoSetting.class);
+      Intent next = new Intent(LoginActivity.this, SettingActivity.class);
       next.putExtra(ExoConstants.SETTING_TYPE, 0);
       startActivity(next);
     }
