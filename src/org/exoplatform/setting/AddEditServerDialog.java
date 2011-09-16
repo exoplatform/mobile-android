@@ -7,6 +7,8 @@ import org.exoplatform.R;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.URLAnalyzer;
 
 import android.app.Dialog;
@@ -24,25 +26,27 @@ import android.widget.Toast;
 // Display language setting & user guide page
 public class AddEditServerDialog extends Dialog implements OnClickListener {
 
-  Button         btnOK;
+  Button                       btnOK;
 
-  Button         btnDeleteCancel;
+  Button                       btnDeleteCancel;
 
-  TextView       txtvTittle;
+  TextView                     txtvTittle;
 
-  TextView       txtvServerName;
+  TextView                     txtvServerName;
 
-  TextView       txtvServerUrl;
+  TextView                     txtvServerUrl;
 
-  EditText       editTextServerName;
+  EditText                     editTextServerName;
 
-  EditText       editTextServerUrl;
+  EditText                     editTextServerUrl;
 
-  static int     selectedServerIndex;
+  public static int            selectedServerIndex;
 
-  static boolean isNewServer;
+  public static boolean        isNewServer;
 
-  ServerObj      serverObj;
+  ServerObj                    serverObj;
+
+  private ArrayList<ServerObj> serverInfoList;
 
   // Constructor
   public AddEditServerDialog(Context context) {
@@ -67,19 +71,21 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
 
     editTextServerName = (EditText) findViewById(R.id.EditText_Server_Name);
     editTextServerUrl = (EditText) findViewById(R.id.EditText_Server_URL);
+    serverInfoList = AccountSetting.getInstance().getServerInfoList();
+
     if (isNewServer) {
       serverObj = new ServerObj();
       serverObj._bSystemServer = false;
       serverObj._strServerName = "";
       serverObj._strServerUrl = "";
     } else {
-      serverObj = AppController.configurationInstance._arrServerList.get(selectedServerIndex);
+      serverObj = serverInfoList.get(selectedServerIndex);
     }
 
     editTextServerName.setText(serverObj._strServerName);
     editTextServerUrl.setText(serverObj._strServerUrl);
 
-    changeLanguage(AppController.bundle);
+    changeLanguage();
   }
 
   // Show user guide or change language
@@ -91,10 +97,10 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
     ServerObj myServerObj = new ServerObj();
 
     myServerObj._strServerName = editTextServerName.getText().toString();
-//    myServerObj._strServerUrl = editTextServerUrl.getText().toString();
-    
+    // myServerObj._strServerUrl = editTextServerUrl.getText().toString();
+
     URLAnalyzer urlAnanyzer = new URLAnalyzer();
-    myServerObj._strServerUrl = urlAnanyzer.parserURL(editTextServerUrl.getText().toString()); 
+    myServerObj._strServerUrl = urlAnanyzer.parserURL(editTextServerUrl.getText().toString());
 
     if (v == btnOK) {
       if (myServerObj._strServerName.equalsIgnoreCase("")
@@ -107,8 +113,8 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
       }
       if (isNewServer) {
         boolean isExisted = false;
-        for (int i = 0; i < conf._arrServerList.size(); i++) {
-          ServerObj tmp = conf._arrServerList.get(i);
+        for (int i = 0; i < serverInfoList.size(); i++) {
+          ServerObj tmp = serverInfoList.get(i);
           if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
             isExisted = true;
             Toast.makeText(ExoSetting.eXoSettingInstance, "The server's existed", Toast.LENGTH_LONG)
@@ -120,17 +126,16 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
         if (!isExisted) {
           // Create new server
           myServerObj._bSystemServer = false;
-          AppController.configurationInstance._arrUserServerList.add(myServerObj);
-          AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrUserServerList,
-                                                                          "UserServerList.xml",
-                                                                          "");
-
+          serverInfoList.add(myServerObj);
+          ExoServerConfiguration.createXmlDataWithServerList(serverInfoList,
+                                                             "UserServerList.xml",
+                                                             "");
         }
       } else // Update server
       {
         boolean isExisted = true;
-        for (int i = 0; i < conf._arrServerList.size(); i++) {
-          ServerObj tmp = conf._arrServerList.get(i);
+        for (int i = 0; i < serverInfoList.size(); i++) {
+          ServerObj tmp = serverInfoList.get(i);
 
           if (i == selectedServerIndex) {
             continue;
@@ -146,18 +151,17 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
         }
         if (isExisted) {
           // Remove the old server
-          AppController.configurationInstance._arrServerList.remove(selectedServerIndex);
+          serverInfoList.remove(selectedServerIndex);
           serverObj._strServerName = myServerObj._strServerName;
           serverObj._strServerUrl = myServerObj._strServerUrl;
-          AppController.configurationInstance._arrServerList.add(selectedServerIndex, serverObj);
+          serverInfoList.add(selectedServerIndex, serverObj);
           if (serverObj._bSystemServer)// Update default server
           {
-            AppController.configurationInstance._arrDefaulServerList.remove(selectedServerIndex);
-            AppController.configurationInstance._arrDefaulServerList.add(selectedServerIndex,
-                                                                         serverObj);
-            AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrDefaulServerList,
-                                                                            "DefaultServerList.xml",
-                                                                            AppController.configurationInstance.version);
+            serverInfoList.remove(selectedServerIndex);
+            serverInfoList.add(selectedServerIndex, serverObj);
+            ExoServerConfiguration.createXmlDataWithServerList(serverInfoList,
+                                                               "DefaultServerList.xml",
+                                                               ExoServerConfiguration.version);
           } else// update user server
           {
             int index = selectedServerIndex
@@ -211,12 +215,13 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
     ExoSetting.eXoSettingInstance.setServerList(AppController.configurationInstance._arrServerList);
     AppController.createServersAdapter(AppController.configurationInstance._arrServerList);
 
+    AccountSetting.getInstance().setServerInfoList(serverInfoList);
     dismiss();
   }
 
   // Set language
-  public void changeLanguage(ResourceBundle resourceBundle) {
-
+  public void changeLanguage() {
+    LocalizationHelper local = LocalizationHelper.getInstance();
     String strTittle = "";
     String strServerName = "";
     String strServerUrl = "";
@@ -224,31 +229,21 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
     String strOKButton = "";
     String strDeleteCancelButton = "";
 
-    try {
-      if (isNewServer) // New server
-      {
-        strTittle = new String(resourceBundle.getString("NewServer").getBytes("ISO-8859-1"),
-                               "UTF-8");
-        strDeleteCancelButton = new String(resourceBundle.getString("Cancel")
-                                                         .getBytes("ISO-8859-1"), "UTF-8");
-      } else // Server detail
-      {
-        strTittle = new String(resourceBundle.getString("ServerDetail").getBytes("ISO-8859-1"),
-                               "UTF-8");
-        strDeleteCancelButton = new String(resourceBundle.getString("Delete")
-                                                         .getBytes("ISO-8859-1"), "UTF-8");
-      }
-
-      strServerName = new String(resourceBundle.getString("NameOfTheServer").getBytes("ISO-8859-1"),
-                                 "UTF-8");
-      strServerUrl = new String(resourceBundle.getString("URLOfTheSerVer").getBytes("ISO-8859-1"),
-                                "UTF-8");
-
-      strOKButton = new String(resourceBundle.getString("OK").getBytes("ISO-8859-1"), "UTF-8");
-
-    } catch (Exception e) {
+    if (isNewServer) // New server
+    {
+      strTittle = local.getString("NewServer");
+      strDeleteCancelButton = local.getString("Cancel");
+    } else // Server detail
+    {
+      strTittle = local.getString("ServerDetail");
+      strDeleteCancelButton = local.getString("Delete");
 
     }
+
+    strServerName = local.getString("NameOfTheServer");
+    strServerUrl = local.getString("URLOfTheSerVer");
+
+    strOKButton = local.getString("OK");
 
     txtvTittle.setText(strTittle);
 
