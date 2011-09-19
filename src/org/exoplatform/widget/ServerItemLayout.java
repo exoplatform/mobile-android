@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class ServerItem extends RelativeLayout {
+public class ServerItemLayout extends RelativeLayout {
 
   public TextView  serverName;
 
@@ -17,7 +17,7 @@ public class ServerItem extends RelativeLayout {
 
   public ImageView serverImageView;
 
-  public ServerItem(Context context) {
+  public ServerItemLayout(Context context) {
     super(context);
     LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View view = inflate.inflate(R.layout.serverlistitemforsetting, this);
