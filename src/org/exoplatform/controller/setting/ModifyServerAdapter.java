@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -22,7 +23,7 @@ public class ModifyServerAdapter extends BaseAdapter {
 
   public ModifyServerAdapter(Context context) {
     mContext = context;
-    serverList = AccountSetting.getInstance().getServerInfoList();
+    serverList = ServerSettingHelper.getInstance().getServerInfoList();
 
   }
 

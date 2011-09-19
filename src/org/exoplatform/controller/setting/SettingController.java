@@ -7,8 +7,9 @@ import java.util.ResourceBundle;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.ServerItem;
+import org.exoplatform.widget.ServerItemLayout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -64,12 +65,12 @@ public class SettingController {
   }
 
   public void setServerList(LinearLayout listServerWrap) {
-    List<ServerObj> serverList = AccountSetting.getInstance().getServerInfoList();
+    List<ServerObj> serverList = ServerSettingHelper.getInstance().getServerInfoList();
     listServerWrap.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     for (int i = 0; i < serverList.size(); i++) {
       ServerObj serverObj = serverList.get(i);
-      ServerItem serverItem = new ServerItem(mContext);
+      ServerItemLayout serverItem = new ServerItemLayout(mContext);
       serverItem.serverName.setText(serverObj._strServerName);
       serverItem.serverUrl.setText(serverObj._strServerUrl);
       if (AccountSetting.getInstance().getDomainIndex() == i)
