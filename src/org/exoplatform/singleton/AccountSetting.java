@@ -21,7 +21,7 @@ public class AccountSetting {
 
   private int                   domainIndex;// the index of checked server url
 
-  private ArrayList<ServerObj>  serverInfoList; // List of server url
+//  private ArrayList<ServerObj>  serverInfoList; // List of server url
 
   private boolean               isNewVersion; // is new version or not
   
@@ -69,13 +69,13 @@ public class AccountSetting {
     domainIndex = index;
   }
 
-  public void setServerInfoList(ArrayList<ServerObj> list) {
-    serverInfoList = list;
-  }
-
-  public ArrayList<ServerObj> getServerInfoList() {
-    return serverInfoList;
-  }
+//  public void setServerInfoList(ArrayList<ServerObj> list) {
+//    serverInfoList = list;
+//  }
+//
+//  public ArrayList<ServerObj> getServerInfoList() {
+//    return serverInfoList;
+//  }
 
   public void setIsNewVersion(boolean is) {
     isNewVersion = is;

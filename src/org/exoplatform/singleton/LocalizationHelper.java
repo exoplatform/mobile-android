@@ -1,6 +1,5 @@
 package org.exoplatform.singleton;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ResourceBundle;
 
 import android.content.SharedPreferences;
@@ -62,7 +61,7 @@ public class LocalizationHelper {
   }
 
   /*
-   * get key name in localization resource
+   * get key value in localization resource
    * return null if the key is not exist 
    */
   public String getString(String key) {
