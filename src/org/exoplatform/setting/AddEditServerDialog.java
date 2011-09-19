@@ -9,6 +9,7 @@ import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.URLAnalyzer;
 
 import android.app.Dialog;
@@ -71,7 +72,7 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
 
     editTextServerName = (EditText) findViewById(R.id.EditText_Server_Name);
     editTextServerUrl = (EditText) findViewById(R.id.EditText_Server_URL);
-    serverInfoList = AccountSetting.getInstance().getServerInfoList();
+    serverInfoList = ServerSettingHelper.getInstance().getServerInfoList();
 
     if (isNewServer) {
       serverObj = new ServerObj();
@@ -215,7 +216,7 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
     ExoSetting.eXoSettingInstance.setServerList(AppController.configurationInstance._arrServerList);
     AppController.createServersAdapter(AppController.configurationInstance._arrServerList);
 
-    AccountSetting.getInstance().setServerInfoList(serverInfoList);
+    ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
     dismiss();
   }
 

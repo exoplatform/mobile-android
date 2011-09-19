@@ -1,36 +1,27 @@
 package org.exoplatform.setting;
 
+import greendroid.widget.ActionBarItem;
+
 import java.util.List;
 
 import org.exoplatform.controller.AppController;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.widget.MyActionBar;
 
-import com.cyrilmottier.android.greendroid.R;
-
-import greendroid.app.GDActivity;
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.LoaderActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.cyrilmottier.android.greendroid.R;
 
 
 public class ExoModifyServerList extends MyActionBar {
@@ -38,8 +29,6 @@ public class ExoModifyServerList extends MyActionBar {
   public static ExoModifyServerList eXoModifyServerListInstance;
 
   ListView                          listViewServer;
-
-  private final Handler             mHandler = new Handler();
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +55,6 @@ public class ExoModifyServerList extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-    // TODO Auto-generated method stub
     super.onBackPressed();
     Intent intent = new Intent(this, ExoSetting.class);
     startActivity(intent);

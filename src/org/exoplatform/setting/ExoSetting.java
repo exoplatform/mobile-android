@@ -1,44 +1,36 @@
 package org.exoplatform.setting;
 
+import greendroid.widget.ActionBarItem;
+
 import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
-import org.exoplatform.chat.ExoChatController;
-import org.exoplatform.chat.ExoChatListController;
-import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
-import org.exoplatform.dashboard.ExoGadgetViewController;
 import org.exoplatform.dashboard.ExoWebViewController;
-import org.exoplatform.document.ExoFilesController;
 import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.ServerItemLayout;
 
-import com.cyrilmottier.android.greendroid.R;
-
-import greendroid.widget.ActionBarItem;
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.BaseAdapter;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.cyrilmottier.android.greendroid.R;
 
 public class ExoSetting extends MyActionBar {
 
@@ -144,8 +136,7 @@ public class ExoSetting extends MyActionBar {
       }
     });
 
-    String locallize = AppController.sharedPreference.getString(AppController.EXO_PRF_LOCALIZE,
-                                                                "exo_prf_localize");
+    String locallize = LocalizationHelper.getInstance().getLocation();
     if (locallize.equalsIgnoreCase("LocalizeFR.properties")) {
       imgViewFCheckMark.setVisibility(View.VISIBLE);
       imgViewECheckMark.setVisibility(View.INVISIBLE);
@@ -154,9 +145,9 @@ public class ExoSetting extends MyActionBar {
       imgViewFCheckMark.setVisibility(View.INVISIBLE);
     }
 
-    setServerList(AppController.configurationInstance._arrServerList);
+    setServerList(ServerSettingHelper.getInstance().getServerInfoList());
 
-    changeLanguage(AppController.bundle);
+    changeLanguage();
 
   }
 
@@ -177,10 +168,10 @@ public class ExoSetting extends MyActionBar {
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     for (int i = 0; i < serverList.size(); i++) {
       ServerObj serverObj = serverList.get(i);
-      ServerItem serverItem = new ServerItem(this);
+      ServerItemLayout serverItem = new ServerItemLayout(this);
       serverItem.serverName.setText(serverObj._strServerName);
       serverItem.serverUrl.setText(serverObj._strServerUrl);
-      if (AppController._intDomainIndex == i)
+      if (AccountSetting.getInstance().getDomainIndex() == i)
         serverItem.serverImageView.setVisibility(View.VISIBLE);
       else
         serverItem.serverImageView.setVisibility(View.INVISIBLE);
@@ -190,17 +181,17 @@ public class ExoSetting extends MyActionBar {
 
   }
 
-
   // Change language
   private void updateLocallize(String localize) {
     try {
-      SharedPreferences.Editor editor = AppController.sharedPreference.edit();
-      editor.putString(AppController.EXO_PRF_LOCALIZE, localize);
+      SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
+      editor.putString(ExoConstants.EXO_PRF_LOCALIZE, localize);
       editor.commit();
-
-      AppController.bundle = new PropertyResourceBundle(this.getAssets().open(localize));
-      changeLanguage(AppController.bundle);
-      setServerList(AppController.configurationInstance._arrServerList);
+      LocalizationHelper.getInstance().setLocation(localize);
+      ResourceBundle bundle = new PropertyResourceBundle(this.getAssets().open(localize));
+      LocalizationHelper.getInstance().setResourceBundle(bundle);
+      changeLanguage();
+      setServerList(ServerSettingHelper.getInstance().getServerInfoList());
 
     } catch (Exception e) {
 
@@ -209,32 +200,29 @@ public class ExoSetting extends MyActionBar {
   }
 
   // Set language
-  public void changeLanguage(ResourceBundle resourceBundle) {
+  public void changeLanguage() {
+    LocalizationHelper local = LocalizationHelper.getInstance();
     String strLanguageTittle = "";
     String strServerTittle = "";
     String strEnglish = "";
     String strFrench = "";
     String strCloseModifyServerLisrButton = "";
     String strUserGuideButton = "";
-    String modifyListText ="";
+    String modifyListText = "";
 
     try {
-      strLanguageTittle = new String(resourceBundle.getString("Language").getBytes("ISO-8859-1"),
-                                     "UTF-8");
-      strServerTittle = new String(resourceBundle.getString("Server").getBytes("ISO-8859-1"),
-                                   "UTF-8");
-      strEnglish = new String(resourceBundle.getString("English").getBytes("ISO-8859-1"), "UTF-8");
-      strFrench = new String(resourceBundle.getString("French").getBytes("ISO-8859-1"), "UTF-8");
-      strCloseModifyServerLisrButton = new String(resourceBundle.getString("ModifyServerList")
-                                                                .getBytes("ISO-8859-1"), "UTF-8");
-      strUserGuideButton = new String(resourceBundle.getString("UserGuide").getBytes("ISO-8859-1"),
-                                      "UTF-8");
+      strLanguageTittle = local.getString("Language");
+      strServerTittle = local.getString("Server");
+      strEnglish = local.getString("English");
+      strFrench = local.getString("French");
+      strCloseModifyServerLisrButton = local.getString("ModifyServerList");
+      strUserGuideButton = local.getString("UserGuide");
     } catch (Exception e) {
 
     }
-    String settings = resourceBundle.getString("Settings");
+    String settings = local.getString("Settings");
     setTitle(settings);
-    modifyListText = resourceBundle.getString("ModifyServerList");
+    modifyListText = local.getString("ModifyServerList");
     modifyServerBtn.setText(modifyListText);
     txtvEnglish.setText(strEnglish);
     txtvFrench.setText(strFrench);
@@ -246,22 +234,5 @@ public class ExoSetting extends MyActionBar {
 
   }
 
-  private class ServerItem extends RelativeLayout {
-
-    private TextView  serverName;
-
-    private TextView  serverUrl;
-
-    private ImageView serverImageView;
-
-    public ServerItem(Context context) {
-      super(context);
-      LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      View view = inflate.inflate(R.layout.serverlistitemforsetting, this);
-      serverName = (TextView) view.findViewById(R.id.TextView_ServerName);
-      serverUrl = (TextView) view.findViewById(R.id.TextView_URL);
-      serverImageView = (ImageView) view.findViewById(R.id.ImageView_Checked);
-    }
-
-  }
+  
 }
