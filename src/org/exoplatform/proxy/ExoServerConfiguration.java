@@ -33,7 +33,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.util.Xml;
 
-
 public class ExoServerConfiguration {
 
   public ArrayList<ServerObj> _arrUserServerList;
@@ -44,19 +43,19 @@ public class ExoServerConfiguration {
 
   public ArrayList<ServerObj> _arrServerList;
 
-  public static String               version;
-  
-  Context             _context;
+  public static String        version;
+
+  private static Context      _context;
 
   public ExoServerConfiguration(Context context) {
-    
+
     _context = context;
     _arrServerList = new ArrayList<ServerObj>();
   }
 
   // Constructor
 
-  public boolean createLocalFileDirectory(String path, boolean isFolder) {
+  public static boolean createLocalFileDirectory(String path, boolean isFolder) {
     boolean returnValue = false;
 
     File f = new File(path);
@@ -75,7 +74,7 @@ public class ExoServerConfiguration {
   }
 
   // Get app's current version, create DefaultServerList.xml if needed
-  public String getAppVersion() {
+  public static String getAppVersion(Context _context) {
     if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {
       return "0";
     } else {
@@ -84,7 +83,7 @@ public class ExoServerConfiguration {
       createLocalFileDirectory(Environment.getExternalStorageDirectory() + "/eXo", true);
       File file = new File(filePath);
       if (!file.exists()) {
-        createXmlDataWithServerList(getDefaultServerList(), "DefaultServerList.xml", "0");
+        createXmlDataWithServerList(getDefaultServerList(_context), "DefaultServerList.xml", "0");
         return "0";
       }
 
@@ -122,7 +121,7 @@ public class ExoServerConfiguration {
   }
 
   // Get default server list
-  public ArrayList<ServerObj> getDefaultServerList() {
+  public static ArrayList<ServerObj> getDefaultServerList(Context _context) {
 
     ArrayList<ServerObj> arrServerList = getServerListWithFileName("");
     XmlResourceParser parser = _context.getResources().getXml(R.xml.defaultconfiguaration);
@@ -174,7 +173,7 @@ public class ExoServerConfiguration {
     if (!file.exists()) {
       try {
 
-        this.createXmlDataWithServerList(arrServerList, "DefaultServerList.xml", "0");
+        createXmlDataWithServerList(arrServerList, "DefaultServerList.xml", "0");
 
       } catch (Exception e) {
 
@@ -187,7 +186,7 @@ public class ExoServerConfiguration {
   }
 
   // Get added/deleted servers
-  public ArrayList<ServerObj> getServerListWithFileName(String name) {
+  public static ArrayList<ServerObj> getServerListWithFileName(String name) {
 
     ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
 
@@ -239,8 +238,8 @@ public class ExoServerConfiguration {
 
   // Create user configuration file: deleted & added servers
   public static boolean createXmlDataWithServerList(ArrayList<ServerObj> objList,
-                                             String fileName,
-                                             String appVersion) {
+                                                    String fileName,
+                                                    String appVersion) {
     boolean returnValue = false;
     String path = Environment.getExternalStorageDirectory() + "/eXo/" + fileName;
     File newxmlfile = new File(path);
@@ -318,4 +317,3 @@ public class ExoServerConfiguration {
   }
 
 }
-
