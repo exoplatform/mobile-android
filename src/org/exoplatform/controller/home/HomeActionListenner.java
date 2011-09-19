@@ -1,7 +1,6 @@
 package org.exoplatform.controller.home;
 
 import org.exoplatform.model.HomeItem;
-import org.exoplatform.setting.ExoSetting;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.HomeHelper;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -13,6 +12,7 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
@@ -22,7 +22,9 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-
+/*
+ * 
+ */
 public class HomeActionListenner implements OnItemClickListener {
   private String  okString;
 
@@ -122,7 +124,7 @@ public class HomeActionListenner implements OnItemClickListener {
   }
 
   private void launchSettingApp() {
-    Intent next = new Intent(mContext, ExoSetting.class);
+    Intent next = new Intent(mContext, SettingActivity.class);
     next.putExtra(ExoConstants.SETTING_TYPE, 1);
     mContext.startActivity(next);
 
