@@ -1,3 +1,4 @@
+
 package org.exoplatform.widget;
 
 import com.cyrilmottier.android.greendroid.R;
