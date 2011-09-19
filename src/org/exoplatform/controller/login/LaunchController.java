@@ -8,6 +8,7 @@ import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 
 import android.content.Context;
@@ -16,11 +17,19 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 
 public class LaunchController {
-  private SharedPreferences sharedPreference;
+  private SharedPreferences    sharedPreference;
 
-  private ResourceBundle    bundle;
+  private ResourceBundle       bundle;
 
-  private Context           context;
+  private Context              context;
+
+  private ArrayList<ServerObj> _arrUserServerList;
+
+  private ArrayList<ServerObj> _arrDefaulServerList;
+
+  private ArrayList<ServerObj> _arrDeletedServerList;
+
+  private ArrayList<ServerObj> _arrServerList;
 
   public LaunchController(Context c, SharedPreferences prefs) {
     sharedPreference = prefs;
@@ -37,50 +46,53 @@ public class LaunchController {
     String strLocalize;
     strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE,
                                              ExoConstants.EXO_PRF_LOCALIZE);
+    // check if localize file name is null or not assigned then default is
+    // "LocalizeEN.properties" file
     if (strLocalize == null || strLocalize.equalsIgnoreCase(ExoConstants.EXO_PRF_LOCALIZE))
       strLocalize = "LocalizeEN.properties";
 
     try {
       bundle = new PropertyResourceBundle(context.getAssets().open(strLocalize));
+      LocalizationHelper.getInstance().setLocation(strLocalize);
+
+      LocalizationHelper.getInstance().setResourceBundle(bundle);
+
+      AccountSetting.getInstance()
+                    .setUsername(sharedPreference.getString(ExoConstants.EXO_PRF_USERNAME, ""));
+      AccountSetting.getInstance()
+                    .setPassword(sharedPreference.getString(ExoConstants.EXO_PRF_PASSWORD, ""));
+      AccountSetting.getInstance()
+                    .setDomainIndex(sharedPreference.getInt(ExoConstants.EXO_PRF_DOMAIN_INDEX, 0));
+      AccountSetting.getInstance()
+                    .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
+
     } catch (Exception e) {
 
     }
-    LocalizationHelper.getInstance().setLocation(strLocalize);
-
-    LocalizationHelper.getInstance().setResourceBundle(bundle);
-
-    AccountSetting.getInstance()
-                  .setUsername(sharedPreference.getString(ExoConstants.EXO_PRF_USERNAME, ""));
-    AccountSetting.getInstance()
-                  .setPassword(sharedPreference.getString(ExoConstants.EXO_PRF_PASSWORD, ""));
-    AccountSetting.getInstance()
-                  .setDomainIndex(sharedPreference.getInt(ExoConstants.EXO_PRF_DOMAIN_INDEX, 0));
-    AccountSetting.getInstance()
-                  .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
 
   }
 
   private void getServerInfo() {
-    ExoServerConfiguration configurationInstance = new ExoServerConfiguration(context);
+    _arrServerList = new ArrayList<ServerObj>();
 
     String appVer = "";
-    String oldVer = configurationInstance.getAppVersion();
+    String oldVer = ExoServerConfiguration.getAppVersion(context);
     try {
       appVer = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
     } catch (NameNotFoundException e) {
     }
 
     if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {
-      configurationInstance._arrDefaulServerList = configurationInstance.getDefaultServerList();
-      if (configurationInstance._arrDefaulServerList.size() > 0)
-        configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
+      _arrDefaulServerList = ExoServerConfiguration.getDefaultServerList(context);
+      if (_arrDefaulServerList.size() > 0)
+        _arrServerList.addAll(_arrDefaulServerList);
     } else {
-      ArrayList<ServerObj> defaultServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
+      ArrayList<ServerObj> defaultServerList = ExoServerConfiguration.getServerListWithFileName("DefaultServerList.xml");
 
-      configurationInstance._arrDeletedServerList = configurationInstance.getServerListWithFileName("DeletedDefaultServerList.xml");
+      _arrDeletedServerList = ExoServerConfiguration.getServerListWithFileName("DeletedDefaultServerList.xml");
       if (appVer.compareToIgnoreCase(oldVer) > 0) {
 
-        ArrayList<ServerObj> deletedDefaultServers = configurationInstance._arrDeletedServerList;
+        ArrayList<ServerObj> deletedDefaultServers = _arrDeletedServerList;
 
         ArrayList<ServerObj> tmp = new ArrayList<ServerObj>();
         if (deletedDefaultServers == null)
@@ -102,22 +114,25 @@ public class LaunchController {
           }
         }
 
-        configurationInstance.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
-        configurationInstance.version = appVer;
+        ExoServerConfiguration.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
+        ServerSettingHelper.getInstance().setVersion(appVer);
       } else {
 
       }
 
-      configurationInstance._arrUserServerList = configurationInstance.getServerListWithFileName("UserServerList.xml");
-      configurationInstance._arrDefaulServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
+      _arrUserServerList = ExoServerConfiguration.getServerListWithFileName("UserServerList.xml");
+      _arrDefaulServerList = ExoServerConfiguration.getServerListWithFileName("DefaultServerList.xml");
 
-      if (configurationInstance._arrDefaulServerList.size() > 0)
-        configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
-      if (configurationInstance._arrUserServerList.size() > 0)
-        configurationInstance._arrServerList.addAll(configurationInstance._arrUserServerList);
+      if (_arrDefaulServerList.size() > 0)
+        _arrServerList.addAll(_arrDefaulServerList);
+      if (_arrUserServerList.size() > 0)
+        _arrServerList.addAll(_arrUserServerList);
     }
 
-    AccountSetting.getInstance().setServerInfoList(configurationInstance._arrServerList);
+    ServerSettingHelper.getInstance().setServerInfoList(_arrServerList);
+    ServerSettingHelper.getInstance().setUserServerList(_arrUserServerList);
+    ServerSettingHelper.getInstance().setDefaultServerList(_arrDefaulServerList);
+    ServerSettingHelper.getInstance().setDeleteServerList(_arrDeletedServerList);
   }
 
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.exoplatform.R;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -30,7 +31,7 @@ public class ServerAdapter extends BaseAdapter {
   public ServerAdapter(Context context, ListView lv) {
     mContext = context;
     _listViewServer = lv;
-    serverInfoList = AccountSetting.getInstance().getServerInfoList();
+    serverInfoList = ServerSettingHelper.getInstance().getServerInfoList();
     _intDomainIndex = AccountSetting.getInstance().getDomainIndex();
   }
 
@@ -90,7 +91,7 @@ public class ServerAdapter extends BaseAdapter {
         rowView = getView(_intDomainIndex, null, _listViewServer);
         imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
         imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
-        
+
         notifyDataSetChanged();
       }
     });
