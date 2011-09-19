@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SettingActivity extends MyActionBar implements OnClickListener {
-  private Button            btnUserGuide;
 
   private View              vEngLish, vFrench;
 
@@ -57,8 +56,6 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     txtvLanguage = (TextView) findViewById(R.id.TextView_Language);
     txtvServer = (TextView) findViewById(R.id.TextView_Server_List);
 
-    btnUserGuide = (Button) findViewById(R.id.Button_User_Guide);
-
     vEngLish = (View) findViewById(R.id.View_English);
     vEngLish.setOnClickListener(this);
     txtvEnglish = (TextView) findViewById(R.id.TextView_English);
@@ -91,14 +88,12 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     String strServerTittle = local.getString("Server");
     String strEnglish = local.getString("English");
     String strFrench = local.getString("French");
-    String strUserGuideButton = local.getString("UserGuide");
     String settings = local.getString("Settings");
     setTitle(settings);
     String modifyListText = local.getString("ModifyServerList");
     modifyServerBtn.setText(modifyListText);
     txtvEnglish.setText(strEnglish);
     txtvFrench.setText(strFrench);
-    btnUserGuide.setText(strUserGuideButton);
     txtvServer.setText(strServerTittle);
     txtvLanguage.setText(strLanguageTittle);
 

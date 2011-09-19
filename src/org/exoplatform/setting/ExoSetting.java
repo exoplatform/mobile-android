@@ -5,9 +5,6 @@ import greendroid.widget.ActionBarItem;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-
-import org.exoplatform.controller.ExoApplicationsController2;
-import org.exoplatform.dashboard.ExoWebViewController;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -35,8 +32,6 @@ import com.cyrilmottier.android.greendroid.R;
 public class ExoSetting extends MyActionBar {
 
   public static ExoSetting eXoSettingInstance;
-
-  Button                   btnUserGuide;
 
   View                     vEngLish, vFrench;
 
@@ -73,8 +68,6 @@ public class ExoSetting extends MyActionBar {
     txtvLanguage = (TextView) findViewById(R.id.TextView_Language);
     txtvServer = (TextView) findViewById(R.id.TextView_Server_List);
 
-    btnUserGuide = (Button) findViewById(R.id.Button_User_Guide);
-
     vEngLish = (View) findViewById(R.id.View_English);
     txtvEnglish = (TextView) findViewById(R.id.TextView_English);
     imgViewECheckMark = (ImageView) findViewById(R.id.ImageView_CheckMark_EN);
@@ -100,17 +93,6 @@ public class ExoSetting extends MyActionBar {
           startActivity(next);
           finish();
         }
-      }
-    });
-
-    btnUserGuide.setOnClickListener(new View.OnClickListener() {
-
-      public void onClick(View v) {
-
-        ExoApplicationsController2.webViewMode = 2;
-        Intent next = new Intent(ExoSetting.this, ExoWebViewController.class);
-        startActivity(next);
-        finish();
       }
     });
 
@@ -207,7 +189,6 @@ public class ExoSetting extends MyActionBar {
     String strEnglish = "";
     String strFrench = "";
     String strCloseModifyServerLisrButton = "";
-    String strUserGuideButton = "";
     String modifyListText = "";
 
     try {
@@ -216,7 +197,7 @@ public class ExoSetting extends MyActionBar {
       strEnglish = local.getString("English");
       strFrench = local.getString("French");
       strCloseModifyServerLisrButton = local.getString("ModifyServerList");
-      strUserGuideButton = local.getString("UserGuide");
+      
     } catch (Exception e) {
 
     }
@@ -226,8 +207,6 @@ public class ExoSetting extends MyActionBar {
     modifyServerBtn.setText(modifyListText);
     txtvEnglish.setText(strEnglish);
     txtvFrench.setText(strFrench);
-
-    btnUserGuide.setText(strUserGuideButton);
 
     txtvServer.setText(strServerTittle);
     txtvLanguage.setText(strLanguageTittle);

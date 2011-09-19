@@ -61,23 +61,6 @@ public class ExoWebViewController extends MyActionBar {
           + ExoFilesController.myFile.fileName;
       _titlebar = ExoFilesController.myFile.fileName;
 
-    } else if (ExoApplicationsController2.webViewMode == 2) {
-
-      String userGuider = AppController.bundle.getString("UserGuide");
-      _titlebar = userGuider;
-
-      String locallize = AppController.sharedPreference.getString(AppController.EXO_PRF_LOCALIZE,
-                                                                  "exo_prf_localize");
-      if (locallize == null || locallize.equalsIgnoreCase("exo_prf_localize"))
-        locallize = "LocalizeEN.properties";
-
-      if (locallize.equalsIgnoreCase("LocalizeEN.properties"))
-        _url = "file:///android_asset/HowtoUse-EN.htm";
-      else if (locallize.equalsIgnoreCase("LocalizeFR.properties"))
-        _url = "file:///android_asset/HowtoUse-FR.htm";
-      // else
-      // _url = "file:///android_asset/HowtoUse-VN.htm";
-
     }
 
     setTitle(_titlebar.replace("%20", " "));

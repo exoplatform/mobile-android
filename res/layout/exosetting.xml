@@ -71,12 +71,6 @@
 				android:layout_width="fill_parent" android:layout_height="44dip"
 				android:text="Modify Server" android:textStyle="bold"
 				android:layout_marginBottom="30dip" android:background="@drawable/settingsuserguidebutton" />
-			<Button android:id="@+id/Button_User_Guide"
-				android:layout_below="@id/modify_server_btn"
-				android:layout_alignParentBottom="true" android:layout_width="fill_parent"
-				android:layout_height="44dip" android:text="User Guide"
-				android:textStyle="bold" android:background="@drawable/settingsuserguidebutton" />
-
 		</RelativeLayout>
 	</ScrollView>
 </LinearLayout>
