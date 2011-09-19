@@ -4,8 +4,8 @@ import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.setting.ModifyServerAdapter;
 import org.exoplatform.controller.setting.ModifyServerListenner;
-import org.exoplatform.setting.AddEditServerDialog;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
@@ -35,12 +35,18 @@ public class SettingServerListEditionActivity extends MyActionBar {
     setServerAdapter();
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+    setServerAdapter();
+  }
+
   private void setServerAdapter() {
     listViewServer = (ListView) findViewById(R.id.ListView_Server_List);
     listViewServer.setDivider(null);
     listViewServer.setDividerHeight(0);
     listViewServer.setAdapter(new ModifyServerAdapter(this));
-    listViewServer.setOnItemClickListener(new ModifyServerListenner(this));
+    listViewServer.setOnItemClickListener(new ModifyServerListenner(this, listViewServer));
   }
 
   // Create Setting Menu
@@ -55,9 +61,13 @@ public class SettingServerListEditionActivity extends MyActionBar {
     int selectedItemIndex = item.getItemId();
 
     if (selectedItemIndex == 1) {
-      AddEditServerDialog.isNewServer = true;
-      AddEditServerDialog customizeDialog = new AddEditServerDialog(SettingServerListEditionActivity.this);
-      customizeDialog.show();
+      ServerSettingHelper.getInstance().setIsNewServer(true);
+      new SettingServerEditionDialog(this, listViewServer).show();
+
+      // AddEditServerDialog.isNewServer = true;
+      // AddEditServerDialog customizeDialog = new
+      // AddEditServerDialog(SettingServerListEditionActivity.this);
+      // customizeDialog.show();
 
     }
 
@@ -82,9 +92,12 @@ public class SettingServerListEditionActivity extends MyActionBar {
       break;
 
     case 0:
-      AddEditServerDialog.isNewServer = true;
-      AddEditServerDialog customizeDialog = new AddEditServerDialog(SettingServerListEditionActivity.this);
-      customizeDialog.show();
+      // AddEditServerDialog.isNewServer = true;
+      // AddEditServerDialog customizeDialog = new
+      // AddEditServerDialog(SettingServerListEditionActivity.this);
+      // customizeDialog.show();
+      ServerSettingHelper.getInstance().setIsNewServer(true);
+      new SettingServerEditionDialog(this, listViewServer).show();
       break;
 
     }
