@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,9 +79,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
     _edtxUserName.setText(AccountSetting.getInstance().getUsername());
-
+    _edtxUserName.setInputType(InputType.TYPE_TEXT_VARIATION_FILTER);
+    
     _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
     _edtxPassword.setText(AccountSetting.getInstance().getPassword());
+    _edtxPassword.setInputType(InputType.TYPE_TEXT_VARIATION_FILTER);
 
     _edtxPassword.setImeOptions(EditorInfo.IME_ACTION_DONE);
     _edtxPassword.setImeActionLabel("Connect", EditorInfo.IME_ACTION_DONE);
