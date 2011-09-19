@@ -16,7 +16,6 @@ import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.setting.ExoSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.URLAnalyzer;
 import org.exoplatform.widget.WaitingDialog;
 
 import android.app.Activity;
@@ -29,7 +28,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,7 +44,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //Login page
@@ -92,10 +89,10 @@ public class AppController extends Activity implements OnTouchListener {
   public static int                         _intDomainIndex;
 
   // Username
-  String                                    _strUserName         = "";
+  private String                            _strUserName         = "";
 
   // Password
-  String                                    _strPassword         = "";
+  private String                            _strPassword         = "";
 
   // Standalone gadget content
   private String                            _strContentForStandaloneURL;
@@ -105,19 +102,19 @@ public class AppController extends Activity implements OnTouchListener {
 
   // UI component
 
-  ImageView                                 _imageAccount;
+  private ImageView                         _imageAccount;
 
-  ImageView                                 _imageServer;
+  private ImageView                         _imageServer;
 
-  RelativeLayout                            _imagePanelBackground;
+  // private RelativeLayout _imagePanelBackground;
 
-  Button                                    _btnAccount;
+  private Button                            _btnAccount;
 
-  Button                                    _btnServer;
+  private Button                            _btnServer;
 
-  Button                                    _btnLogIn;
+  private Button                            _btnLogIn;
 
-  TextView                                  _tvLogIn;
+  // private TextView _tvLogIn;
 
   private EditText                          _edtxUserName;
 
@@ -126,17 +123,17 @@ public class AppController extends Activity implements OnTouchListener {
   static ListView                           _listViewServer;
 
   // Connection status
-  String                                    strWait;
+  private String                            strWait;
 
-  String                                    strSigning;
+  private String                            strSigning;
 
-  String                                    strNetworkConnextionFailed;
+  private String                            strNetworkConnextionFailed;
 
-  String                                    strUserNamePasswordFailed;
+  private String                            strUserNamePasswordFailed;
 
-  String                                    strCannotBackToPreviousPage;
+  private String                            strCannotBackToPreviousPage;
 
-  String                                    strLoadingDataFromServer;
+  private String                            strLoadingDataFromServer;
 
   private String                            settingText;
 
@@ -150,7 +147,7 @@ public class AppController extends Activity implements OnTouchListener {
   public static ExoServerConfiguration      configurationInstance;
 
   // Get data thread
-  Thread                                    thread;
+  private Thread                            thread;
 
   // Login progress dialog
   public static WaitingDialog               _progressDialog      = null;
@@ -164,28 +161,29 @@ public class AppController extends Activity implements OnTouchListener {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
 
     this.setContentView(R.layout.login);
-       
+
     // String path = Environment.getExternalStorageDirectory() +
     // "/eXo/DefaultServerList.xml";
     // File file = new File(path);
     // boolean deleted = file.delete();
 
-    RelativeLayout layout = (RelativeLayout) findViewById(R.id.RelativeLayout_Login);
-    layout.setOnClickListener(new View.OnClickListener() {
-
-      public void onClick(View v) {
-
-        // InputMethodManager imm = (InputMethodManager)
-        // getSystemService(Context.INPUT_METHOD_SERVICE);
-        // imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
-        // imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
-
-      }
-    });
+    // RelativeLayout layout = (RelativeLayout)
+    // findViewById(R.id.RelativeLayout_Login);
+    // layout.setOnClickListener(new View.OnClickListener() {
+    //
+    // public void onClick(View v) {
+    //
+    // // InputMethodManager imm = (InputMethodManager)
+    // // getSystemService(Context.INPUT_METHOD_SERVICE);
+    // // imm.hideSoftInputFromWindow(_edtxUserName.getWindowToken(), 0);
+    // // imm.hideSoftInputFromWindow(_edtxPassword.getWindowToken(), 0);
+    //
+    // }
+    // });
     configurationInstance = new ExoServerConfiguration(this);
 
     String appVer = "";
-    String oldVer = configurationInstance.getAppVersion();
+    String oldVer = ExoServerConfiguration.getAppVersion(this);
     try {
       appVer = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
     } catch (NameNotFoundException e) {
@@ -194,7 +192,7 @@ public class AppController extends Activity implements OnTouchListener {
 
     // If SDCard is not available
     if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {
-      configurationInstance._arrDefaulServerList = configurationInstance.getDefaultServerList();
+      configurationInstance._arrDefaulServerList = ExoServerConfiguration.getDefaultServerList(this);
       if (configurationInstance._arrDefaulServerList.size() > 0)
         configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
     } else {
@@ -262,10 +260,7 @@ public class AppController extends Activity implements OnTouchListener {
 
     _imageAccount = (ImageView) findViewById(R.id.Image_Account);
     _imageServer = (ImageView) findViewById(R.id.Image_Server);
-    _imagePanelBackground = (RelativeLayout) findViewById(R.id.Image_Panel_Background);
-
     _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
-
     _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
 
     _edtxPassword.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -274,7 +269,6 @@ public class AppController extends Activity implements OnTouchListener {
     _btnAccount = (Button) findViewById(R.id.Button_Account);
     _btnServer = (Button) findViewById(R.id.Button_Server);
     _btnLogIn = (Button) findViewById(R.id.Button_Login);
-    // _tvLogIn = (TextView) findViewById(R.id.TextView_Login);
 
     _listViewServer = (ListView) findViewById(R.id.ListView_Servers);
     _listViewServer.setVisibility(View.INVISIBLE);
@@ -285,7 +279,7 @@ public class AppController extends Activity implements OnTouchListener {
     _strDomainIndex = sharedPreference.getString(EXO_PRF_DOMAIN_INDEX, "");
     _strUserName = sharedPreference.getString(EXO_PRF_USERNAME, "");
     _strPassword = sharedPreference.getString(EXO_PRF_PASSWORD, "");
-    
+
     changeLanguage(bundle);
     _edtxUserName.setHint(userNameHint);
     _edtxPassword.setHint(passWordHint);
