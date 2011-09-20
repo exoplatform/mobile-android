@@ -16,6 +16,8 @@ public class ExoConstants {
 
   public static final int    COMPOSE_COMMENT_TYPE      = 1;
 
+  public static final int    NUMBER_OF_ACTIVITY        = 20;
+
   public static final int    TAKE_PICTURE_WITH_CAMERA  = 7;
 
   public static final String HTTP_PROTOCOL             = "http";
@@ -37,6 +39,8 @@ public class ExoConstants {
   public static final int    DEFAULT_AVATAR            = R.drawable.default_avatar;
 
   public static final String MOBILE_FOLDER             = "Mobile";
+
+  public static final String ACTIVITY_ID_EXTRA         = "ACTIVITY_ID_EXTRA";
 
   public static final String SELECTED_IMAGE_EXTRA      = "SELECTED_IMAGE_EXTRA";
 
