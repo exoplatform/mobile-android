@@ -3,8 +3,8 @@ package org.exoplatform.ui;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.setting.SettingController;
-import org.exoplatform.setting.ExoModifyServerList;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
@@ -39,6 +39,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
   private Button            modifyServerBtn;
 
   private SettingController setttingController;
+
+  private String            errorMessage;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     txtvFrench.setText(strFrench);
     txtvServer.setText(strServerTittle);
     txtvLanguage.setText(strLanguageTittle);
+    errorMessage = local.getString("DoNotHavePermision");
 
   }
 
@@ -114,16 +117,15 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
   public void onClick(View view) {
     if (view == vEngLish) {
       setttingController.setEnglishLocation();
-      updateLocation("LocalizeEN.properties");
+      updateLocation(ExoConstants.ENGLISH_LOCALIZATION);
     }
     if (view == vFrench) {
       setttingController.setFrenchLocation();
-      updateLocation("LocalizeFR.properties");
+      updateLocation(ExoConstants.FRENCH_LOCALIZATION);
     }
     if (view == modifyServerBtn) {
       if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {
-        String msg = "You dont't have permission for this because SDCard is not available!";
-        Toast.makeText(this, msg, Toast.LENGTH_LONG);
+        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG);
       } else {
         Intent next = new Intent(SettingActivity.this, SettingServerListEditionActivity.class);
         startActivity(next);

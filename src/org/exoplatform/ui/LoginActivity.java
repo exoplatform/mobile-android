@@ -1,11 +1,9 @@
 package org.exoplatform.ui;
 
 import org.exoplatform.R;
-import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.login.LaunchController;
 import org.exoplatform.controller.login.LoginController;
 import org.exoplatform.controller.login.ServerAdapter;
-import org.exoplatform.setting.ExoSetting;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConstants;
@@ -71,6 +69,7 @@ public class LoginActivity extends Activity implements OnClickListener {
   protected void onResume() {
     super.onResume();
     changeLanguage();
+    setServerAdapter();
   }
 
   private void init() {
@@ -98,8 +97,12 @@ public class LoginActivity extends Activity implements OnClickListener {
     _listViewServer.setVisibility(View.INVISIBLE);
     _listViewServer.setDivider(null);
     _listViewServer.setDividerHeight(0);
-    _listViewServer.setAdapter(new ServerAdapter(this, _listViewServer));
+    setServerAdapter();
 
+  }
+
+  private void setServerAdapter() {
+    _listViewServer.setAdapter(new ServerAdapter(this, _listViewServer));
   }
 
   private void onLogin() {

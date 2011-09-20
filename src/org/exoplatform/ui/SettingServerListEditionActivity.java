@@ -64,11 +64,6 @@ public class SettingServerListEditionActivity extends MyActionBar {
       ServerSettingHelper.getInstance().setIsNewServer(true);
       new SettingServerEditionDialog(this, listViewServer).show();
 
-      // AddEditServerDialog.isNewServer = true;
-      // AddEditServerDialog customizeDialog = new
-      // AddEditServerDialog(SettingServerListEditionActivity.this);
-      // customizeDialog.show();
-
     }
 
     return false;
@@ -92,10 +87,6 @@ public class SettingServerListEditionActivity extends MyActionBar {
       break;
 
     case 0:
-      // AddEditServerDialog.isNewServer = true;
-      // AddEditServerDialog customizeDialog = new
-      // AddEditServerDialog(SettingServerListEditionActivity.this);
-      // customizeDialog.show();
       ServerSettingHelper.getInstance().setIsNewServer(true);
       new SettingServerEditionDialog(this, listViewServer).show();
       break;
