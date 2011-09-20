@@ -5,29 +5,50 @@ import java.util.ArrayList;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.exoplatform.proxy.ServerObj;
+
 /*
  * This class is for manage all the account information
  * 
  */
 public class AccountSetting {
 
-  private static AccountSetting accountSetting = new AccountSetting();
+  private static AccountSetting       accountSetting = new AccountSetting();
 
-  private String                userName; // username
+  private String                      userName;                             // username
 
-  private String                password; // password
+  private String                      password;                             // password
 
-  private String                domainName; // checked server url
+  private String                      domainName;                           // checked
+                                                                             // server
+                                                                             // url
 
-  private int                   domainIndex;// the index of checked server url
+  private String                      domainIndex;                          // the
+                                                                             // index
+                                                                             // of
+                                                                             // checked
+                                                                             // server
+                                                                             // url
 
-//  private ArrayList<ServerObj>  serverInfoList; // List of server url
+  // private ArrayList<ServerObj> serverInfoList; // List of server url
 
-  private boolean               isNewVersion; // is new version or not
-  
-  private AuthScope                   auth            ; // the authentication scope for HttpClient
+  private boolean                     isNewVersion;                         // is
+                                                                             // new
+                                                                             // version
+                                                                             // or
+                                                                             // not
 
-  private UsernamePasswordCredentials credential      ; // username and password credentials for HttpClient
+  private AuthScope                   auth;                                 // the
+                                                                             // authentication
+                                                                             // scope
+                                                                             // for
+                                                                             // HttpClient
+
+  private UsernamePasswordCredentials credential;                           // username
+                                                                             // and
+                                                                             // password
+                                                                             // credentials
+                                                                             // for
+                                                                             // HttpClient
 
   private AccountSetting() {
 
@@ -61,21 +82,21 @@ public class AccountSetting {
     domainName = url;
   }
 
-  public int getDomainIndex() {
+  public String getDomainIndex() {
     return domainIndex;
   }
 
-  public void setDomainIndex(int index) {
+  public void setDomainIndex(String index) {
     domainIndex = index;
   }
 
-//  public void setServerInfoList(ArrayList<ServerObj> list) {
-//    serverInfoList = list;
-//  }
-//
-//  public ArrayList<ServerObj> getServerInfoList() {
-//    return serverInfoList;
-//  }
+  // public void setServerInfoList(ArrayList<ServerObj> list) {
+  // serverInfoList = list;
+  // }
+  //
+  // public ArrayList<ServerObj> getServerInfoList() {
+  // return serverInfoList;
+  // }
 
   public void setIsNewVersion(boolean is) {
     isNewVersion = is;
@@ -84,22 +105,21 @@ public class AccountSetting {
   public boolean getIsNewVersion() {
     return isNewVersion;
   }
-  
-  public void setAuthScope(AuthScope au){
+
+  public void setAuthScope(AuthScope au) {
     auth = au;
   }
-  
-  public AuthScope getAuthScope(){
+
+  public AuthScope getAuthScope() {
     return auth;
   }
-  
-  public void setCredentials(UsernamePasswordCredentials upc){
+
+  public void setCredentials(UsernamePasswordCredentials upc) {
     credential = upc;
   }
-  
-  public UsernamePasswordCredentials getCredentials(){
+
+  public UsernamePasswordCredentials getCredentials() {
     return credential;
   }
-  
-  
+
 }

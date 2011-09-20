@@ -4,23 +4,20 @@ import java.util.ArrayList;
 
 import org.exoplatform.proxy.ServerObj;
 
-public class ServerSettingHelper {
-  private int                        selectedServerIndex;
+/*
+ * This class for storing the list of server url and the index of the selected 
+ *  which is used for adding/repairing/deleting function in setting   
+ */
 
-  private boolean                    isNewServer;
+public class ServerSettingHelper {
+  //The index of server url was selected in setting
+  private int                        selectedServerIndex;               
+  //if this server url is new url
+  private boolean                    isNewServer;                       
 
   private String                     version;
-
-  private ArrayList<ServerObj>       serverInfoList;                    // List
-                                                                         // of
-                                                                         // server
-                                                                         // url
-
-  private ArrayList<ServerObj>       _arrUserServerList;
-
-  private ArrayList<ServerObj>       _arrDefaulServerList;
-
-  private ArrayList<ServerObj>       _arrDeletedServerList;
+  // List of server url
+  private ArrayList<ServerObj>       serverInfoList;                   
 
   private static ServerSettingHelper helper = new ServerSettingHelper();
 
@@ -64,27 +61,4 @@ public class ServerSettingHelper {
     return serverInfoList;
   }
 
-  public void setUserServerList(ArrayList<ServerObj> list) {
-    _arrUserServerList = list;
-  }
-
-  public ArrayList<ServerObj> getUserServerList() {
-    return _arrUserServerList;
-  }
-
-  public void setDefaultServerList(ArrayList<ServerObj> list) {
-    _arrDefaulServerList = list;
-  }
-
-  public ArrayList<ServerObj> getDefaultServerList() {
-    return _arrDefaulServerList;
-  }
-
-  public void setDeleteServerList(ArrayList<ServerObj> list) {
-    _arrDeletedServerList = list;
-  }
-
-  public ArrayList<ServerObj> getDeleteServerList() {
-    return _arrDeletedServerList;
-  }
 }
