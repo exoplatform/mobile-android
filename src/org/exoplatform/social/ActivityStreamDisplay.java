@@ -6,9 +6,7 @@ import greendroid.widget.AsyncImageView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ResourceBundle;
 
-import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.social.client.api.model.RestActivity;
@@ -21,15 +19,14 @@ import org.exoplatform.social.entity.ExoSocialLike;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WarningDialog;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -37,7 +34,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
@@ -98,7 +94,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_refresh);
     activityStreamDisplay = this;
-    activityId = SocialActivity.activityId;
+    activityId = getIntent().getStringExtra(ExoConstants.ACTIVITY_ID_EXTRA);
     changeLanguage();
     domain = SocialActivityUtil.getDomain();
     initComponent();
@@ -254,26 +250,7 @@ public class ActivityStreamDisplay extends MyActionBar implements OnClickListene
 
   // Comment item layout
 
-  private class CommentItemLayout extends RelativeLayout {
-    private AsyncImageView comAvatarImage;
-
-    private TextView       comTextViewName;
-
-    private TextView       comTextViewMessage;
-
-    private TextView       comPostedTime;
-
-    public CommentItemLayout(Context context) {
-      super(context);
-
-      LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      View view = inflate.inflate(R.layout.activitydisplayviewcell, this);
-      comAvatarImage = (AsyncImageView) view.findViewById(R.id.imageView_Avatar);
-      comTextViewName = (TextView) view.findViewById(R.id.textView_Name);
-      comTextViewMessage = (TextView) view.findViewById(R.id.textView_Message);
-      comPostedTime = (TextView) view.findViewById(R.id.textView_Time);
-    }
-  }
+ 
 
   private class DetailLoadTask extends UserTask<Void, Void, Integer> {
 
