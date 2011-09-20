@@ -31,7 +31,7 @@ public class SettingController {
 
   public void initLocation() {
     String locallize = LocalizationHelper.getInstance().getLocation();
-    if (locallize.equalsIgnoreCase("LocalizeFR.properties")) {
+    if (locallize.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) {
       setFrenchLocation();
     } else {
       setEnglishLocation();

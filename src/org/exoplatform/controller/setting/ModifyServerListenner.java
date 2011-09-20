@@ -21,10 +21,6 @@ public class ModifyServerListenner implements OnItemClickListener {
 
   @Override
   public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
-    // AddEditServerDialog.isNewServer = false;
-    // AddEditServerDialog.selectedServerIndex = pos;
-    // AddEditServerDialog customizeDialog = new AddEditServerDialog(mContext);
-    // customizeDialog.show();
     ServerSettingHelper.getInstance().setIsNewServer(false);
     ServerSettingHelper.getInstance().setSelectedServerIndex(pos);
     new SettingServerEditionDialog(mContext, listViewServer).show();
