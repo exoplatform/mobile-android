@@ -23,10 +23,11 @@ public class LaunchController {
 
   private Context              context;
 
-  private ArrayList<ServerObj> _arrUserServerList;
-
+  // private ArrayList<ServerObj> _arrUserServerList;
+  //
   private ArrayList<ServerObj> _arrDefaulServerList;
 
+  //
   private ArrayList<ServerObj> _arrDeletedServerList;
 
   private ArrayList<ServerObj> _arrServerList;
@@ -46,6 +47,7 @@ public class LaunchController {
     String strLocalize;
     strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE,
                                              ExoConstants.EXO_PRF_LOCALIZE);
+
     // check if localize file name is null or not assigned then default is
     // "LocalizeEN.properties" file
     if (strLocalize == null || strLocalize.equalsIgnoreCase(ExoConstants.EXO_PRF_LOCALIZE))
@@ -56,13 +58,17 @@ public class LaunchController {
       LocalizationHelper.getInstance().setLocation(strLocalize);
 
       LocalizationHelper.getInstance().setResourceBundle(bundle);
-
       AccountSetting.getInstance()
                     .setUsername(sharedPreference.getString(ExoConstants.EXO_PRF_USERNAME, ""));
       AccountSetting.getInstance()
                     .setPassword(sharedPreference.getString(ExoConstants.EXO_PRF_PASSWORD, ""));
+      System.out.println("domain index "
+          + sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "0"));
+      System.out.println("domain name "
+                         + sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
       AccountSetting.getInstance()
-                    .setDomainIndex(sharedPreference.getInt(ExoConstants.EXO_PRF_DOMAIN_INDEX, 0));
+                    .setDomainIndex(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX,
+                                                               "0"));
       AccountSetting.getInstance()
                     .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
 
@@ -120,19 +126,18 @@ public class LaunchController {
 
       }
 
-      _arrUserServerList = ExoServerConfiguration.getServerListWithFileName("UserServerList.xml");
       _arrDefaulServerList = ExoServerConfiguration.getServerListWithFileName("DefaultServerList.xml");
 
       if (_arrDefaulServerList.size() > 0)
         _arrServerList.addAll(_arrDefaulServerList);
-      if (_arrUserServerList.size() > 0)
-        _arrServerList.addAll(_arrUserServerList);
+      // if (_arrUserServerList.size() > 0)
+      // _arrServerList.addAll(_arrUserServerList);
     }
 
     ServerSettingHelper.getInstance().setServerInfoList(_arrServerList);
-    ServerSettingHelper.getInstance().setUserServerList(_arrUserServerList);
-    ServerSettingHelper.getInstance().setDefaultServerList(_arrDefaulServerList);
-    ServerSettingHelper.getInstance().setDeleteServerList(_arrDeletedServerList);
+    // ServerSettingHelper.getInstance().setUserServerList(_arrUserServerList);
+    // ServerSettingHelper.getInstance().setDefaultServerList(_arrDefaulServerList);
+    // ServerSettingHelper.getInstance().setDeleteServerList(_arrDeletedServerList);
   }
 
 }

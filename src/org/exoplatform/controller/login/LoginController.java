@@ -116,7 +116,7 @@ public class LoginController {
         createAuthorization(uri.getHost(), uri.getPort(), userName, password);
         SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
-        editor.putInt(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());
+        editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());
         editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);
         editor.putString(ExoConstants.EXO_PRF_PASSWORD, password);
         editor.commit();

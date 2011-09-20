@@ -32,7 +32,7 @@ public class ServerAdapter extends BaseAdapter {
     mContext = context;
     _listViewServer = lv;
     serverInfoList = ServerSettingHelper.getInstance().getServerInfoList();
-    _intDomainIndex = AccountSetting.getInstance().getDomainIndex();
+    _intDomainIndex = Integer.valueOf(AccountSetting.getInstance().getDomainIndex());
   }
 
   @Override
@@ -51,7 +51,7 @@ public class ServerAdapter extends BaseAdapter {
   }
 
   @Override
-  public View getView(final int position, View convertView, ViewGroup parent) {
+  public View getView(int position, View convertView, ViewGroup parent) {
     final int pos = position;
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
@@ -65,7 +65,8 @@ public class ServerAdapter extends BaseAdapter {
     txtvUrl.setText(serverObj._strServerUrl);
 
     ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-
+    if (_intDomainIndex < 0)
+      _intDomainIndex = pos;
     if (_intDomainIndex == pos)
       imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
     else
@@ -74,18 +75,15 @@ public class ServerAdapter extends BaseAdapter {
     rowView.setOnClickListener(new OnClickListener() {
 
       public void onClick(View v) {
-
-        if (_intDomainIndex < 0)
-          _intDomainIndex = pos;
-
-        View rowView = getView(_intDomainIndex, null, _listViewServer);
+        
+        View rowView = getView(pos, null, _listViewServer);
 
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
         imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneoff);
 
         _intDomainIndex = pos;
         _strDomain = serverObj._strServerUrl;
-        AccountSetting.getInstance().setDomainIndex(_intDomainIndex);
+        AccountSetting.getInstance().setDomainIndex(String.valueOf(_intDomainIndex));
         AccountSetting.getInstance().setDomainName(_strDomain);
 
         rowView = getView(_intDomainIndex, null, _listViewServer);
