@@ -56,7 +56,7 @@ public class ModifyServerAdapter extends BaseAdapter {
     txtvUrl.setText(serverObj._strServerUrl);
 
     ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-    if (AccountSetting.getInstance().getDomainIndex() == position)
+    if (Integer.valueOf(AccountSetting.getInstance().getDomainIndex()) == position)
       imgView.setVisibility(View.VISIBLE);
     else
       imgView.setVisibility(View.INVISIBLE);

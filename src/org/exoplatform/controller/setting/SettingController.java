@@ -73,7 +73,7 @@ public class SettingController {
       ServerItemLayout serverItem = new ServerItemLayout(mContext);
       serverItem.serverName.setText(serverObj._strServerName);
       serverItem.serverUrl.setText(serverObj._strServerUrl);
-      if (AccountSetting.getInstance().getDomainIndex() == i)
+      if (Integer.valueOf(AccountSetting.getInstance().getDomainIndex()) == i)
         serverItem.serverImageView.setVisibility(View.VISIBLE);
       else
         serverItem.serverImageView.setVisibility(View.INVISIBLE);

@@ -5,26 +5,24 @@ import java.util.ArrayList;
 import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.utils.ExoConstants;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class SettingServerEditionController {
   private Context              mContext;
 
-  private ArrayList<ServerObj> serverInfoList;       // List
+  private ArrayList<ServerObj> serverInfoList;     // List
 
   // of
   // server
   // url
 
-  private ArrayList<ServerObj> _arrUserServerList;
-
-  private ArrayList<ServerObj> _arrDefaulServerList;
-
-  private ArrayList<ServerObj> _arrDeletedServerList;
 
   private boolean              isNewServer;
 
@@ -39,9 +37,6 @@ public class SettingServerEditionController {
 
   private void init() {
     serverInfoList = ServerSettingHelper.getInstance().getServerInfoList();
-    _arrUserServerList = ServerSettingHelper.getInstance().getUserServerList();
-    _arrDefaulServerList = ServerSettingHelper.getInstance().getDefaultServerList();
-    _arrDeletedServerList = ServerSettingHelper.getInstance().getDeleteServerList();
     isNewServer = ServerSettingHelper.getInstance().getIsNewServer();
     selectedServerIndex = ServerSettingHelper.getInstance().getSelectedServerIndex();
     version = ServerSettingHelper.getInstance().getVersion();
@@ -70,8 +65,10 @@ public class SettingServerEditionController {
       if (!isExisted) {
         // Create new server
         myServerObj._bSystemServer = false;
-        _arrUserServerList.add(myServerObj);
-        ExoServerConfiguration.createXmlDataWithServerList(_arrUserServerList, "UserServerList.xml", "");
+        serverInfoList.add(myServerObj);
+        ExoServerConfiguration.createXmlDataWithServerList(serverInfoList,
+                                                           "DefaultServerList.xml",
+                                                           "");
       }
     } else // Update server
     {
@@ -92,26 +89,13 @@ public class SettingServerEditionController {
       }
       if (isExisted) {
         // Remove the old server
-        _arrDefaulServerList.remove(selectedServerIndex);
+        serverInfoList.remove(selectedServerIndex);
         serverObj._strServerName = myServerObj._strServerName;
         serverObj._strServerUrl = myServerObj._strServerUrl;
-        _arrDefaulServerList.add(selectedServerIndex, serverObj);
-        if (serverObj._bSystemServer)// Update default server
-        {
-          _arrDefaulServerList.remove(selectedServerIndex);
-          _arrDefaulServerList.add(selectedServerIndex, serverObj);
-          ExoServerConfiguration.createXmlDataWithServerList(_arrDefaulServerList,
-                                                             "DefaultServerList.xml",
-                                                             version);
-        } else// update user server
-        {
-          int index = selectedServerIndex - _arrDefaulServerList.size();
-          _arrUserServerList.remove(index);
-          _arrUserServerList.add(index, serverObj);
-          ExoServerConfiguration.createXmlDataWithServerList(_arrUserServerList,
-                                                             "UserServerList.xml",
-                                                             "");
-        }
+        serverInfoList.add(selectedServerIndex, serverObj);
+        ExoServerConfiguration.createXmlDataWithServerList(serverInfoList,
+                                                           "DefaultServerList.xml",
+                                                           "");
       }
     }
     onSave(myServerObj);
@@ -120,50 +104,31 @@ public class SettingServerEditionController {
   public void onDelete(ServerObj myServerObj, ServerObj serverObj) {
     if (!isNewServer) // Delete sever
     {
-      int currentServerIndex = AccountSetting.getInstance().getDomainIndex();
+      int currentServerIndex = Integer.valueOf(AccountSetting.getInstance().getDomainIndex());
       if (currentServerIndex == selectedServerIndex) {
-        AccountSetting.getInstance().setDomainIndex(-1);
+        AccountSetting.getInstance().setDomainIndex(String.valueOf(-1));
         AccountSetting.getInstance().setDomainName("");
       } else if (currentServerIndex > selectedServerIndex) {
         int index = currentServerIndex - 1;
-        AccountSetting.getInstance().setDomainIndex(index);
+        AccountSetting.getInstance().setDomainIndex(String.valueOf(index));
       }
+      serverInfoList.remove(selectedServerIndex);
+      ExoServerConfiguration.createXmlDataWithServerList(serverInfoList,
+                                                         "DefaultServerList.xml",
+                                                         "");
 
-      if (serverObj._bSystemServer) {
-        _arrDefaulServerList.remove(selectedServerIndex);
-        _arrDeletedServerList.add(serverObj);
-        ExoServerConfiguration.createXmlDataWithServerList(_arrDeletedServerList,
-                                                           "DeletedDefaultServerList.xml",
-                                                           "");
-        ExoServerConfiguration.createXmlDataWithServerList(_arrDefaulServerList,
-                                                           "DefaultServerList.xml",
-                                                           version);
-      } else {
-        int index = selectedServerIndex - _arrDefaulServerList.size();
-        _arrUserServerList.remove(index);
-        ExoServerConfiguration.createXmlDataWithServerList(_arrUserServerList,
-                                                           "UserServerList.xml",
-                                                           "");
-      }
     }
     onSave(myServerObj);
   }
 
   private void onSave(ServerObj myServerObj) {
-    serverInfoList = new ArrayList<ServerObj>();
-    if (_arrDefaulServerList.size() > 0)
-      serverInfoList.addAll(_arrDefaulServerList);
-    if (_arrUserServerList.size() > 0)
-      serverInfoList.addAll(_arrUserServerList);
-
-    // ExoModifyServerList.eXoModifyServerListInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
-    // ExoSetting.eXoSettingInstance.setServerList(AppController.configurationInstance._arrServerList);
-    // AppController.createServersAdapter(AppController.configurationInstance._arrServerList);
 
     ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
-    ServerSettingHelper.getInstance().setUserServerList(_arrUserServerList);
-    ServerSettingHelper.getInstance().setDefaultServerList(_arrDefaulServerList);
-    ServerSettingHelper.getInstance().setDeleteServerList(_arrDeletedServerList);
+    SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
+    editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
+    editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance()
+                                                                      .getDomainIndex());
+    editor.commit();
   }
 
   public void onResetAdapter(ListView listViewServer) {
