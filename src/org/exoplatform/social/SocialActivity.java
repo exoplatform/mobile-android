@@ -1,7 +1,6 @@
 package org.exoplatform.social;
 
 import greendroid.widget.ActionBarItem;
-import greendroid.widget.AsyncImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,23 +17,20 @@ import org.exoplatform.social.entity.ExoSocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.SocialActivityStreamItem;
+import org.exoplatform.widget.SocialHeaderLayout;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.WaitingDialog;
+import org.exoplatform.widget.SocialShowMoreItem;
+import org.exoplatform.widget.SocialWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
 
@@ -91,7 +87,7 @@ public class SocialActivity extends MyActionBar {
     onChangeLanguage();
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     resource = getResources();
-    onLoad(number_of_activity);
+    onLoad();
 
   }
 
@@ -135,7 +131,7 @@ public class SocialActivity extends MyActionBar {
       // AppController.bundle);
       String postedTimeTitle = getActivityStreamHeader(activityInfo.getPostedTime());
       if (actHeaderTitle.get(postedTimeTitle) == null) {
-        HeaderLayout headerLayout = new HeaderLayout(this);
+        SocialHeaderLayout headerLayout = new SocialHeaderLayout(this);
         headerLayout.titleView.setText(postedTimeTitle);
 
         if (postedTimeTitle.equalsIgnoreCase(today))
@@ -147,7 +143,7 @@ public class SocialActivity extends MyActionBar {
         activityStreamWrap.addView(headerLayout, params);
       }
 
-      ActivityStreamItem item = new ActivityStreamItem(this, activityInfo);
+      SocialActivityStreamItem item = new SocialActivityStreamItem(this, activityInfo);
       item.setOnClickListener(new OnClickListener() {
 
         public void onClick(View v) {
@@ -161,12 +157,13 @@ public class SocialActivity extends MyActionBar {
     }
     if (result.size() > number_of_activity || result.size() == number_of_activity) {
       if (isShowMore == false) {
-        ShowMoreItem showmore = new ShowMoreItem(this);
+        SocialShowMoreItem showmore = new SocialShowMoreItem(this);
+        showmore.showMoreBtn.setText(showMoreText);
         showmore.showMoreBtn.setOnClickListener(new OnClickListener() {
 
           public void onClick(View v) {
             number_of_activity += 5;
-            onLoad(number_of_activity);
+            onLoad();
             isShowMore = true;
 
           }
@@ -177,9 +174,9 @@ public class SocialActivity extends MyActionBar {
 
   }
 
-  private void onLoad(int loadSize) {
+  private void onLoad() {
     if (mLoadTask == null || mLoadTask.getStatus() == ActivityLoadTask.Status.FINISHED) {
-      mLoadTask = (ActivityLoadTask) new ActivityLoadTask().execute(loadSize);
+      mLoadTask = (ActivityLoadTask) new ActivityLoadTask().execute(number_of_activity);
     }
   }
 
@@ -208,7 +205,7 @@ public class SocialActivity extends MyActionBar {
       finish();
       break;
     case 0:
-      onLoad(number_of_activity);
+      onLoad();
       break;
     case 1:
       Intent intent = new Intent(this, ComposeMessageActivity.class);
@@ -315,82 +312,6 @@ public class SocialActivity extends MyActionBar {
 
     }
 
-  }
-
-  private class ActivityStreamItem extends LinearLayout {
-    private AsyncImageView imageViewAvatar;
-
-    private TextView       textViewName;
-
-    private TextView       textViewMessage;
-
-    private TextView       buttonComment;
-
-    private TextView       buttonLike;
-
-    private TextView       textViewTime;
-
-    private ActivityStreamItem(Context context, ExoSocialActivity activityInfo) {
-      super(context);
-      LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      View view = inflate.inflate(R.layout.activitybrowserviewcell, this);
-      imageViewAvatar = (AsyncImageView) view.findViewById(R.id.imageView_Avatar);
-      textViewName = (TextView) view.findViewById(R.id.textView_Name);
-      textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
-      buttonComment = (TextView) view.findViewById(R.id.button_Comment);
-      buttonLike = (TextView) view.findViewById(R.id.button_Like);
-      textViewTime = (TextView) view.findViewById(R.id.textView_Time);
-      // RestProfile profile = activityInfo.getPosterIdentity().getProfile();
-      String avatarUrl = activityInfo.getImageUrl();
-      if (avatarUrl == null) {
-        imageViewAvatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
-      } else
-        imageViewAvatar.setUrl(SocialActivityUtil.getDomain() + avatarUrl);
-      textViewName.setText(activityInfo.getUserName());
-      textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
-      textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
-      buttonComment.setText("" + activityInfo.getCommentNumber());
-      buttonLike.setText("" + activityInfo.getLikeNumber());
-    }
-  }
-
-  private class ShowMoreItem extends LinearLayout {
-
-    private Button showMoreBtn;
-
-    public ShowMoreItem(Context context) {
-      super(context);
-      LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      View view = inflate.inflate(R.layout.social_show_more_layout, this);
-      showMoreBtn = (Button) view.findViewById(R.id.social_show_more_btn);
-      showMoreBtn.setText(showMoreText);
-    }
-
-  }
-
-  private class HeaderLayout extends RelativeLayout {
-    private TextView titleView;
-
-    public HeaderLayout(Context context) {
-      super(context);
-      LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      View view = inflate.inflate(R.layout.activityheadersection, this);
-      titleView = (TextView) view.findViewById(R.id.textView_Section_Title);
-    }
-
-  }
-
-  private class SocialWaitingDialog extends WaitingDialog {
-    public SocialWaitingDialog(Context context, String titleString, String contentString) {
-      super(context, titleString, contentString);
-    }
-
-    @Override
-    public void onBackPressed() {
-      super.onBackPressed();
-      dismiss();
-      onCancelLoad();
-    }
   }
 
 }
