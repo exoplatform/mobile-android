@@ -1,0 +1,171 @@
+package org.exoplatform.controller.social;
+
+import greendroid.widget.AsyncImageView;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.ActivityStreamDisplay;
+import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.api.model.RestProfile;
+import org.exoplatform.social.entity.ExoSocialComment;
+import org.exoplatform.social.entity.ExoSocialLike;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.widget.CommentItemLayout;
+import org.exoplatform.widget.WarningDialog;
+
+import android.content.Context;
+import android.text.Html;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+
+import com.cyrilmottier.android.greendroid.R;
+
+public class SocialDetailController {
+  private Context                mContext;
+
+  private String                 domain;
+
+  private LinearLayout           commentLayoutWrap;
+
+  private Button                 likeButton;
+
+  private AsyncImageView         imageView_Avatar;
+
+  private TextView               textView_Name;
+
+  private TextView               textView_Message;
+
+  private TextView               textView_Time;
+
+  private TextView               textView_Like_Count;
+
+  private int                    likeDrawable    = R.drawable.activity_like_button_background_shape;
+
+  private int                    disLikeDrawable = R.drawable.activity_dislike_button_background_shape;
+
+  private ActivityDetailLoadTask mLoadTask;
+
+  private String                 activityId;
+
+  private String                 okString;
+
+  private String                 titleString;
+
+  private String                 contentString;
+
+  public SocialDetailController(Context context,
+                                LinearLayout layoutWrap,
+                                Button likeButton,
+                                AsyncImageView imageView_Avatar,
+                                TextView textView_Name,
+                                TextView textView_Message,
+                                TextView textView_Time,
+                                TextView textView_Like_Count) {
+    mContext = context;
+    commentLayoutWrap = layoutWrap;
+    this.likeButton = likeButton;
+    this.imageView_Avatar = imageView_Avatar;
+    this.textView_Name = textView_Name;
+    this.textView_Message = textView_Message;
+    this.textView_Time = textView_Time;
+    this.textView_Like_Count = textView_Like_Count;
+    domain = SocialActivityUtil.getDomain();
+    activityId = SocialDetailHelper.getInstance().getActivityId();
+    changeLanguage();
+  }
+
+  public void onLoad() {
+    if (mLoadTask == null || mLoadTask.getStatus() == ActivityDetailLoadTask.Status.FINISHED) {
+      mLoadTask = (ActivityDetailLoadTask) new ActivityDetailLoadTask(mContext, this).execute();
+    }
+  }
+
+  public void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == ActivityDetailLoadTask.Status.RUNNING) {
+      mLoadTask.onCancelled();
+      mLoadTask.cancel(true);
+      mLoadTask = null;
+    }
+  }
+
+  public void createCommentList(ArrayList<ExoSocialComment> commentList) {
+    if (commentList != null) {
+
+      LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+      commentLayoutWrap.removeAllViews();
+      for (int i = 0; i < commentList.size(); i++) {
+        ExoSocialComment comment = commentList.get(i);
+        CommentItemLayout commentItem = new CommentItemLayout(mContext);
+        String avatarUrl = comment.getImageUrl();
+        if (avatarUrl == null) {
+          commentItem.comAvatarImage.setImageResource(ExoConstants.DEFAULT_AVATAR);
+        } else
+          commentItem.comAvatarImage.setUrl(domain + avatarUrl);
+        commentItem.comTextViewName.setText(comment.getCommentName());
+        commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()));
+        commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime()));
+        commentLayoutWrap.addView(commentItem, params);
+
+      }
+    }
+
+  }
+
+  public void setComponentInfo(RestProfile profile, String title, long postedTime) {
+    boolean liked = SocialDetailHelper.getInstance().getLiked();
+    if (liked) {
+      likeButton.setBackgroundResource(disLikeDrawable);
+    } else
+      likeButton.setBackgroundResource(likeDrawable);
+    String avatarUrl = profile.getAvatarUrl();
+    if (avatarUrl == null) {
+      imageView_Avatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
+    } else
+      imageView_Avatar.setUrl(domain + avatarUrl);
+
+    textView_Name.setText(profile.getFullName());
+
+    textView_Message.setText(Html.fromHtml(title));
+
+    textView_Time.setText(SocialActivityUtil.getPostedTimeString(postedTime));
+  }
+
+  public void setLikeInfo(LinkedList<ExoSocialLike> likeLinkedList) {
+    textView_Like_Count.setText(SocialActivityUtil.getCommentString(likeLinkedList));
+  }
+
+  public void onLikePress() {
+    boolean liked = SocialDetailHelper.getInstance().getLiked();
+    try {
+      RestActivity activity = SocialServiceHelper.getInstance()
+                                                 .getActivityService()
+                                                 .get(activityId);
+      if (liked == true) {
+        SocialServiceHelper.getInstance().getActivityService().unlike(activity);
+        SocialDetailHelper.getInstance().setLiked(false);
+      } else {
+        SocialServiceHelper.getInstance().getActivityService().like(activity);
+      }
+      onLoad();
+    } catch (RuntimeException e) {
+      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+      dialog.show();
+    }
+  }
+
+  private void changeLanguage() {
+    LocalizationHelper location = LocalizationHelper.getInstance();
+    okString = location.getString("OK");
+    titleString = location.getString("Warning");
+    contentString = location.getString("ConnectionError");
+
+  }
+}
