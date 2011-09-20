@@ -14,7 +14,7 @@ public class SocialServiceHelper {
   private IdentityService<?>            identityService;
 
   private String                        userIdentity;  
-
+  
   private static SocialServiceHelper    serviceHelper = new SocialServiceHelper();
 
   private SocialServiceHelper() {
@@ -48,4 +48,5 @@ public class SocialServiceHelper {
   public String getUserId() {
     return userIdentity;
   }
+  
 }
