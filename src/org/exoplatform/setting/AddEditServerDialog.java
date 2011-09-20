@@ -49,6 +49,14 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
 
   private ArrayList<ServerObj> serverInfoList;
 
+  public ArrayList<ServerObj>  _arrUserServerList;
+
+  public ArrayList<ServerObj>  _arrDefaulServerList;
+
+  public ArrayList<ServerObj>  _arrDeletedServerList;
+
+//  public ArrayList<ServerObj>  _arrServerList;
+
   // Constructor
   public AddEditServerDialog(Context context) {
 
@@ -165,13 +173,12 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
                                                                ExoServerConfiguration.version);
           } else// update user server
           {
-            int index = selectedServerIndex
-                - AppController.configurationInstance._arrDefaulServerList.size();
-            AppController.configurationInstance._arrUserServerList.remove(index);
-            AppController.configurationInstance._arrUserServerList.add(index, serverObj);
-            AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrUserServerList,
-                                                                            "UserServerList.xml",
-                                                                            "");
+            int index = selectedServerIndex - _arrDefaulServerList.size();
+            _arrUserServerList.remove(index);
+            _arrUserServerList.add(index, serverObj);
+            ExoServerConfiguration.createXmlDataWithServerList(_arrUserServerList,
+                                                               "UserServerList.xml",
+                                                               "");
           }
         }
       }
@@ -187,34 +194,33 @@ public class AddEditServerDialog extends Dialog implements OnClickListener {
         }
 
         if (serverObj._bSystemServer) {
-          AppController.configurationInstance._arrDefaulServerList.remove(selectedServerIndex);
-          AppController.configurationInstance._arrDeletedServerList.add(serverObj);
-          AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrDeletedServerList,
-                                                                          "DeletedDefaultServerList.xml",
-                                                                          "");
-          AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrDefaulServerList,
-                                                                          "DefaultServerList.xml",
-                                                                          AppController.configurationInstance.version);
+          _arrDefaulServerList.remove(selectedServerIndex);
+          _arrDeletedServerList.add(serverObj);
+          ExoServerConfiguration.createXmlDataWithServerList(_arrDeletedServerList,
+                                                             "DeletedDefaultServerList.xml",
+                                                             "");
+          ExoServerConfiguration.createXmlDataWithServerList(_arrDefaulServerList,
+                                                             "DefaultServerList.xml",
+                                                             AppController.configurationInstance.version);
         } else {
-          int index = selectedServerIndex
-              - AppController.configurationInstance._arrDefaulServerList.size();
-          AppController.configurationInstance._arrUserServerList.remove(index);
-          AppController.configurationInstance.createXmlDataWithServerList(AppController.configurationInstance._arrUserServerList,
-                                                                          "UserServerList.xml",
-                                                                          "");
+          int index = selectedServerIndex - _arrDefaulServerList.size();
+          _arrUserServerList.remove(index);
+          ExoServerConfiguration.createXmlDataWithServerList(_arrUserServerList,
+                                                             "UserServerList.xml",
+                                                             "");
         }
       }
     }
 
-    AppController.configurationInstance._arrServerList = new ArrayList<ServerObj>();
-    if (AppController.configurationInstance._arrDefaulServerList.size() > 0)
-      AppController.configurationInstance._arrServerList.addAll(AppController.configurationInstance._arrDefaulServerList);
-    if (AppController.configurationInstance._arrUserServerList.size() > 0)
-      AppController.configurationInstance._arrServerList.addAll(AppController.configurationInstance._arrUserServerList);
+    serverInfoList = new ArrayList<ServerObj>();
+    if (_arrDefaulServerList.size() > 0)
+      serverInfoList.addAll(_arrDefaulServerList);
+    if (_arrUserServerList.size() > 0)
+      serverInfoList.addAll(_arrUserServerList);
 
-    ExoModifyServerList.eXoModifyServerListInstance.createServersAdapter(AppController.configurationInstance._arrServerList);
-    ExoSetting.eXoSettingInstance.setServerList(AppController.configurationInstance._arrServerList);
-    AppController.createServersAdapter(AppController.configurationInstance._arrServerList);
+    ExoModifyServerList.eXoModifyServerListInstance.createServersAdapter(serverInfoList);
+    ExoSetting.eXoSettingInstance.setServerList(serverInfoList);
+    AppController.createServersAdapter(serverInfoList);
 
     ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
     dismiss();

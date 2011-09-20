@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.exoplatform.controller.AppController;
 import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
@@ -22,7 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
-
 
 public class ExoModifyServerList extends MyActionBar {
 
@@ -50,7 +50,7 @@ public class ExoModifyServerList extends MyActionBar {
     listViewServer.setDivider(null);
     listViewServer.setDividerHeight(0);
 
-    createServersAdapter(AppController.configurationInstance._arrServerList);
+    createServersAdapter(ServerSettingHelper.getInstance().getServerInfoList());
   }
 
   @Override

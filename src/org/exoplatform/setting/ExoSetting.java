@@ -153,7 +153,7 @@ public class ExoSetting extends MyActionBar {
       ServerItemLayout serverItem = new ServerItemLayout(this);
       serverItem.serverName.setText(serverObj._strServerName);
       serverItem.serverUrl.setText(serverObj._strServerUrl);
-      if (AccountSetting.getInstance().getDomainIndex() == i)
+      if (Integer.valueOf(AccountSetting.getInstance().getDomainIndex()) == i)
         serverItem.serverImageView.setVisibility(View.VISIBLE);
       else
         serverItem.serverImageView.setVisibility(View.INVISIBLE);
@@ -213,5 +213,4 @@ public class ExoSetting extends MyActionBar {
 
   }
 
-  
 }
