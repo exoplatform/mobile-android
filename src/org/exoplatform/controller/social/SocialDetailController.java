@@ -5,11 +5,9 @@ import greendroid.widget.AsyncImageView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.ActivityStreamDisplay;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.entity.ExoSocialComment;
@@ -29,37 +27,37 @@ import android.widget.TextView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialDetailController {
-  private Context                mContext;
+  private Context              mContext;
 
-  private String                 domain;
+  private String               domain;
 
-  private LinearLayout           commentLayoutWrap;
+  private LinearLayout         commentLayoutWrap;
 
-  private Button                 likeButton;
+  private Button               likeButton;
 
-  private AsyncImageView         imageView_Avatar;
+  private AsyncImageView       imageView_Avatar;
 
-  private TextView               textView_Name;
+  private TextView             textView_Name;
 
-  private TextView               textView_Message;
+  private TextView             textView_Message;
 
-  private TextView               textView_Time;
+  private TextView             textView_Time;
 
-  private TextView               textView_Like_Count;
+  private TextView             textView_Like_Count;
 
-  private int                    likeDrawable    = R.drawable.activity_like_button_background_shape;
+  private int                  likeDrawable    = R.drawable.activity_like_button_background_shape;
 
-  private int                    disLikeDrawable = R.drawable.activity_dislike_button_background_shape;
+  private int                  disLikeDrawable = R.drawable.activity_dislike_button_background_shape;
 
-  private ActivityDetailLoadTask mLoadTask;
+  private SocialDetailLoadTask mLoadTask;
 
-  private String                 activityId;
+  private String               activityId;
 
-  private String                 okString;
+  private String               okString;
 
-  private String                 titleString;
+  private String               titleString;
 
-  private String                 contentString;
+  private String               contentString;
 
   public SocialDetailController(Context context,
                                 LinearLayout layoutWrap,
@@ -83,13 +81,13 @@ public class SocialDetailController {
   }
 
   public void onLoad() {
-    if (mLoadTask == null || mLoadTask.getStatus() == ActivityDetailLoadTask.Status.FINISHED) {
-      mLoadTask = (ActivityDetailLoadTask) new ActivityDetailLoadTask(mContext, this).execute();
+    if (mLoadTask == null || mLoadTask.getStatus() == SocialDetailLoadTask.Status.FINISHED) {
+      mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this).execute();
     }
   }
 
   public void onCancelLoad() {
-    if (mLoadTask != null && mLoadTask.getStatus() == ActivityDetailLoadTask.Status.RUNNING) {
+    if (mLoadTask != null && mLoadTask.getStatus() == SocialDetailLoadTask.Status.RUNNING) {
       mLoadTask.onCancelled();
       mLoadTask.cancel(true);
       mLoadTask = null;

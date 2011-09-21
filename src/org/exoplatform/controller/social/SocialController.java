@@ -5,8 +5,6 @@ import java.util.HashMap;
 
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.ActivityStreamDisplay;
 import org.exoplatform.social.entity.ExoSocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
@@ -26,29 +24,29 @@ import android.widget.LinearLayout;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialController {
-  private int              number_of_activity;
+  private int            number_of_activity;
 
-  private Context          mContext;
+  private Context        mContext;
 
-  private ActivityLoadTask mLoadTask;
+  private SocialLoadTask mLoadTask;
 
-  private LinearLayout     activityStreamWrap;
+  private LinearLayout   activityStreamWrap;
 
-  private boolean          isShowMore = false;
+  private boolean        isShowMore = false;
 
-  private String           showMoreText;
+  private String         showMoreText;
 
-  private String           today;
+  private String         today;
 
-  private Resources        resource;
+  private Resources      resource;
 
-  private String           minute;
+  private String         minute;
 
-  private String           minutes;
+  private String         minutes;
 
-  private String           hour;
+  private String         hour;
 
-  private String           hours;
+  private String         hours;
 
   public SocialController(Context context, LinearLayout layout) {
     mContext = context;
@@ -59,13 +57,13 @@ public class SocialController {
   }
 
   public void onLoad() {
-    if (mLoadTask == null || mLoadTask.getStatus() == ActivityLoadTask.Status.FINISHED) {
-      mLoadTask = (ActivityLoadTask) new ActivityLoadTask(mContext, this).execute(number_of_activity);
+    if (mLoadTask == null || mLoadTask.getStatus() ==  SocialLoadTask.Status.FINISHED) {
+      mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this).execute(number_of_activity);
     }
   }
 
   public void onCancelLoad() {
-    if (mLoadTask != null && mLoadTask.getStatus() == ActivityLoadTask.Status.RUNNING) {
+    if (mLoadTask != null && mLoadTask.getStatus() == SocialLoadTask.Status.RUNNING) {
       mLoadTask.onCancelled();
       mLoadTask.cancel(true);
       mLoadTask = null;
