@@ -11,6 +11,7 @@ import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.mocks.Mock_Social_Activity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,7 +31,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 //Chat list view controller
-public class ActivityStreamBrowser extends GDActivity {
+public class ActivityStreamBrowser extends MyActionBar {
 
   // Activity cell info object
   class ActivityInfo {

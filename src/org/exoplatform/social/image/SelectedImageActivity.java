@@ -3,10 +3,9 @@ package org.exoplatform.social.image;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
-import java.util.ResourceBundle;
 
-import org.exoplatform.controller.AppController;
-import org.exoplatform.social.ComposeMessageActivity;
+import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.ui.social.ComposeMessageActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.widget.MyActionBar;
@@ -39,14 +38,15 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.social_selected_image_layout);
-    onChangeLanguage(AppController.bundle);
+    onChangeLanguage();
     init();
   }
 
   private void init() {
     imageView = (ImageView) findViewById(R.id.social_selected_image);
     filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
-    Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
+     Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
+//    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
     imageView.setImageBitmap(bitmap);
     okButton = (Button) findViewById(R.id.social_selected_image_ok_button);
     okButton.setText(okText);
@@ -94,10 +94,11 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     }
   }
 
-  private void onChangeLanguage(ResourceBundle resourceBundle) {
-    selectedPhotoTitle = resourceBundle.getString("SelectedPhoto");
+  private void onChangeLanguage() {
+    LocalizationHelper bundle = LocalizationHelper.getInstance();
+    selectedPhotoTitle = bundle.getString("SelectedPhoto");
     setTitle(selectedPhotoTitle);
-    okText = resourceBundle.getString("OK");
+    okText = bundle.getString("OK");
 
   }
 

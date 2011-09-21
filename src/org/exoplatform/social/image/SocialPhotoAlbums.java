@@ -5,9 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
-import org.exoplatform.controller.AppController;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.MyActionBar;
@@ -51,7 +50,7 @@ public class SocialPhotoAlbums extends MyActionBar {
     setActionBarContentView(R.layout.social_photo_albums_layout);
     socialPhotoAlbums = this;
     init();
-    onChangeLanguage(AppController.bundle);
+    onChangeLanguage();
     onLoad();
   }
 
@@ -83,10 +82,11 @@ public class SocialPhotoAlbums extends MyActionBar {
       }
     }
   }
-  private void onChangeLanguage(ResourceBundle resourceBundle) {
-    String title = resourceBundle.getString("PhotoLibrary");
+  private void onChangeLanguage() {
+    LocalizationHelper bundle = LocalizationHelper.getInstance();
+    String title = bundle.getString("PhotoLibrary");
     setTitle(title);
-    loadingData = resourceBundle.getString("LoadingData");
+    loadingData = bundle.getString("LoadingData");
 
   }
 

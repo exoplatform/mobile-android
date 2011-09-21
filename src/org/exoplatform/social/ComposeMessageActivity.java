@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import org.apache.http.HttpResponse;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.controller.social.PostStatusTask;
 import org.exoplatform.document.ExoDocumentUtils;
 import org.exoplatform.proxy.WebdavMethod;
 import org.exoplatform.social.client.api.model.RestActivity;
@@ -22,6 +23,7 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WarningDialog;
 
@@ -62,6 +64,8 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private Button                       cancelButton;
 
+  private PostStatusTask               mPostTask;
+
   private String                       composeMessage;
 
   private String                       sdcard_temp_dir = null;
@@ -76,27 +80,11 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private String                       inputTextWarning;
 
-  private String                       addPhotoTitle;
-
-  private String                       takePhotoText;
-
-  private String                       photoLibraryText;
-
-  private String                       loadingData;
-
-  private PostStatusTask               mPostTask;
-
-  private String                       uploadUrl;
-
   private String                       okString;
 
   private String                       titleString;
 
   private String                       contentString;
-
-  private String                       errorString;
-
-  private String                       warningTitle;
 
   public static ComposeMessageActivity composeMessageActivity;
 
@@ -138,14 +126,10 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     switch (position) {
     case -1:
       destroy();
-      if (SocialActivity.socialActivity != null)
-        SocialActivity.socialActivity.finish();
-      if (ActivityStreamDisplay.activityStreamDisplay != null)
-        ActivityStreamDisplay.activityStreamDisplay.finish();
       break;
 
     case 0:
-      new AddPhotoDialog(this).show();
+      // new AddPhotoDialog(this).show();
       break;
     }
 
@@ -164,8 +148,8 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       } else {
         Toast toast = Toast.makeText(ComposeMessageActivity.this,
                                      inputTextWarning,
-                                     Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                                     Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
         toast.show();
       }
 
@@ -208,7 +192,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   private void onPostTask() {
     if (mPostTask == null || mPostTask.getStatus() == PostStatusTask.Status.FINISHED) {
-      mPostTask = (PostStatusTask) new PostStatusTask().execute();
+      mPostTask = (PostStatusTask) new PostStatusTask(this, sdcard_temp_dir, composeMessage).execute();
     }
   }
 
@@ -272,140 +256,9 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
     sendText = resourceBundle.getString("Send");
     cancelText = resourceBundle.getString("Cancel");
     inputTextWarning = resourceBundle.getString("InputTextWarning");
-    addPhotoTitle = resourceBundle.getString("AddAPhoto");
-    takePhotoText = resourceBundle.getString("TakeAPhoto");
-    photoLibraryText = resourceBundle.getString("PhotoLibrary");
-    loadingData = resourceBundle.getString("LoadingData");
     okString = resourceBundle.getString("OK");
     titleString = resourceBundle.getString("Warning");
     contentString = resourceBundle.getString("ConnectionError");
-    errorString = resourceBundle.getString("PostError");
-    warningTitle = resourceBundle.getString("Warning");
-
-  }
-
-  private class AddPhotoDialog extends Dialog implements android.view.View.OnClickListener {
-
-    Button takePhotoButton;
-
-    Button libraryButton;
-
-    Button cancelButton;
-
-    public AddPhotoDialog(Context context) {
-      super(context);
-      requestWindowFeature(Window.FEATURE_NO_TITLE);
-      setContentView(R.layout.add_photo_dialog_layout);
-      TextView titleView = (TextView) findViewById(R.id.add_photo_title);
-      titleView.setText(addPhotoTitle);
-      takePhotoButton = (Button) findViewById(R.id.add_photo_take_button);
-      takePhotoButton.setText(takePhotoText);
-      takePhotoButton.setOnClickListener(this);
-      libraryButton = (Button) findViewById(R.id.add_photo_library_button);
-      libraryButton.setText(photoLibraryText);
-      libraryButton.setOnClickListener(this);
-      cancelButton = (Button) findViewById(R.id.add_photo_cancel_button);
-      cancelButton.setText(cancelText);
-      cancelButton.setOnClickListener(this);
-    }
-
-    public void onClick(View view) {
-      if (view == takePhotoButton) {
-        dismiss();
-        initCamera();
-      }
-      if (view == libraryButton) {
-        dismiss();
-        Intent intent = new Intent(ComposeMessageActivity.this, SocialPhotoAlbums.class);
-        startActivity(intent);
-
-      }
-      if (view == cancelButton) {
-        dismiss();
-      }
-    }
-  }
-
-  private boolean createFolder() {
-    String userName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
-                                                               "exo_prf_username");
-    String domain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
-                                                             "exo_prf_domain");
-    uploadUrl = ExoDocumentUtils.getDocumentUrl(userName, domain);
-    uploadUrl += "/Public/Mobile";
-
-    HttpResponse response;
-    try {
-
-      WebdavMethod copy = new WebdavMethod("HEAD", uploadUrl);
-      response = ExoConnectionUtils.httpClient.execute(copy);
-      int status = response.getStatusLine().getStatusCode();
-      if (status >= 200 && status < 300) {
-        return true;
-
-      } else {
-        copy = new WebdavMethod("MKCOL", uploadUrl);
-        response = ExoConnectionUtils.httpClient.execute(copy);
-        status = response.getStatusLine().getStatusCode();
-
-        if (status >= 200 && status < 300) {
-          return true;
-        }
-
-        return false;
-      }
-
-    } catch (Exception e) {
-      return false;
-    }
-  }
-
-  private class PostStatusTask extends UserTask<Void, Void, Integer> {
-    private ProgressDialog _progressDialog;
-
-    @Override
-    public void onPreExecute() {
-      _progressDialog = ProgressDialog.show(ComposeMessageActivity.this, null, loadingData);
-    }
-
-    @Override
-    public Integer doInBackground(Void... params) {
-
-      try {
-        RestActivityImpl activityImlp = new RestActivityImpl();
-        if (sdcard_temp_dir != null) {
-          createFolder();
-          File file = new File(sdcard_temp_dir);
-          String imageDir = uploadUrl + "/" + file.getName();
-          if (file != null) {
-            ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, "image/jpeg");
-            Map<String, String> templateParams = new HashMap<String, String>();
-            templateParams.put("image", imageDir);
-            activityImlp.setTemplateParams(templateParams);
-
-          }
-
-        }
-
-        activityImlp.setTitle(composeMessage);
-        ExoApplicationsController2.activityService.create(activityImlp);
-        return 1;
-      } catch (RuntimeException e) {
-        return 0;
-      }
-
-    }
-
-    @Override
-    public void onPostExecute(Integer result) {
-      if (result == 1) {
-        destroy();
-      } else {
-        new WarningDialog(ComposeMessageActivity.this, warningTitle, errorString, okString).show();
-      }
-      _progressDialog.dismiss();
-
-    }
 
   }
 

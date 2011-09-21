@@ -3,11 +3,10 @@ package org.exoplatform.social.image;
 import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import org.exoplatform.R;
-import org.exoplatform.controller.AppController;
-import org.exoplatform.social.ComposeMessageActivity;
+import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.ui.social.ComposeMessageActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
@@ -43,18 +42,18 @@ public class SocialImageLibrary extends MyActionBar {
   public static SocialImageLibrary socialImageLibrary;
 
   private PhotoInfo                photoInfo;
-  
-  private CoverFlow coverFlow;
+
+  private CoverFlow                coverFlow;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
-//    setActionBarContentView(R.layout.social_image_library_layout);
+    // setActionBarContentView(R.layout.social_image_library_layout);
     photoInfo = SocialPhotoAlbums.photoInfoSelected;
     setTitle(photoInfo.getAlbumsName());
-    onChangeLanguage(AppController.bundle);
+    onChangeLanguage();
     socialImageLibrary = this;
 
     onLoad();
@@ -91,7 +90,7 @@ public class SocialImageLibrary extends MyActionBar {
 
   private void setAdapter(ArrayList<String> list) {
     ImageAdapter adapter = new ImageAdapter(this, list);
-    
+
     coverFlow = new CoverFlow(this);
 
     coverFlow.setSpacing(-25);
@@ -110,12 +109,12 @@ public class SocialImageLibrary extends MyActionBar {
     setActionBarContentView(coverFlow);
   }
 
-  private void onChangeLanguage(ResourceBundle resourceBundle) {
-    loadingData = resourceBundle.getString("LoadingData");
+  private void onChangeLanguage() {
+    LocalizationHelper bundle = LocalizationHelper.getInstance();
+    loadingData = bundle.getString("LoadingData");
 
   }
 
-  
   private class ImageAdapter extends BaseAdapter {
     int                       mGalleryItemBackground;
 
@@ -149,10 +148,10 @@ public class SocialImageLibrary extends MyActionBar {
       if (list.size() > 0) {
         String filePath = list.get(position);
         bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
-        if(bitmap!=null){
-          bitmap =PhotoUltils.reflectionPhoto(bitmap);
+        if (bitmap != null) {
+          bitmap = PhotoUltils.reflectionPhoto(bitmap);
         }
-       
+
       }
       imageView.setImageBitmap(bitmap);
       imageView.setLayoutParams(new Gallery.LayoutParams(280, 240));
@@ -173,7 +172,7 @@ public class SocialImageLibrary extends MyActionBar {
 
     @Override
     public ArrayList<String> doInBackground(Void... params) {
-//      ArrayList<String> listResult = new ArrayList<String>();
+      // ArrayList<String> listResult = new ArrayList<String>();
       if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
         // PhotoUltils.getAllImages(Environment.getExternalStorageDirectory(),
         // listResult);
