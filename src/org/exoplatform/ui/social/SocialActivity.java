@@ -3,7 +3,6 @@ package org.exoplatform.ui.social;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.social.SocialController;
-import org.exoplatform.social.ComposeMessageActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 

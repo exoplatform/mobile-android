@@ -5,7 +5,6 @@ import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.social.ComposeMessageActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
