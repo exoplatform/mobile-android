@@ -2,11 +2,14 @@ package org.exoplatform.controller.home;
 
 import java.util.ArrayList;
 
+import org.exoplatform.chat.ExoChatListController;
 import org.exoplatform.model.HomeItem;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.HomeHelper;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -29,10 +32,9 @@ public class HomeController {
 
   public HomeController(Context context) {
     mContext = context;
-    initScreen();
   }
 
-  private void initScreen() {
+  public void initScreen() {
     changeLanguage();
     Resources resource = mContext.getResources();
     ArrayList<HomeItem> itemList = new ArrayList<HomeItem>();
@@ -60,6 +62,20 @@ public class HomeController {
     itemList.add(item);
 
     HomeHelper.getInstance().setHomeItemList(itemList);
+  }
+
+  public void onFinish() {
+    if (ExoConnectionUtils.httpClient != null) {
+      ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
+      ExoConnectionUtils.httpClient = null;
+    }
+    if (ExoChatListController.conn != null) {
+      ExoChatListController.conn.disconnect();
+      ExoChatListController.conn = null;
+    }
+    
+    ((Activity) mContext).finish();
+//    ((Activity) mContext).finish();
   }
 
   private void changeLanguage() {
