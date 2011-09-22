@@ -5,6 +5,7 @@ import java.util.List;
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.ui.DocumentActionDialog;
+import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoDocumentUtils;
 
 import android.content.Context;
@@ -30,7 +31,7 @@ public class DocumentAdapter extends BaseAdapter {
     _mContext = context;
     _urlStr = urlStr;
     
-    _documentList = ExoDocumentUtils.getPersonalDriveContent(_urlStr);
+    _documentList = ExoDocumentUtils.getPersonalDriveContent(_urlStr);;   
   }
   
 //  @Override
@@ -80,8 +81,9 @@ public class DocumentAdapter extends BaseAdapter {
         } else {
         
           _urlStr = myFile.urlStr;
-          _documentList = ExoDocumentUtils.getPersonalDriveContent(myFile.urlStr);
-          notifyDataSetChanged();
+          
+          DocumentTask documentTask = new DocumentTask(_mContext, DocumentActivity._documentActivityInstance, _urlStr, null, 0);
+          documentTask.execute();
           
         }
 

@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import org.apache.http.HttpResponse;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.document.DocumentAdapter;
+import org.exoplatform.controller.document.DocumentTask;
 import org.exoplatform.proxy.WebdavMethod;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -58,7 +59,7 @@ public class DocumentActivity extends MyActionBar {
   String                           _strDownloadFileIntoSDCard;
 
   String                           _sdcard_temp_dir;
-  String                           _urlDocumentHome; 
+  public String                           _urlDocumentHome; 
   
   public DocumentAdapter           _documentAdapter;
 
@@ -84,9 +85,12 @@ public class DocumentActivity extends MyActionBar {
     
     _urlDocumentHome = ExoDocumentUtils.getDocumentUrl(userName, domain);
     
-    _documentAdapter = new DocumentAdapter(this, _urlDocumentHome);
+    DocumentTask documentTask = new DocumentTask(this, this, _urlDocumentHome, null, 0);
+    documentTask.execute();
     
-    setDocumentAdapter();
+//    _documentAdapter = new DocumentAdapter(this, _urlDocumentHome);
+    
+//    setDocumentAdapter();
     
   }
   
@@ -106,8 +110,9 @@ public class DocumentActivity extends MyActionBar {
         finish();
       else
       {
-        _documentAdapter._documentList = ExoDocumentUtils.getPersonalDriveContent(_documentAdapter._urlStr);
-        _documentAdapter.notifyDataSetChanged();
+        DocumentTask documentTask = new DocumentTask(this, this, _documentAdapter._urlStr, null, 0); 
+        documentTask.execute();
+        
       }
     }
 
@@ -128,20 +133,20 @@ public class DocumentActivity extends MyActionBar {
       
       _btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
       _btnUploadImage.setOnClickListener(new View.OnClickListener() {
-        
         public void onClick(View v) {
 
+          setViewUploadImage(false);
+          
           File file = new File(_sdcard_temp_dir);
           String destinationUrl = _documentAdapter._documentActionDialog.myFile.urlStr + "/" + file.getName();
           ExoDocumentUtils.putFileToServerFromLocal(destinationUrl, file, "image/png");
           
-          setViewUploadImage(false);
         }
       });
       
       _btnCancelUploadImage = (Button) findViewById(R.id.ButtonCancel);
       _btnCancelUploadImage.setOnClickListener(new View.OnClickListener() {
-        
+
         public void onClick(View v) {
           setViewUploadImage(false);
         }
@@ -161,6 +166,7 @@ public class DocumentActivity extends MyActionBar {
   }
   
   public void setDocumentAdapter() {
+    
     _listViewDocument.setAdapter(_documentAdapter);
   }
   

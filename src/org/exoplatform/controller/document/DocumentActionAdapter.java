@@ -65,7 +65,6 @@ public class DocumentActionAdapter extends BaseAdapter {
 
        public void onClick(View v) {
 
-//         ExoFilesController.showProgressDialog(false);
          _delegate.dismiss();
          if (pos == 0)// Take picture
          {
@@ -82,46 +81,44 @@ public class DocumentActionAdapter extends BaseAdapter {
            _fileMoved = _selectedFile;
            _fileCopied = null;
          }
-         else if (pos == 3)// Delete file, folder
+         else if (pos == 3 || pos == 4)
          {
-           _fileCopied = null;
-           _fileMoved = null;
+           DocumentTask documentTask = null;
            
-           boolean deleteFile = DocumentActivity._documentActivityInstance.deleteFile(_selectedFile.urlStr);
-           if(deleteFile)
+           if(pos == 3)// Delete file, folder
            {
-             String url = ExoDocumentUtils.getParentUrl(_selectedFile.urlStr);
+             _fileCopied = null;
+             _fileMoved = null;
              
-             DocumentAdapter adapter = DocumentActivity._documentActivityInstance._documentAdapter;
-             adapter._documentList = ExoDocumentUtils.getPersonalDriveContent(url);
-             adapter.notifyDataSetChanged();
-           }
-           
-         }
-         else if (pos == 4)// Paste copy, move file
-         {
-        // Copy file
-           if (_fileCopied != null)
-           {
-             int index = _fileCopied.urlStr.lastIndexOf("/");
-             String lastPathComponent = _fileCopied.urlStr.substring(index);
-             String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
-             DocumentActivity._documentActivityInstance.copyFile(_fileCopied.urlStr, destinationUrl);
+             documentTask = new DocumentTask(_mContext, DocumentActivity._documentActivityInstance, _selectedFile.urlStr, _selectedFile.urlStr, 1);
              
-           }
-           if (_fileMoved != null) 
-           {
-             if (!_fileMoved.urlStr.equalsIgnoreCase(_selectedFile.urlStr)) 
+           } else {
+             // Copy file
+             if (_fileCopied != null)
              {
-               int index = _fileMoved.urlStr.lastIndexOf("/");
-               String lastPathComponent = _fileMoved.urlStr.substring(index);
+               int index = _fileCopied.urlStr.lastIndexOf("/");
+               String lastPathComponent = _fileCopied.urlStr.substring(index);
                String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
-               DocumentActivity._documentActivityInstance.moveFile(_fileMoved.urlStr, destinationUrl);
-
+               
+               documentTask = new DocumentTask(_mContext, DocumentActivity._documentActivityInstance, _fileCopied.urlStr, destinationUrl, 2);
+               
              }
-             
+             if (_fileMoved != null) 
+             {
+               if (!_fileMoved.urlStr.equalsIgnoreCase(_selectedFile.urlStr)) 
+               {
+                 int index = _fileMoved.urlStr.lastIndexOf("/");
+                 String lastPathComponent = _fileMoved.urlStr.substring(index);
+                 String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
+                 
+                 documentTask = new DocumentTask(_mContext, DocumentActivity._documentActivityInstance, _fileMoved.urlStr, destinationUrl, 3);
+
+               }
+               
+             }
            }
-            
+           
+           documentTask.execute();
          }
          else// Rename file
          {
