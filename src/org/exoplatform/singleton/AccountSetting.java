@@ -90,14 +90,6 @@ public class AccountSetting {
     domainIndex = index;
   }
 
-  // public void setServerInfoList(ArrayList<ServerObj> list) {
-  // serverInfoList = list;
-  // }
-  //
-  // public ArrayList<ServerObj> getServerInfoList() {
-  // return serverInfoList;
-  // }
-
   public void setIsNewVersion(boolean is) {
     isNewVersion = is;
   }
