@@ -22,6 +22,12 @@
 		<activity android:name=".ui.SettingServerListEditionActivity"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />
+		<activity android:name=".ui.DocumentActivity"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
+		<activity android:name=".ui.DocumentActionDialog"
+			android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="portrait" />
 		<activity android:name=".controller.ExoApplicationsController2"
 			android:configChanges="keyboardHidden|orientation"
 			android:screenOrientation="portrait" />

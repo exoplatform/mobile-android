@@ -84,7 +84,7 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
   }
 
-  @Override
+//  @Override
   public void onClick(View view) {
     ServerObj myServerObj = new ServerObj();
 

@@ -27,22 +27,22 @@ public class ModifyServerAdapter extends BaseAdapter {
 
   }
 
-  @Override
+//  @Override
   public int getCount() {
     return serverList.size();
   }
 
-  @Override
+//  @Override
   public Object getItem(int pos) {
     return pos;
   }
 
-  @Override
+//  @Override
   public long getItemId(int pos) {
     return pos;
   }
 
-  @Override
+//  @Override
   public View getView(int position, View convertView, ViewGroup viewGroup) {
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View rowView = inflater.inflate(R.layout.serverlistitemforsetting, null);

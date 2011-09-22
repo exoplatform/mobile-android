@@ -106,7 +106,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     return true;
   }
 
-  @Override
+//  @Override
   public void onClick(View view) {
     if (view == editTextComment) {
       Intent intent = new Intent(this, ComposeMessageActivity.class);

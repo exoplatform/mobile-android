@@ -17,6 +17,7 @@ import org.exoplatform.document.ExoFilesController;
 import org.exoplatform.model.ExoAppItem;
 import org.exoplatform.model.GateInDbItem;
 import org.exoplatform.setting.ExoSetting;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.social.SocialActivity;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
@@ -211,7 +212,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     Bitmap bm = BitmapFactory.decodeResource(getResources(),
                                              R.drawable.homeactivitystreamsiconiphone);
     ExoAppItem exoAppItem;
-    if (AppController.isNewVersion == true) {
+    if (AccountSetting.getInstance().getIsNewVersion() == true) {
       exoAppItem = new ExoAppItem(bm, activityStreamsText);
       array.add(exoAppItem);
     }

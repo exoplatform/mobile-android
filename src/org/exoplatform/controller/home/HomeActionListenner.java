@@ -11,6 +11,7 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
@@ -45,7 +46,7 @@ public class HomeActionListenner implements OnItemClickListener {
     changeLanguage();
   }
 
-  @Override
+//  @Override
   public void onItemClick(AdapterView<?> adapter, View view, int postion, long id) {
     HomeItem item = HomeHelper.getInstance().getHomeItemList().get(postion);
     switch (item._index) {
@@ -53,14 +54,19 @@ public class HomeActionListenner implements OnItemClickListener {
       launchActivityStreamApp();
       break;
     case 2:
+      launchChatApp();
       break;
     case 3:
+      launchDocumentApp();
       break;
     case 4:
+      launchDashboardApp();
       break;
     case 5:
       launchSettingApp();
       break;
+   default:
+     break;
 
     }
 
@@ -80,8 +86,7 @@ public class HomeActionListenner implements OnItemClickListener {
     }
   }
 
-  private boolean createConnetion() {
-
+  private boolean createActivityStreamConnetion() {
     try {
       parseDomain();
       String userName = AccountSetting.getInstance().getUsername();
@@ -111,9 +116,14 @@ public class HomeActionListenner implements OnItemClickListener {
     }
   }
 
+  private boolean checkDocumentConnection() {
+    
+    return true;
+  }
+  
   private void launchActivityStreamApp() {
 
-    if (createConnetion() == true) {
+    if (createActivityStreamConnetion() == true) {
       Intent next = new Intent(mContext, SocialActivity.class);
       mContext.startActivity(next);
     } else {
@@ -123,6 +133,25 @@ public class HomeActionListenner implements OnItemClickListener {
 
   }
 
+  private void launchChatApp() {
+    
+  }
+  
+  private void launchDocumentApp() {
+    
+    if (checkDocumentConnection() == true) {
+      Intent next = new Intent(mContext, DocumentActivity.class);
+      mContext.startActivity(next);
+    } else {
+      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+      dialog.show();
+    }
+  }
+
+  private void launchDashboardApp() {
+  
+  }
+  
   private void launchSettingApp() {
     Intent next = new Intent(mContext, SettingActivity.class);
     next.putExtra(ExoConstants.SETTING_TYPE, 1);

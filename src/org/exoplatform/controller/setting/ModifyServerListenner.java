@@ -19,7 +19,7 @@ public class ModifyServerListenner implements OnItemClickListener {
     listViewServer = listView;
   }
 
-  @Override
+//  @Override
   public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
     ServerSettingHelper.getInstance().setIsNewServer(false);
     ServerSettingHelper.getInstance().setSelectedServerIndex(pos);

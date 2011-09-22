@@ -113,7 +113,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     finish();
   }
 
-  @Override
+//  @Override
   public void onClick(View view) {
     if (view == vEngLish) {
       setttingController.setEnglishLocation();

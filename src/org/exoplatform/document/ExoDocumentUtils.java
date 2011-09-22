@@ -9,6 +9,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
 import org.exoplatform.controller.AppController;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 
 public class ExoDocumentUtils {
@@ -41,7 +42,7 @@ public class ExoDocumentUtils {
     buffer.append(domain);
     buffer.append("/rest/private/jcr/repository/collaboration/Users");
 
-    if (AppController.isNewVersion == true) {
+    if (AccountSetting.getInstance().getIsNewVersion() == true) {
       int length = userName.length();
       if (length < 4) {
         for (int i = 1; i < length; i++) {
@@ -66,4 +67,5 @@ public class ExoDocumentUtils {
     return buffer.toString();
   }
 
+  
 }

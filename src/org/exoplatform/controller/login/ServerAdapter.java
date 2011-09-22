@@ -35,22 +35,22 @@ public class ServerAdapter extends BaseAdapter {
     _intDomainIndex = Integer.valueOf(AccountSetting.getInstance().getDomainIndex());
   }
 
-  @Override
+//  @Override
   public int getCount() {
     return serverInfoList.size();
   }
 
-  @Override
+//  @Override
   public Object getItem(int pos) {
     return pos;
   }
 
-  @Override
+//  @Override
   public long getItemId(int pos) {
     return pos;
   }
 
-  @Override
+//  @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     final int pos = position;
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

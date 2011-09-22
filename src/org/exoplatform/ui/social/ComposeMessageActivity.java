@@ -28,7 +28,7 @@ import android.widget.LinearLayout.LayoutParams;
 
 import com.cyrilmottier.android.greendroid.R;
 
-public class ComposeMessageActivity extends MyActionBar implements OnClickListener {
+public class ComposeMessageActivity extends MyActionBar implements View.OnClickListener {
   private int                          composeType;
 
   private EditText                     composeEditText;
@@ -163,7 +163,8 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
 
   }
 
-  @Override
+  
+//  @Override
   public void onClick(View view) {
     if (view == sendButton) {
       composeMessage = composeEditText.getText().toString();
@@ -173,7 +174,7 @@ public class ComposeMessageActivity extends MyActionBar implements OnClickListen
       destroy();
     }
   }
-
+  
   private void changeLanguage() {
     LocalizationHelper bundle = LocalizationHelper.getInstance();
     comment = bundle.getString("Comment");

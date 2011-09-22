@@ -25,22 +25,22 @@ public class HomeAdapter extends BaseAdapter {
     homeItemList = HomeHelper.getInstance().getHomeItemList();
   }
 
-  @Override
+//  @Override
   public int getCount() {
     return homeItemList.size();
   }
 
-  @Override
+//  @Override
   public Object getItem(int pos) {
     return pos;
   }
 
-  @Override
+//  @Override
   public long getItemId(int pos) {
     return pos;
   }
 
-  @Override
+//  @Override
   public View getView(int position, View convertView, ViewGroup viewGroup) {
     HomeItem item = homeItemList.get(position);
     LayoutInflater li = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

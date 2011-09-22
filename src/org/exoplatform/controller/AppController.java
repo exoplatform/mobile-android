@@ -14,6 +14,7 @@ import org.exoplatform.dashboard.entity.ExoGadget;
 import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.setting.ExoSetting;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.WaitingDialog;
@@ -64,8 +65,6 @@ public class AppController extends Activity implements OnTouchListener {
   public static final String                EXO_PRF_LANGUAGE     = "exo_prf_language";
 
   public static final String                EXO_PRF_LOCALIZE     = "exo_prf_localize";
-
-  public static boolean                     isNewVersion;
 
   // Authentication
   public static AuthScope                   auth                 = null;
@@ -622,7 +621,7 @@ public class AppController extends Activity implements OnTouchListener {
         editor.commit();
 
         createAuthorization(uri.getHost(), uri.getPort());
-        isNewVersion = checkNewPLF();
+        AccountSetting.getInstance().setIsNewVersion(checkNewPLF());
         runOnUiThread(returnRes);
       } else if (strResult.equalsIgnoreCase("NO")) {
         runOnUiThread(returnResFaileUserNamePassword);
