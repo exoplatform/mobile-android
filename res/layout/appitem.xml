@@ -11,7 +11,7 @@
 
 	<TextView android:id="@+id/icon_text" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_marginTop="10dip"
-		android:layout_marginBottom="20dip" android:text="TextView"
+		android:layout_marginBottom="20dip" android:text="TextView" android:textColor="#FFFFFF"
 		android:gravity="center" android:textColorHighlight="#656565"
 		android:textStyle="bold">
 	</TextView>
