@@ -6,6 +6,7 @@ import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.WarningDialog;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cyrilmottier.android.greendroid.R;
 
@@ -41,6 +41,10 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
   private SettingController setttingController;
 
   private String            errorMessage;
+
+  private String            titleString;
+
+  private String            okString;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +103,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     txtvServer.setText(strServerTittle);
     txtvLanguage.setText(strLanguageTittle);
     errorMessage = local.getString("DoNotHavePermision");
+    okString = local.getString("OK");
+    titleString = local.getString("Warning");
 
   }
 
@@ -113,7 +119,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     finish();
   }
 
-//  @Override
+  // @Override
   public void onClick(View view) {
     if (view == vEngLish) {
       setttingController.setEnglishLocation();
@@ -125,7 +131,11 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     }
     if (view == modifyServerBtn) {
       if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG);
+        WarningDialog dialog = new WarningDialog(SettingActivity.this,
+                                                 titleString,
+                                                 errorMessage,
+                                                 okString);
+        dialog.show();
       } else {
         Intent next = new Intent(SettingActivity.this, SettingServerListEditionActivity.class);
         startActivity(next);

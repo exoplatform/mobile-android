@@ -82,7 +82,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     
     _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
     _edtxPassword.setText(AccountSetting.getInstance().getPassword());
-//    _edtxPassword.setInputType(InputType.TYPE_TEXT_VARIATION_FILTER);
 
     _edtxPassword.setImeOptions(EditorInfo.IME_ACTION_DONE);
     _edtxPassword.setImeActionLabel("Connect", EditorInfo.IME_ACTION_DONE);

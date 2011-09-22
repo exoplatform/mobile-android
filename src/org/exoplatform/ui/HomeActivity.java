@@ -1,8 +1,11 @@
 package org.exoplatform.ui;
 
+import greendroid.widget.ActionBarItem;
+
 import org.exoplatform.controller.home.HomeActionListenner;
 import org.exoplatform.controller.home.HomeAdapter;
 import org.exoplatform.controller.home.HomeController;
+import org.exoplatform.widget.LogoutDialog;
 import org.exoplatform.widget.MyActionBar;
 
 import android.os.Bundle;
@@ -12,7 +15,9 @@ import android.widget.GridView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class HomeActivity extends MyActionBar {
-  private GridView gridView;
+  private GridView       gridView;
+
+  private HomeController homeController;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -31,8 +36,14 @@ public class HomeActivity extends MyActionBar {
     init();
   }
 
+  @Override
+  public void onBackPressed() {
+    new LogoutDialog(HomeActivity.this, homeController).show();
+  }
+
   private void init() {
-    new HomeController(this);
+    homeController = new HomeController(this);
+    homeController.initScreen();
     createAdapter();
   }
 
@@ -40,6 +51,22 @@ public class HomeActivity extends MyActionBar {
     gridView = (GridView) findViewById(R.id.gridView1);
     gridView.setAdapter(new HomeAdapter(this));
     gridView.setOnItemClickListener(new HomeActionListenner(this));
+  }
+
+  @Override
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+    switch (position) {
+
+    case -1:
+      break;
+    case 0:
+      new LogoutDialog(HomeActivity.this, homeController).show();
+      break;
+    case 1:
+      break;
+    }
+    return true;
+
   }
 
 }
