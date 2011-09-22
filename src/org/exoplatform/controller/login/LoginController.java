@@ -124,10 +124,7 @@ public class LoginController {
         accountSetting.setPassword(password);
         boolean isNewVersion = ExoConnectionUtils.checkPLFVersion();
         accountSetting.setIsNewVersion(isNewVersion);
-        System.out.println("isNewVersion" + isNewVersion);
-
         Intent next = new Intent(mContext, HomeActivity.class);
-
         mContext.startActivity(next);
         ((Activity) mContext).finish();
 

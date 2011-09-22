@@ -48,7 +48,7 @@ public class LaunchController {
     // check if localize file name is null or not assigned then default is
     // "LocalizeEN.properties" file
     if (strLocalize == null || strLocalize.equalsIgnoreCase(ExoConstants.EXO_PRF_LOCALIZE))
-      strLocalize = "LocalizeEN.properties";
+      strLocalize = ExoConstants.ENGLISH_LOCALIZATION;
 
     try {
       bundle = new PropertyResourceBundle(context.getAssets().open(strLocalize));
@@ -61,7 +61,7 @@ public class LaunchController {
                     .setPassword(sharedPreference.getString(ExoConstants.EXO_PRF_PASSWORD, ""));
       AccountSetting.getInstance()
                     .setDomainIndex(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX,
-                                                               "0"));
+                                                               "-1"));
       AccountSetting.getInstance()
                     .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
 

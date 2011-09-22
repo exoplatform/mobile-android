@@ -65,8 +65,8 @@ public class ServerAdapter extends BaseAdapter {
     txtvUrl.setText(serverObj._strServerUrl);
 
     ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-    if (_intDomainIndex < 0)
-      _intDomainIndex = pos;
+//    if (_intDomainIndex < 0)
+//      _intDomainIndex = pos;
     if (_intDomainIndex == pos)
       imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
     else
