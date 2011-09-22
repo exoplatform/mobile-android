@@ -23,8 +23,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.exoplatform.chat.ExoChatListController;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.singleton.AccountSetting;
+import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -127,34 +131,9 @@ public class ExoConnectionUtils {
 
   // Get sub URL path
   private static String getExtend(String domain) {
-    // if(domain.indexOf("http://platform.demo.exoplatform") >= 0)
-    // {
-    // if(domain.equalsIgnoreCase("http://platform.demo.exoplatform.org"))
-    // {
-    // return "/portal/private/intranet";
-    // }
-    // return "ERROR";
-    //
-    // }
-
+   
     return "/portal/private/intranet";
-    /*
-     * String context = ""; String strUrlContent = ""; try { URL url = new
-     * URL(domain); HttpURLConnection con = (HttpURLConnection)
-     * url.openConnection(); // set up url connection to get retrieve
-     * information back con.setRequestMethod("GET"); con.setDoInput( true ); //
-     * pull the information back from the URL InputStream ipstr =
-     * con.getInputStream(); strUrlContent = convertStreamToString(ipstr);
-     * con.disconnect(); } catch (ClientProtocolException e) { e.getMessage(); }
-     * catch (IOException e) { e.getMessage(); }
-     * if(strUrlContent.contains("error', '/main?url")) return "ERROR"; int
-     * index = strUrlContent.indexOf("eXo.env.server.portalBaseURL = \"");
-     * if(index > 0) { strUrlContent = strUrlContent.substring(index + 32, index
-     * + 100); index = strUrlContent.indexOf(" ;"); strUrlContent =
-     * strUrlContent.substring(0, index - 2); context =
-     * strUrlContent.replace("public", "private"); } else { context =
-     * "/portal/private/intranet"; } return context;
-     */
+    
   }
 
   // Send request with authentication
@@ -509,6 +488,26 @@ public class ExoConnectionUtils {
     } catch (RuntimeException e) {
       return false;
     }
+
+  }
+
+//Connect to Openfile server
+  public static boolean connectToChatServer(String host, int port, String userName, String password) {
+    if (ExoChatListController.conn != null && ExoChatListController.conn.isConnected())
+      return true;
+
+    try {
+      ConnectionConfiguration config = new ConnectionConfiguration(host, port, "Work");
+      ExoChatListController.conn = new XMPPConnection(config);
+      ExoChatListController.conn.connect();
+      ExoChatListController.conn.login(userName, password);
+
+    } catch (XMPPException e) {
+      ExoChatListController.conn.disconnect();
+      ExoChatListController.conn = null;
+      return false;
+    }
+    return true;
 
   }
 }
