@@ -23,12 +23,15 @@ public class SettingServerEditionController {
   // server
   // url
 
-
   private boolean              isNewServer;
 
   private int                  selectedServerIndex;
 
   private String               version;
+
+  private String               serverIsEmpty;
+
+  private String               serverisExisted;
 
   public SettingServerEditionController(Context context) {
     mContext = context;
@@ -40,15 +43,14 @@ public class SettingServerEditionController {
     isNewServer = ServerSettingHelper.getInstance().getIsNewServer();
     selectedServerIndex = ServerSettingHelper.getInstance().getSelectedServerIndex();
     version = ServerSettingHelper.getInstance().getVersion();
+    changeLanguage();
   }
 
   public void onAccept(ServerObj myServerObj, ServerObj serverObj) {
     if (myServerObj._strServerName.equalsIgnoreCase("")
         || myServerObj._strServerUrl.equalsIgnoreCase("")) {
       // Server name or server url is empty
-      Toast.makeText(mContext,
-                     "Server name or url is empty. Please enter it again",
-                     Toast.LENGTH_LONG).show();
+      Toast.makeText(mContext, serverIsEmpty, Toast.LENGTH_LONG).show();
       return;
     }
     if (isNewServer) {
@@ -57,7 +59,7 @@ public class SettingServerEditionController {
         ServerObj tmp = serverInfoList.get(i);
         if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
           isExisted = true;
-          Toast.makeText(mContext, "The server's existed", Toast.LENGTH_LONG).show();
+          Toast.makeText(mContext, serverisExisted, Toast.LENGTH_LONG).show();
           break;
           // New server is the same with the old one
         }
@@ -82,7 +84,7 @@ public class SettingServerEditionController {
 
         if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
           isExisted = false;
-          Toast.makeText(mContext, "The server's existed", Toast.LENGTH_LONG).show();
+          Toast.makeText(mContext, serverisExisted, Toast.LENGTH_LONG).show();
           break;
           // updated server is the same with the old one
         }
@@ -133,6 +135,13 @@ public class SettingServerEditionController {
 
   public void onResetAdapter(ListView listViewServer) {
     listViewServer.setAdapter(new ModifyServerAdapter(mContext));
+  }
+
+  private void changeLanguage() {
+    LocalizationHelper bundle = LocalizationHelper.getInstance();
+    serverIsEmpty = bundle.getString("WarningServerNameIsEmpty");
+    serverisExisted = bundle.getString("WarningServerIsExist");
+
   }
 
 }
