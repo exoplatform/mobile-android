@@ -2,7 +2,7 @@ package org.exoplatform.singleton;
 
 import java.util.ArrayList;
 
-import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.model.ServerObjInfo;
 
 /*
  * This class for storing the list of server url and the index of the selected 
@@ -17,7 +17,7 @@ public class ServerSettingHelper {
 
   private String                     version;
   // List of server url
-  private ArrayList<ServerObj>       serverInfoList;                   
+  private ArrayList<ServerObjInfo>       serverInfoList;                   
 
   private static ServerSettingHelper helper = new ServerSettingHelper();
 
@@ -53,11 +53,11 @@ public class ServerSettingHelper {
     return version;
   }
 
-  public void setServerInfoList(ArrayList<ServerObj> list) {
+  public void setServerInfoList(ArrayList<ServerObjInfo> list) {
     serverInfoList = list;
   }
 
-  public ArrayList<ServerObj> getServerInfoList() {
+  public ArrayList<ServerObjInfo> getServerInfoList() {
     return serverInfoList;
   }
 

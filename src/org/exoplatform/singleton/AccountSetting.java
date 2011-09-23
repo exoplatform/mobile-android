@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.model.ServerObjInfo;
 
 /*
  * This class is for manage all the account information
