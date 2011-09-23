@@ -22,7 +22,7 @@ import android.widget.TextView;
 //File action list
 public class ExoFileActionDialog extends Dialog implements OnClickListener {
 
-  public class FileActionDescription extends Object {
+  private class FileActionDescription extends Object {
 
     public String actionName;
 
@@ -77,7 +77,7 @@ public class ExoFileActionDialog extends Dialog implements OnClickListener {
 
   String                  strCannotBackToPreviousPage;
 
-  FileActionDescription[] fileActionList   = null;
+  private FileActionDescription[] fileActionList   = null;
 
   // Constructor
   public ExoFileActionDialog(Context context, ExoFile file) {
@@ -236,7 +236,7 @@ public class ExoFileActionDialog extends Dialog implements OnClickListener {
   }
 
   // Get file list
-  Runnable reloadFileAdapter     = new Runnable() {
+ private  Runnable reloadFileAdapter     = new Runnable() {
 
                                    public void run() {
 
@@ -246,7 +246,7 @@ public class ExoFileActionDialog extends Dialog implements OnClickListener {
                                  };
 
   // Progress dialog
-  Runnable dismissProgressDialog = new Runnable() {
+ private Runnable dismissProgressDialog = new Runnable() {
 
                                    public void run() {
 
