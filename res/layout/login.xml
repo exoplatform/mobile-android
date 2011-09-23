@@ -54,7 +54,7 @@
 			android:layout_marginLeft="15dp" android:layout_marginRight="15dp"
 			android:layout_height="34dip" android:textStyle="bold"
 			android:textSize="16dip" android:gravity="center" android:textColor="#FFFFFF"
-			android:singleLine="true" android:password="true" android:inputType="textPassword"
+			android:singleLine="true" android:password="true"
 			android:background="@drawable/authenticatetextfiedbackground" />
 
 		<ListView android:layout_width="fill_parent"
