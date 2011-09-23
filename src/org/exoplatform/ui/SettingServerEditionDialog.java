@@ -2,7 +2,7 @@ package org.exoplatform.ui;
 
 import org.exoplatform.R;
 import org.exoplatform.controller.setting.SettingServerEditionController;
-import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.URLAnalyzer;
@@ -32,7 +32,7 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
   private EditText  editTextServerUrl;
 
-  private ServerObj serverObj;
+  private ServerObjInfo serverObj;
 
   private Context   mContext;
 
@@ -68,7 +68,7 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
     changeLanguage();
     isNewServer = ServerSettingHelper.getInstance().getIsNewServer();
     if (isNewServer) {
-      serverObj = new ServerObj();
+      serverObj = new ServerObjInfo();
       serverObj._bSystemServer = false;
       serverObj._strServerName = "";
       serverObj._strServerUrl = "";
@@ -86,7 +86,7 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
 //  @Override
   public void onClick(View view) {
-    ServerObj myServerObj = new ServerObj();
+    ServerObjInfo myServerObj = new ServerObjInfo();
 
     myServerObj._strServerName = editTextServerName.getText().toString();
     // myServerObj._strServerUrl = editTextServerUrl.getText().toString();

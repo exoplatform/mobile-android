@@ -9,13 +9,13 @@ import org.apache.http.HttpResponse;
 import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentTask;
-import org.exoplatform.proxy.WebdavMethod;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUltils;
+import org.exoplatform.utils.WebdavMethod;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WaitingDialog;
 

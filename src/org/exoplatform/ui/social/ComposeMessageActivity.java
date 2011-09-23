@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 
 import org.exoplatform.controller.social.ComposeMessageController;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.social.image.SelectedImageActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.MyActionBar;
@@ -158,13 +157,10 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   @Override
   public void onBackPressed() {
-    super.onBackPressed();
     destroy();
-
   }
 
-  
-//  @Override
+  // @Override
   public void onClick(View view) {
     if (view == sendButton) {
       composeMessage = composeEditText.getText().toString();
@@ -174,7 +170,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       destroy();
     }
   }
-  
+
   private void changeLanguage() {
     LocalizationHelper bundle = LocalizationHelper.getInstance();
     comment = bundle.getString("Comment");

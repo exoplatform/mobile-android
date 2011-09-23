@@ -115,7 +115,6 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
   @Override
   public void onBackPressed() {
-    super.onBackPressed();
     finish();
   }
 

@@ -12,13 +12,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -78,13 +76,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
     _edtxUserName.setText(AccountSetting.getInstance().getUsername());
-    _edtxUserName.setInputType(InputType.TYPE_TEXT_VARIATION_FILTER);
     
     _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
     _edtxPassword.setText(AccountSetting.getInstance().getPassword());
-
-    _edtxPassword.setImeOptions(EditorInfo.IME_ACTION_DONE);
-    _edtxPassword.setImeActionLabel("Connect", EditorInfo.IME_ACTION_DONE);
 
     _btnAccount = (Button) findViewById(R.id.Button_Account);
     _btnAccount.setOnClickListener(this);

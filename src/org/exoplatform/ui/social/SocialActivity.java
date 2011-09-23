@@ -40,11 +40,11 @@ public class SocialActivity extends MyActionBar {
 
   }
 
-  private void destroy() {
-    super.onDestroy();
+  @Override
+  public void onBackPressed() {
+    socialController.onCancelLoad();
     finish();
   }
-
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
@@ -53,7 +53,6 @@ public class SocialActivity extends MyActionBar {
       finish();
       break;
     case 0:
-      // onLoad(number_of_activity);
       socialController.onLoad();
       break;
     case 1:
