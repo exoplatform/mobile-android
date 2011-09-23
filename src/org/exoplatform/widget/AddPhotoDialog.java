@@ -3,7 +3,7 @@ package org.exoplatform.widget;
 import org.exoplatform.R;
 import org.exoplatform.controller.social.ComposeMessageController;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.social.image.SocialPhotoAlbums;
+import org.exoplatform.ui.social.SocialPhotoAlbums;
 
 import android.app.Dialog;
 import android.content.Context;

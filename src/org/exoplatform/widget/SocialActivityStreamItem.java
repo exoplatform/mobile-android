@@ -3,7 +3,7 @@ package org.exoplatform.widget;
 import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.R;
-import org.exoplatform.social.entity.ExoSocialActivity;
+import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 
@@ -27,7 +27,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private TextView       textViewTime;
 
-  public SocialActivityStreamItem(Context context, ExoSocialActivity activityInfo) {
+  public SocialActivityStreamItem(Context context, SocialActivityInfo activityInfo) {
     super(context);
     LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View view = inflate.inflate(R.layout.activitybrowserviewcell, this);
