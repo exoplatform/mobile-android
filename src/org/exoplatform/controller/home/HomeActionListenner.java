@@ -3,10 +3,6 @@ package org.exoplatform.controller.home;
 import java.net.URI;
 
 import org.exoplatform.chat.ExoChatListController;
-import org.exoplatform.controller.AppController;
-import org.exoplatform.controller.ExoApplicationsController2;
-import org.exoplatform.controller.dashboard.DashboardController;
-import org.exoplatform.dashboard.ExoDashboard;
 import org.exoplatform.model.HomeItem;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.HomeHelper;
@@ -18,6 +14,7 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.ui.social.SocialActivity;
@@ -28,16 +25,16 @@ import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+
 /*
  * 
  */
 public class HomeActionListenner implements OnItemClickListener {
+  private String  loadingData;
+
   private String  okString;
 
   private String  titleString;
@@ -57,7 +54,7 @@ public class HomeActionListenner implements OnItemClickListener {
     changeLanguage();
   }
 
-//  @Override
+  // @Override
   public void onItemClick(AdapterView<?> adapter, View view, int postion, long id) {
     HomeItem item = HomeHelper.getInstance().getHomeItemList().get(postion);
     switch (item._index) {
@@ -76,8 +73,8 @@ public class HomeActionListenner implements OnItemClickListener {
     case 5:
       launchSettingApp();
       break;
-   default:
-     break;
+    default:
+      break;
 
     }
 
@@ -128,10 +125,10 @@ public class HomeActionListenner implements OnItemClickListener {
   }
 
   private boolean checkDocumentConnection() {
-    
+
     return true;
   }
-  
+
   private void launchActivityStreamApp() {
 
     if (createActivityStreamConnetion() == true) {
@@ -145,7 +142,7 @@ public class HomeActionListenner implements OnItemClickListener {
   }
 
   private void launchChatApp() {
-   
+
     AccountSetting acc = AccountSetting.getInstance();
     String urlStr = acc.getDomainName();
 
@@ -159,20 +156,19 @@ public class HomeActionListenner implements OnItemClickListener {
 
     String userName = acc.getUsername();
     String password = acc.getPassword();
-    
+
     if (ExoConnectionUtils.connectToChatServer(url.getHost(), 5222, userName, password)) {
       Intent next = new Intent(mContext, ExoChatListController.class);
       mContext.startActivity(next);
     } else {
-
-      // showToast("Can not connect to chat server");
-
+      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+      dialog.show();
     }
-    
+
   }
-  
+
   private void launchDocumentApp() {
-    
+
     if (checkDocumentConnection() == true) {
       Intent next = new Intent(mContext, DocumentActivity.class);
       mContext.startActivity(next);
@@ -183,19 +179,10 @@ public class HomeActionListenner implements OnItemClickListener {
   }
 
   private void launchDashboardApp() {
-  
-    DashboardController dashboard = new DashboardController();
-    
-    ExoDashboard.arrGadgets = dashboard.listOfGadgets();
-    if (ExoDashboard.arrGadgets != null) {
-      Intent next = new Intent(mContext, ExoDashboard.class);
-      mContext.startActivity(next);
-    } else {
-       Log.e("Dashboard", "Dashboard is empty");
-    }
-    
+    Intent intent = new Intent(mContext, DashboardActivity.class);
+    mContext.startActivity(intent);
   }
-  
+
   private void launchSettingApp() {
     Intent next = new Intent(mContext, SettingActivity.class);
     next.putExtra(ExoConstants.SETTING_TYPE, 1);
@@ -205,6 +192,7 @@ public class HomeActionListenner implements OnItemClickListener {
 
   private void changeLanguage() {
     LocalizationHelper location = LocalizationHelper.getInstance();
+    loadingData = location.getString("LoadingData");
     okString = location.getString("OK");
     titleString = location.getString("Warning");
     contentString = location.getString("ConnectionError");

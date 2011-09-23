@@ -6,13 +6,13 @@ import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.exoplatform.document.ExoDocumentUtils;
-import org.exoplatform.proxy.WebdavMethod;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.UserTask;
+import org.exoplatform.utils.WebdavMethod;
 import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;

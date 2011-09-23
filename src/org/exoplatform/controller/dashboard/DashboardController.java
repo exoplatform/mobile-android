@@ -4,21 +4,48 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.exoplatform.dashboard.entity.ExoGadget;
+import org.exoplatform.model.DashBoardItem;
+import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.model.GateInDbItem;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 
 import android.graphics.Bitmap;
 
 public class DashboardController {
 
- 
-  public String _strContentForStandaloneURL;
+  private  String             _strContentForStandaloneURL;
+
+  private DashboardActivity activity;
+
+  private DashboardLoadTask mLoadTask;
+
+  public DashboardController(DashboardActivity context) {
+    activity = context;
+  }
+
+  public void onLoad() {
+    if (mLoadTask == null || mLoadTask.getStatus() == DashboardLoadTask.Status.FINISHED) {
+      mLoadTask = (DashboardLoadTask) new DashboardLoadTask(activity, this).execute();
+    }
+  }
+
+  public void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == DashboardLoadTask.Status.RUNNING) {
+      mLoadTask.onCancelled();
+      mLoadTask.cancel(true);
+      mLoadTask = null;
+    }
+  }
+
+  public void setAdapter(ArrayList<DashBoardItem> result) {
+    activity.setListAdapter(new DashboardItemAdapter(activity, result));
+  }
 
   // Get gadget list
-  public List<ExoGadget> getGadgetsList() {
-    List<ExoGadget> arrGadgets = new ArrayList<ExoGadget>();
+  public List<GadgetInfo> getGadgetsList() {
+    List<GadgetInfo> arrGadgets = new ArrayList<GadgetInfo>();
     String _strDomain = AccountSetting.getInstance().getDomainName();
     String strHomeUrl = _strDomain + "/portal/private/classic";
     String strContent = ExoConnectionUtils.sendRequestAndReturnString(strHomeUrl);
@@ -72,7 +99,7 @@ public class DashboardController {
       String bmpUrl = parseUrl(tmpStr2, "\"thumbnail\":\"", true, "\"");
       bmpUrl = bmpUrl.replace("localhost", _strDomain);
 
-      ExoGadget tempGadget = new ExoGadget(title, description, url, bmpUrl, null, null);
+      GadgetInfo tempGadget = new GadgetInfo(title, description, url, bmpUrl, null, null);
       arrGadgets.add(tempGadget);
 
       indexStart = indexEnd;
@@ -83,7 +110,7 @@ public class DashboardController {
   }
 
   // Parser gadget string data
-  public String getStringForGadget(String gadgetStr, String startStr, String endStr) {
+  private String getStringForGadget(String gadgetStr, String startStr, String endStr) {
     String returnValue = "";
     int index1;
     int index2;
@@ -101,8 +128,8 @@ public class DashboardController {
   }
 
   // Get gadget list with URL
-  public List<ExoGadget> listOfGadgetsWithURL(String url) {
-    List<ExoGadget> arrTmpGadgets = new ArrayList<ExoGadget>();
+  private List<GadgetInfo> listOfGadgetsWithURL(String url) {
+    List<GadgetInfo> arrTmpGadgets = new ArrayList<GadgetInfo>();
 
     String strGadgetName;
     String strGadgetDescription;
@@ -178,7 +205,7 @@ public class DashboardController {
 
       gadgetUrl += gadgetXmlFile;
 
-      ExoGadget gadget = new ExoGadget(strGadgetName,
+      GadgetInfo gadget = new GadgetInfo(strGadgetName,
                                        strGadgetDescription,
                                        gadgetUrl,
                                        gadgetIconUrl,
@@ -196,7 +223,7 @@ public class DashboardController {
   }
 
   // Get gadget tab list
-  public List<GateInDbItem> listOfGadgets() {
+  public ArrayList<GateInDbItem> listOfGadgets() {
     try {
 
       AccountSetting acc = AccountSetting.getInstance();
@@ -254,13 +281,13 @@ public class DashboardController {
             // Get the TabName
             String gadgetTabName = stringCutted.substring(0, indexForDashboardNameEnd);
 
-            List<ExoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
+            List<GadgetInfo> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
 
             HashMap<String, String> mapOfURLs = listOfStandaloneGadgetsURL();
 
             if (arrTmpGadgetsInItem != null) {
               for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) {
-                ExoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
+                GadgetInfo tmpGadget = arrTmpGadgetsInItem.get(i);
 
                 String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
 

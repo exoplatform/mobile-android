@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.proxy.ExoServerConfiguration;
-import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -23,11 +23,11 @@ public class LaunchController {
 
   private Context              context;
 
-  private ArrayList<ServerObj> _arrDefaulServerList;
+  private ArrayList<ServerObjInfo> _arrDefaulServerList;
 
-  private ArrayList<ServerObj> _arrDeletedServerList;
+  private ArrayList<ServerObjInfo> _arrDeletedServerList;
 
-  private ArrayList<ServerObj> _arrServerList;
+  private ArrayList<ServerObjInfo> _arrServerList;
 
   public LaunchController(Context c, SharedPreferences prefs) {
     sharedPreference = prefs;
@@ -72,7 +72,7 @@ public class LaunchController {
   }
 
   private void getServerInfo() {
-    _arrServerList = new ArrayList<ServerObj>();
+    _arrServerList = new ArrayList<ServerObjInfo>();
 
     String appVer = "";
     String oldVer = ExoServerConfiguration.getAppVersion(context);
@@ -86,22 +86,22 @@ public class LaunchController {
       if (_arrDefaulServerList.size() > 0)
         _arrServerList.addAll(_arrDefaulServerList);
     } else {
-      ArrayList<ServerObj> defaultServerList = ExoServerConfiguration.getServerListWithFileName("DefaultServerList.xml");
+      ArrayList<ServerObjInfo> defaultServerList = ExoServerConfiguration.getServerListWithFileName("DefaultServerList.xml");
 
       _arrDeletedServerList = ExoServerConfiguration.getServerListWithFileName("DeletedDefaultServerList.xml");
       if (appVer.compareToIgnoreCase(oldVer) > 0) {
 
-        ArrayList<ServerObj> deletedDefaultServers = _arrDeletedServerList;
+        ArrayList<ServerObjInfo> deletedDefaultServers = _arrDeletedServerList;
 
-        ArrayList<ServerObj> tmp = new ArrayList<ServerObj>();
+        ArrayList<ServerObjInfo> tmp = new ArrayList<ServerObjInfo>();
         if (deletedDefaultServers == null)
           tmp = defaultServerList;
         else {
           for (int i = 0; i < defaultServerList.size(); i++) {
-            ServerObj newServerObj = defaultServerList.get(i);
+            ServerObjInfo newServerObj = defaultServerList.get(i);
             boolean isDeleted = false;
             for (int j = 0; j < deletedDefaultServers.size(); j++) {
-              ServerObj deletedServerObj = deletedDefaultServers.get(i);
+              ServerObjInfo deletedServerObj = deletedDefaultServers.get(i);
               if (newServerObj._strServerName.equalsIgnoreCase(deletedServerObj._strServerName)
                   && newServerObj._strServerUrl.equalsIgnoreCase(deletedServerObj._strServerUrl)) {
                 isDeleted = true;

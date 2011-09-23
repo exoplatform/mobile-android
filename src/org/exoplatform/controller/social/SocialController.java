@@ -3,9 +3,9 @@ package org.exoplatform.controller.social;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.social.entity.ExoSocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
@@ -70,14 +70,14 @@ public class SocialController {
     }
   }
 
-  public void setActivityList(ArrayList<ExoSocialActivity> result) {
+  public void setActivityList(ArrayList<SocialActivityInfo> result) {
 
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     activityStreamWrap.removeAllViews();
     HashMap<String, String> actHeaderTitle = new HashMap<String, String>();
 
     for (int i = 0; i < result.size(); i++) {
-      final ExoSocialActivity activityInfo = result.get(i);
+      final SocialActivityInfo activityInfo = result.get(i);
 
       String postedTimeTitle = getActivityStreamHeader(activityInfo.getPostedTime());
       if (actHeaderTitle.get(postedTimeTitle) == null) {

@@ -2,6 +2,7 @@ package org.exoplatform.controller.social;
 
 import java.util.ArrayList;
 
+import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
@@ -10,14 +11,13 @@ import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
-import org.exoplatform.social.entity.ExoSocialActivity;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.SocialWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 
-public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<ExoSocialActivity>> {
+public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActivityInfo>> {
   private SocialWaitingDialog _progressDialog;
 
   private Context             mContext;
@@ -53,10 +53,10 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<ExoSocialA
   }
 
   @Override
-  public ArrayList<ExoSocialActivity> doInBackground(Integer... params) {
+  public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
 
     try {
-      ArrayList<ExoSocialActivity> streamInfoList = new ArrayList<ExoSocialActivity>();
+      ArrayList<SocialActivityInfo> streamInfoList = new ArrayList<SocialActivityInfo>();
 
       int loadSize = params[0];
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
@@ -66,10 +66,10 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<ExoSocialA
                                                                                     .getUserId());
       RealtimeListAccess<RestActivity> list = activityService.getActivityStream(identity);
       ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);
-      ExoSocialActivity streamInfo = null;
+      SocialActivityInfo streamInfo = null;
       RestProfile profile = null;
       for (RestActivity act : activityList) {
-        streamInfo = new ExoSocialActivity();
+        streamInfo = new SocialActivityInfo();
         profile = act.getPosterIdentity().getProfile();
         streamInfo.setActivityId(act.getId());
         streamInfo.setImageUrl(profile.getAvatarUrl());
@@ -93,7 +93,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<ExoSocialA
   }
 
   @Override
-  public void onPostExecute(ArrayList<ExoSocialActivity> result) {
+  public void onPostExecute(ArrayList<SocialActivityInfo> result) {
 
     if (result != null) {
       socialController.setActivityList(result);

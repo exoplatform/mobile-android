@@ -3,7 +3,7 @@ package org.exoplatform.controller.login;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 
@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ServerAdapter extends BaseAdapter {
-  private ArrayList<ServerObj> serverInfoList;
+  private ArrayList<ServerObjInfo> serverInfoList;
 
   private ListView             _listViewServer;
 
@@ -56,7 +56,7 @@ public class ServerAdapter extends BaseAdapter {
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
 
-    final ServerObj serverObj = serverInfoList.get(pos);
+    final ServerObjInfo serverObj = serverInfoList.get(pos);
 
     TextView txtvServerName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
     txtvServerName.setText(serverObj._strServerName);

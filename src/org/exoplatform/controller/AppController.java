@@ -10,11 +10,11 @@ import java.util.ResourceBundle;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.exoplatform.R;
-import org.exoplatform.dashboard.entity.ExoGadget;
+import org.exoplatform.model.GadgetInfo;
+import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.proxy.ExoServerConfiguration;
-import org.exoplatform.proxy.ServerObj;
-import org.exoplatform.setting.ExoSetting;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.WaitingDialog;
@@ -28,7 +28,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -190,52 +189,64 @@ public class AppController extends Activity implements OnTouchListener {
     }
 
     // If SDCard is not available
-    if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {
-      configurationInstance._arrDefaulServerList = ExoServerConfiguration.getDefaultServerList(this);
-      if (configurationInstance._arrDefaulServerList.size() > 0)
-        configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
-    } else {
-      ArrayList<ServerObj> defaultServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
-
-      configurationInstance._arrDeletedServerList = configurationInstance.getServerListWithFileName("DeletedDefaultServerList.xml");
-      if (appVer.compareToIgnoreCase(oldVer) > 0) {
-
-        ArrayList<ServerObj> deletedDefaultServers = configurationInstance._arrDeletedServerList;
-
-        ArrayList<ServerObj> tmp = new ArrayList<ServerObj>();
-        if (deletedDefaultServers == null)
-          tmp = defaultServerList;
-        else {
-          for (int i = 0; i < defaultServerList.size(); i++) {
-            ServerObj newServerObj = defaultServerList.get(i);
-            boolean isDeleted = false;
-            for (int j = 0; j < deletedDefaultServers.size(); j++) {
-              ServerObj deletedServerObj = deletedDefaultServers.get(i);
-              if (newServerObj._strServerName.equalsIgnoreCase(deletedServerObj._strServerName)
-                  && newServerObj._strServerUrl.equalsIgnoreCase(deletedServerObj._strServerUrl)) {
-                isDeleted = true;
-                break;
-              }
-            }
-            if (!isDeleted)
-              tmp.add(newServerObj);
-          }
-        }
-
-        configurationInstance.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
-        configurationInstance.version = appVer;
-      } else {
-
-      }
-
-      configurationInstance._arrUserServerList = configurationInstance.getServerListWithFileName("UserServerList.xml");
-      configurationInstance._arrDefaulServerList = configurationInstance.getServerListWithFileName("DefaultServerList.xml");
-
-      if (configurationInstance._arrDefaulServerList.size() > 0)
-        configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
-      if (configurationInstance._arrUserServerList.size() > 0)
-        configurationInstance._arrServerList.addAll(configurationInstance._arrUserServerList);
-    }
+    // if
+    // (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED)))
+    // {
+    // configurationInstance._arrDefaulServerList =
+    // ExoServerConfiguration.getDefaultServerList(this);
+    // if (configurationInstance._arrDefaulServerList.size() > 0)
+    // configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
+    // } else {
+    // ArrayList<ServerObj> defaultServerList =
+    // configurationInstance.getServerListWithFileName("DefaultServerList.xml");
+    //
+    // configurationInstance._arrDeletedServerList =
+    // configurationInstance.getServerListWithFileName("DeletedDefaultServerList.xml");
+    // if (appVer.compareToIgnoreCase(oldVer) > 0) {
+    //
+    // ArrayList<ServerObj> deletedDefaultServers =
+    // configurationInstance._arrDeletedServerList;
+    //
+    // ArrayList<ServerObj> tmp = new ArrayList<ServerObj>();
+    // if (deletedDefaultServers == null)
+    // tmp = defaultServerList;
+    // else {
+    // for (int i = 0; i < defaultServerList.size(); i++) {
+    // ServerObj newServerObj = defaultServerList.get(i);
+    // boolean isDeleted = false;
+    // for (int j = 0; j < deletedDefaultServers.size(); j++) {
+    // ServerObj deletedServerObj = deletedDefaultServers.get(i);
+    // if
+    // (newServerObj._strServerName.equalsIgnoreCase(deletedServerObj._strServerName)
+    // &&
+    // newServerObj._strServerUrl.equalsIgnoreCase(deletedServerObj._strServerUrl))
+    // {
+    // isDeleted = true;
+    // break;
+    // }
+    // }
+    // if (!isDeleted)
+    // tmp.add(newServerObj);
+    // }
+    // }
+    //
+    // configurationInstance.createXmlDataWithServerList(tmp,
+    // "DefaultServerList.xml", appVer);
+    // configurationInstance.version = appVer;
+    // } else {
+    //
+    // }
+    //
+    // configurationInstance._arrUserServerList =
+    // configurationInstance.getServerListWithFileName("UserServerList.xml");
+    // configurationInstance._arrDefaulServerList =
+    // configurationInstance.getServerListWithFileName("DefaultServerList.xml");
+    //
+    // if (configurationInstance._arrDefaulServerList.size() > 0)
+    // configurationInstance._arrServerList.addAll(configurationInstance._arrDefaulServerList);
+    // if (configurationInstance._arrUserServerList.size() > 0)
+    // configurationInstance._arrServerList.addAll(configurationInstance._arrUserServerList);
+    // }
 
     String strLocalize;
 
@@ -360,7 +371,7 @@ public class AppController extends Activity implements OnTouchListener {
       }
     });
 
-    createServersAdapter(configurationInstance._arrServerList);
+    // createServersAdapter(configurationInstance._arrServerList);
   }
 
   @Override
@@ -418,7 +429,7 @@ public class AppController extends Activity implements OnTouchListener {
 
       // GDActivity.TYPE = 1;
 
-      Intent next = new Intent(AppController.this, ExoSetting.class);
+      Intent next = new Intent(AppController.this, SettingActivity.class);
       next.putExtra(ExoConstants.SETTING_TYPE, 0);
       startActivity(next);
 
@@ -428,9 +439,9 @@ public class AppController extends Activity implements OnTouchListener {
   }
 
   // Create server list adapter
-  public static void createServersAdapter(ArrayList<ServerObj> serverObjs) {
+  public static void createServersAdapter(ArrayList<ServerObjInfo> serverObjs) {
 
-    final List<ServerObj> serverObjsTmp = serverObjs;
+    final List<ServerObjInfo> serverObjsTmp = serverObjs;
 
     final BaseAdapter serverAdapter = new BaseAdapter() {
 
@@ -439,7 +450,7 @@ public class AppController extends Activity implements OnTouchListener {
         LayoutInflater inflater = appControllerInstance.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
 
-        final ServerObj serverObj = serverObjsTmp.get(pos);
+        final ServerObjInfo serverObj = serverObjsTmp.get(pos);
 
         TextView txtvServerName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
         txtvServerName.setText(serverObj._strServerName);
@@ -636,8 +647,8 @@ public class AppController extends Activity implements OnTouchListener {
   }
 
   // Get gadget list
-  public List<ExoGadget> getGadgetsList() {
-    List<ExoGadget> arrGadgets = new ArrayList<ExoGadget>();
+  public List<GadgetInfo> getGadgetsList() {
+    List<GadgetInfo> arrGadgets = new ArrayList<GadgetInfo>();
     _strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
                                                           "exo_prf_domain");
     String strHomeUrl = _strDomain + "/portal/private/classic";
@@ -694,7 +705,7 @@ public class AppController extends Activity implements OnTouchListener {
       // bmp =
       // BitmapFactory.decodeStream(AppController._eXoConnection.sendRequest(bmpUrl));
 
-      ExoGadget tempGadget = new ExoGadget(title, description, url, bmpUrl, null, null);
+      GadgetInfo tempGadget = new GadgetInfo(title, description, url, bmpUrl, null, null);
       arrGadgets.add(tempGadget);
 
       indexStart = indexEnd;
@@ -723,8 +734,8 @@ public class AppController extends Activity implements OnTouchListener {
   }
 
   // Get gadget list with URL
-  public List<ExoGadget> listOfGadgetsWithURL(String url) {
-    List<ExoGadget> arrTmpGadgets = new ArrayList<ExoGadget>();
+  public List<GadgetInfo> listOfGadgetsWithURL(String url) {
+    List<GadgetInfo> arrTmpGadgets = new ArrayList<GadgetInfo>();
 
     String strGadgetName;
     String strGadgetDescription;
@@ -814,12 +825,12 @@ public class AppController extends Activity implements OnTouchListener {
 
       gadgetUrl += gadgetXmlFile;
 
-      ExoGadget gadget = new ExoGadget(strGadgetName,
-                                       strGadgetDescription,
-                                       gadgetUrl,
-                                       gadgetIconUrl,
-                                       null,
-                                       gadgetID);
+      GadgetInfo gadget = new GadgetInfo(strGadgetName,
+                                         strGadgetDescription,
+                                         gadgetUrl,
+                                         gadgetIconUrl,
+                                         null,
+                                         gadgetID);
 
       arrTmpGadgets.add(gadget);
 

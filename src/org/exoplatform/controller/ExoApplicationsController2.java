@@ -9,22 +9,22 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.exoplatform.chat.ExoChatListController;
-import org.exoplatform.dashboard.ExoDashboard;
-import org.exoplatform.dashboard.entity.ExoGadget;
 import org.exoplatform.document.ExoDocumentUtils;
 import org.exoplatform.document.ExoFile;
 import org.exoplatform.document.ExoFilesController;
 import org.exoplatform.model.ExoAppItem;
+import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.model.GateInDbItem;
-import org.exoplatform.setting.ExoSetting;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.social.SocialActivity;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+import org.exoplatform.ui.DashboardActivity;
+import org.exoplatform.ui.SettingActivity;
+import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
@@ -36,14 +36,11 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -122,18 +119,17 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   private String                              settingText;
 
-
   private String                              protocol;
 
   private String                              host;
 
   private int                                 port;
-  
-  private String               okString;
 
-  private String               titleString;
+  private String                              okString;
 
-  private String               contentString;
+  private String                              titleString;
+
+  private String                              contentString;
 
   public static ActivityService<RestActivity> activityService;
 
@@ -395,6 +391,8 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
           ExoAppItem item = array.get(i);
           if (item._name.equalsIgnoreCase(activityStreamsText)) {
             launchActivityStreamApp();
+          } else if (item._name.equalsIgnoreCase(settingText)) {
+            launchSettingApp();
           } else
             launchApp(v, item._name);
         }
@@ -407,7 +405,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
     return true;
   }
 
-  Runnable         mUpdateTimeTask       = new Runnable() {
+  private Runnable mUpdateTimeTask       = new Runnable() {
 
                                            public void run() {
 
@@ -490,8 +488,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
           launchMessengerApp();
         } else if (str.equalsIgnoreCase(dashboardText)) {
           launchDashboardApp();
-        } else if (str.equalsIgnoreCase(settingText)) {
-          launchSettingApp();
         }
 
         runOnUiThread(dismissProgressDialog);
@@ -574,7 +570,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
   public void launchDashboardApp() {
     arrGadgets = listOfGadgets();
     if (arrGadgets != null) {
-      Intent next = new Intent(ExoApplicationsController2.this, ExoDashboard.class);
+      Intent next = new Intent(ExoApplicationsController2.this, DashboardActivity.class);
       startActivity(next);
     } else {
       // Toast.makeText(this, "No gadget", Toast.LENGTH_LONG).show();
@@ -584,7 +580,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
   public void launchSettingApp() {
 
-    Intent next = new Intent(ExoApplicationsController2.this, ExoSetting.class);
+    Intent next = new Intent(ExoApplicationsController2.this, SettingActivity.class);
     next.putExtra(ExoConstants.SETTING_TYPE, 1);
     startActivity(next);
 
@@ -636,7 +632,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
   public void launchActivityStreamApp() {
 
     if (createConnetion() == true) {
-      Intent next = new Intent(ExoApplicationsController2.this, SocialActivity.class);
+      Intent next = new Intent(ExoApplicationsController2.this, SocialDetailActivity.class);
       startActivity(next);
     } else {
       WarningDialog dialog = new WarningDialog(ExoApplicationsController2.this,
@@ -680,8 +676,8 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
   }
 
   // Get gadget list
-  public List<ExoGadget> getGadgetsList() {
-    List<ExoGadget> arrGadgets = new ArrayList<ExoGadget>();
+  public List<GadgetInfo> getGadgetsList() {
+    List<GadgetInfo> arrGadgets = new ArrayList<GadgetInfo>();
     String _strDomain = AppController.sharedPreference.getString(AppController.EXO_PRF_DOMAIN,
                                                                  "exo_prf_domain");
     String strHomeUrl = _strDomain + "/portal/private/classic";
@@ -736,7 +732,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
       String bmpUrl = parseUrl(tmpStr2, "\"thumbnail\":\"", true, "\"");
       bmpUrl = bmpUrl.replace("localhost", _strDomain);
 
-      ExoGadget tempGadget = new ExoGadget(title, description, url, bmpUrl, null, null);
+      GadgetInfo tempGadget = new GadgetInfo(title, description, url, bmpUrl, null, null);
       arrGadgets.add(tempGadget);
 
       indexStart = indexEnd;
@@ -765,8 +761,8 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
   }
 
   // Get gadget list with URL
-  public List<ExoGadget> listOfGadgetsWithURL(String url) {
-    List<ExoGadget> arrTmpGadgets = new ArrayList<ExoGadget>();
+  public List<GadgetInfo> listOfGadgetsWithURL(String url) {
+    List<GadgetInfo> arrTmpGadgets = new ArrayList<GadgetInfo>();
 
     String strGadgetName;
     String strGadgetDescription;
@@ -844,7 +840,7 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
       gadgetUrl += gadgetXmlFile;
 
-      ExoGadget gadget = new ExoGadget(strGadgetName,
+      GadgetInfo gadget = new GadgetInfo(strGadgetName,
                                        strGadgetDescription,
                                        gadgetUrl,
                                        gadgetIconUrl,
@@ -872,7 +868,6 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
 
       String strContent = ExoConnectionUtils.getFirstLoginContent();
       if (strContent != null) {
-
 
         int index1;
         index1 = strContent.indexOf("DashboardIcon TBIcon");
@@ -921,13 +916,13 @@ public class ExoApplicationsController2 extends MyActionBar implements OnTouchLi
             // Get the TabName
             String gadgetTabName = stringCutted.substring(0, indexForDashboardNameEnd);
 
-            List<ExoGadget> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
+            List<GadgetInfo> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
 
             HashMap<String, String> mapOfURLs = listOfStandaloneGadgetsURL();
 
             if (arrTmpGadgetsInItem != null) {
               for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) {
-                ExoGadget tmpGadget = arrTmpGadgetsInItem.get(i);
+                GadgetInfo tmpGadget = arrTmpGadgetsInItem.get(i);
 
                 String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
 

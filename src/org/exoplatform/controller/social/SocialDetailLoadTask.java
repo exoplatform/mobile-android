@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.exoplatform.model.SocialCommentInfo;
+import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
@@ -12,8 +14,6 @@ import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.model.RestLike;
 import org.exoplatform.social.client.api.model.RestProfile;
-import org.exoplatform.social.entity.ExoSocialComment;
-import org.exoplatform.social.entity.ExoSocialLike;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WarningDialog;
 
@@ -23,9 +23,9 @@ import android.content.Context;
 public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
   private RestActivity                selectedRestActivity;
 
-  private LinkedList<ExoSocialLike>   likeLinkedList    = new LinkedList<ExoSocialLike>();
+  private LinkedList<SocialLikeInfo>   likeLinkedList    = new LinkedList<SocialLikeInfo>();
 
-  private ArrayList<ExoSocialComment> socialCommentList = new ArrayList<ExoSocialComment>();
+  private ArrayList<SocialCommentInfo> socialCommentList = new ArrayList<SocialCommentInfo>();
 
   private ProgressDialog              _progressDialog;
 
@@ -74,7 +74,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();
       if (likeList != null) {
         for (RestLike like : likeList) {
-          ExoSocialLike socialLike = new ExoSocialLike();
+          SocialLikeInfo socialLike = new SocialLikeInfo();
           String identity = like.getIdentityId();
           RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
                                                                   .getIdentityService()
@@ -94,7 +94,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
       if (commentList != null) {
         for (RestComment comment : commentList) {
-          ExoSocialComment socialComment = new ExoSocialComment();
+          SocialCommentInfo socialComment = new SocialCommentInfo();
           String identity = comment.getIdentityId();
           RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
                                                                   .getIdentityService()

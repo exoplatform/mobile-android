@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
-import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -65,11 +65,11 @@ public class SettingController {
   }
 
   public void setServerList(LinearLayout listServerWrap) {
-    List<ServerObj> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+    List<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
     listServerWrap.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     for (int i = 0; i < serverList.size(); i++) {
-      ServerObj serverObj = serverList.get(i);
+      ServerObjInfo serverObj = serverList.get(i);
       ServerItemLayout serverItem = new ServerItemLayout(mContext);
       serverItem.serverName.setText(serverObj._strServerName);
       serverItem.serverUrl.setText(serverObj._strServerUrl);

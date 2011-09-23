@@ -2,8 +2,8 @@ package org.exoplatform.controller.setting;
 
 import java.util.ArrayList;
 
+import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.proxy.ExoServerConfiguration;
-import org.exoplatform.proxy.ServerObj;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -17,7 +17,7 @@ import android.widget.Toast;
 public class SettingServerEditionController {
   private Context              mContext;
 
-  private ArrayList<ServerObj> serverInfoList;     // List
+  private ArrayList<ServerObjInfo> serverInfoList;     // List
 
   // of
   // server
@@ -46,7 +46,7 @@ public class SettingServerEditionController {
     changeLanguage();
   }
 
-  public void onAccept(ServerObj myServerObj, ServerObj serverObj) {
+  public void onAccept(ServerObjInfo myServerObj, ServerObjInfo serverObj) {
     if (myServerObj._strServerName.equalsIgnoreCase("")
         || myServerObj._strServerUrl.equalsIgnoreCase("")) {
       // Server name or server url is empty
@@ -56,7 +56,7 @@ public class SettingServerEditionController {
     if (isNewServer) {
       boolean isExisted = false;
       for (int i = 0; i < serverInfoList.size(); i++) {
-        ServerObj tmp = serverInfoList.get(i);
+        ServerObjInfo tmp = serverInfoList.get(i);
         if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
           isExisted = true;
           Toast.makeText(mContext, serverisExisted, Toast.LENGTH_LONG).show();
@@ -76,7 +76,7 @@ public class SettingServerEditionController {
     {
       boolean isExisted = true;
       for (int i = 0; i < serverInfoList.size(); i++) {
-        ServerObj tmp = serverInfoList.get(i);
+        ServerObjInfo tmp = serverInfoList.get(i);
 
         if (i == selectedServerIndex) {
           continue;
@@ -103,7 +103,7 @@ public class SettingServerEditionController {
     onSave(myServerObj);
   }
 
-  public void onDelete(ServerObj myServerObj, ServerObj serverObj) {
+  public void onDelete(ServerObjInfo myServerObj, ServerObjInfo serverObj) {
     if (!isNewServer) // Delete sever
     {
       int currentServerIndex = Integer.valueOf(AccountSetting.getInstance().getDomainIndex());
@@ -123,7 +123,7 @@ public class SettingServerEditionController {
     onSave(myServerObj);
   }
 
-  private void onSave(ServerObj myServerObj) {
+  private void onSave(ServerObjInfo myServerObj) {
 
     ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
     SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();

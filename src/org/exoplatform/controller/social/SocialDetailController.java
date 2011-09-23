@@ -5,13 +5,13 @@ import greendroid.widget.AsyncImageView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.exoplatform.model.SocialCommentInfo;
+import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestProfile;
-import org.exoplatform.social.entity.ExoSocialComment;
-import org.exoplatform.social.entity.ExoSocialLike;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.CommentItemLayout;
@@ -94,13 +94,13 @@ public class SocialDetailController {
     }
   }
 
-  public void createCommentList(ArrayList<ExoSocialComment> commentList) {
+  public void createCommentList(ArrayList<SocialCommentInfo> commentList) {
     if (commentList != null) {
 
       LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
       commentLayoutWrap.removeAllViews();
       for (int i = 0; i < commentList.size(); i++) {
-        ExoSocialComment comment = commentList.get(i);
+        SocialCommentInfo comment = commentList.get(i);
         CommentItemLayout commentItem = new CommentItemLayout(mContext);
         String avatarUrl = comment.getImageUrl();
         if (avatarUrl == null) {
@@ -136,7 +136,7 @@ public class SocialDetailController {
     textView_Time.setText(SocialActivityUtil.getPostedTimeString(postedTime));
   }
 
-  public void setLikeInfo(LinkedList<ExoSocialLike> likeLinkedList) {
+  public void setLikeInfo(LinkedList<SocialLikeInfo> likeLinkedList) {
     textView_Like_Count.setText(SocialActivityUtil.getCommentString(likeLinkedList));
   }
 

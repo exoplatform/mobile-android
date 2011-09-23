@@ -7,11 +7,11 @@ import java.util.ResourceBundle;
 
 import org.exoplatform.R;
 import org.exoplatform.chat.ExoChatListController;
-import org.exoplatform.dashboard.ExoGadgetViewController;
 import org.exoplatform.document.ExoFile;
 import org.exoplatform.document.ExoFilesController;
 import org.exoplatform.model.ExoApp;
 import org.exoplatform.model.GateInDbItem;
+import org.exoplatform.ui.GadgetViewActivity;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -37,28 +37,28 @@ import android.widget.Toast;
 
 //Main app view controller
 public class ExoApplicationsController extends Activity {
-  ListView                         _lstvApps;                        // eXo
+  private ListView                         _lstvApps;                        // eXo
 
   // Apps
   // view
 
-  ListView                         _lstvGadgets;                     // Gadgets
+  private ListView                         _lstvGadgets;                     // Gadgets
 
   // view
 
-  TextView                         txtVieweXoAppsTittle;             // eXo app
+  private TextView                         txtVieweXoAppsTittle;             // eXo app
 
   // title
 
-  TextView                         txtVieweXoGadgetsTittle;          // Gadgets
+  private TextView                         txtVieweXoGadgetsTittle;          // Gadgets
 
   // title
 
-  Button                           _btnSignOut;                      // Signout
+  private Button                           _btnSignOut;                      // Signout
 
   // button
 
-  Button                           _btnLanguageHelp;                 // Setting
+  private Button                           _btnLanguageHelp;                 // Setting
 
   public static short              webViewMode;                      // 0: view
 
@@ -68,12 +68,12 @@ public class ExoApplicationsController extends Activity {
   // 2: view
   // help;
 
-  String                           fileTittle;                       // File
+  private String                           fileTittle;                       // File
 
   // app
   // name
 
-  String                           chatTittle;                       // Chat
+  private String                           chatTittle;                       // Chat
 
   // app
   // name
@@ -84,7 +84,7 @@ public class ExoApplicationsController extends Activity {
 
   // adapter
 
-  ProgressDialog                   _progressDialog;                  // Progress
+  private ProgressDialog                   _progressDialog;                  // Progress
 
   // dialog
 
@@ -98,20 +98,20 @@ public class ExoApplicationsController extends Activity {
 
   // tab
 
-  Thread                           thread;
+  private Thread                           thread;
 
   // Localization strings
-  TextView                         textViewFileDescription;
+  private TextView                         textViewFileDescription;
 
-  TextView                         textViewChatDescription;
+  private TextView                         textViewChatDescription;
 
-  TextView                         labelFileName;
+  private TextView                         labelFileName;
 
-  TextView                         labelChatName;
+  private TextView                         labelChatName;
 
-  String                           strCannotBackToPreviousPage;
+  private String                           strCannotBackToPreviousPage;
 
-  String                           strChatServer;
+  private String                           strChatServer;
 
   // Constructor
   @Override
@@ -383,7 +383,7 @@ public class ExoApplicationsController extends Activity {
   }
 
   // Gadget Adapter - it was used to be Data Source for Gadgets List View
-  class GadgetsAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
+  private class GadgetsAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
     private final List<GateInDbItem> _arrGadgets;
 
     public GadgetsAdapter(List<GateInDbItem> gadgets) {
@@ -429,8 +429,8 @@ public class ExoApplicationsController extends Activity {
     }
 
     public void launchGadget() {
-      ExoGadgetViewController._delegate = eXoApplicationsControllerInstance;
-      Intent next = new Intent(ExoApplicationsController.this, ExoGadgetViewController.class);
+      GadgetViewActivity._delegate = eXoApplicationsControllerInstance;
+      Intent next = new Intent(ExoApplicationsController.this, GadgetViewActivity.class);
       ExoApplicationsController.this.startActivity(next);
 
     }

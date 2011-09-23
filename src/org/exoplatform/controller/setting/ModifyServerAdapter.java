@@ -2,7 +2,7 @@ package org.exoplatform.controller.setting;
 
 import java.util.ArrayList;
 
-import org.exoplatform.proxy.ServerObj;
+import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 
@@ -19,7 +19,7 @@ import com.cyrilmottier.android.greendroid.R;
 public class ModifyServerAdapter extends BaseAdapter {
   private Context              mContext;
 
-  private ArrayList<ServerObj> serverList;
+  private ArrayList<ServerObjInfo> serverList;
 
   public ModifyServerAdapter(Context context) {
     mContext = context;
@@ -47,7 +47,7 @@ public class ModifyServerAdapter extends BaseAdapter {
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View rowView = inflater.inflate(R.layout.serverlistitemforsetting, null);
 
-    ServerObj serverObj = serverList.get(position);
+    ServerObjInfo serverObj = serverList.get(position);
 
     TextView serverName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
     serverName.setText(serverObj._strServerName);
