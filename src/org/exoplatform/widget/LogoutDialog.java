@@ -34,7 +34,7 @@ public class LogoutDialog extends Dialog implements OnClickListener {
     changeLanguage();
   }
 
-  @Override
+//  @Override
   public void onClick(View view) {
     if (view == okButton) {
       homeController.onFinish();

@@ -58,8 +58,8 @@ public class DocumentActivity extends MyActionBar {
   String                           _strCannotBackToPreviousPage;
   String                           _strDownloadFileIntoSDCard;
 
-  String                           _sdcard_temp_dir;
-  public String                           _urlDocumentHome; 
+  public String                    _sdcard_temp_dir;
+  public String                    _urlDocumentHome; 
   
   public DocumentAdapter           _documentAdapter;
 
@@ -88,10 +88,6 @@ public class DocumentActivity extends MyActionBar {
     DocumentTask documentTask = new DocumentTask(this, this, _urlDocumentHome, null, 0);
     documentTask.execute();
     
-//    _documentAdapter = new DocumentAdapter(this, _urlDocumentHome);
-    
-//    setDocumentAdapter();
-    
   }
   
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -112,7 +108,6 @@ public class DocumentActivity extends MyActionBar {
       {
         DocumentTask documentTask = new DocumentTask(this, this, _documentAdapter._urlStr, null, 0); 
         documentTask.execute();
-        
       }
     }
 
@@ -137,10 +132,9 @@ public class DocumentActivity extends MyActionBar {
 
           setViewUploadImage(false);
           
-          File file = new File(_sdcard_temp_dir);
-          String destinationUrl = _documentAdapter._documentActionDialog.myFile.urlStr + "/" + file.getName();
-          ExoDocumentUtils.putFileToServerFromLocal(destinationUrl, file, "image/png");
-          
+          String sourceUrl = _documentAdapter._documentActionDialog.myFile.urlStr;
+          DocumentTask documentTask = new DocumentTask(_documentActivityInstance, _documentActivityInstance, sourceUrl, null, 4);
+          documentTask.execute();
         }
       });
       

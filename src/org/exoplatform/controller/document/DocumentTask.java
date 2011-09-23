@@ -1,5 +1,6 @@
 package org.exoplatform.controller.document;
 
+import java.io.File;
 import java.util.List;
 
 import org.exoplatform.model.ExoFile;
@@ -26,7 +27,7 @@ public class DocumentTask extends UserTask<Integer, Void, Boolean> {
 
   private String              contentString;
 
-//  actionID: 0-retrieve data, 1: delete file, 2: copy file, 3: move file
+//  actionID: 0-retrieve data, 1: delete file, 2: copy file, 3: move file, 4: upload file
   private int                 actionID;
   
   private String              strSourceUrl;
@@ -67,29 +68,35 @@ public class DocumentTask extends UserTask<Integer, Void, Boolean> {
     try {
       if(actionID == 0) {
         _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
-        
       }
       else if(actionID == 1) {
         
         boolean deleteFile = documentActivity.deleteFile(strSourceUrl);
         if(deleteFile)
         {
-          String url = ExoDocumentUtils.getParentUrl(strSourceUrl);
-          _documentList = ExoDocumentUtils.getPersonalDriveContent(url);
+          strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
+          _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
         }
-        
       }
       else if(actionID == 2) {
         DocumentAdapter adapter = documentActivity._documentAdapter;
         _documentList = adapter._documentList;
         
         documentActivity.copyFile(strSourceUrl, strDestinationUrl);
+        strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
       }
-      else {
+      else if(actionID == 3) {
         DocumentAdapter adapter = documentActivity._documentAdapter;
         _documentList = adapter._documentList;
-        
-        documentActivity.copyFile(strSourceUrl, strDestinationUrl);
+
+        documentActivity.moveFile(strSourceUrl, strDestinationUrl);
+        strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
+      }
+      else {
+        File file = new File(documentActivity._sdcard_temp_dir);
+        ExoDocumentUtils.putFileToServerFromLocal(strSourceUrl + "/" + file.getName(), file, "image/png");
+        documentActivity._documentAdapter._urlStr = strSourceUrl;
+        _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
       }
       
       return true;
@@ -116,12 +123,14 @@ public class DocumentTask extends UserTask<Integer, Void, Boolean> {
       }
       documentActivity._documentAdapter._documentList = _documentList;
       documentActivity._documentAdapter.notifyDataSetChanged();
+      
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
     _progressDialog.dismiss();
-
+    
+    documentActivity.setTitle(ExoDocumentUtils.getLastPathComponent(strSourceUrl));
   }
 
 }

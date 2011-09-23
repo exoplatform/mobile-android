@@ -158,4 +158,11 @@ public class ExoDocumentUtils {
     
     return url.substring(0, url.lastIndexOf("/"));
   }
+  
+  public static String getLastPathComponent(String url) {
+    
+    return url.substring(url.lastIndexOf("/") + 1, url.length());
+  }
+  
+  
 }

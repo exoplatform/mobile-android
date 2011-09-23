@@ -6,7 +6,6 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
-import org.exoplatform.utils.ExoDocumentUtils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
