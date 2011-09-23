@@ -4,13 +4,13 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
+import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.social.entity.ExoSocialLike;
 
 public class SocialActivityUtil {
 
-  public static String getCommentString(LinkedList<ExoSocialLike> socialLikeList) {
+  public static String getCommentString(LinkedList<SocialLikeInfo> socialLikeList) {
     LocalizationHelper location = LocalizationHelper.getInstance();
     String nolike = location.getString("NoLike");
     String likedThis = location.getString("LikedThis");
@@ -19,7 +19,7 @@ public class SocialActivityUtil {
     String peopleLiked = location.getString("PeopleLikedThis");
     StringBuffer buffer = new StringBuffer();
     int count = socialLikeList.size();
-    ExoSocialLike socialLike = null;
+    SocialLikeInfo socialLike = null;
 
     if (count == 0) {
       buffer.append(nolike);

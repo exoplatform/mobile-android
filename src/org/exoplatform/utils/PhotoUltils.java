@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
-import org.exoplatform.social.image.PhotoInfo;
+import org.exoplatform.model.SocialPhotoInfo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -203,13 +203,13 @@ public class PhotoUltils {
     return files;
   }
 
-  public static ArrayList<PhotoInfo> listFileToArray(File directory,
+  public static ArrayList<SocialPhotoInfo> listFileToArray(File directory,
                                                      FilenameFilter[] filter,
                                                      int recurse) {
-    ArrayList<PhotoInfo> list = new ArrayList<PhotoInfo>();
+    ArrayList<SocialPhotoInfo> list = new ArrayList<SocialPhotoInfo>();
     Set<File> collection = getImageFolder(directory, filter, recurse);
     for (File file : collection) {
-      PhotoInfo info = new PhotoInfo();
+      SocialPhotoInfo info = new SocialPhotoInfo();
       ArrayList<String> listFile = new ArrayList<String>();
       info.setAlbumsName(file.getName());
       File[] entries = file.listFiles();
