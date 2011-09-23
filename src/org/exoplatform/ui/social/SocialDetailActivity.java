@@ -42,6 +42,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
 
   private SocialDetailController detailController;
 
+  public static SocialDetailActivity socialDetailActivity;
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -52,6 +53,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_refresh);
+    socialDetailActivity = this;
     changeLanguage();
     initComponent();
 
@@ -101,6 +103,9 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
+      if(SocialActivity.socialActivity!=null){
+        SocialActivity.socialActivity.finish();
+      }
       destroy();
       break;
     case 0:

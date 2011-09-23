@@ -70,7 +70,9 @@ public class WebViewActivity extends MyActionBar {
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-
+    if (DashboardActivity.dashboardActivity != null) {
+      DashboardActivity.dashboardActivity.finish();
+    }
     finish();
 
     return true;
@@ -103,7 +105,6 @@ public class WebViewActivity extends MyActionBar {
         buffer.append(cookie.getName());
         buffer.append("=");
         buffer.append(cookie.getValue());
-        System.out.println("Cookies " + buffer.toString());
         CookieManager.getInstance().setCookie(cookie.getDomain(), buffer.toString());
       }
 

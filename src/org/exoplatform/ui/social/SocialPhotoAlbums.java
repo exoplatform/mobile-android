@@ -1,5 +1,7 @@
 package org.exoplatform.ui.social;
 
+import greendroid.widget.ActionBarItem;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,6 +12,7 @@ import org.exoplatform.model.SocialPhotoInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.ProgressDialog;
@@ -35,12 +38,12 @@ public class SocialPhotoAlbums extends MyActionBar {
 
   private String                  loadingData;
 
-  public static SocialPhotoInfo photoInfoSelected;
+  public static SocialPhotoInfo   photoInfoSelected;
 
   private LinearLayout            albumLayout;
 
   private LoadImageTask           mLoadTask;
-  
+
   public static SocialPhotoAlbums socialPhotoAlbums;
 
   @Override
@@ -73,16 +76,39 @@ public class SocialPhotoAlbums extends MyActionBar {
             photoInfoSelected = photoInfo;
             Intent intent = new Intent(SocialPhotoAlbums.this, SocialImageLibrary.class);
             startActivity(intent);
-//            photoInfoSelected = photoInfo;
-//            Intent intent = new Intent(SocialPhotoAlbums.this, CoverFlowExample.class);
-//            startActivity(intent);
+            // photoInfoSelected = photoInfo;
+            // Intent intent = new Intent(SocialPhotoAlbums.this,
+            // CoverFlowExample.class);
+            // startActivity(intent);
           }
         });
-        
+
         albumLayout.addView(item, params);
       }
     }
   }
+
+  @Override
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+    switch (position) {
+    case -1:
+      
+      if (ComposeMessageActivity.composeMessageActivity != null)
+        ComposeMessageActivity.composeMessageActivity.finish();
+      if (SocialActivity.socialActivity != null) {
+        SocialActivity.socialActivity.finish();
+      }
+
+      finish();
+      break;
+
+    case 0:
+      break;
+    }
+
+    return true;
+  }
+
   private void onChangeLanguage() {
     LocalizationHelper bundle = LocalizationHelper.getInstance();
     String title = bundle.getString("PhotoLibrary");
@@ -117,10 +143,11 @@ public class SocialPhotoAlbums extends MyActionBar {
             public boolean accept(File dir, String name) {
               int index = name.lastIndexOf(".");
               String typeOfFile = name.substring(index + 1);
-//              return name.endsWith("." + type) || name.endsWith("." + typeUpcase);
+              // return name.endsWith("." + type) || name.endsWith("." +
+              // typeUpcase);
               return type.equalsIgnoreCase(typeOfFile);
-              
-//              return name.endsWith("." + type);
+
+              // return name.endsWith("." + type);
             }
           };
           i++;
@@ -166,7 +193,7 @@ public class SocialPhotoAlbums extends MyActionBar {
       albumsName = (TextView) view.findViewById(R.id.albums_name);
       albumsName.setText(info.getAlbumsName());
       albumsNumber = (TextView) view.findViewById(R.id.albums_number);
-      albumsNumber.setText("(" + info.getImageNumber()+")");
+      albumsNumber.setText("(" + info.getImageNumber() + ")");
     }
 
   }

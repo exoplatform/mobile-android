@@ -46,10 +46,10 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   private void init() {
     imageView = (ImageView) findViewById(R.id.social_selected_image);
     filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
-//    Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
-//    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-     Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
-//    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+    // Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
+    // Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+    Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
+    // Bitmap bitmap = BitmapFactory.decodeFile(filePath);
     imageView.setImageBitmap(bitmap);
     okButton = (Button) findViewById(R.id.social_selected_image_ok_button);
     okButton.setText(okText);
@@ -68,6 +68,8 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
         SocialPhotoAlbums.socialPhotoAlbums.finish();
       if (ComposeMessageActivity.composeMessageActivity != null)
         ComposeMessageActivity.composeMessageActivity.finish();
+      if (SocialActivity.socialActivity != null)
+        SocialActivity.socialActivity.finish();
       break;
 
     case 0:

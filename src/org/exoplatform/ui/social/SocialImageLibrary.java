@@ -42,7 +42,7 @@ public class SocialImageLibrary extends MyActionBar {
 
   public static SocialImageLibrary socialImageLibrary;
 
-  private SocialPhotoInfo                photoInfo;
+  private SocialPhotoInfo          photoInfo;
 
   private CoverFlow                coverFlow;
 
@@ -72,8 +72,12 @@ public class SocialImageLibrary extends MyActionBar {
     switch (position) {
     case -1:
       finish();
-      SocialPhotoAlbums.socialPhotoAlbums.finish();
-      ComposeMessageActivity.composeMessageActivity.finish();
+      if (SocialPhotoAlbums.socialPhotoAlbums != null)
+        SocialPhotoAlbums.socialPhotoAlbums.finish();
+      if (ComposeMessageActivity.composeMessageActivity != null)
+        ComposeMessageActivity.composeMessageActivity.finish();
+      if (SocialActivity.socialActivity != null)
+        SocialActivity.socialActivity.finish();
 
       break;
 

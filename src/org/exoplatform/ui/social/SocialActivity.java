@@ -13,9 +13,11 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 
 public class SocialActivity extends MyActionBar {
-  private LinearLayout     activityStreamWrap;
+  private LinearLayout         activityStreamWrap;
 
-  private SocialController socialController;
+  private SocialController     socialController;
+
+  public static SocialActivity socialActivity;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,7 @@ public class SocialActivity extends MyActionBar {
     addActionBarItem();
     getActionBar().getItem(1).setDrawable(R.drawable.gd_action_bar_compose);
     setActionBarContentView(R.layout.activitybrowserview);
-
+    socialActivity = this;
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     init();
   }
@@ -45,6 +47,7 @@ public class SocialActivity extends MyActionBar {
     socialController.onCancelLoad();
     finish();
   }
+
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {

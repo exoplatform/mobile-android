@@ -45,6 +45,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
   private String            titleString;
 
   private String            okString;
+  
+  public static SettingActivity settingActivity;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.exosetting);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    settingActivity = this;
     init();
   }
 

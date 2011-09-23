@@ -13,6 +13,8 @@ import android.widget.ListView;
 public class DashboardActivity extends MyListActivity {
 
   private DashboardController controller;
+  
+  public static DashboardActivity dashboardActivity;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -20,7 +22,7 @@ public class DashboardActivity extends MyListActivity {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
 
     setTitle("Dashboard");
-
+    dashboardActivity = this;
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     ListView listView = getListView();
     listView.setBackgroundColor(Color.rgb(8, 56, 123));

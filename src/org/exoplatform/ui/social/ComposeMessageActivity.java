@@ -91,6 +91,12 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
+      if (SocialActivity.socialActivity != null) {
+        SocialActivity.socialActivity.finish();
+      }
+      if (SocialDetailActivity.socialDetailActivity != null) {
+        SocialDetailActivity.socialDetailActivity.finish();
+      }
       destroy();
       break;
 

@@ -71,7 +71,7 @@ public class SettingServerListEditionActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-//    super.onBackPressed();
+    // super.onBackPressed();
     Intent intent = new Intent(this, SettingActivity.class);
     startActivity(intent);
     finish();
@@ -83,6 +83,8 @@ public class SettingServerListEditionActivity extends MyActionBar {
     switch (position) {
 
     case -1:
+      if (SettingActivity.settingActivity != null)
+        SettingActivity.settingActivity.finish();
       finish();
       break;
 
