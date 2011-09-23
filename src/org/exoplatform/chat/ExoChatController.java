@@ -4,11 +4,9 @@ import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
-import org.exoplatform.chat.entity.ExoChatMessageContent;
-import org.exoplatform.controller.AppController;
-import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.model.ChatMessageContent;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.widget.MyActionBar;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.filter.MessageTypeFilter;
@@ -17,19 +15,14 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
 
-import com.cyrilmottier.android.greendroid.R;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,26 +30,28 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cyrilmottier.android.greendroid.R;
+
 //Chat windows view controller
 public class ExoChatController extends MyActionBar {
   // List message content for each user
-  public static List<ExoChatMessageContent> listChatContent = new ArrayList<ExoChatMessageContent>();
+  public static List<ChatMessageContent> listChatContent = new ArrayList<ChatMessageContent>();
 
   public static String                      currentChatStr  = "";                                    // Current
 
   // chat
   // user
 
-  EditText                                  messageEditText;                                         // Chat
+  private EditText                          messageEditText;                                         // Chat
 
   // text
   // field
 
-  Button                                    sendMessageBtn;                                          // Send
+  private Button                            sendMessageBtn;                                          // Send
 
   // button
 
-  static ListView                           conversationView;                                        // Chat
+  private static ListView                   conversationView;                                        // Chat
 
   // conversation
   public static ExoChatController           eXoChatControllerInstance;                               // Instance
@@ -74,7 +69,7 @@ public class ExoChatController extends MyActionBar {
 
   private String                            fromChatStr;                                             // Source
 
-  String                                    strCannotBackToPreviousPage;
+  private String                            strCannotBackToPreviousPage;
 
   /** Called when the activity is first created. */
   @Override
@@ -125,7 +120,7 @@ public class ExoChatController extends MyActionBar {
             message.setBody(msg);
             ExoChatListController.conn.sendPacket(message);
 
-            listChatContent.add(new ExoChatMessageContent("Me", msg));
+            listChatContent.add(new ChatMessageContent("Me", msg));
             messageEditText.setText("");
             setListAdapter();
 
@@ -152,8 +147,8 @@ public class ExoChatController extends MyActionBar {
             fromChatStr = ExoChatListController.listChatRosterEntry.get(i).address;
             final String chatFromName = fromChatStr.substring(0, fromChatStr.lastIndexOf("@"));
             if (fromName.equalsIgnoreCase(fromChatStr)) {
-              List<ExoChatMessageContent> msgContent = ExoChatListController.arrListChat.get(i);
-              msgContent.add(new ExoChatMessageContent(chatFromName, message.getBody()));
+              List<ChatMessageContent> msgContent = ExoChatListController.arrListChat.get(i);
+              msgContent.add(new ChatMessageContent(chatFromName, message.getBody()));
               ExoChatListController.arrListChat.set(i, msgContent);
 
               if (fromName.equalsIgnoreCase(ExoChatController.currentChatStr)) {
@@ -183,7 +178,7 @@ public class ExoChatController extends MyActionBar {
 
     ExoChatListController.conn.addPacketListener(packetListener, filter);
 
-    changeLanguage(AppController.bundle);
+    changeLanguage();
 
     setListAdapter();
 
@@ -213,7 +208,6 @@ public class ExoChatController extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-    super.onBackPressed();
     finishMe();
   }
 
@@ -228,7 +222,7 @@ public class ExoChatController extends MyActionBar {
         return (rowView);
       }
 
-      private void bindView(View view, ExoChatMessageContent msgContent) {
+      private void bindView(View view, ChatMessageContent msgContent) {
         TextView name = (TextView) view.findViewById(R.id.TextView_Name);
         name.setText(msgContent.name);
 
@@ -263,24 +257,15 @@ public class ExoChatController extends MyActionBar {
   }
 
   // Set language
-  public void changeLanguage(ResourceBundle resourceBundle) {
-
+  public void changeLanguage() {
+    LocalizationHelper bundle = LocalizationHelper.getInstance();
     String strsendMessageBtn = "";
     String strcloseBtn = "";
-    try {
-      strsendMessageBtn = new String(resourceBundle.getString("Send").getBytes("ISO-8859-1"),
-                                     "UTF-8");
-      strcloseBtn = new String(resourceBundle.getString("CloseButton").getBytes("ISO-8859-1"),
-                               "UTF-8");
-      strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage")
-                                                             .getBytes("ISO-8859-1"), "UTF-8");
-    } catch (Exception e) {
-
-    }
+    strsendMessageBtn = bundle.getString("Send");
+    strcloseBtn = bundle.getString("CloseButton");
+    strCannotBackToPreviousPage = bundle.getString("CannotBackToPreviousPage");
 
     sendMessageBtn.setText(strsendMessageBtn);
-
-    // _delegate.createAdapter();
 
   }
 

@@ -5,12 +5,10 @@ import greendroid.widget.ActionBarItem;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ResourceBundle;
 
-import org.exoplatform.chat.entity.ChatMember;
-import org.exoplatform.chat.entity.ExoChatMessageContent;
-import org.exoplatform.controller.AppController;
-import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.model.ChatMemberInfo;
+import org.exoplatform.model.ChatMessageContent;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.widget.MyActionBar;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketListener;
@@ -26,13 +24,10 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
 
-import com.cyrilmottier.android.greendroid.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +39,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cyrilmottier.android.greendroid.R;
+
 //Chat list view controller
 public class ExoChatListController extends MyActionBar {
 
@@ -54,17 +51,16 @@ public class ExoChatListController extends MyActionBar {
 
   public static ExoChatListController                  eXoChatListControllerInstance; // Instance
 
-
   public static XMPPConnection                         conn;                         // Interact
 
   // with
   // server
 
-  public static List<ChatMember>                       listChatRosterEntry;          // Roster
+  public static List<ChatMemberInfo>                       listChatRosterEntry;          // Roster
 
   // array
 
-  public static ArrayList<List<ExoChatMessageContent>> arrListChat = null;           // Chat
+  public static ArrayList<List<ChatMessageContent>> arrListChat = null;           // Chat
 
   // message
   // array
@@ -83,12 +79,12 @@ public class ExoChatListController extends MyActionBar {
 
   public static PacketListener                         packetListener;
 
-  private ExoChatListAdapter                                   chatsAdapter;
+  private ExoChatListAdapter                           chatsAdapter;
 
-  private String                                               strCannotBackToPreviousPage;
+  private String                                       strCannotBackToPreviousPage;
 
   // Chat user info
-  
+
   // Constructor
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -118,12 +114,12 @@ public class ExoChatListController extends MyActionBar {
           String fromName = StringUtils.parseBareAddress(message.getFrom());
 
           for (int i = 0; i < listChatRosterEntry.size(); i++) {
-            ChatMember member = listChatRosterEntry.get(i);
+            ChatMemberInfo member = listChatRosterEntry.get(i);
             fromChatStr = member.address;
             final String chatFromName = fromChatStr.substring(0, fromChatStr.lastIndexOf("@"));
             if (fromName.equalsIgnoreCase(fromChatStr)) {
-              List<ExoChatMessageContent> str = arrListChat.get(i);
-              str.add(new ExoChatMessageContent(chatFromName, message.getBody()));
+              List<ChatMessageContent> str = arrListChat.get(i);
+              str.add(new ChatMessageContent(chatFromName, message.getBody()));
               arrListChat.set(i, str);
 
               if (fromName.equalsIgnoreCase(ExoChatController.currentChatStr)) {
@@ -176,7 +172,7 @@ public class ExoChatListController extends MyActionBar {
               msg.show();
 
               for (int i = 0; i < listChatRosterEntry.size(); i++) {
-                ChatMember tmp = listChatRosterEntry.get(i);
+                ChatMemberInfo tmp = listChatRosterEntry.get(i);
                 if (from.equalsIgnoreCase(tmp.address)) {
                   if (status.equalsIgnoreCase("available"))
                     tmp.isOnline = true;
@@ -212,7 +208,7 @@ public class ExoChatListController extends MyActionBar {
       }
     };
 
-    changeLanguage(AppController.bundle);
+    changeLanguage();
 
     if (conn.isAuthenticated()) {
       conn.getRoster().addRosterListener(rosterListener);
@@ -242,10 +238,8 @@ public class ExoChatListController extends MyActionBar {
     return true;
   }
 
-
   @Override
   public void onBackPressed() {
-    super.onBackPressed();
     finish();
   }
 
@@ -261,9 +255,9 @@ public class ExoChatListController extends MyActionBar {
   private void setArrayListChat() {
     if (arrListChat == null) {
       int size = listChatRosterEntry.size();
-      arrListChat = new ArrayList<List<ExoChatMessageContent>>(size);
+      arrListChat = new ArrayList<List<ChatMessageContent>>(size);
       for (int i = 0; i < size; i++) {
-        List<ExoChatMessageContent> tmp = new ArrayList<ExoChatMessageContent>();
+        List<ChatMessageContent> tmp = new ArrayList<ChatMessageContent>();
         arrListChat.add(tmp);
       }
     }
@@ -289,8 +283,8 @@ public class ExoChatListController extends MyActionBar {
   }
 
   // Get chat user list
-  public List<ChatMember> getListChat() {
-    List<ChatMember> list = new ArrayList<ChatMember>();
+  public List<ChatMemberInfo> getListChat() {
+    List<ChatMemberInfo> list = new ArrayList<ChatMemberInfo>();
 
     Roster roster = conn.getRoster();
 
@@ -302,7 +296,7 @@ public class ExoChatListController extends MyActionBar {
       boolean isAvailable = false;
       if (presence.getType().toString().equalsIgnoreCase("available"))
         isAvailable = true;
-      ChatMember tmp = new ChatMember(user, isAvailable);
+      ChatMemberInfo tmp = new ChatMemberInfo(user, isAvailable);
       list.add(tmp);
 
     }
@@ -313,9 +307,9 @@ public class ExoChatListController extends MyActionBar {
   // Create adapter for Chat user
   private class ExoChatListAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
-    private List<ChatMember> arrExoChats;
+    private List<ChatMemberInfo> arrExoChats;
 
-    public ExoChatListAdapter(List<ChatMember> chats) {
+    public ExoChatListAdapter(List<ChatMemberInfo> chats) {
       arrExoChats = chats;
     }
 
@@ -339,7 +333,7 @@ public class ExoChatListController extends MyActionBar {
       return (rowView);
     }
 
-    private void bindView(View view, ChatMember chat) {
+    private void bindView(View view, ChatMemberInfo chat) {
       TextView label = (TextView) view.findViewById(R.id.label);
 
       label.setText(chat.getChatName());
@@ -366,20 +360,14 @@ public class ExoChatListController extends MyActionBar {
   }
 
   // Set language
-  public void changeLanguage(ResourceBundle resourceBundle) {
-
+  public void changeLanguage() {
+    LocalizationHelper bundle = LocalizationHelper.getInstance();
     String strTitle = "";
 
-    try {
-      strTitle = new String(resourceBundle.getString("ChatTitle").getBytes("ISO-8859-1"), "UTF-8");
-      strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage")
-                                                             .getBytes("ISO-8859-1"), "UTF-8");
-    } catch (Exception e) {
-
-    }
+    strTitle = bundle.getString("ChatTitle");
+    strCannotBackToPreviousPage = bundle.getString("CannotBackToPreviousPage");
 
     setTitle(strTitle);
 
-    // _delegate.createAdapter();
   }
 }
