@@ -19,6 +19,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.exoplatform.R;
+import org.exoplatform.model.ServerObjInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -35,13 +36,13 @@ import android.util.Xml;
 
 public class ExoServerConfiguration {
 
-  public ArrayList<ServerObj> _arrUserServerList;
-
-  public ArrayList<ServerObj> _arrDefaulServerList;
-
-  public ArrayList<ServerObj> _arrDeletedServerList;
-
-  public ArrayList<ServerObj> _arrServerList;
+//  public ArrayList<ServerObj> _arrUserServerList;
+//
+//  public ArrayList<ServerObj> _arrDefaulServerList;
+//
+//  public ArrayList<ServerObj> _arrDeletedServerList;
+//
+//  public ArrayList<ServerObj> _arrServerList;
 
   public static String        version;
 
@@ -50,7 +51,7 @@ public class ExoServerConfiguration {
   public ExoServerConfiguration(Context context) {
 
     _context = context;
-    _arrServerList = new ArrayList<ServerObj>();
+//    _arrServerList = new ArrayList<ServerObj>();
   }
 
   // Constructor
@@ -121,9 +122,9 @@ public class ExoServerConfiguration {
   }
 
   // Get default server list
-  public static ArrayList<ServerObj> getDefaultServerList(Context _context) {
+  public static ArrayList<ServerObjInfo> getDefaultServerList(Context _context) {
 
-    ArrayList<ServerObj> arrServerList = getServerListWithFileName("");
+    ArrayList<ServerObjInfo> arrServerList = getServerListWithFileName("");
     XmlResourceParser parser = _context.getResources().getXml(R.xml.defaultconfiguaration);
 
     try {
@@ -137,7 +138,7 @@ public class ExoServerConfiguration {
           name = parser.getName().toLowerCase();
 
           if (name.equalsIgnoreCase("server")) {
-            ServerObj serverObj = new ServerObj();
+            ServerObjInfo serverObj = new ServerObjInfo();
             for (int i = 0; i < parser.getAttributeCount(); i++) {
               String attribute = parser.getAttributeName(i).toLowerCase();
               if (attribute.equalsIgnoreCase("name")) {
@@ -186,9 +187,9 @@ public class ExoServerConfiguration {
   }
 
   // Get added/deleted servers
-  public static ArrayList<ServerObj> getServerListWithFileName(String name) {
+  public static ArrayList<ServerObjInfo> getServerListWithFileName(String name) {
 
-    ArrayList<ServerObj> arrServerList = new ArrayList<ServerObj>();
+    ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
 
     String filePath = Environment.getExternalStorageDirectory() + "/eXo/" + name;
     File file = new File(filePath);
@@ -217,7 +218,7 @@ public class ExoServerConfiguration {
           if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
             Element itemElement = (Element) itemNode;
 
-            ServerObj serverObj = new ServerObj();
+            ServerObjInfo serverObj = new ServerObjInfo();
             serverObj._strServerName = itemElement.getAttribute("name");
             serverObj._strServerUrl = itemElement.getAttribute("serverURL");
             serverObj._bSystemServer = false;
@@ -237,7 +238,7 @@ public class ExoServerConfiguration {
   }
 
   // Create user configuration file: deleted & added servers
-  public static boolean createXmlDataWithServerList(ArrayList<ServerObj> objList,
+  public static boolean createXmlDataWithServerList(ArrayList<ServerObjInfo> objList,
                                                     String fileName,
                                                     String appVersion) {
     boolean returnValue = false;
@@ -290,7 +291,7 @@ public class ExoServerConfiguration {
 
       // i indent code just to have a view similar to xml-tree
       for (int i = 0; i < objList.size(); i++) {
-        ServerObj serverObj = objList.get(i);
+        ServerObjInfo serverObj = objList.get(i);
         serializer.startTag(null, "server");
         serializer.attribute(null, "name", serverObj._strServerName);
         serializer.attribute(null, "serverURL", serverObj._strServerUrl);
