@@ -2,7 +2,6 @@ package org.exoplatform.model;
 
 import java.util.List;
 
-import org.exoplatform.dashboard.entity.ExoGadget;
 
 
 
@@ -14,11 +13,11 @@ public class GateInDbItem {
 
   public String          _strUrlDbItem;    // Dashboard URL
 
-  public List<ExoGadget> _arrGadgetsInItem; // Gadget list
+  public List<GadgetInfo> _arrGadgetsInItem; // Gadget list
 
   // Constructor
 
-  public GateInDbItem(String name, String url, List<ExoGadget> arrGadgets) {
+  public GateInDbItem(String name, String url, List<GadgetInfo> arrGadgets) {
 
     _strDbItemName = name;
     _strUrlDbItem = url;
