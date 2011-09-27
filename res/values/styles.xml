@@ -52,6 +52,7 @@
 	</style>
 	<style name="textview_like">
 		<item name="android:textSize">12sp</item>
+		<item name="android:textColor">#FFFFFF</item>
 	</style>
 	
     
