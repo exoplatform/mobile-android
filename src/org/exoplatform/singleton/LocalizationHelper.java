@@ -61,12 +61,11 @@ public class LocalizationHelper {
   }
 
   /*
-   * get key value in localization resource
-   * return null if the key is not exist 
+   * get key value in localization resource return null if the key is not exist
    */
   public String getString(String key) {
     try {
-      return resBundle.getString(key);
+      return new String(resBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
     } catch (Exception e) {
       Log.e("LOCALIZATION", "Missing key " + key + " in localization resources");
       return null;

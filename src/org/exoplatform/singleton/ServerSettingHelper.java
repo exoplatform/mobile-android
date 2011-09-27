@@ -10,14 +10,20 @@ import org.exoplatform.model.ServerObjInfo;
  */
 
 public class ServerSettingHelper {
-  //The index of server url was selected in setting
-  private int                        selectedServerIndex;               
-  //if this server url is new url
-  private boolean                    isNewServer;                       
+  // The index of server url was selected in setting
+  private int                        selectedServerIndex;
 
-  private String                     version;
+  // if this server url is new url
+  private boolean                    isNewServer;
+
+  // The application version number
+  private String                     applicationVersion;
+
+  // the server version number
+  private String                     serverVersion;
+
   // List of server url
-  private ArrayList<ServerObjInfo>       serverInfoList;                   
+  private ArrayList<ServerObjInfo>   serverInfoList;
 
   private static ServerSettingHelper helper = new ServerSettingHelper();
 
@@ -45,12 +51,20 @@ public class ServerSettingHelper {
     return isNewServer;
   }
 
-  public void setVersion(String ver) {
-    version = ver;
+  public void setApplicationVersion(String version) {
+    applicationVersion = version;
   }
 
-  public String getVersion() {
-    return version;
+  public String getApplicationVersion() {
+    return applicationVersion;
+  }
+
+  public void setServerVersion(String ver) {
+    serverVersion = ver;
+  }
+
+  public String getServerVersion() {
+    return serverVersion;
   }
 
   public void setServerInfoList(ArrayList<ServerObjInfo> list) {
