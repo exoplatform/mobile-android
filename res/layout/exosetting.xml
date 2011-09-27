@@ -30,7 +30,7 @@
 					android:textStyle="bold" android:text="English" />
 				<ImageView android:id="@+id/ImageView_CheckMark_EN"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:layout_marginTop="5dip" android:layout_marginRight="5dip"
+					android:layout_marginTop="5dip" android:layout_marginRight="10dip"
 					android:layout_alignParentRight="true"
 					android:background="@drawable/authenticatecheckmarkiphoneon" />
 
@@ -51,7 +51,7 @@
 				<ImageView android:id="@+id/ImageView_CheckMark_FR"
 					android:layout_below="@id/View_English" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:layout_marginTop="5dip"
-					android:layout_marginRight="5dip" android:layout_alignParentRight="true"
+					android:layout_marginRight="10dip" android:layout_alignParentRight="true"
 					android:background="@drawable/authenticatecheckmarkiphoneon" />
 
 			</RelativeLayout>
@@ -70,7 +70,42 @@
 				android:layout_below="@id/listview_server_wrap"
 				android:layout_width="fill_parent" android:layout_height="44dip"
 				android:text="Modify Server" android:textStyle="bold"
-				android:layout_marginBottom="30dip" android:background="@drawable/settingsuserguidebutton" />
+				android:background="@drawable/settingsuserguidebutton" />
+
+			<TextView android:text="Application Informations"
+				android:layout_below="@id/modify_server_btn" android:id="@+id/setting_application_info_title"
+				android:padding="3dp" android:textSize="18dip" android:textStyle="bold"
+				android:textColor="#ffffff" android:gravity="center_vertical"
+				android:layout_width="fill_parent" android:layout_height="40dip" />
+			<LinearLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:id="@+id/setting_server_version"
+				android:layout_below="@id/setting_application_info_title"
+				android:background="@drawable/settingcellstreachablebackground"
+				android:orientation="horizontal">
+				<TextView android:layout_width="fill_parent"
+					android:id="@+id/setting_server_info_title_text"
+					android:layout_weight="1" android:layout_height="wrap_content"
+					android:textSize="16dip" android:padding="4dp" android:textColor="#000000"
+					android:textStyle="bold" android:text="Server version" />
+				<TextView android:id="@+id/setting_server_info_value_text"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textSize="16dip" android:padding="4dp" android:textColor="#000000"
+					android:textStyle="bold" android:layout_marginRight="10dp" />
+			</LinearLayout>
+			<LinearLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_below="@id/setting_server_version"
+				android:background="@drawable/settingcellstreachablebackground"
+				android:orientation="horizontal">
+				<TextView android:layout_width="fill_parent"
+					android:id="@+id/setting_app_info_title_text"
+					android:layout_weight="1" android:layout_height="wrap_content"
+					android:textSize="16dip" android:padding="4dp" android:textColor="#000000"
+					android:textStyle="bold" android:text="Application version" />
+				<TextView android:id="@+id/setting_app_info_value_text"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textSize="16dip" android:padding="4dp" android:textColor="#000000"
+					android:textStyle="bold" android:layout_marginRight="10dp" />
+			</LinearLayout>
 		</RelativeLayout>
 	</ScrollView>
 </LinearLayout>
