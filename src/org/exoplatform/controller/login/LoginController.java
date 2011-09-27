@@ -79,11 +79,11 @@ public class LoginController {
   }
 
   private class LoginTask extends UserTask<Void, Void, String> {
-    private WaitingDialog _progressDialog;
+    private LoginWaitingDialog _progressDialog;
 
     @Override
     public void onPreExecute() {
-      _progressDialog = new WaitingDialog(mContext, null, strSigning);
+      _progressDialog = new LoginWaitingDialog(mContext, null, strSigning);
       _progressDialog.show();
     }
 
@@ -142,6 +142,20 @@ public class LoginController {
         dialog.show();
       }
       _progressDialog.dismiss();
+    }
+
+  }
+
+  private class LoginWaitingDialog extends WaitingDialog {
+
+    public LoginWaitingDialog(Context context, String titleString, String contentString) {
+      super(context, titleString, contentString);
+    }
+
+    @Override
+    public void onBackPressed() {
+      super.onBackPressed();
+      onCancelLoad();
     }
 
   }

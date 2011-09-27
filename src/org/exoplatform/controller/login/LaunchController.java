@@ -9,6 +9,7 @@ import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 
 import android.content.Context;
@@ -17,11 +18,11 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 
 public class LaunchController {
-  private SharedPreferences    sharedPreference;
+  private SharedPreferences        sharedPreference;
 
-  private ResourceBundle       bundle;
+  private ResourceBundle           bundle;
 
-  private Context              context;
+  private Context                  context;
 
   private ArrayList<ServerObjInfo> _arrDefaulServerList;
 
@@ -68,16 +69,19 @@ public class LaunchController {
     } catch (Exception e) {
 
     }
-
+    //get server version information
+    ExoConnectionUtils.checkPLFVersion();
   }
 
   private void getServerInfo() {
+
     _arrServerList = new ArrayList<ServerObjInfo>();
 
     String appVer = "";
     String oldVer = ExoServerConfiguration.getAppVersion(context);
     try {
       appVer = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+      ServerSettingHelper.getInstance().setApplicationVersion(appVer);
     } catch (NameNotFoundException e) {
     }
 
@@ -114,9 +118,6 @@ public class LaunchController {
         }
 
         ExoServerConfiguration.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
-        ServerSettingHelper.getInstance().setVersion(appVer);
-      } else {
-
       }
 
       _arrDefaulServerList = ExoServerConfiguration.getServerListWithFileName("DefaultServerList.xml");

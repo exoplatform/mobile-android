@@ -8,6 +8,7 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -65,8 +66,6 @@ public class ServerAdapter extends BaseAdapter {
     txtvUrl.setText(serverObj._strServerUrl);
 
     ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-//    if (_intDomainIndex < 0)
-//      _intDomainIndex = pos;
     if (_intDomainIndex == pos)
       imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
     else
@@ -83,9 +82,10 @@ public class ServerAdapter extends BaseAdapter {
 
         _intDomainIndex = pos;
         _strDomain = serverObj._strServerUrl;
+        Log.i("Server URL", _strDomain);
         AccountSetting.getInstance().setDomainIndex(String.valueOf(_intDomainIndex));
         AccountSetting.getInstance().setDomainName(_strDomain);
-
+        
         rowView = getView(_intDomainIndex, null, _listViewServer);
         imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
         imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
