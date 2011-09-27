@@ -42,7 +42,7 @@ public class SettingServerEditionController {
     serverInfoList = ServerSettingHelper.getInstance().getServerInfoList();
     isNewServer = ServerSettingHelper.getInstance().getIsNewServer();
     selectedServerIndex = ServerSettingHelper.getInstance().getSelectedServerIndex();
-    version = ServerSettingHelper.getInstance().getVersion();
+//    version = ServerSettingHelper.getInstance().getVersion();
     changeLanguage();
   }
 
