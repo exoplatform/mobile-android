@@ -4,6 +4,7 @@ import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WarningDialog;
@@ -23,29 +24,35 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class SettingActivity extends MyActionBar implements OnClickListener {
 
-  private View              vEngLish, vFrench;
+  private View                  vEngLish, vFrench;
 
-  private TextView          txtvEnglish, txtvFrench;
+  private TextView              txtvEnglish, txtvFrench;
 
-  private ImageView         imgViewECheckMark, imgViewFCheckMark;
+  private ImageView             imgViewECheckMark, imgViewFCheckMark;
 
-  private TextView          txtvLanguage;                        // Language
+  private TextView              txtvLanguage;                        // Language
 
-  private TextView          txtvServer;                          // Server
-                                                                  // label
+  private TextView              txtvServer;                          // Server
+                                                                      // label
 
-  private LinearLayout      listServerWrap;
+  private LinearLayout          listServerWrap;
 
-  private Button            modifyServerBtn;
+  private Button                modifyServerBtn;
 
-  private SettingController setttingController;
+  private TextView              settingAppInfoTitle;
 
-  private String            errorMessage;
+  private TextView              applicationInfoText;
 
-  private String            titleString;
+  private TextView              serverInfoText;
 
-  private String            okString;
-  
+  private SettingController     setttingController;
+
+  private String                errorMessage;
+
+  private String                titleString;
+
+  private String                okString;
+
   public static SettingActivity settingActivity;
 
   @Override
@@ -60,6 +67,11 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     settingActivity = this;
     init();
   }
+//  @Override
+//  protected void onResume() {
+//    super.onResume();
+//    init();
+//  }
 
   private void init() {
     txtvLanguage = (TextView) findViewById(R.id.TextView_Language);
@@ -78,9 +90,21 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     listServerWrap = (LinearLayout) findViewById(R.id.listview_server_wrap);
     modifyServerBtn = (Button) findViewById(R.id.modify_server_btn);
     modifyServerBtn.setOnClickListener(this);
+
     setttingController = new SettingController(this, imgViewECheckMark, imgViewFCheckMark);
     setttingController.initLocation();
+    
+    settingAppInfoTitle = (TextView) findViewById(R.id.setting_application_info_title);
+    serverInfoText = (TextView) findViewById(R.id.setting_server_info_title_text);
+    String serverVersion = ServerSettingHelper.getInstance().getServerVersion();
+    TextView severValueText = (TextView) findViewById(R.id.setting_server_info_value_text);
+    severValueText.setText(serverVersion);
+    applicationInfoText = (TextView) findViewById(R.id.setting_app_info_title_text);
+    TextView appValueText = (TextView) findViewById(R.id.setting_app_info_value_text);
+    String appVersion = ServerSettingHelper.getInstance().getApplicationVersion();
+    appValueText.setText(appVersion);
     changeLanguage();
+    
     setttingController.setServerList(listServerWrap);
   }
 
@@ -97,6 +121,9 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     String strServerTittle = local.getString("Server");
     String strEnglish = local.getString("English");
     String strFrench = local.getString("French");
+    String applicationInfos = local.getString("ApplicationInformation");
+    String serverVersion = local.getString("ServerVersion");
+    String appVersion = local.getString("ApplicationVersion");
     String settings = local.getString("Settings");
     setTitle(settings);
     String modifyListText = local.getString("ModifyServerList");
@@ -105,6 +132,9 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     txtvFrench.setText(strFrench);
     txtvServer.setText(strServerTittle);
     txtvLanguage.setText(strLanguageTittle);
+    settingAppInfoTitle.setText(applicationInfos);
+    applicationInfoText.setText(appVersion);
+    serverInfoText.setText(serverVersion);
     errorMessage = local.getString("DoNotHavePermision");
     okString = local.getString("OK");
     titleString = local.getString("Warning");

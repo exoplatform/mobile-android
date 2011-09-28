@@ -3,6 +3,7 @@ package org.exoplatform.ui.social;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.social.SocialController;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
@@ -33,6 +34,8 @@ public class SocialActivity extends MyActionBar {
     setActionBarContentView(R.layout.activitybrowserview);
     socialActivity = this;
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
+    String title = LocalizationHelper.getInstance().getString("ActivityStream");
+    setTitle(title);
     init();
   }
 

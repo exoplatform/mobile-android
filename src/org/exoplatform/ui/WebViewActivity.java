@@ -3,19 +3,13 @@ package org.exoplatform.ui;
 import greendroid.widget.ActionBarItem;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.apache.http.cookie.Cookie;
-import org.exoplatform.controller.AppController;
-import org.exoplatform.controller.ExoApplicationsController2;
-import org.exoplatform.document.ExoFilesController;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.MyActionBar;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -53,15 +47,15 @@ public class WebViewActivity extends MyActionBar {
 
     _wvGadget.getSettings().setBuiltInZoomControls(true);
 
-    if (ExoApplicationsController2.webViewMode == 0) {
-
-    } else if (ExoApplicationsController2.webViewMode == 1) {
-
-      _url = Environment.getExternalStorageDirectory() + "/eXo/"
-          + ExoFilesController.myFile.fileName;
-      _titlebar = ExoFilesController.myFile.fileName;
-
-    }
+//    if (ExoApplicationsController2.webViewMode == 0) {
+//
+//    } else if (ExoApplicationsController2.webViewMode == 1) {
+//
+//      _url = Environment.getExternalStorageDirectory() + "/eXo/"
+//          + ExoFilesController.myFile.fileName;
+//      _titlebar = ExoFilesController.myFile.fileName;
+//
+//    }
 
     setTitle(_titlebar.replace("%20", " "));
     _wvGadget.loadUrl(_url);
@@ -78,21 +72,21 @@ public class WebViewActivity extends MyActionBar {
     return true;
   }
 
-  public void finishMe() {
-    if (ExoApplicationsController2.webViewMode == 1) {
-      int index = ExoFilesController.myFile.urlStr.lastIndexOf("/");
-      ExoFilesController.myFile.urlStr = ExoFilesController.myFile.urlStr.substring(0, index);
-
-    } else if (ExoApplicationsController2.webViewMode == 2) {
-      Intent next = new Intent(WebViewActivity.this, SettingActivity.class);
-      startActivity(next);
-    } else {
-      Intent next = new Intent(WebViewActivity.this, DashboardActivity.class);
-      startActivity(next);
-    }
-    finish();
-
-  }
+//  public void finishMe() {
+//    if (ExoApplicationsController2.webViewMode == 1) {
+//      int index = ExoFilesController.myFile.urlStr.lastIndexOf("/");
+//      ExoFilesController.myFile.urlStr = ExoFilesController.myFile.urlStr.substring(0, index);
+//
+//    } else if (ExoApplicationsController2.webViewMode == 2) {
+//      Intent next = new Intent(WebViewActivity.this, SettingActivity.class);
+//      startActivity(next);
+//    } else {
+//      Intent next = new Intent(WebViewActivity.this, DashboardActivity.class);
+//      startActivity(next);
+//    }
+//    finish();
+//
+//  }
 
   private void setupCookies() {
     CookieSyncManager.createInstance(this);

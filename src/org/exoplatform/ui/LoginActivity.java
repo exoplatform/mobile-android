@@ -6,11 +6,13 @@ import org.exoplatform.controller.login.LoginController;
 import org.exoplatform.controller.login.ServerAdapter;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,7 +62,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     this.setContentView(R.layout.login);
     new LaunchController(this, sharedPreference);
     init();
-    changeLanguage();
   }
 
   @Override
@@ -76,7 +77,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
     _edtxUserName.setText(AccountSetting.getInstance().getUsername());
-    
+
     _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
     _edtxPassword.setText(AccountSetting.getInstance().getPassword());
 
@@ -88,8 +89,11 @@ public class LoginActivity extends Activity implements OnClickListener {
     _btnLogIn.setOnClickListener(this);
     _listViewServer = (ListView) findViewById(R.id.ListView_Servers);
     _listViewServer.setVisibility(View.INVISIBLE);
+    _listViewServer.setCacheColorHint(Color.TRANSPARENT);
+    _listViewServer.setFadingEdgeLength(0);
     _listViewServer.setDivider(null);
-    _listViewServer.setDividerHeight(0);
+    _listViewServer.setDividerHeight(1);
+    changeLanguage();
     setServerAdapter();
 
   }
@@ -137,7 +141,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     return false;
   }
 
-//  @Override
+  // @Override
   public void onClick(View view) {
     if (view == _btnLogIn) {
       onLogin();
@@ -147,7 +151,7 @@ public class LoginActivity extends Activity implements OnClickListener {
       view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
       _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneon);
       _btnAccount.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
-      _imageAccount.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneoff);
+      _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_off);
       _edtxUserName.setVisibility(View.INVISIBLE);
       _edtxPassword.setVisibility(View.INVISIBLE);
       _btnLogIn.setVisibility(View.INVISIBLE);
@@ -155,7 +159,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
     if (view == _btnAccount) {
       view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
-      _imageAccount.setBackgroundResource(R.drawable.authenticatecredentialsiconiphoneon);
+      _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_on);
       _btnServer.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
       _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
       _edtxUserName.setVisibility(View.VISIBLE);

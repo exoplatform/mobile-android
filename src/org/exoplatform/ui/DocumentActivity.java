@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import org.apache.http.HttpResponse;
-import org.exoplatform.controller.AppController;
 import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentTask;
 import org.exoplatform.singleton.AccountSetting;
@@ -27,6 +26,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -38,106 +38,109 @@ import android.widget.TextView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class DocumentActivity extends MyActionBar {
-  
-  public static DocumentActivity   _documentActivityInstance; 
-  
-  ListView                         _listViewDocument;
 
-  TextView                         _textViewEmptyPage;
+  public static DocumentActivity _documentActivityInstance;
 
-  ImageView                        _imgViewUpLoadPhoto;
+  ListView                       _listViewDocument;
 
-  ImageView                        _imgViewEmptyPage;
+  TextView                       _textViewEmptyPage;
 
-  Button                           _btnUploadImage;
+  ImageView                      _imgViewUpLoadPhoto;
 
-  Button                           _btnCancelUploadImage;                                                                                                             // "/sdcard/eXo/";
+  ImageView                      _imgViewEmptyPage;
 
-  WaitingDialog                    _progressDialog;
-  
-  String                           _strCannotBackToPreviousPage;
-  String                           _strDownloadFileIntoSDCard;
+  Button                         _btnUploadImage;
 
-  public String                    _sdcard_temp_dir;
-  public String                    _urlDocumentHome; 
-  
-  public DocumentAdapter           _documentAdapter;
+  Button                         _btnCancelUploadImage;       // "/sdcard/eXo/";
+
+  WaitingDialog                  _progressDialog;
+
+  String                         _strCannotBackToPreviousPage;
+
+  String                         _strDownloadFileIntoSDCard;
+
+  public String                  _sdcard_temp_dir;
+
+  public String                  _urlDocumentHome;
+
+  public DocumentAdapter         _documentAdapter;
 
   // Constructor
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-    
+
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.exofilesview);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    
+
     _documentActivityInstance = this;
-    
+
     init();
 
     setViewUploadImage(false);
-    
+
     AccountSetting acc = AccountSetting.getInstance();
     String userName = acc.getUsername();
     String domain = acc.getDomainName();
-    
+
     _urlDocumentHome = ExoDocumentUtils.getDocumentUrl(userName, domain);
-    
+
     DocumentTask documentTask = new DocumentTask(this, this, _urlDocumentHome, null, 0);
     documentTask.execute();
-    
+
   }
-  
+
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     finish();
     return true;
   }
-  
-//Key down listener
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
-      
-      _documentAdapter._urlStr = ExoDocumentUtils.getParentUrl(_documentAdapter._urlStr);
-      
-      if(_documentAdapter._urlStr.length() < _urlDocumentHome.length())
-        finish();
-      else
-      {
-        DocumentTask documentTask = new DocumentTask(this, this, _documentAdapter._urlStr, null, 0); 
-        documentTask.execute();
-      }
+
+  @Override
+  public void onBackPressed() {
+    if (_documentAdapter._urlStr == null) {
+      finish();
     }
+    _documentAdapter._urlStr = ExoDocumentUtils.getParentUrl(_documentAdapter._urlStr);
+    Log.i("_documentAdapter._urlStr", _documentAdapter._urlStr);
 
-    return false;
+    if (_documentAdapter._urlStr.length() < _urlDocumentHome.length())
+      finish();
+    else {
+      DocumentTask documentTask = new DocumentTask(this, this, _documentAdapter._urlStr, null, 0);
+      documentTask.execute();
+    }
   }
-  
+
   @Override
   protected void onResume() {
     super.onResume();
     init();
   }
-  
+
   private void init() {
 
-    if(_listViewDocument == null)
-    {
+    if (_listViewDocument == null) {
       _listViewDocument = (ListView) findViewById(R.id.ListView_Files);
-      
+
       _btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
       _btnUploadImage.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
 
           setViewUploadImage(false);
-          
+
           String sourceUrl = _documentAdapter._documentActionDialog.myFile.urlStr;
-          DocumentTask documentTask = new DocumentTask(_documentActivityInstance, _documentActivityInstance, sourceUrl, null, 4);
+          DocumentTask documentTask = new DocumentTask(_documentActivityInstance,
+                                                       _documentActivityInstance,
+                                                       sourceUrl,
+                                                       null,
+                                                       4);
           documentTask.execute();
         }
       });
-      
+
       _btnCancelUploadImage = (Button) findViewById(R.id.ButtonCancel);
       _btnCancelUploadImage.setOnClickListener(new View.OnClickListener() {
 
@@ -145,25 +148,25 @@ public class DocumentActivity extends MyActionBar {
           setViewUploadImage(false);
         }
       });
-      
+
       _imgViewUpLoadPhoto = (ImageView) findViewById(R.id.ImageView);
-      
+
       _imgViewEmptyPage = (ImageView) findViewById(R.id.ImageViewEmptyPage);
       _imgViewEmptyPage.setVisibility(View.INVISIBLE);
-      
+
       _textViewEmptyPage = (TextView) findViewById(R.id.TextView_EmptyPage);
-      _textViewEmptyPage.setVisibility(View.INVISIBLE);  
+      _textViewEmptyPage.setVisibility(View.INVISIBLE);
     }
-    
+
     changeLanguage();
-    
+
   }
-  
+
   public void setDocumentAdapter() {
-    
+
     _listViewDocument.setAdapter(_documentAdapter);
   }
-  
+
   // Show/hide taken photo
   private void setViewUploadImage(boolean isVieweXoImage) {
     int viewImageMode;
@@ -181,48 +184,47 @@ public class DocumentActivity extends MyActionBar {
     _btnUploadImage.setVisibility(viewImageMode);
     _btnCancelUploadImage.setVisibility(viewImageMode);
   }
-  
+
   // Refresh files view
-  Runnable reloadFileAdapter = new Runnable() {
+  Runnable        reloadFileAdapter     = new Runnable() {
 
-    public void run() {
+                                          public void run() {
 
-      onResume();
-      
-      }
-    };
+                                            onResume();
+
+                                          }
+                                        };
 
   // Dismiss progress dialog
   public Runnable dismissProgressDialog = new Runnable() {
 
-    public void run() {
-      
-      _progressDialog.dismiss();
-    }
-  };
-  
+                                          public void run() {
+
+                                            _progressDialog.dismiss();
+                                          }
+                                        };
+
   // Show progress dialog
   public void showProgressDialog(boolean isloadingData) {
+    LocalizationHelper local = LocalizationHelper.getInstance();
     String strLoadingDataFromServer = "";
     try {
-        if (isloadingData)
-          strLoadingDataFromServer = new String(AppController.bundle.getString("LoadingDataFromServer")
-                                                                  .getBytes("ISO-8859-1"),
-                                              "UTF-8");
-        else
-          strLoadingDataFromServer = new String(AppController.bundle.getString("FileProcessing")
-                                                                  .getBytes("ISO-8859-1"), "UTF-8");
+      if (isloadingData)
+        strLoadingDataFromServer = local.getString("LoadingDataFromServer");
+
+      else
+        strLoadingDataFromServer = local.getString("FileProcessing");
 
     } catch (Exception e) {
 
       strLoadingDataFromServer = "";
     }
-    
+
     _progressDialog = new WaitingDialog(this, null, strLoadingDataFromServer);
     _progressDialog.show();
   }
-  
-//Take a photo
+
+  // Take a photo
   public void takePicture() {
     String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
     _sdcard_temp_dir = parentPath + PhotoUltils.getImageFileName();
@@ -255,8 +257,7 @@ public class DocumentActivity extends MyActionBar {
     }
 
   }
-  
-  
+
   // Delete file/folder method
   public boolean deleteFile(String url) {
     HttpResponse response;
@@ -274,9 +275,9 @@ public class DocumentActivity extends MyActionBar {
     } catch (Exception e) {
       return false;
     }
-    
+
   }
-  
+
   // Copy file/folder method
   public boolean copyFile(String source, String destination) {
 
@@ -296,8 +297,8 @@ public class DocumentActivity extends MyActionBar {
       return false;
     }
   }
-  
-//Move file/folder method
+
+  // Move file/folder method
   public boolean moveFile(String source, String destination) {
     HttpResponse response;
     try {
@@ -319,15 +320,15 @@ public class DocumentActivity extends MyActionBar {
 
   // Set language
   public void changeLanguage() {
-    
+
     LocalizationHelper local = LocalizationHelper.getInstance();
-    
+
     String strUploadFile = local.getString("Upload");
     String strCancel = local.getString("Cancel");
     String strEmptyPage = local.getString("EmptyPage");
     _strCannotBackToPreviousPage = local.getString("CannotBackToPreviousPage");
     _strDownloadFileIntoSDCard = local.getString("DownloadFileInToSDCard");
-    
+
     _btnUploadImage.setText(strUploadFile);
     _btnCancelUploadImage.setText(strCancel);
     _textViewEmptyPage.setText(strEmptyPage);
