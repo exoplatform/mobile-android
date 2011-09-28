@@ -126,7 +126,6 @@ public class LoginController {
         accountSetting.setIsNewVersion(isNewVersion);
         Intent next = new Intent(mContext, HomeActivity.class);
         mContext.startActivity(next);
-        ((Activity) mContext).finish();
 
       } else if (result.equalsIgnoreCase("NO")) {
         WarningDialog dialog = new WarningDialog(mContext,
