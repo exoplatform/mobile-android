@@ -42,6 +42,8 @@ public class DashboardController {
   public void setAdapter(ArrayList<DashBoardItem> result) {
     activity.setListAdapter(new DashboardItemAdapter(activity, result));
   }
+  
+  
 
   // Get gadget list
   public List<GadgetInfo> getGadgetsList() {

@@ -13,14 +13,14 @@ import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.utils.WebdavMethod;
+import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 
 public class PostStatusTask extends UserTask<Void, Void, Integer> {
-  private ProgressDialog _progressDialog;
+  private PostWaitingDialog _progressDialog;
 
   private Context        mContext;
 
@@ -37,9 +37,12 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
   private String         warningTitle;
 
   private String         uploadUrl;
+  
+  private ComposeMessageController messageController;
 
-  public PostStatusTask(Context context, String dir, String content) {
+  public PostStatusTask(Context context, String dir, String content,ComposeMessageController controller) {
     mContext = context;
+    messageController = controller;
     sdcard_temp_dir = dir;
     composeMessage = content;
     changeLanguage();
@@ -47,7 +50,8 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
 
   @Override
   public void onPreExecute() {
-    _progressDialog = ProgressDialog.show(mContext, null, loadingData);
+    _progressDialog = new PostWaitingDialog(mContext, null, loadingData);
+    _progressDialog.show();
   }
 
   @Override
@@ -128,5 +132,16 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
     errorString = bundle.getString("PostError");
     warningTitle = bundle.getString("Warning");
   }
+private class PostWaitingDialog extends WaitingDialog{
 
+  public PostWaitingDialog(Context context, String titleString, String contentString) {
+    super(context, titleString, contentString);
+  }
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
+    messageController.onCancelPostTask();
+  }
+  
+}
 }

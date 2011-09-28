@@ -72,7 +72,14 @@ public class ComposeMessageController {
 
   private void onPostTask(String composeMessage, String sdcard) {
     if (mPostTask == null || mPostTask.getStatus() == PostStatusTask.Status.FINISHED) {
-      mPostTask = (PostStatusTask) new PostStatusTask(mContext, sdcard, composeMessage).execute();
+      mPostTask = (PostStatusTask) new PostStatusTask(mContext, sdcard, composeMessage, this).execute();
+    }
+  }
+
+  public void onCancelPostTask() {
+    if (mPostTask != null && mPostTask.getStatus() == PostStatusTask.Status.RUNNING) {
+      mPostTask.cancel(true);
+      mPostTask = null;
     }
   }
 

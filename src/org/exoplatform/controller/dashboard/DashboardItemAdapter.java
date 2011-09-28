@@ -4,19 +4,16 @@ import greendroid.image.ImageProcessor;
 import greendroid.widget.AsyncImageView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.exoplatform.R;
-import org.exoplatform.controller.ExoApplicationsController2;
 import org.exoplatform.model.DashBoardItem;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoConstants;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -142,7 +139,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 
   public void showGadget(GadgetInfo gadget) {
 
-    ExoApplicationsController2.webViewMode = 0;
+//    ExoApplicationsController2.webViewMode = 0;
     DefaultHttpClient client = new DefaultHttpClient();
 
     HttpGet get = new HttpGet(gadget._strGadgetUrl);

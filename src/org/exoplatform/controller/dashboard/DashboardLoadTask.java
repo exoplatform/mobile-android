@@ -7,25 +7,25 @@ import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.model.GateInDbItem;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 
 public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbItem>> {
-  private DashboardController dashboardController;
+  private DashboardController    dashboardController;
 
-  private Context             mContext;
+  private Context                mContext;
 
-  private String              loadingData;
+  private String                 loadingData;
 
-  private String              okString;
+  private String                 okString;
 
-  private String              titleString;
+  private String                 titleString;
 
-  private String              contentString;
+  private String                 contentString;
 
-  private ProgressDialog      _progressDialog;
+  private DashboardWaitingDialog _progressDialog;
 
   public DashboardLoadTask(Context context, DashboardController controller) {
     mContext = context;
@@ -35,7 +35,8 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
 
   @Override
   public void onPreExecute() {
-    _progressDialog = ProgressDialog.show(mContext, null, loadingData);
+    _progressDialog = new DashboardWaitingDialog(mContext, null, loadingData);
+    _progressDialog.show();
   }
 
   @Override
@@ -49,8 +50,6 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
       ArrayList<DashBoardItem> items = new ArrayList<DashBoardItem>();
       for (int i = 0; i < result.size(); i++) {
         GateInDbItem gadgetTab = result.get(i);
-        System.out.println("gadgetTab._strDbItemName" + gadgetTab._strDbItemName);
-
         items.add(new DashBoardItem(gadgetTab._strDbItemName, null));
         for (int j = 0; j < gadgetTab._arrGadgetsInItem.size(); j++) {
           GadgetInfo gadget = gadgetTab._arrGadgetsInItem.get(j);
@@ -71,5 +70,18 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
     okString = location.getString("OK");
     titleString = location.getString("Warning");
     contentString = location.getString("ConnectionError");
+  }
+
+  private class DashboardWaitingDialog extends WaitingDialog {
+
+    public DashboardWaitingDialog(Context context, String titleString, String contentString) {
+      super(context, titleString, contentString);
+    }
+
+    @Override
+    public void onBackPressed() {
+      super.onBackPressed();
+      dashboardController.onCancelLoad();
+    }
   }
 }

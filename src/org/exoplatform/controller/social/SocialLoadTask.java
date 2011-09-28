@@ -12,7 +12,7 @@ import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.utils.UserTask;
-import org.exoplatform.widget.SocialWaitingDialog;
+import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
@@ -30,8 +30,9 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
 
   private String              contentString;
 
-  private SocialController socialController;
-  public SocialLoadTask(Context context,SocialController controller) {
+  private SocialController    socialController;
+
+  public SocialLoadTask(Context context, SocialController controller) {
     mContext = context;
     socialController = controller;
     changeLanguage();
@@ -102,6 +103,20 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
       dialog.show();
     }
     _progressDialog.dismiss();
+
+  }
+
+  private class SocialWaitingDialog extends WaitingDialog {
+
+    public SocialWaitingDialog(Context context, String titleString, String contentString) {
+      super(context, titleString, contentString);
+    }
+
+    @Override
+    public void onBackPressed() {
+      super.onBackPressed();
+      socialController.onCancelLoad();
+    }
 
   }
 

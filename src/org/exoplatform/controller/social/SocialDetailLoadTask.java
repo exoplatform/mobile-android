@@ -15,39 +15,40 @@ import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.model.RestLike;
 import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 
 public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
-  private RestActivity                selectedRestActivity;
+  private RestActivity                 selectedRestActivity;
 
   private LinkedList<SocialLikeInfo>   likeLinkedList    = new LinkedList<SocialLikeInfo>();
 
   private ArrayList<SocialCommentInfo> socialCommentList = new ArrayList<SocialCommentInfo>();
 
-  private ProgressDialog              _progressDialog;
+  private SocialDetailWaitingDialog    _progressDialog;
 
-  private Context                     mContext;
+  private Context                      mContext;
 
-  private String                      loadingData;
+  private String                       loadingData;
 
-  private String                      youText;
+  private String                       youText;
 
-  private String                      okString;
+  private String                       okString;
 
-  private String                      titleString;
+  private String                       titleString;
 
-  private String                      contentString;
+  private String                       contentString;
 
-  private SocialDetailController      detailController;
+  private SocialDetailController       detailController;
 
-  private RestProfile                 profile;
+  private RestProfile                  profile;
 
-  private String                      title;
+  private String                       title;
 
-  private long                        postedTime;
+  private long                         postedTime;
 
   public SocialDetailLoadTask(Context context, SocialDetailController controller) {
     mContext = context;
@@ -57,7 +58,8 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
   @Override
   public void onPreExecute() {
-    _progressDialog = ProgressDialog.show(mContext, null, loadingData);
+    _progressDialog = new SocialDetailWaitingDialog(mContext, null, loadingData);
+    _progressDialog.show();
   }
 
   @Override
@@ -112,6 +114,8 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
       return 1;
     } catch (RuntimeException e) {
+      Log.e("SocialDetailLoadTask", e.getMessage());
+      Log.e("SocialDetailLoadTask", e.toString());
       return 0;
     }
   }
@@ -140,4 +144,17 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
   }
 
+  private class SocialDetailWaitingDialog extends WaitingDialog {
+
+    public SocialDetailWaitingDialog(Context context, String titleString, String contentString) {
+      super(context, titleString, contentString);
+    }
+
+    @Override
+    public void onBackPressed() {
+      super.onBackPressed();
+      detailController.onCancelLoad();
+    }
+
+  }
 }
