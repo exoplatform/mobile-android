@@ -5,10 +5,15 @@ import greendroid.widget.ActionBarItem;
 import org.exoplatform.controller.home.HomeActionListenner;
 import org.exoplatform.controller.home.HomeAdapter;
 import org.exoplatform.controller.home.HomeController;
+import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.LogoutDialog;
 import org.exoplatform.widget.MyActionBar;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.widget.GridView;
 
@@ -19,6 +24,8 @@ public class HomeActivity extends MyActionBar {
 
   private HomeController homeController;
 
+  private String         settingText;
+  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -28,12 +35,34 @@ public class HomeActivity extends MyActionBar {
     addActionBarItem(R.drawable.signout);
     super.setTitle("eXo");
     init();
+    changeLanguage();
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     init();
+  }
+  
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+
+    menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
+
+    return true;
+  }
+  
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+
+    int selectedItemIndex = item.getItemId();
+
+    if (selectedItemIndex == 1) {
+      Intent next = new Intent(HomeActivity.this, SettingActivity.class);
+      next.putExtra(ExoConstants.SETTING_TYPE, 0);
+      startActivity(next);
+    }
+    return false;
   }
 
   @Override
@@ -69,4 +98,9 @@ public class HomeActivity extends MyActionBar {
 
   }
 
+  public void changeLanguage() {
+    LocalizationHelper local = LocalizationHelper.getInstance();
+    settingText = local.getString("Settings");
+  }
+  
 }

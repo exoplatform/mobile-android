@@ -26,7 +26,7 @@ public class HomeController {
 
   private String  dashboardText;
 
-  private String  settingText;
+//  private String  settingText;
 
   private Context mContext;
 
@@ -57,10 +57,6 @@ public class HomeController {
     item = new HomeItem(bm, 4, dashboardText);
     itemList.add(item);
 
-    bm = BitmapFactory.decodeResource(resource, R.drawable.homesettingsiconiphone);
-    item = new HomeItem(bm, 5, settingText);
-    itemList.add(item);
-
     HomeHelper.getInstance().setHomeItemList(itemList);
   }
 
@@ -75,7 +71,6 @@ public class HomeController {
     }
     
     ((Activity) mContext).finish();
-//    ((Activity) mContext).finish();
   }
 
   private void changeLanguage() {
@@ -84,7 +79,7 @@ public class HomeController {
     chatText = location.getString("ChatApplication");
     documentText = location.getString("Documents");
     dashboardText = location.getString("Dashboard");
-    settingText = location.getString("Settings");
+//    settingText = location.getString("Settings");
   }
 
 }
