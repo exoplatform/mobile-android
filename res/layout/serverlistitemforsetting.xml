@@ -20,7 +20,7 @@
 		<ImageView android:id="@+id/ImageView_Checked"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:layout_marginTop="5dip" android:layout_alignParentRight="true"
-			android:layout_toLeftOf="@+id/TextView_URL" android:background="@drawable/authenticatecheckmarkiphoneon"
+			android:layout_toLeftOf="@+id/TextView_URL" android:background="@drawable/authenticate_checkmark_on"
 			android:tag="2" />
 	</RelativeLayout>
 </RelativeLayout>

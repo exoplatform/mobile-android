@@ -32,7 +32,7 @@
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:layout_marginTop="5dip" android:layout_marginRight="10dip"
 					android:layout_alignParentRight="true"
-					android:background="@drawable/authenticatecheckmarkiphoneon" />
+					android:background="@drawable/authenticate_checkmark_on" />
 
 
 				<View android:id="@+id/View_French" android:layout_width="fill_parent"
@@ -52,7 +52,7 @@
 					android:layout_below="@id/View_English" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:layout_marginTop="5dip"
 					android:layout_marginRight="10dip" android:layout_alignParentRight="true"
-					android:background="@drawable/authenticatecheckmarkiphoneon" />
+					android:background="@drawable/authenticate_checkmark_on" />
 
 			</RelativeLayout>
 
