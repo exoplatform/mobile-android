@@ -11,20 +11,17 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.exoplatform.R;
-import org.exoplatform.controller.AppController;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class ExoImageView extends Activity {
 
@@ -60,13 +57,13 @@ public class ExoImageView extends Activity {
         }
 
         String localFile = "file:///sdcard/eXo/";
-        saveToLocal(AppController.auth, AppController.credential, imageUri, localFile, fileName);
-        putFileToServerFromLocal(AppController.auth,
-                                 AppController.credential,
-                                 ExoFilesController.myFile.urlStr,
-                                 localFile,
-                                 fileName,
-                                 "image/jpeg");
+//        saveToLocal(AppController.auth, AppController.credential, imageUri, localFile, fileName);
+//        putFileToServerFromLocal(AppController.auth,
+//                                 AppController.credential,
+//                                 ExoFilesController.myFile.urlStr,
+//                                 localFile,
+//                                 fileName,
+//                                 "image/jpeg");
       }
 
     });

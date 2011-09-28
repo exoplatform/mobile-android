@@ -24,13 +24,15 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.chat.ExoChatListController;
-import org.exoplatform.controller.AppController;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+
+import android.util.Log;
 
 //interact with server
 public class ExoConnectionUtils {
@@ -131,9 +133,9 @@ public class ExoConnectionUtils {
 
   // Get sub URL path
   private static String getExtend(String domain) {
-   
+
     return "/portal/private/intranet";
-    
+
   }
 
   // Send request with authentication
@@ -375,10 +377,8 @@ public class ExoConnectionUtils {
 
     InputStream ipstr = null;
     try {
-      String strUserName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
-                                                                    "exo_prf_username");
-      String strPassword = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
-                                                                    "exo_prf_password");
+      String strUserName = AccountSetting.getInstance().getUsername();
+      String strPassword = AccountSetting.getInstance().getPassword();
 
       urlStr = urlStr.replace(" ", "%20");
 
@@ -461,10 +461,40 @@ public class ExoConnectionUtils {
     }
     return ipstr;
   }
+//get input stream from URL without authentication
+  private static InputStream sendRequestWithoutAuthen(String strUrlRequest) {
+    InputStream ipstr = null;
+    try {
+      HttpResponse response;
+      HttpEntity entity;
+      HttpParams httpParameters = new BasicHttpParams();
+      HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
+      HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+      HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+
+      DefaultHttpClient httpClientPlf = new DefaultHttpClient(httpParameters);
+      HttpGet httpGet = new HttpGet(strUrlRequest);
+      response = httpClientPlf.execute(httpGet);
+      entity = response.getEntity();
+      if (entity != null) {
+        ipstr = entity.getContent();
+      }
+    } catch (ClientProtocolException e) {
+      e.getMessage();
+    } catch (IOException e) {
+      e.getMessage();
+    }
+    return ipstr;
+  }
 
   // Get string input stream from URL
   public static String sendRequestAndReturnString(String strUrlRequest) {
     return convertStreamToString(sendRequest(strUrlRequest));
+  }
+
+ // get the JSONObject string of PLF 
+  private static String getPLFStream(String url) {
+    return convertStreamToString(sendRequestWithoutAuthen(url));
   }
 
   /*
@@ -474,24 +504,31 @@ public class ExoConnectionUtils {
   public static boolean checkPLFVersion() {
     try {
       String versionUrl = SocialActivityUtil.getDomain() + "/portal/rest/platform/version";
-      String result = sendRequestAndReturnString(versionUrl);
-      System.out.println("result " + result);
+      Log.i("versionUrl", versionUrl);
+      String result = getPLFStream(versionUrl);
       JSONObject json = (JSONObject) JSONValue.parse(result);
       String verObject = json.get("platformVersion").toString();
       int index = verObject.lastIndexOf(".");
       String verNumber = verObject.substring(0, index);
       float num = Float.parseFloat(verNumber);
       if (num < 3.5) {
+        ServerSettingHelper.getInstance().setServerVersion("0");
         return false;
-      } else
+      } else {
+        if (verObject != null) {
+          ServerSettingHelper.getInstance().setServerVersion(verObject);
+        }
         return true;
+      }
     } catch (RuntimeException e) {
+      ServerSettingHelper.getInstance().setServerVersion("0");
+      Log.i("Check PLF", e.toString());
       return false;
     }
 
   }
 
-//Connect to Openfile server
+  // Connect to Openfile server
   public static boolean connectToChatServer(String host, int port, String userName, String password) {
     if (ExoChatListController.conn != null && ExoChatListController.conn.isConnected())
       return true;

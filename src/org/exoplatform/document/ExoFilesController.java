@@ -8,16 +8,14 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
-import org.exoplatform.controller.AppController;
-import org.exoplatform.controller.ExoApplicationsController;
-import org.exoplatform.controller.ExoApplicationsController2;
+import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
@@ -182,7 +180,7 @@ public class ExoFilesController extends MyActionBar {
 
     setVieweXoImage(false);
 
-    changeLanguage(AppController.bundle);
+    changeLanguage();
 
     createExoFilesAdapter();
   }
@@ -190,7 +188,7 @@ public class ExoFilesController extends MyActionBar {
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     myFile = null;
     _rootUrl = null;
-    Intent intent = new Intent(this, ExoApplicationsController2.class);
+    Intent intent = new Intent(this, HomeActivity.class);
     startActivity(intent);
     finish();
     return true;
@@ -201,7 +199,7 @@ public class ExoFilesController extends MyActionBar {
       eXoFilesControllerInstance.finish();
       myFile = null;
       _rootUrl = null;
-      Intent intent = new Intent(this, ExoApplicationsController2.class);
+      Intent intent = new Intent(this, HomeActivity.class);
       startActivity(intent);
       finish();
     } else {
@@ -303,7 +301,7 @@ public class ExoFilesController extends MyActionBar {
 
                                            public void run() {
 
-                                             ExoApplicationsController.webViewMode = 1;
+//                                             ExoApplicationsController.webViewMode = 1;
 
                                              AlertDialog.Builder builder = new AlertDialog.Builder(eXoFilesControllerInstance);
                                              builder.setMessage(strDownloadFileIntoSDCard);
@@ -316,13 +314,13 @@ public class ExoFilesController extends MyActionBar {
 
                                                                            Runnable loadingDataRunnable = new Runnable() {
                                                                              public void run() {
-                                                                               eXoFilesControllerInstance.saveFileToLocal(AppController.auth,
-                                                                                                                          AppController.credential,
-                                                                                                                          myFile.urlStr,
-                                                                                                                          localFilePath,
-                                                                                                                          myFile.fileName.replace("%20",
-                                                                                                                                                  " "),
-                                                                                                                          false);
+//                                                                               eXoFilesControllerInstance.saveFileToLocal(AppController.auth,
+//                                                                                                                          AppController.credential,
+//                                                                                                                          myFile.urlStr,
+//                                                                                                                          localFilePath,
+//                                                                                                                          myFile.fileName.replace("%20",
+//                                                                                                                                                  " "),
+//                                                                                                                          false);
 
                                                                                int index = myFile.urlStr.lastIndexOf("/");
                                                                                myFile.urlStr = myFile.urlStr.substring(0,
@@ -486,12 +484,9 @@ public class ExoFilesController extends MyActionBar {
     String strLoadingDataFromServer = "";
     try {
       if (isloadingData)
-        strLoadingDataFromServer = new String(AppController.bundle.getString("LoadingDataFromServer")
-                                                                  .getBytes("ISO-8859-1"),
-                                              "UTF-8");
+        strLoadingDataFromServer = "";
       else
-        strLoadingDataFromServer = new String(AppController.bundle.getString("FileProcessing")
-                                                                  .getBytes("ISO-8859-1"), "UTF-8");
+        strLoadingDataFromServer = "";
 
     } catch (Exception e) {
 
@@ -797,19 +792,17 @@ public class ExoFilesController extends MyActionBar {
   }
 
   // Set language
-  public void changeLanguage(ResourceBundle resourceBundle) {
+  public void changeLanguage() {
+    LocalizationHelper local = LocalizationHelper.getInstance();
     String strUploadFile = "";
     String strCancel = "";
     String strEmptyPage = "";
     try {
-      strUploadFile = new String(resourceBundle.getString("Upload").getBytes("ISO-8859-1"), "UTF-8");
-      strCancel = new String(resourceBundle.getString("Cancel").getBytes("ISO-8859-1"), "UTF-8");
-      strEmptyPage = new String(resourceBundle.getString("EmptyPage").getBytes("ISO-8859-1"),
-                                "UTF-8");
-      strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage")
-                                                             .getBytes("ISO-8859-1"), "UTF-8");
-      strDownloadFileIntoSDCard = new String(resourceBundle.getString("DownloadFileInToSDCard")
-                                                           .getBytes("ISO-8859-1"), "UTF-8");
+      strUploadFile = local.getString("Upload");
+      strCancel = local.getString("Cancel");
+      strEmptyPage = local.getString("EmptyPage");
+      strCannotBackToPreviousPage = local.getString("CannotBackToPreviousPage");
+      strDownloadFileIntoSDCard = local.getString("DownloadFileInToSDCard");
     } catch (Exception e) {
 
     }
@@ -819,5 +812,4 @@ public class ExoFilesController extends MyActionBar {
     _textViewEmptyPage.setText(strEmptyPage);
 
   }
-
 }

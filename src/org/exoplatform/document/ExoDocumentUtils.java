@@ -1,14 +1,10 @@
 package org.exoplatform.document;
 
 import java.io.File;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.URL;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
-import org.exoplatform.controller.AppController;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 
@@ -25,7 +21,6 @@ public class ExoDocumentUtils {
 
       response = ExoConnectionUtils.httpClient.execute(put);
       int status = response.getStatusLine().getStatusCode();
-      System.out.println("status " + status);
       if (status >= 200 && status < 300) {
         return true;
       } else

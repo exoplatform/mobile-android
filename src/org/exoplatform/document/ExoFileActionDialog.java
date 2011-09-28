@@ -1,11 +1,8 @@
 package org.exoplatform.document;
 
-import java.util.ResourceBundle;
-
 import org.exoplatform.R;
-import org.exoplatform.controller.AppController;
+import org.exoplatform.singleton.LocalizationHelper;
 
-import android.R.bool;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -43,39 +40,39 @@ public class ExoFileActionDialog extends Dialog implements OnClickListener {
 
   }
 
-  Thread                  thread;
+  Thread                          thread;
 
-  Button                  _btnClose;                  // Close dialog
+  Button                          _btnClose;                  // Close dialog
 
-  ListView                _lvFileAction;              // List of action
+  ListView                        _lvFileAction;              // List of action
 
-  TextView                _txtvFileName;              // File's name
+  TextView                        _txtvFileName;              // File's name
 
-  Context                 thisClass;                  // instance
+  Context                         thisClass;                  // instance
 
-  private ExoFile         myFile;                     // Current file
+  private ExoFile                 myFile;                     // Current file
 
   // copyMoveFileMode: 1-copy, 2-move;
-  public static short     copyMoveFileMode = 0;
+  public static short             copyMoveFileMode = 0;
 
-  public static ExoFile   copyMoveFile     = null;    // Copy/move file
+  public static ExoFile           copyMoveFile     = null;    // Copy/move file
 
   // Localization string
-  String                  strClose         = "";
+  String                          strClose         = "";
 
-  String                  strTakePicture   = "";
+  String                          strTakePicture   = "";
 
-  String                  strCopy          = "";
+  String                          strCopy          = "";
 
-  String                  strMove          = "";
+  String                          strMove          = "";
 
-  String                  strDelete        = "";
+  String                          strDelete        = "";
 
-  String                  strRename        = "";
+  String                          strRename        = "";
 
-  String                  strPaste         = "";
+  String                          strPaste         = "";
 
-  String                  strCannotBackToPreviousPage;
+  String                          strCannotBackToPreviousPage;
 
   private FileActionDescription[] fileActionList   = null;
 
@@ -102,7 +99,7 @@ public class ExoFileActionDialog extends Dialog implements OnClickListener {
     _txtvFileName = (TextView) findViewById(R.id.TextView_FileName);
     _txtvFileName.setText(myFile.fileName.replace("%20", " "));
 
-    changeLanguage(AppController.bundle);
+    changeLanguage();
 
     _lvFileAction = (ListView) findViewById(R.id.ListView0_FileAction);
 
@@ -236,39 +233,37 @@ public class ExoFileActionDialog extends Dialog implements OnClickListener {
   }
 
   // Get file list
- private  Runnable reloadFileAdapter     = new Runnable() {
+  private Runnable reloadFileAdapter     = new Runnable() {
 
-                                   public void run() {
+                                           public void run() {
 
-                                     ExoFilesController.eXoFilesControllerInstance.fileAdapter.notifyDataSetChanged();
+                                             ExoFilesController.eXoFilesControllerInstance.fileAdapter.notifyDataSetChanged();
 
-                                   }
-                                 };
+                                           }
+                                         };
 
   // Progress dialog
- private Runnable dismissProgressDialog = new Runnable() {
+  private Runnable dismissProgressDialog = new Runnable() {
 
-                                   public void run() {
+                                           public void run() {
 
-                                     ExoFilesController._progressDialog.dismiss();
-                                     thread.stop();
-                                   }
-                                 };
+                                             ExoFilesController._progressDialog.dismiss();
+                                             thread.stop();
+                                           }
+                                         };
 
   // Set language
-  public void changeLanguage(ResourceBundle resourceBundle) {
-
+  public void changeLanguage() {
+    LocalizationHelper local = LocalizationHelper.getInstance();
     try {
-      strClose = new String(resourceBundle.getString("CloseButton").getBytes("ISO-8859-1"), "UTF-8");
-      strTakePicture = new String(resourceBundle.getString("TakePicture").getBytes("ISO-8859-1"),
-                                  "UTF-8");
-      strCopy = new String(resourceBundle.getString("Copy").getBytes("ISO-8859-1"), "UTF-8");
-      strMove = new String(resourceBundle.getString("Move").getBytes("ISO-8859-1"), "UTF-8");
-      strDelete = new String(resourceBundle.getString("Delete").getBytes("ISO-8859-1"), "UTF-8");
-      strRename = new String(resourceBundle.getString("Rename").getBytes("ISO-8859-1"), "UTF-8");
-      strPaste = new String(resourceBundle.getString("Paste").getBytes("ISO-8859-1"), "UTF-8");
-      strCannotBackToPreviousPage = new String(resourceBundle.getString("CannotBackToPreviousPage")
-                                                             .getBytes("ISO-8859-1"), "UTF-8");
+      strClose = local.getString("CloseButton");
+      strTakePicture = local.getString("TakePicture");
+      strCopy = local.getString("Copy");
+      strMove = local.getString("Move");
+      strDelete = local.getString("Delete");
+      strRename = local.getString("Rename");
+      strPaste = local.getString("Paste");
+      strCannotBackToPreviousPage = local.getString("CannotBackToPreviousPage");
     } catch (Exception e) {
 
     }

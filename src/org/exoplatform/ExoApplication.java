@@ -15,18 +15,17 @@
  */
 package org.exoplatform;
 
+import org.exoplatform.ui.HomeActivity;
+
 import greendroid.app.GDApplication;
-
-import org.exoplatform.controller.AppController;
-
 import android.content.Intent;
 import android.net.Uri;
- 
+
 public class ExoApplication extends GDApplication {
 
   @Override
   public Class<?> getHomeActivityClass() {
-    return AppController.class;
+    return HomeActivity.class;
   }
 
   @Override

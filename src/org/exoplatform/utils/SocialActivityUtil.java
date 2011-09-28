@@ -171,10 +171,8 @@ public class SocialActivityUtil {
 
   public static String getDomain() {
     String domain = AccountSetting.getInstance().getDomainName();
-    System.out.println("domai" + domain);
     if (domain.endsWith("/")) {
       domain = domain.substring(0, domain.length() - 1);
-
     }
     return domain;
   }

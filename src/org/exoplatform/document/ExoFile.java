@@ -5,7 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.apache.http.client.ClientProtocolException;
-import org.exoplatform.controller.AppController;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 
 //	File info
@@ -30,10 +30,8 @@ public class ExoFile {
   public ExoFile(String urlString, String file_Name) {
     HttpURLConnection con = null;
     try {
-      String strUserName = AppController.sharedPreference.getString(AppController.EXO_PRF_USERNAME,
-                                                                    "exo_prf_username");
-      String strPassword = AppController.sharedPreference.getString(AppController.EXO_PRF_PASSWORD,
-                                                                    "exo_prf_password");
+      String strUserName = AccountSetting.getInstance().getUsername();
+      String strPassword = AccountSetting.getInstance().getPassword();
 
       urlStr = urlString.replace(" ", "%20");
       fileName = file_Name;
