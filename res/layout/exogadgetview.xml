@@ -13,7 +13,7 @@
 
 	<Button android:id="@+id/Button_Language_Help"
 		android:layout_width="30sp" android:layout_height="30sp"
-		android:layout_x="285sp" android:layout_y="05sp" android:background="@drawable/setting1" />
+		android:layout_x="285sp" android:layout_y="05sp" android:background="@drawable/optionsettingsbutton" />
 
 	<TextView android:id="@+id/TextView_TitleBar"
 		android:layout_x="0sp" android:layout_y="40sp" android:layout_width="320sp"

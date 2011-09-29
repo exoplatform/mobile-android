@@ -4,17 +4,19 @@
 
 	<ImageView android:id="@+id/ImageView_Navigationbar"
 		android:layout_width="fill_parent" android:layout_height="40dip"
-		android:background="@drawable/editservernavigationbarbackground" />
+		android:background="@drawable/serveraddingbackgroundtitlepanel" />
 
 	<TextView android:id="@+id/TextView_Title"
-		android:layout_width="fill_parent" android:layout_height="30dip"
-		android:layout_marginTop="8dip" android:textSize="22dip"
+		android:layout_width="fill_parent" android:layout_height="40dip"
+		android:shadowColor="#000000"
+		android:shadowDx="1.0" android:shadowDy="1.0"
+		android:shadowRadius="1.0" android:textSize="18dip"
 		android:textColor="#FFFFFFFF" android:gravity="center" />
 
 	<RelativeLayout android:id="@+id/RelativeLayout_TextfieldPanel"
 		android:layout_below="@id/ImageView_Navigationbar"
 		android:layout_width="fill_parent" android:layout_height="180dip"
-		android:background="@drawable/editservertextfield">
+		android:background="@drawable/serveraddingbackgroundtextfieldspanel">
 
 		<TextView android:id="@+id/TextView_Server_Name"
 			android:layout_width="fill_parent" android:layout_height="20dip"
@@ -27,7 +29,7 @@
 			android:layout_height="40dip" android:inputType="textNoSuggestions"
 			android:textSize="16dip" android:layout_width="fill_parent"
 			android:layout_marginTop="5dip" android:textColor="#FF000000"
-			android:background="@drawable/editservertextfieldbg" />
+			android:background="@drawable/settingcellstreachablebackground" />
 
 
 		<TextView android:id="@+id/TextView_Server_URL"
@@ -41,24 +43,24 @@
 			android:layout_marginLeft="10dip" android:layout_marginRight="10dip"
 			android:layout_marginTop="10dip" android:layout_height="40dip"
 			android:layout_width="fill_parent" android:textSize="16dip"
-			android:textColor="#FF000000" android:background="@drawable/editservertextfieldbg" />
+			android:textColor="#FF000000" android:background="@drawable/settingcellstreachablebackground" />
 
 	</RelativeLayout>
 
 	<RelativeLayout android:id="@+id/RelativeLayout_ButtonPanel"
 		android:layout_below="@id/RelativeLayout_TextfieldPanel"
 		android:layout_width="fill_parent" android:layout_height="60dip"
-		android:background="@drawable/editserveraddbutton">
+		android:background="@drawable/serveraddbuttonpanelbackground">
 
 		<Button android:id="@+id/Button_Delete_Cancel"
 			android:layout_width="100dip" android:layout_height="44dip"
-			android:layout_marginLeft="10dip" android:layout_marginTop="10dip"
+			android:layout_marginLeft="10dip" android:layout_marginTop="7dip"
 			android:background="@drawable/androiddeletedbuttonbg"
 			android:textColor="#ffffff" android:text="Delete" />
 
 		<Button android:id="@+id/Button_OK" android:layout_width="100dip"
 			android:layout_alignParentRight="true" android:layout_marginRight="10dip"
-			android:layout_marginTop="10dip" android:layout_height="44dip"
+			android:layout_marginTop="7dip" android:layout_height="44dip"
 			android:background="@drawable/androidokbuttonbg" android:text="OK" />
 	</RelativeLayout>
 

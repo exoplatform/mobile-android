@@ -29,7 +29,7 @@ public class SettingServerListEditionActivity extends MyActionBar {
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
-    getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_add);
+    getActionBar().getItem(0).setDrawable(R.drawable.actionbaraddbutton);
     String serverListText = LocalizationHelper.getInstance().getString("ServerList");
     setTitle(serverListText);
     setServerAdapter();

@@ -13,7 +13,7 @@
 		android:layout_height="38sp" />
 	<Button android:id="@+id/Button_Language_Help"
 		android:layout_width="30sp" android:layout_height="30sp"
-		android:layout_x="285sp" android:layout_y="05sp" android:background="@drawable/setting1" />
+		android:layout_x="285sp" android:layout_y="05sp" android:background="@drawable/optionsettingsbutton" />
 
 	<EditText android:id="@+id/EditTextImageName"
 		android:layout_x="5sp" android:layout_y="50sp" android:layout_width="310sp"
