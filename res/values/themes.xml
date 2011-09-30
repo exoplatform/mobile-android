@@ -13,7 +13,7 @@
 
 	<style name="Theme.eXo" parent="@style/Theme.GreenDroid.NoTitleBar">
 
-		<item name="gdActionBarTitleColor">@android:color/white</item>
+		<item name="gdActionBarTitleColor">#ff444444</item>
 		<!--<item name="gdActionBarBackground">@color/action_bar_tint</item> -->
 		<item name="gdActionBarBackground">@drawable/action_bar_background2</item>
 		<item name="gdActionBarDividerDrawable">@drawable/action_bar_separator</item>
@@ -25,7 +25,7 @@
 
 	<style name="Theme.eXo_Back" parent="@style/Theme.eXo">
 		<item name="gdActionBarBackground">@color/action_bar_tint</item>
-		<item name="gdActionBarHomeDrawable">@drawable/back</item>
+		<item name="gdActionBarHomeDrawable">@drawable/home</item>
 	</style>
 
 	<style name="Theme.eXo_Close" parent="@style/Theme.eXo">
