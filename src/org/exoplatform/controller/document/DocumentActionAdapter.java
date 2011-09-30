@@ -186,11 +186,11 @@ public class DocumentActionAdapter extends BaseAdapter {
       strPaste = local.getString("Paste");
       
       fileActionList = new DocumentActionDescription[] {
-          new DocumentActionDescription(strTakePicture, R.drawable.takephoto),
-          new DocumentActionDescription(strCopy, R.drawable.copy),
-          new DocumentActionDescription(strMove, R.drawable.move),
-          new DocumentActionDescription(strDelete, R.drawable.delete),
-          new DocumentActionDescription(strPaste, R.drawable.paste) };
+          new DocumentActionDescription(strTakePicture, R.drawable.documentactionpopupphotoicon),
+          new DocumentActionDescription(strCopy, R.drawable.documentactionpopupcopyicon),
+          new DocumentActionDescription(strMove, R.drawable.documentactionpopupcuticon),
+          new DocumentActionDescription(strDelete, R.drawable.documentactionpopupdeleteicon),
+          new DocumentActionDescription(strPaste, R.drawable.documentactionpopuppasteicon) };
 
     }
 

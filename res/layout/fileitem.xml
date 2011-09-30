@@ -16,6 +16,6 @@
 	<Button android:id="@+id/Button_FileAction"
 		android:layout_width="36dip" android:layout_height="36dip"
 		android:layout_marginTop="02dip" android:layout_alignParentRight="true"
-		android:background="@drawable/setting" />
+		android:background="@drawable/documentdisclosureactionbutton" />
 
 </RelativeLayout>

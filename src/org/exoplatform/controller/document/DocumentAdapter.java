@@ -68,7 +68,7 @@ public class DocumentAdapter extends BaseAdapter {
       icon.setImageResource(ExoDocumentUtils.getPicIDFromName(iconFileName));
       
     } else {
-      icon.setImageResource(R.drawable.folder);
+      icon.setImageResource(R.drawable.documenticonforfolder);
     }
     
     rowView.setOnClickListener(new View.OnClickListener() {
