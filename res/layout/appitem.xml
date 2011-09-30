@@ -5,7 +5,7 @@
 	<ImageView android:id="@+id/icon_delete"
 		android:layout_width="20dip" android:layout_height="20dip"
 		android:layout_marginLeft="-20dip" android:layout_marginTop="10dip"
-		android:layout_marginBottom="-10dip" android:background="@drawable/delete" />
+		android:layout_marginBottom="-10dip" android:background="@drawable/documentactionpopupdeleteicon" />
 	<ImageView android:id="@+id/icon_image" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
 

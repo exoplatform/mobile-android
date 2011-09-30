@@ -2,10 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal" android:layout_width="fill_parent"
 	android:layout_height="wrap_content" android:background="@drawable/settingcellstreachablebackground">
-	<TextView android:id="@+id/TextView_Modify_The_List"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:textStyle="bold" android:textColor="#000000" android:gravity="center"
-		android:visibility="invisible" />
 	<TextView android:id="@+id/TextView_ServerName"
 		android:layout_width="140dip" android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true" android:textStyle="bold"

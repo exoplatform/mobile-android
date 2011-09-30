@@ -8,11 +8,13 @@
 			android:layout_height="wrap_content">
 
 			<TextView android:id="@+id/TextView_Language"
-				android:shadowDx="1.0" android:shadowDy="1.0"
+				android:layout_width="fill_parent" android:layout_height="40dip"
+				android:shadowColor="#000000"
+				android:shadowDx="1.0" android:shadowDy="2.0"
 				android:shadowRadius="1.0"
 				android:padding="3dp" android:textSize="18dip" android:textStyle="bold"
 				android:textColor="#ffffff" android:gravity="center_vertical"
-				android:layout_width="fill_parent" android:layout_height="40dip" />
+				 />
 			<ImageView android:id="@+id/ImageView_Language_Section_Bottom"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
 				android:layout_below="@id/TextView_Language"
@@ -69,7 +71,8 @@
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:background="@drawable/serversectionseparator" />
 				<TextView 
-					android:shadowDx="1.0" android:shadowDy="1.0"
+					android:shadowColor="#000000"
+					android:shadowDx="1.0" android:shadowDy="2.0"
 					android:shadowRadius="1.0" android:text="Server List" 
 					android:id="@+id/TextView_Server_List"
 					android:layout_below="@id/ImageView_Server_List_Section_Header"
@@ -92,7 +95,8 @@
 					android:layout_below="@id/listview_server_wrap"
 					android:layout_width="fill_parent" android:layout_height="44dip"
 					android:text="Modify Server" android:textStyle="bold"
-					android:background="@drawable/settingsuserguidebutton" />
+					android:textColor="#000000"
+					android:background="@drawable/settingcellstreachablebackground" />
 
 			<RelativeLayout android:id="@+id/Server_Information_Section"
 				android:layout_below="@id/modify_server_btn" android:layout_width="fill_parent"
@@ -101,7 +105,8 @@
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:background="@drawable/serversectionseparator" />
 				<TextView android:text="Application Informations"
-					android:shadowDx="1.0" android:shadowDy="1.0"
+					android:shadowColor="#000000"
+					android:shadowDx="1.0" android:shadowDy="2.0"
 					android:shadowRadius="1.0"
 					android:inputType="textCapSentences" 
 					android:layout_below="@id/ImageView_Server_Information_Section_Header" 
