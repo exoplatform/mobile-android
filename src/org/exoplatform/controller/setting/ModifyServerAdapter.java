@@ -45,7 +45,7 @@ public class ModifyServerAdapter extends BaseAdapter {
 //  @Override
   public View getView(int position, View convertView, ViewGroup viewGroup) {
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    View rowView = inflater.inflate(R.layout.serverlistitemforsetting, null);
+    View rowView = inflater.inflate(R.layout.server_list_item_for_setting, null);
 
     ServerObjInfo serverObj = serverList.get(position);
 
