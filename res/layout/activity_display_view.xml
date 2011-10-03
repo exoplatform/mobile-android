@@ -9,8 +9,10 @@
 		<LinearLayout android:orientation="vertical"
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
 			<RelativeLayout android:id="@+id/RelativeLayout_Status"
-				android:padding="2dp" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:background="#E9E9E9">
+				android:paddingTop="5dp" android:paddingLeft="5dp"
+				android:paddingRight="5dp" android:paddingBottom="15dp"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:background="@drawable/social_activity_detail_message_bg">
 
 				<RelativeLayout android:background="@drawable/bottom_background_shape"
 					android:layout_marginTop="5dip" android:padding="2.5dp"
@@ -38,7 +40,8 @@
 
 				<TextView android:id="@+id/textView_Time"
 					android:layout_height="wrap_content" android:layout_marginTop="7dip"
-					android:layout_marginLeft="15dip" android:layout_toRightOf="@id/imageView_Avatar_wrap"
+					android:layout_marginBottom="7dp" android:layout_marginLeft="15dip"
+					android:layout_toRightOf="@id/imageView_Avatar_wrap"
 					android:layout_below="@id/textView_Message" android:layout_width="wrap_content"
 					style="@style/textview_time" />
 
@@ -46,17 +49,17 @@
 
 			<RelativeLayout android:id="@+id/relativeLayout_Like"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:layout_below="@id/RelativeLayout_Status" android:background="@drawable/socialactivitydetaillikebgselected"
+				android:layout_below="@id/RelativeLayout_Status"
 				android:layout_marginTop="-3dip" android:padding="5dp">
 
 				<Button android:id="@+id/like_button" android:layout_height="wrap_content"
 					android:layout_width="wrap_content" android:layout_marginRight="3dp"
-					android:layout_alignParentRight="true" android:layout_marginTop="20dip"
+					android:layout_alignParentRight="true" android:layout_marginTop="5dip"
 					android:background="@null" />
 
 				<TextView android:id="@+id/textView_Like_Count" style="@style/textview_like"
 					android:layout_height="wrap_content" android:layout_marginLeft="5dip"
-					android:layout_marginTop="20dip" android:layout_toLeftOf="@id/like_button"
+					android:layout_marginTop="5dip" android:layout_toLeftOf="@id/like_button"
 					android:layout_width="fill_parent" />
 
 			</RelativeLayout>

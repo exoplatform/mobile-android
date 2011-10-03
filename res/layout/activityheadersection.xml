@@ -3,7 +3,7 @@
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	android:background="#08387B">
 	<TextView android:layout_height="wrap_content"
-		android:padding="7dp" android:layout_marginTop="5dp"
+		android:padding="5dp" android:layout_marginTop="5dp"
 		android:layout_alignParentRight="true" android:layout_width="160dp"
 		android:id="@+id/textView_Section_Title" android:textSize="15dp"
 		android:textColor="#000000" />

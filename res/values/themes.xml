@@ -12,12 +12,10 @@
 <resources>
 
 	<style name="Theme.eXo" parent="@style/Theme.GreenDroid.NoTitleBar">
-
 		<item name="gdActionBarTitleColor">#ff444444</item>
-		<!--<item name="gdActionBarBackground">@color/action_bar_tint</item> -->
 		<item name="gdActionBarBackground">@drawable/action_bar_background2</item>
 		<item name="gdActionBarDividerDrawable">@drawable/action_bar_separator</item>
-		<item name="gdActionBarDividerWidth">1px</item>
+		<item name="gdActionBarDividerWidth">1dp</item>
 		<item name="gdActionBarApplicationDrawable">@drawable/exo_application_logo</item>
 		<item name="gdActionBarHomeDrawable">@drawable/home</item>
 
@@ -28,9 +26,9 @@
 		<item name="gdActionBarHomeDrawable">@drawable/home</item>
 	</style>
 
-	<style name="Theme.eXo_Close" parent="@style/Theme.eXo">
+	<style name="Theme.eXo_signout" parent="@style/Theme.eXo">
 		<item name="gdActionBarBackground">@color/action_bar_tint</item>
-		<item name="gdActionBarHomeDrawable">@drawable/close</item>
+		<item name="gdActionBarHomeDrawable">@drawable/action_bar_logout_button</item>
 	</style>
 
 	<style name="Theme.GDCatalog.TweakedItems" parent="@style/Theme.eXo">
