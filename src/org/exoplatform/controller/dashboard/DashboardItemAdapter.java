@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor {
 
@@ -97,10 +98,17 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
     final DashBoardItem item = _arrayOfItems.get(position);
 
     if (item.strTabName != null) {
-      convertView = new TextView(mContext);
-      convertView.setPadding(7, 7, 7, 7);
-      ((TextView) convertView).setTextColor(Color.WHITE);
-      ((TextView) convertView).setText(item.strTabName);
+//      convertView = new TextView(mContext);
+//      convertView.setPadding(7, 7, 7, 7);
+//      ((TextView) convertView).setTextColor(Color.BLACK);
+//      ((TextView) convertView).setText(item.strTabName);
+//      ((TextView) convertView).setWidth(LayoutParams.WRAP_CONTENT);
+//      ((TextView) convertView).setBackgroundResource(R.drawable.dashboardtabbackground);
+      
+      convertView = mInflater.inflate(R.layout.gadget_tab_layout, parent, false);
+      TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
+      textViewTabTitle.setText(item.strTabName);
+      
     } else {
       convertView = mInflater.inflate(R.layout.gadget_item_layout, parent, false);
 

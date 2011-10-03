@@ -5,9 +5,7 @@ import com.cyrilmottier.android.greendroid.R;
 
 import greendroid.util.Config;
 import greendroid.widget.ActionBar;
-import android.app.ListActivity;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;

@@ -20,8 +20,6 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
   Thread                  thread;
 
-  Button                  _btnClose;                  // Close dialog
-
   ListView                _listViewFileAction;        // List of action
 
   TextView                _txtvFileName;              // File's name
@@ -46,6 +44,9 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
     
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.exofileaction);
+    
+    setCanceledOnTouchOutside(true);
+    
     mContext = context;
     
     myFile = file;
@@ -60,15 +61,7 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
     
     _listViewFileAction = (ListView) findViewById(R.id.ListView0_FileAction);
     
-    _btnClose = (Button) findViewById(R.id.Button_Close);
-    _btnClose.setOnClickListener(new View.OnClickListener() {
-      
-      public void onClick(View v) {
-        dismiss();
-      }
-    });
-    
-    _txtvFileName = (TextView) findViewById(R.id.TextView_FileName);
+    _txtvFileName = (TextView) findViewById(R.id.TextView_Title);
     _txtvFileName.setText(myFile.fileName.replace("%20", " "));
     
     changeLanguage();
@@ -91,10 +84,7 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
     LocalizationHelper local = LocalizationHelper.getInstance();
     
-    String strClose = local.getString("CloseButton");
     strCannotBackToPreviousPage = local.getString("CannotBackToPreviousPage");
-
-    _btnClose.setText(strClose);
 
   }
 
