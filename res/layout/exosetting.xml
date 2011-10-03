@@ -66,7 +66,7 @@
 				<ImageView android:id="@+id/ImageView_Server_List_Section_Header"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:background="@drawable/serversectionseparator" />
-				<TextView android:shadowColor="#000000" android:shadowDx="1.0"
+				<TextView android:shadowColor="#000000" android:shadowDx="1.0" android:padding="3dp"
 					android:shadowDy="2.0" android:shadowRadius="1.0" android:text="Server List"
 					android:id="@+id/TextView_Server_List" android:layout_below="@id/ImageView_Server_List_Section_Header"
 					android:textSize="18dip" android:textStyle="bold"
@@ -96,7 +96,7 @@
 					android:background="@drawable/serversectionseparator" />
 				<TextView android:text="Application Informations"
 					android:shadowColor="#000000" android:shadowDx="1.0"
-					android:shadowDy="2.0" android:shadowRadius="1.0"
+					android:shadowDy="2.0" android:shadowRadius="1.0" android:padding="3dp"
 					android:inputType="textCapSentences" android:layout_below="@id/ImageView_Server_Information_Section_Header"
 					android:id="@+id/setting_application_info_title" android:textSize="18dip"
 					android:textStyle="bold" android:textColor="#ffffff"
