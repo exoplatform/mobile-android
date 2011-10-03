@@ -68,10 +68,10 @@ public class ServerAdapter extends BaseAdapter {
 
     ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
     if (_intDomainIndex == pos) {
-      imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
+      imgView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
 //      listItem.setBackgroundResource(R.drawable.authenticate_server_cell_bg_selected);
     } else {
-      imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneoff);
+      imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
 //      listItem.setBackgroundResource(R.drawable.authenticate_server_cell_bg_normal);
     }
 
@@ -82,7 +82,7 @@ public class ServerAdapter extends BaseAdapter {
         View rowView = getView(pos, null, _listViewServer);
 //        RelativeLayout listItem = (RelativeLayout) rowView.findViewById(R.id.authenticate_server_listview_item);
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-        imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneoff);
+        imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
 //        listItem.setBackgroundResource(R.drawable.authenticate_server_cell_bg_normal);
 
         _intDomainIndex = pos;
@@ -93,7 +93,7 @@ public class ServerAdapter extends BaseAdapter {
 
         rowView = getView(_intDomainIndex, null, _listViewServer);
         imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-        imgView.setBackgroundResource(R.drawable.authenticatecheckmarkiphoneon);
+        imgView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
 //        listItem = (RelativeLayout) rowView.findViewById(R.id.authenticate_server_listview_item);
 //        listItem.setBackgroundResource(R.drawable.authenticate_server_cell_bg_selected);
 

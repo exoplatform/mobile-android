@@ -2,6 +2,7 @@ package org.exoplatform.ui;
 
 import greendroid.widget.ActionBarItem;
 
+import org.exoplatform.R;
 import org.exoplatform.controller.home.HomeActionListenner;
 import org.exoplatform.controller.home.HomeAdapter;
 import org.exoplatform.controller.home.HomeController;
@@ -17,7 +18,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.GridView;
 
-import com.cyrilmottier.android.greendroid.R;
+//import com.cyrilmottier.android.greendroid.R;
 
 public class HomeActivity extends MyActionBar {
   private GridView       gridView;
@@ -30,10 +31,12 @@ public class HomeActivity extends MyActionBar {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setActionBarContentView(R.layout.appsview2);
+    setActionBarContentView(R.layout.home_layout);
     super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
-    addActionBarItem(R.drawable.signout);
-    super.setTitle("eXo");
+    addActionBarItem();
+    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_logout_button);
+//    addActionBarItem(R.drawable.action_bar_logout_button);
+    // super.setTitle("eXo");
     init();
     changeLanguage();
   }

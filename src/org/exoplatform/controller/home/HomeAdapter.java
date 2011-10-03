@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,12 +46,12 @@ public class HomeAdapter extends BaseAdapter {
     HomeItem item = homeItemList.get(position);
     LayoutInflater li = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View view = li.inflate(R.layout.appitem, null);
-    TextView tv = (TextView) view.findViewById(R.id.icon_text);
-    tv.setText(item._name);
+//    view.setLayoutParams(new GridView.LayoutParams(90, 90));
+
     ImageView iv = (ImageView) view.findViewById(R.id.icon_image);
     iv.setImageBitmap(item._icon);
-    ImageView ivDelete = (ImageView) view.findViewById(R.id.icon_delete);
-    ivDelete.setVisibility(View.INVISIBLE);
+    TextView tv = (TextView) view.findViewById(R.id.icon_text);
+    tv.setText(item._name);
     return view;
   }
 

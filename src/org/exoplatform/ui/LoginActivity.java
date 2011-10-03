@@ -6,7 +6,6 @@ import org.exoplatform.controller.login.LoginController;
 import org.exoplatform.controller.login.ServerAdapter;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 
 import android.app.Activity;
@@ -141,7 +140,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     return false;
   }
 
-  // @Override
+   @Override
   public void onClick(View view) {
     if (view == _btnLogIn) {
       onLogin();
