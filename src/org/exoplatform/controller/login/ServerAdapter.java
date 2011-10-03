@@ -56,7 +56,7 @@ public class ServerAdapter extends BaseAdapter {
   public View getView(int position, View convertView, ViewGroup parent) {
     final int pos = position;
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    View rowView = inflater.inflate(R.layout.serverlistitem, parent, false);
+    View rowView = inflater.inflate(R.layout.server_list_item, parent, false);
 
     final ServerObjInfo serverObj = serverInfoList.get(pos);
 //    RelativeLayout listItem = (RelativeLayout) rowView.findViewById(R.id.authenticate_server_listview_item);
@@ -94,9 +94,6 @@ public class ServerAdapter extends BaseAdapter {
         rowView = getView(_intDomainIndex, null, _listViewServer);
         imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
         imgView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-//        listItem = (RelativeLayout) rowView.findViewById(R.id.authenticate_server_listview_item);
-//        listItem.setBackgroundResource(R.drawable.authenticate_server_cell_bg_selected);
-
         notifyDataSetChanged();
       }
     });
