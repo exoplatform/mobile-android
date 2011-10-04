@@ -7,7 +7,8 @@ import java.io.FileInputStream;
 
 import org.apache.http.HttpResponse;
 import org.exoplatform.controller.document.DocumentAdapter;
-import org.exoplatform.controller.document.DocumentTask;
+import org.exoplatform.controller.document.DocumentLoadTask;
+import org.exoplatform.controller.social.SocialDetailLoadTask;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
@@ -65,6 +66,8 @@ public class DocumentActivity extends MyActionBar {
 
   public DocumentAdapter         _documentAdapter;
 
+  private DocumentLoadTask       mLoadTask;
+
   // Constructor
   @Override
   public void onCreate(Bundle icicle) {
@@ -76,7 +79,7 @@ public class DocumentActivity extends MyActionBar {
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     _documentActivityInstance = this;
-
+    setTitle("Documents");
     init();
 
     setViewUploadImage(false);
@@ -87,8 +90,10 @@ public class DocumentActivity extends MyActionBar {
 
     _urlDocumentHome = ExoDocumentUtils.getDocumentUrl(userName, domain);
 
-    DocumentTask documentTask = new DocumentTask(this, this, _urlDocumentHome, null, 0);
-    documentTask.execute();
+    // DocumentLoadTask documentTask = new DocumentLoadTask(this, this,
+    // _urlDocumentHome, null, 0);
+    // documentTask.execute();
+    onLoad(_urlDocumentHome, null, 0);
 
   }
 
@@ -97,20 +102,38 @@ public class DocumentActivity extends MyActionBar {
     return true;
   }
 
-
   @Override
   public void onBackPressed() {
-    if (_documentAdapter._urlStr == null) {
+    if (_documentAdapter == null) {
       finish();
+    } else {
+      _documentAdapter._urlStr = ExoDocumentUtils.getParentUrl(_documentAdapter._urlStr);
+      Log.i("_documentAdapter._urlStr", _documentAdapter._urlStr);
+      if (_documentAdapter._urlStr.length() < _urlDocumentHome.length())
+        finish();
+      else {
+        // DocumentLoadTask documentTask = new DocumentLoadTask(this,
+        // this,
+        // _documentAdapter._urlStr,
+        // null,
+        // 0);
+        // documentTask.execute();
+        onLoad(_documentAdapter._urlStr, null, 0);
+      }
     }
-    _documentAdapter._urlStr = ExoDocumentUtils.getParentUrl(_documentAdapter._urlStr);
-    Log.i("_documentAdapter._urlStr", _documentAdapter._urlStr);
 
-    if (_documentAdapter._urlStr.length() < _urlDocumentHome.length())
-      finish();
-    else {
-      DocumentTask documentTask = new DocumentTask(this, this, _documentAdapter._urlStr, null, 0);
-      documentTask.execute();
+  }
+
+  public void onLoad(String source, String destination, int action) {
+    if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
+      mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this, this, source, destination, action).execute();
+    }
+  }
+
+  public void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == DocumentLoadTask.Status.RUNNING) {
+      mLoadTask.cancel(true);
+      mLoadTask = null;
     }
   }
 
@@ -132,12 +155,15 @@ public class DocumentActivity extends MyActionBar {
           setViewUploadImage(false);
 
           String sourceUrl = _documentAdapter._documentActionDialog.myFile.urlStr;
-          DocumentTask documentTask = new DocumentTask(_documentActivityInstance,
-                                                       _documentActivityInstance,
-                                                       sourceUrl,
-                                                       null,
-                                                       4);
-          documentTask.execute();
+          // DocumentLoadTask documentTask = new
+          // DocumentLoadTask(_documentActivityInstance,
+          // _documentActivityInstance,
+          // sourceUrl,
+          // null,
+          // 4);
+          // documentTask.execute();
+
+          onLoad(sourceUrl, null, 4);
         }
       });
 

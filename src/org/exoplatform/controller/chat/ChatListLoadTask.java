@@ -13,6 +13,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 import android.content.Context;
+import android.util.Log;
 
 public class ChatListLoadTask extends UserTask<Void, Void, Boolean> {
   private String                loadingData;
@@ -69,6 +70,7 @@ public class ChatListLoadTask extends UserTask<Void, Void, Boolean> {
       ChatServiceHelper.getInstance().setXMPPConnection(connection);
       return true;
     } catch (XMPPException e) {
+      Log.i("XMPPException", e.getMessage());
       connection.disconnect();
       connection = null;
       return false;
