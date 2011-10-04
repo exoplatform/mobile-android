@@ -4,6 +4,7 @@
 	android:background="#ffffff">
 
 	<ImageView android:id="@+id/icon"
+		android:padding="5dip"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 	 />

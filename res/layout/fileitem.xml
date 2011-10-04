@@ -4,6 +4,7 @@
 	android:background="@drawable/settingcellstreachablebackground">
 
 	<ImageView android:id="@+id/icon" android:layout_marginLeft="5dip"
+		android:padding="5dip"
 		android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
 	<RelativeLayout android:layout_toRightOf="@id/icon" android:layout_marginLeft="5dip"
