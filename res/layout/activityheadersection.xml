@@ -3,8 +3,8 @@
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	android:background="#08387B">
 	<TextView android:layout_height="wrap_content"
-		android:padding="5dp" android:layout_marginTop="5dp"
-		android:layout_alignParentRight="true" android:layout_width="160dp"
-		android:id="@+id/textView_Section_Title" android:textSize="14dp"
+		android:padding="3dp" android:layout_marginTop="5dp"
+		style="@style/textview_content" android:layout_alignParentRight="true"
+		android:layout_width="wrap_content" android:id="@+id/textView_Section_Title"
 		android:textColor="#000000" />
 </RelativeLayout>

@@ -26,7 +26,7 @@
 		<TextView android:id="@+id/textView_Name" android:textStyle="bold"
 			style="@style/textview_name" android:layout_height="wrap_content"
 			android:text="Name" android:layout_marginLeft="10dip"
-			android:layout_marginTop="5dip" android:layout_width="wrap_content" />
+			android:layout_width="wrap_content" />
 
 		<TextView android:id="@+id/textView_Message" style="@style/textview_content"
 			android:layout_height="wrap_content" android:text="Test message"
@@ -34,26 +34,25 @@
 			android:layout_marginTop="3dip" android:layout_below="@id/textView_Name"
 			android:layout_width="fill_parent" />
 
-		<TextView android:id="@+id/button_Comment" style="@style/textview_number"
-			android:gravity="center_vertical" android:paddingLeft="2dp"
-			android:layout_height="wrap_content" android:text="1000"
-			android:layout_width="wrap_content" android:layout_marginLeft="0dip"
-			android:layout_marginTop="7dip" android:layout_marginRight="10dip"
-			android:layout_alignParentRight="true" android:layout_below="@id/textView_Message"
-			android:background="@drawable/socialactivitybrowsercommentbutton" />
+		<LinearLayout android:layout_width="fill_parent"
+			android:gravity="center_vertical" android:layout_height="wrap_content"
+			android:orientation="horizontal" android:layout_marginTop="7dip"
+			android:layout_marginBottom="3dp" android:layout_marginRight="10dp"
+			android:layout_below="@id/textView_Message">
+			<TextView android:id="@+id/textView_Time" style="@style/textview_time"
+				android:layout_weight="1" android:layout_marginLeft="10dip"
+				android:layout_marginRight="3dp" android:layout_height="wrap_content"
+				android:text="about 15 hours ago" android:layout_width="fill_parent" />
+			<TextView android:id="@+id/button_Like" style="@style/textview_number"
+				android:gravity="center_vertical" android:layout_height="wrap_content"
+				android:text="100" android:layout_width="wrap_content"
+				android:padding="2dp" android:background="@drawable/socialactivitybrowserlikebutton" />
+			<TextView android:id="@+id/button_Comment" style="@style/textview_number"
+				android:layout_height="wrap_content" android:text="1000"
+				android:padding="2dp" android:gravity="center_vertical"
+				android:layout_width="wrap_content" android:background="@drawable/socialactivitybrowsercommentbutton" />
+		</LinearLayout>
 
-		<TextView android:id="@+id/button_Like" style="@style/textview_number"
-			android:gravity="center_vertical" android:paddingLeft="2dp"
-			android:layout_height="wrap_content" android:text="100"
-			android:layout_width="wrap_content" android:layout_marginLeft="10dip"
-			android:layout_marginTop="7dip" android:layout_toLeftOf="@id/button_Comment"
-			android:layout_below="@id/textView_Message" android:background="@drawable/socialactivitybrowserlikebutton" />
-
-		<TextView android:id="@+id/textView_Time" style="@style/textview_time"
-			android:layout_height="wrap_content" android:text="about 15 hours ago"
-			android:layout_below="@id/textView_Message"
-			android:layout_marginLeft="10dip" android:layout_marginTop="7dip"
-			android:layout_marginRight="3dip" android:layout_width="wrap_content" />
 	</RelativeLayout>
 
 </RelativeLayout>
