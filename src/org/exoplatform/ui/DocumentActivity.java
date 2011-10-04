@@ -126,12 +126,14 @@ public class DocumentActivity extends MyActionBar {
 
   public void onLoad(String source, String destination, int action) {
     if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
+      Log.i("DocumentLoadTask", "onLoad");
       mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this, this, source, destination, action).execute();
     }
   }
 
   public void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == DocumentLoadTask.Status.RUNNING) {
+      Log.i("DocumentLoadTask", "onCancelLoad");
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
