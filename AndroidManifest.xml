@@ -4,56 +4,46 @@
 	<application android:icon="@drawable/application_icon"
 		android:name=".ExoApplication" android:theme="@style/Theme.eXo"
 		android:debuggable="true" android:label="eXo Application">
-
 		<activity android:name=".ui.LoginActivity"
-			android:screenOrientation="portrait">
+			android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
 		<activity android:name=".ui.HomeActivity"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.SettingActivity"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.SettingServerListEditionActivity"
-			android:screenOrientation="portrait" />
-
+			android:configChanges="keyboardHidden|orientation" />
+			<activity android:name=".ui.ChatListActivity"
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.DocumentActivity"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.DocumentActionDialog"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.DashboardActivity"
-			android:screenOrientation="portrait" />
-		<activity android:name=".controller.ExoApplicationsController2"
-			android:screenOrientation="portrait" />
-		<activity android:name=".ui.WebViewActivity"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
+		<activity android:name=".ui.WebViewActivity" />
 		<activity android:name=".document.ExoFilesController"
-			android:screenOrientation="portrait" />
-		<activity android:name=".chat.ExoChatController"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
+		<activity android:name=".ui.ChatDetailActivity"
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".chat.ExoChatListController"
-			android:screenOrientation="portrait" />
-		<activity android:name=".ui.GadgetViewActivity"
-			android:screenOrientation="portrait" />
-		<activity android:name=".widget.BasicItemActivity"
-			android:screenOrientation="portrait" />
-		<activity android:name=".dashboard.ExoDashboard"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.social.SocialActivity"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.social.SocialDetailActivity"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.social.ComposeMessageActivity"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.social.SocialImageLibrary"
-			android:configChanges="keyboardHidden|orientation"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.social.SelectedImageActivity"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 		<activity android:name=".ui.social.SocialPhotoAlbums"
-			android:screenOrientation="portrait" />
+			android:configChanges="keyboardHidden|orientation" />
 
 	</application>
 	<uses-sdk android:minSdkVersion="7" />
