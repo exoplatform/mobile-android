@@ -15,9 +15,9 @@
 				android:background="@drawable/social_activity_detail_message_bg">
 
 				<RelativeLayout android:background="@drawable/bottom_background_shape"
-					android:layout_marginTop="5dip" android:padding="2.5dp"
-					android:id="@+id/imageView_Avatar_wrap" android:layout_height="wrap_content"
-					android:layout_width="wrap_content" android:layout_alignParentLeft="true">
+					android:padding="2.5dp" android:id="@+id/imageView_Avatar_wrap"
+					android:layout_height="wrap_content" android:layout_width="wrap_content"
+					android:layout_alignParentLeft="true">
 					<greendroid.widget.AsyncImageView
 						android:layout_centerInParent="true" android:id="@+id/imageView_Avatar"
 						android:layout_height="43dip" android:layout_width="43dip" />
@@ -29,7 +29,7 @@
 
 				<TextView android:id="@+id/textView_Name" style="@style/textview_name"
 					android:layout_height="wrap_content" android:layout_marginLeft="15dip"
-					android:layout_marginTop="5dip" android:layout_toRightOf="@id/imageView_Avatar_wrap"
+					android:layout_toRightOf="@id/imageView_Avatar_wrap"
 					android:layout_width="fill_parent" android:textStyle="bold" />
 
 				<TextView android:id="@+id/textView_Message" style="@style/textview_content"
