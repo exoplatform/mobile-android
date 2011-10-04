@@ -1,8 +1,5 @@
 package org.exoplatform.controller.home;
 
-import java.net.URI;
-
-import org.exoplatform.chat.ExoChatListController;
 import org.exoplatform.model.HomeItem;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.HomeHelper;
@@ -14,11 +11,11 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+import org.exoplatform.ui.ChatListActivity;
 import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.ui.social.SocialActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
@@ -142,28 +139,8 @@ public class HomeActionListenner implements OnItemClickListener {
   }
 
   private void launchChatApp() {
-
-    AccountSetting acc = AccountSetting.getInstance();
-    String urlStr = acc.getDomainName();
-
-    URI url = null;
-
-    try {
-      url = new URI(urlStr);
-    } catch (Exception e) {
-
-    }
-
-    String userName = acc.getUsername();
-    String password = acc.getPassword();
-
-    if (ExoConnectionUtils.connectToChatServer(url.getHost(), 5222, userName, password)) {
-      Intent next = new Intent(mContext, ExoChatListController.class);
-      mContext.startActivity(next);
-    } else {
-      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
-      dialog.show();
-    }
+    Intent next = new Intent(mContext, ChatListActivity.class);
+    mContext.startActivity(next);
 
   }
 

@@ -1,14 +1,18 @@
-package org.exoplatform.chat;
+package org.exoplatform.ui;
 
 import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.model.ChatMemberInfo;
 import org.exoplatform.model.ChatMessageContent;
+import org.exoplatform.singleton.ChatServiceHelper;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.WarningDialog;
 import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.filter.MessageTypeFilter;
 import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.packet.Message;
@@ -33,49 +37,56 @@ import android.widget.Toast;
 import com.cyrilmottier.android.greendroid.R;
 
 //Chat windows view controller
-public class ExoChatController extends MyActionBar {
+public class ChatDetailActivity extends MyActionBar {
   // List message content for each user
   public static List<ChatMessageContent> listChatContent = new ArrayList<ChatMessageContent>();
 
-  public static String                      currentChatStr  = "";                                    // Current
+  public static String                   currentChatStr  = "";                                 // Current
 
   // chat
   // user
 
-  private EditText                          messageEditText;                                         // Chat
+  private EditText                       messageEditText;                                      // Chat
 
   // text
   // field
 
-  private Button                            sendMessageBtn;                                          // Send
+  private Button                         sendMessageBtn;                                       // Send
 
   // button
 
-  private static ListView                   conversationView;                                        // Chat
+  private static ListView                conversationView;                                     // Chat
 
   // conversation
-  public static ExoChatController           eXoChatControllerInstance;                               // Instance
+  public static ChatDetailActivity        eXoChatControllerInstance;                            // Instance
 
   // app
   // view
   // controller
 
   // Receive message
-  public static PacketListener              packetListener;
+  public static PacketListener           packetListener;
 
-  private static Handler                    mHandler;
+  private static Handler                 mHandler;
 
-  private static Runnable                   runnable;
+  private static Runnable                runnable;
 
-  private String                            fromChatStr;                                             // Source
+  private String                         meText;
 
-  private String                            strCannotBackToPreviousPage;
+  private String                         titleString;
+
+  private String                         okString;
+
+  private String                         messageFromText;
+
+  private String                         fromChatStr;                                          // Source
+
+  private XMPPConnection                 connection;
 
   /** Called when the activity is first created. */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    // requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
 
@@ -83,14 +94,16 @@ public class ExoChatController extends MyActionBar {
     eXoChatControllerInstance = this;
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    // addActionBarItem();
-    // getActionBar().getItem(0).setDrawable(R.drawable.back);
+
+    connection = ChatServiceHelper.getInstance().getXMPPConnection();
 
     messageEditText = (EditText) findViewById(R.id.message);
 
     conversationView = (ListView) findViewById(R.id.chatContent);
     conversationView.setDivider(null);
     conversationView.setDividerHeight(0);
+    sendMessageBtn = (Button) findViewById(R.id.Send);
+    changeLanguage();
 
     String currentChatNickName = currentChatStr.substring(0, currentChatStr.lastIndexOf("@"));
     setTitle(currentChatNickName);
@@ -107,7 +120,6 @@ public class ExoChatController extends MyActionBar {
       };
     }
 
-    sendMessageBtn = (Button) findViewById(R.id.Send);
     sendMessageBtn.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
 
@@ -118,14 +130,18 @@ public class ExoChatController extends MyActionBar {
 
             Message message = new Message(currentChatStr, Message.Type.chat);
             message.setBody(msg);
-            ExoChatListController.conn.sendPacket(message);
+            connection.sendPacket(message);
 
-            listChatContent.add(new ChatMessageContent("Me", msg));
+            listChatContent.add(new ChatMessageContent(meText, msg));
             messageEditText.setText("");
             setListAdapter();
 
           } catch (Exception e) {
-
+            WarningDialog warning = new WarningDialog(getApplicationContext(),
+                                                      titleString,
+                                                      e.getMessage(),
+                                                      okString);
+            warning.show();
           }
         }
 
@@ -142,22 +158,25 @@ public class ExoChatController extends MyActionBar {
         if (message.getBody() != null) {
 
           String fromName = StringUtils.parseBareAddress(message.getFrom());
-
-          for (int i = 0; i < ExoChatListController.listChatRosterEntry.size(); i++) {
-            fromChatStr = ExoChatListController.listChatRosterEntry.get(i).address;
+          ArrayList<ChatMemberInfo> listChatRosterEntry = ChatServiceHelper.getInstance()
+                                                                           .getChatListRosterEntry();
+          ArrayList<List<ChatMessageContent>> arrListChat = ChatServiceHelper.getInstance()
+                                                                             .getListChat();
+          for (int i = 0; i < listChatRosterEntry.size(); i++) {
+            fromChatStr = listChatRosterEntry.get(i).address;
             final String chatFromName = fromChatStr.substring(0, fromChatStr.lastIndexOf("@"));
             if (fromName.equalsIgnoreCase(fromChatStr)) {
-              List<ChatMessageContent> msgContent = ExoChatListController.arrListChat.get(i);
+              List<ChatMessageContent> msgContent = arrListChat.get(i);
               msgContent.add(new ChatMessageContent(chatFromName, message.getBody()));
-              ExoChatListController.arrListChat.set(i, msgContent);
+              arrListChat.set(i, msgContent);
 
-              if (fromName.equalsIgnoreCase(ExoChatController.currentChatStr)) {
-                listChatContent = ExoChatListController.arrListChat.get(i);
+              if (fromName.equalsIgnoreCase(currentChatStr)) {
+                listChatContent = arrListChat.get(i);
               } else {
                 runOnUiThread(new Runnable() {
 
                   public void run() {
-                    Toast msg = Toast.makeText(getApplicationContext(), "Message from "
+                    Toast msg = Toast.makeText(getApplicationContext(), messageFromText + " "
                         + chatFromName, Toast.LENGTH_SHORT);
                     msg.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                     msg.show();
@@ -175,10 +194,8 @@ public class ExoChatController extends MyActionBar {
         }
       }
     };
-
-    ExoChatListController.conn.addPacketListener(packetListener, filter);
-
-    changeLanguage();
+    ChatServiceHelper.getInstance().setPacketListener(packetListener);
+    ChatServiceHelper.getInstance().getXMPPConnection().addPacketListener(packetListener, filter);
 
     setListAdapter();
 
@@ -187,11 +204,10 @@ public class ExoChatController extends MyActionBar {
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
-      if (ExoChatListController.eXoChatListControllerInstance != null) {
-        ExoChatListController.eXoChatListControllerInstance.finish();
+      if (ChatListActivity.chatListActivity != null) {
+        ChatListActivity.chatListActivity.finish();
       }
       finishMe();
-      // your method here
       break;
 
     case 0:
@@ -212,7 +228,7 @@ public class ExoChatController extends MyActionBar {
   }
 
   // Create adapter for conversation list
-  public static void setListAdapter() {
+  public void setListAdapter() {
     BaseAdapter adapter = new BaseAdapter() {
 
       public View getView(int position, View convertView, ViewGroup parent) {
@@ -226,7 +242,7 @@ public class ExoChatController extends MyActionBar {
         TextView name = (TextView) view.findViewById(R.id.TextView_Name);
         name.setText(msgContent.name);
 
-        if (msgContent.name.equalsIgnoreCase("Me")) {
+        if (msgContent.name.equalsIgnoreCase(meText)) {
           // view.setBackgroundResource(R.drawable.chatbackgroundwhite);
         } else {
           // view.setBackgroundResource(R.drawable.chatbackgroundwhite);
@@ -257,21 +273,20 @@ public class ExoChatController extends MyActionBar {
   }
 
   // Set language
-  public void changeLanguage() {
+  private void changeLanguage() {
     LocalizationHelper bundle = LocalizationHelper.getInstance();
-    String strsendMessageBtn = "";
-    String strcloseBtn = "";
-    strsendMessageBtn = bundle.getString("Send");
-    strcloseBtn = bundle.getString("CloseButton");
-    strCannotBackToPreviousPage = bundle.getString("CannotBackToPreviousPage");
-
+    String strsendMessageBtn = bundle.getString("Send");
+    meText = bundle.getString("Me");
+    messageFromText = bundle.getString("MessageFrom");
+    titleString = bundle.getString("Warning");
+    okString = bundle.getString("OK");
     sendMessageBtn.setText(strsendMessageBtn);
 
   }
 
   public void finishMe() {
     currentChatStr = "";
-    ExoChatListController.conn.removePacketListener(packetListener);
+    ChatServiceHelper.getInstance().getXMPPConnection().removePacketListener(packetListener);
     finish();
   }
 }

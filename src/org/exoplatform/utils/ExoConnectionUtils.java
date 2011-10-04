@@ -23,12 +23,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.exoplatform.chat.ExoChatListController;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -527,24 +523,5 @@ public class ExoConnectionUtils {
     }
 
   }
-
-  // Connect to Openfile server
-  public static boolean connectToChatServer(String host, int port, String userName, String password) {
-    if (ExoChatListController.conn != null && ExoChatListController.conn.isConnected())
-      return true;
-
-    try {
-      ConnectionConfiguration config = new ConnectionConfiguration(host, port, "Work");
-      ExoChatListController.conn = new XMPPConnection(config);
-      ExoChatListController.conn.connect();
-      ExoChatListController.conn.login(userName, password);
-
-    } catch (XMPPException e) {
-      ExoChatListController.conn.disconnect();
-      ExoChatListController.conn = null;
-      return false;
-    }
-    return true;
-
-  }
+  
 }

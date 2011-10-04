@@ -2,9 +2,9 @@ package org.exoplatform.controller.home;
 
 import java.util.ArrayList;
 
-import org.exoplatform.chat.ExoChatListController;
 import org.exoplatform.model.HomeItem;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ChatServiceHelper;
 import org.exoplatform.singleton.HomeHelper;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
@@ -65,9 +65,9 @@ public class HomeController {
       ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
       ExoConnectionUtils.httpClient = null;
     }
-    if (ExoChatListController.conn != null) {
-      ExoChatListController.conn.disconnect();
-      ExoChatListController.conn = null;
+    if(ChatServiceHelper.getInstance().getXMPPConnection()!=null){
+      ChatServiceHelper.getInstance().getXMPPConnection().disconnect();
+      ChatServiceHelper.getInstance().setXMPPConnection(null);
     }
     
     ((Activity) mContext).finish();

@@ -3,11 +3,11 @@ package org.exoplatform.controller.setting;
 import java.util.ArrayList;
 
 import org.exoplatform.model.ServerObjInfo;
-import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ServerConfigurationUtils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -68,7 +68,7 @@ public class SettingServerEditionController {
         // Create new server
         myServerObj._bSystemServer = false;
         serverInfoList.add(myServerObj);
-        ExoServerConfiguration.createXmlDataWithServerList(serverInfoList,
+        ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
                                                            "DefaultServerList.xml",
                                                            "");
       }
@@ -95,7 +95,7 @@ public class SettingServerEditionController {
         serverObj._strServerName = myServerObj._strServerName;
         serverObj._strServerUrl = myServerObj._strServerUrl;
         serverInfoList.add(selectedServerIndex, serverObj);
-        ExoServerConfiguration.createXmlDataWithServerList(serverInfoList,
+        ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
                                                            "DefaultServerList.xml",
                                                            "");
       }
@@ -115,7 +115,7 @@ public class SettingServerEditionController {
         AccountSetting.getInstance().setDomainIndex(String.valueOf(index));
       }
       serverInfoList.remove(selectedServerIndex);
-      ExoServerConfiguration.createXmlDataWithServerList(serverInfoList,
+      ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
                                                          "DefaultServerList.xml",
                                                          "");
 

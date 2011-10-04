@@ -5,12 +5,12 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import org.exoplatform.model.ServerObjInfo;
-import org.exoplatform.proxy.ExoServerConfiguration;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ServerConfigurationUtils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -78,7 +78,7 @@ public class LaunchController {
     _arrServerList = new ArrayList<ServerObjInfo>();
 
     String appVer = "";
-    String oldVer = ExoServerConfiguration.getAppVersion(context);
+    String oldVer = ServerConfigurationUtils.getAppVersion(context);
     try {
       appVer = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
       ServerSettingHelper.getInstance().setApplicationVersion(appVer);
@@ -86,13 +86,13 @@ public class LaunchController {
     }
 
     if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {
-      _arrDefaulServerList = ExoServerConfiguration.getDefaultServerList(context);
+      _arrDefaulServerList = ServerConfigurationUtils.getDefaultServerList(context);
       if (_arrDefaulServerList.size() > 0)
         _arrServerList.addAll(_arrDefaulServerList);
     } else {
-      ArrayList<ServerObjInfo> defaultServerList = ExoServerConfiguration.getServerListWithFileName("DefaultServerList.xml");
+      ArrayList<ServerObjInfo> defaultServerList = ServerConfigurationUtils.getServerListWithFileName("DefaultServerList.xml");
 
-      _arrDeletedServerList = ExoServerConfiguration.getServerListWithFileName("DeletedDefaultServerList.xml");
+      _arrDeletedServerList = ServerConfigurationUtils.getServerListWithFileName("DeletedDefaultServerList.xml");
       if (appVer.compareToIgnoreCase(oldVer) > 0) {
 
         ArrayList<ServerObjInfo> deletedDefaultServers = _arrDeletedServerList;
@@ -117,10 +117,10 @@ public class LaunchController {
           }
         }
 
-        ExoServerConfiguration.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
+        ServerConfigurationUtils.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
       }
 
-      _arrDefaulServerList = ExoServerConfiguration.getServerListWithFileName("DefaultServerList.xml");
+      _arrDefaulServerList = ServerConfigurationUtils.getServerListWithFileName("DefaultServerList.xml");
 
       if (_arrDefaulServerList.size() > 0)
         _arrServerList.addAll(_arrDefaulServerList);

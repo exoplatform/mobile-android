@@ -5,7 +5,7 @@
  * Jul 12, 2011  
  */
 
-package org.exoplatform.proxy;
+package org.exoplatform.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,7 +34,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.util.Xml;
 
-public class ExoServerConfiguration {
+public class ServerConfigurationUtils {
 
 //  public ArrayList<ServerObj> _arrUserServerList;
 //
@@ -48,7 +48,7 @@ public class ExoServerConfiguration {
 
   private static Context      _context;
 
-  public ExoServerConfiguration(Context context) {
+  public ServerConfigurationUtils(Context context) {
 
     _context = context;
 //    _arrServerList = new ArrayList<ServerObj>();
