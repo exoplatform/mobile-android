@@ -19,7 +19,8 @@
 			
 		<TextView android:id="@+id/label"
 			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_toLeftOf="@id/Button_FileAction" android:gravity="center_vertical"
+			android:layout_toLeftOf="@id/Button_FileAction" 
+			android:layout_centerInParent="true" android:gravity="center_vertical"
 			android:textColor="#000000" android:textSize="18dip" />
 
 	</RelativeLayout>

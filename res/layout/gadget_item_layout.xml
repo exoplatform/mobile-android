@@ -23,6 +23,7 @@
 		<TextView android:id="@+id/gadget_title" style="@style/textview_name"
 			android:text="gadge title" android:layout_height="wrap_content"
 			android:layout_marginLeft="15dip" android:layout_marginTop="5dip"
+			android:textColor="#62656A"
 			android:layout_width="fill_parent" android:textStyle="bold" />
 
 		<TextView android:id="@+id/gadget_content" style="@style/textview_content"

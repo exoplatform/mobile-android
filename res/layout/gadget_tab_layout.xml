@@ -14,5 +14,7 @@
     	android:layout_marginLeft="20dip"
     	android:layout_marginTop="10dip"
     	android:layout_marginBottom="-10dip"
+    	android:textStyle="bold"
+    	android:textSize="12dip"
     	android:background="@drawable/dashboardtabbackground"/>
 </LinearLayout>

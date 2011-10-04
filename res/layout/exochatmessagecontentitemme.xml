@@ -10,13 +10,13 @@
 
 	<RelativeLayout android:layout_toRightOf="@id/TextView_Name"
 		android:layout_marginLeft="0dip" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:background="@drawable/chatdiscussionbuddymessagebg">
+		android:layout_height="wrap_content" android:background="@drawable/chatdiscussionusermessagebg">
 
 		<TextView android:id="@+id/TextView_Content"
 			android:layout_marginLeft="15dip" android:layout_marginRight="10dip"
 			android:layout_marginTop="10dip" android:layout_marginBottom="15dip"
 			android:typeface="serif" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:textColor="#000000"
+			android:layout_height="wrap_content" android:textColor="#ffffff"
 			android:text="Message content" />
 
 
