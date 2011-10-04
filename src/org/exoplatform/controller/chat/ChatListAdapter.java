@@ -56,9 +56,9 @@ public class ChatListAdapter extends BaseAdapter implements AdapterView.OnItemCl
     ImageView icon = (ImageView) view.findViewById(R.id.icon);
 
     if (chat.isOnline)
-      icon.setImageResource(R.drawable.onlinechat);
+      icon.setImageResource(R.drawable.chatcontactavailable);
     else
-      icon.setImageResource(R.drawable.offlinechat);
+      icon.setImageResource(R.drawable.chatcontactnotavailable);
   }
 
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
