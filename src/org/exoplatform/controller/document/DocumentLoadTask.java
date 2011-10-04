@@ -13,36 +13,36 @@ import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 
-public class DocumentTask extends UserTask<Integer, Void, Boolean> {
-  private DocumentWaitingDialog    _progressDialog;
+public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
+  private DocumentWaitingDialog _progressDialog;
 
-  private Context          mContext;
+  private Context               mContext;
 
-  private String           loadingData;
+  private String                loadingData;
 
-  private String           okString;
+  private String                okString;
 
-  private String           titleString;
+  private String                titleString;
 
-  private String           contentString;
+  private String                contentString;
 
   // actionID: 0-retrieve data, 1: delete file, 2: copy file, 3: move file, 4:
   // upload file
-  private int              actionID;
+  private int                   actionID;
 
-  private String           strSourceUrl;
+  private String                strSourceUrl;
 
-  private String           strDestinationUrl;
+  private String                strDestinationUrl;
 
-  private DocumentActivity documentActivity;
+  private DocumentActivity      documentActivity;
 
-  private List<ExoFile>    _documentList;
+  private List<ExoFile>         _documentList;
 
-  public DocumentTask(Context context,
-                      DocumentActivity activity,
-                      String source,
-                      String destination,
-                      int action) {
+  public DocumentLoadTask(Context context,
+                          DocumentActivity activity,
+                          String source,
+                          String destination,
+                          int action) {
     mContext = context;
     documentActivity = activity;
     strSourceUrl = source;
@@ -145,7 +145,7 @@ public class DocumentTask extends UserTask<Integer, Void, Boolean> {
     @Override
     public void onBackPressed() {
       super.onBackPressed();
-      onCancelled();
+      DocumentActivity._documentActivityInstance.onCancelLoad();
     }
 
   }

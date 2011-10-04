@@ -16,182 +16,198 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DocumentActionAdapter extends BaseAdapter {
-  
-  public  ExoFile              _selectedFile;
+
+  public ExoFile               _selectedFile;
+
   private Context              _mContext;
-  private DocumentActionDialog         _delegate;
-  
-//Localization string
-  String                  strClose         = "";
 
-  String                  strTakePicture   = "";
+  private DocumentActionDialog _delegate;
 
-  String                  strCopy          = "";
+  // Localization string
+  String                       strClose       = "";
 
-  String                  strMove          = "";
+  String                       strTakePicture = "";
 
-  String                  strDelete        = "";
+  String                       strCopy        = "";
 
-  String                  strRename        = "";
+  String                       strMove        = "";
 
-  String                  strPaste         = "";
+  String                       strDelete      = "";
 
-  DocumentActionDescription[] fileActionList   = null;
-  ExoFile                 _fileCopied;
-  ExoFile                 _fileMoved;
+  String                       strRename      = "";
+
+  String                       strPaste       = "";
+
+  DocumentActionDescription[]  fileActionList = null;
+
+  ExoFile                      _fileCopied;
+
+  ExoFile                      _fileMoved;
 
   public DocumentActionAdapter(Context context, DocumentActionDialog parent, ExoFile file) {
     _mContext = context;
     _delegate = parent;
     _selectedFile = file;
-    
+
     changeLanguage();
-    
+
   }
 
   public void setSelectedFile(ExoFile file) {
-  
+
     _selectedFile = file;
   }
-  
-   public View getView(int position, View convertView, ViewGroup parent) {
-     
-     final int pos = position;
-     LayoutInflater inflater = (LayoutInflater) _mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-     View rowView = inflater.inflate(R.layout.fileactionitem, parent, false);
-             
-     rowView.setOnClickListener(new View.OnClickListener() {
 
-       public void onClick(View v) {
+  public View getView(int position, View convertView, ViewGroup parent) {
 
-         _delegate.dismiss();
-         if (pos == 0)// Take picture
-         {
-           DocumentActivity._documentActivityInstance.takePicture();
-           
-         }
-         else if (pos == 1)// Copy file
-         {
-           _fileCopied = _selectedFile;
-           _fileMoved = null;
-         } 
-         else if (pos == 2)// move file
-         {
-           _fileMoved = _selectedFile;
-           _fileCopied = null;
-         }
-         else if (pos == 3 || pos == 4)
-         {
-           DocumentTask documentTask = null;
-           
-           if(pos == 3)// Delete file, folder
-           {
-             _fileCopied = null;
-             _fileMoved = null;
-             
-             documentTask = new DocumentTask(_mContext, DocumentActivity._documentActivityInstance, _selectedFile.urlStr, _selectedFile.urlStr, 1);
-             
-           } else {
-             // Copy file
-             if (_fileCopied != null)
-             {
-               int index = _fileCopied.urlStr.lastIndexOf("/");
-               String lastPathComponent = _fileCopied.urlStr.substring(index);
-               String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
-               
-               documentTask = new DocumentTask(_mContext, DocumentActivity._documentActivityInstance, _fileCopied.urlStr, destinationUrl, 2);
-               
-             }
-             if (_fileMoved != null) 
-             {
-               if (!_fileMoved.urlStr.equalsIgnoreCase(_selectedFile.urlStr)) 
-               {
-                 int index = _fileMoved.urlStr.lastIndexOf("/");
-                 String lastPathComponent = _fileMoved.urlStr.substring(index);
-                 String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
-                 
-                 documentTask = new DocumentTask(_mContext, DocumentActivity._documentActivityInstance, _fileMoved.urlStr, destinationUrl, 3);
+    final int pos = position;
+    LayoutInflater inflater = (LayoutInflater) _mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    View rowView = inflater.inflate(R.layout.fileactionitem, parent, false);
 
-               }
-               
-             }
-           }
-           
-           documentTask.execute();
-         }
-         else// Rename file
-         {
+    rowView.setOnClickListener(new View.OnClickListener() {
 
-         }
+      public void onClick(View v) {
 
-       }
+        _delegate.dismiss();
+        if (pos == 0)// Take picture
+        {
+          DocumentActivity._documentActivityInstance.takePicture();
 
-     });
+        } else if (pos == 1)// Copy file
+        {
+          _fileCopied = _selectedFile;
+          _fileMoved = null;
+        } else if (pos == 2)// move file
+        {
+          _fileMoved = _selectedFile;
+          _fileCopied = null;
+        } else if (pos == 3 || pos == 4) {
+//          DocumentLoadTask documentTask = null;
 
-     bindView(rowView, fileActionList[position]);
-     return (rowView);
-     
-   }
+          if (pos == 3)// Delete file, folder
+          {
+            _fileCopied = null;
+            _fileMoved = null;
 
-   private void bindView(View view, DocumentActionDescription fileAction) {
-      TextView label = (TextView) view.findViewById(R.id.label);
-      label.setText(fileAction.actionName.replace("%20", " "));
-      ImageView icon = (ImageView) view.findViewById(R.id.icon);
-      icon.setImageResource(fileAction.imageID);
-  
-      if (_selectedFile.isFolder) {
-        if (fileAction.actionName.equalsIgnoreCase(strCopy)
-            || fileAction.actionName.equalsIgnoreCase(strMove)) {
-          
-          label.setTextColor(android.graphics.Color.DKGRAY);
-          view.setEnabled(false);
+//            documentTask = new DocumentLoadTask(_mContext,
+//                                                DocumentActivity._documentActivityInstance,
+//                                                _selectedFile.urlStr,
+//                                                _selectedFile.urlStr,
+//                                                1);
+            DocumentActivity._documentActivityInstance.onLoad(_selectedFile.urlStr,
+                                                              _selectedFile.urlStr,
+                                                              1);
+          } else {
+            // Copy file
+            if (_fileCopied != null) {
+              int index = _fileCopied.urlStr.lastIndexOf("/");
+              String lastPathComponent = _fileCopied.urlStr.substring(index);
+              String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
+
+//              documentTask = new DocumentLoadTask(_mContext,
+//                                                  DocumentActivity._documentActivityInstance,
+//                                                  _fileCopied.urlStr,
+//                                                  destinationUrl,
+//                                                  2);
+              DocumentActivity._documentActivityInstance.onLoad(_fileCopied.urlStr,
+                                                                destinationUrl,
+                                                                2);
+
+            }
+            if (_fileMoved != null) {
+              if (!_fileMoved.urlStr.equalsIgnoreCase(_selectedFile.urlStr)) {
+                int index = _fileMoved.urlStr.lastIndexOf("/");
+                String lastPathComponent = _fileMoved.urlStr.substring(index);
+                String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
+
+//                documentTask = new DocumentLoadTask(_mContext,
+//                                                    DocumentActivity._documentActivityInstance,
+//                                                    _fileMoved.urlStr,
+//                                                    destinationUrl,
+//                                                    3);
+                DocumentActivity._documentActivityInstance.onLoad(_fileMoved.urlStr,
+                                                                  destinationUrl,
+                                                                  3);
+
+              }
+
+            }
+          }
+
+//          documentTask.execute();
+        } else// Rename file
+        {
+
         }
-      } else {
-        if (fileAction.actionName.equalsIgnoreCase(strTakePicture)
-            || fileAction.actionName.equalsIgnoreCase(strPaste)) {
-          
-          label.setTextColor(android.graphics.Color.DKGRAY);
-          view.setEnabled(false);
-        }
-  
+
       }
-  
-    }
-  
-    public long getItemId(int position) {
-  
-      return position;
-    }
-  
-    public Object getItem(int position) {
-  
-      return position;
-    }
-  
-    public int getCount() {
-  
-      return 5;
-    }
-    
-    // Set language
-    public void changeLanguage() {
 
-      LocalizationHelper local = LocalizationHelper.getInstance();
-      
-      strTakePicture = local.getString("TakePicture");
-      strCopy = local.getString("Copy");
-      strMove = local.getString("Move");
-      strDelete = local.getString("Delete");
-      strRename = local.getString("Rename");
-      strPaste = local.getString("Paste");
-      
-      fileActionList = new DocumentActionDescription[] {
-          new DocumentActionDescription(strTakePicture, R.drawable.documentactionpopupphotoicon),
-          new DocumentActionDescription(strCopy, R.drawable.documentactionpopupcopyicon),
-          new DocumentActionDescription(strMove, R.drawable.documentactionpopupcuticon),
-          new DocumentActionDescription(strDelete, R.drawable.documentactionpopupdeleteicon),
-          new DocumentActionDescription(strPaste, R.drawable.documentactionpopuppasteicon) };
+    });
+
+    bindView(rowView, fileActionList[position]);
+    return (rowView);
+
+  }
+
+  private void bindView(View view, DocumentActionDescription fileAction) {
+    TextView label = (TextView) view.findViewById(R.id.label);
+    label.setText(fileAction.actionName.replace("%20", " "));
+    ImageView icon = (ImageView) view.findViewById(R.id.icon);
+    icon.setImageResource(fileAction.imageID);
+
+    if (_selectedFile.isFolder) {
+      if (fileAction.actionName.equalsIgnoreCase(strCopy)
+          || fileAction.actionName.equalsIgnoreCase(strMove)) {
+
+        label.setTextColor(android.graphics.Color.DKGRAY);
+        view.setEnabled(false);
+      }
+    } else {
+      if (fileAction.actionName.equalsIgnoreCase(strTakePicture)
+          || fileAction.actionName.equalsIgnoreCase(strPaste)) {
+
+        label.setTextColor(android.graphics.Color.DKGRAY);
+        view.setEnabled(false);
+      }
 
     }
+
+  }
+
+  public long getItemId(int position) {
+
+    return position;
+  }
+
+  public Object getItem(int position) {
+
+    return position;
+  }
+
+  public int getCount() {
+
+    return 5;
+  }
+
+  // Set language
+  public void changeLanguage() {
+
+    LocalizationHelper local = LocalizationHelper.getInstance();
+
+    strTakePicture = local.getString("TakePicture");
+    strCopy = local.getString("Copy");
+    strMove = local.getString("Move");
+    strDelete = local.getString("Delete");
+    strRename = local.getString("Rename");
+    strPaste = local.getString("Paste");
+
+    fileActionList = new DocumentActionDescription[] {
+        new DocumentActionDescription(strTakePicture, R.drawable.documentactionpopupphotoicon),
+        new DocumentActionDescription(strCopy, R.drawable.documentactionpopupcopyicon),
+        new DocumentActionDescription(strMove, R.drawable.documentactionpopupcuticon),
+        new DocumentActionDescription(strDelete, R.drawable.documentactionpopupdeleteicon),
+        new DocumentActionDescription(strPaste, R.drawable.documentactionpopuppasteicon) };
+
+  }
 
 }

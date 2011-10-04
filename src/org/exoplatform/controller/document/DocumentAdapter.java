@@ -82,7 +82,7 @@ public class DocumentAdapter extends BaseAdapter {
         
           _urlStr = myFile.urlStr;
           
-          DocumentTask documentTask = new DocumentTask(_mContext, DocumentActivity._documentActivityInstance, _urlStr, null, 0);
+          DocumentLoadTask documentTask = new DocumentLoadTask(_mContext, DocumentActivity._documentActivityInstance, _urlStr, null, 0);
           documentTask.execute();
           
         }
