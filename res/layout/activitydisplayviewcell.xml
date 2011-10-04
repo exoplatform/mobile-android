@@ -22,8 +22,8 @@
 		<TextView android:id="@+id/textView_Name" style="@style/textview_name"
 			android:layout_height="wrap_content" android:text="Name"
 			android:padding="2dp" android:layout_marginLeft="10dip"
-			android:layout_marginTop="2dip" android:layout_width="fill_parent"
-			android:gravity="center_vertical" android:textStyle="bold" />
+			android:layout_width="fill_parent" android:gravity="center_vertical"
+			android:textStyle="bold" />
 
 		<TextView android:id="@+id/textView_Message" android:padding="2dp"
 			style="@style/textview_content" android:layout_height="wrap_content"
