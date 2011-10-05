@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="#08387B">
+	android:background="@drawable/home_background">
 
+	<ViewStub android:id="@+id/social_empty_stub"
+		android:inflatedId="@+id/social_empty_stub_inflted" android:layout="@layout/empty_screen"
+		android:visibility="gone" android:layout_centerInParent="true"
+		android:layout_width="wrap_content" android:layout_height="wrap_content" />
 	<ScrollView android:fadingEdge="none" android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 		<LinearLayout android:id="@+id/activity_stream_wrap"
@@ -10,4 +14,4 @@
 			android:layout_height="fill_parent">
 		</LinearLayout>
 	</ScrollView>
-</LinearLayout>
+</RelativeLayout>
