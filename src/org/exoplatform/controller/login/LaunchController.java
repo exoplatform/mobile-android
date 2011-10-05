@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
+import android.util.Log;
 
 public class LaunchController {
   private SharedPreferences        sharedPreference;
@@ -67,7 +68,7 @@ public class LaunchController {
                     .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
 
     } catch (Exception e) {
-
+      Log.i("LaunchController", e.getMessage());
     }
     //get server version information
     ExoConnectionUtils.checkPLFVersion();

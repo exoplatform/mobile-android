@@ -58,7 +58,7 @@ public class ChatDetailActivity extends MyActionBar {
   private static ListView                conversationView;                                     // Chat
 
   // conversation
-  public static ChatDetailActivity        eXoChatControllerInstance;                            // Instance
+  public static ChatDetailActivity       eXoChatControllerInstance;                            // Instance
 
   // app
   // view
@@ -233,6 +233,7 @@ public class ChatDetailActivity extends MyActionBar {
 
       public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = eXoChatControllerInstance.getLayoutInflater();
+
         View rowView = inflater.inflate(R.layout.exochatmessagecontentitem, parent, false);
         bindView(rowView, listChatContent.get(position));
         return (rowView);

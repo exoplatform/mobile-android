@@ -30,6 +30,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,23 +43,25 @@ public class DocumentActivity extends MyActionBar {
 
   public static DocumentActivity _documentActivityInstance;
 
-  ListView                       _listViewDocument;
+  private ListView               _listViewDocument;
 
-  TextView                       _textViewEmptyPage;
+  private TextView               _textViewEmptyPage;
 
-  ImageView                      _imgViewUpLoadPhoto;
+  private ImageView              _imgViewUpLoadPhoto;
 
-  ImageView                      _imgViewEmptyPage;
+  private ImageView              _imgViewEmptyPage;
 
-  Button                         _btnUploadImage;
+  private Button                 _btnUploadImage;
 
-  Button                         _btnCancelUploadImage;       // "/sdcard/eXo/";
+  private Button                 _btnCancelUploadImage;       // "/sdcard/eXo/";
 
-  WaitingDialog                  _progressDialog;
+  private WaitingDialog          _progressDialog;
 
-  String                         _strCannotBackToPreviousPage;
+  private String                 _strCannotBackToPreviousPage;
 
-  String                         _strDownloadFileIntoSDCard;
+  private String                 _strDownloadFileIntoSDCard;
+
+  private String                 emptyFolderString;
 
   public String                  _sdcard_temp_dir;
 
@@ -67,6 +70,8 @@ public class DocumentActivity extends MyActionBar {
   public DocumentAdapter         _documentAdapter;
 
   private DocumentLoadTask       mLoadTask;
+
+  private View                   empty_stub;
 
   // Constructor
   @Override
@@ -346,6 +351,21 @@ public class DocumentActivity extends MyActionBar {
 
   }
 
+  public void setEmptyView(int status) {
+    if (empty_stub == null) {
+      initStubView();
+    }
+    empty_stub.setVisibility(status);
+  }
+
+  private void initStubView() {
+    empty_stub = ((ViewStub) findViewById(R.id.file_empty_stub)).inflate();
+    ImageView emptyImage = (ImageView) empty_stub.findViewById(R.id.empty_image);
+    emptyImage.setBackgroundResource(R.drawable.icon_for_empty_folder);
+    TextView emptyStatus = (TextView) empty_stub.findViewById(R.id.empty_status);
+    emptyStatus.setText(emptyFolderString);
+  }
+
   // Set language
   public void changeLanguage() {
 
@@ -356,6 +376,7 @@ public class DocumentActivity extends MyActionBar {
     String strEmptyPage = local.getString("EmptyPage");
     _strCannotBackToPreviousPage = local.getString("CannotBackToPreviousPage");
     _strDownloadFileIntoSDCard = local.getString("DownloadFileInToSDCard");
+    emptyFolderString = local.getString("EmptyFolder");
 
     _btnUploadImage.setText(strUploadFile);
     _btnCancelUploadImage.setText(strCancel);

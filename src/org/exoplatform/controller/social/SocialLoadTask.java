@@ -11,11 +11,14 @@ import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
+import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.View;
 
 public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActivityInfo>> {
   private SocialWaitingDialog _progressDialog;
@@ -29,6 +32,8 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
   private String              titleString;
 
   private String              contentString;
+
+  private String              emptyString;
 
   private SocialController    socialController;
 
@@ -44,6 +49,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
     okString = location.getString("OK");
     titleString = location.getString("Warning");
     contentString = location.getString("ConnectionError");
+    emptyString = location.getString("EmptyActivity");
   }
 
   @Override
@@ -67,22 +73,25 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
                                                                                     .getUserId());
       RealtimeListAccess<RestActivity> list = activityService.getActivityStream(identity);
       ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);
-      SocialActivityInfo streamInfo = null;
-      RestProfile profile = null;
-      for (RestActivity act : activityList) {
-        streamInfo = new SocialActivityInfo();
-        profile = act.getPosterIdentity().getProfile();
-        streamInfo.setActivityId(act.getId());
-        streamInfo.setImageUrl(profile.getAvatarUrl());
-        streamInfo.setUserName(profile.getFullName());
-        streamInfo.setTitle(act.getTitle());
-        streamInfo.setPostedTime(act.getPostedTime());
-        streamInfo.setLikeNumber(act.getLikes().size());
-        streamInfo.setCommentNumber(act.getAvailableComments().size());
-        streamInfoList.add(streamInfo);
+      if (activityList.size() > 0) {
+        SocialActivityInfo streamInfo = null;
+        RestProfile profile = null;
+        for (RestActivity act : activityList) {
+          streamInfo = new SocialActivityInfo();
+          profile = act.getPosterIdentity().getProfile();
+          streamInfo.setActivityId(act.getId());
+          streamInfo.setImageUrl(profile.getAvatarUrl());
+          streamInfo.setUserName(profile.getFullName());
+          streamInfo.setTitle(act.getTitle());
+          streamInfo.setPostedTime(act.getPostedTime());
+          streamInfo.setLikeNumber(act.getLikes().size());
+          streamInfo.setCommentNumber(act.getAvailableComments().size());
+          streamInfoList.add(streamInfo);
+        }
       }
       return streamInfoList;
     } catch (RuntimeException e) {
+      Log.i("SocialLoadTask", e.getMessage());
       return null;
     }
   }
@@ -95,12 +104,18 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
 
   @Override
   public void onPostExecute(ArrayList<SocialActivityInfo> result) {
-
     if (result != null) {
-      socialController.setActivityList(result);
+      if (result.size() == 0) {
+        SocialActivity.socialActivity.setEmptyView(emptyString, View.VISIBLE);
+      } else {
+        SocialActivity.socialActivity.setEmptyView(emptyString, View.GONE);
+        socialController.setActivityList(result);
+      }
+
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
+      SocialActivity.socialActivity.setEmptyView(emptyString, View.VISIBLE);
     }
     _progressDialog.dismiss();
 

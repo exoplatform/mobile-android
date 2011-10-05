@@ -7,11 +7,15 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
-import com.cyrilmottier.android.greendroid.R;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewStub;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.cyrilmottier.android.greendroid.R;
 
 public class SocialActivity extends MyActionBar {
   private LinearLayout         activityStreamWrap;
@@ -20,11 +24,13 @@ public class SocialActivity extends MyActionBar {
 
   public static SocialActivity socialActivity;
 
+  private View                 emptyStubView;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-//    setTheme(R.style.Theme_eXo);
+    // setTheme(R.style.Theme_eXo);
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
@@ -43,6 +49,21 @@ public class SocialActivity extends MyActionBar {
     socialController = new SocialController(this, activityStreamWrap);
     socialController.onLoad();
 
+  }
+
+  public void setEmptyView(String content,int status) {
+    if (emptyStubView == null) {
+      initStubView(content);
+    }
+    emptyStubView.setVisibility(status);
+  }
+
+  private void initStubView(String content) {
+    emptyStubView = ((ViewStub) findViewById(R.id.social_empty_stub)).inflate();
+    ImageView emptyImage = (ImageView) emptyStubView.findViewById(R.id.empty_image);
+    emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
+    TextView emptyStatus = (TextView) emptyStubView.findViewById(R.id.empty_status);
+    emptyStatus.setText(content);
   }
 
   @Override

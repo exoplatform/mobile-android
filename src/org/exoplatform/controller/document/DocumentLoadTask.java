@@ -12,6 +12,7 @@ import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
+import android.view.View;
 
 public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
   private DocumentWaitingDialog _progressDialog;
@@ -126,10 +127,14 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
       }
       documentActivity._documentAdapter._documentList = _documentList;
       documentActivity._documentAdapter.notifyDataSetChanged();
-
+      if (_documentList.size() == 0) {
+        documentActivity.setEmptyView(View.VISIBLE);
+      } else
+        documentActivity.setEmptyView(View.GONE);
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
+      documentActivity.setEmptyView(View.VISIBLE);
     }
     _progressDialog.dismiss();
 

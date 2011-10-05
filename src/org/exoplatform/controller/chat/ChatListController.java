@@ -7,7 +7,9 @@ import java.util.List;
 import org.exoplatform.model.ChatMemberInfo;
 import org.exoplatform.model.ChatMessageContent;
 import org.exoplatform.singleton.ChatServiceHelper;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.ChatDetailActivity;
+import org.exoplatform.ui.ChatListActivity;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
@@ -19,11 +21,17 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
 
+import com.cyrilmottier.android.greendroid.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewStub;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChatListController {
@@ -197,9 +205,15 @@ public class ChatListController {
   private void setListAdapter() {
     ArrayList<ChatMemberInfo> listChatRosterEntry = getListChat();
     ChatServiceHelper.getInstance().setChatListRosterEntry(listChatRosterEntry);
-    chatsAdapter = new ChatListAdapter(mContext, listChatRosterEntry);
-    lvChatList.setAdapter(chatsAdapter);
-    lvChatList.setOnItemClickListener(chatsAdapter);
+    if (listChatRosterEntry.size() == 0) {
+      ChatListActivity.chatListActivity.setEmptyView(View.VISIBLE);
+    } else {
+      ChatListActivity.chatListActivity.setEmptyView(View.GONE);
+      chatsAdapter = new ChatListAdapter(mContext, listChatRosterEntry);
+      lvChatList.setAdapter(chatsAdapter);
+      lvChatList.setOnItemClickListener(chatsAdapter);
+    }
+
   }
 
   // Set roster array

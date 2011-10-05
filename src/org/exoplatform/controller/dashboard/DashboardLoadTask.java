@@ -6,16 +6,18 @@ import org.exoplatform.model.DashBoardItem;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.model.GateInDbItem;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
+import android.view.View;
 
 public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbItem>> {
   private DashboardController    dashboardController;
 
-  private Context                mContext;
+  private DashboardActivity      dashboardActivity;
 
   private String                 loadingData;
 
@@ -25,17 +27,19 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
 
   private String                 contentString;
 
+  private String                 dashboardEmptyString;
+
   private DashboardWaitingDialog _progressDialog;
 
-  public DashboardLoadTask(Context context, DashboardController controller) {
-    mContext = context;
+  public DashboardLoadTask(DashboardActivity context, DashboardController controller) {
+    dashboardActivity = context;
     dashboardController = controller;
     changeLanguage();
   }
 
   @Override
   public void onPreExecute() {
-    _progressDialog = new DashboardWaitingDialog(mContext, null, loadingData);
+    _progressDialog = new DashboardWaitingDialog(dashboardActivity, null, loadingData);
     _progressDialog.show();
   }
 
@@ -47,19 +51,29 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
   @Override
   public void onPostExecute(ArrayList<GateInDbItem> result) {
     if (result != null) {
-      ArrayList<DashBoardItem> items = new ArrayList<DashBoardItem>();
-      for (int i = 0; i < result.size(); i++) {
-        GateInDbItem gadgetTab = result.get(i);
-        items.add(new DashBoardItem(gadgetTab._strDbItemName, null));
-        for (int j = 0; j < gadgetTab._arrGadgetsInItem.size(); j++) {
-          GadgetInfo gadget = gadgetTab._arrGadgetsInItem.get(j);
-          items.add(new DashBoardItem(null, gadget));
+      if (result.size() == 0) {
+        dashboardActivity.setEmptyView(dashboardEmptyString, View.VISIBLE);
+      } else {
+        ArrayList<DashBoardItem> items = new ArrayList<DashBoardItem>();
+        for (int i = 0; i < result.size(); i++) {
+          GateInDbItem gadgetTab = result.get(i);
+          items.add(new DashBoardItem(gadgetTab._strDbItemName, null));
+          for (int j = 0; j < gadgetTab._arrGadgetsInItem.size(); j++) {
+            GadgetInfo gadget = gadgetTab._arrGadgetsInItem.get(j);
+            items.add(new DashBoardItem(null, gadget));
+          }
         }
+        dashboardController.setAdapter(items);
+        dashboardActivity.setEmptyView(dashboardEmptyString, View.GONE);
       }
-      dashboardController.setAdapter(items);
+
     } else {
-      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+      WarningDialog dialog = new WarningDialog(dashboardActivity,
+                                               titleString,
+                                               contentString,
+                                               okString);
       dialog.show();
+      dashboardActivity.setEmptyView(dashboardEmptyString, View.VISIBLE);
     }
     _progressDialog.dismiss();
   }
@@ -70,6 +84,7 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
     okString = location.getString("OK");
     titleString = location.getString("Warning");
     contentString = location.getString("ConnectionError");
+    dashboardEmptyString = location.getString("EmptyDashboard");
   }
 
   private class DashboardWaitingDialog extends WaitingDialog {

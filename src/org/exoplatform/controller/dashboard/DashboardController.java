@@ -11,18 +11,30 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 
+import com.cyrilmottier.android.greendroid.R;
+
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.view.View;
+import android.view.ViewStub;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public class DashboardController {
 
-  private  String             _strContentForStandaloneURL;
+  private String            _strContentForStandaloneURL;
 
-  private DashboardActivity activity;
+  private DashboardActivity           activity;
 
   private DashboardLoadTask mLoadTask;
 
-  public DashboardController(DashboardActivity context) {
+  private ListView          listView;
+
+  public DashboardController(DashboardActivity context, ListView list) {
     activity = context;
+    listView = list;
   }
 
   public void onLoad() {
@@ -39,11 +51,14 @@ public class DashboardController {
     }
   }
 
+  
   public void setAdapter(ArrayList<DashBoardItem> result) {
-    activity.setListAdapter(new DashboardItemAdapter(activity, result));
+    listView.setAdapter(new DashboardItemAdapter(activity, result));
   }
-  
-  
+
+//  public void setListAdapter(ArrayList<DashBoardItem> result) {
+//
+//  }
 
   // Get gadget list
   public List<GadgetInfo> getGadgetsList() {
@@ -208,11 +223,11 @@ public class DashboardController {
       gadgetUrl += gadgetXmlFile;
 
       GadgetInfo gadget = new GadgetInfo(strGadgetName,
-                                       strGadgetDescription,
-                                       gadgetUrl,
-                                       gadgetIconUrl,
-                                       null,
-                                       gadgetID);
+                                         strGadgetDescription,
+                                         gadgetUrl,
+                                         gadgetIconUrl,
+                                         null,
+                                         gadgetID);
 
       arrTmpGadgets.add(gadget);
 
@@ -283,7 +298,8 @@ public class DashboardController {
             // Get the TabName
             String gadgetTabName = stringCutted.substring(0, indexForDashboardNameEnd);
 
-            List<GadgetInfo> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain + gadgetTabUrlStr);
+            List<GadgetInfo> arrTmpGadgetsInItem = listOfGadgetsWithURL(_strDomain
+                + gadgetTabUrlStr);
 
             HashMap<String, String> mapOfURLs = listOfStandaloneGadgetsURL();
 

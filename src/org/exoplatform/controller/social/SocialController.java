@@ -3,9 +3,11 @@ package org.exoplatform.controller.social;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
@@ -13,7 +15,6 @@ import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.SocialHeaderLayout;
 import org.exoplatform.widget.SocialShowMoreItem;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.view.View;
@@ -21,12 +22,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
-import com.cyrilmottier.android.greendroid.R;
-
 public class SocialController {
   private int            number_of_activity;
 
-  private Context        mContext;
+  private SocialActivity mContext;
 
   private SocialLoadTask mLoadTask;
 
@@ -48,7 +47,7 @@ public class SocialController {
 
   private String         hours;
 
-  public SocialController(Context context, LinearLayout layout) {
+  public SocialController(SocialActivity context, LinearLayout layout) {
     mContext = context;
     activityStreamWrap = layout;
     resource = context.getResources();
@@ -57,7 +56,7 @@ public class SocialController {
   }
 
   public void onLoad() {
-    if (mLoadTask == null || mLoadTask.getStatus() ==  SocialLoadTask.Status.FINISHED) {
+    if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
       mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this).execute(number_of_activity);
     }
   }
