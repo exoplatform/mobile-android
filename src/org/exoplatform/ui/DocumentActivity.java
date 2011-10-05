@@ -95,9 +95,6 @@ public class DocumentActivity extends MyActionBar {
 
     _urlDocumentHome = ExoDocumentUtils.getDocumentUrl(userName, domain);
 
-    // DocumentLoadTask documentTask = new DocumentLoadTask(this, this,
-    // _urlDocumentHome, null, 0);
-    // documentTask.execute();
     onLoad(_urlDocumentHome, null, 0);
 
   }
@@ -117,12 +114,6 @@ public class DocumentActivity extends MyActionBar {
       if (_documentAdapter._urlStr.length() < _urlDocumentHome.length())
         finish();
       else {
-        // DocumentLoadTask documentTask = new DocumentLoadTask(this,
-        // this,
-        // _documentAdapter._urlStr,
-        // null,
-        // 0);
-        // documentTask.execute();
         onLoad(_documentAdapter._urlStr, null, 0);
       }
     }
@@ -162,14 +153,6 @@ public class DocumentActivity extends MyActionBar {
           setViewUploadImage(false);
 
           String sourceUrl = _documentAdapter._documentActionDialog.myFile.urlStr;
-          // DocumentLoadTask documentTask = new
-          // DocumentLoadTask(_documentActivityInstance,
-          // _documentActivityInstance,
-          // sourceUrl,
-          // null,
-          // 4);
-          // documentTask.execute();
-
           onLoad(sourceUrl, null, 4);
         }
       });

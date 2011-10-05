@@ -82,18 +82,12 @@ public class DocumentActionAdapter extends BaseAdapter {
           _fileMoved = _selectedFile;
           _fileCopied = null;
         } else if (pos == 3 || pos == 4) {
-//          DocumentLoadTask documentTask = null;
 
           if (pos == 3)// Delete file, folder
           {
             _fileCopied = null;
             _fileMoved = null;
 
-//            documentTask = new DocumentLoadTask(_mContext,
-//                                                DocumentActivity._documentActivityInstance,
-//                                                _selectedFile.urlStr,
-//                                                _selectedFile.urlStr,
-//                                                1);
             DocumentActivity._documentActivityInstance.onLoad(_selectedFile.urlStr,
                                                               _selectedFile.urlStr,
                                                               1);
@@ -104,11 +98,6 @@ public class DocumentActionAdapter extends BaseAdapter {
               String lastPathComponent = _fileCopied.urlStr.substring(index);
               String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
 
-//              documentTask = new DocumentLoadTask(_mContext,
-//                                                  DocumentActivity._documentActivityInstance,
-//                                                  _fileCopied.urlStr,
-//                                                  destinationUrl,
-//                                                  2);
               DocumentActivity._documentActivityInstance.onLoad(_fileCopied.urlStr,
                                                                 destinationUrl,
                                                                 2);
@@ -120,11 +109,6 @@ public class DocumentActionAdapter extends BaseAdapter {
                 String lastPathComponent = _fileMoved.urlStr.substring(index);
                 String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
 
-//                documentTask = new DocumentLoadTask(_mContext,
-//                                                    DocumentActivity._documentActivityInstance,
-//                                                    _fileMoved.urlStr,
-//                                                    destinationUrl,
-//                                                    3);
                 DocumentActivity._documentActivityInstance.onLoad(_fileMoved.urlStr,
                                                                   destinationUrl,
                                                                   3);
@@ -134,7 +118,6 @@ public class DocumentActionAdapter extends BaseAdapter {
             }
           }
 
-//          documentTask.execute();
         } else// Rename file
         {
 

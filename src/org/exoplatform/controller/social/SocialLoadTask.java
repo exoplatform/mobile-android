@@ -33,8 +33,6 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
 
   private String              contentString;
 
-  private String              emptyString;
-
   private SocialController    socialController;
 
   public SocialLoadTask(Context context, SocialController controller) {
@@ -49,7 +47,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
     okString = location.getString("OK");
     titleString = location.getString("Warning");
     contentString = location.getString("ConnectionError");
-    emptyString = location.getString("EmptyActivity");
+
   }
 
   @Override
@@ -106,16 +104,16 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
   public void onPostExecute(ArrayList<SocialActivityInfo> result) {
     if (result != null) {
       if (result.size() == 0) {
-        SocialActivity.socialActivity.setEmptyView(emptyString, View.VISIBLE);
+        SocialActivity.socialActivity.setEmptyView(View.VISIBLE);
       } else {
-        SocialActivity.socialActivity.setEmptyView(emptyString, View.GONE);
+        SocialActivity.socialActivity.setEmptyView(View.GONE);
         socialController.setActivityList(result);
       }
 
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
-      SocialActivity.socialActivity.setEmptyView(emptyString, View.VISIBLE);
+      SocialActivity.socialActivity.setEmptyView(View.VISIBLE);
     }
     _progressDialog.dismiss();
 

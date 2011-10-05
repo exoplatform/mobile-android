@@ -65,7 +65,8 @@ public class LocalizationHelper {
    */
   public String getString(String key) {
     try {
-      return new String(resBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
+//      return new String(resBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
+      return resBundle.getString(key);
     } catch (Exception e) {
       Log.e("LOCALIZATION", "Missing key " + key + " in localization resources");
       return null;

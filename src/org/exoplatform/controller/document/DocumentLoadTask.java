@@ -12,6 +12,7 @@ import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
@@ -116,21 +117,21 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   @Override
   public void onPostExecute(Boolean result) {
-
+    Log.i("DocumentLoadTask", "" + _documentList.size());
     if (result) {
-
-      if (documentActivity._documentAdapter == null) {
-
-        documentActivity._documentAdapter = new DocumentAdapter(documentActivity,
-                                                                documentActivity._urlDocumentHome);
-        documentActivity.setDocumentAdapter();
-      }
-      documentActivity._documentAdapter._documentList = _documentList;
-      documentActivity._documentAdapter.notifyDataSetChanged();
       if (_documentList.size() == 0) {
         documentActivity.setEmptyView(View.VISIBLE);
-      } else
+      } else {
         documentActivity.setEmptyView(View.GONE);
+        if (documentActivity._documentAdapter == null) {
+
+          documentActivity._documentAdapter = new DocumentAdapter(documentActivity,
+                                                                  documentActivity._urlDocumentHome);
+          documentActivity.setDocumentAdapter();
+        }
+        documentActivity._documentAdapter._documentList = _documentList;
+        documentActivity._documentAdapter.notifyDataSetChanged();
+      }
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();

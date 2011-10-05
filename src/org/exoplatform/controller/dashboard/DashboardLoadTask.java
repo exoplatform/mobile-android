@@ -27,8 +27,6 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
 
   private String                 contentString;
 
-  private String                 dashboardEmptyString;
-
   private DashboardWaitingDialog _progressDialog;
 
   public DashboardLoadTask(DashboardActivity context, DashboardController controller) {
@@ -52,7 +50,7 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
   public void onPostExecute(ArrayList<GateInDbItem> result) {
     if (result != null) {
       if (result.size() == 0) {
-        dashboardActivity.setEmptyView(dashboardEmptyString, View.VISIBLE);
+        dashboardActivity.setEmptyView(View.VISIBLE);
       } else {
         ArrayList<DashBoardItem> items = new ArrayList<DashBoardItem>();
         for (int i = 0; i < result.size(); i++) {
@@ -64,7 +62,7 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
           }
         }
         dashboardController.setAdapter(items);
-        dashboardActivity.setEmptyView(dashboardEmptyString, View.GONE);
+        dashboardActivity.setEmptyView(View.GONE);
       }
 
     } else {
@@ -73,7 +71,7 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
                                                contentString,
                                                okString);
       dialog.show();
-      dashboardActivity.setEmptyView(dashboardEmptyString, View.VISIBLE);
+      dashboardActivity.setEmptyView(View.VISIBLE);
     }
     _progressDialog.dismiss();
   }
@@ -84,7 +82,6 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
     okString = location.getString("OK");
     titleString = location.getString("Warning");
     contentString = location.getString("ConnectionError");
-    dashboardEmptyString = location.getString("EmptyDashboard");
   }
 
   private class DashboardWaitingDialog extends WaitingDialog {

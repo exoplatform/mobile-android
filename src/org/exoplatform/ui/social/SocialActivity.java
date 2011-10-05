@@ -26,6 +26,10 @@ public class SocialActivity extends MyActionBar {
 
   private View                 emptyStubView;
 
+  private String               title;
+
+  private String               emptyString;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -40,8 +44,7 @@ public class SocialActivity extends MyActionBar {
     setActionBarContentView(R.layout.activitybrowserview);
     socialActivity = this;
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
-    String title = LocalizationHelper.getInstance().getString("ActivityStream");
-    setTitle(title);
+    changeLanguage();
     init();
   }
 
@@ -51,19 +54,19 @@ public class SocialActivity extends MyActionBar {
 
   }
 
-  public void setEmptyView(String content,int status) {
+  public void setEmptyView(int status) {
     if (emptyStubView == null) {
-      initStubView(content);
+      initStubView();
     }
     emptyStubView.setVisibility(status);
   }
 
-  private void initStubView(String content) {
+  private void initStubView() {
     emptyStubView = ((ViewStub) findViewById(R.id.social_empty_stub)).inflate();
     ImageView emptyImage = (ImageView) emptyStubView.findViewById(R.id.empty_image);
     emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
     TextView emptyStatus = (TextView) emptyStubView.findViewById(R.id.empty_status);
-    emptyStatus.setText(content);
+    emptyStatus.setText(emptyString);
   }
 
   @Override
@@ -92,6 +95,13 @@ public class SocialActivity extends MyActionBar {
     }
     return true;
 
+  }
+
+  private void changeLanguage() {
+    LocalizationHelper bundle = LocalizationHelper.getInstance();
+    title = bundle.getString("ActivityStream");
+    setTitle(title);
+    emptyString = bundle.getString("EmptyActivity");
   }
 
 }
