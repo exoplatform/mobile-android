@@ -140,7 +140,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     return false;
   }
 
-   @Override
+//   @Override
   public void onClick(View view) {
     if (view == _btnLogIn) {
       onLogin();

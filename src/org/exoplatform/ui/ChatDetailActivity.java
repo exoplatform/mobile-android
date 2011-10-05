@@ -58,7 +58,7 @@ public class ChatDetailActivity extends MyActionBar {
   private static ListView                conversationView;                                     // Chat
 
   // conversation
-  public static ChatDetailActivity       eXoChatControllerInstance;                            // Instance
+  public static ChatDetailActivity        eXoChatControllerInstance;                            // Instance
 
   // app
   // view
@@ -134,6 +134,7 @@ public class ChatDetailActivity extends MyActionBar {
 
             listChatContent.add(new ChatMessageContent(meText, msg));
             messageEditText.setText("");
+            
             setListAdapter();
 
           } catch (Exception e) {
@@ -232,27 +233,25 @@ public class ChatDetailActivity extends MyActionBar {
     BaseAdapter adapter = new BaseAdapter() {
 
       public View getView(int position, View convertView, ViewGroup parent) {
+        
         LayoutInflater inflater = eXoChatControllerInstance.getLayoutInflater();
-
-        View rowView = inflater.inflate(R.layout.exochatmessagecontentitem, parent, false);
-        bindView(rowView, listChatContent.get(position));
+        
+        View rowView = null;
+        
+        ChatMessageContent msgContent = listChatContent.get(position);
+        if(msgContent.name.equalsIgnoreCase("me"))
+          rowView = inflater.inflate(R.layout.exochatmessagecontentitemme, parent, false);
+        else
+          rowView = inflater.inflate(R.layout.exochatmessagecontentitem, parent, false);
+        
+        bindView(rowView, msgContent);
         return (rowView);
       }
 
       private void bindView(View view, ChatMessageContent msgContent) {
-        TextView name = (TextView) view.findViewById(R.id.TextView_Name);
-        name.setText(msgContent.name);
-
-        if (msgContent.name.equalsIgnoreCase(meText)) {
-          // view.setBackgroundResource(R.drawable.chatbackgroundwhite);
-        } else {
-          // view.setBackgroundResource(R.drawable.chatbackgroundwhite);
-          // view.setBackgroundResource(0xFFFFFFFF);
-        }
+        
         TextView content = (TextView) view.findViewById(R.id.TextView_Content);
         content.setText(msgContent.content);
-
-        name.setBackgroundResource(R.drawable.chatnamebackground);
       }
 
       public long getItemId(int position) {
@@ -271,6 +270,7 @@ public class ChatDetailActivity extends MyActionBar {
       }
     };
     conversationView.setAdapter(adapter);
+    
   }
 
   // Set language
