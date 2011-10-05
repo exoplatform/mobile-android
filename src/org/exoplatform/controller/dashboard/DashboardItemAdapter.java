@@ -4,6 +4,7 @@ import greendroid.image.ImageProcessor;
 import greendroid.widget.AsyncImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -30,11 +31,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.RelativeLayout.LayoutParams;
 
 public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor {
 
   private ArrayList<DashBoardItem>    _arrayOfItems;
+  private HashMap<String, ArrayList<DashBoardItem>> dashbashHash;
+  ArrayList<DashBoardItem> gadgetsInTab;
 
   private final Paint    mPaint    = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -56,12 +58,27 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
     mContext = context;
     mInflater = LayoutInflater.from(context);
 
-    _arrayOfItems = items;
-
     mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
 
     mThumbnailSize = context.getResources().getDimensionPixelSize(R.dimen.thumbnail_size);
     mThumbnailRadius = context.getResources().getDimensionPixelSize(R.dimen.thumbnail_radius);
+    
+    _arrayOfItems = items;
+    dashbashHash = new HashMap<String, ArrayList<DashBoardItem>>();
+    
+    ArrayList<DashBoardItem> tmpItems;
+    for(DashBoardItem item : items) {
+      
+      if (dashbashHash.get(item.strTabName) == null) {
+        tmpItems = new ArrayList<DashBoardItem>();
+        dashbashHash.put(item.strTabName, tmpItems);
+      }
+      else {
+        tmpItems = dashbashHash.get(item.strTabName);
+        tmpItems.add(item);
+        dashbashHash.put(item.strTabName, tmpItems);
+      }
+    }
 
     prepareMask();
   }
@@ -96,29 +113,55 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
   public View getView(int position, View convertView, ViewGroup parent) {
 
     final DashBoardItem item = _arrayOfItems.get(position);
-
+    GadgetInfo inforGadget = item.gadget;
+    
     if (item.strTabName != null) {
-//      convertView = new TextView(mContext);
-//      convertView.setPadding(7, 7, 7, 7);
-//      ((TextView) convertView).setTextColor(Color.BLACK);
-//      ((TextView) convertView).setText(item.strTabName);
-//      ((TextView) convertView).setWidth(LayoutParams.WRAP_CONTENT);
-//      ((TextView) convertView).setBackgroundResource(R.drawable.dashboardtabbackground);
-      
+
       convertView = mInflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
       textViewTabTitle.setText(item.strTabName);
       
+      gadgetsInTab = dashbashHash.get(item.strTabName);
+      
     } else {
       convertView = mInflater.inflate(R.layout.gadget_item_layout, parent, false);
+      
+      if(position + 1 < _arrayOfItems.size()) 
+      {
+      
+        DashBoardItem nextItem = _arrayOfItems.get(position + 1);
+        
+        if(inforGadget.getGadgetIndex() == 0)
+        {
+          if(nextItem.strTabName != null)
+            convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellsingle);
+          else
+            convertView.setBackgroundResource(R.drawable.dashboardcustombgforcelltop);
+        }
+        else 
+        {
+          if(nextItem.strTabName != null)
+             convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellbottom);
+          else
+            convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellmiddle);
+        }
+        
+      }
+      else
+      {
+        if(item.strTabName != null)
+          convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellbottom);
+       else
+         convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellsingle);
+      }
 
       AsyncImageView imageViewAvatar = (AsyncImageView) convertView.findViewById(R.id.gadget_image);
-      imageViewAvatar.setUrl(item.gadget._strGadgetIcon);
+      imageViewAvatar.setUrl(item.gadget.getStrGadgetIcon());
       TextView textViewName = (TextView) convertView.findViewById(R.id.gadget_title);
-      textViewName.setText(item.gadget._strGadgetName);
+      textViewName.setText(item.gadget.getGadgetName());
 
       TextView textViewMessage = (TextView) convertView.findViewById(R.id.gadget_content);
-      textViewMessage.setText(item.gadget._strGadgetDescription);
+      textViewMessage.setText(item.gadget.getGadgetDescription());
 
     }
 
@@ -150,7 +193,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 //    ExoApplicationsController2.webViewMode = 0;
     DefaultHttpClient client = new DefaultHttpClient();
 
-    HttpGet get = new HttpGet(gadget._strGadgetUrl);
+    HttpGet get = new HttpGet(gadget.getGadgetUrl());
     try {
       HttpResponse response = client.execute(get);
       int status = response.getStatusLine().getStatusCode();
@@ -163,8 +206,8 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
       return;
     }
 
-    WebViewActivity._titlebar = gadget._strGadgetName;
-    WebViewActivity._url = gadget._strGadgetUrl;
+    WebViewActivity._titlebar = gadget.getGadgetName();
+    WebViewActivity._url = gadget.getGadgetUrl();
 
     Intent next = new Intent(mContext, WebViewActivity.class);
     next.putExtra(ExoConstants.WEB_VIEW_TYPE, 0);

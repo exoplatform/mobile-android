@@ -75,6 +75,8 @@ public class DashboardController {
     int indexEnd;
     String tmpStr = strContent;
     indexStart = tmpStr.indexOf(strGadgetMark);
+    
+    int count = 0;
 
     while (indexStart >= 0) {
       tmpStr = tmpStr.substring(indexStart + 1);
@@ -116,10 +118,12 @@ public class DashboardController {
       String bmpUrl = parseUrl(tmpStr2, "\"thumbnail\":\"", true, "\"");
       bmpUrl = bmpUrl.replace("localhost", _strDomain);
 
-      GadgetInfo tempGadget = new GadgetInfo(title, description, url, bmpUrl, null, null);
+      GadgetInfo tempGadget = new GadgetInfo(title, description, url, bmpUrl, null, null, count);
       arrGadgets.add(tempGadget);
 
       indexStart = indexEnd;
+      
+      count++;
 
     }
 
@@ -174,6 +178,8 @@ public class DashboardController {
 
     index1 = strContent.indexOf("eXo.gadget.UIGadget.createGadget");
 
+    int count = 0;
+    
     do {
       if (index1 < 0)
         return null;
@@ -227,13 +233,15 @@ public class DashboardController {
                                          gadgetUrl,
                                          gadgetIconUrl,
                                          null,
-                                         gadgetID);
+                                         gadgetID, count);
 
       arrTmpGadgets.add(gadget);
 
       strContent = strContent.substring(index2 + 35);
       index1 = strContent.indexOf("eXo.gadget.UIGadget.createGadget");
 
+      count++;
+      
     } while (index1 > 0);
 
     return arrTmpGadgets;
@@ -307,10 +315,10 @@ public class DashboardController {
               for (int i = 0; i < arrTmpGadgetsInItem.size(); i++) {
                 GadgetInfo tmpGadget = arrTmpGadgetsInItem.get(i);
 
-                String urlStandalone = mapOfURLs.get(tmpGadget._strGadgetID);
+                String urlStandalone = mapOfURLs.get(tmpGadget.getGadgetID());
 
                 if (urlStandalone != null) {
-                  tmpGadget._strGadgetUrl = urlStandalone;
+                  tmpGadget.setGadgetUrl(urlStandalone);
                 }
               }
 

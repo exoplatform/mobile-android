@@ -4,16 +4,18 @@ import android.graphics.Bitmap;
 
 //gadget info
 public class GadgetInfo {
-  public final String _strGadgetName;       // Gadget name
+  private final String _strGadgetName;       // Gadget name
 
-  public final String _strGadgetDescription; // Gadget description
+  private final String _strGadgetDescription; // Gadget description
 
-  public String       _strGadgetUrl;        // Gadget url
+  private String       _strGadgetUrl;        // Gadget url
 
-  public String       _strGadgetIcon;       // Gadget icon string
-  public final Bitmap _btmGadgetIcon;       // Gadget icon
+  private String       _strGadgetIcon;       // Gadget icon string
+  private final Bitmap _btmGadgetIcon;       // Gadget icon
 
-  public final String _strGadgetID;         // Gadget ID
+  private final String _strGadgetID;         // Gadget ID
+  
+  private int          _intGatdetIndex;      //index for background setting
 
   // Constructor
 
@@ -22,13 +24,15 @@ public class GadgetInfo {
                    String gadgetUrl,
                    String strGadgetIcon,
                    Bitmap gadgetIcon,
-                   String gadgetID) {
+                   String gadgetID,
+                   int gadgetIndex) {
     _strGadgetName = gadgetName;
     _strGadgetDescription = gadgetDescription;
     _strGadgetUrl = gadgetUrl;
     _strGadgetIcon = strGadgetIcon;
     _btmGadgetIcon = gadgetIcon;
     _strGadgetID = gadgetID;
+    _intGatdetIndex = gadgetIndex;
   }
 
   // Gettors
@@ -43,6 +47,14 @@ public class GadgetInfo {
   public String getGadgetUrl() {
     return _strGadgetUrl;
   }
+  
+  public void setGadgetUrl(String url) {
+    _strGadgetUrl = url;
+  }
+  
+  public String getStrGadgetIcon() {
+    return _strGadgetIcon;
+  }
 
   public Bitmap getGadgetIcon() {
     return _btmGadgetIcon;
@@ -50,5 +62,9 @@ public class GadgetInfo {
 
   public String getGadgetID() {
     return _strGadgetID;
+  }
+  
+  public int getGadgetIndex() {
+    return _intGatdetIndex;
   }
 }
