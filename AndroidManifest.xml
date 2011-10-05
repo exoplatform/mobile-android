@@ -1,9 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.exoplatform" android:versionCode="2" android:versionName="2.0">
-	<application android:icon="@drawable/application_icon"
-		android:name=".ExoApplication" android:theme="@style/Theme.eXo"
-		android:debuggable="true" android:label="eXo Application">
+<manifest 
+  xmlns:android="http://schemas.android.com/apk/res/android"
+	package="org.exoplatform" 
+	android:versionCode="2" 
+	android:versionName="2.0">
+	
+	<!-- Application Permissions -->
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
+  <uses-feature android:name="android.hardware.camera" />
+  <uses-feature android:name="android.hardware.camera.autofocus" />
+	
+	<!-- Application Uses SDK -->
+  <uses-sdk android:minSdkVersion="7" />
+	
+	<!-- Application Informations -->
+	<application 
+	  android:icon="@drawable/application_icon"
+		android:name=".ExoApplication" 
+		android:theme="@style/Theme.eXo"
+		android:debuggable="true" 
+		android:label="eXo Application">
+		
+		<!-- First Activity of the Application -->
 		<activity android:name=".ui.LoginActivity"
 			android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
@@ -11,48 +31,56 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		
 		<activity android:name=".ui.HomeActivity"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.SettingActivity"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.SettingServerListEditionActivity"
 			android:configChanges="keyboardHidden|orientation" />
-			<activity android:name=".ui.ChatListActivity"
+		
+		<activity android:name=".ui.ChatListActivity"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.DocumentActivity"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.DocumentActionDialog"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.DashboardActivity"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.WebViewActivity" />
+		
 		<activity android:name=".document.ExoFilesController"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.ChatDetailActivity"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".chat.ExoChatListController"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.social.SocialActivity"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.social.SocialDetailActivity"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.social.ComposeMessageActivity"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.social.SocialImageLibrary"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.social.SelectedImageActivity"
 			android:configChanges="keyboardHidden|orientation" />
+		
 		<activity android:name=".ui.social.SocialPhotoAlbums"
 			android:configChanges="keyboardHidden|orientation" />
 
 	</application>
-	<uses-sdk android:minSdkVersion="7" />
-
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.CAMERA" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
-	<uses-feature android:name="android.hardware.camera" />
-	<uses-feature android:name="android.hardware.camera.autofocus" />
-
 </manifest> 
