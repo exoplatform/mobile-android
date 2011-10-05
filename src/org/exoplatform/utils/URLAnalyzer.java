@@ -19,6 +19,7 @@ package org.exoplatform.utils;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import android.util.Log;
 import android.webkit.URLUtil;
 
 /**
@@ -45,18 +46,24 @@ public class URLAnalyzer {
 //    Log.e("Valid:", "" + isValidUrl(urlStr));
     
     String url = urlStr;
+    
+    boolean isHTTPSUrl = false;
+
 
     try {
       
       int indexOfProtocol;
+      
       
       indexOfProtocol = urlStr.indexOf(ExoConstants.HTTP_PROTOCOL);
       if(indexOfProtocol == 0)
         url = urlStr.substring(ExoConstants.HTTP_PROTOCOL.length() + 3);
       
       indexOfProtocol = urlStr.indexOf(ExoConstants.HTTPS_PROTOCOL);
-      if(indexOfProtocol == 0)
+      if(indexOfProtocol == 0) {
         url = urlStr.substring(ExoConstants.HTTPS_PROTOCOL.length() + 3);
+        isHTTPSUrl = true;
+      }
       
       while(url.charAt(0) == '/')
       {
@@ -74,18 +81,26 @@ public class URLAnalyzer {
     
     try {
       
-      url = ExoConstants.HTTP_PROTOCOL + "://" + url;
-      URI uri = new URI(ExoConstants.HTTP_PROTOCOL + url);
-      url = ExoConstants.HTTP_PROTOCOL + "://" + uri.getHost();
+      URI uri;	
+    	
+      if (!(isHTTPSUrl)) {
+    	  url = ExoConstants.HTTP_PROTOCOL + "://" + url;
+    	  uri = new URI(ExoConstants.HTTP_PROTOCOL + url);
+    	  url = ExoConstants.HTTP_PROTOCOL + "://" + uri.getHost();
+      } else {
+    	  url = ExoConstants.HTTPS_PROTOCOL + "://" + url;
+    	  uri = new URI(ExoConstants.HTTPS_PROTOCOL + url);
+    	  url = ExoConstants.HTTPS_PROTOCOL + "://" + uri.getHost();
+      }
       
       int port = uri.getPort(); 
       if(port > 0)
         url += ":" + port; 
       
     } catch (URISyntaxException e) {
-//      String msg = e.getMessage();
-//      String reason = e.getReason();
-//      Log.e("URISyntaxException", "Hehe");
+      String msg = e.getMessage();
+      String reason = e.getReason();
+      Log.e("URISyntaxException",msg+"  "+reason);
       
       url = null;
     }
