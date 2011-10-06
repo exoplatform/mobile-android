@@ -41,10 +41,10 @@ public class DashboardActivity extends MyActionBar {
 
     listView = (ListView) findViewById(R.id.dashboard_listview);
     listView.setCacheColorHint(Color.TRANSPARENT);
-//    listView.setFadingEdgeLength(0);
+    listView.setFadingEdgeLength(0);
     listView.setScrollbarFadingEnabled(true);
     listView.setDivider(null);
-    listView.setDividerHeight(0);
+    listView.setDividerHeight(-1);
     
 
     controller = new DashboardController(this, listView);
