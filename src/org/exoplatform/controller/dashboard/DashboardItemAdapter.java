@@ -4,7 +4,6 @@ import greendroid.image.ImageProcessor;
 import greendroid.widget.AsyncImageView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -35,9 +34,7 @@ import android.widget.Toast;
 public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor {
 
   private ArrayList<DashBoardItem>    _arrayOfItems;
-  private HashMap<String, ArrayList<DashBoardItem>> dashbashHash;
-  ArrayList<DashBoardItem> gadgetsInTab;
-
+  
   private final Paint    mPaint    = new Paint(Paint.ANTI_ALIAS_FLAG);
 
   private final Rect     mRectSrc  = new Rect();
@@ -64,21 +61,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
     mThumbnailRadius = context.getResources().getDimensionPixelSize(R.dimen.thumbnail_radius);
     
     _arrayOfItems = items;
-    dashbashHash = new HashMap<String, ArrayList<DashBoardItem>>();
-    
-    ArrayList<DashBoardItem> tmpItems;
-    for(DashBoardItem item : items) {
-      
-      if (dashbashHash.get(item.strTabName) == null) {
-        tmpItems = new ArrayList<DashBoardItem>();
-        dashbashHash.put(item.strTabName, tmpItems);
-      }
-      else {
-        tmpItems = dashbashHash.get(item.strTabName);
-        tmpItems.add(item);
-        dashbashHash.put(item.strTabName, tmpItems);
-      }
-    }
+   
 
     prepareMask();
   }
@@ -121,8 +104,6 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
       textViewTabTitle.setText(item.strTabName);
       
-      gadgetsInTab = dashbashHash.get(item.strTabName);
-      
     } else {
       convertView = mInflater.inflate(R.layout.gadget_item_layout, parent, false);
       
@@ -143,7 +124,10 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
           if(nextItem.strTabName != null)
              convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellbottom);
           else
+          {
             convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellmiddle);
+           
+          }
         }
         
       }
