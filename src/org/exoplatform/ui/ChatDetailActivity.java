@@ -239,7 +239,7 @@ public class ChatDetailActivity extends MyActionBar {
         View rowView = null;
         
         ChatMessageContent msgContent = listChatContent.get(position);
-        if(msgContent.name.equalsIgnoreCase("me"))
+        if(msgContent.name.equalsIgnoreCase(meText))
           rowView = inflater.inflate(R.layout.exochatmessagecontentitemme, parent, false);
         else
           rowView = inflater.inflate(R.layout.exochatmessagecontentitem, parent, false);

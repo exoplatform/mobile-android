@@ -121,17 +121,17 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
     if (result) {
       if (_documentList.size() == 0) {
         documentActivity.setEmptyView(View.VISIBLE);
-      } else {
+      } else
         documentActivity.setEmptyView(View.GONE);
-        if (documentActivity._documentAdapter == null) {
+      if (documentActivity._documentAdapter == null) {
 
-          documentActivity._documentAdapter = new DocumentAdapter(documentActivity,
-                                                                  documentActivity._urlDocumentHome);
-          documentActivity.setDocumentAdapter();
-        }
-        documentActivity._documentAdapter._documentList = _documentList;
-        documentActivity._documentAdapter.notifyDataSetChanged();
+        documentActivity._documentAdapter = new DocumentAdapter(documentActivity,
+                                                                documentActivity._urlDocumentHome);
+        documentActivity.setDocumentAdapter();
       }
+      documentActivity._documentAdapter._documentList = _documentList;
+      documentActivity._documentAdapter.notifyDataSetChanged();
+
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();

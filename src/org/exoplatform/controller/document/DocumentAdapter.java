@@ -7,6 +7,7 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.widget.UnreadableFileDialog;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -79,6 +80,7 @@ public class DocumentAdapter extends BaseAdapter {
         if (!myFile.isFolder) {
           // Action for display file
           // eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
+         new UnreadableFileDialog(_mContext).show();
         } else {
 
           _urlStr = myFile.urlStr;

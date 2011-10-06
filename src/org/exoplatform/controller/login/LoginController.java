@@ -92,9 +92,9 @@ public class LoginController {
 
       try {
         String _strDomain = AccountSetting.getInstance().getDomainName();
-        if (_strDomain.indexOf("http://") == -1) {
-          _strDomain = "http://" + _strDomain;
-        }
+//        if (_strDomain.indexOf("http://") == -1) {
+//          _strDomain = "http://" + _strDomain;
+//        }
         uri = new URI(_strDomain);
         return ExoConnectionUtils.sendAuthentication(_strDomain, userName, password);
       } catch (URISyntaxException e) {

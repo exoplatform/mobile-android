@@ -59,7 +59,6 @@ public class ServerAdapter extends BaseAdapter {
     View rowView = inflater.inflate(R.layout.server_list_item, parent, false);
 
     final ServerObjInfo serverObj = serverInfoList.get(pos);
-//    RelativeLayout listItem = (RelativeLayout) rowView.findViewById(R.id.authenticate_server_listview_item);
     TextView txtvServerName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
     txtvServerName.setText(serverObj._strServerName);
 
@@ -69,10 +68,8 @@ public class ServerAdapter extends BaseAdapter {
     ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
     if (_intDomainIndex == pos) {
       imgView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-//      listItem.setBackgroundResource(R.drawable.authenticate_server_cell_bg_selected);
     } else {
       imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
-//      listItem.setBackgroundResource(R.drawable.authenticate_server_cell_bg_normal);
     }
 
     rowView.setOnClickListener(new OnClickListener() {
@@ -80,14 +77,11 @@ public class ServerAdapter extends BaseAdapter {
       public void onClick(View v) {
 
         View rowView = getView(pos, null, _listViewServer);
-//        RelativeLayout listItem = (RelativeLayout) rowView.findViewById(R.id.authenticate_server_listview_item);
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
         imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
-//        listItem.setBackgroundResource(R.drawable.authenticate_server_cell_bg_normal);
 
         _intDomainIndex = pos;
         _strDomain = serverObj._strServerUrl;
-        Log.i("Server URL", _strDomain);
         AccountSetting.getInstance().setDomainIndex(String.valueOf(_intDomainIndex));
         AccountSetting.getInstance().setDomainName(_strDomain);
 
