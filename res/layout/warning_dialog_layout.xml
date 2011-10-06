@@ -14,7 +14,7 @@
 	</LinearLayout>
 
 	<Button android:layout_marginTop="15dp" android:id="@+id/warning_ok_button"
-		android:text="Ok" android:textColor="#FFFFFF"
+		android:text="Ok" android:textColor="#FFFFFF" android:textStyle="bold"
 		android:background="@drawable/cancel_button_background_shape"
 		android:layout_width="fill_parent" android:layout_height="40dp" />
 

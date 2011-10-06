@@ -5,8 +5,9 @@
 	<ImageView android:id="@+id/empty_image" android:background="@drawable/application_icon"
 		android:layout_width="wrap_content" android:layout_height="wrap_content" />
 	<TextView android:layout_marginLeft="5dp" android:id="@+id/empty_status"
-		android:text="No content in this folder" android:textColor="#FFFFFF"
-		android:textSize="16sp" android:padding="5dp" android:layout_width="wrap_content"
+		android:text="No content in this folder, Non comment ta le vous"
+		android:textColor="#FFFFFF" android:gravity="center_horizontal"
+		android:textSize="16sp" android:padding="7dp" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
 </LinearLayout>
 
