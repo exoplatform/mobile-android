@@ -46,7 +46,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
     loadingData = location.getString("LoadingData");
     okString = location.getString("OK");
     titleString = location.getString("Warning");
-    contentString = location.getString("ConnectionError");
+    contentString = location.getString("LoadingDataError");
 
   }
 
@@ -113,7 +113,6 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
-      SocialActivity.socialActivity.setEmptyView(View.VISIBLE);
     }
     _progressDialog.dismiss();
 

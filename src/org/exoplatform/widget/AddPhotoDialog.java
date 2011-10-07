@@ -35,13 +35,14 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
 
   public AddPhotoDialog(Context context, ComposeMessageController controller) {
     super(context);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
+//    requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.add_photo_dialog_layout);
     mContext = context;
     messageController = controller;
     changeLanguage();
-    TextView titleView = (TextView) findViewById(R.id.add_photo_title);
-    titleView.setText(addPhotoTitle);
+//    TextView titleView = (TextView) findViewById(R.id.add_photo_title);
+//    titleView.setText(addPhotoTitle);
+    setTitle(addPhotoTitle);
     takePhotoButton = (Button) findViewById(R.id.add_photo_take_button);
     takePhotoButton.setText(takePhotoText);
     takePhotoButton.setOnClickListener(this);

@@ -71,7 +71,6 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<GateInDbIt
                                                contentString,
                                                okString);
       dialog.show();
-      dashboardActivity.setEmptyView(View.VISIBLE);
     }
     _progressDialog.dismiss();
   }

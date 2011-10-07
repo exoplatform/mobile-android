@@ -26,7 +26,6 @@ public class ExoDocumentUtils {
 
       response = ExoConnectionUtils.httpClient.execute(put);
       int status = response.getStatusLine().getStatusCode();
-      System.out.println("status " + status);
       if (status >= 200 && status < 300) {
         return true;
       } else

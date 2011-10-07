@@ -14,10 +14,10 @@ import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class LoginController {
   private String    userName;
@@ -33,6 +33,8 @@ public class LoginController {
   private String    strNetworkConnectionFailed;
 
   private String    strUserNamePasswordFailed;
+
+  private String    invalidServerName;
 
   private String    titleString;
 
@@ -64,8 +66,9 @@ public class LoginController {
   private void getLanguage() {
     LocalizationHelper bundle = LocalizationHelper.getInstance();
     strSigning = bundle.getString("SigningIn");
-    strNetworkConnectionFailed = bundle.getString("NetworkConnectionFailed");
+    strNetworkConnectionFailed = bundle.getString("ConnectionError");
     strUserNamePasswordFailed = bundle.getString("UserNamePasswordFailed");
+    invalidServerName = bundle.getString("InvalidServerName");
     titleString = bundle.getString("Warning");
     okString = bundle.getString("OK");
 
@@ -92,11 +95,10 @@ public class LoginController {
 
       try {
         String _strDomain = AccountSetting.getInstance().getDomainName();
-//        if (_strDomain.indexOf("http://") == -1) {
-//          _strDomain = "http://" + _strDomain;
-//        }
         uri = new URI(_strDomain);
-        return ExoConnectionUtils.sendAuthentication(_strDomain, userName, password);
+        String resultStr = ExoConnectionUtils.sendAuthentication(_strDomain, userName, password);
+        return resultStr;
+
       } catch (URISyntaxException e) {
         return null;
       }
@@ -132,6 +134,9 @@ public class LoginController {
                                                  titleString,
                                                  strUserNamePasswordFailed,
                                                  okString);
+        dialog.show();
+      } else if (result.equalsIgnoreCase("URL_ERROR")) {
+        WarningDialog dialog = new WarningDialog(mContext, titleString, invalidServerName, okString);
         dialog.show();
       } else {
         WarningDialog dialog = new WarningDialog(mContext,

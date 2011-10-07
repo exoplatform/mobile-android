@@ -49,8 +49,6 @@ public class ExoConnectionUtils {
 
   // login
 
-  private static String           _fullDomainStr;       // Host
-
   private static byte[] zeroPad(int length, byte[] bytes) {
     byte[] padded = new byte[length]; // initialized to zero by JVM
     System.arraycopy(bytes, 0, padded, 0, bytes.length);
@@ -143,12 +141,7 @@ public class ExoConnectionUtils {
       CookieStore cookiesStore;
       String strCookie = "";
 
-      _fullDomainStr = getExtend(domain);
-
-      if (_fullDomainStr.equalsIgnoreCase("ERROR"))
-        return "ERROR";
-
-      String redirectStr = domain.concat(_fullDomainStr);
+      String redirectStr = domain.concat(ExoConstants.DOMAIN_SUFFIX);
 
       HttpParams httpParameters = new BasicHttpParams();
       HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
@@ -219,13 +212,7 @@ public class ExoConnectionUtils {
       HttpEntity entity;
       CookieStore cookiesStore;
       String strCookie = "";
-
-      _fullDomainStr = getExtend(domain);
-
-      if (_fullDomainStr.equalsIgnoreCase("ERROR"))
-        return "ERROR";
-
-      String redirectStr = domain.concat(_fullDomainStr);
+      String redirectStr = domain.concat(ExoConstants.DOMAIN_SUFFIX);
 
       HttpParams httpParameters = new BasicHttpParams();
       HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
@@ -287,7 +274,7 @@ public class ExoConnectionUtils {
           return "NO";
         } else if (_strFirstLoginContent.contains("error', '/main?url")) {
           _strFirstLoginContent = null;
-          return "ERROR";
+          return "URL_ERROR";
         } else if (_strFirstLoginContent.contains("eXo.env.portal")) {
           return "YES";
         }
@@ -457,7 +444,8 @@ public class ExoConnectionUtils {
     }
     return ipstr;
   }
-//get input stream from URL without authentication
+
+  // get input stream from URL without authentication
   private static InputStream sendRequestWithoutAuthen(String strUrlRequest) {
     InputStream ipstr = null;
     try {
@@ -488,7 +476,7 @@ public class ExoConnectionUtils {
     return convertStreamToString(sendRequest(strUrlRequest));
   }
 
- // get the JSONObject string of PLF 
+  // get the JSONObject string of PLF
   private static String getPLFStream(String url) {
     return convertStreamToString(sendRequestWithoutAuthen(url));
   }
@@ -499,7 +487,7 @@ public class ExoConnectionUtils {
    */
   public static boolean checkPLFVersion() {
     try {
-      String versionUrl = SocialActivityUtil.getDomain() + "/portal/rest/platform/version";
+      String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_SUFFIX_VERSION;
       Log.i("versionUrl", versionUrl);
       String result = getPLFStream(versionUrl);
       JSONObject json = (JSONObject) JSONValue.parse(result);
@@ -523,5 +511,5 @@ public class ExoConnectionUtils {
     }
 
   }
-  
+
 }

@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="wrap_content"
 	android:minWidth="280dip" android:layout_height="wrap_content"
-	android:padding="5dp" android:background="@drawable/bottom_background_shape">
+	android:padding="5dp" android:background="@drawable/dialog_background">
 
-	<LinearLayout android:orientation="vertical"
+	<!--<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="wrap_content">
 
 		<TextView android:id="@+id/add_photo_title" style="@style/DialogText.Title"
@@ -12,11 +12,11 @@
 			android:paddingRight="8dip" android:paddingLeft="8dip"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:paddingBottom="3dip" android:paddingTop="3dip"
-			android:textColor="#0000FF" />
+			android:textColor="#FFFFFF" />
 
 	</LinearLayout>
 
-	<Button android:layout_marginTop="25dp" android:id="@+id/add_photo_take_button"
+	--><Button android:layout_marginTop="25dp" android:id="@+id/add_photo_take_button"
 		android:text="Take a Photo" android:textColor="#FFFFFF"
 		android:background="@drawable/send_button_background_shape"
 		android:layout_width="fill_parent" android:layout_height="40dp" />
@@ -30,7 +30,5 @@
 		android:text="Cancel" android:textColor="#FFFFFF"
 		android:background="@drawable/cancel_button_background_shape"
 		android:layout_width="fill_parent" android:layout_height="40dp" />
-
-
 
 </LinearLayout>
