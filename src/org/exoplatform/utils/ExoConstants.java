@@ -66,6 +66,6 @@ public class ExoConstants {
 
   public static final String DOMAIN_SUFFIX             = "/portal/private/intranet";
 
-  public static final String DOMAIN_SUFFIX_VERSION     = "/portal/rest/platform/version";
+  public static final String DOMAIN_SUFFIX_VERSION     = "/portal/rest/platform/info";
 
 }
