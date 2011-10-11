@@ -72,22 +72,22 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       profile = selectedRestActivity.getPosterIdentity().getProfile();
       title = selectedRestActivity.getTitle();
       postedTime = selectedRestActivity.getPostedTime();
-      List<RestLike> likeList = selectedRestActivity.getLikes();
+      List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();
       if (likeList != null) {
-        for (RestLike like : likeList) {
+        for (RestIdentity like : likeList) {
           SocialLikeInfo socialLike = new SocialLikeInfo();
-          String identity = like.getIdentityId();
-          RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
-                                                                  .getIdentityService()
-                                                                  .get(identity);
-          socialLike.setLikeID(identity);
+          String identity = like.getId();
+//          RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
+//                                                                  .getIdentityService()
+//                                                                  .get(identity);
+//          socialLike.setLikeID(identity);
           if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().getUserId())) {
             socialLike.setLikeName(youText);
             likeLinkedList.addFirst(socialLike);
             SocialDetailHelper.getInstance().setLiked(true);
           } else {
-            socialLike.setLikeName(restId.getProfile().getFullName());
+            socialLike.setLikeName(like.getProfile().getFullName());
             likeLinkedList.add(socialLike);
           }
 

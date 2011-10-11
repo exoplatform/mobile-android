@@ -82,7 +82,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           streamInfo.setUserName(profile.getFullName());
           streamInfo.setTitle(act.getTitle());
           streamInfo.setPostedTime(act.getPostedTime());
-          streamInfo.setLikeNumber(act.getLikes().size());
+          streamInfo.setLikeNumber(act.getAvailableLikes().size());
           streamInfo.setCommentNumber(act.getAvailableComments().size());
           streamInfoList.add(streamInfo);
         }

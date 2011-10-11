@@ -8,8 +8,6 @@ import java.io.FileInputStream;
 import org.apache.http.HttpResponse;
 import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentLoadTask;
-import org.exoplatform.controller.social.SocialDetailLoadTask;
-import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -28,7 +26,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.Window;
@@ -56,10 +53,6 @@ public class DocumentActivity extends MyActionBar {
   private Button                 _btnCancelUploadImage;       // "/sdcard/eXo/";
 
   private WaitingDialog          _progressDialog;
-
-  private String                 _strCannotBackToPreviousPage;
-
-  private String                 _strDownloadFileIntoSDCard;
 
   private String                 emptyFolderString;
 
@@ -89,11 +82,7 @@ public class DocumentActivity extends MyActionBar {
 
     setViewUploadImage(false);
 
-    AccountSetting acc = AccountSetting.getInstance();
-    String userName = acc.getUsername();
-    String domain = acc.getDomainName();
-
-    _urlDocumentHome = ExoDocumentUtils.getDocumentUrl(userName, domain);
+    _urlDocumentHome = ExoDocumentUtils.repositoryHomeURL;
 
     onLoad(_urlDocumentHome, null, 0);
 
@@ -357,8 +346,6 @@ public class DocumentActivity extends MyActionBar {
     String strUploadFile = local.getString("Upload");
     String strCancel = local.getString("Cancel");
     String strEmptyPage = local.getString("EmptyPage");
-    _strCannotBackToPreviousPage = local.getString("CannotBackToPreviousPage");
-    _strDownloadFileIntoSDCard = local.getString("DownloadFileInToSDCard");
     emptyFolderString = local.getString("EmptyFolder");
 
     _btnUploadImage.setText(strUploadFile);

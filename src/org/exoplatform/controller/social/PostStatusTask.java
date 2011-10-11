@@ -94,10 +94,8 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
   }
 
   private boolean createFolder() {
-    String userName = AccountSetting.getInstance().getUsername();
-    String domain = AccountSetting.getInstance().getPassword();
-    uploadUrl = ExoDocumentUtils.getDocumentUrl(userName, domain);
-    uploadUrl += "/Public/Mobile";
+    
+    uploadUrl = ExoDocumentUtils.repositoryHomeURL + "/Public/Mobile";
 
     HttpResponse response;
     try {

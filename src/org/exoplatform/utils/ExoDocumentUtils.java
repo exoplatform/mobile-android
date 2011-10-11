@@ -13,8 +13,12 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 
+import android.util.Log;
+
 public class ExoDocumentUtils {
 
+  public static String repositoryHomeURL = null;
+  
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
     HttpResponse response = null;
     try {
@@ -37,12 +41,14 @@ public class ExoDocumentUtils {
 
   }
 
-  public static String getDocumentUrl(String userName, String domain) {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append(domain);
-    buffer.append(ExoConstants.DOCUMENT_PATH);
+  public static void setRepositoryHomeUrl(String userName, String domain) {
+    
+    if(repositoryHomeURL == null)
+    {
+      StringBuffer buffer = new StringBuffer();
+      buffer.append(domain);
+      buffer.append(ExoConstants.DOCUMENT_PATH);
 
-    if (AccountSetting.getInstance().getIsNewVersion() == true) {
       int length = userName.length();
       if (length < 4) {
         for (int i = 1; i < length; i++) {
@@ -59,12 +65,30 @@ public class ExoDocumentUtils {
           buffer.append("___");
         }
       }
+      
+      buffer.append("/");
+      buffer.append(userName);
 
+      try {
+        
+        WebdavMethod copy = new WebdavMethod("HEAD", buffer.toString());
+        int status = ExoConnectionUtils.httpClient.execute(copy).getStatusLine().getStatusCode();
+        
+        if (status >= 200 && status < 300)
+          repositoryHomeURL = buffer.toString();
+        else
+          repositoryHomeURL = domain + ExoConstants.DOCUMENT_PATH + "/" + userName;
+        
+      } catch (Exception e) {
+        
+        repositoryHomeURL = null;
+        
+      }
+      
     }
-    buffer.append("/");
-    buffer.append(userName);
-
-    return buffer.toString();
+   
+    Log.e("123: ", repositoryHomeURL);
+    
   }
 
   // Get file array from URL

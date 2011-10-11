@@ -10,6 +10,7 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -17,7 +18,6 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 public class LoginController {
   private String    userName;
@@ -124,8 +124,12 @@ public class LoginController {
         editor.commit();
         accountSetting.setUsername(userName);
         accountSetting.setPassword(password);
+        
         boolean isNewVersion = ExoConnectionUtils.checkPLFVersion();
         accountSetting.setIsNewVersion(isNewVersion);
+        
+        ExoDocumentUtils.setRepositoryHomeUrl(userName, accountSetting.getDomainName());
+        
         Intent next = new Intent(mContext, HomeActivity.class);
         mContext.startActivity(next);
 
