@@ -34,8 +34,6 @@ public class LoginController {
 
   private String    strUserNamePasswordFailed;
 
-  private String    invalidServerName;
-
   private String    titleString;
 
   private String    okString;
@@ -68,7 +66,6 @@ public class LoginController {
     strSigning = bundle.getString("SigningIn");
     strNetworkConnectionFailed = bundle.getString("ConnectionError");
     strUserNamePasswordFailed = bundle.getString("UserNamePasswordFailed");
-    invalidServerName = bundle.getString("InvalidServerName");
     titleString = bundle.getString("Warning");
     okString = bundle.getString("OK");
 
@@ -138,9 +135,6 @@ public class LoginController {
                                                  titleString,
                                                  strUserNamePasswordFailed,
                                                  okString);
-        dialog.show();
-      } else if (result.equalsIgnoreCase("URL_ERROR")) {
-        WarningDialog dialog = new WarningDialog(mContext, titleString, invalidServerName, okString);
         dialog.show();
       } else {
         WarningDialog dialog = new WarningDialog(mContext,
