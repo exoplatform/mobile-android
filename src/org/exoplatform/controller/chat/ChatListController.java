@@ -10,6 +10,7 @@ import org.exoplatform.singleton.ChatServiceHelper;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.ChatDetailActivity;
 import org.exoplatform.ui.ChatListActivity;
+import org.exoplatform.widget.WarningDialog;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
@@ -45,11 +46,16 @@ public class ChatListController {
 
   private String           fromChatStr;
 
+  private String           titleString;
+
+  private String           okString;
+
   private ChatListAdapter  chatsAdapter;
 
   public ChatListController(Context context, ListView listView) {
     mContext = context;
     lvChatList = listView;
+    changeLanguage();
   }
 
   private ArrayList<ChatMemberInfo> getListChat() {
@@ -129,8 +135,18 @@ public class ChatListController {
         }
       }
     };
-    ChatServiceHelper.getInstance().setPacketListener(packetListener);
-    ChatServiceHelper.getInstance().getXMPPConnection().addPacketListener(packetListener, filter);
+    try {
+      ChatServiceHelper.getInstance().setPacketListener(packetListener);
+      ChatServiceHelper.getInstance().getXMPPConnection().addPacketListener(packetListener, filter);
+    } catch (Exception e) {
+      WarningDialog warning = new WarningDialog(mContext, titleString, e.getMessage(), okString);
+      warning.show();
+      if (ChatServiceHelper.getInstance().getXMPPConnection() != null) {
+        ChatServiceHelper.getInstance().getXMPPConnection().disconnect();
+        ChatServiceHelper.getInstance().setXMPPConnection(null);
+      }
+    }
+
   }
 
   private void setRosterListener() {
@@ -242,5 +258,12 @@ public class ChatListController {
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
+  }
+
+  // Set language
+  private void changeLanguage() {
+    LocalizationHelper bundle = LocalizationHelper.getInstance();
+    titleString = bundle.getString("Warning");
+    okString = bundle.getString("OK");
   }
 }
