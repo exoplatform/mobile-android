@@ -21,6 +21,7 @@ import org.jivesoftware.smack.util.StringUtils;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +59,7 @@ public class ChatDetailActivity extends MyActionBar {
   private static ListView                conversationView;                                     // Chat
 
   // conversation
-  public static ChatDetailActivity        eXoChatControllerInstance;                            // Instance
+  public static ChatDetailActivity       eXoChatControllerInstance;                            // Instance
 
   // app
   // view
@@ -134,11 +135,12 @@ public class ChatDetailActivity extends MyActionBar {
 
             listChatContent.add(new ChatMessageContent(meText, msg));
             messageEditText.setText("");
-            
+
             setListAdapter();
 
           } catch (Exception e) {
-            WarningDialog warning = new WarningDialog(getApplicationContext(),
+            Log.e("Chat Error", e.getMessage());
+            WarningDialog warning = new WarningDialog(ChatDetailActivity.this,
                                                       titleString,
                                                       e.getMessage(),
                                                       okString);
@@ -195,10 +197,22 @@ public class ChatDetailActivity extends MyActionBar {
         }
       }
     };
-    ChatServiceHelper.getInstance().setPacketListener(packetListener);
-    ChatServiceHelper.getInstance().getXMPPConnection().addPacketListener(packetListener, filter);
-
-    setListAdapter();
+    try {
+      ChatServiceHelper.getInstance().setPacketListener(packetListener);
+      ChatServiceHelper.getInstance().getXMPPConnection().addPacketListener(packetListener, filter);
+      setListAdapter();
+    } catch (Exception e) {
+      Log.e("Packet Listenner Error", e.getMessage());
+      if (ChatServiceHelper.getInstance().getXMPPConnection() != null) {
+        ChatServiceHelper.getInstance().getXMPPConnection().disconnect();
+        ChatServiceHelper.getInstance().setXMPPConnection(null);
+      }
+      WarningDialog warning = new WarningDialog(ChatDetailActivity.this,
+                                                titleString,
+                                                e.getMessage(),
+                                                okString);
+      warning.show();
+    }
 
   }
 
@@ -233,23 +247,23 @@ public class ChatDetailActivity extends MyActionBar {
     BaseAdapter adapter = new BaseAdapter() {
 
       public View getView(int position, View convertView, ViewGroup parent) {
-        
+
         LayoutInflater inflater = eXoChatControllerInstance.getLayoutInflater();
-        
+
         View rowView = null;
-        
+
         ChatMessageContent msgContent = listChatContent.get(position);
-        if(msgContent.name.equalsIgnoreCase(meText))
+        if (msgContent.name.equalsIgnoreCase(meText))
           rowView = inflater.inflate(R.layout.exochatmessagecontentitemme, parent, false);
         else
           rowView = inflater.inflate(R.layout.exochatmessagecontentitem, parent, false);
-        
+
         bindView(rowView, msgContent);
         return (rowView);
       }
 
       private void bindView(View view, ChatMessageContent msgContent) {
-        
+
         TextView content = (TextView) view.findViewById(R.id.TextView_Content);
         content.setText(msgContent.content);
       }
@@ -270,7 +284,7 @@ public class ChatDetailActivity extends MyActionBar {
       }
     };
     conversationView.setAdapter(adapter);
-    
+
   }
 
   // Set language
@@ -287,7 +301,10 @@ public class ChatDetailActivity extends MyActionBar {
 
   public void finishMe() {
     currentChatStr = "";
-    ChatServiceHelper.getInstance().getXMPPConnection().removePacketListener(packetListener);
+    if(ChatServiceHelper.getInstance().getXMPPConnection()!=null){
+      ChatServiceHelper.getInstance().getXMPPConnection().removePacketListener(packetListener);
+    }
+   
     finish();
   }
 }
