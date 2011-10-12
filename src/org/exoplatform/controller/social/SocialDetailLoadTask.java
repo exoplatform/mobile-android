@@ -14,6 +14,8 @@ import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.model.RestLike;
 import org.exoplatform.social.client.api.model.RestProfile;
+import org.exoplatform.social.client.api.service.QueryParams;
+import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -67,7 +69,12 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
     try {
       String activityId = SocialDetailHelper.getInstance().getActivityId();
-      selectedRestActivity = SocialServiceHelper.getInstance().getActivityService().get(activityId);
+      QueryParams queryParams = new QueryParamsImpl();
+      queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(10));
+      queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(10));
+      selectedRestActivity = SocialServiceHelper.getInstance()
+                                                .getActivityService()
+                                                .get(activityId, queryParams);
       SocialDetailHelper.getInstance().setLiked(false);
       profile = selectedRestActivity.getPosterIdentity().getProfile();
       title = selectedRestActivity.getTitle();
@@ -78,10 +85,6 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
         for (RestIdentity like : likeList) {
           SocialLikeInfo socialLike = new SocialLikeInfo();
           String identity = like.getId();
-//          RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
-//                                                                  .getIdentityService()
-//                                                                  .get(identity);
-//          socialLike.setLikeID(identity);
           if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().getUserId())) {
             socialLike.setLikeName(youText);
             likeLinkedList.addFirst(socialLike);
@@ -93,16 +96,22 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
         }
       }
+      System.out.println("commentList" + commentList.size());
 
       if (commentList != null) {
         for (RestComment comment : commentList) {
           SocialCommentInfo socialComment = new SocialCommentInfo();
           String identity = comment.getIdentityId();
-          RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
-                                                                  .getIdentityService()
-                                                                  .get(identity);
+          System.out.println("identity " + identity);
+//          RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
+//                                                                  .getIdentityService()
+//                                                                  .get(identity);
+          RestIdentity restId = comment.getIdentity();
+          System.out.println("RestIdentity ");
           RestProfile profile = restId.getProfile();
+
           socialComment.setCommentId(identity);
+          System.out.println("fullname " + profile.getFullName());
           socialComment.setCommentName(profile.getFullName());
           socialComment.setImageUrl(profile.getAvatarUrl());
           socialComment.setCommentTitle(comment.getText());
@@ -114,8 +123,6 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
       return 1;
     } catch (RuntimeException e) {
-      Log.e("SocialDetailLoadTask", e.getMessage());
-      Log.e("SocialDetailLoadTask", e.toString());
       return 0;
     }
   }

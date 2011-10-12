@@ -32,7 +32,7 @@ public class ExoConstants {
 
   public static final String ACTIVITY_REST_CONTEXT     = "rest";
 
-  public static final String ACTIVITY_REST_VERSION     = "v1-alpha1";
+  public static final String ACTIVITY_REST_VERSION     = "v1-alpha2";
 
   public static final String ACTIVITY_ORGANIZATION     = "organization";
 

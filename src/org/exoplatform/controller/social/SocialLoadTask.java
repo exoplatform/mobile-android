@@ -11,13 +11,14 @@ import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
+import org.exoplatform.social.client.api.service.QueryParams;
+import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 
 public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActivityInfo>> {
@@ -69,7 +70,11 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
       IdentityService<?> identityService = SocialServiceHelper.getInstance().getIdentityService();
       RestIdentity identity = (RestIdentity) identityService.get(SocialServiceHelper.getInstance()
                                                                                     .getUserId());
-      RealtimeListAccess<RestActivity> list = activityService.getActivityStream(identity);
+      QueryParams queryParams = new QueryParamsImpl();
+      queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(10));
+      queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(10));
+      RealtimeListAccess<RestActivity> list = activityService.getConnectionsActivityStream(identity,
+                                                                                           queryParams);
       ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);
       if (activityList.size() > 0) {
         SocialActivityInfo streamInfo = null;
@@ -82,14 +87,13 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           streamInfo.setUserName(profile.getFullName());
           streamInfo.setTitle(act.getTitle());
           streamInfo.setPostedTime(act.getPostedTime());
-          streamInfo.setLikeNumber(act.getAvailableLikes().size());
-          streamInfo.setCommentNumber(act.getAvailableComments().size());
+          streamInfo.setLikeNumber(act.getTotalNumberOfLikes());
+          streamInfo.setCommentNumber(act.getTotalNumberOfComments());
           streamInfoList.add(streamInfo);
         }
       }
       return streamInfoList;
     } catch (RuntimeException e) {
-      Log.i("SocialLoadTask", e.getMessage());
       return null;
     }
   }
