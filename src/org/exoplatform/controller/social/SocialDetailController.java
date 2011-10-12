@@ -19,6 +19,8 @@ import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -109,6 +111,7 @@ public class SocialDetailController {
           commentItem.comAvatarImage.setUrl(domain + avatarUrl);
         commentItem.comTextViewName.setText(comment.getCommentName());
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()));
+        SocialActivityUtil.setTextLinkfy(commentItem.comTextViewMessage);
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime()));
         commentLayoutWrap.addView(commentItem, params);
 
@@ -132,6 +135,7 @@ public class SocialDetailController {
     textView_Name.setText(profile.getFullName());
 
     textView_Message.setText(Html.fromHtml(title));
+    SocialActivityUtil.setTextLinkfy(textView_Message);
 
     textView_Time.setText(SocialActivityUtil.getPostedTimeString(postedTime));
   }
@@ -146,6 +150,7 @@ public class SocialDetailController {
       RestActivity activity = SocialServiceHelper.getInstance()
                                                  .getActivityService()
                                                  .get(activityId);
+
       if (liked == true) {
         SocialServiceHelper.getInstance().getActivityService().unlike(activity);
         SocialDetailHelper.getInstance().setLiked(false);
@@ -154,7 +159,7 @@ public class SocialDetailController {
       }
       onLoad();
     } catch (RuntimeException e) {
-      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+      WarningDialog dialog = new WarningDialog(mContext, titleString, e.toString(), okString);
       dialog.show();
     }
   }

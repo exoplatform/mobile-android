@@ -73,6 +73,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
       QueryParams queryParams = new QueryParamsImpl();
       queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(10));
       queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(10));
+      queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
       RealtimeListAccess<RestActivity> list = activityService.getConnectionsActivityStream(identity,
                                                                                            queryParams);
       ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);

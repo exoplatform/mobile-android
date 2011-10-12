@@ -44,6 +44,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       imageViewAvatar.setUrl(SocialActivityUtil.getDomain() + avatarUrl);
     textViewName.setText(activityInfo.getUserName());
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
+//    SocialActivityUtil.setTextLinkfy(textViewMessage);
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());

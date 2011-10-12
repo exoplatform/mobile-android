@@ -72,6 +72,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       QueryParams queryParams = new QueryParamsImpl();
       queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(10));
       queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(10));
+      queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
       selectedRestActivity = SocialServiceHelper.getInstance()
                                                 .getActivityService()
                                                 .get(activityId, queryParams);
@@ -98,28 +99,25 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       }
       System.out.println("commentList" + commentList.size());
 
-      if (commentList != null) {
-        for (RestComment comment : commentList) {
-          SocialCommentInfo socialComment = new SocialCommentInfo();
-          String identity = comment.getIdentityId();
-          System.out.println("identity " + identity);
+//      if (commentList != null) {
+//        for (RestComment comment : commentList) {
+//          SocialCommentInfo socialComment = new SocialCommentInfo();
+//          String identity = comment.getIdentityId();
+//          System.out.println("identity " + identity);
 //          RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
 //                                                                  .getIdentityService()
 //                                                                  .get(identity);
-          RestIdentity restId = comment.getIdentity();
-          System.out.println("RestIdentity ");
-          RestProfile profile = restId.getProfile();
-
-          socialComment.setCommentId(identity);
-          System.out.println("fullname " + profile.getFullName());
-          socialComment.setCommentName(profile.getFullName());
-          socialComment.setImageUrl(profile.getAvatarUrl());
-          socialComment.setCommentTitle(comment.getText());
-          socialComment.setPostedTime(comment.getPostedTime());
-
-          socialCommentList.add(socialComment);
-        }
-      }
+//          RestProfile profile = restId.getProfile();
+//
+//          socialComment.setCommentId(identity);
+//          socialComment.setCommentName(profile.getFullName());
+//          socialComment.setImageUrl(profile.getAvatarUrl());
+//          socialComment.setCommentTitle(comment.getText());
+//          socialComment.setPostedTime(comment.getPostedTime());
+//
+//          socialCommentList.add(socialComment);
+//        }
+//      }
 
       return 1;
     } catch (RuntimeException e) {

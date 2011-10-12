@@ -8,6 +8,10 @@ import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
+import android.widget.TextView;
+
 public class SocialActivityUtil {
 
   public static String getCommentString(LinkedList<SocialLikeInfo> socialLikeList) {
@@ -185,5 +189,16 @@ public class SocialActivityUtil {
     urlBuffer.append(":");
     urlBuffer.append(ExoConstants.ACTIVITY_PORT);
     return urlBuffer.toString();
+  }
+
+  public static void setTextLinkfy(TextView textView) {
+    URLSpan[] list = textView.getUrls();
+    if (list != null) {
+      for (URLSpan span : list) {
+        if (span.getURL().startsWith(ExoConstants.HTTP_PROTOCOL)) {
+          textView.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+      }
+    }
   }
 }
