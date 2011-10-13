@@ -80,6 +80,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       profile = selectedRestActivity.getPosterIdentity().getProfile();
       title = selectedRestActivity.getTitle();
       postedTime = selectedRestActivity.getPostedTime();
+      // selectedRestActivity.getT
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();
       if (likeList != null) {

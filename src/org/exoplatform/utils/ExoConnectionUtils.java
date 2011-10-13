@@ -112,7 +112,6 @@ public class ExoConnectionUtils {
         sb.append(line + "\n");
       }
     } catch (IOException e) {
-      System.out.println("" + e.getMessage());
       // e.printStackTrace();
     } finally {
       try {
@@ -123,13 +122,6 @@ public class ExoConnectionUtils {
     }
     // System.out.println("convertStreamToString "+sb.toString());
     return sb.toString();
-  }
-
-  // Get sub URL path
-  private static String getExtend(String domain) {
-
-    return "/portal/private/intranet";
-
   }
 
   // Send request with authentication
@@ -488,7 +480,6 @@ public class ExoConnectionUtils {
   public static boolean checkPLFVersion() {
     try {
       String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_SUFFIX_VERSION;
-      Log.i("versionUrl", versionUrl);
       String result = getPLFStream(versionUrl);
       JSONObject json = (JSONObject) JSONValue.parse(result);
       String verObject = json.get("platformVersion").toString();
@@ -499,14 +490,11 @@ public class ExoConnectionUtils {
         ServerSettingHelper.getInstance().setServerVersion("0");
         return false;
       } else {
-        if (verObject != null) {
-          ServerSettingHelper.getInstance().setServerVersion(verObject);
-        }
+        ServerSettingHelper.getInstance().setServerVersion(verObject);
         return true;
       }
     } catch (RuntimeException e) {
       ServerSettingHelper.getInstance().setServerVersion("0");
-      Log.i("Check PLF", e.toString());
       return false;
     }
 

@@ -33,7 +33,7 @@ public class DocumentAdapter extends BaseAdapter {
     _urlStr = urlStr;
 
     _documentList = ExoDocumentUtils.getPersonalDriveContent(_urlStr);
-    ;
+
   }
 
   // @Override
@@ -59,6 +59,8 @@ public class DocumentAdapter extends BaseAdapter {
     View rowView = inflater.inflate(R.layout.fileitem, parent, false);
 
     final ExoFile myFile = _documentList.get(pos);
+    System.out.println("contentType: " + myFile.contentType + "-url:" + myFile.urlStr
+        + "-isFolder:" + myFile.isFolder);
 
     ImageView icon = (ImageView) rowView.findViewById(R.id.icon);
     TextView lb = (TextView) rowView.findViewById(R.id.label);
@@ -80,7 +82,7 @@ public class DocumentAdapter extends BaseAdapter {
         if (!myFile.isFolder) {
           // Action for display file
           // eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
-         new UnreadableFileDialog(_mContext).show();
+          new UnreadableFileDialog(_mContext).show();
         } else {
 
           _urlStr = myFile.urlStr;

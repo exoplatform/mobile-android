@@ -26,8 +26,6 @@ public class HomeController {
 
   private String  dashboardText;
 
-//  private String  settingText;
-
   private Context mContext;
 
   public HomeController(Context context) {
@@ -79,7 +77,6 @@ public class HomeController {
     chatText = location.getString("ChatApplication");
     documentText = location.getString("Documents");
     dashboardText = location.getString("Dashboard");
-//    settingText = location.getString("Settings");
   }
 
 }
