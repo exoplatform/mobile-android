@@ -74,7 +74,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
       queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(10));
       queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(10));
       queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
-      RealtimeListAccess<RestActivity> list = activityService.getActivityStream(identity,
+      RealtimeListAccess<RestActivity> list = activityService.getConnectionsActivityStream(identity,
                                                                                            queryParams);
       ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);
       if (activityList.size() > 0) {
@@ -90,6 +90,8 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           streamInfo.setPostedTime(act.getPostedTime());
           streamInfo.setLikeNumber(act.getTotalNumberOfLikes());
           streamInfo.setCommentNumber(act.getTotalNumberOfComments());
+          streamInfo.setAttachedImageUrl(act.getTemplateParameter("DOCLINK"));
+          streamInfo.setAttachedImageName(act.getTemplateParameter("DOCNAME"));
           streamInfoList.add(streamInfo);
         }
       }

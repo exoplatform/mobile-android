@@ -1,14 +1,13 @@
 package org.exoplatform.model;
 
-import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestLike;
 
 public class SocialActivityInfo {
-  
-  private String   activityId;
+
+  private String            activityId;
 
   private String            userID;
 
@@ -18,37 +17,32 @@ public class SocialActivityInfo {
 
   private String            title;
 
-  private String            body;
-
-  private Date              lastUpdateDate;
-
   private long              postedTime;
 
   private int               nbLikes;
 
   private int               nbComments;
 
-  private String            postedTimeInWords;
+  private String            attachImageUrl;
+
+  private String            attachedImageName;
 
   private List<RestComment> commentList;
 
   private List<RestLike>    likeList;
 
-  private boolean           isShowMore;
-
-  private boolean           isHeader;
-
   public SocialActivityInfo() {
 
   }
-  
-  public void setActivityId(String actId){
+
+  public void setActivityId(String actId) {
     activityId = actId;
   }
 
-  public String getActivityId(){
+  public String getActivityId() {
     return activityId;
   }
+
   public void setUserId(String id) {
     userID = id;
   }
@@ -121,20 +115,19 @@ public class SocialActivityInfo {
     return nbLikes;
   }
 
-  public void setIsShowMore(boolean showMore) {
-    this.isShowMore = showMore;
+  public void setAttachedImageUrl(String url) {
+    attachImageUrl = url;
   }
 
-  public boolean getIsShowMore() {
-    return isShowMore;
+  public String getAttachedImageUrl() {
+    return attachImageUrl;
+  }
+  public void setAttachedImageName(String name) {
+    attachedImageName = name;
   }
 
-  public void setIsHeader(boolean header) {
-    this.isHeader = header;
-  }
-
-  public boolean getIsHeader() {
-    return isHeader;
+  public String getAttachedImageName() {
+    return attachedImageName;
   }
 
 }

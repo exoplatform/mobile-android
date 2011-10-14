@@ -12,6 +12,7 @@ import org.exoplatform.utils.ExoDocumentUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,6 +24,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class LoginActivity extends Activity implements OnClickListener {
   private SharedPreferences sharedPreference;
@@ -72,6 +75,7 @@ public class LoginActivity extends Activity implements OnClickListener {
   }
 
   private void init() {
+
     _imageAccount = (ImageView) findViewById(R.id.Image_Account);
     _imageServer = (ImageView) findViewById(R.id.Image_Server);
 
@@ -107,7 +111,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     password = _edtxPassword.getText().toString();
 
     ExoDocumentUtils.repositoryHomeURL = null;
-    
+
     new LoginController(this, username, password);
 
   }
@@ -143,7 +147,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     return false;
   }
 
-//   @Override
+  // @Override
   public void onClick(View view) {
     if (view == _btnLogIn) {
       onLogin();

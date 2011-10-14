@@ -97,8 +97,11 @@ public class SocialController {
 
         public void onClick(View v) {
           String activityId = activityInfo.getActivityId();
-          Intent intent = new Intent(mContext, SocialDetailActivity.class);
           SocialDetailHelper.getInstance().setActivityId(activityId);
+          SocialDetailHelper.getInstance().setAttachedImageUrl(activityInfo.getAttachedImageUrl());
+          SocialDetailHelper.getInstance()
+                            .setAttachedImageName(activityInfo.getAttachedImageName());
+          Intent intent = new Intent(mContext, SocialDetailActivity.class);
           mContext.startActivity(intent);
         }
       });

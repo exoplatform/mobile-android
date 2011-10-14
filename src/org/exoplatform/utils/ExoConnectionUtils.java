@@ -395,13 +395,18 @@ public class ExoConnectionUtils {
       HttpGet get = new HttpGet(url);
       HttpResponse response;
       response = httpClient.execute(get);
-      HttpEntity entity = response.getEntity();
-      if (entity != null) {
-        InputStream instream = entity.getContent();
-        String strResult = convertStreamToString(instream);
-        return strResult;
+      int status = response.getStatusLine().getStatusCode();
+      if (status >= 200 && status < 300) {
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+          InputStream instream = entity.getContent();
+          String strResult = convertStreamToString(instream);
+          return strResult;
+        } else {
+          return null;
+        }
       } else {
-        return null;
+        return "Timeout";
       }
 
     } catch (Exception e) {

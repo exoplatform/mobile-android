@@ -46,6 +46,7 @@ public class HomeAdapter extends BaseAdapter {
     HomeItem item = homeItemList.get(position);
     LayoutInflater li = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View view = li.inflate(R.layout.appitem, null);
+    view.setPadding(8, 8, 8, 8);
 //    view.setLayoutParams(new GridView.LayoutParams(90, 90));
 
     ImageView iv = (ImageView) view.findViewById(R.id.icon_image);

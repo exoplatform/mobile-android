@@ -12,6 +12,7 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestProfile;
+import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.CommentItemLayout;
@@ -138,6 +139,10 @@ public class SocialDetailController {
     SocialActivityUtil.setTextLinkfy(textView_Message);
 
     textView_Time.setText(SocialActivityUtil.getPostedTimeString(postedTime));
+    String attachedUrl = SocialDetailHelper.getInstance().getAttachedImageUrl();
+    if (attachedUrl != null) {
+      SocialDetailActivity.socialDetailActivity.displayAttachImage(attachedUrl);
+    }
   }
 
   public void setLikeInfo(LinkedList<SocialLikeInfo> likeLinkedList) {

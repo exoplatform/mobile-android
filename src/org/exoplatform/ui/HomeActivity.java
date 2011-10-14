@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 //import com.cyrilmottier.android.greendroid.R;
 
@@ -26,7 +28,7 @@ public class HomeActivity extends MyActionBar {
   private HomeController homeController;
 
   private String         settingText;
-  
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -35,7 +37,7 @@ public class HomeActivity extends MyActionBar {
     super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_logout_button);
-//    addActionBarItem(R.drawable.action_bar_logout_button);
+    // addActionBarItem(R.drawable.action_bar_logout_button);
     // super.setTitle("eXo");
     init();
     changeLanguage();
@@ -46,7 +48,7 @@ public class HomeActivity extends MyActionBar {
     super.onResume();
     init();
   }
-  
+
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -54,7 +56,7 @@ public class HomeActivity extends MyActionBar {
 
     return true;
   }
-  
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -105,5 +107,5 @@ public class HomeActivity extends MyActionBar {
     LocalizationHelper local = LocalizationHelper.getInstance();
     settingText = local.getString("Settings");
   }
-  
+
 }

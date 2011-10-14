@@ -8,13 +8,18 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
+import android.net.Uri;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SocialActivityStreamItem extends LinearLayout {
+
+  private View           view;
+
   private AsyncImageView imageViewAvatar;
 
   private TextView       textViewName;
@@ -27,10 +32,15 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private TextView       textViewTime;
 
+  private View           attachStubView;
+
+  private String         domain;
+
   public SocialActivityStreamItem(Context context, SocialActivityInfo activityInfo) {
     super(context);
     LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    View view = inflate.inflate(R.layout.activitybrowserviewcell, this);
+    domain = SocialActivityUtil.getDomain();
+    view = inflate.inflate(R.layout.activitybrowserviewcell, this);
     imageViewAvatar = (AsyncImageView) view.findViewById(R.id.imageView_Avatar);
     textViewName = (TextView) view.findViewById(R.id.textView_Name);
     textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
@@ -41,12 +51,29 @@ public class SocialActivityStreamItem extends LinearLayout {
     if (avatarUrl == null) {
       imageViewAvatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
     } else
-      imageViewAvatar.setUrl(SocialActivityUtil.getDomain() + avatarUrl);
+      imageViewAvatar.setUrl(domain + avatarUrl);
     textViewName.setText(activityInfo.getUserName());
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
-//    SocialActivityUtil.setTextLinkfy(textViewMessage);
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
+    String attachUrl = activityInfo.getAttachedImageUrl();
+    if (attachUrl != null) {
+      displayAttachImage(attachUrl);
+    }
+
+  }
+
+  public void displayAttachImage(String url) {
+    if (attachStubView == null) {
+      initAttachStubView(domain + url);
+    }
+    attachStubView.setVisibility(View.VISIBLE);
+  }
+
+  private void initAttachStubView(String url) {
+    attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
+    AsyncImageView attachImage = (AsyncImageView) attachStubView.findViewById(R.id.attached_image_view);
+    attachImage.setUrl(url);
   }
 }

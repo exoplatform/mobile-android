@@ -98,7 +98,6 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
         }
       }
-      System.out.println("commentList" + commentList.size());
 
 //      if (commentList != null) {
 //        for (RestComment comment : commentList) {

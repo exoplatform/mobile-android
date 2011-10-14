@@ -6,11 +6,13 @@ import greendroid.widget.AsyncImageView;
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
@@ -22,27 +24,30 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class SocialDetailActivity extends MyActionBar implements OnClickListener {
 
-  private LinearLayout           commentLayoutWrap;
+  private LinearLayout               commentLayoutWrap;
 
-  private EditText               editTextComment;
+  private EditText                   editTextComment;
 
-  private AsyncImageView         imageView_Avatar;
+  private AsyncImageView             imageView_Avatar;
 
-  private TextView               textView_Name;
+  private TextView                   textView_Name;
 
-  private TextView               textView_Message;
+  private TextView                   textView_Message;
 
-  private TextView               textView_Time;
+  private TextView                   textView_Time;
 
-  private TextView               textView_Like_Count;
+  private TextView                   textView_Like_Count;
 
-  private Button                 likeButton;
+  private Button                     likeButton;
 
-  private String                 yourCommentText;
+  private View                       attachStubView;
 
-  private SocialDetailController detailController;
+  private String                     yourCommentText;
+
+  private SocialDetailController     detailController;
 
   public static SocialDetailActivity socialDetailActivity;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -82,6 +87,28 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     detailController.onLoad();
   }
 
+  public void displayAttachImage(String url) {
+    url = SocialActivityUtil.getDomain() + url;
+    if (attachStubView == null) {
+      initAttachStubView(url);
+    }
+    attachStubView.setVisibility(View.VISIBLE);
+  }
+
+  private void initAttachStubView(final String url) {
+    attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_detail)).inflate();
+    AsyncImageView attachImage = (AsyncImageView) attachStubView.findViewById(R.id.attached_image_view);
+    attachImage.setUrl(url);
+    attachImage.setOnClickListener(new OnClickListener() {
+
+      @Override
+      public void onClick(View arg0) {
+            Intent intent = new Intent(SocialDetailActivity.this, SocialAttachedImageActivity.class);
+            startActivity(intent);
+      }
+    });
+  }
+
   @Override
   protected void onResume() {
     super.onResume();
@@ -103,7 +130,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
-      if(SocialActivity.socialActivity!=null){
+      if (SocialActivity.socialActivity != null) {
         SocialActivity.socialActivity.finish();
       }
       destroy();
