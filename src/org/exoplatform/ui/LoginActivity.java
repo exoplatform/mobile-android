@@ -12,7 +12,6 @@ import org.exoplatform.utils.ExoDocumentUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,8 +23,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 
 public class LoginActivity extends Activity implements OnClickListener {
   private SharedPreferences sharedPreference;
