@@ -6,9 +6,9 @@
 		android:id="@+id/authenticate_logo_imageview" android:src="@drawable/authenticate_logo"
 		android:layout_centerHorizontal="true" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
-	<RelativeLayout android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:layout_alignParentBottom="true"
-		android:layout_marginBottom="50dp">
+	<RelativeLayout android:id="@+id/login_frame"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_alignParentBottom="true" android:layout_marginBottom="50dp">
 
 		<RelativeLayout android:id="@+id/RelativeLayout_Account"
 			android:layout_below="@id/authenticate_logo_imageview"
