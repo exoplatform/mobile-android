@@ -94,7 +94,7 @@ public class ExoDocumentUtils {
   public static List<ExoFile> getPersonalDriveContent(String url) {
 
     List<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
-    String responseStr = ExoConnectionUtils.getDriveContent(url.replace(" ", "%20"));
+    String responseStr = ExoConnectionUtils.getDriveContent(url);
     if (responseStr != null) {
       int local1;
       int local2;
