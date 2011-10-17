@@ -52,7 +52,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       imageViewAvatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
     } else
       imageViewAvatar.setUrl(domain + avatarUrl);
-    textViewName.setText(activityInfo.getUserName());
+    textViewName.setText(Html.fromHtml(activityInfo.getUserName()));
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());

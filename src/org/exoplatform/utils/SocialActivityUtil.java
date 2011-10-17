@@ -2,12 +2,13 @@ package org.exoplatform.utils;
 
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 
+import android.content.Context;
+import android.content.Intent;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.widget.TextView;
@@ -191,12 +192,25 @@ public class SocialActivityUtil {
     return urlBuffer.toString();
   }
 
-  public static void setTextLinkfy(TextView textView) {
+  public static void setTextLinkfy(Context mContext, TextView textView) {
     URLSpan[] list = textView.getUrls();
     if (list != null) {
+      Intent intent;
       for (URLSpan span : list) {
-        if (span.getURL().startsWith(ExoConstants.HTTP_PROTOCOL)) {
-          textView.setMovementMethod(LinkMovementMethod.getInstance());
+        String spanUrl = span.getURL();
+
+        if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
+           textView.setMovementMethod(LinkMovementMethod.getInstance());
+          // intent = new Intent(mContext, LinkfyWebViewActivity.class);
+          // intent.putExtra(ExoConstants.SOCIAL_LINKFY_EXTRA, spanUrl);
+          // mContext.startActivity(intent);
+        } else {
+          if (spanUrl.contains("profile")) {
+            String link = AccountSetting.getInstance().getDomainName() + spanUrl;
+            // intent = new Intent(mContext, LinkfyWebViewActivity.class);
+            // intent.putExtra(ExoConstants.SOCIAL_LINKFY_EXTRA, link);
+            // mContext.startActivity(intent);
+          }
         }
       }
     }

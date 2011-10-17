@@ -2,6 +2,7 @@ package org.exoplatform.controller.social;
 
 import greendroid.widget.AsyncImageView;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -110,9 +111,14 @@ public class SocialDetailController {
           commentItem.comAvatarImage.setImageResource(ExoConstants.DEFAULT_AVATAR);
         } else
           commentItem.comAvatarImage.setUrl(domain + avatarUrl);
-        commentItem.comTextViewName.setText(comment.getCommentName());
+        try {
+          String userName = new String(comment.getCommentName().getBytes("ISO-8859-1"), "UTF-8");
+          commentItem.comTextViewName.setText(userName);
+        } catch (UnsupportedEncodingException e) {
+        }
+
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()));
-        SocialActivityUtil.setTextLinkfy(commentItem.comTextViewMessage);
+        SocialActivityUtil.setTextLinkfy(mContext, commentItem.comTextViewMessage);
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime()));
         commentLayoutWrap.addView(commentItem, params);
 
@@ -133,10 +139,15 @@ public class SocialDetailController {
     } else
       imageView_Avatar.setUrl(domain + avatarUrl);
 
-    textView_Name.setText(profile.getFullName());
+    try {
+      String userName = new String(profile.getFullName().getBytes("ISO-8859-1"), "UTF-8");
+      textView_Name.setText(userName);
+    } catch (UnsupportedEncodingException e) {
+
+    }
 
     textView_Message.setText(Html.fromHtml(title));
-    SocialActivityUtil.setTextLinkfy(textView_Message);
+    SocialActivityUtil.setTextLinkfy(mContext, textView_Message);
 
     textView_Time.setText(SocialActivityUtil.getPostedTimeString(postedTime));
     String attachedUrl = SocialDetailHelper.getInstance().getAttachedImageUrl();

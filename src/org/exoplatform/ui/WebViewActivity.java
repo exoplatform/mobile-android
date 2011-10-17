@@ -25,8 +25,6 @@ public class WebViewActivity extends MyActionBar {
 
   public static String _titlebar;
 
-  private String       strCannotBackToPreviousPage;
-
   public void onCreate(Bundle icicle) {
 
     super.onCreate(icicle);
@@ -47,16 +45,6 @@ public class WebViewActivity extends MyActionBar {
 
     _wvGadget.getSettings().setBuiltInZoomControls(true);
 
-//    if (ExoApplicationsController2.webViewMode == 0) {
-//
-//    } else if (ExoApplicationsController2.webViewMode == 1) {
-//
-//      _url = Environment.getExternalStorageDirectory() + "/eXo/"
-//          + ExoFilesController.myFile.fileName;
-//      _titlebar = ExoFilesController.myFile.fileName;
-//
-//    }
-
     setTitle(_titlebar.replace("%20", " "));
     _wvGadget.loadUrl(_url);
 
@@ -71,22 +59,6 @@ public class WebViewActivity extends MyActionBar {
 
     return true;
   }
-
-//  public void finishMe() {
-//    if (ExoApplicationsController2.webViewMode == 1) {
-//      int index = ExoFilesController.myFile.urlStr.lastIndexOf("/");
-//      ExoFilesController.myFile.urlStr = ExoFilesController.myFile.urlStr.substring(0, index);
-//
-//    } else if (ExoApplicationsController2.webViewMode == 2) {
-//      Intent next = new Intent(WebViewActivity.this, SettingActivity.class);
-//      startActivity(next);
-//    } else {
-//      Intent next = new Intent(WebViewActivity.this, DashboardActivity.class);
-//      startActivity(next);
-//    }
-//    finish();
-//
-//  }
 
   private void setupCookies() {
     CookieSyncManager.createInstance(this);
@@ -115,8 +87,5 @@ public class WebViewActivity extends MyActionBar {
   public void changeLanguage() {
     LocalizationHelper local = LocalizationHelper.getInstance();
 
-    String str_btnBack = "";
-    str_btnBack = local.getString("CloseButton");
-    strCannotBackToPreviousPage = local.getString("CannotBackToPreviousPage");
   }
 }

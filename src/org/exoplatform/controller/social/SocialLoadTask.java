@@ -1,5 +1,6 @@
 package org.exoplatform.controller.social;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.exoplatform.model.SocialActivityInfo;
@@ -12,6 +13,7 @@ import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.QueryParams;
+import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.UserTask;
@@ -77,6 +79,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
       RealtimeListAccess<RestActivity> list = activityService.getConnectionsActivityStream(identity,
                                                                                            queryParams);
       ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);
+      
       if (activityList.size() > 0) {
         SocialActivityInfo streamInfo = null;
         RestProfile profile = null;
@@ -85,7 +88,12 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           profile = act.getPosterIdentity().getProfile();
           streamInfo.setActivityId(act.getId());
           streamInfo.setImageUrl(profile.getAvatarUrl());
-          streamInfo.setUserName(profile.getFullName());
+          try {
+            String userName = new String(profile.getFullName().getBytes("ISO-8859-1"), "UTF-8");
+            streamInfo.setUserName(userName);
+          } catch (UnsupportedEncodingException e) {
+            return null;
+          }
           streamInfo.setTitle(act.getTitle());
           streamInfo.setPostedTime(act.getPostedTime());
           streamInfo.setLikeNumber(act.getTotalNumberOfLikes());

@@ -44,6 +44,8 @@ public class ExoConstants {
 
   public static final String SELECTED_IMAGE_EXTRA      = "SELECTED_IMAGE_EXTRA";
   
+  public static final String SOCIAL_LINKFY_EXTRA      = "SOCIAL_LINKFY_EXTRA";
+  
   public static final String EXO_PREFERENCE            = "exo_preference";
 
   public static final String EXO_PRF_DOMAIN            = "exo_prf_domain";

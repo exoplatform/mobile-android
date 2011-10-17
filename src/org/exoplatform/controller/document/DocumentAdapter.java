@@ -59,12 +59,10 @@ public class DocumentAdapter extends BaseAdapter {
     View rowView = inflater.inflate(R.layout.fileitem, parent, false);
 
     final ExoFile myFile = _documentList.get(pos);
-    System.out.println("contentType: " + myFile.contentType + "-url:" + myFile.urlStr
-        + "-isFolder:" + myFile.isFolder);
 
     ImageView icon = (ImageView) rowView.findViewById(R.id.icon);
     TextView lb = (TextView) rowView.findViewById(R.id.label);
-    lb.setText(myFile.fileName.replace("%20", " "));
+    lb.setText(myFile.fileName);
 
     if (!myFile.isFolder) {
 
