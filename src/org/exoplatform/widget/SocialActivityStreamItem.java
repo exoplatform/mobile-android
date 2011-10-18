@@ -8,7 +8,8 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,9 +37,12 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private String         domain;
 
+  private Context        mContext;
+
   public SocialActivityStreamItem(Context context, SocialActivityInfo activityInfo) {
     super(context);
-    LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    mContext = context;
+    LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     domain = SocialActivityUtil.getDomain();
     view = inflate.inflate(R.layout.activitybrowserviewcell, this);
     imageViewAvatar = (AsyncImageView) view.findViewById(R.id.imageView_Avatar);
@@ -51,7 +55,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     if (avatarUrl == null) {
       imageViewAvatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
     } else
-      imageViewAvatar.setUrl(domain + avatarUrl);
+      imageViewAvatar.setUrl(avatarUrl);
     textViewName.setText(Html.fromHtml(activityInfo.getUserName()));
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
@@ -71,9 +75,14 @@ public class SocialActivityStreamItem extends LinearLayout {
     attachStubView.setVisibility(View.VISIBLE);
   }
 
-  private void initAttachStubView(String url) {
+  private void initAttachStubView(final String url) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     AsyncImageView attachImage = (AsyncImageView) attachStubView.findViewById(R.id.attached_image_view);
+     BitmapFactory.Options options = new BitmapFactory.Options();
+     options.inTempStorage = new byte[16*1024];
+     attachImage.setOptions(options);
+     attachImage.setDefaultImageResource(R.drawable.documenticonforunknown);
+
     attachImage.setUrl(url);
   }
 }

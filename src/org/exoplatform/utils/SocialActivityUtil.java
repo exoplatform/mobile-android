@@ -1,5 +1,10 @@
 package org.exoplatform.utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
@@ -9,6 +14,8 @@ import org.exoplatform.singleton.LocalizationHelper;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.widget.TextView;
@@ -192,6 +199,46 @@ public class SocialActivityUtil {
     return urlBuffer.toString();
   }
 
+  public static InputStream OpenHttpConnection(String urlString) throws IOException {
+    InputStream in = null;
+    int response = -1;
+
+    URL url = new URL(urlString);
+    URLConnection conn = url.openConnection();
+    if (conn == null) {
+      throw new IOException();
+    }
+    conn.setConnectTimeout(1000);
+    conn.setReadTimeout(5000);
+    HttpURLConnection httpConn = (HttpURLConnection) conn;
+    httpConn.setAllowUserInteraction(false);
+    httpConn.setInstanceFollowRedirects(true);
+    httpConn.setRequestMethod("GET");
+    httpConn.connect();
+    response = httpConn.getResponseCode();
+    if (response == HttpURLConnection.HTTP_OK) {
+      in = httpConn.getInputStream();
+    }
+    return in;
+  }
+
+  // =========================== DownloadImg =======================
+  public static Bitmap DownloadImage(Context context, String URL) {
+    Bitmap bitmap = null;
+    InputStream in = null;
+    try {
+      in = OpenHttpConnection(URL);
+      BitmapFactory.Options options = new BitmapFactory.Options();
+      options.inSampleSize = 4;
+      bitmap = BitmapFactory.decodeStream(in,null,options);
+      in.close();
+      return bitmap;
+    } catch (Exception ex) {
+      return null;
+    }
+
+  }
+
   public static void setTextLinkfy(Context mContext, TextView textView) {
     URLSpan[] list = textView.getUrls();
     if (list != null) {
@@ -200,7 +247,7 @@ public class SocialActivityUtil {
         String spanUrl = span.getURL();
 
         if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
-           textView.setMovementMethod(LinkMovementMethod.getInstance());
+          textView.setMovementMethod(LinkMovementMethod.getInstance());
           // intent = new Intent(mContext, LinkfyWebViewActivity.class);
           // intent.putExtra(ExoConstants.SOCIAL_LINKFY_EXTRA, spanUrl);
           // mContext.startActivity(intent);

@@ -38,10 +38,10 @@ public class HomeController {
     ArrayList<HomeItem> itemList = new ArrayList<HomeItem>();
     Bitmap bm = BitmapFactory.decodeResource(resource, R.drawable.homeactivitystreamsiconiphone);
     HomeItem item;
-    if (AccountSetting.getInstance().getIsNewVersion() == true) {
+//    if (AccountSetting.getInstance().getIsNewVersion() == true) {
       item = new HomeItem(bm, 1, activityStreamsText);
       itemList.add(item);
-    }
+//    }
 
     bm = BitmapFactory.decodeResource(resource, R.drawable.homechaticoniphone);
     item = new HomeItem(bm, 2, chatText);
