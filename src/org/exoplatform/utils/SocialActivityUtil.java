@@ -16,8 +16,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.text.util.Linkify;
 import android.widget.TextView;
 
 public class SocialActivityUtil {
@@ -230,7 +233,7 @@ public class SocialActivityUtil {
       in = OpenHttpConnection(URL);
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inSampleSize = 4;
-      bitmap = BitmapFactory.decodeStream(in,null,options);
+      bitmap = BitmapFactory.decodeStream(in, null, options);
       in.close();
       return bitmap;
     } catch (Exception ex) {
@@ -242,24 +245,27 @@ public class SocialActivityUtil {
   public static void setTextLinkfy(Context mContext, TextView textView) {
     URLSpan[] list = textView.getUrls();
     if (list != null) {
-      Intent intent;
+      Spannable spannable = (Spannable) textView.getText();
       for (URLSpan span : list) {
         String spanUrl = span.getURL();
-
         if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
           textView.setMovementMethod(LinkMovementMethod.getInstance());
-          // intent = new Intent(mContext, LinkfyWebViewActivity.class);
-          // intent.putExtra(ExoConstants.SOCIAL_LINKFY_EXTRA, spanUrl);
-          // mContext.startActivity(intent);
         } else {
           if (spanUrl.contains("profile")) {
+            int start = spannable.getSpanStart(span);
+            int stop = spannable.getSpanEnd(span);
+            int flags = spannable.getSpanEnd(span);
+            spannable.removeSpan(span);
             String link = AccountSetting.getInstance().getDomainName() + spanUrl;
-            // intent = new Intent(mContext, LinkfyWebViewActivity.class);
-            // intent.putExtra(ExoConstants.SOCIAL_LINKFY_EXTRA, link);
-            // mContext.startActivity(intent);
+            URLSpan myUrlSpan = new URLSpan(link);
+
+            spannable.setSpan(myUrlSpan, start, stop, flags);
+            textView.setText(spannable);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
           }
         }
       }
     }
   }
+
 }

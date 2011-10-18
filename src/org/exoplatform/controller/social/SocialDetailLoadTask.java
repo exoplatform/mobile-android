@@ -129,6 +129,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
       return 1;
     } catch (RuntimeException e) {
+      System.out.println("RuntimeException" + e.getMessage());
       return 0;
     }
   }

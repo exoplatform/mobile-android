@@ -23,6 +23,7 @@ import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.text.util.Linkify;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -116,8 +117,9 @@ public class SocialDetailController {
           commentItem.comTextViewName.setText(userName);
         } catch (UnsupportedEncodingException e) {
         }
-
-        commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()));
+        commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()),
+                                               TextView.BufferType.SPANNABLE);
+        SocialActivityUtil.setTextLinkfy(mContext, commentItem.comTextViewMessage);
         SocialActivityUtil.setTextLinkfy(mContext, commentItem.comTextViewMessage);
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime()));
         commentLayoutWrap.addView(commentItem, params);
@@ -146,9 +148,8 @@ public class SocialDetailController {
 
     }
 
-    textView_Message.setText(Html.fromHtml(title));
+    textView_Message.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
     SocialActivityUtil.setTextLinkfy(mContext, textView_Message);
-
     textView_Time.setText(SocialActivityUtil.getPostedTimeString(postedTime));
     String attachedUrl = SocialDetailHelper.getInstance().getAttachedImageUrl();
     if (attachedUrl != null) {
