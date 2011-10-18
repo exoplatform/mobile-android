@@ -120,7 +120,6 @@ public class SocialDetailController {
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()),
                                                TextView.BufferType.SPANNABLE);
         SocialActivityUtil.setTextLinkfy(mContext, commentItem.comTextViewMessage);
-        SocialActivityUtil.setTextLinkfy(mContext, commentItem.comTextViewMessage);
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime()));
         commentLayoutWrap.addView(commentItem, params);
 
