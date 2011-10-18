@@ -137,7 +137,7 @@ public class SocialDetailController {
     if (avatarUrl == null) {
       imageView_Avatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
     } else
-      imageView_Avatar.setUrl(domain + avatarUrl);
+      imageView_Avatar.setUrl(avatarUrl);
 
     try {
       String userName = new String(profile.getFullName().getBytes("ISO-8859-1"), "UTF-8");

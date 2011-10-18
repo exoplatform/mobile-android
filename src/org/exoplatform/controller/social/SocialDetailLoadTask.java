@@ -1,5 +1,6 @@
 package org.exoplatform.controller.social;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -92,7 +93,14 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
             likeLinkedList.addFirst(socialLike);
             SocialDetailHelper.getInstance().setLiked(true);
           } else {
-            socialLike.setLikeName(like.getProfile().getFullName());
+            try {
+              String likeName = new String(like.getProfile().getFullName().getBytes("ISO-8859-1"),
+                                           "UTF-8");
+              socialLike.setLikeName(likeName);
+            } catch (UnsupportedEncodingException e) {
+
+            }
+
             likeLinkedList.add(socialLike);
           }
 

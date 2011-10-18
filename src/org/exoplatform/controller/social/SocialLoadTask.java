@@ -21,6 +21,7 @@ import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActivityInfo>> {
@@ -76,7 +77,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
       queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(10));
       queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(10));
       queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
-      RealtimeListAccess<RestActivity> list = activityService.getConnectionsActivityStream(identity,
+      RealtimeListAccess<RestActivity> list = activityService.getFeedActivityStream(identity,
                                                                                            queryParams);
       ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);
       
@@ -98,8 +99,10 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           streamInfo.setPostedTime(act.getPostedTime());
           streamInfo.setLikeNumber(act.getTotalNumberOfLikes());
           streamInfo.setCommentNumber(act.getTotalNumberOfComments());
-          streamInfo.setAttachedImageUrl(act.getTemplateParameter("DOCLINK"));
-          streamInfo.setAttachedImageName(act.getTemplateParameter("DOCNAME"));
+          String docLink = act.getTemplateParameter("DOCLINK");
+          streamInfo.setAttachedImageUrl(docLink);
+          String docName = act.getTemplateParameter("DOCNAME");
+          streamInfo.setAttachedImageName(docName);
           streamInfoList.add(streamInfo);
         }
       }
