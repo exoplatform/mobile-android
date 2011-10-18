@@ -252,17 +252,21 @@ public class SocialActivityUtil {
           textView.setMovementMethod(LinkMovementMethod.getInstance());
         } else {
           // if (spanUrl.contains("profile")) {
-          int start = spannable.getSpanStart(span);
-          int stop = spannable.getSpanEnd(span);
-          int flags = spannable.getSpanEnd(span);
-          spannable.removeSpan(span);
-          String link = AccountSetting.getInstance().getDomainName() + spanUrl;
-          URLSpan myUrlSpan = new URLSpan(link);
+          try {
+            int start = spannable.getSpanStart(span);
+            int stop = spannable.getSpanEnd(span);
+            int flags = spannable.getSpanEnd(span);
+            spannable.removeSpan(span);
+            String link = AccountSetting.getInstance().getDomainName() + spanUrl;
+            URLSpan myUrlSpan = new URLSpan(link);
 
-          spannable.setSpan(myUrlSpan, start, stop, flags);
-          textView.setText(spannable);
-          textView.setMovementMethod(LinkMovementMethod.getInstance());
-          // }
+            spannable.setSpan(myUrlSpan, start, stop, flags);
+            textView.setText(spannable);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+          } catch (Exception e) {
+            
+          }
         }
       }
     }
