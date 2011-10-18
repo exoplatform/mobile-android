@@ -6,11 +6,12 @@
 
 	<RelativeLayout android:background="@drawable/bottom_background_shape"
 		android:padding="2.5dp" android:id="@+id/imageView_Avatar_wrap"
-		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:layout_height="45dp" android:layout_width="45dp"
 		android:layout_marginLeft="5dp" android:layout_alignParentLeft="true">
 		<greendroid.widget.AsyncImageView
-			android:layout_centerInParent="true" android:id="@+id/imageView_Avatar"
-			android:layout_height="43dp" android:layout_width="43dp" />
+			android:scaleType="fitXY" android:layout_centerInParent="true"
+			android:id="@+id/imageView_Avatar" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" />
 		<ImageView android:background="@drawable/activity_avatar_shadow"
 			android:layout_centerInParent="true" android:layout_height="43dp"
 			android:layout_width="43dp" />
