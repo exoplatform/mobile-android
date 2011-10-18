@@ -7,16 +7,15 @@
 	<RelativeLayout android:background="@drawable/bottom_background_shape"
 		android:padding="2.5dp" android:id="@+id/imageView_Avatar_wrap"
 		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:layout_marginLeft="5dip" android:layout_alignParentLeft="true">
+		android:layout_marginLeft="5dp" android:layout_alignParentLeft="true">
 		<greendroid.widget.AsyncImageView
 			android:layout_centerInParent="true" android:id="@+id/imageView_Avatar"
-			android:layout_height="43dip" android:layout_width="43dip" />
+			android:layout_height="43dp" android:layout_width="43dp" />
 		<ImageView android:background="@drawable/activity_avatar_shadow"
-			android:layout_centerInParent="true" android:layout_height="43dip"
-			android:layout_width="43dip" />
+			android:layout_centerInParent="true" android:layout_height="43dp"
+			android:layout_width="43dp" />
 
 	</RelativeLayout>
-
 	<LinearLayout android:id="@+id/relativeLayout_Content"
 		android:orientation="vertical" android:padding="5dp"
 		android:layout_height="wrap_content" android:layout_weight="1"
