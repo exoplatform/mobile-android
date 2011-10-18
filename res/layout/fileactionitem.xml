@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="wrap_content" 
-	android:background="#ffffff">
-
+	android:background="@drawable/document_action_popup_background_shape">
 	<ImageView android:id="@+id/icon"
 		android:padding="5dip"
 		android:layout_width="wrap_content"
