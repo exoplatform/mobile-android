@@ -10,6 +10,8 @@ import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
@@ -98,13 +100,16 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   private void initAttachStubView(final String url) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_detail)).inflate();
     AsyncImageView attachImage = (AsyncImageView) attachStubView.findViewById(R.id.attached_image_view);
+//    BitmapFactory.Options options = new BitmapFactory.Options();
+//    options.inSampleSize = 4;
+//    attachImage.setOptions(options);
     attachImage.setUrl(url);
     attachImage.setOnClickListener(new OnClickListener() {
 
       @Override
       public void onClick(View arg0) {
-            Intent intent = new Intent(SocialDetailActivity.this, SocialAttachedImageActivity.class);
-            startActivity(intent);
+        Intent intent = new Intent(SocialDetailActivity.this, SocialAttachedImageActivity.class);
+        startActivity(intent);
       }
     });
   }
