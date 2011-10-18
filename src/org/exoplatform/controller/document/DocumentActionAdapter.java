@@ -63,7 +63,6 @@ public class DocumentActionAdapter extends BaseAdapter {
     final int pos = position;
     LayoutInflater inflater = (LayoutInflater) _mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View rowView = inflater.inflate(R.layout.fileactionitem, parent, false);
-
     rowView.setOnClickListener(new View.OnClickListener() {
 
       public void onClick(View v) {
@@ -140,16 +139,17 @@ public class DocumentActionAdapter extends BaseAdapter {
 
     if (_selectedFile.isFolder) {
       if (fileAction.actionName.equalsIgnoreCase(strCopy)
-          || fileAction.actionName.equalsIgnoreCase(strMove)) {
+          || fileAction.actionName.equalsIgnoreCase(strMove) || 
+          (fileAction.actionName.equalsIgnoreCase(strPaste) && _fileCopied == null && _fileMoved == null)) {
 
-        label.setTextColor(android.graphics.Color.DKGRAY);
+        label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
       }
     } else {
       if (fileAction.actionName.equalsIgnoreCase(strTakePicture)
           || fileAction.actionName.equalsIgnoreCase(strPaste)) {
 
-        label.setTextColor(android.graphics.Color.DKGRAY);
+        label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
       }
 
@@ -188,8 +188,8 @@ public class DocumentActionAdapter extends BaseAdapter {
         new DocumentActionDescription(strTakePicture, R.drawable.documentactionpopupphotoicon),
         new DocumentActionDescription(strCopy, R.drawable.documentactionpopupcopyicon),
         new DocumentActionDescription(strMove, R.drawable.documentactionpopupcuticon),
-        new DocumentActionDescription(strDelete, R.drawable.documentactionpopupdeleteicon),
-        new DocumentActionDescription(strPaste, R.drawable.documentactionpopuppasteicon) };
+        new DocumentActionDescription(strPaste, R.drawable.documentactionpopuppasteicon),
+        new DocumentActionDescription(strDelete, R.drawable.documentactionpopupdeleteicon) };
 
   }
 
