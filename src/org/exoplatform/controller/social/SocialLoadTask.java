@@ -78,9 +78,9 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
       queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(10));
       queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
       RealtimeListAccess<RestActivity> list = activityService.getFeedActivityStream(identity,
-                                                                                           queryParams);
+                                                                                    queryParams);
       ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);
-      
+
       if (activityList.size() > 0) {
         SocialActivityInfo streamInfo = null;
         RestProfile profile = null;
@@ -95,6 +95,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           } catch (UnsupportedEncodingException e) {
             return null;
           }
+          System.out.println("act.getTitle()" + act.getTitle());
           streamInfo.setTitle(act.getTitle());
           streamInfo.setPostedTime(act.getPostedTime());
           streamInfo.setLikeNumber(act.getTotalNumberOfLikes());

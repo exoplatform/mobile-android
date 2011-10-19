@@ -45,6 +45,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
   private TextView              serverInfoText;
 
+  private TextView              serverEditionText;
+
   private SettingController     setttingController;
 
   private String                errorMessage;
@@ -67,11 +69,12 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     settingActivity = this;
     init();
   }
-//  @Override
-//  protected void onResume() {
-//    super.onResume();
-//    init();
-//  }
+
+  // @Override
+  // protected void onResume() {
+  // super.onResume();
+  // init();
+  // }
 
   private void init() {
     txtvLanguage = (TextView) findViewById(R.id.TextView_Language);
@@ -93,18 +96,25 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
     setttingController = new SettingController(this, imgViewECheckMark, imgViewFCheckMark);
     setttingController.initLocation();
-    
+
     settingAppInfoTitle = (TextView) findViewById(R.id.setting_application_info_title);
     serverInfoText = (TextView) findViewById(R.id.setting_server_info_title_text);
     String serverVersion = ServerSettingHelper.getInstance().getServerVersion();
     TextView severValueText = (TextView) findViewById(R.id.setting_server_info_value_text);
     severValueText.setText(serverVersion);
+    
+    serverEditionText = (TextView) findViewById(R.id.setting_server_edition_info_title_text);
+    String serverEdition = ServerSettingHelper.getInstance().getServerEdition();
+    TextView severEditionValueText = (TextView) findViewById(R.id.setting_server_edition_info_value_text);
+    severEditionValueText.setText(serverEdition);
+    
+    
     applicationInfoText = (TextView) findViewById(R.id.setting_app_info_title_text);
     TextView appValueText = (TextView) findViewById(R.id.setting_app_info_value_text);
     String appVersion = ServerSettingHelper.getInstance().getApplicationVersion();
     appValueText.setText(appVersion);
     changeLanguage();
-    
+
     setttingController.setServerList(listServerWrap);
   }
 
@@ -123,6 +133,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     String strFrench = local.getString("French");
     String applicationInfos = local.getString("ApplicationInformation");
     String serverVersion = local.getString("ServerVersion");
+    String serverEdition = local.getString("ServerEdition");
     String appVersion = local.getString("ApplicationVersion");
     String settings = local.getString("Settings");
     setTitle(settings);
@@ -135,6 +146,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     settingAppInfoTitle.setText(applicationInfos);
     applicationInfoText.setText(appVersion);
     serverInfoText.setText(serverVersion);
+    serverEditionText.setText(serverEdition);
     errorMessage = local.getString("DoNotHavePermision");
     okString = local.getString("OK");
     titleString = local.getString("Warning");

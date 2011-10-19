@@ -1,15 +1,18 @@
 package org.exoplatform.controller.document;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.widget.UnreadableFileDialog;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +83,12 @@ public class DocumentAdapter extends BaseAdapter {
         if (!myFile.isFolder) {
           // Action for display file
           // eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
-          new UnreadableFileDialog(_mContext).show();
+          // new UnreadableFileDialog(_mContext).show();
+          WebViewActivity._url = myFile.urlStr;
+          WebViewActivity._titlebar = myFile.fileName;
+          Intent intent = new Intent(_mContext, WebViewActivity.class);
+          _mContext.startActivity(intent);
+
         } else {
 
           _urlStr = myFile.urlStr;

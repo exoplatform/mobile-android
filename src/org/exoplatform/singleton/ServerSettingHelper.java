@@ -22,10 +22,14 @@ public class ServerSettingHelper {
   // the server version number
   private String                     serverVersion;
 
+  private String                     serverEdition;
+
+  public boolean                     isMobileCompliant = false;
+
   // List of server url
   private ArrayList<ServerObjInfo>   serverInfoList;
 
-  private static ServerSettingHelper helper = new ServerSettingHelper();
+  private static ServerSettingHelper helper            = new ServerSettingHelper();
 
   private ServerSettingHelper() {
 
@@ -65,6 +69,14 @@ public class ServerSettingHelper {
 
   public String getServerVersion() {
     return serverVersion;
+  }
+
+  public void setServerEdition(String ver) {
+    serverEdition = ver;
+  }
+
+  public String getServerEdition() {
+    return serverEdition;
   }
 
   public void setServerInfoList(ArrayList<ServerObjInfo> list) {

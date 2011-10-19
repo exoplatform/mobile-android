@@ -31,7 +31,7 @@ public class AccountSetting {
 
   // private ArrayList<ServerObj> serverInfoList; // List of server url
 
-  private boolean                     isNewVersion;                         // is
+//  private boolean                     isNewVersion;                         // is
                                                                              // new
                                                                              // version
                                                                              // or
@@ -90,13 +90,13 @@ public class AccountSetting {
     domainIndex = index;
   }
 
-  public void setIsNewVersion(boolean is) {
-    isNewVersion = is;
-  }
-
-  public boolean getIsNewVersion() {
-    return isNewVersion;
-  }
+//  public void setIsNewVersion(boolean is) {
+//    isNewVersion = is;
+//  }
+//
+//  public boolean getIsNewVersion() {
+//    return isNewVersion;
+//  }
 
   public void setAuthScope(AuthScope au) {
     auth = au;

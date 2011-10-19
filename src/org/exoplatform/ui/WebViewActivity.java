@@ -9,11 +9,15 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.MyActionBar;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.cyrilmottier.android.greendroid.R;
 
@@ -45,7 +49,21 @@ public class WebViewActivity extends MyActionBar {
 
     _wvGadget.getSettings().setBuiltInZoomControls(true);
 
-    setTitle(_titlebar.replace("%20", " "));
+    setTitle(_titlebar);
+    final Activity activity = this;
+
+    _wvGadget.setWebChromeClient(new WebChromeClient() {
+      public void onProgressChanged(WebView view, int progress) {
+        // Activities and WebViews measure progress with different scales.
+        // The progress meter will automatically disappear when we reach 100%
+        activity.setProgress(progress * 1000);
+      }
+    });
+    _wvGadget.setWebViewClient(new WebViewClient() {
+      public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+        Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
+      }
+    });
     _wvGadget.loadUrl(_url);
 
     changeLanguage();
@@ -54,6 +72,9 @@ public class WebViewActivity extends MyActionBar {
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     if (DashboardActivity.dashboardActivity != null) {
       DashboardActivity.dashboardActivity.finish();
+    }
+    if (DocumentActivity._documentActivityInstance != null) {
+      DocumentActivity._documentActivityInstance.finish();
     }
     finish();
 

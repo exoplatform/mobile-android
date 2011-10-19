@@ -7,6 +7,7 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -33,6 +34,8 @@ public class LoginController {
   private String    strNetworkConnectionFailed;
 
   private String    strUserNamePasswordFailed;
+
+  private String    mobileNotCompilant;
 
   private String    titleString;
 
@@ -66,6 +69,7 @@ public class LoginController {
     strSigning = bundle.getString("SigningIn");
     strNetworkConnectionFailed = bundle.getString("ConnectionError");
     strUserNamePasswordFailed = bundle.getString("UserNamePasswordFailed");
+    mobileNotCompilant = bundle.getString("CompliantMessage");
     titleString = bundle.getString("Warning");
     okString = bundle.getString("OK");
 
@@ -121,14 +125,20 @@ public class LoginController {
         editor.commit();
         accountSetting.setUsername(userName);
         accountSetting.setPassword(password);
-        
-        boolean isNewVersion = ExoConnectionUtils.checkPLFVersion();
-        accountSetting.setIsNewVersion(isNewVersion);
-        
-        ExoDocumentUtils.setRepositoryHomeUrl(userName, accountSetting.getDomainName());
-        
-        Intent next = new Intent(mContext, HomeActivity.class);
-        mContext.startActivity(next);
+
+        ExoConnectionUtils.checkPLFVersion();
+        boolean isCompliant = ServerSettingHelper.getInstance().isMobileCompliant;
+        System.out.println("on login: " + isCompliant);
+        if (isCompliant == true) {
+          Intent next = new Intent(mContext, HomeActivity.class);
+          mContext.startActivity(next);
+        } else {
+          WarningDialog dialog = new WarningDialog(mContext,
+                                                   titleString,
+                                                   mobileNotCompilant,
+                                                   okString);
+          dialog.show();
+        }
 
       } else if (result.equalsIgnoreCase("NO")) {
         WarningDialog dialog = new WarningDialog(mContext,

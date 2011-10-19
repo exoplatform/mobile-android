@@ -17,6 +17,7 @@ import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
 
@@ -122,8 +123,8 @@ public class HomeActionListenner implements OnItemClickListener {
   }
 
   private boolean checkDocumentConnection() {
-
-    return true;
+    return ExoDocumentUtils.setRepositoryHomeUrl(AccountSetting.getInstance().getUsername(),
+                                                 AccountSetting.getInstance().getDomainName());
   }
 
   private void launchActivityStreamApp() {
