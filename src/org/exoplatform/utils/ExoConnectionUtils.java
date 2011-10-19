@@ -487,7 +487,16 @@ public class ExoConnectionUtils {
       String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_SUFFIX_VERSION;
       String result = getPLFStream(versionUrl);
       JSONObject json = (JSONObject) JSONValue.parse(result);
-      String verObject = json.get("platformVersion").toString();
+      String isComplicant = json.get(ExoConstants.IS_MOBILE_COMPLIANT).toString();
+      if (isComplicant.equalsIgnoreCase("true")) {
+        ServerSettingHelper.getInstance().isMobileCompliant = true;
+      } else
+        ServerSettingHelper.getInstance().isMobileCompliant = false;
+
+      String editionObject = json.get(ExoConstants.PLATFORM_EDITION).toString();
+      ServerSettingHelper.getInstance().setServerEdition(editionObject);
+      
+      String verObject = json.get(ExoConstants.PLATFORM_VERSION).toString();
       int index = verObject.lastIndexOf(".");
       String verNumber = verObject.substring(0, index);
       float num = Float.parseFloat(verNumber);
@@ -500,6 +509,7 @@ public class ExoConnectionUtils {
       }
     } catch (RuntimeException e) {
       ServerSettingHelper.getInstance().setServerVersion("0");
+      ServerSettingHelper.getInstance().setServerEdition("");
       return false;
     }
 

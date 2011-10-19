@@ -13,14 +13,11 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
-import android.text.util.Linkify;
 import android.widget.TextView;
 
 public class SocialActivityUtil {
@@ -202,45 +199,6 @@ public class SocialActivityUtil {
     return urlBuffer.toString();
   }
 
-  public static InputStream OpenHttpConnection(String urlString) throws IOException {
-    InputStream in = null;
-    int response = -1;
-
-    URL url = new URL(urlString);
-    URLConnection conn = url.openConnection();
-    if (conn == null) {
-      throw new IOException();
-    }
-    conn.setConnectTimeout(1000);
-    conn.setReadTimeout(5000);
-    HttpURLConnection httpConn = (HttpURLConnection) conn;
-    httpConn.setAllowUserInteraction(false);
-    httpConn.setInstanceFollowRedirects(true);
-    httpConn.setRequestMethod("GET");
-    httpConn.connect();
-    response = httpConn.getResponseCode();
-    if (response == HttpURLConnection.HTTP_OK) {
-      in = httpConn.getInputStream();
-    }
-    return in;
-  }
-
-  // =========================== DownloadImg =======================
-  public static Bitmap DownloadImage(Context context, String URL) {
-    Bitmap bitmap = null;
-    InputStream in = null;
-    try {
-      in = OpenHttpConnection(URL);
-      BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inSampleSize = 4;
-      bitmap = BitmapFactory.decodeStream(in, null, options);
-      in.close();
-      return bitmap;
-    } catch (Exception ex) {
-      return null;
-    }
-
-  }
 
   public static void setTextLinkfy(Context mContext, TextView textView) {
     URLSpan[] list = textView.getUrls();

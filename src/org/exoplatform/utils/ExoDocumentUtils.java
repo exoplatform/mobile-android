@@ -1,6 +1,7 @@
 package org.exoplatform.utils;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class ExoDocumentUtils {
 
   }
 
-  public static void setRepositoryHomeUrl(String userName, String domain) {
+  public static boolean setRepositoryHomeUrl(String userName, String domain) {
 
     if (repositoryHomeURL == null) {
       StringBuffer buffer = new StringBuffer();
@@ -77,16 +78,16 @@ public class ExoDocumentUtils {
           repositoryHomeURL = buffer.toString();
         else
           repositoryHomeURL = domain + ExoConstants.DOCUMENT_PATH + "/" + userName;
-
+        return true;
       } catch (Exception e) {
 
         repositoryHomeURL = null;
-
+        return false;
       }
 
     }
-
-    Log.e("123: ", repositoryHomeURL);
+    return true;
+    // Log.e("123: ", repositoryHomeURL);
 
   }
 
@@ -112,7 +113,10 @@ public class ExoDocumentUtils {
           if (!fileName.equalsIgnoreCase("..")) {
             fileName = StringEscapeUtils.unescapeHtml(fileName);
             fileName = StringEscapeUtils.unescapeJava(fileName);
-
+            try {
+              fileName = new String(fileName.getBytes(), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+            }
             ExoFile file = new ExoFile(urlStr, fileName);
             arrFilesTmp.add(file);
           }

@@ -4,6 +4,12 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class ExoConstants {
 
+  public static final String PLATFORM_EDITION          = "platformEdition";
+
+  public static final String PLATFORM_VERSION          = "platformVersion";
+
+  public static final String IS_MOBILE_COMPLIANT       = "isMobileCompliant";
+
   public static final String COMPOSE_TYPE              = "COMPOSE_TYPE";
 
   public static final String SETTING_TYPE              = "SETTING_TYPE";
@@ -43,9 +49,9 @@ public class ExoConstants {
   public static final String ACTIVITY_ID_EXTRA         = "ACTIVITY_ID_EXTRA";
 
   public static final String SELECTED_IMAGE_EXTRA      = "SELECTED_IMAGE_EXTRA";
-  
-  public static final String SOCIAL_LINKFY_EXTRA      = "SOCIAL_LINKFY_EXTRA";
-  
+
+  public static final String SOCIAL_LINKFY_EXTRA       = "SOCIAL_LINKFY_EXTRA";
+
   public static final String EXO_PREFERENCE            = "exo_preference";
 
   public static final String EXO_PRF_DOMAIN            = "exo_prf_domain";
