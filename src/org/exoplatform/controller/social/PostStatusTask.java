@@ -70,14 +70,14 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
           Map<String, String> templateParams = new HashMap<String, String>();
       
        
-          activityImlp.setType("DOC_ACTIVITY");
+//          activityImlp.setType("DOC_ACTIVITY");
           /* "DOCPATH":"/Users/xuyen_mai/Public/Kaka.jpg",
            "MESSAGE":"",
            "DOCLINK":"/portal/rest/jcr/repository/collaboration/Users/xuyen_mai/Public/Kaka.jpg",
            "WORKSPACE":"collaboration",
            "REPOSITORY":"repository",
            "DOCNAME":"KakaHaha.jpg"*/
-           
+           /*
            
            String host = AccountSetting.getInstance().getDomainName(); 
            String docLink = imageDir.substring(imageDir.indexOf(host) + host.length());
@@ -92,7 +92,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
           templateParams.put("WORKSPACE", "collaboration");
           templateParams.put("REPOSITORY", "repository");
           templateParams.put("DOCNAME", file.getName());
-          
+          */
           activityImlp.setTemplateParams(templateParams);
 
         }
