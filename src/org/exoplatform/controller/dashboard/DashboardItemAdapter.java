@@ -11,6 +11,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.exoplatform.R;
 import org.exoplatform.model.DashBoardItem;
 import org.exoplatform.model.GadgetInfo;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoConstants;
 
@@ -182,7 +183,8 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
       HttpResponse response = client.execute(get);
       int status = response.getStatusLine().getStatusCode();
       if (status < 200 || status >= 300) {
-        Toast.makeText(mContext, "Connection timed out", Toast.LENGTH_LONG).show();
+        LocalizationHelper bundle = LocalizationHelper.getInstance();
+        Toast.makeText(mContext, bundle.getString("ConnectionTimedOut"), Toast.LENGTH_LONG).show();
         return;
       }
     } catch (Exception e) {

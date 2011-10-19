@@ -1,6 +1,8 @@
 package org.exoplatform.controller.social;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +68,31 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
         if (file != null) {
           ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, "image/jpeg");
           Map<String, String> templateParams = new HashMap<String, String>();
-          templateParams.put("image", imageDir);
+      
+       
+          activityImlp.setType("DOC_ACTIVITY");
+          /* "DOCPATH":"/Users/xuyen_mai/Public/Kaka.jpg",
+           "MESSAGE":"",
+           "DOCLINK":"/portal/rest/jcr/repository/collaboration/Users/xuyen_mai/Public/Kaka.jpg",
+           "WORKSPACE":"collaboration",
+           "REPOSITORY":"repository",
+           "DOCNAME":"KakaHaha.jpg"*/
+           
+           
+           String host = AccountSetting.getInstance().getDomainName(); 
+           String docLink = imageDir.substring(imageDir.indexOf(host) + host.length());
+           
+           String pathExtension = "jcr/repository/collaboration";
+           int indextOfDocPath = imageDir.indexOf(pathExtension);
+           String docPath = imageDir.substring(indextOfDocPath + pathExtension.length());
+          
+          templateParams.put("DOCPATH", docPath);
+          templateParams.put("MESSAGE", "");
+          templateParams.put("DOCLINK", docLink);
+          templateParams.put("WORKSPACE", "collaboration");
+          templateParams.put("REPOSITORY", "repository");
+          templateParams.put("DOCNAME", file.getName());
+          
           activityImlp.setTemplateParams(templateParams);
 
         }

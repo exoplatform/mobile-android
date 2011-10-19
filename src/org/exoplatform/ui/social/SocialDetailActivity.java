@@ -108,7 +108,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     attachImage.setUrl(url);
     attachImage.setOnClickListener(new OnClickListener() {
 
-      @Override
+//      @Override
       public void onClick(View arg0) {
         Intent intent = new Intent(SocialDetailActivity.this, SocialAttachedImageActivity.class);
         startActivity(intent);

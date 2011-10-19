@@ -22,17 +22,12 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
 
-import com.cyrilmottier.android.greendroid.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewStub;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChatListController {
@@ -113,8 +108,11 @@ public class ChatListController {
                 ((Activity) mContext).runOnUiThread(new Runnable() {
 
                   public void run() {
+                    
+                    LocalizationHelper bundle = LocalizationHelper.getInstance();
+                    
                     Toast msg = Toast.makeText(mContext,
-                                               "Message from " + chatFromName,
+                                               bundle.getString("MessageFrom") + " " + chatFromName,
                                                Toast.LENGTH_LONG);
                     msg.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                     msg.show();
