@@ -66,9 +66,10 @@
 				<ImageView android:id="@+id/ImageView_Server_List_Section_Header"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:background="@drawable/serversectionseparator" />
-				<TextView android:shadowColor="#000000" android:shadowDx="1.0" android:padding="3dp"
-					android:shadowDy="2.0" android:shadowRadius="1.0" android:text="Server List"
-					android:id="@+id/TextView_Server_List" android:layout_below="@id/ImageView_Server_List_Section_Header"
+				<TextView android:shadowColor="#000000" android:shadowDx="1.0"
+					android:padding="3dp" android:shadowDy="2.0" android:shadowRadius="1.0"
+					android:text="Server List" android:id="@+id/TextView_Server_List"
+					android:layout_below="@id/ImageView_Server_List_Section_Header"
 					android:textSize="18dip" android:textStyle="bold"
 					android:textColor="#ffffff" android:gravity="center_vertical"
 					android:layout_width="fill_parent" android:layout_height="40dip" />
@@ -110,8 +111,23 @@
 			</RelativeLayout>
 
 			<LinearLayout android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:id="@+id/setting_server_version"
+				android:layout_height="wrap_content" android:id="@+id/setting_server_edition"
 				android:layout_below="@id/Server_Information_Section"
+				android:background="@drawable/settingcellstreachablebackground"
+				android:orientation="horizontal">
+				<TextView android:layout_width="fill_parent"
+					android:id="@+id/setting_server_edition_info_title_text"
+					android:layout_weight="1" android:layout_height="wrap_content"
+					android:textSize="16dip" android:padding="4dp" android:textColor="#000000"
+					android:textStyle="bold" android:text="Server Edition" />
+				<TextView android:id="@+id/setting_server_edition_info_value_text"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textSize="16dip" android:padding="4dp" android:textColor="#000000"
+					android:textStyle="bold" android:layout_marginRight="10dp" />
+			</LinearLayout>
+			<LinearLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:id="@+id/setting_server_version"
+				android:layout_below="@id/setting_server_edition"
 				android:background="@drawable/settingcellstreachablebackground"
 				android:orientation="horizontal">
 				<TextView android:layout_width="fill_parent"
