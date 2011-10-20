@@ -13,7 +13,6 @@ import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestIdentity;
-import org.exoplatform.social.client.api.model.RestLike;
 import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.QueryParams;
@@ -23,7 +22,6 @@ import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
-import android.util.Log;
 
 public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
   private RestActivity                 selectedRestActivity;
@@ -74,7 +72,6 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
                                                                          .getActivityService();
 
       String activityId = SocialDetailHelper.getInstance().getActivityId();
-      System.out.println("activityId: " + activityId);
       QueryParams queryParams = new QueryParamsImpl();
       queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(10));
       queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(10));
@@ -110,29 +107,30 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
         }
       }
 
-      // if (commentList != null) {
-      // for (RestComment comment : commentList) {
-      // SocialCommentInfo socialComment = new SocialCommentInfo();
-      // String identity = comment.getIdentityId();
-      // System.out.println("identity " + identity);
-      // RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
-      // .getIdentityService()
-      // .get(identity);
-      // RestProfile profile = restId.getProfile();
-      //
-      // socialComment.setCommentId(identity);
-      // socialComment.setCommentName(profile.getFullName());
-      // socialComment.setImageUrl(profile.getAvatarUrl());
-      // socialComment.setCommentTitle(comment.getText());
-      // socialComment.setPostedTime(comment.getPostedTime());
-      //
-      // socialCommentList.add(socialComment);
-      // }
-      // }
+//      if (commentList != null) {
+//        System.out.println("comment list size: " + commentList.size());
+//        for (RestComment comment : commentList) {
+//          SocialCommentInfo socialComment = new SocialCommentInfo();
+//          String identity = comment.getId();
+//          System.out.println("identity " + identity);
+//          RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
+//                                                                  .getIdentityService()
+//                                                                  .get(identity);
+//          RestProfile profile = restId.getProfile();
+//
+//          socialComment.setCommentId(identity);
+//          socialComment.setCommentName(profile.getFullName());
+//          socialComment.setImageUrl(profile.getAvatarUrl());
+//          socialComment.setCommentTitle(comment.getText());
+//          socialComment.setPostedTime(comment.getPostedTime());
+//
+//          socialCommentList.add(socialComment);
+//        }
+//      }
 
       return 1;
     } catch (RuntimeException e) {
-      System.out.println("RuntimeException" + e.toString());
+//      System.out.println("RuntimeException" + e.toString());
       return 0;
     }
   }

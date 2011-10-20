@@ -489,27 +489,16 @@ public class ExoConnectionUtils {
       JSONObject json = (JSONObject) JSONValue.parse(result);
       String isComplicant = json.get(ExoConstants.IS_MOBILE_COMPLIANT).toString();
       if (isComplicant.equalsIgnoreCase("true")) {
-        ServerSettingHelper.getInstance().isMobileCompliant = true;
-      } else
-        ServerSettingHelper.getInstance().isMobileCompliant = false;
+        String editionObject = json.get(ExoConstants.PLATFORM_EDITION).toString();
+        ServerSettingHelper.getInstance().setServerEdition(editionObject);
 
-      String editionObject = json.get(ExoConstants.PLATFORM_EDITION).toString();
-      ServerSettingHelper.getInstance().setServerEdition(editionObject);
-      
-      String verObject = json.get(ExoConstants.PLATFORM_VERSION).toString();
-      int index = verObject.lastIndexOf(".");
-      String verNumber = verObject.substring(0, index);
-      float num = Float.parseFloat(verNumber);
-      if (num < 3.5) {
-        ServerSettingHelper.getInstance().setServerVersion("0");
-        return false;
-      } else {
+        String verObject = json.get(ExoConstants.PLATFORM_VERSION).toString();
         ServerSettingHelper.getInstance().setServerVersion(verObject);
         return true;
-      }
+      } else
+        return false;
+
     } catch (RuntimeException e) {
-      ServerSettingHelper.getInstance().setServerVersion("0");
-      ServerSettingHelper.getInstance().setServerEdition("");
       return false;
     }
 

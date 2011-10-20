@@ -24,7 +24,7 @@ public class ServerSettingHelper {
 
   private String                     serverEdition;
 
-  public boolean                     isMobileCompliant = false;
+//  public boolean                     isMobileCompliant = false;
 
   // List of server url
   private ArrayList<ServerObjInfo>   serverInfoList;

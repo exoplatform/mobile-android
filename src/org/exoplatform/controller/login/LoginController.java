@@ -126,8 +126,7 @@ public class LoginController {
         accountSetting.setUsername(userName);
         accountSetting.setPassword(password);
 
-        ExoConnectionUtils.checkPLFVersion();
-        boolean isCompliant = ServerSettingHelper.getInstance().isMobileCompliant;
+        boolean isCompliant = ExoConnectionUtils.checkPLFVersion();
         System.out.println("on login: " + isCompliant);
         if (isCompliant == true) {
           Intent next = new Intent(mContext, HomeActivity.class);

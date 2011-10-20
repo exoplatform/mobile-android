@@ -38,11 +38,9 @@ public class HomeController {
     ArrayList<HomeItem> itemList = new ArrayList<HomeItem>();
     Bitmap bm = BitmapFactory.decodeResource(resource, R.drawable.homeactivitystreamsiconiphone);
     HomeItem item;
-//    if (AccountSetting.getInstance().getIsNewVersion() == true) {
-      item = new HomeItem(bm, 1, activityStreamsText);
-      itemList.add(item);
-//    }
-
+    item = new HomeItem(bm, 1, activityStreamsText);
+    itemList.add(item);
+    
     bm = BitmapFactory.decodeResource(resource, R.drawable.homechaticoniphone);
     item = new HomeItem(bm, 2, chatText);
     itemList.add(item);
@@ -63,11 +61,11 @@ public class HomeController {
       ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
       ExoConnectionUtils.httpClient = null;
     }
-    if(ChatServiceHelper.getInstance().getXMPPConnection()!=null){
+    if (ChatServiceHelper.getInstance().getXMPPConnection() != null) {
       ChatServiceHelper.getInstance().getXMPPConnection().disconnect();
       ChatServiceHelper.getInstance().setXMPPConnection(null);
     }
-    
+
     ((Activity) mContext).finish();
   }
 
