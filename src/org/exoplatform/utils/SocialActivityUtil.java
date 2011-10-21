@@ -206,6 +206,7 @@ public class SocialActivityUtil {
       Spannable spannable = (Spannable) textView.getText();
       for (URLSpan span : list) {
         String spanUrl = span.getURL();
+        System.out.println("span url: "+spanUrl);
         if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
           textView.setMovementMethod(LinkMovementMethod.getInstance());
         } else {

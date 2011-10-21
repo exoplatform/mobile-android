@@ -53,20 +53,20 @@ public class WebViewActivity extends MyActionBar {
     _wvGadget.getSettings().setBuiltInZoomControls(true);
 
     setTitle(_titlebar);
-    final Activity activity = this;
-
-    _wvGadget.setWebChromeClient(new WebChromeClient() {
-      public void onProgressChanged(WebView view, int progress) {
-        // Activities and WebViews measure progress with different scales.
-        // The progress meter will automatically disappear when we reach 100%
-        activity.setProgress(progress * 1000);
-      }
-    });
-    _wvGadget.setWebViewClient(new WebViewClient() {
-      public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-        Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
-      }
-    });
+//    final Activity activity = this;
+//
+//    _wvGadget.setWebChromeClient(new WebChromeClient() {
+//      public void onProgressChanged(WebView view, int progress) {
+//        // Activities and WebViews measure progress with different scales.
+//        // The progress meter will automatically disappear when we reach 100%
+//        activity.setProgress(progress * 1000);
+//      }
+//    });
+//    _wvGadget.setWebViewClient(new WebViewClient() {
+//      public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+//        Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
+//      }
+//    });
     
     _url = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
     Log.e(_url, _url);

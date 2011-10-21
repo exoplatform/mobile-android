@@ -21,9 +21,6 @@ import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.text.style.URLSpan;
-import android.text.util.Linkify;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -33,8 +30,6 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class SocialDetailController {
   private Context              mContext;
-
-  private String               domain;
 
   private LinearLayout         commentLayoutWrap;
 
@@ -62,7 +57,6 @@ public class SocialDetailController {
 
   private String               titleString;
 
-  private String               contentString;
 
   public SocialDetailController(Context context,
                                 LinearLayout layoutWrap,
@@ -80,7 +74,6 @@ public class SocialDetailController {
     this.textView_Message = textView_Message;
     this.textView_Time = textView_Time;
     this.textView_Like_Count = textView_Like_Count;
-    domain = SocialActivityUtil.getDomain();
     activityId = SocialDetailHelper.getInstance().getActivityId();
     changeLanguage();
   }
@@ -111,10 +104,14 @@ public class SocialDetailController {
         if (avatarUrl == null) {
           commentItem.comAvatarImage.setImageResource(ExoConstants.DEFAULT_AVATAR);
         } else
-          commentItem.comAvatarImage.setUrl(domain + avatarUrl);
+          commentItem.comAvatarImage.setUrl(avatarUrl);
         try {
-          String userName = new String(comment.getCommentName().getBytes("ISO-8859-1"), "UTF-8");
-          commentItem.comTextViewName.setText(userName);
+          String commentName = comment.getCommentName();
+          if (commentName != null) {
+            String userName = new String(commentName.getBytes("ISO-8859-1"), "UTF-8");
+            commentItem.comTextViewName.setText(userName);
+          }
+
         } catch (UnsupportedEncodingException e) {
         }
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()),
@@ -184,7 +181,6 @@ public class SocialDetailController {
     LocalizationHelper location = LocalizationHelper.getInstance();
     okString = location.getString("OK");
     titleString = location.getString("Warning");
-    contentString = location.getString("ConnectionError");
 
   }
 }

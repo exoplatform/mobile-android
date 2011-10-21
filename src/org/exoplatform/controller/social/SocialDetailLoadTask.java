@@ -81,7 +81,6 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       profile = selectedRestActivity.getPosterIdentity().getProfile();
       title = selectedRestActivity.getTitle();
       postedTime = selectedRestActivity.getPostedTime();
-      // selectedRestActivity.getT
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();
       if (likeList != null) {
@@ -107,30 +106,24 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
         }
       }
 
-//      if (commentList != null) {
-//        System.out.println("comment list size: " + commentList.size());
-//        for (RestComment comment : commentList) {
-//          SocialCommentInfo socialComment = new SocialCommentInfo();
-//          String identity = comment.getId();
-//          System.out.println("identity " + identity);
-//          RestIdentity restId = (RestIdentity) SocialServiceHelper.getInstance()
-//                                                                  .getIdentityService()
-//                                                                  .get(identity);
-//          RestProfile profile = restId.getProfile();
-//
-//          socialComment.setCommentId(identity);
-//          socialComment.setCommentName(profile.getFullName());
-//          socialComment.setImageUrl(profile.getAvatarUrl());
-//          socialComment.setCommentTitle(comment.getText());
-//          socialComment.setPostedTime(comment.getPostedTime());
-//
-//          socialCommentList.add(socialComment);
-//        }
-//      }
+      if (commentList != null) {
+        for (RestComment comment : commentList) {
+          SocialCommentInfo socialComment = new SocialCommentInfo();
+          RestIdentity restId = comment.getPosterIdentity();
+
+          RestProfile profile = restId.getProfile();
+          socialComment.setCommentId(restId.getId());
+          socialComment.setCommentName(profile.getFullName());
+          socialComment.setImageUrl(profile.getAvatarUrl());
+          socialComment.setCommentTitle(comment.getText());
+          socialComment.setPostedTime(comment.getPostedTime());
+
+          socialCommentList.add(socialComment);
+        }
+      }
 
       return 1;
     } catch (RuntimeException e) {
-//      System.out.println("RuntimeException" + e.toString());
       return 0;
     }
   }
