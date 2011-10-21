@@ -8,6 +8,7 @@ import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
+import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.widget.WarningDialog;
@@ -93,7 +94,12 @@ public class ComposeMessageController {
       RestActivity restActivity = (RestActivity) activityService.get(selectedId);
 
       activityService.createComment(restActivity, comment);
+      
       ((Activity) mContext).finish();
+      
+      SocialActivity.socialActivity.reloadActivity();
+      
+      
     } catch (RuntimeException e) {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();

@@ -13,6 +13,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,9 +28,9 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private TextView       textViewMessage;
 
-  private TextView       buttonComment;
+  private Button       buttonComment;
 
-  private TextView       buttonLike;
+  private Button       buttonLike;
 
   private TextView       textViewTime;
 
@@ -48,8 +49,8 @@ public class SocialActivityStreamItem extends LinearLayout {
     imageViewAvatar = (AsyncImageView) view.findViewById(R.id.imageView_Avatar);
     textViewName = (TextView) view.findViewById(R.id.textView_Name);
     textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
-    buttonComment = (TextView) view.findViewById(R.id.button_Comment);
-    buttonLike = (TextView) view.findViewById(R.id.button_Like);
+    buttonComment = (Button) view.findViewById(R.id.button_Comment);
+    buttonLike = (Button) view.findViewById(R.id.button_Like);
     textViewTime = (TextView) view.findViewById(R.id.textView_Time);
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl == null) {
@@ -84,5 +85,13 @@ public class SocialActivityStreamItem extends LinearLayout {
      attachImage.setDefaultImageResource(R.drawable.documenticonforunknown);
 
     attachImage.setUrl(url);
+  }
+  
+  public Button likeButton() {
+    return buttonLike;
+  }
+  
+  public Button commentButton() {
+    return buttonComment;
   }
 }

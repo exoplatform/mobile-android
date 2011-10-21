@@ -7,10 +7,13 @@ import java.util.List;
 import org.apache.http.cookie.Cookie;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -64,6 +67,9 @@ public class WebViewActivity extends MyActionBar {
         Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
       }
     });
+    
+    _url = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
+    Log.e(_url, _url);
     _wvGadget.loadUrl(_url);
 
     changeLanguage();

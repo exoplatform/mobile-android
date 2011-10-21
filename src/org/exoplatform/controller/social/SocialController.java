@@ -7,6 +7,9 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.ui.social.ComposeMessageActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
@@ -20,6 +23,7 @@ import android.content.res.Resources;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class SocialController {
@@ -93,6 +97,39 @@ public class SocialController {
       }
 
       SocialActivityStreamItem item = new SocialActivityStreamItem(mContext, activityInfo);
+      
+      Button likeButton = item.likeButton();
+      likeButton.setOnClickListener(new View.OnClickListener() {
+        
+        public void onClick(View v) {
+      
+          RestActivity activity = SocialServiceHelper.getInstance()
+          .getActivityService()
+          .get(activityInfo.getActivityId());
+          if(activity.isLiked())
+            SocialServiceHelper.getInstance().getActivityService().unlike(activity);
+          else
+            SocialServiceHelper.getInstance().getActivityService().like(activity);
+          
+          onLoad();
+        }
+      });
+      
+      Button commentButton = item.commentButton();
+      commentButton.setOnClickListener(new View.OnClickListener() {
+        
+        public void onClick(View v) {
+      
+          SocialDetailHelper.getInstance().setActivityId(activityInfo.getActivityId());
+          
+          Intent intent = new Intent(mContext, ComposeMessageActivity.class);
+          intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_COMMENT_TYPE);
+          mContext.startActivity(intent);
+          
+        }
+      });
+      
       item.setOnClickListener(new OnClickListener() {
 
         public void onClick(View v) {
