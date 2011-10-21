@@ -41,9 +41,9 @@ public class HomeController {
     item = new HomeItem(bm, 1, activityStreamsText);
     itemList.add(item);
     
-    bm = BitmapFactory.decodeResource(resource, R.drawable.homechaticoniphone);
-    item = new HomeItem(bm, 2, chatText);
-    itemList.add(item);
+//    bm = BitmapFactory.decodeResource(resource, R.drawable.homechaticoniphone);
+//    item = new HomeItem(bm, 2, chatText);
+//    itemList.add(item);
 
     bm = BitmapFactory.decodeResource(resource, R.drawable.homedocumentsiconiphone);
     item = new HomeItem(bm, 3, documentText);
