@@ -66,8 +66,6 @@ public class SocialLoadTask extends UserTask<Integer, Void, SocialCache> {
 
     try {
       SocialCache socialCache = new SocialCache(ExoConstants.CACHE_MAX_NUMBER);
-//      ArrayList<SocialActivityInfo> streamInfoList = new ArrayList<SocialActivityInfo>();
-
       int loadSize = params[0];
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
                                                                          .getActivityService();
@@ -105,7 +103,6 @@ public class SocialLoadTask extends UserTask<Integer, Void, SocialCache> {
           streamInfo.setAttachedImageUrl(docLink);
           String docName = act.getTemplateParameter("DOCNAME");
           streamInfo.setAttachedImageName(docName);
-//          streamInfoList.add(streamInfo);
           socialCache.put(i, streamInfo);
         }
       }

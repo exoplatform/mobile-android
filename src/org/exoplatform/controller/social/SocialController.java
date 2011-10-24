@@ -1,6 +1,5 @@
 package org.exoplatform.controller.social;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.exoplatform.R;
@@ -18,6 +17,7 @@ import org.exoplatform.utils.SocialCache;
 import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.SocialHeaderLayout;
 import org.exoplatform.widget.SocialShowMoreItem;
+import org.exoplatform.widget.WarningDialog;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -53,6 +53,10 @@ public class SocialController {
   private String         hour;
 
   private String         hours;
+
+  private String         okString;
+
+  private String         titleString;
 
   public SocialController(SocialActivity context, LinearLayout layout) {
     mContext = context;
@@ -106,16 +110,24 @@ public class SocialController {
       likeButton.setOnClickListener(new View.OnClickListener() {
 
         public void onClick(View v) {
+          try {
+            RestActivity activity = SocialServiceHelper.getInstance()
+                                                       .getActivityService()
+                                                       .get(activityInfo.getActivityId());
+            if (activity.isLiked())
+              SocialServiceHelper.getInstance().getActivityService().unlike(activity);
+            else
+              SocialServiceHelper.getInstance().getActivityService().like(activity);
 
-          RestActivity activity = SocialServiceHelper.getInstance()
-                                                     .getActivityService()
-                                                     .get(activityInfo.getActivityId());
-          if (activity.isLiked())
-            SocialServiceHelper.getInstance().getActivityService().unlike(activity);
-          else
-            SocialServiceHelper.getInstance().getActivityService().like(activity);
+            onLoad();
+          } catch (RuntimeException e) {
+            WarningDialog dialog = new WarningDialog(mContext,
+                                                     titleString,
+                                                     e.getMessage(),
+                                                     okString);
+            dialog.show();
+          }
 
-          onLoad();
         }
       });
 
@@ -187,6 +199,9 @@ public class SocialController {
     hour = location.getString("Hour");
     hours = location.getString("Hours");
     today = location.getString("Today");
+    okString = location.getString("OK");
+    titleString = location.getString("Warning");
+
   }
 
 }
