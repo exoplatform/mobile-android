@@ -127,16 +127,18 @@ public class LoginController {
         accountSetting.setPassword(password);
 
         boolean isCompliant = ExoConnectionUtils.checkPLFVersion();
-        if (isCompliant == true) {
-          Intent next = new Intent(mContext, HomeActivity.class);
-          mContext.startActivity(next);
-        } else {
-          WarningDialog dialog = new WarningDialog(mContext,
-                                                   titleString,
-                                                   mobileNotCompilant,
-                                                   okString);
-          dialog.show();
-        }
+        Intent next = new Intent(mContext, HomeActivity.class);
+        mContext.startActivity(next);
+        // if (isCompliant == true) {
+        // Intent next = new Intent(mContext, HomeActivity.class);
+        // mContext.startActivity(next);
+        // } else {
+        // WarningDialog dialog = new WarningDialog(mContext,
+        // titleString,
+        // mobileNotCompilant,
+        // okString);
+        // dialog.show();
+        // }
 
       } else if (result.equalsIgnoreCase("NO")) {
         WarningDialog dialog = new WarningDialog(mContext,

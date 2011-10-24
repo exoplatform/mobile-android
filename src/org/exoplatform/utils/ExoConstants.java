@@ -24,6 +24,12 @@ public class ExoConstants {
 
   public static final int    NUMBER_OF_ACTIVITY        = 50;
 
+  public static final int    NUMBER_OF_MORE_ACTIVITY   = 10;
+
+  public static final int    NUMBER_OF_LIKES_PARAM     = 20;
+
+  public static final int    NUMBER_OF_COMMENTS_PARAM  = 20;
+
   public static final int    TAKE_PICTURE_WITH_CAMERA  = 7;
 
   public static final String HTTP_PROTOCOL             = "http";
@@ -75,5 +81,9 @@ public class ExoConstants {
   public static final String DOMAIN_SUFFIX             = "/portal/private/intranet";
 
   public static final String DOMAIN_SUFFIX_VERSION     = "/portal/rest/platform/info";
+
+  public static final int    CACHE_MAX_NUMBER          = 1000;
+
+  public static final int    CACHE_TIME_TO_LIVE        = 500;
 
 }

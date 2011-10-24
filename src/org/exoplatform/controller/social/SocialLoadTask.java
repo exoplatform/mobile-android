@@ -15,6 +15,8 @@ import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.social.SocialActivity;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SocialCache;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -22,7 +24,7 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.view.View;
 
-public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActivityInfo>> {
+public class SocialLoadTask extends UserTask<Integer, Void, SocialCache> {
   private SocialWaitingDialog _progressDialog;
 
   private Context             mContext;
@@ -60,10 +62,11 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
   }
 
   @Override
-  public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
+  public SocialCache doInBackground(Integer... params) {
 
     try {
-      ArrayList<SocialActivityInfo> streamInfoList = new ArrayList<SocialActivityInfo>();
+      SocialCache socialCache = new SocialCache(ExoConstants.CACHE_MAX_NUMBER);
+//      ArrayList<SocialActivityInfo> streamInfoList = new ArrayList<SocialActivityInfo>();
 
       int loadSize = params[0];
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
@@ -72,8 +75,8 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
       RestIdentity identity = (RestIdentity) identityService.get(SocialServiceHelper.getInstance()
                                                                                     .getUserId());
       QueryParams queryParams = new QueryParamsImpl();
-      queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(10));
-      queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(10));
+      queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(ExoConstants.NUMBER_OF_LIKES_PARAM));
+      queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(ExoConstants.NUMBER_OF_COMMENTS_PARAM));
       queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
       RealtimeListAccess<RestActivity> list = activityService.getFeedActivityStream(identity,
                                                                                     queryParams);
@@ -82,7 +85,8 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
       if (activityList.size() > 0) {
         SocialActivityInfo streamInfo = null;
         RestProfile profile = null;
-        for (RestActivity act : activityList) {
+        for (int i = 0; i < activityList.size(); i++) {
+          RestActivity act = activityList.get(i);
           streamInfo = new SocialActivityInfo();
           profile = act.getPosterIdentity().getProfile();
           streamInfo.setActivityId(act.getId());
@@ -101,10 +105,11 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           streamInfo.setAttachedImageUrl(docLink);
           String docName = act.getTemplateParameter("DOCNAME");
           streamInfo.setAttachedImageName(docName);
-          streamInfoList.add(streamInfo);
+//          streamInfoList.add(streamInfo);
+          socialCache.put(i, streamInfo);
         }
       }
-      return streamInfoList;
+      return socialCache;
     } catch (RuntimeException e) {
       return null;
     }
@@ -117,7 +122,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
   }
 
   @Override
-  public void onPostExecute(ArrayList<SocialActivityInfo> result) {
+  public void onPostExecute(SocialCache result) {
     if (result != null) {
       if (result.size() == 0) {
         SocialActivity.socialActivity.setEmptyView(View.VISIBLE);

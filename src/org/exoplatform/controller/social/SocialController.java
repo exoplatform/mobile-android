@@ -14,6 +14,7 @@ import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.SocialCache;
 import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.SocialHeaderLayout;
 import org.exoplatform.widget.SocialShowMoreItem;
@@ -29,13 +30,15 @@ import android.widget.LinearLayout;
 public class SocialController {
   private int            number_of_activity;
 
+  private int            number_of_more_activity;
+
   private SocialActivity mContext;
 
   private SocialLoadTask mLoadTask;
 
   private LinearLayout   activityStreamWrap;
 
-  private boolean        isShowMore = false;
+  // private boolean isShowMore = false;
 
   private String         showMoreText;
 
@@ -57,6 +60,7 @@ public class SocialController {
     resource = context.getResources();
     onChangeLanguage();
     number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
+    number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
   }
 
   public void onLoad() {
@@ -73,14 +77,14 @@ public class SocialController {
     }
   }
 
-  public void setActivityList(ArrayList<SocialActivityInfo> result) {
+  public void setActivityList(SocialCache result) {
 
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     activityStreamWrap.removeAllViews();
     HashMap<String, String> actHeaderTitle = new HashMap<String, String>();
 
     for (int i = 0; i < result.size(); i++) {
-      final SocialActivityInfo activityInfo = result.get(i);
+      final SocialActivityInfo activityInfo = (SocialActivityInfo) result.get(i);
 
       String postedTimeTitle = getActivityStreamHeader(activityInfo.getPostedTime());
       if (actHeaderTitle.get(postedTimeTitle) == null) {
@@ -97,39 +101,39 @@ public class SocialController {
       }
 
       SocialActivityStreamItem item = new SocialActivityStreamItem(mContext, activityInfo);
-      
+
       Button likeButton = item.likeButton();
       likeButton.setOnClickListener(new View.OnClickListener() {
-        
+
         public void onClick(View v) {
-      
+
           RestActivity activity = SocialServiceHelper.getInstance()
-          .getActivityService()
-          .get(activityInfo.getActivityId());
-          if(activity.isLiked())
+                                                     .getActivityService()
+                                                     .get(activityInfo.getActivityId());
+          if (activity.isLiked())
             SocialServiceHelper.getInstance().getActivityService().unlike(activity);
           else
             SocialServiceHelper.getInstance().getActivityService().like(activity);
-          
+
           onLoad();
         }
       });
-      
+
       Button commentButton = item.commentButton();
       commentButton.setOnClickListener(new View.OnClickListener() {
-        
+
         public void onClick(View v) {
-      
+
           SocialDetailHelper.getInstance().setActivityId(activityInfo.getActivityId());
-          
+
           Intent intent = new Intent(mContext, ComposeMessageActivity.class);
           intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_COMMENT_TYPE);
           mContext.startActivity(intent);
-          
+
         }
       });
-      
+
       item.setOnClickListener(new OnClickListener() {
 
         public void onClick(View v) {
@@ -146,20 +150,17 @@ public class SocialController {
 
     }
     if (result.size() > number_of_activity || result.size() == number_of_activity) {
-      if (isShowMore == false) {
-        SocialShowMoreItem showmore = new SocialShowMoreItem(mContext);
-        showmore.showMoreBtn.setText(showMoreText);
-        showmore.showMoreBtn.setOnClickListener(new OnClickListener() {
+      SocialShowMoreItem showmore = new SocialShowMoreItem(mContext);
+      showmore.showMoreBtn.setText(showMoreText);
+      showmore.showMoreBtn.setOnClickListener(new OnClickListener() {
 
-          public void onClick(View v) {
-            number_of_activity += 5;
-            onLoad();
-            isShowMore = true;
+        public void onClick(View v) {
+          number_of_activity += number_of_more_activity;
+          onLoad();
 
-          }
-        });
-        activityStreamWrap.addView(showmore, params);
-      }
+        }
+      });
+      activityStreamWrap.addView(showmore, params);
     }
   }
 

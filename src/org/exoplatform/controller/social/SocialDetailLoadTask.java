@@ -17,6 +17,7 @@ import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -73,8 +74,8 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
       String activityId = SocialDetailHelper.getInstance().getActivityId();
       QueryParams queryParams = new QueryParamsImpl();
-      queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(10));
-      queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(10));
+      queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(ExoConstants.NUMBER_OF_LIKES_PARAM));
+      queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(ExoConstants.NUMBER_OF_COMMENTS_PARAM));
       queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
       selectedRestActivity = activityService.get(activityId, queryParams);
       SocialDetailHelper.getInstance().setLiked(false);
