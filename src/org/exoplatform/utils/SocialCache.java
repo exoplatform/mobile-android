@@ -46,8 +46,6 @@ public class SocialCache implements KCache {
       Object toRemove = queue.poll();
       if (toRemove == null)
         break;
-      // System.out.println("toRemove=" + toRemove + " size=" + size.get() +
-      // " maxSize=" + maxSize);
       if (toRemove != null) {
         remove(key);
       }
@@ -77,7 +75,6 @@ public class SocialCache implements KCache {
 
   public Object removeAndGet(Object key) {
     Object[] entry = cache.remove(key);
-    // System.out.println("entry=" + entry);
     if (entry != null) {
       return entry[1];
     }

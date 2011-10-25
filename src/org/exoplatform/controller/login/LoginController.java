@@ -7,11 +7,9 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -21,34 +19,64 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 public class LoginController {
-  private String    userName;
 
-  private String    password;
+  private LocalizationHelper bundle;
 
-  private Context   mContext;
+  private String             userName;
 
-  private LoginTask mLoadTask;
+  private String             password;
 
-  private String    strSigning;
+  private String             _strDomain;
 
-  private String    strNetworkConnectionFailed;
+  private Context            mContext;
 
-  private String    strUserNamePasswordFailed;
+  private LoginTask          mLoadTask;
 
-  private String    mobileNotCompilant;
+  private String             strSigning;
 
-  private String    titleString;
+  private String             blankError;
 
-  private String    okString;
+  private String             strNetworkConnectionFailed;
 
-  private URI       uri;
+  private String             strServerFailed;
+
+  private String             strUserNamePasswordFailed;
+
+  private String             mobileNotCompilant;
+
+  private String             titleString;
+
+  private String             okString;
+
+  private URI                uri;
+
+  private WarningDialog      dialog;
 
   public LoginController(Context context, String user, String pass) {
     mContext = context;
     userName = user;
     password = pass;
+    _strDomain = AccountSetting.getInstance().getDomainName();
     getLanguage();
-    onLoad();
+    if (checkLogin() == true) {
+      onLoad();
+    } else {
+      dialog = new WarningDialog(mContext, titleString, blankError, okString);
+      dialog.show();
+    }
+
+  }
+
+  private boolean checkLogin() {
+    if (userName == null || userName.length() == 0) {
+      blankError = bundle.getString("NoUsernameEnter");
+    } else if (password == null || password.length() == 0) {
+      blankError = bundle.getString("NoPasswordEnter");
+    } else if (_strDomain == null || _strDomain.length() == 0) {
+      blankError = bundle.getString("NoServerSelected");
+    } else
+      return true;
+    return false;
   }
 
   private void onLoad() {
@@ -65,7 +93,7 @@ public class LoginController {
   }
 
   private void getLanguage() {
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
+    bundle = LocalizationHelper.getInstance();
     strSigning = bundle.getString("SigningIn");
     strNetworkConnectionFailed = bundle.getString("ConnectionError");
     strUserNamePasswordFailed = bundle.getString("UserNamePasswordFailed");
@@ -95,7 +123,7 @@ public class LoginController {
     public String doInBackground(Void... params) {
 
       try {
-        String _strDomain = AccountSetting.getInstance().getDomainName();
+
         uri = new URI(_strDomain);
         String resultStr = ExoConnectionUtils.sendAuthentication(_strDomain, userName, password);
         return resultStr;
@@ -109,10 +137,7 @@ public class LoginController {
     @Override
     public void onPostExecute(String result) {
       if (result == null) {
-        WarningDialog dialog = new WarningDialog(mContext,
-                                                 titleString,
-                                                 strNetworkConnectionFailed,
-                                                 okString);
+        dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
         dialog.show();
       } else if (result.equalsIgnoreCase("YES")) {
         AccountSetting accountSetting = AccountSetting.getInstance();
@@ -127,30 +152,19 @@ public class LoginController {
         accountSetting.setPassword(password);
 
         boolean isCompliant = ExoConnectionUtils.checkPLFVersion();
-        Intent next = new Intent(mContext, HomeActivity.class);
-        mContext.startActivity(next);
-        // if (isCompliant == true) {
-        // Intent next = new Intent(mContext, HomeActivity.class);
-        // mContext.startActivity(next);
-        // } else {
-        // WarningDialog dialog = new WarningDialog(mContext,
-        // titleString,
-        // mobileNotCompilant,
-        // okString);
-        // dialog.show();
-        // }
+        if (isCompliant == true) {
+          Intent next = new Intent(mContext, HomeActivity.class);
+          mContext.startActivity(next);
+        } else {
+          dialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
+          dialog.show();
+        }
 
       } else if (result.equalsIgnoreCase("NO")) {
-        WarningDialog dialog = new WarningDialog(mContext,
-                                                 titleString,
-                                                 strUserNamePasswordFailed,
-                                                 okString);
+        dialog = new WarningDialog(mContext, titleString, strUserNamePasswordFailed, okString);
         dialog.show();
       } else {
-        WarningDialog dialog = new WarningDialog(mContext,
-                                                 titleString,
-                                                 strNetworkConnectionFailed,
-                                                 okString);
+        dialog = new WarningDialog(mContext, titleString, result, okString);
         dialog.show();
       }
       _progressDialog.dismiss();

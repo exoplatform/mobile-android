@@ -179,6 +179,7 @@ public class ExoConnectionUtils {
       if (entity != null) {
         InputStream instream = entity.getContent();
         _strFirstLoginContent = convertStreamToString(instream);
+        System.out.println(_strFirstLoginContent);
         if (_strFirstLoginContent.contains("Sign in failed. Wrong username or password.")) {
           return "NO";
         } else if (_strFirstLoginContent.contains("error', '/main?url")) {
@@ -193,7 +194,7 @@ public class ExoConnectionUtils {
       }
       // httpClient.getConnectionManager().shutdown();
     } catch (Exception e) {
-      return null;
+      return e.getMessage();
     }
 
   }

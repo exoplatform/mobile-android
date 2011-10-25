@@ -161,6 +161,7 @@ public class SocialController {
       activityStreamWrap.addView(item, params);
 
     }
+//    System.out.println("result size =   " + result.size());
     if (result.size() > number_of_activity || result.size() == number_of_activity) {
       SocialShowMoreItem showmore = new SocialShowMoreItem(mContext);
       showmore.showMoreBtn.setText(showMoreText);
