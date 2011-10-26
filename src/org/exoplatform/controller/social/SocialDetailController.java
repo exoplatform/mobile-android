@@ -22,6 +22,7 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.text.Html;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -43,6 +44,8 @@ public class SocialDetailController {
 
   private TextView             textView_Time;
 
+  private ImageView            typeImageView;
+
   private TextView             textView_Like_Count;
 
   private int                  likeDrawable    = R.drawable.activity_like_button_background_shape;
@@ -57,7 +60,6 @@ public class SocialDetailController {
 
   private String               titleString;
 
-
   public SocialDetailController(Context context,
                                 LinearLayout layoutWrap,
                                 Button likeButton,
@@ -65,6 +67,7 @@ public class SocialDetailController {
                                 TextView textView_Name,
                                 TextView textView_Message,
                                 TextView textView_Time,
+                                ImageView typeView,
                                 TextView textView_Like_Count) {
     mContext = context;
     commentLayoutWrap = layoutWrap;
@@ -73,6 +76,7 @@ public class SocialDetailController {
     this.textView_Name = textView_Name;
     this.textView_Message = textView_Message;
     this.textView_Time = textView_Time;
+    this.typeImageView = typeView;
     this.textView_Like_Count = textView_Like_Count;
     activityId = SocialDetailHelper.getInstance().getActivityId();
     changeLanguage();
@@ -125,7 +129,7 @@ public class SocialDetailController {
 
   }
 
-  public void setComponentInfo(RestProfile profile, String title, long postedTime) {
+  public void setComponentInfo(RestProfile profile, String title, String actType, long postedTime) {
     boolean liked = SocialDetailHelper.getInstance().getLiked();
     if (liked) {
       likeButton.setBackgroundResource(disLikeDrawable);
@@ -146,6 +150,9 @@ public class SocialDetailController {
 
     textView_Message.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
     SocialActivityUtil.setTextLinkfy(mContext, textView_Message);
+    int imageId = SocialActivityUtil.getTypeImageId(actType);
+    typeImageView.setImageResource(imageId);
+    
     textView_Time.setText(SocialActivityUtil.getPostedTimeString(postedTime));
     String attachedUrl = SocialDetailHelper.getInstance().getAttachedImageUrl();
     if (attachedUrl != null) {

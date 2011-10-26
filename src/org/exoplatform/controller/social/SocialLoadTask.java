@@ -99,6 +99,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, SocialCache> {
           streamInfo.setPostedTime(act.getPostedTime());
           streamInfo.setLikeNumber(act.getTotalNumberOfLikes());
           streamInfo.setCommentNumber(act.getTotalNumberOfComments());
+          streamInfo.setType(act.getType());
           String docLink = act.getTemplateParameter("DOCLINK");
           streamInfo.setAttachedImageUrl(docLink);
           String docName = act.getTemplateParameter("DOCNAME");

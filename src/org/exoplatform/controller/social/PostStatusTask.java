@@ -1,8 +1,6 @@
 package org.exoplatform.controller.social;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,27 +20,30 @@ import android.app.Activity;
 import android.content.Context;
 
 public class PostStatusTask extends UserTask<Void, Void, Integer> {
-  private PostWaitingDialog _progressDialog;
+  private PostWaitingDialog        _progressDialog;
 
-  private Context        mContext;
+  private Context                  mContext;
 
-  private String         sdcard_temp_dir;
+  private String                   sdcard_temp_dir;
 
-  private String         composeMessage;
+  private String                   composeMessage;
 
-  private String         loadingData;
+  private String                   loadingData;
 
-  private String         okString;
+  private String                   okString;
 
-  private String         errorString;
+  private String                   errorString;
 
-  private String         warningTitle;
+  private String                   warningTitle;
 
-  private String         uploadUrl;
-  
+  private String                   uploadUrl;
+
   private ComposeMessageController messageController;
 
-  public PostStatusTask(Context context, String dir, String content,ComposeMessageController controller) {
+  public PostStatusTask(Context context,
+                        String dir,
+                        String content,
+                        ComposeMessageController controller) {
     mContext = context;
     messageController = controller;
     sdcard_temp_dir = dir;
@@ -68,31 +69,20 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
         if (file != null) {
           ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, "image/jpeg");
           Map<String, String> templateParams = new HashMap<String, String>();
-      
-       
-//          activityImlp.setType("DOC_ACTIVITY");
-          /* "DOCPATH":"/Users/xuyen_mai/Public/Kaka.jpg",
-           "MESSAGE":"",
-           "DOCLINK":"/portal/rest/jcr/repository/collaboration/Users/xuyen_mai/Public/Kaka.jpg",
-           "WORKSPACE":"collaboration",
-           "REPOSITORY":"repository",
-           "DOCNAME":"KakaHaha.jpg"*/
-           /*
-           
-           String host = AccountSetting.getInstance().getDomainName(); 
-           String docLink = imageDir.substring(imageDir.indexOf(host) + host.length());
-           
-           String pathExtension = "jcr/repository/collaboration";
-           int indextOfDocPath = imageDir.indexOf(pathExtension);
-           String docPath = imageDir.substring(indextOfDocPath + pathExtension.length());
-          
+
+          activityImlp.setType("DOC_ACTIVITY");
+
+          String host = AccountSetting.getInstance().getDomainName();
+          String docLink = imageDir.substring(imageDir.indexOf(host) + host.length());
+          String pathExtension = "jcr/repository/collaboration";
+          int indextOfDocPath = imageDir.indexOf(pathExtension);
+          String docPath = imageDir.substring(indextOfDocPath + pathExtension.length());
           templateParams.put("DOCPATH", docPath);
           templateParams.put("MESSAGE", "");
           templateParams.put("DOCLINK", docLink);
           templateParams.put("WORKSPACE", "collaboration");
           templateParams.put("REPOSITORY", "repository");
           templateParams.put("DOCNAME", file.getName());
-          */
           activityImlp.setTemplateParams(templateParams);
 
         }
@@ -120,7 +110,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
   }
 
   private boolean createFolder() {
-    
+
     uploadUrl = ExoDocumentUtils.repositoryHomeURL + "/Public/Mobile";
 
     HttpResponse response;
@@ -156,16 +146,18 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
     errorString = bundle.getString("PostError");
     warningTitle = bundle.getString("Warning");
   }
-private class PostWaitingDialog extends WaitingDialog{
 
-  public PostWaitingDialog(Context context, String titleString, String contentString) {
-    super(context, titleString, contentString);
+  private class PostWaitingDialog extends WaitingDialog {
+
+    public PostWaitingDialog(Context context, String titleString, String contentString) {
+      super(context, titleString, contentString);
+    }
+
+    @Override
+    public void onBackPressed() {
+      super.onBackPressed();
+      messageController.onCancelPostTask();
+    }
+
   }
-  @Override
-  public void onBackPressed() {
-    super.onBackPressed();
-    messageController.onCancelPostTask();
-  }
-  
-}
 }

@@ -51,6 +51,8 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
   private String                       title;
 
+  private String                       activityType;
+
   private long                         postedTime;
 
   public SocialDetailLoadTask(Context context, SocialDetailController controller) {
@@ -81,6 +83,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       SocialDetailHelper.getInstance().setLiked(false);
       profile = selectedRestActivity.getPosterIdentity().getProfile();
       title = selectedRestActivity.getTitle();
+      activityType = selectedRestActivity.getType();
       postedTime = selectedRestActivity.getPostedTime();
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();
@@ -125,7 +128,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
       return 1;
     } catch (RuntimeException e) {
-//      System.out.println("error" + e.getMessage());
+      // System.out.println("error" + e.getMessage());
       return 0;
     }
   }
@@ -133,7 +136,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
   @Override
   public void onPostExecute(Integer result) {
     if (result == 1) {
-      detailController.setComponentInfo(profile, title, postedTime);
+      detailController.setComponentInfo(profile, title, activityType, postedTime);
       detailController.createCommentList(socialCommentList);
       detailController.setLikeInfo(likeLinkedList);
     } else {
