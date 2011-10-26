@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:gravity="center" android:layout_width="wrap_content"
 	android:layout_height="wrap_content">
-	<greendroid.widget.AsyncImageView
-		android:id="@+id/attached_image_view" android:layout_height="wrap_content"
-		android:layout_width="wrap_content" />
+	<ImageView android:id="@+id/attached_image_view"
+		android:layout_height="wrap_content" android:layout_width="wrap_content" />
 </LinearLayout>
