@@ -23,18 +23,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.widget.ImageView;
 
 public class ImageDownloader {
   private static final String                                           LOG_TAG             = "ImageDownloader";
 
-  private static final int                                              HARD_CACHE_CAPACITY = 100;
+  private static final int                                              HARD_CACHE_CAPACITY = 50;
 
-  private static final int                                              DELAY_BEFORE_PURGE  = 30 * 1000;                                                                    // in
+  private static final int                                              DELAY_BEFORE_PURGE  = 3 * 1000;      
+  // in
                                                                                                                                                                              // milliseconds
-
+private BitmapDownloaderTask mLoadTask;
   // Hard cache, with a fixed maximum capacity and a life duration
   private final HashMap<String, Bitmap>                                 sHardBitmapCache    = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2,
                                                                                                                                 0.75f,
@@ -213,7 +213,7 @@ public class ImageDownloader {
   /**
    * The actual AsyncTask that will asynchronously download the image.
    */
-  class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+  class BitmapDownloaderTask extends UserTask<String, Void, Bitmap> {
     private static final int               IO_BUFFER_SIZE = 16 * 1024;
 
     private String                         url;
@@ -228,22 +228,22 @@ public class ImageDownloader {
      * Actual download method.
      */
     @Override
-    protected Bitmap doInBackground(String... params) {
+    public Bitmap doInBackground(String... params) {
       // final AndroidHttpClient client =
       // AndroidHttpClient.newInstance("Android");
       url = params[0];
-      // final HttpGet getRequest = new HttpGet(url);
-      // String cookie = params[1];
-      // if (cookie != null) {
-      // getRequest.setHeader("cookie", cookie);
-      // }
+      final HttpGet getRequest = new HttpGet(url);
+      String cookie = params[1];
+      if (cookie != null) {
+        getRequest.setHeader("cookie", cookie);
+      }
 
       // HttpEntity entity;
       // DefaultHttpClient httpClient = new DefaultHttpClient();
       ExoConnectionUtils.httpClient.getCredentialsProvider()
                                    .setCredentials(AccountSetting.getInstance().getAuthScope(),
                                                    AccountSetting.getInstance().getCredentials());
-      HttpGet getRequest = new HttpGet(url);
+      // HttpGet getRequest = new HttpGet(url);
       // getRequest.setHeader("Cookie", ExoConnectionUtils._strCookie);
 
       try {
@@ -301,7 +301,7 @@ public class ImageDownloader {
      * Once the image is downloaded, associates it to the imageView
      */
     @Override
-    protected void onPostExecute(Bitmap bitmap) {
+    public void onPostExecute(Bitmap bitmap) {
       if (isCancelled()) {
         bitmap = null;
       }

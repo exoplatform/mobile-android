@@ -13,6 +13,8 @@ public class SocialDetailHelper {
 
   public ImageDownloader            imageDownloader;
 
+  public boolean                    taskIsFinish = false;
+
   private static SocialDetailHelper detailHelper = new SocialDetailHelper();
 
   private SocialDetailHelper() {

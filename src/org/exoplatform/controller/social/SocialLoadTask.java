@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
@@ -134,6 +135,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, SocialCache> {
       dialog.show();
     }
     _progressDialog.dismiss();
+    SocialDetailHelper.getInstance().taskIsFinish = true;
 
   }
 

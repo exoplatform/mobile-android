@@ -94,7 +94,9 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void initAttachStubView(final String url) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
-    SocialDetailHelper.getInstance().imageDownloader.download(url, attachImage);
+    if (SocialDetailHelper.getInstance().taskIsFinish = true) {
+      SocialDetailHelper.getInstance().imageDownloader.download(url, attachImage,ExoConnectionUtils._strCookie);
+    }
 
   }
 
