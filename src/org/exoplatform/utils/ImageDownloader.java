@@ -30,7 +30,7 @@ import android.widget.ImageView;
 public class ImageDownloader {
   private static final String                                           LOG_TAG             = "ImageDownloader";
 
-  private static final int                                              HARD_CACHE_CAPACITY = 40;
+  private static final int                                              HARD_CACHE_CAPACITY = 100;
 
   private static final int                                              DELAY_BEFORE_PURGE  = 30 * 1000;                                                                    // in
                                                                                                                                                                              // milliseconds
@@ -44,18 +44,6 @@ public class ImageDownloader {
                                                                                               @Override
                                                                                               protected boolean removeEldestEntry(LinkedHashMap.Entry<String, Bitmap> eldest) {
                                                                                                 if (size() > HARD_CACHE_CAPACITY) {
-                                                                                                  // Entries
-                                                                                                  // push-out
-                                                                                                  // of
-                                                                                                  // hard
-                                                                                                  // reference
-                                                                                                  // cache
-                                                                                                  // are
-                                                                                                  // transferred
-                                                                                                  // to
-                                                                                                  // soft
-                                                                                                  // reference
-                                                                                                  // cache
                                                                                                   sSoftBitmapCache.put(eldest.getKey(),
                                                                                                                        new SoftReference<Bitmap>(eldest.getValue()));
                                                                                                   return true;
@@ -227,7 +215,7 @@ public class ImageDownloader {
    * The actual AsyncTask that will asynchronously download the image.
    */
   class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
-    private static final int               IO_BUFFER_SIZE = 4 * 1024;
+    private static final int               IO_BUFFER_SIZE = 16 * 1024;
 
     private String                         url;
 
@@ -245,7 +233,7 @@ public class ImageDownloader {
       // final AndroidHttpClient client =
       // AndroidHttpClient.newInstance("Android");
       url = params[0];
-      final HttpGet getRequest = new HttpGet(url);
+//      final HttpGet getRequest = new HttpGet(url);
       // String cookie = params[1];
       // if (cookie != null) {
       // getRequest.setHeader("cookie", cookie);
@@ -256,8 +244,8 @@ public class ImageDownloader {
       ExoConnectionUtils.httpClient.getCredentialsProvider()
                                    .setCredentials(AccountSetting.getInstance().getAuthScope(),
                                                    AccountSetting.getInstance().getCredentials());
-      HttpGet httpGet = new HttpGet(url);
-      httpGet.setHeader("Cookie", ExoConnectionUtils._strCookie);
+      HttpGet getRequest = new HttpGet(url);
+//      getRequest.setHeader("Cookie", ExoConnectionUtils._strCookie);
 
       try {
         HttpResponse response = ExoConnectionUtils.httpClient.execute(getRequest);

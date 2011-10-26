@@ -131,7 +131,6 @@ public class HomeActionListenner implements OnItemClickListener {
   private void launchActivityStreamApp() {
 
     if (createActivityStreamConnetion() == true) {
-      SocialDetailHelper.getInstance().imageDownloader = new ImageDownloader();
       Intent next = new Intent(mContext, SocialActivity.class);
       mContext.startActivity(next);
     } else {
