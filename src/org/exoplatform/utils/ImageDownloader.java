@@ -39,7 +39,6 @@ public class ImageDownloader {
   private final HashMap<String, Bitmap>                                 sHardBitmapCache    = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2,
                                                                                                                                 0.75f,
                                                                                                                                 true) {
-                                                                                              private static final long serialVersionUID = -7190622541619388252L;
 
                                                                                               @Override
                                                                                               protected boolean removeEldestEntry(LinkedHashMap.Entry<String, Bitmap> eldest) {
@@ -233,7 +232,7 @@ public class ImageDownloader {
       // final AndroidHttpClient client =
       // AndroidHttpClient.newInstance("Android");
       url = params[0];
-//      final HttpGet getRequest = new HttpGet(url);
+      // final HttpGet getRequest = new HttpGet(url);
       // String cookie = params[1];
       // if (cookie != null) {
       // getRequest.setHeader("cookie", cookie);
@@ -245,7 +244,7 @@ public class ImageDownloader {
                                    .setCredentials(AccountSetting.getInstance().getAuthScope(),
                                                    AccountSetting.getInstance().getCredentials());
       HttpGet getRequest = new HttpGet(url);
-//      getRequest.setHeader("Cookie", ExoConnectionUtils._strCookie);
+      // getRequest.setHeader("Cookie", ExoConnectionUtils._strCookie);
 
       try {
         HttpResponse response = ExoConnectionUtils.httpClient.execute(getRequest);
