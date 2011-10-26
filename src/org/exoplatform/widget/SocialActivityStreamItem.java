@@ -1,13 +1,20 @@
 package org.exoplatform.widget;
 
+import java.io.InputStream;
+
 import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -28,9 +35,11 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private TextView       textViewMessage;
 
-  private Button       buttonComment;
+  private Button         buttonComment;
 
-  private Button       buttonLike;
+  private Button         buttonLike;
+
+  private ImageView      typeImageView;
 
   private TextView       textViewTime;
 
@@ -39,6 +48,8 @@ public class SocialActivityStreamItem extends LinearLayout {
   private String         domain;
 
   private Context        mContext;
+
+  private Bitmap         bitmap;
 
   public SocialActivityStreamItem(Context context, SocialActivityInfo activityInfo) {
     super(context);
@@ -51,6 +62,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
     buttonComment = (Button) view.findViewById(R.id.button_Comment);
     buttonLike = (Button) view.findViewById(R.id.button_Like);
+    typeImageView = (ImageView) view.findViewById(R.id.activity_image_type);
     textViewTime = (TextView) view.findViewById(R.id.textView_Time);
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl == null) {
@@ -60,6 +72,9 @@ public class SocialActivityStreamItem extends LinearLayout {
     textViewName.setText(Html.fromHtml(activityInfo.getUserName()));
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
+    int imageId = SocialActivityUtil.getTypeImageId(activityInfo.getType());
+    typeImageView.setImageResource(imageId);
+
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
     String attachUrl = activityInfo.getAttachedImageUrl();
@@ -78,19 +93,19 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private void initAttachStubView(final String url) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
-    AsyncImageView attachImage = (AsyncImageView) attachStubView.findViewById(R.id.attached_image_view);
-     BitmapFactory.Options options = new BitmapFactory.Options();
-     options.inTempStorage = new byte[16*1024];
-     attachImage.setOptions(options);
-     attachImage.setDefaultImageResource(R.drawable.documenticonforunknown);
+    ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
+    SocialDetailHelper.getInstance().imageDownloader.download(url, attachImage);
 
-    attachImage.setUrl(url);
   }
-  
+
+  public Bitmap getAtttachBitmap() {
+    return bitmap;
+  }
+
   public Button likeButton() {
     return buttonLike;
   }
-  
+
   public Button commentButton() {
     return buttonComment;
   }

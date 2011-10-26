@@ -4,6 +4,7 @@ import org.exoplatform.model.HomeItem;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.HomeHelper;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
@@ -18,6 +19,7 @@ import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
 
@@ -123,13 +125,13 @@ public class HomeActionListenner implements OnItemClickListener {
   }
 
   private boolean checkDocumentConnection() {
-    return ExoDocumentUtils.setRepositoryHomeUrl(AccountSetting.getInstance().getUsername(),
-                                                 AccountSetting.getInstance().getDomainName());
+    return true;
   }
 
   private void launchActivityStreamApp() {
 
     if (createActivityStreamConnetion() == true) {
+      SocialDetailHelper.getInstance().imageDownloader = new ImageDownloader();
       Intent next = new Intent(mContext, SocialActivity.class);
       mContext.startActivity(next);
     } else {

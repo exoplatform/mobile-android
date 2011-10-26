@@ -5,7 +5,9 @@ import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.MyActionBar;
 
@@ -14,17 +16,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialAttachedImageActivity extends MyActionBar implements OnClickListener {
-  private AsyncImageView imageView;
+  private ImageView imageView;
 
-  private Button         okButton;
+  private Button    okButton;
 
-  private String         okText;
+  private String    okText;
 
-  private String         imageUrl;
+  private String    imageUrl;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,8 @@ public class SocialAttachedImageActivity extends MyActionBar implements OnClickL
   }
 
   private void init() {
-    imageView = (AsyncImageView) findViewById(R.id.social_attached_image_view);
-    imageView.setUrl(imageUrl);
+    imageView = (ImageView) findViewById(R.id.social_attached_image_view);
+    SocialDetailHelper.getInstance().imageDownloader.download(imageUrl, imageView);
     okButton = (Button) findViewById(R.id.social_attached_image_ok_button);
     okButton.setText(okText);
     okButton.setOnClickListener(this);

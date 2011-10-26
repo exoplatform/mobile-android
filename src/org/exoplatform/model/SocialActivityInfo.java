@@ -23,6 +23,8 @@ public class SocialActivityInfo {
 
   private int               nbComments;
 
+  private String            type;
+
   private String            attachImageUrl;
 
   private String            attachedImageName;
@@ -75,6 +77,14 @@ public class SocialActivityInfo {
     return title;
   }
 
+  public void setType(String t) {
+    type = t;
+  }
+
+  public String getType() {
+    return type;
+  }
+
   public void setPostedTime(long time) {
     postedTime = time;
   }
@@ -122,6 +132,7 @@ public class SocialActivityInfo {
   public String getAttachedImageUrl() {
     return attachImageUrl;
   }
+
   public void setAttachedImageName(String name) {
     attachedImageName = name;
   }

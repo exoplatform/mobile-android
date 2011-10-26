@@ -10,6 +10,7 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -150,6 +151,7 @@ public class LoginController {
         editor.commit();
         accountSetting.setUsername(userName);
         accountSetting.setPassword(password);
+        ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
 
         boolean isCompliant = ExoConnectionUtils.checkPLFVersion();
         if (isCompliant == true) {
@@ -163,8 +165,11 @@ public class LoginController {
       } else if (result.equalsIgnoreCase("NO")) {
         dialog = new WarningDialog(mContext, titleString, strUserNamePasswordFailed, okString);
         dialog.show();
-      } else {
+      } else if (result.contains("confused")) {
         dialog = new WarningDialog(mContext, titleString, result, okString);
+        dialog.show();
+      } else {
+        dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
         dialog.show();
       }
       _progressDialog.dismiss();

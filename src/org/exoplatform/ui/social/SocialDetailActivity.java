@@ -5,7 +5,10 @@ import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.MyActionBar;
 
@@ -19,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,6 +41,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   private TextView                   textView_Message;
 
   private TextView                   textView_Time;
+
+  private ImageView                  typeImageView;
 
   private TextView                   textView_Like_Count;
 
@@ -72,6 +78,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     textView_Name = (TextView) findViewById(R.id.textView_Name);
     textView_Message = (TextView) findViewById(R.id.textView_Message);
     textView_Time = (TextView) findViewById(R.id.textView_Time);
+    typeImageView = (ImageView) findViewById(R.id.activity_detail_image_type);
     textView_Like_Count = (TextView) findViewById(R.id.textView_Like_Count);
     editTextComment = (EditText) findViewById(R.id.editText_Comment);
     editTextComment.setHint(yourCommentText);
@@ -85,30 +92,29 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
                                                   textView_Name,
                                                   textView_Message,
                                                   textView_Time,
+                                                  typeImageView,
                                                   textView_Like_Count);
     detailController.onLoad();
   }
 
   public void displayAttachImage(String url) {
-    url = SocialActivityUtil.getDomain() + url;
     if (attachStubView == null) {
-      initAttachStubView(url);
+      initAttachStubView(SocialActivityUtil.getDomain()+url);
     }
     attachStubView.setVisibility(View.VISIBLE);
   }
 
-  private void initAttachStubView(final String url) {
+  private void initAttachStubView(String url) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_detail)).inflate();
-    AsyncImageView attachImage = (AsyncImageView) attachStubView.findViewById(R.id.attached_image_view);
-    BitmapFactory.Options options = new BitmapFactory.Options();
-    options.inTempStorage = new byte[16 * 1024];
-    attachImage.setOptions(options);
-    attachImage.setDefaultImageResource(R.drawable.documenticonforunknown);
-
-    attachImage.setUrl(url);
+    ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
+    // BitmapFactory.Options options = new BitmapFactory.Options();
+    // options.inTempStorage = new byte[16 * 1024];
+    // attachImage.setOptions(options);
+    // attachImage.setDefaultImageResource(R.drawable.documenticonforunknown);
+//    ImageDownloader imageDownloader = new ImageDownloader();
+    SocialDetailHelper.getInstance().imageDownloader.download(url, attachImage);
     attachImage.setOnClickListener(new OnClickListener() {
 
-//      @Override
       public void onClick(View arg0) {
         Intent intent = new Intent(SocialDetailActivity.this, SocialAttachedImageActivity.class);
         startActivity(intent);

@@ -179,7 +179,6 @@ public class ExoConnectionUtils {
       if (entity != null) {
         InputStream instream = entity.getContent();
         _strFirstLoginContent = convertStreamToString(instream);
-        System.out.println(_strFirstLoginContent);
         if (_strFirstLoginContent.contains("Sign in failed. Wrong username or password.")) {
           return "NO";
         } else if (_strFirstLoginContent.contains("error', '/main?url")) {
@@ -418,8 +417,7 @@ public class ExoConnectionUtils {
   }
 
   // Get input stream from URL
-  private static InputStream sendRequest(String strUrlRequest) {
-    InputStream ipstr = null;
+  public static InputStream sendRequest(String strUrlRequest) {
     try {
       HttpResponse response;
       HttpEntity entity;
@@ -433,15 +431,13 @@ public class ExoConnectionUtils {
       response = httpClient.execute(httpGet);
       entity = response.getEntity();
       if (entity != null) {
-        ipstr = entity.getContent();
+        return entity.getContent();
       }
-      // httpClient.getConnectionManager().shutdown();
-    } catch (ClientProtocolException e) {
-      e.getMessage();
-    } catch (IOException e) {
-      e.getMessage();
+
+    } catch (Exception e) {
+      return null;
     }
-    return ipstr;
+    return null;
   }
 
   // get input stream from URL without authentication

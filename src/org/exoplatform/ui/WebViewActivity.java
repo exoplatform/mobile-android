@@ -68,8 +68,8 @@ public class WebViewActivity extends MyActionBar {
 //      }
 //    });
     
-    _url = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
-    Log.e(_url, _url);
+//    _url = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
+    System.out.println(_url);
     _wvGadget.loadUrl(_url);
 
     changeLanguage();

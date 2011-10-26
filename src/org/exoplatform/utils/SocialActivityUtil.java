@@ -1,20 +1,14 @@
 package org.exoplatform.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
+import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
@@ -199,6 +193,29 @@ public class SocialActivityUtil {
     return urlBuffer.toString();
   }
 
+  public static int getTypeImageId(String type) {
+    if (type != null) {
+      if (type.contains("ks-forum:spaces")) {
+        return R.drawable.activity_type_forum;
+      } else if (type.contains("ks-wiki:spaces")) {
+        return R.drawable.activity_type_wiki;
+      } else if (type.contains("exosocial:spaces")) {
+        return R.drawable.activity_type_normal;
+      } else if (type.contains("DOC_ACTIVITY")) {
+        return R.drawable.activity_type_document;
+      } else if (type.contains("DEFAULT_ACTIVITY")) {
+        return R.drawable.activity_type_normal;
+      } else if (type.contains("LINK_ACTIVITY")) {
+        return R.drawable.activity_type_link;
+      } else if (type.contains("exosocial:relationship")) {
+        return R.drawable.activity_type_connection;
+      } else if (type.contains("exosocial:people")) {
+        return R.drawable.activity_type_normal;
+      } else
+        return R.drawable.activity_type_normal;
+    } else
+      return R.drawable.activity_type_normal;
+  }
 
   public static void setTextLinkfy(Context mContext, TextView textView) {
     URLSpan[] list = textView.getUrls();
@@ -206,7 +223,6 @@ public class SocialActivityUtil {
       Spannable spannable = (Spannable) textView.getText();
       for (URLSpan span : list) {
         String spanUrl = span.getURL();
-        System.out.println("span url: "+spanUrl);
         if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
           textView.setMovementMethod(LinkMovementMethod.getInstance());
         } else {
@@ -222,9 +238,8 @@ public class SocialActivityUtil {
             spannable.setSpan(myUrlSpan, start, stop, flags);
             textView.setText(spannable);
             textView.setMovementMethod(LinkMovementMethod.getInstance());
-
           } catch (Exception e) {
-            
+
           }
         }
       }
