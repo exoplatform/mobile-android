@@ -19,23 +19,27 @@ import org.apache.http.client.methods.HttpGet;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
 public class ImageDownloader {
   private static final String                                           LOG_TAG             = "ImageDownloader";
 
-  private static final int                                              HARD_CACHE_CAPACITY = 50;
+  private static final int                                              HARD_CACHE_CAPACITY = 40;
 
-  private static final int                                              DELAY_BEFORE_PURGE  = 3 * 1000;      
+  private static final int                                              DELAY_BEFORE_PURGE  = 30 * 1000;
+
   // in
-                                                                                                                                                                             // milliseconds
-private BitmapDownloaderTask mLoadTask;
+  // milliseconds
+  private BitmapDownloaderTask                                          mLoadTask;
+
   // Hard cache, with a fixed maximum capacity and a life duration
   private final HashMap<String, Bitmap>                                 sHardBitmapCache    = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2,
                                                                                                                                 0.75f,
@@ -215,7 +219,7 @@ private BitmapDownloaderTask mLoadTask;
    * The actual AsyncTask that will asynchronously download the image.
    */
   class BitmapDownloaderTask extends UserTask<String, Void, Bitmap> {
-    private static final int               IO_BUFFER_SIZE = 16 * 1024;
+    private static final int               IO_BUFFER_SIZE = 8 * 1024;
 
     private String                         url;
 
@@ -260,20 +264,26 @@ private BitmapDownloaderTask mLoadTask;
           OutputStream outputStream = null;
           try {
             inputStream = entity.getContent();
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 4;
             final ByteArrayOutputStream dataStream = new ByteArrayOutputStream();
             outputStream = new BufferedOutputStream(dataStream, IO_BUFFER_SIZE);
             copy(inputStream, outputStream);
             outputStream.flush();
 
             final byte[] data = dataStream.toByteArray();
-            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
 
+            return BitmapFactory.decodeByteArray(data, 0, data.length, options);
             // FIXME : Should use BitmapFactory.decodeStream(inputStream)
             // instead.
-            // final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-            return bitmap;
+            // final Bitmap bitmap = BitmapFactory.decodeStream(inputStream,
+            // null, options);
 
+//            return bitmap;
+
+          } catch (RuntimeException e) {
+            return null;
           } finally {
             if (inputStream != null) {
               inputStream.close();

@@ -4,7 +4,6 @@ import org.exoplatform.model.HomeItem;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.HomeHelper;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
@@ -18,8 +17,6 @@ import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
 
@@ -33,8 +30,6 @@ import android.widget.AdapterView.OnItemClickListener;
  * 
  */
 public class HomeActionListenner implements OnItemClickListener {
-  private String  loadingData;
-
   private String  okString;
 
   private String  titleString;
@@ -171,7 +166,6 @@ public class HomeActionListenner implements OnItemClickListener {
 
   private void changeLanguage() {
     LocalizationHelper location = LocalizationHelper.getInstance();
-    loadingData = location.getString("LoadingData");
     okString = location.getString("OK");
     titleString = location.getString("Warning");
     contentString = location.getString("ConnectionError");

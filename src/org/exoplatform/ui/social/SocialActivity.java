@@ -71,7 +71,7 @@ public class SocialActivity extends MyActionBar {
     TextView emptyStatus = (TextView) emptyStubView.findViewById(R.id.empty_status);
     emptyStatus.setText(emptyString);
   }
-  
+
   public void reloadActivity() {
     socialController.onLoad();
   }
