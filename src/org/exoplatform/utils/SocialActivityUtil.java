@@ -217,6 +217,13 @@ public class SocialActivityUtil {
       return R.drawable.activity_type_normal;
   }
 
+  public static void setActivityKinds(int type) {
+    switch (type) {
+    case R.drawable.activity_type_forum:
+      break;
+    }
+  }
+
   public static void setTextLinkfy(Context mContext, TextView textView) {
     URLSpan[] list = textView.getUrls();
     if (list != null) {

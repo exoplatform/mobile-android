@@ -1,5 +1,6 @@
 package org.exoplatform.controller.social;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.exoplatform.R;
@@ -81,7 +82,7 @@ public class SocialController {
     }
   }
 
-  public void setActivityList(SocialCache result) {
+  public void setActivityList(ArrayList<SocialActivityInfo> result) {
 
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     activityStreamWrap.removeAllViews();

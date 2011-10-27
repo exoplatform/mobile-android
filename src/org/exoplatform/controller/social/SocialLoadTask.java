@@ -25,7 +25,7 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.view.View;
 
-public class SocialLoadTask extends UserTask<Integer, Void, SocialCache> {
+public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActivityInfo>> {
   private SocialWaitingDialog _progressDialog;
 
   private Context             mContext;
@@ -63,10 +63,11 @@ public class SocialLoadTask extends UserTask<Integer, Void, SocialCache> {
   }
 
   @Override
-  public SocialCache doInBackground(Integer... params) {
+  public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
 
     try {
       SocialCache socialCache = new SocialCache(ExoConstants.CACHE_MAX_NUMBER);
+      ArrayList<SocialActivityInfo> listActivity = new ArrayList<SocialActivityInfo>();
       int loadSize = params[0];
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
                                                                          .getActivityService();
@@ -105,10 +106,11 @@ public class SocialLoadTask extends UserTask<Integer, Void, SocialCache> {
           streamInfo.setAttachedImageUrl(docLink);
           String docName = act.getTemplateParameter("DOCNAME");
           streamInfo.setAttachedImageName(docName);
-          socialCache.put(i, streamInfo);
+//          socialCache.put(i, streamInfo);
+          listActivity.add(streamInfo);
         }
       }
-      return socialCache;
+      return listActivity;
     } catch (RuntimeException e) {
       return null;
     }
@@ -121,7 +123,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, SocialCache> {
   }
 
   @Override
-  public void onPostExecute(SocialCache result) {
+  public void onPostExecute(ArrayList<SocialActivityInfo> result) {
     if (result != null) {
       if (result.size() == 0) {
         SocialActivity.socialActivity.setEmptyView(View.VISIBLE);

@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.exoplatform.model.SocialCommentInfo;
 import org.exoplatform.model.SocialLikeInfo;
@@ -85,6 +87,12 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       title = selectedRestActivity.getTitle();
       activityType = selectedRestActivity.getType();
       postedTime = selectedRestActivity.getPostedTime();
+      Map<String, String> templateMap = selectedRestActivity.getTemplateParams();
+      Set<String> set = templateMap.keySet();
+      for (String param : set) {
+        System.out.println("type: "+activityType +"--template key: " + param + "-- " + templateMap.get(param));
+      }
+
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();
       if (likeList != null) {

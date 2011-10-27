@@ -32,9 +32,9 @@ import android.widget.ImageView;
 public class ImageDownloader {
   private static final String                                           LOG_TAG             = "ImageDownloader";
 
-  private static final int                                              HARD_CACHE_CAPACITY = 40;
+  private static final int                                              HARD_CACHE_CAPACITY = 80;
 
-  private static final int                                              DELAY_BEFORE_PURGE  = 30 * 1000;
+  private static final int                                              DELAY_BEFORE_PURGE  = 3 * 1000;
 
   // in
   // milliseconds
@@ -219,7 +219,7 @@ public class ImageDownloader {
    * The actual AsyncTask that will asynchronously download the image.
    */
   class BitmapDownloaderTask extends UserTask<String, Void, Bitmap> {
-    private static final int               IO_BUFFER_SIZE = 8 * 1024;
+    private static final int               IO_BUFFER_SIZE = 4 * 1024;
 
     private String                         url;
 
@@ -237,7 +237,7 @@ public class ImageDownloader {
       // final AndroidHttpClient client =
       // AndroidHttpClient.newInstance("Android");
       url = params[0];
-      final HttpGet getRequest = new HttpGet(url);
+      HttpGet getRequest = new HttpGet(url);
       String cookie = params[1];
       if (cookie != null) {
         getRequest.setHeader("cookie", cookie);
@@ -253,12 +253,12 @@ public class ImageDownloader {
 
       try {
         HttpResponse response = ExoConnectionUtils.httpClient.execute(getRequest);
-        final int statusCode = response.getStatusLine().getStatusCode();
+        int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode != HttpStatus.SC_OK) {
           return null;
         }
 
-        final HttpEntity entity = response.getEntity();
+        HttpEntity entity = response.getEntity();
         if (entity != null) {
           InputStream inputStream = null;
           OutputStream outputStream = null;
@@ -266,21 +266,22 @@ public class ImageDownloader {
             inputStream = entity.getContent();
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 4;
-            final ByteArrayOutputStream dataStream = new ByteArrayOutputStream();
-            outputStream = new BufferedOutputStream(dataStream, IO_BUFFER_SIZE);
-            copy(inputStream, outputStream);
-            outputStream.flush();
-
-            final byte[] data = dataStream.toByteArray();
-
-            return BitmapFactory.decodeByteArray(data, 0, data.length, options);
+            // ByteArrayOutputStream dataStream = new ByteArrayOutputStream();
+            // outputStream = new BufferedOutputStream(dataStream,
+            // IO_BUFFER_SIZE);
+            // copy(inputStream, outputStream);
+            // outputStream.flush();
+            //
+            // byte[] data = dataStream.toByteArray();
+            //
+            // return BitmapFactory.decodeByteArray(data, 0, data.length,
+            // options);
             // FIXME : Should use BitmapFactory.decodeStream(inputStream)
             // instead.
 
-            // final Bitmap bitmap = BitmapFactory.decodeStream(inputStream,
-            // null, options);
+            return BitmapFactory.decodeStream(inputStream, null, options);
 
-//            return bitmap;
+            // return bitmap;
 
           } catch (RuntimeException e) {
             return null;
