@@ -9,6 +9,7 @@ import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.http.HttpEntity;
@@ -41,7 +42,7 @@ private BitmapDownloaderTask mLoadTask;
                                                                                                                                 true) {
 
                                                                                               @Override
-                                                                                              protected boolean removeEldestEntry(LinkedHashMap.Entry<String, Bitmap> eldest) {
+                                                                                              protected boolean removeEldestEntry(Map.Entry<String, Bitmap> eldest) {
                                                                                                 if (size() > HARD_CACHE_CAPACITY) {
                                                                                                   sSoftBitmapCache.put(eldest.getKey(),
                                                                                                                        new SoftReference<Bitmap>(eldest.getValue()));
