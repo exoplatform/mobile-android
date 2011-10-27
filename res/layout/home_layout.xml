@@ -14,7 +14,6 @@
 		android:layout_marginTop="5dip" android:layout_width="fill_parent"
 		android:layout_weight="1" android:layout_height="fill_parent"
 		android:stretchMode="columnWidth" android:columnWidth="90dip"
-		android:verticalSpacing="10dp" android:horizontalSpacing="10dp"
-		android:padding="5dp" android:numColumns="auto_fit" />
+		android:numColumns="auto_fit" />
 
 </RelativeLayout>
