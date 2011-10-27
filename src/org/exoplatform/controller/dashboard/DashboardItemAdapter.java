@@ -9,7 +9,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.exoplatform.R;
-import org.exoplatform.model.DashBoardItem;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.WebViewActivity;
@@ -34,7 +33,7 @@ import android.widget.Toast;
 
 public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor {
 
-  private ArrayList<DashBoardItem>    _arrayOfItems;
+  private ArrayList<GadgetInfo>    _arrayOfItems;
   
   private final Paint    mPaint    = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -52,7 +51,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 
   private Context        mContext;
 
-  public DashboardItemAdapter(Context context, ArrayList<DashBoardItem> items) {
+  public DashboardItemAdapter(Context context, ArrayList<GadgetInfo> items) {
     mContext = context;
     mInflater = LayoutInflater.from(context);
 
@@ -96,33 +95,31 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 
   public View getView(int position, View convertView, ViewGroup parent) {
 
-    final DashBoardItem item = _arrayOfItems.get(position);
-    GadgetInfo inforGadget = item.gadget;
+    final GadgetInfo inforGadget  = _arrayOfItems.get(position);
     
-    if (item.strTabName != null) {
+    if (inforGadget.getTabName() != null) {
 
       convertView = mInflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
-      textViewTabTitle.setText(item.strTabName);
+      textViewTabTitle.setText(inforGadget.getTabName());
       
     } else {
       convertView = mInflater.inflate(R.layout.gadget_item_layout, parent, false);
       
       if(position + 1 < _arrayOfItems.size()) 
       {
-      
-        DashBoardItem nextItem = _arrayOfItems.get(position + 1);
+        GadgetInfo nextItem = _arrayOfItems.get(position + 1);
         
         if(inforGadget.getGadgetIndex() == 0)
         {
-          if(nextItem.strTabName != null)
+          if(nextItem.getTabName() != null)
             convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellsingle);
           else
             convertView.setBackgroundResource(R.drawable.dashboardcustombgforcelltop);
         }
         else 
         {
-          if(nextItem.strTabName != null)
+          if(nextItem.getTabName() != null)
              convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellbottom);
           else
           {
@@ -134,27 +131,28 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
       }
       else
       {
-        if(item.strTabName != null)
+        GadgetInfo previousItem = _arrayOfItems.get(position - 1);
+        if(previousItem.getTabName() == null)
           convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellbottom);
        else
          convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellsingle);
       }
 
       AsyncImageView imageViewAvatar = (AsyncImageView) convertView.findViewById(R.id.gadget_image);
-      imageViewAvatar.setUrl(item.gadget.getStrGadgetIcon());
+      imageViewAvatar.setUrl(inforGadget.getStrGadgetIcon());
       TextView textViewName = (TextView) convertView.findViewById(R.id.gadget_title);
-      textViewName.setText(item.gadget.getGadgetName());
+      textViewName.setText(inforGadget.getGadgetName());
 
       TextView textViewMessage = (TextView) convertView.findViewById(R.id.gadget_content);
-      textViewMessage.setText(item.gadget.getGadgetDescription());
+      textViewMessage.setText(inforGadget.getGadgetDescription());
 
     }
 
     convertView.setOnClickListener(new View.OnClickListener() {
 
       public void onClick(View v) {
-        if (item.strTabName == null)
-          showGadget(item.gadget);
+        if (inforGadget.getTabName() == null)
+          showGadget(inforGadget);
       }
     });
 

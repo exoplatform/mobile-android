@@ -1,21 +1,18 @@
 package org.exoplatform.model;
 
-import android.graphics.Bitmap;
-
 //gadget info
 public class GadgetInfo {
-  private final String _strGadgetName;       // Gadget name
+  private String _strGadgetName;       // Gadget name
 
-  private final String _strGadgetDescription; // Gadget description
+  private String _strGadgetDescription; // Gadget description
 
-  private String       _strGadgetUrl;        // Gadget url
+  private String _strGadgetUrl;        // Gadget url
 
-  private String       _strGadgetIcon;       // Gadget icon string
-  private final Bitmap _btmGadgetIcon;       // Gadget icon
-
-  private final String _strGadgetID;         // Gadget ID
+  private String _strGadgetIcon;       // Gadget icon string
   
-  private int          _intGatdetIndex;      //index for background setting
+  private int    _intGatdetIndex;      //index for background setting
+  
+  private String _strTabName;
 
   // Constructor
 
@@ -23,17 +20,19 @@ public class GadgetInfo {
                    String gadgetDescription,
                    String gadgetUrl,
                    String strGadgetIcon,
-                   Bitmap gadgetIcon,
-                   String gadgetID,
+                   String strTabName,
                    int gadgetIndex) {
     _strGadgetName = gadgetName;
     _strGadgetDescription = gadgetDescription;
     _strGadgetUrl = gadgetUrl;
     _strGadgetIcon = strGadgetIcon;
-    _btmGadgetIcon = gadgetIcon;
-    _strGadgetID = gadgetID;
+    _strTabName = strTabName;
     _intGatdetIndex = gadgetIndex;
   }
+  
+  public GadgetInfo(String tabName) {
+     _strTabName = tabName;
+   }
 
   // Gettors
   public String getGadgetName() {
@@ -56,12 +55,8 @@ public class GadgetInfo {
     return _strGadgetIcon;
   }
 
-  public Bitmap getGadgetIcon() {
-    return _btmGadgetIcon;
-  }
-
-  public String getGadgetID() {
-    return _strGadgetID;
+  public String getTabName() {
+    return _strTabName;
   }
   
   public int getGadgetIndex() {

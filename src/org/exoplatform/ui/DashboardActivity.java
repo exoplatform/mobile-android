@@ -5,6 +5,7 @@ import greendroid.widget.ActionBarItem;
 import org.exoplatform.R;
 import org.exoplatform.controller.dashboard.DashboardController;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.utils.WebdavMethod;
 import org.exoplatform.widget.MyActionBar;
 
 import android.graphics.Color;
@@ -37,7 +38,10 @@ public class DashboardActivity extends MyActionBar {
     setActionBarContentView(R.layout.dashboard_layout);
     changeLanguage();
     dashboardActivity = this;
+    
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    addActionBarItem();
+    getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_refresh);
 
     listView = (ListView) findViewById(R.id.dashboard_listview);
     listView.setCacheColorHint(Color.TRANSPARENT);
@@ -66,7 +70,7 @@ public class DashboardActivity extends MyActionBar {
     TextView emptyStatus = (TextView) empty_stub.findViewById(R.id.empty_status);
     emptyStatus.setText(dashboardEmptyString);
   }
-
+  
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
@@ -75,7 +79,9 @@ public class DashboardActivity extends MyActionBar {
       finish();
       break;
     case 0:
-
+    {
+      controller.onLoad();
+    }
       break;
 
     default:

@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -28,8 +27,6 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-
-import android.util.Log;
 
 //interact with server
 public class ExoConnectionUtils {
@@ -137,8 +134,8 @@ public class ExoConnectionUtils {
       String redirectStr = domain.concat(ExoConstants.DOMAIN_SUFFIX);
 
       HttpParams httpParameters = new BasicHttpParams();
-      HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
-      HttpConnectionParams.setSoTimeout(httpParameters, 60000);
+      HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
+      HttpConnectionParams.setSoTimeout(httpParameters, 30000);
       HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
       httpClient = new DefaultHttpClient(httpParameters);
@@ -198,148 +195,6 @@ public class ExoConnectionUtils {
 
   }
 
-  // Standalone gadget requset
-  private String loginForStandaloneGadget(String domain, String username, String password) {
-    try {
-      HttpResponse response;
-      HttpEntity entity;
-      CookieStore cookiesStore;
-      String strCookie = "";
-      String redirectStr = domain.concat(ExoConstants.DOMAIN_SUFFIX);
-
-      HttpParams httpParameters = new BasicHttpParams();
-      HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
-      HttpConnectionParams.setSoTimeout(httpParameters, 60000);
-      HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-
-      // DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-
-      HttpGet httpGet = new HttpGet(redirectStr);
-
-      response = httpClient.execute(httpGet);
-
-      cookiesStore = httpClient.getCookieStore();
-      List<Cookie> cookies = cookiesStore.getCookies();
-
-      if (!cookies.isEmpty()) {
-        for (int i = 0; i < cookies.size(); i++) {
-          strCookie = cookies.get(i).getName().toString() + "=";
-          strCookie = strCookie + cookies.get(i).getValue().toString()
-              + ";domain=mobile.demo.exoplatform.org";
-        }
-      }
-
-      /*
-       * int indexOfPrivate = redirectStr.indexOf("/classic"); //Request to
-       * login String loginStr =
-       * "http://mobile.demo.exoplatform.org/portal/login"; if(indexOfPrivate >
-       * 0) loginStr = redirectStr.substring(0,
-       * indexOfPrivate).concat("/j_security_check"); else loginStr =
-       * redirectStr.concat("/j_security_check");
-       */
-
-      HttpPost httpPost = new HttpPost("http://mobile.demo.exoplatform.org/portal/login");
-      List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
-      nvps.add(new BasicNameValuePair("username", username));
-      nvps.add(new BasicNameValuePair("password", password));
-      httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-      httpPost.setHeader("Cookie", strCookie);
-      _strCookie = strCookie;
-      response = httpClient.execute(httpPost);
-
-      cookiesStore = httpClient.getCookieStore();
-      cookies = cookiesStore.getCookies();
-
-      if (!cookies.isEmpty()) {
-        for (int i = 0; i < cookies.size(); i++) {
-          strCookie = cookies.get(i).getName().toString() + "="
-              + cookies.get(i).getValue().toString();
-        }
-      }
-      _sessionCookies = cookies;
-
-      entity = response.getEntity();
-
-      if (entity != null) {
-        InputStream instream = entity.getContent();
-        _strFirstLoginContent = convertStreamToString(instream);
-        if (_strFirstLoginContent.contains("Sign in failed. Wrong username or password.")) {
-          return "NO";
-        } else if (_strFirstLoginContent.contains("error', '/main?url")) {
-          _strFirstLoginContent = null;
-          return "URL_ERROR";
-        } else if (_strFirstLoginContent.contains("eXo.env.portal")) {
-          return "YES";
-        }
-      } else {
-        return "ERROR";
-      }
-
-    } catch (ClientProtocolException e) {
-      return e.getMessage();
-    } catch (IOException e) {
-      return e.getMessage();
-    }
-
-    return "ERROR";
-  }
-
-  // Normal gadget request
-  public static String sendRequestToGetGadget(String urlStr, String username, String password) {
-    try {
-      HttpResponse response;
-      HttpEntity entity;
-      CookieStore cookiesStore;
-      String strCookie = "";
-
-      String strRedirectUrl = urlStr;
-      // DefaultHttpClient httpClient = new DefaultHttpClient();
-      HttpGet httpGet = new HttpGet(strRedirectUrl);
-
-      response = httpClient.execute(httpGet);
-      cookiesStore = httpClient.getCookieStore();
-      List<Cookie> cookies = cookiesStore.getCookies();
-
-      if (!cookies.isEmpty()) {
-        for (int i = 0; i < cookies.size(); i++) {
-          strCookie = cookies.get(i).getName().toString() + "="
-              + cookies.get(i).getValue().toString();
-        }
-      }
-
-      String strMarked = "/classic";
-      int r = strRedirectUrl.indexOf(strMarked);
-      String strLoginUrl = "";
-      if (r >= 0)
-        strLoginUrl = urlStr.substring(0, r).concat("/j_security_check");
-      else {
-        strLoginUrl = urlStr.concat("/j_security_check");
-      }
-
-      HttpPost httpPost = new HttpPost(strLoginUrl);
-      List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
-      nvps.add(new BasicNameValuePair("j_username", username));
-      nvps.add(new BasicNameValuePair("j_password", password));
-      httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-      httpPost.setHeader("Cookie", strCookie);
-      _strCookie = strCookie;
-      response = httpClient.execute(httpPost);
-      entity = response.getEntity();
-
-      if (entity != null) {
-        InputStream instream = entity.getContent();
-        String strResult = convertStreamToString(instream);
-        return strResult;
-      } else {
-        return "ERROR";
-      }
-    } catch (ClientProtocolException e) {
-      return e.getMessage();
-    } catch (IOException e) {
-      return e.getMessage();
-    }
-
-  }
 
   // Send request with authentication
   public static String authorizationHeader(String username, String password) {
@@ -349,18 +204,16 @@ public class ExoConnectionUtils {
   }
 
   // Get input stream from URL with authentication
-  private InputStream sendRequestWithAuthorization(String urlStr) {
+  public static InputStream sendRequestWithAuthorization(String urlStr) {
 
     InputStream ipstr = null;
     try {
       String strUserName = AccountSetting.getInstance().getUsername();
       String strPassword = AccountSetting.getInstance().getPassword();
 
-      urlStr = urlStr.replace(" ", "%20");
-
       URL url = new URL(urlStr);
       HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
+      con.setConnectTimeout(30000);
       // set up url connection to get retrieve information back
       con.setRequestMethod("GET");
       con.setDoInput(true);
@@ -371,15 +224,15 @@ public class ExoConnectionUtils {
 
       // pull the information back from the URL
       ipstr = con.getInputStream();
-
+/*
       StringBuffer buf = new StringBuffer();
 
       int c;
       while ((c = ipstr.read()) != -1) {
         buf.append((char) c);
       }
-
-      con.disconnect();
+*/    
+//      con.disconnect();
 
     } catch (ClientProtocolException e) {
       e.getMessage();
@@ -441,7 +294,7 @@ public class ExoConnectionUtils {
   }
 
   // get input stream from URL without authentication
-  private static InputStream sendRequestWithoutAuthen(String strUrlRequest) {
+  public static InputStream sendRequestWithoutAuthen(String strUrlRequest) {
     InputStream ipstr = null;
     try {
       HttpResponse response;
