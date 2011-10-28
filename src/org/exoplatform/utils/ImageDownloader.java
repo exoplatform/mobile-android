@@ -286,23 +286,27 @@ public class ImageDownloader {
             if (inputStream != null) {
               inputStream.close();
             }
-            if (outputStream != null) {
-              outputStream.close();
-            }
+//            if (outputStream != null) {
+//              outputStream.close();
+//            }
             entity.consumeContent();
           }
         }
-      } catch (IOException e) {
-        getRequest.abort();
-      } catch (IllegalStateException e) {
-        getRequest.abort();
-      } catch (Exception e) {
-        getRequest.abort();
-      } finally {
-        // if (client != null) {
-        // client.close();
-        // }
       }
+      // catch (IOException e) {
+      // getRequest.abort();
+      // } catch (IllegalStateException e) {
+      // getRequest.abort();
+      // }
+      catch (Exception e) {
+        // getRequest.abort();
+        return null;
+      }
+      // finally {
+      // // if (client != null) {
+      // // client.close();
+      // // }
+      // }
       return null;
     }
 
