@@ -3,5 +3,6 @@
 	android:gravity="center" android:layout_width="wrap_content"
 	android:layout_height="wrap_content">
 	<ImageView android:id="@+id/attached_image_view"
-		android:layout_height="wrap_content" android:layout_width="wrap_content" />
+		android:scaleType="fitXY" android:layout_height="wrap_content"
+		android:layout_width="wrap_content" />
 </LinearLayout>

@@ -8,59 +8,15 @@
 		android:fadingEdge="none">
 		<LinearLayout android:orientation="vertical"
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
-			<LinearLayout android:orientation="horizontal"
+			<!--<org.exoplatform.widget.SocialActivityStreamItem android:id="@+id/social_detail_wrap_layout" 
+				android:layout_width="fill_parent" android:layout_height="wrap_content" /> -->
+			<LinearLayout android:id="@+id/social_detail_wrap_layout"
 				android:paddingTop="5dp" android:paddingLeft="5dp"
 				android:paddingRight="5dp" android:paddingBottom="15dp"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
 				android:background="@drawable/social_activity_detail_message_bg">
 
-				<RelativeLayout android:background="@drawable/bottom_background_shape"
-					android:padding="2.5dp" android:id="@+id/imageView_Avatar_wrap"
-					android:layout_height="45dp" android:layout_width="45dp"
-					android:layout_alignParentLeft="true">
-					<greendroid.widget.AsyncImageView
-						android:scaleType="fitXY" android:layout_centerInParent="true"
-						android:id="@+id/imageView_Avatar" android:layout_height="wrap_content"
-						android:layout_width="wrap_content" />
-					<ImageView android:background="@drawable/activity_avatar_shadow"
-						android:layout_centerInParent="true" android:layout_height="43dip"
-						android:layout_width="43dip" />
-				</RelativeLayout>
-				<LinearLayout android:orientation="vertical"
-					android:layout_weight="1" android:layout_width="fill_parent"
-					android:layout_height="wrap_content">
-					<TextView android:id="@+id/textView_Name" style="@style/textview_name"
-						android:layout_height="wrap_content" android:layout_marginLeft="15dip"
-						android:layout_width="fill_parent" android:textStyle="bold" />
-
-					<TextView android:id="@+id/textView_Message" style="@style/textview_content"
-						android:layout_height="wrap_content" android:layout_marginLeft="15dip"
-						android:layout_marginRight="5dip" android:layout_marginTop="3dip"
-						android:layout_width="fill_parent" />
-					<ViewStub android:id="@+id/attached_image_stub_detail"
-						android:layout_marginTop="10dip" android:layout_marginBottom="3dp"
-						android:padding="5dp" android:layout_gravity="center_horizontal"
-						android:inflatedId="@+id/attached_image_stub_detail_inflate"
-						android:layout="@layout/activity_image_display_layout"
-						android:visibility="gone" android:layout_width="150dp"
-						android:layout_height="90dp" />
-					<LinearLayout android:orientation="horizontal"
-						android:layout_marginLeft="10dp" android:gravity="center_vertical"
-						android:layout_marginTop="7dip" android:layout_marginBottom="3dp"
-						android:layout_width="fill_parent" android:layout_height="wrap_content">
-						<ImageView android:id="@+id/activity_detail_image_type"
-							android:padding="2dp" android:layout_width="wrap_content"
-							android:layout_height="wrap_content" />
-						<TextView android:id="@+id/textView_Time" style="@style/textview_time"
-							android:layout_weight="1" android:layout_marginLeft="5dip"
-							android:layout_height="wrap_content" android:text="about 15 hours ago"
-							android:layout_width="fill_parent" />
-					</LinearLayout>
-
-
-				</LinearLayout>
 			</LinearLayout>
-
 			<RelativeLayout android:id="@+id/relativeLayout_Like"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
 				android:layout_marginTop="-3dip" android:padding="5dp">
