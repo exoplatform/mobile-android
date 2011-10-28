@@ -1,28 +1,25 @@
 package org.exoplatform.controller.social;
 
-import greendroid.widget.AsyncImageView;
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.model.RestActivity;
-import org.exoplatform.social.client.api.model.RestProfile;
-import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.CommentItemLayout;
+import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.text.Html;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -36,15 +33,17 @@ public class SocialDetailController {
 
   private Button               likeButton;
 
-  private AsyncImageView       imageView_Avatar;
+  private LinearLayout         contentDetailLayout;
 
-  private TextView             textView_Name;
-
-  private TextView             textView_Message;
-
-  private TextView             textView_Time;
-
-  private ImageView            typeImageView;
+  // private AsyncImageView imageView_Avatar;
+  //
+  // private TextView textView_Name;
+  //
+  // private TextView textView_Message;
+  //
+  // private TextView textView_Time;
+  //
+  // private ImageView typeImageView;
 
   private TextView             textView_Like_Count;
 
@@ -63,21 +62,13 @@ public class SocialDetailController {
   public SocialDetailController(Context context,
                                 LinearLayout layoutWrap,
                                 Button likeButton,
-                                AsyncImageView imageView_Avatar,
-                                TextView textView_Name,
-                                TextView textView_Message,
-                                TextView textView_Time,
-                                ImageView typeView,
+                                LinearLayout detailLayout,
                                 TextView textView_Like_Count) {
     mContext = context;
     commentLayoutWrap = layoutWrap;
     this.likeButton = likeButton;
-    this.imageView_Avatar = imageView_Avatar;
-    this.textView_Name = textView_Name;
-    this.textView_Message = textView_Message;
-    this.textView_Time = textView_Time;
-    this.typeImageView = typeView;
     this.textView_Like_Count = textView_Like_Count;
+    contentDetailLayout = detailLayout;
     activityId = SocialDetailHelper.getInstance().getActivityId();
     changeLanguage();
   }
@@ -129,35 +120,17 @@ public class SocialDetailController {
 
   }
 
-  public void setComponentInfo(RestProfile profile, String title, String actType, long postedTime) {
+  public void setComponentInfo(SocialActivityInfo streamInfo) {
     boolean liked = SocialDetailHelper.getInstance().getLiked();
     if (liked) {
       likeButton.setBackgroundResource(disLikeDrawable);
     } else
       likeButton.setBackgroundResource(likeDrawable);
-    String avatarUrl = profile.getAvatarUrl();
-    if (avatarUrl == null) {
-      imageView_Avatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
-    } else
-      imageView_Avatar.setUrl(avatarUrl);
-
-    try {
-      String userName = new String(profile.getFullName().getBytes("ISO-8859-1"), "UTF-8");
-      textView_Name.setText(userName);
-    } catch (UnsupportedEncodingException e) {
-
-    }
-
-    textView_Message.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
-    SocialActivityUtil.setTextLinkfy(mContext, textView_Message);
-    int imageId = SocialActivityUtil.getTypeImageId(actType);
-    typeImageView.setImageResource(imageId);
-    
-    textView_Time.setText(SocialActivityUtil.getPostedTimeString(postedTime));
-    String attachedUrl = SocialDetailHelper.getInstance().getAttachedImageUrl();
-    if (attachedUrl != null) {
-      SocialDetailActivity.socialDetailActivity.displayAttachImage(attachedUrl);
-    }
+    LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+    contentDetailLayout.removeAllViews();
+    SocialActivityStreamItem item = new SocialActivityStreamItem(mContext, streamInfo, true);
+    SocialActivityUtil.setTextLinkfy(mContext, item.textViewMessage);
+    contentDetailLayout.addView(item,params);
   }
 
   public void setLikeInfo(LinkedList<SocialLikeInfo> likeLinkedList) {

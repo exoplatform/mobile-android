@@ -1,37 +1,40 @@
 package org.exoplatform.model;
 
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestLike;
 
 public class SocialActivityInfo {
 
-  private String            activityId;
+  private String             activityId;
 
-  private String            userID;
+  private String             userID;
 
-  private String            userName;
+  private String             userName;
 
-  private String            imageUrl;
+  private String             imageUrl;
 
-  private String            title;
+  private String             title;
 
-  private long              postedTime;
+  private long               postedTime;
 
-  private int               nbLikes;
+  private int                nbLikes;
 
-  private int               nbComments;
+  private int                nbComments;
 
-  private String            type;
+  private String             type;
 
-  private String            attachImageUrl;
+  private String             attachImageUrl;
 
-  private String            attachedImageName;
+  private String             attachedImageName;
 
-  private List<RestComment> commentList;
+  public Map<String, String> templateParams;
 
-  private List<RestLike>    likeList;
+  private List<RestComment>  commentList;
+
+  private List<RestLike>     likeList;
 
   public SocialActivityInfo() {
 

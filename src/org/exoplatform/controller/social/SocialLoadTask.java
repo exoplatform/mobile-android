@@ -17,7 +17,6 @@ import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.SocialCache;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -66,7 +65,6 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
   public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
 
     try {
-      SocialCache socialCache = new SocialCache(ExoConstants.CACHE_MAX_NUMBER);
       ArrayList<SocialActivityInfo> listActivity = new ArrayList<SocialActivityInfo>();
       int loadSize = params[0];
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
@@ -102,11 +100,12 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           streamInfo.setLikeNumber(act.getTotalNumberOfLikes());
           streamInfo.setCommentNumber(act.getTotalNumberOfComments());
           streamInfo.setType(act.getType());
-          String docLink = act.getTemplateParameter("DOCLINK");
-          streamInfo.setAttachedImageUrl(docLink);
-          String docName = act.getTemplateParameter("DOCNAME");
-          streamInfo.setAttachedImageName(docName);
-//          socialCache.put(i, streamInfo);
+          streamInfo.templateParams = act.getTemplateParams();
+          // String docLink = act.getTemplateParameter("DOCLINK");
+          // streamInfo.setAttachedImageUrl(docLink);
+          // String docName = act.getTemplateParameter("DOCNAME");
+          // streamInfo.setAttachedImageName(docName);
+          // socialCache.put(i, streamInfo);
           listActivity.add(streamInfo);
         }
       }

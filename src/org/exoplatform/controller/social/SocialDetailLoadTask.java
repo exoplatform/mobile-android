@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -49,13 +50,13 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
   private SocialDetailController       detailController;
 
-  private RestProfile                  profile;
-
   private String                       title;
 
   private String                       activityType;
 
   private long                         postedTime;
+
+  private SocialActivityInfo           streamInfo;
 
   public SocialDetailLoadTask(Context context, SocialDetailController controller) {
     mContext = context;
@@ -83,14 +84,34 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
       selectedRestActivity = activityService.get(activityId, queryParams);
       SocialDetailHelper.getInstance().setLiked(false);
-      profile = selectedRestActivity.getPosterIdentity().getProfile();
-      title = selectedRestActivity.getTitle();
+
+      streamInfo = new SocialActivityInfo();
+      RestProfile restProfile = selectedRestActivity.getPosterIdentity().getProfile();
+      streamInfo.setActivityId(selectedRestActivity.getId());
+      streamInfo.setImageUrl(restProfile.getAvatarUrl());
+      try {
+        String userName = new String(restProfile.getFullName().getBytes("ISO-8859-1"), "UTF-8");
+        streamInfo.setUserName(userName);
+      } catch (UnsupportedEncodingException e) {
+        return null;
+      }
+      streamInfo.setTitle(selectedRestActivity.getTitle());
+      streamInfo.setPostedTime(selectedRestActivity.getPostedTime());
+      streamInfo.setLikeNumber(selectedRestActivity.getTotalNumberOfLikes());
+      streamInfo.setCommentNumber(selectedRestActivity.getTotalNumberOfComments());
       activityType = selectedRestActivity.getType();
-      postedTime = selectedRestActivity.getPostedTime();
+      streamInfo.setType(activityType);
+      streamInfo.templateParams = selectedRestActivity.getTemplateParams();
+//      String docLink = selectedRestActivity.getTemplateParameter("DOCLINK");
+//      streamInfo.setAttachedImageUrl(docLink);
+//      String docName = selectedRestActivity.getTemplateParameter("DOCNAME");
+//      streamInfo.setAttachedImageName(docName);
+
       Map<String, String> templateMap = selectedRestActivity.getTemplateParams();
       Set<String> set = templateMap.keySet();
       for (String param : set) {
-        System.out.println("type: "+activityType +"--template key: " + param + "-- " + templateMap.get(param));
+        System.out.println("type: " + activityType + "--template key: " + param + "-- "
+            + templateMap.get(param));
       }
 
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();
@@ -144,7 +165,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
   @Override
   public void onPostExecute(Integer result) {
     if (result == 1) {
-      detailController.setComponentInfo(profile, title, activityType, postedTime);
+      detailController.setComponentInfo(streamInfo);
       detailController.createCommentList(socialCommentList);
       detailController.setLikeInfo(likeLinkedList);
     } else {

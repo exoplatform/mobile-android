@@ -1,92 +1,215 @@
 package org.exoplatform.widget;
 
-import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
-import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.text.Html;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SocialActivityStreamItem extends LinearLayout {
 
-  private View           view;
+  private LinearLayout       contentLayoutWrap;
 
-  private AsyncImageView imageViewAvatar;
+  private View               view;
 
-  private TextView       textViewName;
+  private AsyncImageView     imageViewAvatar;
 
-  private TextView       textViewMessage;
+  private TextView           textViewName;
 
-  private Button         buttonComment;
+  public TextView            textViewMessage;
 
-  private Button         buttonLike;
+  private Button             buttonComment;
 
-  private ImageView      typeImageView;
+  private Button             buttonLike;
 
-  private TextView       textViewTime;
+  private ImageView          typeImageView;
 
-  private View           attachStubView;
+  private TextView           textViewTime;
 
-  private String         domain;
+  private View               attachStubView;
 
-  private Context        mContext;
+  private String             domain;
 
-  private Bitmap         bitmap;
+  private Context            mContext;
 
-  public SocialActivityStreamItem(Context context, SocialActivityInfo activityInfo) {
+  private SocialActivityInfo activityInfo;
+
+  public SocialActivityStreamItem(Context context, AttributeSet attrs) {
+    super(context, attrs);
+
+  }
+
+  public SocialActivityStreamItem(Context context, SocialActivityInfo info, boolean isDetail) {
     super(context);
     mContext = context;
+    activityInfo = info;
     LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     domain = SocialActivityUtil.getDomain();
     view = inflate.inflate(R.layout.activitybrowserviewcell, this);
     imageViewAvatar = (AsyncImageView) view.findViewById(R.id.imageView_Avatar);
+    contentLayoutWrap = (LinearLayout) view.findViewById(R.id.relativeLayout_Content);
     textViewName = (TextView) view.findViewById(R.id.textView_Name);
     textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
     buttonComment = (Button) view.findViewById(R.id.button_Comment);
     buttonLike = (Button) view.findViewById(R.id.button_Like);
     typeImageView = (ImageView) view.findViewById(R.id.activity_image_type);
     textViewTime = (TextView) view.findViewById(R.id.textView_Time);
+    setDetailView(isDetail);
+    initCommonInfo();
+  }
+
+  private void initCommonInfo() {
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl == null) {
       imageViewAvatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
     } else
       imageViewAvatar.setUrl(avatarUrl);
+    System.out.println("activityInfo.getUserName():" + activityInfo.getUserName());
     textViewName.setText(Html.fromHtml(activityInfo.getUserName()));
-    textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
+    try {
+      String title = new String(activityInfo.getTitle().getBytes("ISO-8859-1"), "UTF-8");
+      System.out.println("title:" + title);
+      textViewMessage.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
+    } catch (UnsupportedEncodingException e) {
+    }
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
-    int imageId = SocialActivityUtil.getTypeImageId(activityInfo.getType());
-    typeImageView.setImageResource(imageId);
-
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
-    String attachUrl = activityInfo.getAttachedImageUrl();
-    if (attachUrl != null) {
-      displayAttachImage(attachUrl);
+    System.out.println("type: " + activityInfo.getType());
+    int imageId = SocialActivityUtil.getActyvityTypeId(activityInfo.getType());
+    SocialActivityUtil.setImageType(imageId, typeImageView);
+    setViewByType(imageId);
+
+  }
+
+  private void setDetailView(boolean is) {
+    if (is) {
+      contentLayoutWrap.setBackgroundDrawable(null);
+      buttonComment.setVisibility(View.GONE);
+      buttonLike.setVisibility(View.GONE);
     }
 
   }
 
-  public void displayAttachImage(String url) {
+  private void setViewByType(int typeId) {
+    switch (typeId) {
+    case 1:
+      setActivityTypeForum();
+      break;
+    case 2:
+      setActivityTypeWiki();
+      break;
+    case 3:
+
+      break;
+    case 4:
+      String docLink = activityInfo.templateParams.get("DOCLINK");
+      if (docLink != null) {
+        displayAttachImage(domain + docLink);
+      }
+      break;
+    case 5:
+
+      break;
+    case 6:
+
+      break;
+    case 7:
+
+      break;
+    case 8:
+
+      break;
+    case 9:
+
+      String contentLink = activityInfo.templateParams.get("contenLink");
+      System.out.println("space =========================" + contentLink);
+      if (contentLink != null) {
+        contentLink = domain + "/rest/private/jcr/" + contentLink;
+        displayAttachImage(contentLink);
+      }
+      break;
+    default:
+      break;
+    }
+  }
+
+  private void setActivityTypeForum() {
+    StringBuffer forumBuffer = new StringBuffer();
+    forumBuffer.append("<html><body>");
+
+    forumBuffer.append(activityInfo.getUserName());
+    forumBuffer.append(" ");
+    String actType = activityInfo.templateParams.get("ActivityType");
+    String actTypeDesc = null;
+    String forumName = null;
+    forumBuffer.append("<font color=\"#696969\">");
+    if (actType.equalsIgnoreCase("AddPost")) {
+      actTypeDesc = LocalizationHelper.getInstance().getString("HasPostedAnewTopic");
+      forumBuffer.append(actTypeDesc);
+      forumName = activityInfo.templateParams.get("PostName");
+    } else if (actType.equalsIgnoreCase("AddTopic")) {
+      actTypeDesc = LocalizationHelper.getInstance().getString("HasAddANewPost");
+      forumBuffer.append(actTypeDesc);
+      forumName = activityInfo.templateParams.get("TopicName");
+    }
+    forumBuffer.append("</font>");
+    forumBuffer.append(" ");
+    forumBuffer.append("<a>");
+    forumBuffer.append(forumName);
+    forumBuffer.append("</a>");
+    forumBuffer.append("</body></html>");
+    textViewName.setText(Html.fromHtml(forumBuffer.toString()));
+  }
+
+  private void setActivityTypeWiki() {
+    StringBuffer buffer = new StringBuffer();
+    buffer.append("<html><body>");
+    buffer.append("<a>");
+    buffer.append(activityInfo.getUserName());
+    buffer.append(" ");
+    buffer.append("</a>");
+    buffer.append("<font color=\"#696969\">");
+    String act_key = activityInfo.templateParams.get("act_key");
+    String act_key_des = null;
+    if (act_key.equalsIgnoreCase("update_page")) {
+      act_key_des = LocalizationHelper.getInstance().getString("HasEditWikiPage");
+      buffer.append(act_key_des);
+    } else if (act_key.equalsIgnoreCase("add_page")) {
+      act_key_des = LocalizationHelper.getInstance().getString("HasCreatWikiPage");
+      buffer.append(act_key_des);
+    }
+    buffer.append("</font>");
+    buffer.append(" ");
+    String page_name = activityInfo.templateParams.get("page_name");
+    buffer.append("<a>");
+    buffer.append(page_name);
+    buffer.append("</a>");
+    buffer.append("</body></html>");
+    textViewName.setText(Html.fromHtml(buffer.toString()));
+  }
+
+  private void displayAttachImage(String url) {
     if (attachStubView == null) {
-      initAttachStubView(domain + url);
+      initAttachStubView(url);
     }
     attachStubView.setVisibility(View.VISIBLE);
   }
@@ -95,13 +218,11 @@ public class SocialActivityStreamItem extends LinearLayout {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
     if (SocialDetailHelper.getInstance().taskIsFinish = true) {
-      SocialDetailHelper.getInstance().imageDownloader.download(url, attachImage,ExoConnectionUtils._strCookie);
+      SocialDetailHelper.getInstance().imageDownloader.download(url,
+                                                                attachImage,
+                                                                ExoConnectionUtils._strCookie);
     }
 
-  }
-
-  public Bitmap getAtttachBitmap() {
-    return bitmap;
   }
 
   public Button likeButton() {

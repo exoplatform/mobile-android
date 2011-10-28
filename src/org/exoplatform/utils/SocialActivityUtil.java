@@ -12,6 +12,7 @@ import android.content.Context;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SocialActivityUtil {
@@ -193,35 +194,67 @@ public class SocialActivityUtil {
     return urlBuffer.toString();
   }
 
-  public static int getTypeImageId(String type) {
+  public static int getActyvityTypeId(String type) {
     if (type != null) {
       if (type.contains("ks-forum:spaces")) {
-        return R.drawable.activity_type_forum;
+        return 1;
       } else if (type.contains("ks-wiki:spaces")) {
-        return R.drawable.activity_type_wiki;
+        return 2;
       } else if (type.contains("exosocial:spaces")) {
-        return R.drawable.activity_type_normal;
+        return 3;
       } else if (type.contains("DOC_ACTIVITY")) {
-        return R.drawable.activity_type_document;
+        return 4;
       } else if (type.contains("DEFAULT_ACTIVITY")) {
-        return R.drawable.activity_type_normal;
+        return 5;
       } else if (type.contains("LINK_ACTIVITY")) {
-        return R.drawable.activity_type_link;
+        return 6;
       } else if (type.contains("exosocial:relationship")) {
-        return R.drawable.activity_type_connection;
+        return 7;
       } else if (type.contains("exosocial:people")) {
-        return R.drawable.activity_type_normal;
+        return 8;
+      } else if (type.contains("contents:spaces")) {
+        return 9;
       } else
-        return R.drawable.activity_type_normal;
+        return 0;
     } else
-      return R.drawable.activity_type_normal;
+      return 0;
   }
 
-  public static void setActivityKinds(int type) {
+  public static void setImageType(int type, ImageView imageView) {
+    int returnType = 0;
     switch (type) {
-    case R.drawable.activity_type_forum:
+    case 0:
+      returnType = R.drawable.activity_type_normal;
+      break;
+    case 1:
+      returnType = R.drawable.activity_type_forum;
+      break;
+    case 2:
+      returnType = R.drawable.activity_type_wiki;
+      break;
+    case 3:
+      returnType = R.drawable.activity_type_normal;
+      break;
+    case 4:
+      returnType = R.drawable.activity_type_document;
+      break;
+    case 5:
+      returnType = R.drawable.activity_type_normal;
+      break;
+    case 6:
+      returnType = R.drawable.activity_type_link;
+      break;
+    case 7:
+      returnType = R.drawable.activity_type_connection;
+      break;
+    case 8:
+      returnType = R.drawable.activity_type_normal;
+      break;
+    case 9:
+      returnType = R.drawable.activity_type_normal;
       break;
     }
+    imageView.setImageResource(returnType);
   }
 
   public static void setTextLinkfy(Context mContext, TextView textView) {

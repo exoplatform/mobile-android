@@ -1,7 +1,5 @@
 package org.exoplatform.utils;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,14 +17,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
 public class ImageDownloader {
@@ -237,21 +233,22 @@ public class ImageDownloader {
       // final AndroidHttpClient client =
       // AndroidHttpClient.newInstance("Android");
       url = params[0];
-      HttpGet getRequest = new HttpGet(url);
-      String cookie = params[1];
-      if (cookie != null) {
-        getRequest.setHeader("cookie", cookie);
-      }
 
-      // HttpEntity entity;
-      // DefaultHttpClient httpClient = new DefaultHttpClient();
-      ExoConnectionUtils.httpClient.getCredentialsProvider()
-                                   .setCredentials(AccountSetting.getInstance().getAuthScope(),
-                                                   AccountSetting.getInstance().getCredentials());
       // HttpGet getRequest = new HttpGet(url);
       // getRequest.setHeader("Cookie", ExoConnectionUtils._strCookie);
-
+      HttpGet getRequest = null;
       try {
+        getRequest = new HttpGet(url);
+        String cookie = params[1];
+        if (cookie != null) {
+          getRequest.setHeader("cookie", cookie);
+        }
+
+        // HttpEntity entity;
+        // DefaultHttpClient httpClient = new DefaultHttpClient();
+        ExoConnectionUtils.httpClient.getCredentialsProvider()
+                                     .setCredentials(AccountSetting.getInstance().getAuthScope(),
+                                                     AccountSetting.getInstance().getCredentials());
         HttpResponse response = ExoConnectionUtils.httpClient.execute(getRequest);
         int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode != HttpStatus.SC_OK) {

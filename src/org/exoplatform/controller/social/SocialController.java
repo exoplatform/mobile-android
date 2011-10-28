@@ -105,7 +105,7 @@ public class SocialController {
         activityStreamWrap.addView(headerLayout, params);
       }
 
-      SocialActivityStreamItem item = new SocialActivityStreamItem(mContext, activityInfo);
+      SocialActivityStreamItem item = new SocialActivityStreamItem(mContext, activityInfo, false);
 
       Button likeButton = item.likeButton();
       likeButton.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +162,7 @@ public class SocialController {
       activityStreamWrap.addView(item, params);
 
     }
-//    System.out.println("result size =   " + result.size());
+    // System.out.println("result size =   " + result.size());
     if (result.size() > number_of_activity || result.size() == number_of_activity) {
       SocialShowMoreItem showmore = new SocialShowMoreItem(mContext);
       showmore.showMoreBtn.setText(showMoreText);
