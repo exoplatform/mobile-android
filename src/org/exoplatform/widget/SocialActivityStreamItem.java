@@ -1,8 +1,10 @@
 package org.exoplatform.widget;
 
-import java.io.UnsupportedEncodingException;
-
 import greendroid.widget.AsyncImageView;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+import java.util.Set;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -21,7 +23,6 @@ import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SocialActivityStreamItem extends LinearLayout {
@@ -35,6 +36,8 @@ public class SocialActivityStreamItem extends LinearLayout {
   private TextView           textViewName;
 
   public TextView            textViewMessage;
+
+  private TextView           textViewCommnet;
 
   private Button             buttonComment;
 
@@ -68,6 +71,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     contentLayoutWrap = (LinearLayout) view.findViewById(R.id.relativeLayout_Content);
     textViewName = (TextView) view.findViewById(R.id.textView_Name);
     textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
+    textViewCommnet = (TextView) view.findViewById(R.id.activity_comment_view);
     buttonComment = (Button) view.findViewById(R.id.button_Comment);
     buttonLike = (Button) view.findViewById(R.id.button_Like);
     typeImageView = (ImageView) view.findViewById(R.id.activity_image_type);
@@ -82,18 +86,15 @@ public class SocialActivityStreamItem extends LinearLayout {
       imageViewAvatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
     } else
       imageViewAvatar.setUrl(avatarUrl);
-    System.out.println("activityInfo.getUserName():" + activityInfo.getUserName());
     textViewName.setText(Html.fromHtml(activityInfo.getUserName()));
     try {
       String title = new String(activityInfo.getTitle().getBytes("ISO-8859-1"), "UTF-8");
-      System.out.println("title:" + title);
       textViewMessage.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
     } catch (UnsupportedEncodingException e) {
     }
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
-    System.out.println("type: " + activityInfo.getType());
     int imageId = SocialActivityUtil.getActyvityTypeId(activityInfo.getType());
     SocialActivityUtil.setImageType(imageId, typeImageView);
     setViewByType(imageId);
@@ -113,9 +114,21 @@ public class SocialActivityStreamItem extends LinearLayout {
     switch (typeId) {
     case 1:
       setActivityTypeForum();
+      Map<String, String> templateMap = activityInfo.templateParams;
+      Set<String> set = templateMap.keySet();
+      for (String param : set) {
+        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+            + templateMap.get(param));
+      }
       break;
     case 2:
       setActivityTypeWiki();
+      /*
+       * Map<String, String> templateMap = activityInfo.templateParams;
+       * Set<String> set = templateMap.keySet(); for (String param : set) {
+       * System.out.println("type: " + activityInfo.getType() +
+       * "--template key: " + param + "-- " + templateMap.get(param)); }
+       */
       break;
     case 3:
 
@@ -131,6 +144,15 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 6:
 
+      String templateComment = activityInfo.templateParams.get("comment");
+      textViewCommnet.setText(templateComment);
+      textViewCommnet.setVisibility(View.VISIBLE);
+
+      String imageParams = activityInfo.templateParams.get("image");
+      if ((imageParams != null) && (imageParams.contains("http"))) {
+        displayAttachImage(imageParams);
+      }
+
       break;
     case 7:
 
@@ -141,7 +163,6 @@ public class SocialActivityStreamItem extends LinearLayout {
     case 9:
 
       String contentLink = activityInfo.templateParams.get("contenLink");
-      System.out.println("space =========================" + contentLink);
       if (contentLink != null) {
         contentLink = domain + "/rest/private/jcr/" + contentLink;
         displayAttachImage(contentLink);
@@ -155,7 +176,6 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void setActivityTypeForum() {
     StringBuffer forumBuffer = new StringBuffer();
     forumBuffer.append("<html><body>");
-
     forumBuffer.append(activityInfo.getUserName());
     forumBuffer.append(" ");
     String actType = activityInfo.templateParams.get("ActivityType");
@@ -163,11 +183,19 @@ public class SocialActivityStreamItem extends LinearLayout {
     String forumName = null;
     forumBuffer.append("<font color=\"#696969\">");
     if (actType.equalsIgnoreCase("AddPost")) {
-      actTypeDesc = LocalizationHelper.getInstance().getString("HasPostedAnewTopic");
+      actTypeDesc = LocalizationHelper.getInstance().getString("HasAddANewPost");
+      forumBuffer.append(actTypeDesc);
+      forumName = activityInfo.templateParams.get("PostName");
+    } else if (actType.equalsIgnoreCase("UpdatePost")) {
+      actTypeDesc = LocalizationHelper.getInstance().getString("HasUpdateANewPost");
       forumBuffer.append(actTypeDesc);
       forumName = activityInfo.templateParams.get("PostName");
     } else if (actType.equalsIgnoreCase("AddTopic")) {
-      actTypeDesc = LocalizationHelper.getInstance().getString("HasAddANewPost");
+      actTypeDesc = LocalizationHelper.getInstance().getString("HasPostedAnewTopic");
+      forumBuffer.append(actTypeDesc);
+      forumName = activityInfo.templateParams.get("TopicName");
+    } else if (actType.equalsIgnoreCase("UpdateTopic")) {
+      actTypeDesc = LocalizationHelper.getInstance().getString("HasUpdateAnewTopic");
       forumBuffer.append(actTypeDesc);
       forumName = activityInfo.templateParams.get("TopicName");
     }

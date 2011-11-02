@@ -102,17 +102,13 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       activityType = selectedRestActivity.getType();
       streamInfo.setType(activityType);
       streamInfo.templateParams = selectedRestActivity.getTemplateParams();
-//      String docLink = selectedRestActivity.getTemplateParameter("DOCLINK");
-//      streamInfo.setAttachedImageUrl(docLink);
-//      String docName = selectedRestActivity.getTemplateParameter("DOCNAME");
-//      streamInfo.setAttachedImageName(docName);
 
-      Map<String, String> templateMap = selectedRestActivity.getTemplateParams();
+     /* Map<String, String> templateMap = selectedRestActivity.getTemplateParams();
       Set<String> set = templateMap.keySet();
       for (String param : set) {
         System.out.println("type: " + activityType + "--template key: " + param + "-- "
             + templateMap.get(param));
-      }
+      }*/
 
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();

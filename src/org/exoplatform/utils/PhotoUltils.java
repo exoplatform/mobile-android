@@ -126,6 +126,7 @@ public class PhotoUltils {
     bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
     return bitmap;
   }
+
   public static Bitmap reflectionPhoto(Bitmap originalImage) {
     // The gap we want between the reflection and the original image
     final int reflectionGap = 4;
@@ -139,12 +140,18 @@ public class PhotoUltils {
 
     // Create a Bitmap with the flip matix applied to it.
     // We only want the bottom half of the image
-    Bitmap reflectionImage = Bitmap.createBitmap(originalImage, 0,
-        height / 2, width, height / 2, matrix, false);
+    Bitmap reflectionImage = Bitmap.createBitmap(originalImage,
+                                                 0,
+                                                 height / 2,
+                                                 width,
+                                                 height / 2,
+                                                 matrix,
+                                                 false);
 
     // Create a new bitmap with same width but taller to fit reflection
     Bitmap bitmapWithReflection = Bitmap.createBitmap(width,
-        (height + height / 2), Config.ARGB_8888);
+                                                      (height + height / 2),
+                                                      Config.ARGB_8888);
 
     // Create a new Canvas with the bitmap that's big enough for
     // the image plus gap plus reflection
@@ -153,28 +160,29 @@ public class PhotoUltils {
     canvas.drawBitmap(originalImage, 0, 0, null);
     // Draw in the gap
     Paint deafaultPaint = new Paint();
-    canvas
-        .drawRect(0, height, width, height + reflectionGap,
-            deafaultPaint);
+    canvas.drawRect(0, height, width, height + reflectionGap, deafaultPaint);
     // Draw in the reflection
     canvas.drawBitmap(reflectionImage, 0, height + reflectionGap, null);
 
     // Create a shader that is a linear gradient that covers the reflection
     Paint paint = new Paint();
     LinearGradient shader = new LinearGradient(0,
-        originalImage.getHeight(), 0, bitmapWithReflection.getHeight()
-            + reflectionGap, 0x70ffffff, 0x00ffffff, TileMode.CLAMP);
+                                               originalImage.getHeight(),
+                                               0,
+                                               bitmapWithReflection.getHeight() + reflectionGap,
+                                               0x70ffffff,
+                                               0x00ffffff,
+                                               TileMode.CLAMP);
     // Set the paint to use this shader (linear gradient)
     paint.setShader(shader);
     // Set the Transfer mode to be porter duff and destination in
     paint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
     // Draw a rectangle using the paint with our linear gradient
-    canvas.drawRect(0, height, width, bitmapWithReflection.getHeight()
-        + reflectionGap, paint);
+    canvas.drawRect(0, height, width, bitmapWithReflection.getHeight() + reflectionGap, paint);
 
     return bitmapWithReflection;
   }
-    
+
   public static Set<File> getImageFolder(File directory, FilenameFilter[] filter, int recurse) {
     Set<File> files = new HashSet<File>();
 
@@ -183,7 +191,7 @@ public class PhotoUltils {
     if (entries != null) {
       for (File entry : entries) {
         if (entry.getName().startsWith(".")) {
-//          break;
+          // break;
         } else {
           for (FilenameFilter filefilter : filter) {
             if (filter == null || filefilter.accept(directory, entry.getName())) {
@@ -204,8 +212,8 @@ public class PhotoUltils {
   }
 
   public static ArrayList<SocialPhotoInfo> listFileToArray(File directory,
-                                                     FilenameFilter[] filter,
-                                                     int recurse) {
+                                                           FilenameFilter[] filter,
+                                                           int recurse) {
     ArrayList<SocialPhotoInfo> list = new ArrayList<SocialPhotoInfo>();
     Set<File> collection = getImageFolder(directory, filter, recurse);
     for (File file : collection) {
@@ -230,6 +238,32 @@ public class PhotoUltils {
 
   }
 
-  
+  public static Bitmap resizeImage(Bitmap originalImage, int newW) {
+
+    Bitmap resizedBitmap = null;
+
+    int width = originalImage.getWidth();
+
+    if (width >= newW) {
+
+      int height = originalImage.getHeight();
+
+      float scaleWidth = ((float) newW) / width;
+
+      float scaleHeight = scaleWidth;
+
+      Matrix matrix = new Matrix();
+
+      matrix.postScale(scaleWidth, scaleHeight);
+
+      resizedBitmap = Bitmap.createBitmap(originalImage, 0, 0,
+
+      width, height, matrix, true);
+
+    } else
+      return originalImage;
+    return resizedBitmap;
+
+  }
 
 }
