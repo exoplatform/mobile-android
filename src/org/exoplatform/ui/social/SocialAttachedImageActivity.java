@@ -38,14 +38,13 @@ public class SocialAttachedImageActivity extends MyActionBar implements OnClickL
     onChangeLanguage();
     String imageName = SocialDetailHelper.getInstance().getAttachedImageName();
     setTitle(imageName);
-    imageUrl = SocialActivityUtil.getDomain()
-        + SocialDetailHelper.getInstance().getAttachedImageUrl();
+    imageUrl = SocialDetailHelper.getInstance().getAttachedImageUrl();
     init();
   }
 
   private void init() {
     imageView = (ImageView) findViewById(R.id.social_attached_image_view);
-    SocialDetailHelper.getInstance().imageDownloader.download(imageUrl, imageView);
+    SocialDetailHelper.getInstance().imageDownloader.download(imageUrl, imageView,ExoConnectionUtils._strCookie);
     okButton = (Button) findViewById(R.id.social_attached_image_ok_button);
     okButton.setText(okText);
     okButton.setOnClickListener(this);

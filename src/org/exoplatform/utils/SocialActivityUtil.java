@@ -194,7 +194,7 @@ public class SocialActivityUtil {
     return urlBuffer.toString();
   }
 
-  public static int getActyvityTypeId(String type) {
+  public static int getActivityTypeId(String type) {
     if (type != null) {
       if (type.contains("ks-forum:spaces")) {
         return 1;

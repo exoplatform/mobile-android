@@ -10,11 +10,13 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -55,15 +57,18 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private SocialActivityInfo activityInfo;
 
+  private boolean            isDetail;
+
   public SocialActivityStreamItem(Context context, AttributeSet attrs) {
     super(context, attrs);
 
   }
 
-  public SocialActivityStreamItem(Context context, SocialActivityInfo info, boolean isDetail) {
+  public SocialActivityStreamItem(Context context, SocialActivityInfo info, boolean is) {
     super(context);
     mContext = context;
     activityInfo = info;
+    isDetail = is;
     LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     domain = SocialActivityUtil.getDomain();
     view = inflate.inflate(R.layout.activitybrowserviewcell, this);
@@ -76,7 +81,8 @@ public class SocialActivityStreamItem extends LinearLayout {
     buttonLike = (Button) view.findViewById(R.id.button_Like);
     typeImageView = (ImageView) view.findViewById(R.id.activity_image_type);
     textViewTime = (TextView) view.findViewById(R.id.textView_Time);
-    setDetailView(isDetail);
+
+    setDetailView();
     initCommonInfo();
   }
 
@@ -95,15 +101,16 @@ public class SocialActivityStreamItem extends LinearLayout {
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
-    int imageId = SocialActivityUtil.getActyvityTypeId(activityInfo.getType());
+    int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());
     SocialActivityUtil.setImageType(imageId, typeImageView);
     setViewByType(imageId);
 
   }
 
-  private void setDetailView(boolean is) {
-    if (is) {
+  private void setDetailView() {
+    if (isDetail) {
       contentLayoutWrap.setBackgroundDrawable(null);
+      contentLayoutWrap.setPadding(5, -2, 5, 5);
       buttonComment.setVisibility(View.GONE);
       buttonLike.setVisibility(View.GONE);
     }
@@ -114,12 +121,13 @@ public class SocialActivityStreamItem extends LinearLayout {
     switch (typeId) {
     case 1:
       setActivityTypeForum();
-      Map<String, String> templateMap = activityInfo.templateParams;
-      Set<String> set = templateMap.keySet();
-      for (String param : set) {
-        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-            + templateMap.get(param));
-      }
+      // Map<String, String> templateMap = activityInfo.templateParams;
+      // Set<String> set = templateMap.keySet();
+      // for (String param : set) {
+      // System.out.println("type: " + activityInfo.getType() +
+      // "--template key: " + param + "-- "
+      // + templateMap.get(param));
+      // }
       break;
     case 2:
       setActivityTypeWiki();
@@ -140,6 +148,12 @@ public class SocialActivityStreamItem extends LinearLayout {
       }
       break;
     case 5:
+      Map<String, String> templateMap = activityInfo.templateParams;
+      Set<String> set = templateMap.keySet();
+      for (String param : set) {
+        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+            + templateMap.get(param));
+      }
 
       break;
     case 6:
@@ -158,7 +172,13 @@ public class SocialActivityStreamItem extends LinearLayout {
 
       break;
     case 8:
-
+      // Map<String, String> templateMap = activityInfo.templateParams;
+      // Set<String> set = templateMap.keySet();
+      // for (String param : set) {
+      // System.out.println("type: " + activityInfo.getType() +
+      // "--template key: " + param + "-- "
+      // + templateMap.get(param));
+      // }
       break;
     case 9:
 
@@ -249,6 +269,17 @@ public class SocialActivityStreamItem extends LinearLayout {
       SocialDetailHelper.getInstance().imageDownloader.download(url,
                                                                 attachImage,
                                                                 ExoConnectionUtils._strCookie);
+      if (isDetail) {
+        attachImage.setOnClickListener(new OnClickListener() {
+
+          @Override
+          public void onClick(View v) {
+            SocialDetailHelper.getInstance().setAttachedImageUrl(url);
+            Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);
+            mContext.startActivity(intent);
+          }
+        });
+      }
     }
 
   }

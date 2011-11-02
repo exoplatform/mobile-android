@@ -26,7 +26,6 @@ import android.os.Handler;
 import android.widget.ImageView;
 
 public class ImageDownloader {
-  private static final String                                           LOG_TAG             = "ImageDownloader";
 
   private static final int                                              HARD_CACHE_CAPACITY = 80;
 
@@ -34,7 +33,6 @@ public class ImageDownloader {
 
   // in
   // milliseconds
-  private BitmapDownloaderTask                                          mLoadTask;
 
   // Hard cache, with a fixed maximum capacity and a life duration
   private final HashMap<String, Bitmap>                                 sHardBitmapCache    = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2,
@@ -230,12 +228,8 @@ public class ImageDownloader {
      */
     @Override
     public Bitmap doInBackground(String... params) {
-      // final AndroidHttpClient client =
-      // AndroidHttpClient.newInstance("Android");
       url = params[0];
 
-      // HttpGet getRequest = new HttpGet(url);
-      // getRequest.setHeader("Cookie", ExoConnectionUtils._strCookie);
       HttpGet getRequest = null;
       try {
         getRequest = new HttpGet(url);
@@ -244,8 +238,6 @@ public class ImageDownloader {
           getRequest.setHeader("cookie", cookie);
         }
 
-        // HttpEntity entity;
-        // DefaultHttpClient httpClient = new DefaultHttpClient();
         ExoConnectionUtils.httpClient.getCredentialsProvider()
                                      .setCredentials(AccountSetting.getInstance().getAuthScope(),
                                                      AccountSetting.getInstance().getCredentials());
@@ -258,27 +250,13 @@ public class ImageDownloader {
         HttpEntity entity = response.getEntity();
         if (entity != null) {
           InputStream inputStream = null;
-          OutputStream outputStream = null;
           try {
             inputStream = entity.getContent();
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 4;
-            // ByteArrayOutputStream dataStream = new ByteArrayOutputStream();
-            // outputStream = new BufferedOutputStream(dataStream,
-            // IO_BUFFER_SIZE);
-            // copy(inputStream, outputStream);
-            // outputStream.flush();
-            //
-            // byte[] data = dataStream.toByteArray();
-            //
-            // return BitmapFactory.decodeByteArray(data, 0, data.length,
-            // options);
-            // FIXME : Should use BitmapFactory.decodeStream(inputStream)
-            // instead.
 
-            return BitmapFactory.decodeStream(inputStream, null, options);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            bitmap = PhotoUltils.resizeImage(bitmap, 350);
 
-            // return bitmap;
+            return bitmap;
 
           } catch (RuntimeException e) {
             return null;
@@ -286,27 +264,12 @@ public class ImageDownloader {
             if (inputStream != null) {
               inputStream.close();
             }
-//            if (outputStream != null) {
-//              outputStream.close();
-//            }
             entity.consumeContent();
           }
         }
-      }
-      // catch (IOException e) {
-      // getRequest.abort();
-      // } catch (IllegalStateException e) {
-      // getRequest.abort();
-      // }
-      catch (Exception e) {
-        // getRequest.abort();
+      } catch (Exception e) {
         return null;
       }
-      // finally {
-      // // if (client != null) {
-      // // client.close();
-      // // }
-      // }
       return null;
     }
 
