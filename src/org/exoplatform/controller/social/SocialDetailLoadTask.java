@@ -89,26 +89,22 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       RestProfile restProfile = selectedRestActivity.getPosterIdentity().getProfile();
       streamInfo.setActivityId(selectedRestActivity.getId());
       streamInfo.setImageUrl(restProfile.getAvatarUrl());
-      try {
-        String userName = new String(restProfile.getFullName().getBytes("ISO-8859-1"), "UTF-8");
-        streamInfo.setUserName(userName);
-      } catch (UnsupportedEncodingException e) {
-        return null;
-      }
+      streamInfo.setUserName(restProfile.getFullName());
       streamInfo.setTitle(selectedRestActivity.getTitle());
       streamInfo.setPostedTime(selectedRestActivity.getPostedTime());
       streamInfo.setLikeNumber(selectedRestActivity.getTotalNumberOfLikes());
       streamInfo.setCommentNumber(selectedRestActivity.getTotalNumberOfComments());
       activityType = selectedRestActivity.getType();
       streamInfo.setType(activityType);
+      System.out.println("activityType: "+activityType);
       streamInfo.templateParams = selectedRestActivity.getTemplateParams();
 
-     /* Map<String, String> templateMap = selectedRestActivity.getTemplateParams();
+      Map<String, String> templateMap = selectedRestActivity.getTemplateParams();
       Set<String> set = templateMap.keySet();
       for (String param : set) {
         System.out.println("type: " + activityType + "--template key: " + param + "-- "
             + templateMap.get(param));
-      }*/
+      }
 
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();

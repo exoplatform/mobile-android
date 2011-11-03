@@ -147,7 +147,7 @@ public class SocialController {
         }
       });
 
-      item.setOnClickListener(new OnClickListener() {
+      item.contentLayoutWrap.setOnClickListener(new OnClickListener() {
 
         public void onClick(View v) {
           String activityId = activityInfo.getActivityId();

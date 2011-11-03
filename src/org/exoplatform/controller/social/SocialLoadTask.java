@@ -89,23 +89,13 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           profile = act.getPosterIdentity().getProfile();
           streamInfo.setActivityId(act.getId());
           streamInfo.setImageUrl(profile.getAvatarUrl());
-          try {
-            String userName = new String(profile.getFullName().getBytes("ISO-8859-1"), "UTF-8");
-            streamInfo.setUserName(userName);
-          } catch (UnsupportedEncodingException e) {
-            return null;
-          }
+          streamInfo.setUserName(profile.getFullName());
           streamInfo.setTitle(act.getTitle());
           streamInfo.setPostedTime(act.getPostedTime());
           streamInfo.setLikeNumber(act.getTotalNumberOfLikes());
           streamInfo.setCommentNumber(act.getTotalNumberOfComments());
           streamInfo.setType(act.getType());
           streamInfo.templateParams = act.getTemplateParams();
-          // String docLink = act.getTemplateParameter("DOCLINK");
-          // streamInfo.setAttachedImageUrl(docLink);
-          // String docName = act.getTemplateParameter("DOCNAME");
-          // streamInfo.setAttachedImageName(docName);
-          // socialCache.put(i, streamInfo);
           listActivity.add(streamInfo);
         }
       }

@@ -12,7 +12,7 @@ import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
-import android.util.Log;
+//import android.util.Log;
 import android.view.View;
 
 public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
@@ -117,7 +117,6 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   @Override
   public void onPostExecute(Boolean result) {
-    Log.i("DocumentLoadTask", "" + _documentList.size());
     if (result) {
       if (_documentList.size() == 0) {
         documentActivity.setEmptyView(View.VISIBLE);

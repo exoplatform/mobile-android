@@ -1,8 +1,6 @@
 package org.exoplatform.controller.document;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
