@@ -4,13 +4,6 @@
 	android:id="@+id/RelativeLayout_Activity_Streams" android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
 
-	<!--<RelativeLayout android:id="@+id/imageView_Avatar_wrap" android:layout_height="wrap_content" 
-		android:layout_width="wrap_content" android:layout_marginLeft="5dp" android:layout_alignParentLeft="true"> 
-		<greendroid.widget.AsyncImageView android:background="@drawable/bottom_background_shape" 
-		android:scaleType="fitXY" android:id="@+id/imageView_Avatar" android:layout_height="43dp" 
-		android:layout_width="43dp" /> <ImageView android:background="@drawable/activity_avatar_shadow" 
-		android:layout_centerInParent="true" android:layout_height="fill_parent" 
-		android:layout_width="fill_parent" /> </RelativeLayout> -->
 	<greendroid.widget.AsyncImageView
 		android:padding="-0.5dp" android:layout_marginLeft="5dp"
 		android:layout_alignParentLeft="true" android:background="@drawable/bottom_background_shape"

@@ -36,7 +36,7 @@
 				<LinearLayout android:background="@drawable/activity_detail_like_comment_separator"
 					android:layout_marginTop="5dp" android:layout_marginLeft="10dp"
 					android:layout_marginRight="10dp" android:layout_width="fill_parent"
-					android:layout_height="wrap_content">
+					android:layout_height="0.5dp">
 				</LinearLayout>
 
 				<LinearLayout android:id="@+id/activity_display_comment_wrap"
