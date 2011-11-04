@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/widget44" android:layout_width="wrap_content"
-	android:layout_height="wrap_content" android:orientation="vertical"
-	android:gravity="center_horizontal">
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:orientation="vertical" android:gravity="center_horizontal"
+	android:padding="3dp">
 	<ImageView android:layout_marginTop="20dp" android:id="@+id/icon_image"
 		android:background="@drawable/homedashboardiconiphone"
 		android:layout_width="wrap_content" android:layout_height="wrap_content" />

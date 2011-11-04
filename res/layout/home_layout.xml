@@ -10,10 +10,10 @@
 		android:layout_marginTop="5dip" android:layout_width="wrap_content"
 		android:layout_height="34dip" android:text="Done" android:visibility="invisible" />
 
-	<GridView android:id="@+id/gridView1"
+	<GridView android:id="@+id/gridView1" android:listSelector="@drawable/home_item_background_shape"
 		android:layout_marginTop="5dip" android:layout_width="fill_parent"
 		android:layout_weight="1" android:layout_height="fill_parent"
-		android:stretchMode="columnWidth" android:columnWidth="90dip"
+		android:columnWidth="90dp" android:stretchMode="columnWidth"
 		android:numColumns="auto_fit" />
 
 </RelativeLayout>
