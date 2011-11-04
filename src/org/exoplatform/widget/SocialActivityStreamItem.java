@@ -33,7 +33,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private View               view;
 
-  private AsyncImageView     imageViewAvatar;
+  private RoundedImageView     imageViewAvatar;
 
   private TextView           textViewName;
 
@@ -72,7 +72,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     domain = SocialActivityUtil.getDomain();
     view = inflate.inflate(R.layout.activitybrowserviewcell, this);
-    imageViewAvatar = (AsyncImageView) view.findViewById(R.id.imageView_Avatar);
+    imageViewAvatar = (RoundedImageView) view.findViewById(R.id.imageView_Avatar);
     imageViewAvatar.setDefaultImageResource(R.drawable.default_avatar);
     contentLayoutWrap = (LinearLayout) view.findViewById(R.id.relativeLayout_Content);
     textViewName = (TextView) view.findViewById(R.id.textView_Name);

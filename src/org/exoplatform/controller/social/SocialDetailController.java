@@ -58,6 +58,8 @@ public class SocialDetailController {
   private String               okString;
 
   private String               titleString;
+  
+  private String likeErrorString;
 
   public SocialDetailController(Context context,
                                 LinearLayout layoutWrap,
@@ -152,7 +154,7 @@ public class SocialDetailController {
       }
       onLoad();
     } catch (RuntimeException e) {
-      WarningDialog dialog = new WarningDialog(mContext, titleString, e.toString(), okString);
+      WarningDialog dialog = new WarningDialog(mContext, titleString, likeErrorString, okString);
       dialog.show();
     }
   }
@@ -161,6 +163,7 @@ public class SocialDetailController {
     LocalizationHelper location = LocalizationHelper.getInstance();
     okString = location.getString("OK");
     titleString = location.getString("Warning");
+    likeErrorString = location.getString("ErrorOnLike");
 
   }
 }
