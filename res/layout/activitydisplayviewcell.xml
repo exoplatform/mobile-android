@@ -2,16 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:padding="4dp" android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
-
-	<greendroid.widget.AsyncImageView
-		android:padding="-0.5dp" android:layout_marginLeft="5dp"
+	<FrameLayout android:layout_marginLeft="5dp"
+		android:id="@+id/imageView_Avatar_wrap"
 		android:layout_alignParentLeft="true" android:background="@drawable/bottom_background_shape"
-		android:scaleType="fitXY" android:id="@+id/imageView_Avatar"
-		android:layout_height="43dp" android:layout_width="43dp" />
-
+		android:layout_height="43dp" android:layout_width="43dp">
+		<org.exoplatform.widget.RoundedImageView
+			android:scaleType="centerCrop" android:id="@+id/imageView_Avatar"
+			android:layout_height="fill_parent" android:layout_width="fill_parent" />
+	</FrameLayout>
 	<RelativeLayout android:id="@+id/relativeLayout_Content"
 		android:padding="3dp" android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:layout_toRightOf="@id/imageView_Avatar"
+		android:layout_width="fill_parent" android:layout_toRightOf="@id/imageView_Avatar_wrap"
 		android:background="@drawable/news_browser_background_shape">
 		<TextView android:id="@+id/textView_Name" style="@style/textview_name"
 			android:layout_height="wrap_content" android:text="Name"

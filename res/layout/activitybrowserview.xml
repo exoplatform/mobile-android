@@ -7,8 +7,8 @@
 		android:inflatedId="@+id/social_empty_stub_inflted" android:layout="@layout/empty_screen"
 		android:visibility="gone" android:layout_centerInParent="true"
 		android:layout_width="wrap_content" android:layout_height="wrap_content" />
-	<ScrollView android:fadingEdge="none" android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
+	<ScrollView android:fadingEdge="none" android:background="@drawable/home_background"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
 		<LinearLayout android:id="@+id/activity_stream_wrap"
 			android:orientation="vertical" android:layout_width="fill_parent"
 			android:layout_height="fill_parent">
