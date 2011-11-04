@@ -60,10 +60,18 @@ public class DashboardController {
     {
       JSONObject json = (JSONObject) obj;
       
-      String id = json.get("id").toString();
-      String html = json.get("html").toString();
-      String link = json.get("link").toString();
-      String label = json.get("label").toString();
+      String id = "";
+      String html = "";
+      String link = "";
+      String label = "";
+      if(json.get("id") != null)
+        id = json.get("id").toString();
+      if(json.get("html") != null)
+        html = json.get("html").toString();
+      if(json.get("link") != null)
+        link = json.get("link").toString();
+      if(json.get("label") != null)
+        label = json.get("label").toString();
       
       DashboardItem dashboardItem = new DashboardItem(id, html, link, label);
 
@@ -90,10 +98,19 @@ public class DashboardController {
       {
         JSONObject json = (JSONObject) obj;
         
-        String gadgetIcon = json.get("gadgetIcon").toString();
-        String gadgetUrl = json.get("gadgetUrl").toString();
-        String gadgetName = json.get("gadgetName").toString();
-        String gadgetDescription = json.get("gadgetDescription").toString();
+        String gadgetIcon = "";
+        String gadgetUrl = "";
+        String gadgetName = "";
+        String gadgetDescription = "";
+        
+        if(json.get("gadgetIcon") != null)
+          gadgetIcon = json.get("gadgetIcon").toString();
+        if(json.get("gadgetUrl") != null)
+        gadgetUrl = json.get("gadgetUrl").toString();
+        if(json.get("gadgetName") != null)
+          gadgetName = json.get("gadgetName").toString();
+        if(json.get("gadgetDescription") != null)
+          gadgetDescription = json.get("gadgetDescription").toString();
         
         GadgetInfo gadget = new GadgetInfo(gadgetName, gadgetDescription, gadgetUrl, gadgetIcon, null, count);
 
