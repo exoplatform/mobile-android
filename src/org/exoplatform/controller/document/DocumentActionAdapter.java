@@ -82,7 +82,7 @@ public class DocumentActionAdapter extends BaseAdapter {
           _fileCopied = null;
         } else if (pos == 3 || pos == 4) {
 
-          if (pos == 3)// Delete file, folder
+          if (pos == 4)// Delete file, folder
           {
             _fileCopied = null;
             _fileMoved = null;
