@@ -73,6 +73,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     domain = SocialActivityUtil.getDomain();
     view = inflate.inflate(R.layout.activitybrowserviewcell, this);
     imageViewAvatar = (AsyncImageView) view.findViewById(R.id.imageView_Avatar);
+    imageViewAvatar.setDefaultImageResource(R.drawable.default_avatar);
     contentLayoutWrap = (LinearLayout) view.findViewById(R.id.relativeLayout_Content);
     textViewName = (TextView) view.findViewById(R.id.textView_Name);
     textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
