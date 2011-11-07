@@ -33,8 +33,8 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
   private String                 contentString;
 
   private DashboardWaitingDialog _progressDialog;
-  
-  private boolean               canWorkWithDashboardService;
+
+  private boolean                canWorkWithDashboardService;
 
   public DashboardLoadTask(DashboardActivity context, DashboardController controller) {
     dashboardActivity = context;
@@ -50,62 +50,62 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
 
   @Override
   public ArrayList<DashboardItem> doInBackground(Void... params) {
-    
+
     HttpResponse response;
     canWorkWithDashboardService = true;
     try {
-      
+
       WebdavMethod copy = new WebdavMethod("HEAD", AccountSetting.getInstance().getDomainName());
       response = ExoConnectionUtils.httpClient.execute(copy);
-      
+
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return dashboardController.getDashboards();
       }
-      
+
     } catch (Exception e) {
-      
-      if(e instanceof SocketTimeoutException)
+
+      if (e instanceof SocketTimeoutException)
         canWorkWithDashboardService = true;
       else
         canWorkWithDashboardService = false;
-      
+
       return null;
     }
-    
+
     return null;
   }
 
   @Override
   public void onPostExecute(ArrayList<DashboardItem> result) {
     if (result != null) {
+      System.out.println("dashboard------- " + result.size());
       if (result.size() == 0) {
         dashboardActivity.setEmptyView(View.VISIBLE);
       } else {
         ArrayList<GadgetInfo> items = new ArrayList<GadgetInfo>();
         for (int i = 0; i < result.size(); i++) {
           DashboardItem gadgetTab = result.get(i);
-          
+
           List<GadgetInfo> gadgets = dashboardController.getGadgetInTab(gadgetTab.link);
-          if(gadgets != null && gadgets.size() > 0)
-          {
+          if (gadgets != null && gadgets.size() > 0) {
             items.add(new GadgetInfo(gadgetTab.label));
             items.addAll(gadgets);
           }
-          
+
         }
-        
+
         dashboardController.setAdapter(items);
         dashboardActivity.setEmptyView(View.GONE);
       }
 
     } else {
-      
-      if(canWorkWithDashboardService)
+
+      if (canWorkWithDashboardService)
         contentString = LocalizationHelper.getInstance().getString("ConnectionError");
       else
         contentString = LocalizationHelper.getInstance().getString("CompliantMessage");
-        
+
       WarningDialog dialog = new WarningDialog(dashboardActivity,
                                                titleString,
                                                contentString,

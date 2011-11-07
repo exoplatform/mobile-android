@@ -141,6 +141,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     ImageView emptyImage = (ImageView) emptyCommentStubView.findViewById(R.id.empty_image);
     emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
     TextView emptyStatus = (TextView) emptyCommentStubView.findViewById(R.id.empty_status);
+    emptyStatus.setTextSize(14);
     emptyStatus.setText(commentEmptyString);
   }
 

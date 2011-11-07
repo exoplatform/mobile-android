@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 public class DashboardController {
 
-  private DashboardActivity           activity;
+  private DashboardActivity activity;
 
   private DashboardLoadTask mLoadTask;
 
@@ -26,7 +26,7 @@ public class DashboardController {
   }
 
   public void onLoad() {
-    
+
     if (mLoadTask == null || mLoadTask.getStatus() == DashboardLoadTask.Status.FINISHED) {
       mLoadTask = (DashboardLoadTask) new DashboardLoadTask(activity, this).execute();
     }
@@ -40,93 +40,94 @@ public class DashboardController {
     }
   }
 
-  
   public void setAdapter(ArrayList<GadgetInfo> result) {
     listView.setAdapter(new DashboardItemAdapter(activity, result));
   }
 
-//  Get Dashboards
+  // Get Dashboards
   public ArrayList<DashboardItem> getDashboards() {
-  
+
     AccountSetting acc = AccountSetting.getInstance();
     String urlForDahboards = acc.getDomainName() + ExoConstants.DASHBOARD_PATH;
     String result = ExoConnectionUtils.convertStreamToString(ExoConnectionUtils.sendRequestWithAuthorization(urlForDahboards));
-    
+    System.out.println("result ====" + result);
     ArrayList<DashboardItem> dashboards = new ArrayList<DashboardItem>();
-    
-    JSONArray array=(JSONArray)JSONValue.parse(result);
-    
-    for(Object obj : array)
-    {
+
+    JSONArray array = (JSONArray) JSONValue.parse(result);
+
+    for (Object obj : array) {
       JSONObject json = (JSONObject) obj;
-      
+      System.out.println("JSONObject " + json.toJSONString());
       String id = "";
       String html = "";
       String link = "";
       String label = "";
-      if(json.get("id") != null)
+      if (json.get("id") != null)
         id = json.get("id").toString();
-      if(json.get("html") != null)
+      if (json.get("html") != null)
         html = json.get("html").toString();
-      if(json.get("link") != null)
+      if (json.get("link") != null)
         link = json.get("link").toString();
-      if(json.get("label") != null)
+      if (json.get("label") != null)
         label = json.get("label").toString();
-      
+
       DashboardItem dashboardItem = new DashboardItem(id, html, link, label);
 
       dashboards.add(dashboardItem);
     }
-    
+
     return dashboards;
-    
+
   }
-  
-//  Get Gadget in Dashboard
+
+  // Get Gadget in Dashboard
   public ArrayList<GadgetInfo> getGadgetInTab(String url) {
-    
+
     try {
-      
-      String result = ExoConnectionUtils.convertStreamToString(ExoConnectionUtils.sendRequestWithAuthorization(url));    
+
+      String result = ExoConnectionUtils.convertStreamToString(ExoConnectionUtils.sendRequestWithAuthorization(url));
       ArrayList<GadgetInfo> gadgets = new ArrayList<GadgetInfo>();
-      
-      JSONArray array=(JSONArray)JSONValue.parse(result);
-      
+
+      JSONArray array = (JSONArray) JSONValue.parse(result);
+
       int count = 0;
-      
-      for(Object obj : array)
-      {
+
+      for (Object obj : array) {
         JSONObject json = (JSONObject) obj;
-        
+
         String gadgetIcon = "";
         String gadgetUrl = "";
         String gadgetName = "";
         String gadgetDescription = "";
-        
-        if(json.get("gadgetIcon") != null)
+
+        if (json.get("gadgetIcon") != null)
           gadgetIcon = json.get("gadgetIcon").toString();
-        if(json.get("gadgetUrl") != null)
-        gadgetUrl = json.get("gadgetUrl").toString();
-        if(json.get("gadgetName") != null)
+        if (json.get("gadgetUrl") != null)
+          gadgetUrl = json.get("gadgetUrl").toString();
+        if (json.get("gadgetName") != null)
           gadgetName = json.get("gadgetName").toString();
-        if(json.get("gadgetDescription") != null)
+        if (json.get("gadgetDescription") != null)
           gadgetDescription = json.get("gadgetDescription").toString();
-        
-        GadgetInfo gadget = new GadgetInfo(gadgetName, gadgetDescription, gadgetUrl, gadgetIcon, null, count);
+
+        GadgetInfo gadget = new GadgetInfo(gadgetName,
+                                           gadgetDescription,
+                                           gadgetUrl,
+                                           gadgetIcon,
+                                           null,
+                                           count);
 
         gadgets.add(gadget);
-        
+
         count++;
-        
+
       }
-      
+
       return gadgets;
-      
+
     } catch (Exception e) {
       return null;
     }
 
   }
-  
 
 }

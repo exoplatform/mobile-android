@@ -13,6 +13,7 @@ import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.RoundedImageView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -138,7 +139,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
          convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellsingle);
       }
 
-      AsyncImageView imageViewAvatar = (AsyncImageView) convertView.findViewById(R.id.gadget_image);
+      RoundedImageView imageViewAvatar = (RoundedImageView) convertView.findViewById(R.id.gadget_image);
       imageViewAvatar.setUrl(inforGadget.getStrGadgetIcon());
       TextView textViewName = (TextView) convertView.findViewById(R.id.gadget_title);
       textViewName.setText(inforGadget.getGadgetName());

@@ -1,6 +1,5 @@
 package org.exoplatform.controller.social;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.exoplatform.model.SocialActivityInfo;

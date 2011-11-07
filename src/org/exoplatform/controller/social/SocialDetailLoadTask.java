@@ -4,8 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
@@ -23,8 +21,8 @@ import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.SocialDetailsWarningDialog;
 import org.exoplatform.widget.WaitingDialog;
-import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.view.View;
@@ -57,6 +55,8 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
   private String                       activityType;
 
   private SocialActivityInfo           streamInfo;
+
+  private boolean                      hasContent        = false;
 
   public SocialDetailLoadTask(Context context, SocialDetailController controller) {
     mContext = context;
@@ -98,13 +98,6 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       streamInfo.setType(activityType);
       System.out.println("activityType: " + activityType);
       streamInfo.templateParams = selectedRestActivity.getTemplateParams();
-
-      Map<String, String> templateMap = selectedRestActivity.getTemplateParams();
-      Set<String> set = templateMap.keySet();
-      for (String param : set) {
-        System.out.println("type: " + activityType + "--template key: " + param + "-- "
-            + templateMap.get(param));
-      }
 
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();
@@ -150,7 +143,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       return 1;
     } catch (RuntimeException e) {
       String error = e.getMessage().toLowerCase();
-      
+
       if (error.contains("http")) {
         return 0;
       }
@@ -161,16 +154,25 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
   @Override
   public void onPostExecute(Integer result) {
-    WarningDialog dialog;
+    SocialDetailsWarningDialog dialog;
     if (result == 1) {
+      hasContent = true;
       detailController.setComponentInfo(streamInfo);
       detailController.createCommentList(socialCommentList);
       detailController.setLikeInfo(likeLinkedList);
     } else if (result == 0) {
-      dialog = new WarningDialog(mContext, titleString, detailsErrorStr, okString);
+      dialog = new SocialDetailsWarningDialog(mContext,
+                                              titleString,
+                                              detailsErrorStr,
+                                              okString,
+                                              hasContent);
       dialog.show();
     } else {
-      dialog = new WarningDialog(mContext, titleString, networkNotReachable, okString);
+      dialog = new SocialDetailsWarningDialog(mContext,
+                                              titleString,
+                                              networkNotReachable,
+                                              okString,
+                                              hasContent);
       dialog.show();
     }
     SocialDetailActivity.socialDetailActivity.startScreen.setVisibility(View.GONE);
@@ -202,4 +204,5 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
     }
 
   }
+
 }
