@@ -50,14 +50,12 @@ public class DashboardController {
     AccountSetting acc = AccountSetting.getInstance();
     String urlForDahboards = acc.getDomainName() + ExoConstants.DASHBOARD_PATH;
     String result = ExoConnectionUtils.convertStreamToString(ExoConnectionUtils.sendRequestWithAuthorization(urlForDahboards));
-    System.out.println("result ====" + result);
     ArrayList<DashboardItem> dashboards = new ArrayList<DashboardItem>();
 
     JSONArray array = (JSONArray) JSONValue.parse(result);
 
     for (Object obj : array) {
       JSONObject json = (JSONObject) obj;
-      System.out.println("JSONObject " + json.toJSONString());
       String id = "";
       String html = "";
       String link = "";
