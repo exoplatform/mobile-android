@@ -40,10 +40,10 @@
 				</LinearLayout>
 
 				<ViewStub android:id="@+id/comment_details_empty_stub"
-					android:layout_weight="1" android:inflatedId="@+id/social_empty_stub_inflted"
-					android:layout="@layout/empty_screen" android:visibility="gone"
-					android:layout_gravity="center" android:layout_width="fill_parent"
-					android:layout_height="fill_parent" />
+					android:layout_marginTop="5dp" android:layout_weight="1"
+					android:inflatedId="@+id/social_empty_stub_inflted" android:layout="@layout/empty_screen"
+					android:visibility="gone" android:layout_gravity="center"
+					android:layout_width="fill_parent" android:layout_height="fill_parent" />
 				<LinearLayout android:id="@+id/activity_display_comment_wrap"
 					android:orientation="vertical" android:padding="2dp"
 					android:layout_width="fill_parent" android:layout_height="wrap_content">
