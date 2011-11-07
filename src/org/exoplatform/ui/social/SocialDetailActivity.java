@@ -10,10 +10,12 @@ import org.exoplatform.widget.MyActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +24,8 @@ import com.cyrilmottier.android.greendroid.R;
 public class SocialDetailActivity extends MyActionBar implements OnClickListener {
 
   public LinearLayout                startScreen;
+
+  private View                       emptyCommentStubView;
 
   private LinearLayout               commentLayoutWrap;
 
@@ -34,6 +38,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   private Button                     likeButton;
 
   private String                     yourCommentText;
+
+  private String                     commentEmptyString;
 
   private SocialDetailController     detailController;
 
@@ -123,12 +129,27 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     }
   }
 
+  public void setEmptyView(int status) {
+    if (emptyCommentStubView == null) {
+      initStubView();
+    }
+    emptyCommentStubView.setVisibility(status);
+  }
+
+  private void initStubView() {
+    emptyCommentStubView = ((ViewStub) findViewById(R.id.comment_details_empty_stub)).inflate();
+    ImageView emptyImage = (ImageView) emptyCommentStubView.findViewById(R.id.empty_image);
+    emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
+    TextView emptyStatus = (TextView) emptyCommentStubView.findViewById(R.id.empty_status);
+    emptyStatus.setText(commentEmptyString);
+  }
+
   private void changeLanguage() {
     LocalizationHelper location = LocalizationHelper.getInstance();
     String strTitle = location.getString("ActivityDetail");
     setTitle(strTitle);
     yourCommentText = location.getString("YourComment");
-
+    commentEmptyString = location.getString("EmptyComment");
   }
 
 }

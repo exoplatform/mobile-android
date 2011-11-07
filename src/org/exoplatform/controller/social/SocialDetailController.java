@@ -11,6 +11,7 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.CommentItemLayout;
@@ -19,6 +20,7 @@ import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.text.Html;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -58,8 +60,8 @@ public class SocialDetailController {
   private String               okString;
 
   private String               titleString;
-  
-  private String likeErrorString;
+
+  private String               likeErrorString;
 
   public SocialDetailController(Context context,
                                 LinearLayout layoutWrap,
@@ -90,11 +92,12 @@ public class SocialDetailController {
   }
 
   public void createCommentList(ArrayList<SocialCommentInfo> commentList) {
-    if (commentList != null) {
-
+    int commentListSize = commentList.size();
+    if (commentListSize > 0) {
+      SocialDetailActivity.socialDetailActivity.setEmptyView(View.GONE);
       LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
       commentLayoutWrap.removeAllViews();
-      for (int i = 0; i < commentList.size(); i++) {
+      for (int i = 0; i < commentListSize; i++) {
         SocialCommentInfo comment = commentList.get(i);
         CommentItemLayout commentItem = new CommentItemLayout(mContext);
         String avatarUrl = comment.getImageUrl();
@@ -118,6 +121,8 @@ public class SocialDetailController {
         commentLayoutWrap.addView(commentItem, params);
 
       }
+    } else {
+      SocialDetailActivity.socialDetailActivity.setEmptyView(View.VISIBLE);
     }
 
   }
@@ -132,7 +137,7 @@ public class SocialDetailController {
     contentDetailLayout.removeAllViews();
     SocialActivityStreamItem item = new SocialActivityStreamItem(mContext, streamInfo, true);
     SocialActivityUtil.setTextLinkfy(mContext, item.textViewMessage);
-    contentDetailLayout.addView(item,params);
+    contentDetailLayout.addView(item, params);
   }
 
   public void setLikeInfo(LinkedList<SocialLikeInfo> likeLinkedList) {

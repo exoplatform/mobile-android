@@ -214,6 +214,8 @@ public class SocialActivityUtil {
         return 8;
       } else if (type.contains("contents:spaces")) {
         return 9;
+      } else if (type.contains("ks-answer")) {
+        return 10;
       } else
         return 0;
     } else
@@ -252,6 +254,9 @@ public class SocialActivityUtil {
       break;
     case 9:
       returnType = R.drawable.activity_type_normal;
+      break;
+    case 10:
+      returnType = R.drawable.activity_type_answer;
       break;
     }
     imageView.setImageResource(returnType);

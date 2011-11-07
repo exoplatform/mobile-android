@@ -33,7 +33,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private View               view;
 
-  private RoundedImageView     imageViewAvatar;
+  private RoundedImageView   imageViewAvatar;
 
   private TextView           textViewName;
 
@@ -144,7 +144,6 @@ public class SocialActivityStreamItem extends LinearLayout {
         System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
             + templateMap.get(param));
       }
-
       break;
     case 6:
 
@@ -181,6 +180,9 @@ public class SocialActivityStreamItem extends LinearLayout {
         contentLink = domain + "/rest/private/jcr/" + contentLink;
         displayAttachImage(contentLink);
       }
+      break;
+    case 10:
+      setActivityTypeAnswer();
       break;
     default:
       break;
@@ -258,6 +260,39 @@ public class SocialActivityStreamItem extends LinearLayout {
       buffer.append("</body></html>");
 
       textViewName.setText(Html.fromHtml(buffer.toString()));
+    } catch (UnsupportedEncodingException e) {
+    }
+  }
+
+  private void setActivityTypeAnswer() {
+    try {
+      StringBuffer answerBuffer = new StringBuffer();
+      answerBuffer.append("<html><body>");
+      answerBuffer.append("<a>");
+      String answerUserName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
+      answerBuffer.append(answerUserName);
+      answerBuffer.append(" ");
+      answerBuffer.append("</a>");
+      answerBuffer.append("<font color=\"#696969\">");
+      String act_key = activityInfo.templateParams.get("ActivityType");
+      String act_key_des = null;
+      if (act_key.equalsIgnoreCase("QuestionUpdate")) {
+        act_key_des = LocalizationHelper.getInstance().getString("HasUpdatedQuestion");
+        answerBuffer.append(act_key_des);
+      } else if (act_key.equalsIgnoreCase("QuestionAdd")) {
+        act_key_des = LocalizationHelper.getInstance().getString("HasAskAnswer");
+        answerBuffer.append(act_key_des);
+      }
+      answerBuffer.append("</font>");
+      answerBuffer.append(" ");
+      String page_name = new String(activityInfo.templateParams.get("Name").getBytes("ISO-8859-1"),
+                                    "UTF-8");
+      answerBuffer.append("<a>");
+      answerBuffer.append(page_name);
+      answerBuffer.append("</a>");
+      answerBuffer.append("</body></html>");
+
+      textViewName.setText(Html.fromHtml(answerBuffer.toString()));
     } catch (UnsupportedEncodingException e) {
     }
   }
