@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
-import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
@@ -18,6 +17,7 @@ import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
 import android.content.Context;
+
 
 public class PostStatusTask extends UserTask<Void, Void, Integer> {
   private PostWaitingDialog        _progressDialog;
@@ -71,12 +71,10 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
           Map<String, String> templateParams = new HashMap<String, String>();
 
           activityImlp.setType("DOC_ACTIVITY");
-
-          String host = AccountSetting.getInstance().getDomainName();
-          String docLink = imageDir.substring(imageDir.indexOf(host) + host.length());
           String pathExtension = "jcr/repository/collaboration";
-          int indextOfDocPath = imageDir.indexOf(pathExtension);
-          String docPath = imageDir.substring(indextOfDocPath + pathExtension.length());
+          int indexOfDocLink = imageDir.indexOf(pathExtension);
+          String docLink = "/portal/rest/" + imageDir.substring(indexOfDocLink);
+          String docPath = imageDir.substring(indexOfDocLink + pathExtension.length());
           templateParams.put("DOCPATH", docPath);
           templateParams.put("MESSAGE", "");
           templateParams.put("DOCLINK", docLink);
