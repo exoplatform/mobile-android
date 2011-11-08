@@ -79,7 +79,6 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
   @Override
   public void onPostExecute(ArrayList<DashboardItem> result) {
     if (result != null) {
-      System.out.println("dashboard------- " + result.size());
       if (result.size() == 0) {
         dashboardActivity.setEmptyView(View.VISIBLE);
       } else {

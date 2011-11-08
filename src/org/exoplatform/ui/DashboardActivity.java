@@ -48,7 +48,7 @@ public class DashboardActivity extends MyActionBar {
     listView.setFadingEdgeLength(0);
     listView.setScrollbarFadingEnabled(true);
     listView.setDivider(null);
-    listView.setDividerHeight(-1);
+//    listView.setDividerHeight(-1);
     
 
     controller = new DashboardController(this, listView);

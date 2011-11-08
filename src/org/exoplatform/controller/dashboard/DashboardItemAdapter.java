@@ -1,7 +1,6 @@
 package org.exoplatform.controller.dashboard;
 
 import greendroid.image.ImageProcessor;
-import greendroid.widget.AsyncImageView;
 
 import java.util.ArrayList;
 
@@ -34,23 +33,23 @@ import android.widget.Toast;
 
 public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor {
 
-  private ArrayList<GadgetInfo>    _arrayOfItems;
-  
-  private final Paint    mPaint    = new Paint(Paint.ANTI_ALIAS_FLAG);
+  private ArrayList<GadgetInfo> _arrayOfItems;
 
-  private final Rect     mRectSrc  = new Rect();
+  private final Paint           mPaint    = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-  private final Rect     mRectDest = new Rect();
+  private final Rect            mRectSrc  = new Rect();
 
-  private Bitmap         mMask;
+  private final Rect            mRectDest = new Rect();
 
-  private int            mThumbnailSize;
+  private Bitmap                mMask;
 
-  private int            mThumbnailRadius;
+  private int                   mThumbnailSize;
 
-  private LayoutInflater mInflater;
+  private int                   mThumbnailRadius;
 
-  private Context        mContext;
+  private LayoutInflater        mInflater;
+
+  private Context               mContext;
 
   public DashboardItemAdapter(Context context, ArrayList<GadgetInfo> items) {
     mContext = context;
@@ -60,9 +59,8 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 
     mThumbnailSize = context.getResources().getDimensionPixelSize(R.dimen.thumbnail_size);
     mThumbnailRadius = context.getResources().getDimensionPixelSize(R.dimen.thumbnail_radius);
-    
+
     _arrayOfItems = items;
-   
 
     prepareMask();
   }
@@ -96,47 +94,40 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 
   public View getView(int position, View convertView, ViewGroup parent) {
 
-    final GadgetInfo inforGadget  = _arrayOfItems.get(position);
-    
+    final GadgetInfo inforGadget = _arrayOfItems.get(position);
+
     if (inforGadget.getTabName() != null) {
 
       convertView = mInflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
       textViewTabTitle.setText(inforGadget.getTabName());
       
+
     } else {
       convertView = mInflater.inflate(R.layout.gadget_item_layout, parent, false);
-      
-      if(position + 1 < _arrayOfItems.size()) 
-      {
+      if (position + 1 < _arrayOfItems.size()) {
         GadgetInfo nextItem = _arrayOfItems.get(position + 1);
-        
-        if(inforGadget.getGadgetIndex() == 0)
-        {
-          if(nextItem.getTabName() != null)
-            convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellsingle);
+
+        if (inforGadget.getGadgetIndex() == 0) {
+          if (nextItem.getTabName() != null)
+            convertView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
           else
-            convertView.setBackgroundResource(R.drawable.dashboardcustombgforcelltop);
-        }
-        else 
-        {
-          if(nextItem.getTabName() != null)
-             convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellbottom);
-          else
-          {
-            convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellmiddle);
-           
+            convertView.setBackgroundResource(R.drawable.dashboard_top_background_shape);
+        } else {
+          if (nextItem.getTabName() != null)
+            convertView.setBackgroundResource(R.drawable.dasboard_bottom_background_shape);
+          else {
+            convertView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
+
           }
         }
-        
-      }
-      else
-      {
+
+      } else {
         GadgetInfo previousItem = _arrayOfItems.get(position - 1);
-        if(previousItem.getTabName() == null)
-          convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellbottom);
-       else
-         convertView.setBackgroundResource(R.drawable.dashboardcustombgforcellsingle);
+        if (previousItem.getTabName() == null)
+          convertView.setBackgroundResource(R.drawable.dasboard_bottom_background_shape);
+        else
+          convertView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
       }
 
       RoundedImageView imageViewAvatar = (RoundedImageView) convertView.findViewById(R.id.gadget_image);
@@ -174,7 +165,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 
   public void showGadget(GadgetInfo gadget) {
 
-//    ExoApplicationsController2.webViewMode = 0;
+    // ExoApplicationsController2.webViewMode = 0;
     DefaultHttpClient client = new DefaultHttpClient();
 
     HttpGet get = new HttpGet(gadget.getGadgetUrl());
@@ -197,7 +188,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
     Intent next = new Intent(mContext, WebViewActivity.class);
     next.putExtra(ExoConstants.WEB_VIEW_TYPE, 0);
     mContext.startActivity(next);
-    //((Activity) mContext).finish();
+    // ((Activity) mContext).finish();
 
   }
 
