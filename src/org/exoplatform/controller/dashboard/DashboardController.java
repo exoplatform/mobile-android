@@ -19,6 +19,8 @@ public class DashboardController {
   private DashboardLoadTask mLoadTask;
 
   private ListView          listView;
+  
+  private String dashboardsCannotBeRetrieved = "";
 
   public DashboardController(DashboardActivity context, ListView list) {
     activity = context;
@@ -79,10 +81,10 @@ public class DashboardController {
   }
 
   // Get Gadget in Dashboard
-  public ArrayList<GadgetInfo> getGadgetInTab(String url) {
+  public ArrayList<GadgetInfo> getGadgetInTab(String tabName, String url) {
 
     try {
-
+      
       String result = ExoConnectionUtils.convertStreamToString(ExoConnectionUtils.sendRequestWithAuthorization(url));
       ArrayList<GadgetInfo> gadgets = new ArrayList<GadgetInfo>();
 
@@ -91,6 +93,7 @@ public class DashboardController {
       int count = 0;
 
       for (Object obj : array) {
+        
         JSONObject json = (JSONObject) obj;
 
         String gadgetIcon = "";
@@ -102,30 +105,35 @@ public class DashboardController {
           gadgetIcon = json.get("gadgetIcon").toString();
         if (json.get("gadgetUrl") != null)
           gadgetUrl = json.get("gadgetUrl").toString();
-        if (json.get("gadgetName") != null)
+        if (json.get("gadgetName") != null) 
           gadgetName = json.get("gadgetName").toString();
+         
         if (json.get("gadgetDescription") != null)
           gadgetDescription = json.get("gadgetDescription").toString();
 
-        GadgetInfo gadget = new GadgetInfo(gadgetName,
-                                           gadgetDescription,
-                                           gadgetUrl,
-                                           gadgetIcon,
-                                           null,
-                                           count);
+        GadgetInfo gadget = new GadgetInfo(gadgetName, gadgetDescription,
+                                           gadgetUrl, gadgetIcon, null, count);
 
         gadgets.add(gadget);
 
         count++;
-
       }
 
       return gadgets;
-
+      
     } catch (Exception e) {
+
+      if(dashboardsCannotBeRetrieved.length() == 0)
+        dashboardsCannotBeRetrieved += tabName;
+      else
+        dashboardsCannotBeRetrieved += ", " + tabName;
+      
       return null;
     }
 
   }
 
+  public String getGadgetsErrorList() {
+    return dashboardsCannotBeRetrieved;
+  }
 }

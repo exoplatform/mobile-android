@@ -86,7 +86,7 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
         for (int i = 0; i < result.size(); i++) {
           DashboardItem gadgetTab = result.get(i);
 
-          List<GadgetInfo> gadgets = dashboardController.getGadgetInTab(gadgetTab.link);
+          List<GadgetInfo> gadgets = dashboardController.getGadgetInTab(gadgetTab.label, gadgetTab.link);
           if (gadgets != null && gadgets.size() > 0) {
             items.add(new GadgetInfo(gadgetTab.label));
             items.addAll(gadgets);
@@ -112,6 +112,19 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
       dialog.show();
     }
     _progressDialog.dismiss();
+    
+    String strGadgetsErrorList = dashboardController.getGadgetsErrorList();
+    if(strGadgetsErrorList.length() > 0) {
+      
+      contentString = LocalizationHelper.getInstance().getString("GadgetsCannotBeRetrieved");
+      
+      WarningDialog dialog = new WarningDialog(dashboardActivity,
+                                               titleString,
+                                               "Apps: " + strGadgetsErrorList + " " + contentString,
+                                               okString);
+      dialog.show();
+    }
+
   }
 
   private void changeLanguage() {
