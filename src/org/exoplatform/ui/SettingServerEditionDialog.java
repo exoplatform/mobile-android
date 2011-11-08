@@ -65,13 +65,14 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
     editTextServerName = (EditText) findViewById(R.id.EditText_Server_Name);
     editTextServerUrl = (EditText) findViewById(R.id.EditText_Server_URL);
-    changeLanguage();
+    
     isNewServer = ServerSettingHelper.getInstance().getIsNewServer();
     if (isNewServer) {
       serverObj = new ServerObjInfo();
       serverObj._bSystemServer = false;
       serverObj._strServerName = "";
       serverObj._strServerUrl = "";
+      
     } else {
       serverObj = ServerSettingHelper.getInstance()
                                      .getServerInfoList()
@@ -82,6 +83,8 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
     editTextServerName.setText(serverObj._strServerName);
     editTextServerUrl.setText(serverObj._strServerUrl);
 
+    changeLanguage();
+    
   }
 
 //  @Override
