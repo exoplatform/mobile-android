@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal" android:padding="5dip"
-	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	android:background="#ffffff">
-	<FrameLayout android:layout_marginLeft="5dp"
+	android:layout_marginBottom="1dp" android:layout_width="fill_parent"
+	android:layout_height="wrap_content" android:background="#62656A">
+	<LinearLayout android:layout_marginTop="5dp"
 		android:layout_alignParentLeft="true" android:background="@drawable/bottom_background_shape"
 		android:layout_height="43dp" android:layout_width="43dp">
 		<org.exoplatform.widget.RoundedImageView
 			android:scaleType="fitXY" android:id="@+id/gadget_image"
 			android:layout_height="fill_parent" android:layout_width="fill_parent" />
-	</FrameLayout>
+	</LinearLayout>
 
 	<LinearLayout android:orientation="vertical"
-		android:layout_marginLeft="5dp" android:layout_weight="1"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:layout_marginRight="5dip" android:gravity="center_vertical">
+		android:padding="2dp" android:layout_marginTop="3dp"
+		android:layout_weight="1" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:gravity="center_vertical">
 		<TextView android:id="@+id/gadget_title" style="@style/textview_name"
 			android:text="gadge title" android:layout_height="wrap_content"
-			android:layout_marginLeft="10dip" android:layout_marginTop="5dip"
-			android:textColor="#62656A" android:layout_width="fill_parent"
-			android:textStyle="bold" />
+			android:layout_marginLeft="10dip" android:textColor="#62656A"
+			android:layout_width="fill_parent" android:textStyle="bold" />
 
 		<TextView android:id="@+id/gadget_content" style="@style/textview_content"
 			android:text="gadge content" android:layout_height="wrap_content"
