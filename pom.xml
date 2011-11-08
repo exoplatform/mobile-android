@@ -26,7 +26,7 @@
          <dependency>
               <groupId>org.exoplatform.social</groupId>
               <artifactId>exo.social.client</artifactId>
-              <version>1.0.0-alpha2</version>
+              <version>1.0.0-alpha2-SNAPSHOT</version>
               <exclusions>
                 <!-- Exclusion for slf4j not compatible with android -->
                 <exclusion>
