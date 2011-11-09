@@ -25,7 +25,6 @@ public class DocumentActionAdapter extends BaseAdapter {
   private DocumentActionDialog        _delegate;
 
   // Localization string
-  private String                      strClose       = "";
 
   private String                      strTakePicture = "";
 

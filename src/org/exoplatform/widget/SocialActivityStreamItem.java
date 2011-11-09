@@ -122,24 +122,28 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void setViewByType(int typeId) {
     switch (typeId) {
     case 1:
+      // ks-forum:spaces
       setActivityTypeForum();
       break;
     case 2:
+      // ks-wiki:spaces
       setActivityTypeWiki();
       break;
     case 3:
-
+      // exosocial:spaces
       break;
     case 4:
+      // DOC_ACTIVITY
       String docLink = activityInfo.templateParams.get("DOCLINK");
       if (docLink != null) {
         displayAttachImage(domain + docLink);
       }
       break;
     case 5:
+      // DEFAULT_ACTIVITY
       break;
     case 6:
-
+      // LINK_ACTIVITY
       String templateComment = activityInfo.templateParams.get("comment");
       try {
         String commentStr = new String(templateComment.getBytes("ISO-8859-1"), "UTF-8");
@@ -155,19 +159,21 @@ public class SocialActivityStreamItem extends LinearLayout {
 
       break;
     case 7:
+      // exosocial:relationship
 
       break;
-    case 8:
-      // Map<String, String> templateMap = activityInfo.templateParams;
-      // Set<String> set = templateMap.keySet();
-      // for (String param : set) {
-      // System.out.println("type: " + activityInfo.getType() +
-      // "--template key: " + param + "-- "
-      // + templateMap.get(param));
-      // }
+    case 8: 
+      // exosocial:people
+       Map<String, String> templateMap = activityInfo.templateParams;
+       Set<String> set = templateMap.keySet();
+       for (String param : set) {
+       System.out.println("type: " + activityInfo.getType() +
+       "--template key: " + param + "-- "
+       + templateMap.get(param));
+       }
       break;
     case 9:
-
+      // contents:spaces
       String contentLink = activityInfo.templateParams.get("contenLink");
       if (contentLink != null) {
         contentLink = domain + "/rest/private/jcr/" + contentLink;
@@ -175,15 +181,16 @@ public class SocialActivityStreamItem extends LinearLayout {
       }
       break;
     case 10:
+      // ks-answer
       setActivityTypeAnswer();
       break;
     default:
-      Map<String, String> templateMap = activityInfo.templateParams;
-      Set<String> set = templateMap.keySet();
-      for (String param : set) {
-        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-            + templateMap.get(param));
-      }
+//      Map<String, String> templateMap = activityInfo.templateParams;
+//      Set<String> set = templateMap.keySet();
+//      for (String param : set) {
+//        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+//            + templateMap.get(param));
+//      }
       break;
     }
   }
@@ -280,6 +287,9 @@ public class SocialActivityStreamItem extends LinearLayout {
         answerBuffer.append(act_key_des);
       } else if (act_key.equalsIgnoreCase("QuestionAdd")) {
         act_key_des = LocalizationHelper.getInstance().getString("HasAskAnswer");
+        answerBuffer.append(act_key_des);
+      }else if (act_key.equalsIgnoreCase("AnswerAdd")) {
+        act_key_des = LocalizationHelper.getInstance().getString("HasAnswerQuestion");
         answerBuffer.append(act_key_des);
       }
       answerBuffer.append("</font>");

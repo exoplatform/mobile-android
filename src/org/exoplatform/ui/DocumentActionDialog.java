@@ -70,11 +70,6 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
   }
 
-  public void setMyFile(ExoFile file) {
-
-    myFile = file;
-  }
-
   public void setDocumentActionAdapter() {
     _listViewFileAction.setAdapter(_documentActionAdapter);
   }

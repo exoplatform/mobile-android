@@ -1,6 +1,7 @@
 package org.exoplatform.controller.document;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.exoplatform.model.ExoFile;
@@ -116,7 +117,6 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
         strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
         _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
       }
-
       return true;
     } catch (RuntimeException e) {
       return false;
@@ -144,6 +144,12 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
       }
       documentActivity._documentAdapter._documentList = _documentList;
       documentActivity._documentAdapter.notifyDataSetChanged();
+      try {
+        String title = new String(ExoDocumentUtils.getLastPathComponent(strSourceUrl)
+                                                  .getBytes("ISO-8859-1"), "UTF-8");
+        documentActivity.setTitle(title);
+      } catch (UnsupportedEncodingException e) {
+      }
 
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
@@ -152,7 +158,6 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
     }
     _progressDialog.dismiss();
 
-    documentActivity.setTitle(ExoDocumentUtils.getLastPathComponent(strSourceUrl));
   }
 
   private class DocumentWaitingDialog extends WaitingDialog {

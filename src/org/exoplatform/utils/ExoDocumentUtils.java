@@ -11,10 +11,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.utils.ExoConnectionUtils;
-
-import android.util.Log;
 
 public class ExoDocumentUtils {
 

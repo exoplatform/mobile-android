@@ -103,11 +103,9 @@ public class DocumentAdapter extends BaseAdapter {
 
       public void onClick(View v) {
 
-        if (_documentActionDialog == null)
-          _documentActionDialog = new DocumentActionDialog(_mContext, _documentList.get(pos));
+        _documentActionDialog = new DocumentActionDialog(_mContext, _documentList.get(pos));
 
         ExoFile file = _documentList.get(pos);
-        _documentActionDialog.setMyFile(file);
         _documentActionDialog._documentActionAdapter.setSelectedFile(file);
         _documentActionDialog._documentActionAdapter.notifyDataSetChanged();
         _documentActionDialog.show();
