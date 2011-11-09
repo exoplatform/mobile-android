@@ -134,6 +134,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       options.inSampleSize = 8;
       FileInputStream fis = new FileInputStream(file);
       Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
+//      bitmap.
       fis.close();
       ImageView image = new ImageView(composeMessageActivity);
       image.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));

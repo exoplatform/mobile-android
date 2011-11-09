@@ -92,7 +92,7 @@ public class SocialPhotoAlbums extends MyActionBar {
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
-      
+
       if (ComposeMessageActivity.composeMessageActivity != null)
         ComposeMessageActivity.composeMessageActivity.finish();
       if (SocialActivity.socialActivity != null) {
@@ -180,15 +180,8 @@ public class SocialPhotoAlbums extends MyActionBar {
       View view = inflate.inflate(R.layout.social_photo_albums_item_layout, this);
       albumsAvatar = (ImageView) view.findViewById(R.id.albums_image);
       File file = new File(info.getAlbumsAvatar());
-      FileInputStream fis;
-      try {
-        fis = new FileInputStream(file);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 2;
-        Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
-        albumsAvatar.setImageBitmap(bitmap);
-      } catch (FileNotFoundException e) {
-      }
+      Bitmap bitmap = PhotoUltils.shrinkBitmap(file.getPath(), 1024, 860);
+      albumsAvatar.setImageBitmap(bitmap);
 
       albumsName = (TextView) view.findViewById(R.id.albums_name);
       albumsName.setText(info.getAlbumsName());

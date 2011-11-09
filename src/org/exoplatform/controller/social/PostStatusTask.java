@@ -10,6 +10,7 @@ import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.utils.WebdavMethod;
 import org.exoplatform.widget.WaitingDialog;
@@ -17,7 +18,7 @@ import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
 import android.content.Context;
-
+import android.graphics.BitmapFactory;
 
 public class PostStatusTask extends UserTask<Void, Void, Integer> {
   private PostWaitingDialog        _progressDialog;
@@ -64,10 +65,13 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
       RestActivityImpl activityImlp = new RestActivityImpl();
       if (sdcard_temp_dir != null) {
         createFolder();
+
         File file = new File(sdcard_temp_dir);
         String imageDir = uploadUrl + "/" + file.getName();
         if (file != null) {
-          ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, "image/jpeg");
+          File tempFile = PhotoUltils.reziseFileImage(file);
+          ExoDocumentUtils.putFileToServerFromLocal(imageDir, tempFile, "image/jpeg");
+          tempFile.delete();
           Map<String, String> templateParams = new HashMap<String, String>();
 
           activityImlp.setType("DOC_ACTIVITY");

@@ -1,26 +1,30 @@
 package org.exoplatform.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Vector;
 
 import org.exoplatform.model.SocialPhotoInfo;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader.TileMode;
+import android.os.Environment;
 import android.text.format.DateFormat;
 
 public class PhotoUltils {
@@ -263,6 +267,22 @@ public class PhotoUltils {
     } else
       return originalImage;
     return resizedBitmap;
+
+  }
+
+  public static File reziseFileImage(File file) {
+    try {
+      String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
+      Bitmap bitmap = shrinkBitmap(file.getPath(), 1024, 860);
+      ByteArrayOutputStream output = new ByteArrayOutputStream();
+      bitmap.compress(CompressFormat.PNG, 100, output);
+      File tempFile = new File(parentPath + "temfile.png");
+      FileOutputStream out = new FileOutputStream(tempFile);
+      output.writeTo(out);
+      return tempFile;
+    } catch (Exception e) {
+      return null;
+    }
 
   }
 
