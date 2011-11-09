@@ -323,7 +323,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       if (isDetail) {
         attachImage.setOnClickListener(new OnClickListener() {
 
-          @Override
+//          @Override
           public void onClick(View v) {
             SocialDetailHelper.getInstance().setAttachedImageUrl(url);
             Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);

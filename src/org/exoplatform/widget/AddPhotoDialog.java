@@ -3,15 +3,14 @@ package org.exoplatform.widget;
 import org.exoplatform.R;
 import org.exoplatform.controller.social.ComposeMessageController;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.social.SocialPhotoAlbums;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class AddPhotoDialog extends Dialog implements android.view.View.OnClickListener {
 
@@ -32,16 +31,34 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
   private String                   photoLibraryText;
 
   private ComposeMessageController messageController;
+  
+  private DocumentActionDialog     fileActionDialog;
 
+  public AddPhotoDialog(Context context, DocumentActionDialog activity) {
+    super(context);
+    
+    setContentView(R.layout.add_photo_dialog_layout);
+    mContext = context;
+    fileActionDialog = activity;
+    
+    init();
+    
+  }
+  
   public AddPhotoDialog(Context context, ComposeMessageController controller) {
     super(context);
-//    requestWindowFeature(Window.FEATURE_NO_TITLE);
+
     setContentView(R.layout.add_photo_dialog_layout);
     mContext = context;
     messageController = controller;
+    
+    init();
+  }
+
+  private void init() {
+
     changeLanguage();
-//    TextView titleView = (TextView) findViewById(R.id.add_photo_title);
-//    titleView.setText(addPhotoTitle);
+    
     setTitle(addPhotoTitle);
     takePhotoButton = (Button) findViewById(R.id.add_photo_take_button);
     takePhotoButton.setText(takePhotoText);
@@ -52,12 +69,15 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
     cancelButton = (Button) findViewById(R.id.add_photo_cancel_button);
     cancelButton.setText(cancelText);
     cancelButton.setOnClickListener(this);
-  }
 
+  }
   public void onClick(View view) {
     if (view == takePhotoButton) {
       dismiss();
-      messageController.initCamera();
+      if(messageController == null)
+        fileActionDialog._documentActionAdapter.initCamera();
+      else
+        messageController.initCamera();
     }
     if (view == libraryButton) {
       dismiss();

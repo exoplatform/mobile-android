@@ -89,6 +89,7 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+    _documentActivityInstance = null;
     finish();
     return true;
   }
@@ -100,8 +101,11 @@ public class DocumentActivity extends MyActionBar {
     } else {
       _documentAdapter._urlStr = ExoDocumentUtils.getParentUrl(_documentAdapter._urlStr);
       Log.i("_documentAdapter._urlStr", _documentAdapter._urlStr);
-      if (_documentAdapter._urlStr.length() < _urlDocumentHome.length())
-        finish();
+      if (_documentAdapter._urlStr.length() < _urlDocumentHome.length()) {
+        _documentActivityInstance = null;
+        finish(); 
+      }
+       
       else {
         onLoad(_documentAdapter._urlStr, null, 0);
       }
@@ -130,6 +134,14 @@ public class DocumentActivity extends MyActionBar {
     init();
   }
 
+  public void uploadFile() {
+    
+    setViewUploadImage(false);
+
+    onLoad(_documentAdapter._documentActionDialog.myFile.urlStr, null, 4);
+
+  }
+  
   private void init() {
 
     if (_listViewDocument == null) {
@@ -139,10 +151,8 @@ public class DocumentActivity extends MyActionBar {
       _btnUploadImage.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
 
-          setViewUploadImage(false);
-
-          String sourceUrl = _documentAdapter._documentActionDialog.myFile.urlStr;
-          onLoad(sourceUrl, null, 4);
+          uploadFile();
+          
         }
       });
 
@@ -229,6 +239,12 @@ public class DocumentActivity extends MyActionBar {
     _progressDialog.show();
   }
 
+//Add a photo: camera or photo album
+  public void addAPhoto() {
+    
+    
+  }
+  
   // Take a photo
   public void takePicture() {
     String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";

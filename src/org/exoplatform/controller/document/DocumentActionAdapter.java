@@ -6,6 +6,7 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.DocumentExtendDialog;
 
 import android.content.Context;
@@ -26,7 +27,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   // Localization string
 
-  private String                      strTakePicture = "";
+  private String                      strAddAPhoto = "";
 
   private String                      strCopy        = "";
 
@@ -62,6 +63,10 @@ public class DocumentActionAdapter extends BaseAdapter {
     _selectedFile = file;
   }
 
+  public void initCamera() {
+    DocumentActivity._documentActivityInstance.takePicture();
+  }
+  
   public View getView(int position, View convertView, ViewGroup parent) {
 
     final int pos = position;
@@ -72,9 +77,9 @@ public class DocumentActionAdapter extends BaseAdapter {
       public void onClick(View v) {
 
         _delegate.dismiss();
-        if (pos == 0)// Take picture
+        if (pos == 0)// Add Photo
         {
-          DocumentActivity._documentActivityInstance.takePicture();
+          new AddPhotoDialog(_mContext, _delegate).show();
 
         } else if (pos == 1)// Copy file
         {
@@ -155,7 +160,7 @@ public class DocumentActionAdapter extends BaseAdapter {
         view.setEnabled(false);
       }
     } else {
-      if (fileAction.actionName.equalsIgnoreCase(strTakePicture)
+      if (fileAction.actionName.equalsIgnoreCase(strAddAPhoto)
           || fileAction.actionName.equalsIgnoreCase(strPaste)
           || fileAction.actionName.equalsIgnoreCase(strRename)
           || fileAction.actionName.equalsIgnoreCase(strCreateFolder)) {
@@ -188,7 +193,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
     LocalizationHelper local = LocalizationHelper.getInstance();
 
-    strTakePicture = local.getString("TakePicture");
+    strAddAPhoto = local.getString("AddAPhoto");
     strCopy = local.getString("Copy");
     strMove = local.getString("Move");
     strDelete = local.getString("Delete");
@@ -197,7 +202,7 @@ public class DocumentActionAdapter extends BaseAdapter {
     strCreateFolder = local.getString("CreateFolder");
 
     fileActionList = new DocumentActionDescription[] {
-        new DocumentActionDescription(strTakePicture, R.drawable.documentactionpopupphotoicon),
+        new DocumentActionDescription(strAddAPhoto, R.drawable.documentactionpopupphotoicon),
         new DocumentActionDescription(strCopy, R.drawable.documentactionpopupcopyicon),
         new DocumentActionDescription(strMove, R.drawable.documentactionpopupcuticon),
         new DocumentActionDescription(strPaste, R.drawable.documentactionpopuppasteicon),

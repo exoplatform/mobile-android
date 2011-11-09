@@ -5,13 +5,12 @@ import greendroid.widget.ActionBarItem;
 import java.io.File;
 
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.widget.MyActionBar;
 
-import android.content.pm.PathPermission;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -88,8 +87,17 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     if (view == okButton) {
       if (filePath != null) {
         File file = new File(filePath);
-        ComposeMessageActivity.addImageToMessage(file);
+        
+        if(DocumentActivity._documentActivityInstance != null) {
+          DocumentActivity._documentActivityInstance._sdcard_temp_dir = filePath;
+          DocumentActivity._documentActivityInstance.uploadFile();
+        }
+          
+        else
+          ComposeMessageActivity.addImageToMessage(file);
+
         finish();
+        
         if (SocialImageLibrary.socialImageLibrary != null)
           SocialImageLibrary.socialImageLibrary.finish();
         if (SocialPhotoAlbums.socialPhotoAlbums != null)
