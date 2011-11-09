@@ -185,12 +185,6 @@ public class SocialActivityStreamItem extends LinearLayout {
       setActivityTypeAnswer();
       break;
     default:
-//      Map<String, String> templateMap = activityInfo.templateParams;
-//      Set<String> set = templateMap.keySet();
-//      for (String param : set) {
-//        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-//            + templateMap.get(param));
-//      }
       break;
     }
   }
