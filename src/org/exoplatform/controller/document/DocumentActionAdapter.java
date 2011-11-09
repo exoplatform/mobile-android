@@ -6,6 +6,7 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.widget.DocumentExtendDialog;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,32 +18,36 @@ import android.widget.TextView;
 
 public class DocumentActionAdapter extends BaseAdapter {
 
-  public ExoFile               _selectedFile;
+  public ExoFile                      _selectedFile;
 
-  private Context              _mContext;
+  private Context                     _mContext;
 
-  private DocumentActionDialog _delegate;
+  private DocumentActionDialog        _delegate;
 
   // Localization string
-  String                       strClose       = "";
+  private String                      strClose       = "";
 
-  String                       strTakePicture = "";
+  private String                      strTakePicture = "";
 
-  String                       strCopy        = "";
+  private String                      strCopy        = "";
 
-  String                       strMove        = "";
+  private String                      strMove        = "";
 
-  String                       strDelete      = "";
+  private String                      strDelete      = "";
 
-  String                       strRename      = "";
+  private String                      strRename      = "";
 
-  String                       strPaste       = "";
+  private String                      strPaste       = "";
 
-  DocumentActionDescription[]  fileActionList = null;
+  private String                      strCreateFolder;
 
-  ExoFile                      _fileCopied;
+  private DocumentActionDescription[] fileActionList = null;
 
-  ExoFile                      _fileMoved;
+  private ExoFile                     _fileCopied;
+
+  private ExoFile                     _fileMoved;
+
+  private DocumentExtendDialog        extendDialog;
 
   public DocumentActionAdapter(Context context, DocumentActionDialog parent, ExoFile file) {
     _mContext = context;
@@ -117,9 +122,14 @@ public class DocumentActionAdapter extends BaseAdapter {
             }
           }
 
-        } else// Rename file
+        } else if (pos == 5)// Rename file
         {
+          extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, 5);
+          extendDialog.show();
 
+        } else if (pos == 6) { //Create folder
+          extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, 6);
+          extendDialog.show();
         }
 
       }
@@ -133,21 +143,23 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   private void bindView(View view, DocumentActionDescription fileAction) {
     TextView label = (TextView) view.findViewById(R.id.label);
-    label.setText(fileAction.actionName.replace("%20", " "));
+    label.setText(fileAction.actionName);
     ImageView icon = (ImageView) view.findViewById(R.id.icon);
     icon.setImageResource(fileAction.imageID);
 
     if (_selectedFile.isFolder) {
       if (fileAction.actionName.equalsIgnoreCase(strCopy)
-          || fileAction.actionName.equalsIgnoreCase(strMove) || 
-          (fileAction.actionName.equalsIgnoreCase(strPaste) && _fileCopied == null && _fileMoved == null)) {
+          || fileAction.actionName.equalsIgnoreCase(strMove)
+          || (fileAction.actionName.equalsIgnoreCase(strPaste) && _fileCopied == null && _fileMoved == null)) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
       }
     } else {
       if (fileAction.actionName.equalsIgnoreCase(strTakePicture)
-          || fileAction.actionName.equalsIgnoreCase(strPaste)) {
+          || fileAction.actionName.equalsIgnoreCase(strPaste)
+          || fileAction.actionName.equalsIgnoreCase(strRename)
+          || fileAction.actionName.equalsIgnoreCase(strCreateFolder)) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
@@ -169,7 +181,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   public int getCount() {
 
-    return 5;
+    return fileActionList.length;
   }
 
   // Set language
@@ -183,13 +195,16 @@ public class DocumentActionAdapter extends BaseAdapter {
     strDelete = local.getString("Delete");
     strRename = local.getString("Rename");
     strPaste = local.getString("Paste");
+    strCreateFolder = local.getString("CreateFolder");
 
     fileActionList = new DocumentActionDescription[] {
         new DocumentActionDescription(strTakePicture, R.drawable.documentactionpopupphotoicon),
         new DocumentActionDescription(strCopy, R.drawable.documentactionpopupcopyicon),
         new DocumentActionDescription(strMove, R.drawable.documentactionpopupcuticon),
         new DocumentActionDescription(strPaste, R.drawable.documentactionpopuppasteicon),
-        new DocumentActionDescription(strDelete, R.drawable.documentactionpopupdeleteicon) };
+        new DocumentActionDescription(strDelete, R.drawable.documentactionpopupdeleteicon),
+        new DocumentActionDescription(strRename, R.drawable.documentactionpopuprenameicon),
+        new DocumentActionDescription(strCreateFolder, R.drawable.documentactionpopupaddfoldericon) };
 
   }
 

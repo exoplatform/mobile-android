@@ -1,7 +1,5 @@
 package org.exoplatform.widget;
 
-import greendroid.widget.AsyncImageView;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Set;
@@ -116,7 +114,8 @@ public class SocialActivityStreamItem extends LinearLayout {
       contentLayoutWrap.setPadding(5, -2, 5, 5);
       buttonComment.setVisibility(View.GONE);
       buttonLike.setVisibility(View.GONE);
-    }
+    } else
+      textViewMessage.setMaxLines(15);
 
   }
 

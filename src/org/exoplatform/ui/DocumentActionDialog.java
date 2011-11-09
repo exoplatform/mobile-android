@@ -18,78 +18,78 @@ import android.widget.TextView;
 //File action list
 public class DocumentActionDialog extends Dialog implements OnClickListener {
 
-  Thread                  thread;
+  Thread                       thread;
 
-  ListView                _listViewFileAction;        // List of action
+  ListView                     _listViewFileAction;        // List of action
 
-  TextView                _txtvFileName;              // File's name
+  TextView                     _txtvFileName;              // File's name
 
-  Context                 mContext;                   // context
+  Context                      mContext;                   // context
 
-  ExoFile                 myFile;                     // Current file
-  
+  ExoFile                      myFile;                     // Current file
+
   // Localization string
-  String                  strClose;
+  String                       strClose;
 
-  String                  strCannotBackToPreviousPage;
+  String                       strCannotBackToPreviousPage;
 
-  DocumentActionDescription[] fileActionList   = null;
-  
-  public DocumentActionAdapter  _documentActionAdapter;
+  DocumentActionDescription[]  fileActionList = null;
+
+  public DocumentActionAdapter _documentActionAdapter;
 
   // Constructor
   public DocumentActionDialog(Context context, ExoFile file) {
-    
+
     super(context);
-    
+
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.exofileaction);
-    
+
     setCanceledOnTouchOutside(true);
-    
+
     mContext = context;
-    
+
     myFile = file;
-    
+
     _documentActionAdapter = new DocumentActionAdapter(getContext(), this, myFile);
-    
+
     init();
-    
+
   }
 
   private void init() {
-    
+
     _listViewFileAction = (ListView) findViewById(R.id.ListView0_FileAction);
-    
+
     _txtvFileName = (TextView) findViewById(R.id.TextView_Title);
-    _txtvFileName.setText(myFile.fileName.replace("%20", " "));
-    
+    _txtvFileName.setText(myFile.fileName);
+
     changeLanguage();
-    
+
     setDocumentActionAdapter();
 
   }
-  
+
   public void setMyFile(ExoFile file) {
-    
+
     myFile = file;
   }
-  
+
   public void setDocumentActionAdapter() {
     _listViewFileAction.setAdapter(_documentActionAdapter);
   }
-  
+
   // Set language
   public void changeLanguage() {
 
     LocalizationHelper local = LocalizationHelper.getInstance();
-    
+
     strCannotBackToPreviousPage = local.getString("CannotBackToPreviousPage");
 
   }
 
   public void onClick(View v) {
-    
+
   }
 
 }

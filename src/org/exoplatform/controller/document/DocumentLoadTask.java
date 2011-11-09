@@ -94,12 +94,26 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
         documentActivity.moveFile(strSourceUrl, strDestinationUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
-      } else {
+      } else if (actionID == 4) {
         File file = new File(documentActivity._sdcard_temp_dir);
         ExoDocumentUtils.putFileToServerFromLocal(strSourceUrl + "/" + file.getName(),
                                                   file,
                                                   "image/png");
         documentActivity._documentAdapter._urlStr = strSourceUrl;
+        _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
+      } else if (actionID == 5) {
+        DocumentAdapter adapter = documentActivity._documentAdapter;
+        _documentList = adapter._documentList;
+
+        documentActivity.moveFile(strSourceUrl, strDestinationUrl);
+        strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
+        _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
+      } else if (actionID == 6) {
+        DocumentAdapter adapter = documentActivity._documentAdapter;
+        _documentList = adapter._documentList;
+
+        documentActivity.createFolder(strDestinationUrl);
+        strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
         _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
       }
 

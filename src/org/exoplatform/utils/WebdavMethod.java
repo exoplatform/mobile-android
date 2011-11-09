@@ -62,7 +62,6 @@ public class WebdavMethod extends HttpRequestBase{
     
   @Override
   public String getMethod() {
-    // TODO Auto-generated method stub
     return method;
   }
 

@@ -50,7 +50,7 @@ public class DocumentActivity extends MyActionBar {
 
   private Button                 _btnUploadImage;
 
-  private Button                 _btnCancelUploadImage;       // "/sdcard/eXo/";
+  private Button                 _btnCancelUploadImage;    // "/sdcard/eXo/";
 
   private WaitingDialog          _progressDialog;
 
@@ -316,6 +316,34 @@ public class DocumentActivity extends MyActionBar {
         return true;
       } else
         return false;
+
+    } catch (Exception e) {
+      return false;
+    }
+
+  }
+
+  public boolean createFolder(String destination) {
+    HttpResponse response;
+    try {
+
+      WebdavMethod create = new WebdavMethod("HEAD", destination);
+      response = ExoConnectionUtils.httpClient.execute(create);
+      int status = response.getStatusLine().getStatusCode();
+      if (status >= 200 && status < 300) {
+        return true;
+
+      } else {
+        create = new WebdavMethod("MKCOL", destination);
+        response = ExoConnectionUtils.httpClient.execute(create);
+        status = response.getStatusLine().getStatusCode();
+
+        if (status >= 200 && status < 300) {
+          return true;
+        }
+
+        return false;
+      }
 
     } catch (Exception e) {
       return false;
