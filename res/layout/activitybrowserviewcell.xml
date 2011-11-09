@@ -32,8 +32,8 @@
 
 		<TextView android:id="@+id/textView_Message" style="@style/textview_content"
 			android:layout_height="wrap_content" android:text="Test message"
-			android:maxLines="15" android:layout_marginLeft="10dip"
-			android:layout_marginTop="3dip" android:layout_width="fill_parent" />
+			android:layout_marginLeft="10dip" android:layout_marginTop="3dip"
+			android:layout_width="fill_parent" />
 
 		<ViewStub android:id="@+id/attached_image_stub_activity"
 			android:layout_marginTop="10dip" android:layout_marginBottom="3dp"

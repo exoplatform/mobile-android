@@ -4,7 +4,7 @@
 	android:background="@drawable/home_background">
 
 	<ListView android:id="@+id/ListView_Server_List"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:cacheColorHint="#00000000" />
+		android:fadingEdge="none" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:cacheColorHint="#00000000" />
 
 </RelativeLayout>
