@@ -40,9 +40,9 @@ public class SocialActivity extends MyActionBar {
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
-    getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_refresh);
+    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     addActionBarItem();
-    getActionBar().getItem(1).setDrawable(R.drawable.gd_action_bar_compose);
+    getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
     setActionBarContentView(R.layout.activitybrowserview);
     socialActivity = this;
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);

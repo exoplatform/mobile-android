@@ -67,7 +67,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
     if (composeType == 0) {
       setTitle(statusUpdate);
       addActionBarItem();
-      getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_take_photo);
+      getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_photo);
     } else {
       setTitle(comment);
     }

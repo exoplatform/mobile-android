@@ -54,7 +54,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
-    getActionBar().getItem(0).setDrawable(R.drawable.gd_action_bar_refresh);
+    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     socialDetailActivity = this;
     changeLanguage();
     initComponent();
