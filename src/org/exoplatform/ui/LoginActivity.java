@@ -12,6 +12,7 @@ import org.exoplatform.utils.ExoDocumentUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -69,6 +70,11 @@ public class LoginActivity extends Activity implements OnClickListener {
     super.onResume();
     changeLanguage();
     setServerAdapter();
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
   }
 
   private void init() {
