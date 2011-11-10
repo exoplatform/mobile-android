@@ -72,7 +72,7 @@ public class HomeActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-    new LogoutDialog(HomeActivity.this, homeController).show();
+//    new LogoutDialog(HomeActivity.this, homeController).show();
   }
 
   private void init() {
@@ -94,7 +94,8 @@ public class HomeActivity extends MyActionBar {
     case -1:
       break;
     case 0:
-      new LogoutDialog(HomeActivity.this, homeController).show();
+      // new LogoutDialog(HomeActivity.this, homeController).show();
+      homeController.onFinish();
       break;
     case 1:
       break;
