@@ -18,8 +18,7 @@
 		android:debuggable="true" android:label="eXo Application">
 
 		<!-- First Activity of the Application -->
-		<activity android:name=".ui.LoginActivity"
-			android:configChanges="keyboardHidden|orientation">
+		<activity android:name=".ui.LoginActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -75,7 +74,7 @@
 
 		<activity android:name=".ui.social.SocialPhotoAlbums"
 			android:configChanges="keyboardHidden|orientation" />
-			
+
 		<activity android:name=".ui.social.SocialAttachedImageActivity"
 			android:configChanges="keyboardHidden|orientation" />
 
