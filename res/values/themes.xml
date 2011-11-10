@@ -14,6 +14,7 @@
 	<style name="Theme.eXo" parent="@style/Theme.GreenDroid.NoTitleBar">
 		<item name="gdActionBarTitleColor">#ff444444</item>
 		<item name="gdActionBarBackground">@drawable/action_bar_background2</item>
+		<item name="gdActionBarItemBackground">@drawable/action_bar_item_background</item>
 		<item name="gdActionBarDividerDrawable">@drawable/action_bar_separator</item>
 		<item name="gdActionBarDividerWidth">1dp</item>
 		<item name="gdActionBarApplicationDrawable">@drawable/exo_application_logo</item>
