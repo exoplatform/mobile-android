@@ -11,6 +11,7 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
@@ -36,6 +37,8 @@ public class SocialActivityStreamItem extends LinearLayout {
   private TextView           textViewName;
 
   public TextView            textViewMessage;
+
+  public TextView            textViewTempMessage;
 
   private TextView           textViewCommnet;
 
@@ -75,6 +78,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     contentLayoutWrap = (LinearLayout) view.findViewById(R.id.relativeLayout_Content);
     textViewName = (TextView) view.findViewById(R.id.textView_Name);
     textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
+    textViewTempMessage = (TextView) view.findViewById(R.id.textview_temp_message);
     textViewCommnet = (TextView) view.findViewById(R.id.activity_comment_view);
     buttonComment = (Button) view.findViewById(R.id.button_Comment);
     buttonLike = (Button) view.findViewById(R.id.button_Like);
@@ -134,9 +138,21 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 4:
       // DOC_ACTIVITY
+
+      String tempMessage = activityInfo.templateParams.get("MESSAGE");
+      if (tempMessage != null) {
+        textViewTempMessage.setText(tempMessage);
+        textViewTempMessage.setVisibility(View.VISIBLE);
+        textViewMessage.setVisibility(View.GONE);
+      }
+
       String docLink = activityInfo.templateParams.get("DOCLINK");
       if (docLink != null) {
-        displayAttachImage(domain + docLink);
+        String docName = activityInfo.templateParams.get("DOCNAME");
+        if (PhotoUltils.isImages(docName)) {
+          displayAttachImage(domain + docLink);
+        }
+
       }
       break;
     case 5:
@@ -162,22 +178,33 @@ public class SocialActivityStreamItem extends LinearLayout {
       // exosocial:relationship
 
       break;
-    case 8: 
+    case 8:
       // exosocial:people
-       Map<String, String> templateMap = activityInfo.templateParams;
-       Set<String> set = templateMap.keySet();
-       for (String param : set) {
-       System.out.println("type: " + activityInfo.getType() +
-       "--template key: " + param + "-- "
-       + templateMap.get(param));
-       }
+      // Map<String, String> templateMap = activityInfo.templateParams;
+      // Set<String> set = templateMap.keySet();
+      // for (String param : set) {
+      // System.out.println("type: " + activityInfo.getType() +
+      // "--template key: " + param + "-- "
+      // + templateMap.get(param));
+      // }
       break;
     case 9:
       // contents:spaces
+      Map<String, String> templateMap = activityInfo.templateParams;
+      Set<String> set = templateMap.keySet();
+      for (String param : set) {
+        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+            + templateMap.get(param));
+      }
+
       String contentLink = activityInfo.templateParams.get("contenLink");
       if (contentLink != null) {
-        contentLink = domain + "/rest/private/jcr/" + contentLink;
-        displayAttachImage(contentLink);
+        String contentType = activityInfo.templateParams.get("mimeType");
+        if (contentType != null && (contentType.equalsIgnoreCase("image/png"))) {
+          contentLink = domain + "/rest/private/jcr/" + contentLink;
+          displayAttachImage(contentLink);
+        }
+
       }
       break;
     case 10:
@@ -282,7 +309,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       } else if (act_key.equalsIgnoreCase("QuestionAdd")) {
         act_key_des = LocalizationHelper.getInstance().getString("HasAskAnswer");
         answerBuffer.append(act_key_des);
-      }else if (act_key.equalsIgnoreCase("AnswerAdd")) {
+      } else if (act_key.equalsIgnoreCase("AnswerAdd")) {
         act_key_des = LocalizationHelper.getInstance().getString("HasAnswerQuestion");
         answerBuffer.append(act_key_des);
       }
@@ -317,7 +344,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       if (isDetail) {
         attachImage.setOnClickListener(new OnClickListener() {
 
-//          @Override
+          // @Override
           public void onClick(View v) {
             SocialDetailHelper.getInstance().setAttachedImageUrl(url);
             Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);

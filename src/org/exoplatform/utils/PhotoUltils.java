@@ -2,15 +2,15 @@ package org.exoplatform.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.exoplatform.R;
 import org.exoplatform.model.SocialPhotoInfo;
 
 import android.graphics.Bitmap;
@@ -28,7 +28,7 @@ import android.os.Environment;
 import android.text.format.DateFormat;
 
 public class PhotoUltils {
-  private static final String[] suffix  = { ".jpeg", ".jpg", ".png" };
+  private static final String[] suffix  = { ".jpeg", ".jpg", ".png", ".bmp", ".gif" };
 
   private static final String   dotSign = ".";
 
@@ -36,6 +36,14 @@ public class PhotoUltils {
     String name = file.getName();
     for (int i = 0; i < suffix.length; i++) {
       if (name.endsWith(suffix[i]))
+        return true;
+    }
+    return false;
+  }
+
+  public static boolean isImages(String fileName) {
+    for (int i = 0; i < suffix.length; i++) {
+      if (fileName.endsWith(suffix[i]))
         return true;
     }
     return false;
@@ -128,6 +136,28 @@ public class PhotoUltils {
 
     bmpFactoryOptions.inJustDecodeBounds = false;
     bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
+    return bitmap;
+  }
+
+  public static Bitmap shrinkBitmap(InputStream inputStream, int width, int height) {
+
+    BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
+    bmpFactoryOptions.inJustDecodeBounds = true;
+    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+    int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float) height);
+    int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth / (float) width);
+
+    if (heightRatio > 1 || widthRatio > 1) {
+      if (heightRatio > widthRatio) {
+        bmpFactoryOptions.inSampleSize = heightRatio;
+      } else {
+        bmpFactoryOptions.inSampleSize = widthRatio;
+      }
+    }
+
+    bmpFactoryOptions.inJustDecodeBounds = false;
+    bitmap = BitmapFactory.decodeStream(inputStream, null, bmpFactoryOptions);
     return bitmap;
   }
 
