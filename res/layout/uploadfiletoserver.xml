@@ -13,7 +13,8 @@
 		android:layout_height="38sp" />
 	<Button android:id="@+id/Button_Language_Help"
 		android:layout_width="30sp" android:layout_height="30sp"
-		android:layout_x="285sp" android:layout_y="05sp" android:background="@drawable/optionsettingsbutton" />
+		android:layout_x="285sp" android:layout_y="05sp"
+		android:background="@drawable/optionsettingsbutton" />
 
 	<EditText android:id="@+id/EditTextImageName"
 		android:layout_x="5sp" android:layout_y="50sp" android:layout_width="310sp"
@@ -24,11 +25,17 @@
 		android:layout_height="270sp" />
 
 	<Button android:text="Upload" android:id="@+id/ButtonUpImage"
+		android:textColor="#000000" android:shadowColor="#888888"
+		android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
+		android:background="@drawable/send_button_background_shape"
 		android:layout_x="30sp" android:layout_y="380sp" android:layout_width="120sp"
-		android:layout_height="wrap_content" />
+		android:layout_height="40dp" />
 
 	<Button android:text="Cancel" android:id="@+id/ButtonCancel"
+		android:textColor="#FFFFFF" android:shadowColor="#000000"
+		android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
+		android:background="@drawable/cancel_button_background_shape"
 		android:layout_x="170sp" android:layout_y="380sp"
-		android:layout_width="120sp" android:layout_height="wrap_content" />
+		android:layout_width="120sp" android:layout_height="40dp" />
 
 </AbsoluteLayout>
