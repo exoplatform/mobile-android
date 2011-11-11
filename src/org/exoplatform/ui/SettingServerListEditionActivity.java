@@ -44,7 +44,7 @@ public class SettingServerListEditionActivity extends MyActionBar {
   private void setServerAdapter() {
     listViewServer = (ListView) findViewById(R.id.ListView_Server_List);
     listViewServer.setDivider(null);
-    listViewServer.setDividerHeight(0);
+    listViewServer.setDividerHeight(-1);
     listViewServer.setAdapter(new ModifyServerAdapter(this));
     listViewServer.setOnItemClickListener(new ModifyServerListenner(this, listViewServer));
   }

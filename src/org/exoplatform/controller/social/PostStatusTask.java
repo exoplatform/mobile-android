@@ -18,7 +18,6 @@ import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 
 public class PostStatusTask extends UserTask<Void, Void, Integer> {
   private PostWaitingDialog        _progressDialog;
@@ -29,7 +28,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
 
   private String                   composeMessage;
 
-  private String                   loadingData;
+  private String                   sendingData;
 
   private String                   okString;
 
@@ -54,7 +53,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
 
   @Override
   public void onPreExecute() {
-    _progressDialog = new PostWaitingDialog(mContext, null, loadingData);
+    _progressDialog = new PostWaitingDialog(mContext, null, sendingData);
     _progressDialog.show();
   }
 
@@ -143,7 +142,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
 
   private void changeLanguage() {
     LocalizationHelper bundle = LocalizationHelper.getInstance();
-    loadingData = bundle.getString("LoadingData");
+    sendingData = bundle.getString("SendingData");
     okString = bundle.getString("OK");
     errorString = bundle.getString("PostError");
     warningTitle = bundle.getString("Warning");

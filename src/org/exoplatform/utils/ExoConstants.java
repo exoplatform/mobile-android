@@ -79,12 +79,14 @@ public class ExoConstants {
   public static final String FRENCH_LOCALIZATION           = "LocalizeFR.properties";
 
   public static final String DOCUMENT_PATH                 = "/rest/private/jcr/repository/collaboration/Users";
-  
-  public static final String DASHBOARD_PATH             = "/rest/private/dashboards";
+
+  public static final String DASHBOARD_PATH                = "/rest/private/dashboards";
 
   public static final String DOMAIN_SUFFIX                 = "/portal/private/intranet";
 
   public static final String DOMAIN_SUFFIX_VERSION         = "/portal/rest/platform/info";
+
+  public static final String IMAGE_TYPE                    = "image/png";
 
   public static final int    CACHE_MAX_NUMBER              = 1000;
 

@@ -15,9 +15,9 @@ import org.exoplatform.widget.ServerItemLayout;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 
 public class SettingController {
   private Context mContext;
@@ -28,7 +28,7 @@ public class SettingController {
     mContext = context;
     imgViewECheckMark = imgViewE;
     imgViewFCheckMark = imgViewF;
-//    ExoConnectionUtils.checkPLFVersion();
+    // ExoConnectionUtils.checkPLFVersion();
   }
 
   public void initLocation() {
@@ -70,6 +70,7 @@ public class SettingController {
     List<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
     listServerWrap.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+    params.setMargins(0, 0, 0, -1);
     for (int i = 0; i < serverList.size(); i++) {
       ServerObjInfo serverObj = serverList.get(i);
       ServerItemLayout serverItem = new ServerItemLayout(mContext);
