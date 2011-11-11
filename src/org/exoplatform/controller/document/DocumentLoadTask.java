@@ -112,6 +112,9 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
         documentActivity.createFolder(strDestinationUrl);
         
       }
+      
+      _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
+      
       return true;
     } catch (RuntimeException e) {
       return false;
@@ -140,8 +143,6 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
           documentActivity._fileForCurrnentActionBar.contentType = type;
         }
       }
-      
-      _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
       
       if (_documentList.size() == 0) {
         documentActivity.setEmptyView(View.VISIBLE);
