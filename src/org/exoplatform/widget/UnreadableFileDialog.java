@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class UnreadableFileDialog extends Dialog implements android.view.View.OnClickListener {
+
+  private TextView titleView;
+
   private TextView contentView;
 
   private Button   okButton;
@@ -23,9 +26,11 @@ public class UnreadableFileDialog extends Dialog implements android.view.View.On
 
   public UnreadableFileDialog(Context context) {
     super(context);
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.unreadable_file_dialog_layout);
     changeLanguage();
-    setTitle(titleString);
+    titleView = (TextView) findViewById(R.id.unreadable_file_dialog_title_view);
+    titleView.setText(titleString);
     contentView = (TextView) findViewById(R.id.unreadable_content);
     contentView.setText(contentString);
     okButton = (Button) findViewById(R.id.unreadable_ok_button);

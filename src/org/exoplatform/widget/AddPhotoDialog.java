@@ -10,9 +10,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class AddPhotoDialog extends Dialog implements android.view.View.OnClickListener {
+
+  private TextView                 titleView;
 
   private Button                   takePhotoButton;
 
@@ -31,35 +35,36 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
   private String                   photoLibraryText;
 
   private ComposeMessageController messageController;
-  
+
   private DocumentActionDialog     fileActionDialog;
 
   public AddPhotoDialog(Context context, DocumentActionDialog activity) {
     super(context);
-    
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.add_photo_dialog_layout);
     mContext = context;
     fileActionDialog = activity;
-    
+
     init();
-    
+
   }
-  
+
   public AddPhotoDialog(Context context, ComposeMessageController controller) {
     super(context);
-
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.add_photo_dialog_layout);
     mContext = context;
     messageController = controller;
-    
+
     init();
   }
 
   private void init() {
 
     changeLanguage();
-    
-    setTitle(addPhotoTitle);
+
+    titleView = (TextView) findViewById(R.id.add_photo_dialog_title_view);
+    titleView.setText(addPhotoTitle);
     takePhotoButton = (Button) findViewById(R.id.add_photo_take_button);
     takePhotoButton.setText(takePhotoText);
     takePhotoButton.setOnClickListener(this);
@@ -71,10 +76,11 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
     cancelButton.setOnClickListener(this);
 
   }
+
   public void onClick(View view) {
     if (view == takePhotoButton) {
       dismiss();
-      if(messageController == null)
+      if (messageController == null)
         fileActionDialog._documentActionAdapter.initCamera();
       else
         messageController.initCamera();
