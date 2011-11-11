@@ -5,8 +5,8 @@
 
 	<ListView android:id="@+id/dashboard_listview"
 		android:scrollbarStyle="outsideInset" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:layout_marginLeft="10dip"
-		android:layout_marginRight="10dip" />
+		android:layout_height="fill_parent" android:layout_marginLeft="2dip"
+		android:layout_marginRight="2dip" />
 	<ViewStub android:id="@+id/dashboard_empty_stub"
 		android:inflatedId="@+id/dashboard_empty_stub_inflated"
 		android:layout="@layout/empty_screen" android:visibility="gone"
