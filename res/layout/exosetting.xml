@@ -36,7 +36,8 @@
 				<ImageView android:id="@+id/ImageView_CheckMark_EN"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:layout_marginTop="5dip" android:layout_marginRight="10dip"
-					android:layout_alignParentRight="true" android:background="@drawable/authenticate_checkmark_on" />
+					android:layout_alignParentRight="true"
+					android:background="@drawable/authenticate_checkmark_on" />
 
 
 				<View android:id="@+id/View_French" android:layout_width="fill_parent"
@@ -87,7 +88,7 @@
 				android:layout_below="@id/listview_server_wrap"
 				android:layout_width="fill_parent" android:layout_height="44dip"
 				android:text="Modify Server" android:textStyle="bold"
-				android:textColor="#000000" android:background="@drawable/settingcellstreachablebackground" />
+				android:textColor="#000000" android:background="@drawable/file_item_background_shape" />
 
 			<RelativeLayout android:id="@+id/Server_Information_Section"
 				android:layout_below="@id/modify_server_btn" android:layout_width="fill_parent"

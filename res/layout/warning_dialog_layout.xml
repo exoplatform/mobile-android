@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="wrap_content"
-	android:minWidth="280dip" android:layout_height="wrap_content"
-	android:background="@drawable/dialog_background">
-	<ScrollView android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp" android:fadingEdge="none"
+	android:minWidth="280dip" android:layout_height="wrap_content">
+	<LinearLayout android:layout_width="fill_parent"
+		android:gravity="center" android:layout_height="40dip"
+		android:background="@drawable/serveraddingbackgroundtitlepanel">
+		<TextView android:id="@+id/warning_dialog_title_view"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:shadowColor="#000000" android:shadowDx="1.0"
+			android:shadowDy="2.0" android:shadowRadius="1.0" android:textSize="18dip"
+			android:textColor="#FFFFFFFF" android:gravity="center" />
+	</LinearLayout>
+	<ScrollView android:background="@drawable/serveraddingbackgroundtextfieldspanel"
+		android:padding="10dp" android:fadingEdge="none"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
 		android:layout_weight="1">
 		<LinearLayout android:gravity="center"
 			android:orientation="vertical" android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 			<ImageView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:background="@drawable/alert_image" />
+				android:layout_height="wrap_content" android:background="@drawable/warning_icon" />
 			<TextView android:id="@+id/warning_content"
 				android:textSize="16sp"
 				android:text="Ce fichier ne peut pas être ouvert depuis l'application"
 				android:paddingRight="8dip" android:paddingLeft="8dip"
 				android:paddingBottom="3dip" android:paddingTop="3dip"
-				android:textColor="#FFFFFF" android:layout_marginTop="5dp"
+				android:textColor="#000000" android:layout_marginTop="5dp"
 				android:gravity="center_horizontal" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 		</LinearLayout>
 	</ScrollView>
-	<Button android:layout_marginTop="15dp" android:id="@+id/warning_ok_button"
-		android:text="Ok" android:textColor="#FFFFFF" android:shadowColor="#000000"
-		android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
-		android:textStyle="bold" android:layout_margin="5dp"
-		android:background="@drawable/cancel_button_background_shape"
-		android:layout_width="fill_parent" android:layout_height="40dp" />
+	<LinearLayout android:layout_width="fill_parent"
+		android:padding="5dp" android:gravity="center" android:layout_height="60dp"
+		android:background="@drawable/serveraddbuttonpanelbackground">
+		<Button android:layout_marginTop="15dp" android:id="@+id/warning_ok_button"
+			android:text="Ok" android:textColor="#FFFFFF" android:shadowColor="#000000"
+			android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
+			android:textStyle="bold" android:layout_margin="5dp"
+			android:background="@drawable/cancel_button_background_shape"
+			android:layout_width="fill_parent" android:layout_height="40dp" />
+
+	</LinearLayout>
+
 
 </LinearLayout>
