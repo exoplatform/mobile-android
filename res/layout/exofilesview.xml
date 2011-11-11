@@ -22,7 +22,7 @@
 	<ListView android:id="@+id/ListView_Files"
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
 		android:fadingEdge="none" android:fadingEdgeLength="0dp"
-		android:cacheColorHint="#00000000" />
+		android:dividerHeight="-1dp" android:cacheColorHint="#00000000" />
 
 	<Button android:text="Upload" android:id="@+id/ButtonUpImage"
 		android:layout_alignParentBottom="true" android:layout_marginLeft="30dip"
