@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import org.apache.http.HttpResponse;
 import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentLoadTask;
+import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -65,6 +66,9 @@ public class DocumentActivity extends MyActionBar {
   private DocumentLoadTask       mLoadTask;
 
   private View                   empty_stub;
+  
+  public ExoFile                 _fileForCurrnentActionBar;
+  public ExoFile                 _fileForCurrnentCell;
 
   // Constructor
   @Override
@@ -89,9 +93,46 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    _documentActivityInstance = null;
-    finish();
+    switch (position) {
+
+    case -1:
+      _documentActivityInstance = null;
+      finish();
+      break;
+    case 0:
+      
+      if(_documentAdapter._documentActionDialog == null)
+        _documentAdapter._documentActionDialog = new DocumentActionDialog(this, _fileForCurrnentActionBar);
+      
+      _documentAdapter._documentActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrnentActionBar);
+      _documentAdapter._documentActionDialog._documentActionAdapter.notifyDataSetChanged();
+      _documentAdapter._documentActionDialog.setTileForDialog(_fileForCurrnentActionBar.fileName);
+      _documentAdapter._documentActionDialog.myFile = _fileForCurrnentActionBar;
+      _documentAdapter._documentActionDialog.show();
+      
+
+      break;
+    default:
+      
+      break;
+
+    }
     return true;
+  }
+
+  public void addOrRemoveFileActionButton() {
+    
+    if (_fileForCurrnentActionBar.urlStr.equalsIgnoreCase(_urlDocumentHome)) {
+      getActionBar().removeItem(0);
+    }
+    else {
+      if(getActionBar().getItem(0) == null) {
+    
+        addActionBarItem();
+        getActionBar().getItem(0).setDrawable(R.drawable.documentdisclosureactionbutton);
+      }
+    }
+    
   }
 
   @Override
@@ -99,15 +140,16 @@ public class DocumentActivity extends MyActionBar {
     if (_documentAdapter == null) {
       finish();
     } else {
-      _documentAdapter._urlStr = ExoDocumentUtils.getParentUrl(_documentAdapter._urlStr);
-      Log.i("_documentAdapter._urlStr", _documentAdapter._urlStr);
-      if (_documentAdapter._urlStr.length() < _urlDocumentHome.length()) {
+      String url = ExoDocumentUtils.getParentUrl(_fileForCurrnentActionBar.urlStr);
+      String name = ExoDocumentUtils.getLastPathComponent(url);
+      _fileForCurrnentActionBar =  new ExoFile(url, name, true, "text/html");
+      
+      if (_fileForCurrnentActionBar.urlStr.length() < _urlDocumentHome.length()) {
         _documentActivityInstance = null;
         finish(); 
       }
-       
       else {
-        onLoad(_documentAdapter._urlStr, null, 0);
+        onLoad(_fileForCurrnentActionBar.urlStr, null, 0);
       }
     }
 

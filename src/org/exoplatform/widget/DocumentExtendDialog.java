@@ -80,7 +80,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
 
   }
 
-  @Override
+//  @Override
   public void onClick(View view) {
     if (view == okButton) {
       folderName = actionEditText.getText().toString();
@@ -90,6 +90,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
           String lastPathComponent = selectedFile.urlStr.substring(0, index + 1);
           String destinationUrl = lastPathComponent.concat(folderName);
 
+         
           DocumentActivity._documentActivityInstance.onLoad(selectedFile.urlStr, destinationUrl, 5);
 
         } else {
@@ -98,6 +99,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
           buffer.append("/");
           buffer.append(folderName);
           String desUrl = buffer.toString();
+          
           DocumentActivity._documentActivityInstance.onLoad(selectedFile.urlStr, desUrl, 6);
 
         }

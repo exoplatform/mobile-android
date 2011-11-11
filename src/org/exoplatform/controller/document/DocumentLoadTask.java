@@ -74,48 +74,43 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
   public Boolean doInBackground(Integer... params) {
 
     try {
-      if (actionID == 0) {
-        _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
-      } else if (actionID == 1) {
+      if (actionID == 1) {
 
-        boolean deleteFile = documentActivity.deleteFile(strSourceUrl);
-        if (deleteFile) {
-          strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
-          _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
-        }
+        documentActivity.deleteFile(strSourceUrl);
+        
+        strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
+        
       } else if (actionID == 2) {
-        DocumentAdapter adapter = documentActivity._documentAdapter;
-        _documentList = adapter._documentList;
-
+        
         documentActivity.copyFile(strSourceUrl, strDestinationUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
+        
       } else if (actionID == 3) {
-        DocumentAdapter adapter = documentActivity._documentAdapter;
-        _documentList = adapter._documentList;
-
+      
         documentActivity.moveFile(strSourceUrl, strDestinationUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
+        
       } else if (actionID == 4) {
         File file = new File(documentActivity._sdcard_temp_dir);
         ExoDocumentUtils.putFileToServerFromLocal(strSourceUrl + "/" + file.getName(),
                                                   file,
                                                   "image/png");
-        documentActivity._documentAdapter._urlStr = strSourceUrl;
-        _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
+        
       } else if (actionID == 5) {
-        DocumentAdapter adapter = documentActivity._documentAdapter;
-        _documentList = adapter._documentList;
-
+        
         documentActivity.moveFile(strSourceUrl, strDestinationUrl);
-        strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
-        _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
+        
+        boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
+        
+        strSourceUrl = strDestinationUrl;
+        
+        if(!isFolder) 
+          strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
+        
       } else if (actionID == 6) {
-        DocumentAdapter adapter = documentActivity._documentAdapter;
-        _documentList = adapter._documentList;
-
+        
         documentActivity.createFolder(strDestinationUrl);
-        strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
-        _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
+        
       }
       return true;
     } catch (RuntimeException e) {
@@ -132,6 +127,22 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
   @Override
   public void onPostExecute(Boolean result) {
     if (result) {
+      
+      documentActivity._fileForCurrnentActionBar = 
+        new ExoFile(strSourceUrl, ExoDocumentUtils.getLastPathComponent(strSourceUrl), true, "text/html");
+
+      if (actionID == 0 || actionID == 1 || actionID == 4 || actionID == 5 || actionID == 6) {
+        
+        if(actionID == 5) {
+          boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
+          String type = documentActivity._documentAdapter._documentActionDialog.myFile.contentType;
+          documentActivity._fileForCurrnentActionBar.isFolder = isFolder;
+          documentActivity._fileForCurrnentActionBar.contentType = type;
+        }
+      }
+      
+      _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
+      
       if (_documentList.size() == 0) {
         documentActivity.setEmptyView(View.VISIBLE);
       } else
@@ -144,6 +155,8 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
       }
       documentActivity._documentAdapter._documentList = _documentList;
       documentActivity._documentAdapter.notifyDataSetChanged();
+      documentActivity.addOrRemoveFileActionButton();
+      
       try {
         String title = new String(ExoDocumentUtils.getLastPathComponent(strSourceUrl)
                                                   .getBytes("ISO-8859-1"), "UTF-8");

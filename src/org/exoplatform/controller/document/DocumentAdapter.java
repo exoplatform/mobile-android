@@ -24,16 +24,13 @@ public class DocumentAdapter extends BaseAdapter {
 
   private Context             _mContext;
 
-  public String               _urlStr;
-
   public DocumentActionDialog _documentActionDialog;
 
   public DocumentAdapter(Context context, String urlStr) {
 
     _mContext = context;
-    _urlStr = urlStr;
 
-    _documentList = ExoDocumentUtils.getPersonalDriveContent(_urlStr);
+    _documentList = ExoDocumentUtils.getPersonalDriveContent(urlStr);
 
   }
 
@@ -78,10 +75,15 @@ public class DocumentAdapter extends BaseAdapter {
 
       public void onClick(View v) {
 
+        DocumentActivity._documentActivityInstance._fileForCurrnentActionBar = myFile;
+        
         if (!myFile.isFolder) {
           // Action for display file
           // eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
           // new UnreadableFileDialog(_mContext).show();
+          
+          DocumentActivity._documentActivityInstance.addOrRemoveFileActionButton();
+          
           WebViewActivity._url = myFile.urlStr;
           WebViewActivity._titlebar = myFile.fileName;
           Intent intent = new Intent(_mContext, WebViewActivity.class);
@@ -89,9 +91,7 @@ public class DocumentAdapter extends BaseAdapter {
 
         } else {
 
-          _urlStr = myFile.urlStr;
-
-          DocumentActivity._documentActivityInstance.onLoad(_urlStr, null, 0);
+          DocumentActivity._documentActivityInstance.onLoad(myFile.urlStr, null, 0);
 
         }
 
@@ -103,11 +103,16 @@ public class DocumentAdapter extends BaseAdapter {
 
       public void onClick(View v) {
 
-        _documentActionDialog = new DocumentActionDialog(_mContext, _documentList.get(pos));
-
         ExoFile file = _documentList.get(pos);
+        DocumentActivity._documentActivityInstance._fileForCurrnentCell = file; 
+        
+        if(_documentActionDialog == null)
+          _documentActionDialog = new DocumentActionDialog(_mContext, file);
+        
+        _documentActionDialog.myFile = file;
         _documentActionDialog._documentActionAdapter.setSelectedFile(file);
         _documentActionDialog._documentActionAdapter.notifyDataSetChanged();
+        _documentActionDialog.setTileForDialog(file.fileName);
         _documentActionDialog.show();
 
       }

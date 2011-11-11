@@ -25,11 +25,12 @@ public class ExoFile {
   public boolean isFolder;   // is folder
 
   // Default constructors
-//  public ExoFile() {
-//    urlStr = null;
-//    fileName = null;
-//    contentType = null;
-//  }
+  public ExoFile(String url, String name, boolean folder, String type) {
+    urlStr = url;
+    fileName = name;
+    isFolder = folder;
+    contentType = type;
+  }
 
   // Construtor
   public ExoFile(String urlString, String file_Name) {

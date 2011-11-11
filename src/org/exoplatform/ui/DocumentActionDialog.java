@@ -25,7 +25,7 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
   Context                      mContext;                   // context
 
-  ExoFile                      myFile;                     // Current file
+  public ExoFile                      myFile;                     // Current file
 
   // Localization string
   String                       strClose;
@@ -54,15 +54,20 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
     init();
 
+    setTileForDialog(myFile.fileName);
+    
   }
 
+  public void setTileForDialog(String title) {
+    _txtvFileName.setText(title);
+  }
+  
   private void init() {
 
     _listViewFileAction = (ListView) findViewById(R.id.ListView0_FileAction);
 
     _txtvFileName = (TextView) findViewById(R.id.TextView_Title);
-    _txtvFileName.setText(myFile.fileName);
-
+    
     changeLanguage();
 
     setDocumentActionAdapter();

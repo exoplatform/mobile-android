@@ -150,12 +150,13 @@ public class DocumentActionAdapter extends BaseAdapter {
     label.setText(fileAction.actionName);
     ImageView icon = (ImageView) view.findViewById(R.id.icon);
     icon.setImageResource(fileAction.imageID);
-
+    
     if (_selectedFile.isFolder) {
       if (fileAction.actionName.equalsIgnoreCase(strCopy)
           || fileAction.actionName.equalsIgnoreCase(strMove)
-          || (fileAction.actionName.equalsIgnoreCase(strPaste) && _fileCopied == null && _fileMoved == null)) {
+          || (fileAction.actionName.equalsIgnoreCase(strPaste) && (_fileCopied == null && _fileMoved == null))) {
 
+        
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
       }
