@@ -6,8 +6,16 @@
 	<ImageView android:id="@+id/social_selected_image"
 		android:layout_weight="1" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" />
-	<Button android:layout_marginTop="5dp"
-		android:id="@+id/social_selected_image_ok_button" android:textColor="#FFFFFF"
-		android:text="OK" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:background="@drawable/send_button_background_shape" />
+	<LinearLayout android:layout_width="fill_parent"
+		android:padding="5dp" android:gravity="center" android:layout_height="60dp"
+		android:background="@drawable/serveraddbuttonpanelbackground">
+		<Button android:gravity="center" android:id="@+id/social_selected_image_ok_button"
+			android:text="OK" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:textColor="#000000"
+			android:shadowColor="#888888" android:shadowDx="1.0"
+			android:shadowDy="2.0" android:shadowRadius="1.0"
+			android:background="@drawable/send_button_background_shape" />
+
+	</LinearLayout>
+
 </LinearLayout>
