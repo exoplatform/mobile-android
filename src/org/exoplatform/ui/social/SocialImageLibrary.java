@@ -3,6 +3,7 @@ package org.exoplatform.ui.social;
 import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialPhotoInfo;
@@ -126,6 +127,8 @@ public class SocialImageLibrary extends MyActionBar {
     private Context           mContext;
 
     private ArrayList<String> list;
+    
+    private HashMap<String, ImageView> imgViews;
 
     public ImageAdapter(Context c, ArrayList<String> l) {
       mContext = c;
@@ -134,6 +137,7 @@ public class SocialImageLibrary extends MyActionBar {
                                                   0);
       attr.recycle();
       list = l;
+      imgViews = new HashMap<String, ImageView>();
     }
 
     public int getCount() {
@@ -149,19 +153,29 @@ public class SocialImageLibrary extends MyActionBar {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-      ImageView imageView = new ImageView(mContext);
+      ImageView imageView = null;
       if (list.size() > 0) {
         String filePath = list.get(position);
-        bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
-        if (bitmap != null) {
-          bitmap = PhotoUltils.reflectionPhoto(bitmap);
+        
+        imageView = imgViews.get(list.get(position));
+        
+        if(imageView == null ) {
+          
+          bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
+//          if (bitmap != null) {
+//            bitmap = PhotoUltils.reflectionPhoto(bitmap);
+            
+          imageView = new ImageView(mContext);
+          imageView.setImageBitmap(bitmap);
+          imageView.setLayoutParams(new Gallery.LayoutParams(280, 240));
+          imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+          imageView.setBackgroundResource(mGalleryItemBackground);
+         
+          imgViews.put(list.get(position), imageView);
         }
-
+        
       }
-      imageView.setImageBitmap(bitmap);
-      imageView.setLayoutParams(new Gallery.LayoutParams(280, 240));
-      imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-      imageView.setBackgroundResource(mGalleryItemBackground);
+      
       bitmap = null;
       return imageView;
     }
