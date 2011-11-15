@@ -298,7 +298,10 @@ public class ImageDownloader {
       // Add bitmap to cache
       if (bitmap != null) {
         synchronized (sHardBitmapCache) {
-          sHardBitmapCache.put(url, bitmap);
+          if(!sHardBitmapCache.containsValue(bitmap)){
+            sHardBitmapCache.put(url, bitmap);
+          }
+          
         }
       }
 

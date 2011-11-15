@@ -139,27 +139,27 @@ public class PhotoUltils {
     return bitmap;
   }
 
-  public static Bitmap shrinkBitmap(InputStream inputStream, int width, int height) {
-
-    BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-    bmpFactoryOptions.inJustDecodeBounds = true;
-    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
-    int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float) height);
-    int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth / (float) width);
-
-    if (heightRatio > 1 || widthRatio > 1) {
-      if (heightRatio > widthRatio) {
-        bmpFactoryOptions.inSampleSize = heightRatio;
-      } else {
-        bmpFactoryOptions.inSampleSize = widthRatio;
-      }
-    }
-
-    bmpFactoryOptions.inJustDecodeBounds = false;
-    bitmap = BitmapFactory.decodeStream(inputStream, null, bmpFactoryOptions);
-    return bitmap;
-  }
+//  public static Bitmap shrinkBitmap(InputStream inputStream, int width, int height) {
+//
+//    BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
+//    bmpFactoryOptions.inJustDecodeBounds = true;
+//    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//
+//    int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float) height);
+//    int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth / (float) width);
+//
+//    if (heightRatio > 1 || widthRatio > 1) {
+//      if (heightRatio > widthRatio) {
+//        bmpFactoryOptions.inSampleSize = heightRatio;
+//      } else {
+//        bmpFactoryOptions.inSampleSize = widthRatio;
+//      }
+//    }
+//
+//    bmpFactoryOptions.inJustDecodeBounds = false;
+//    bitmap = BitmapFactory.decodeStream(inputStream, null, bmpFactoryOptions);
+//    return bitmap;
+//  }
 
   public static Bitmap reflectionPhoto(Bitmap originalImage) {
     // The gap we want between the reflection and the original image

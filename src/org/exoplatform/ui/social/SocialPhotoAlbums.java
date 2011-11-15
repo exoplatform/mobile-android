@@ -179,8 +179,7 @@ public class SocialPhotoAlbums extends MyActionBar {
       LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
       View view = inflate.inflate(R.layout.social_photo_albums_item_layout, this);
       albumsAvatar = (ImageView) view.findViewById(R.id.albums_image);
-      File file = new File(info.getAlbumsAvatar());
-      Bitmap bitmap = PhotoUltils.shrinkBitmap(file.getPath(), 1024, 860);
+      Bitmap bitmap = PhotoUltils.shrinkBitmap(info.getAlbumsAvatar(), 320, 240);
       albumsAvatar.setImageBitmap(bitmap);
 
       albumsName = (TextView) view.findViewById(R.id.albums_name);
