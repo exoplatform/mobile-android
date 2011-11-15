@@ -8,6 +8,7 @@ import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.widget.UnreadableFileDialog;
 
 import android.content.Context;
 import android.content.Intent;
@@ -75,21 +76,23 @@ public class DocumentAdapter extends BaseAdapter {
 
       public void onClick(View v) {
 
-        DocumentActivity._documentActivityInstance._fileForCurrnentActionBar = myFile;
-        
         if (!myFile.isFolder) {
           // Action for display file
           // eXoFilesControllerInstance.runOnUiThread(fileItemClickRunnable);
           // new UnreadableFileDialog(_mContext).show();
-          
           DocumentActivity._documentActivityInstance.addOrRemoveFileActionButton();
-          
-          WebViewActivity._url = myFile.urlStr;
-          WebViewActivity._titlebar = myFile.fileName;
-          Intent intent = new Intent(_mContext, WebViewActivity.class);
-          _mContext.startActivity(intent);
+          if (myFile.contentType != null
+              && (myFile.contentType.contains("image") || myFile.contentType.contains("text"))) {
+            WebViewActivity._url = myFile.urlStr;
+            WebViewActivity._titlebar = myFile.fileName;
+            Intent intent = new Intent(_mContext, WebViewActivity.class);
+            _mContext.startActivity(intent);
+          } else {
+            new UnreadableFileDialog(_mContext).show();
+          }
 
         } else {
+          DocumentActivity._documentActivityInstance._fileForCurrnentActionBar = myFile;
 
           DocumentActivity._documentActivityInstance.onLoad(myFile.urlStr, null, 0);
 
@@ -104,11 +107,11 @@ public class DocumentAdapter extends BaseAdapter {
       public void onClick(View v) {
 
         ExoFile file = _documentList.get(pos);
-        DocumentActivity._documentActivityInstance._fileForCurrnentCell = file; 
-        
-        if(_documentActionDialog == null)
+        DocumentActivity._documentActivityInstance._fileForCurrnentCell = file;
+
+        if (_documentActionDialog == null)
           _documentActionDialog = new DocumentActionDialog(_mContext, file);
-        
+
         _documentActionDialog.myFile = file;
         _documentActionDialog._documentActionAdapter.setSelectedFile(file);
         _documentActionDialog._documentActionAdapter.notifyDataSetChanged();

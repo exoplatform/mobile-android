@@ -1,14 +1,10 @@
 package org.exoplatform.ui.social;
 
 import greendroid.widget.ActionBarItem;
-import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ImageDownloader;
-import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.MyActionBar;
 
 import android.os.Bundle;
@@ -78,7 +74,6 @@ public class SocialAttachedImageActivity extends MyActionBar implements OnClickL
 
   @Override
   public void onBackPressed() {
-    super.onBackPressed();
     finish();
   }
 

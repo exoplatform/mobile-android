@@ -248,9 +248,10 @@ public class ImageDownloader {
           getRequest.setHeader("cookie", cookie);
         }
 
-        httpClient.getCredentialsProvider()
-                                     .setCredentials(AccountSetting.getInstance().getAuthScope(),
-                                                     AccountSetting.getInstance().getCredentials());
+        httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
+                                                                         .getAuthScope(),
+                                                           AccountSetting.getInstance()
+                                                                         .getCredentials());
         HttpResponse response = httpClient.execute(getRequest);
         int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode != HttpStatus.SC_OK) {
@@ -279,6 +280,8 @@ public class ImageDownloader {
         }
       } catch (Exception e) {
         return null;
+      } finally {
+        httpClient.getConnectionManager().shutdown();
       }
       return null;
     }

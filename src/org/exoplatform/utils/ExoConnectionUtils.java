@@ -195,7 +195,6 @@ public class ExoConnectionUtils {
 
   }
 
-
   // Send request with authentication
   public static String authorizationHeader(String username, String password) {
     String s = "Basic ";
@@ -224,15 +223,11 @@ public class ExoConnectionUtils {
 
       // pull the information back from the URL
       ipstr = con.getInputStream();
-/*
-      StringBuffer buf = new StringBuffer();
-
-      int c;
-      while ((c = ipstr.read()) != -1) {
-        buf.append((char) c);
-      }
-*/    
-//      con.disconnect();
+      /*
+       * StringBuffer buf = new StringBuffer(); int c; while ((c = ipstr.read())
+       * != -1) { buf.append((char) c); }
+       */
+      // con.disconnect();
 
     } catch (ClientProtocolException e) {
       e.getMessage();
@@ -247,6 +242,11 @@ public class ExoConnectionUtils {
 
     try {
       HttpGet get = new HttpGet(url);
+      get.setHeader("Cookie", _strCookie);
+      httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
+                                                                       .getAuthScope(),
+                                                         AccountSetting.getInstance()
+                                                                       .getCredentials());
       HttpResponse response;
       response = httpClient.execute(get);
       int status = response.getStatusLine().getStatusCode();
