@@ -39,7 +39,9 @@ public class LoginController {
 
   private String             strNetworkConnectionFailed;
 
-  private String             strServerFailed;
+  private String             strServerUnreachable;
+
+  private String             strServerInvalid;
 
   private String             strUserNamePasswordFailed;
 
@@ -101,6 +103,8 @@ public class LoginController {
     strNetworkConnectionFailed = bundle.getString("ConnectionError");
     strUserNamePasswordFailed = bundle.getString("UserNamePasswordFailed");
     mobileNotCompilant = bundle.getString("CompliantMessage");
+    strServerInvalid = bundle.getString("ServerInvalid");
+    strServerUnreachable = bundle.getString("ServerUnreachable");
     titleString = bundle.getString("Warning");
     okString = bundle.getString("OK");
 
@@ -140,7 +144,7 @@ public class LoginController {
       if (result == null) {
         dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
         dialog.show();
-      } else if (result.equalsIgnoreCase("YES")) {
+      } else if (result.equalsIgnoreCase(ExoConstants.LOGIN_YES)) {
         AccountSetting accountSetting = AccountSetting.getInstance();
         createAuthorization(uri.getHost(), uri.getPort(), userName, password);
         SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
@@ -162,13 +166,16 @@ public class LoginController {
           dialog.show();
         }
 
-      } else if (result.equalsIgnoreCase("NO")) {
+      } else if (result.equalsIgnoreCase(ExoConstants.LOGIN_NO)) {
         dialog = new WarningDialog(mContext, titleString, strUserNamePasswordFailed, okString);
         dialog.show();
-      } else if (result.contains("confused")) {
-        dialog = new WarningDialog(mContext, titleString, result, okString);
+      } else if (result.contains(ExoConstants.LOGIN_INVALID)) {
+        dialog = new WarningDialog(mContext, titleString, strServerInvalid, okString);
         dialog.show();
-      } else {
+      } else if (result.contains(ExoConstants.LOGIN_UNREACHABLE)) {
+        dialog = new WarningDialog(mContext, titleString, strServerUnreachable, okString);
+        dialog.show();
+      }else {
         dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
         dialog.show();
       }

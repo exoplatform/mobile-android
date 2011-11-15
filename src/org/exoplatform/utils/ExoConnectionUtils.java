@@ -177,20 +177,26 @@ public class ExoConnectionUtils {
         InputStream instream = entity.getContent();
         _strFirstLoginContent = convertStreamToString(instream);
         if (_strFirstLoginContent.contains("Sign in failed. Wrong username or password.")) {
-          return "NO";
+          return ExoConstants.LOGIN_NO;
         } else if (_strFirstLoginContent.contains("error', '/main?url")) {
           _strFirstLoginContent = null;
           return "ERROR";
         } else if (_strFirstLoginContent.contains("eXo.env.portal")) {
-          return "YES";
-        } else
-          return null;
+          return ExoConstants.LOGIN_YES;
+        } else {
+          return ExoConstants.LOGIN_INVALID;
+        }
+
       } else {
         return null;
       }
       // httpClient.getConnectionManager().shutdown();
     } catch (Exception e) {
-      return e.getMessage();
+      String error = e.getMessage();
+      if (error.contains("No route")) {
+        return ExoConstants.LOGIN_UNREACHABLE;
+      } else
+        return null;
     }
 
   }

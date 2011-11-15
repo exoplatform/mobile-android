@@ -1,6 +1,8 @@
 package org.exoplatform.widget;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
+import java.util.Set;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -129,6 +131,12 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 2:
       // ks-wiki:spaces
+      Map<String, String> templateMap = activityInfo.templateParams;
+    Set<String> set = templateMap.keySet();
+    for (String param : set) {
+      System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+          + templateMap.get(param));
+    }
       setActivityTypeWiki();
       break;
     case 3:

@@ -10,6 +10,14 @@ public class ExoConstants {
 
   public static final String IS_MOBILE_COMPLIANT           = "isMobileCompliant";
 
+  public static final String LOGIN_YES                     = "YES";
+
+  public static final String LOGIN_NO                      = "NO";
+
+  public static final String LOGIN_INVALID                 = "INVALID";
+
+  public static final String LOGIN_UNREACHABLE             = "UNREACHABLE";
+
   public static final String COMPOSE_TYPE                  = "COMPOSE_TYPE";
 
   public static final String SETTING_TYPE                  = "SETTING_TYPE";
