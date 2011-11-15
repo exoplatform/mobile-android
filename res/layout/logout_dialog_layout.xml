@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="wrap_content"
 	android:minWidth="280dip" android:layout_height="wrap_content"
-	android:background="@drawable/dialog_background">
+	android:background="@drawable/serveraddingbackgroundtextfieldspanel">
 	<ScrollView android:layout_marginTop="10dp"
 		android:layout_marginBottom="10dp" android:fadingEdge="none" android:layout_height="wrap_content"
 		android:layout_width="fill_parent" android:layout_weight="1">
@@ -10,7 +10,7 @@
 			android:orientation="vertical" android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 			<ImageView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:background="@drawable/alert_image" />
+				android:layout_height="wrap_content" android:background="@drawable/warning_icon" />
 			<TextView android:id="@+id/logout_content" android:textSize="16sp"
 				android:text="Ce fichier ne peut pas être ouvert depuis l'application"
 				android:paddingRight="8dip" android:paddingLeft="8dip"

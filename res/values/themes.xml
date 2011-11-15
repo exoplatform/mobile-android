@@ -24,20 +24,11 @@
 
 	<style name="Theme.eXo_Back" parent="@style/Theme.eXo">
 		<item name="gdActionBarBackground">@color/action_bar_tint</item>
-		<item name="gdActionBarHomeDrawable">@drawable/home</item>
+		<item name="gdActionBarHomeDrawable">@drawable/home_background</item>
 	</style>
 
 	<style name="Theme.eXo_signout" parent="@style/Theme.eXo">
 		<item name="gdActionBarBackground">@color/action_bar_tint</item>
 		<item name="gdActionBarHomeDrawable">@drawable/action_bar_logout_button</item>
 	</style>
-
-	<style name="Theme.GDCatalog.TweakedItems" parent="@style/Theme.eXo">
-
-		<item name="gdTextAppearanceLarge">@style/TextAppearanceLarge</item>
-		<item name="gdItemViewPreferredHeight">45dp</item>
-		<item name="gdSeparatorItemViewStyle">@style/SeparatorItemView</item>
-
-	</style>
-
 </resources>
