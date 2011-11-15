@@ -53,6 +53,8 @@ public class LoginController {
 
   private WarningDialog      dialog;
 
+  private LoginWaitingDialog _progressDialog;
+
   public LoginController(Context context, String user, String pass) {
     mContext = context;
     userName = user;
@@ -86,7 +88,7 @@ public class LoginController {
     }
   }
 
-  private void onCancelLoad() {
+  public void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == LoginTask.Status.RUNNING) {
       mLoadTask.cancel(true);
       mLoadTask = null;
@@ -111,9 +113,7 @@ public class LoginController {
     AccountSetting.getInstance().setCredentials(credential);
   }
 
-  private class LoginTask extends UserTask<Void, Void, String> {
-    private LoginWaitingDialog _progressDialog;
-
+  public class LoginTask extends UserTask<Void, Void, String> {
     @Override
     public void onPreExecute() {
       _progressDialog = new LoginWaitingDialog(mContext, null, strSigning);

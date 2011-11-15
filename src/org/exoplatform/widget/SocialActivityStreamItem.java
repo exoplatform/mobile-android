@@ -138,6 +138,12 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 4:
       // DOC_ACTIVITY
+//      Map<String, String> templateMap = activityInfo.templateParams;
+//      Set<String> set = templateMap.keySet();
+//      for (String param : set) {
+//        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+//            + templateMap.get(param));
+//      }
 
       String tempMessage = activityInfo.templateParams.get("MESSAGE");
       if (tempMessage != null) {
@@ -189,13 +195,6 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 9:
       // contents:spaces
-      Map<String, String> templateMap = activityInfo.templateParams;
-      Set<String> set = templateMap.keySet();
-      for (String param : set) {
-        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-            + templateMap.get(param));
-      }
-
       String contentLink = activityInfo.templateParams.get("contenLink");
       if (contentLink != null) {
         String contentType = activityInfo.templateParams.get("mimeType");

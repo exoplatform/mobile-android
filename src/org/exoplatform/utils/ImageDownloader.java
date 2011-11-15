@@ -14,6 +14,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 
@@ -230,6 +234,12 @@ public class ImageDownloader {
     public Bitmap doInBackground(String... params) {
       url = params[0];
 
+      HttpParams httpParameters = new BasicHttpParams();
+      HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
+      HttpConnectionParams.setSoTimeout(httpParameters, 30000);
+      HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+
+      DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
       HttpGet getRequest = null;
       try {
         getRequest = new HttpGet(url);
@@ -238,10 +248,10 @@ public class ImageDownloader {
           getRequest.setHeader("cookie", cookie);
         }
 
-        ExoConnectionUtils.httpClient.getCredentialsProvider()
+        httpClient.getCredentialsProvider()
                                      .setCredentials(AccountSetting.getInstance().getAuthScope(),
                                                      AccountSetting.getInstance().getCredentials());
-        HttpResponse response = ExoConnectionUtils.httpClient.execute(getRequest);
+        HttpResponse response = httpClient.execute(getRequest);
         int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode != HttpStatus.SC_OK) {
           return null;
