@@ -36,18 +36,26 @@ public class SocialAttachedImageActivity extends MyActionBar implements OnClickL
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.social_attached_image_layout);
     onChangeLanguage();
-    String imageName = SocialDetailHelper.getInstance().getAttachedImageName();
-    setTitle(imageName);
     imageUrl = SocialDetailHelper.getInstance().getAttachedImageUrl();
+    String imageName = getImageName(imageUrl);
+    setTitle(imageName);
     init();
   }
 
   private void init() {
     imageView = (ImageView) findViewById(R.id.social_attached_image_view);
-    SocialDetailHelper.getInstance().imageDownloader.download(imageUrl, imageView,ExoConnectionUtils._strCookie);
+    SocialDetailHelper.getInstance().imageDownloader.download(imageUrl,
+                                                              imageView,
+                                                              ExoConnectionUtils._strCookie);
     okButton = (Button) findViewById(R.id.social_attached_image_ok_button);
     okButton.setText(okText);
     okButton.setOnClickListener(this);
+  }
+
+  private String getImageName(String url) {
+    int index = url.lastIndexOf("/");
+    String name = url.substring(index + 1);
+    return name;
   }
 
   @Override

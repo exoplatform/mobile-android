@@ -27,6 +27,8 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   private Button    okButton;
 
   private String    filePath = null;
+  
+  private File file;
 
   private String    selectedPhotoTitle;
 
@@ -45,10 +47,9 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   private void init() {
     imageView = (ImageView) findViewById(R.id.social_selected_image);
     filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
-    // Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
-    // Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+    file = new File(filePath);
+    setTitle(file.getName());
     Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
-    // Bitmap bitmap = BitmapFactory.decodeFile(filePath);
     imageView.setImageBitmap(bitmap);
     okButton = (Button) findViewById(R.id.social_selected_image_ok_button);
     okButton.setText(okText);
@@ -86,18 +87,18 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   public void onClick(View view) {
     if (view == okButton) {
       if (filePath != null) {
-        File file = new File(filePath);
-        
-        if(DocumentActivity._documentActivityInstance != null) {
+//        File file = new File(filePath);
+
+        if (DocumentActivity._documentActivityInstance != null) {
           DocumentActivity._documentActivityInstance._sdcard_temp_dir = filePath;
           DocumentActivity._documentActivityInstance.uploadFile();
         }
-          
+
         else
           ComposeMessageActivity.addImageToMessage(file);
 
         finish();
-        
+
         if (SocialImageLibrary.socialImageLibrary != null)
           SocialImageLibrary.socialImageLibrary.finish();
         if (SocialPhotoAlbums.socialPhotoAlbums != null)
@@ -109,8 +110,8 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
 
   private void onChangeLanguage() {
     LocalizationHelper bundle = LocalizationHelper.getInstance();
-    selectedPhotoTitle = bundle.getString("SelectedPhoto");
-    setTitle(selectedPhotoTitle);
+//    selectedPhotoTitle = bundle.getString("SelectedPhoto");
+//    setTitle(selectedPhotoTitle);
     okText = bundle.getString("OK");
 
   }

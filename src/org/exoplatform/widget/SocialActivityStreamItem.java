@@ -1,8 +1,6 @@
 package org.exoplatform.widget;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Map;
-import java.util.Set;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -185,13 +183,6 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 8:
       // exosocial:people
-      // Map<String, String> templateMap = activityInfo.templateParams;
-      // Set<String> set = templateMap.keySet();
-      // for (String param : set) {
-      // System.out.println("type: " + activityInfo.getType() +
-      // "--template key: " + param + "-- "
-      // + templateMap.get(param));
-      // }
       break;
     case 9:
       // contents:spaces

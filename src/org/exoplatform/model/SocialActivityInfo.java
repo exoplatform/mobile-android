@@ -136,12 +136,4 @@ public class SocialActivityInfo {
     return attachImageUrl;
   }
 
-  public void setAttachedImageName(String name) {
-    attachedImageName = name;
-  }
-
-  public String getAttachedImageName() {
-    return attachedImageName;
-  }
-
 }

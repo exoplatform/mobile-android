@@ -153,8 +153,6 @@ public class SocialController {
           String activityId = activityInfo.getActivityId();
           SocialDetailHelper.getInstance().setActivityId(activityId);
           SocialDetailHelper.getInstance().setAttachedImageUrl(activityInfo.getAttachedImageUrl());
-          SocialDetailHelper.getInstance()
-                            .setAttachedImageName(activityInfo.getAttachedImageName());
           Intent intent = new Intent(mContext, SocialDetailActivity.class);
           mContext.startActivity(intent);
         }

@@ -49,11 +49,4 @@ public class SocialDetailHelper {
     return attachImageUrl;
   }
 
-  public void setAttachedImageName(String name) {
-    attachedImageName = name;
-  }
-
-  public String getAttachedImageName() {
-    return attachedImageName;
-  }
 }
