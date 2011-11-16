@@ -32,6 +32,8 @@ public class SettingServerEditionController {
   private String               serverIsEmpty;
 
   private String               serverisExisted;
+  
+  private String selectedServer;
 
   public SettingServerEditionController(Context context) {
     mContext = context;
@@ -100,7 +102,7 @@ public class SettingServerEditionController {
                                                            "");
       }
     }
-    onSave(myServerObj);
+    onSave();
   }
 
   public void onDelete(ServerObjInfo myServerObj, ServerObjInfo serverObj) {
@@ -120,10 +122,10 @@ public class SettingServerEditionController {
                                                          "");
 
     }
-    onSave(myServerObj);
+    onSave();
   }
 
-  private void onSave(ServerObjInfo myServerObj) {
+  private void onSave() {
 
     ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
     SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
