@@ -103,6 +103,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       textViewMessage.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
     } catch (UnsupportedEncodingException e) {
     }
+
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
@@ -131,12 +132,13 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 2:
       // ks-wiki:spaces
-      Map<String, String> templateMap = activityInfo.templateParams;
-    Set<String> set = templateMap.keySet();
-    for (String param : set) {
-      System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-          + templateMap.get(param));
-    }
+      // Map<String, String> templateMap = activityInfo.templateParams;
+      // Set<String> set = templateMap.keySet();
+      // for (String param : set) {
+      // System.out.println("type: " + activityInfo.getType() +
+      // "--template key: " + param + "-- "
+      // + templateMap.get(param));
+      // }
       setActivityTypeWiki();
       break;
     case 3:
@@ -144,12 +146,13 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 4:
       // DOC_ACTIVITY
-//      Map<String, String> templateMap = activityInfo.templateParams;
-//      Set<String> set = templateMap.keySet();
-//      for (String param : set) {
-//        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-//            + templateMap.get(param));
-//      }
+      // Map<String, String> templateMap = activityInfo.templateParams;
+      // Set<String> set = templateMap.keySet();
+      // for (String param : set) {
+      // System.out.println("type: " + activityInfo.getType() +
+      // "--template key: " + param + "-- "
+      // + templateMap.get(param));
+      // }
 
       String tempMessage = activityInfo.templateParams.get("MESSAGE");
       if (tempMessage != null) {
@@ -250,6 +253,12 @@ public class SocialActivityStreamItem extends LinearLayout {
       forumBuffer.append("</body></html>");
 
       textViewName.setText(Html.fromHtml(forumBuffer.toString()));
+      String forumBody = activityInfo.getBody();
+      if (forumBody != null) {
+        forumBody = new String(forumBody.getBytes("ISO-8859-1"), "UTF-8");
+        textViewMessage.setText(Html.fromHtml(forumBody), TextView.BufferType.SPANNABLE);
+      }
+
     } catch (UnsupportedEncodingException e) {
     }
 
@@ -284,6 +293,11 @@ public class SocialActivityStreamItem extends LinearLayout {
       buffer.append("</body></html>");
 
       textViewName.setText(Html.fromHtml(buffer.toString()));
+      String wikiBody = activityInfo.getBody();
+      if (wikiBody != null) {
+        wikiBody = new String(wikiBody.getBytes("ISO-8859-1"), "UTF-8");
+        textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
+      }
     } catch (UnsupportedEncodingException e) {
     }
   }
@@ -320,6 +334,12 @@ public class SocialActivityStreamItem extends LinearLayout {
       answerBuffer.append("</body></html>");
 
       textViewName.setText(Html.fromHtml(answerBuffer.toString()));
+      
+      String answerBody = activityInfo.getBody();
+      if (answerBody != null) {
+        answerBody = new String(answerBody.getBytes("ISO-8859-1"), "UTF-8");
+        textViewMessage.setText(Html.fromHtml(answerBody), TextView.BufferType.SPANNABLE);
+      }
     } catch (UnsupportedEncodingException e) {
     }
   }

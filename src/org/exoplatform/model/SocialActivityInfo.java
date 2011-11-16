@@ -18,6 +18,8 @@ public class SocialActivityInfo {
 
   private String             title;
 
+  private String             body;
+
   private long               postedTime;
 
   private int                nbLikes;
@@ -78,6 +80,13 @@ public class SocialActivityInfo {
 
   public String getTitle() {
     return title;
+  }
+  public void setBody(String bod) {
+    body = bod;
+  }
+
+  public String getBody() {
+    return body;
   }
 
   public void setType(String t) {

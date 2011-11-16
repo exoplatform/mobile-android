@@ -91,12 +91,12 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       streamInfo.setImageUrl(restProfile.getAvatarUrl());
       streamInfo.setUserName(restProfile.getFullName());
       streamInfo.setTitle(selectedRestActivity.getTitle());
+      streamInfo.setBody(selectedRestActivity.getBody());
       streamInfo.setPostedTime(selectedRestActivity.getPostedTime());
       streamInfo.setLikeNumber(selectedRestActivity.getTotalNumberOfLikes());
       streamInfo.setCommentNumber(selectedRestActivity.getTotalNumberOfComments());
       activityType = selectedRestActivity.getType();
       streamInfo.setType(activityType);
-      System.out.println("activityType: " + activityType);
       streamInfo.templateParams = selectedRestActivity.getTemplateParams();
 
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();

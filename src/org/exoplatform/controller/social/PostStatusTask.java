@@ -8,6 +8,7 @@ import org.apache.http.HttpResponse;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
+import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUltils;
@@ -103,6 +104,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
   public void onPostExecute(Integer result) {
     if (result == 1) {
       ((Activity) mContext).finish();
+      SocialActivity.socialActivity.reloadActivity();
     } else {
       new WarningDialog(mContext, warningTitle, errorString, okString).show();
     }
