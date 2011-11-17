@@ -17,11 +17,12 @@ public class ExoDocumentUtils {
   public static String repositoryHomeURL = null;
 
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
+    File tempFile = PhotoUltils.reziseFileImage(fileManager);
     HttpResponse response = null;
     try {
 
       HttpPut put = new HttpPut(url);
-      FileEntity fileEntity = new FileEntity(fileManager, fileType);
+      FileEntity fileEntity = new FileEntity(tempFile, fileType);
       put.setEntity(fileEntity);
       fileEntity.setContentType(fileType);
 
@@ -34,6 +35,8 @@ public class ExoDocumentUtils {
 
     } catch (Exception e) {
       return false;
+    } finally {
+      tempFile.delete();
     }
 
   }

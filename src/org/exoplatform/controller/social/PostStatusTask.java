@@ -69,9 +69,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
         File file = new File(sdcard_temp_dir);
         String imageDir = uploadUrl + "/" + file.getName();
         if (file != null) {
-          File tempFile = PhotoUltils.reziseFileImage(file);
-          ExoDocumentUtils.putFileToServerFromLocal(imageDir, tempFile, "image/jpeg");
-          tempFile.delete();
+          ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, "image/jpeg");
           Map<String, String> templateParams = new HashMap<String, String>();
 
           activityImlp.setType("DOC_ACTIVITY");

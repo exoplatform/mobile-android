@@ -2,6 +2,7 @@ package org.exoplatform.controller.document;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.model.ExoFile;
@@ -39,7 +40,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   private DocumentActivity      documentActivity;
 
-  private List<ExoFile>         _documentList;
+  private List<ExoFile>         _documentList = new ArrayList<ExoFile>();
 
   public DocumentLoadTask(Context context,
                           DocumentActivity activity,
@@ -73,49 +74,49 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
   @Override
   public Boolean doInBackground(Integer... params) {
 
+    boolean result = true;
+
     try {
       if (actionID == 1) {
-
-        documentActivity.deleteFile(strSourceUrl);
-        
+        result = documentActivity.deleteFile(strSourceUrl);
+        contentString = LocalizationHelper.getInstance().getString("DocumentCannotDelete");
         strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
-        
+
       } else if (actionID == 2) {
-        
-        documentActivity.copyFile(strSourceUrl, strDestinationUrl);
+        result = documentActivity.copyFile(strSourceUrl, strDestinationUrl);
+        contentString = LocalizationHelper.getInstance().getString("DocumentCopyPasteError");
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
-        
+
       } else if (actionID == 3) {
-      
-        documentActivity.moveFile(strSourceUrl, strDestinationUrl);
+        result = documentActivity.moveFile(strSourceUrl, strDestinationUrl);
+        contentString = LocalizationHelper.getInstance().getString("DocumentCopyPasteError");
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
-        
+
       } else if (actionID == 4) {
         File file = new File(documentActivity._sdcard_temp_dir);
-        ExoDocumentUtils.putFileToServerFromLocal(strSourceUrl + "/" + file.getName(),
-                                                  file,
-                                                  "image/png");
-        
+        contentString = LocalizationHelper.getInstance().getString("DocumentUploadError");
+        result = ExoDocumentUtils.putFileToServerFromLocal(strSourceUrl + "/" + file.getName(),
+                                                           file,
+                                                           "image/png");
+
       } else if (actionID == 5) {
-        
-        documentActivity.moveFile(strSourceUrl, strDestinationUrl);
-        
+        result = documentActivity.moveFile(strSourceUrl, strDestinationUrl);
+        contentString = LocalizationHelper.getInstance().getString("DocumentRenameError");
         boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
-        
         strSourceUrl = strDestinationUrl;
-        
-        if(!isFolder) 
+        if (!isFolder)
           strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
-        
+
       } else if (actionID == 6) {
-        
-        documentActivity.createFolder(strDestinationUrl);
-        
+        contentString = LocalizationHelper.getInstance().getString("DocumentCreateFolderError");
+        result = documentActivity.createFolder(strDestinationUrl);
+
       }
-      
-      _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
-      
-      return true;
+      if (result == true) {
+        _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
+      }
+
+      return result;
     } catch (RuntimeException e) {
       return false;
     }
@@ -130,24 +131,22 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
   @Override
   public void onPostExecute(Boolean result) {
     if (result) {
-      
-      documentActivity._fileForCurrnentActionBar = 
-        new ExoFile(strSourceUrl, ExoDocumentUtils.getLastPathComponent(strSourceUrl), true, "text/html");
+
+      documentActivity._fileForCurrnentActionBar = new ExoFile(strSourceUrl,
+                                                               ExoDocumentUtils.getLastPathComponent(strSourceUrl),
+                                                               true,
+                                                               "text/html");
 
       if (actionID == 0 || actionID == 1 || actionID == 4 || actionID == 5 || actionID == 6) {
-        
-        if(actionID == 5) {
+
+        if (actionID == 5) {
           boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
           String type = documentActivity._documentAdapter._documentActionDialog.myFile.contentType;
           documentActivity._fileForCurrnentActionBar.isFolder = isFolder;
           documentActivity._fileForCurrnentActionBar.contentType = type;
         }
       }
-      
-      if (_documentList.size() == 0) {
-        documentActivity.setEmptyView(View.VISIBLE);
-      } else
-        documentActivity.setEmptyView(View.GONE);
+
       if (documentActivity._documentAdapter == null) {
 
         documentActivity._documentAdapter = new DocumentAdapter(documentActivity,
@@ -157,7 +156,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
       documentActivity._documentAdapter._documentList = _documentList;
       documentActivity._documentAdapter.notifyDataSetChanged();
       documentActivity.addOrRemoveFileActionButton();
-      
+
       try {
         String title = new String(ExoDocumentUtils.getLastPathComponent(strSourceUrl)
                                                   .getBytes("ISO-8859-1"), "UTF-8");
@@ -168,8 +167,11 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
-      documentActivity.setEmptyView(View.VISIBLE);
     }
+    if (_documentList.size() == 0) {
+      documentActivity.setEmptyView(View.VISIBLE);
+    } else
+      documentActivity.setEmptyView(View.GONE);
     _progressDialog.dismiss();
 
   }
