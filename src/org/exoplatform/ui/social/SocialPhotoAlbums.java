@@ -3,8 +3,6 @@ package org.exoplatform.ui.social;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
@@ -12,7 +10,6 @@ import org.exoplatform.model.SocialPhotoInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
-import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.ProgressDialog;
@@ -20,7 +17,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -64,7 +60,7 @@ public class SocialPhotoAlbums extends MyActionBar {
 
   private void setListAdapter(ArrayList<SocialPhotoInfo> photoList) {
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-    params.setMargins(0, 0, 0, 1);
+    params.setMargins(0, 0, 0, -1);
     albumLayout.removeAllViews();
     for (int i = 0; i < photoList.size(); i++) {
       final SocialPhotoInfo photoInfo = photoList.get(i);
@@ -76,10 +72,6 @@ public class SocialPhotoAlbums extends MyActionBar {
             photoInfoSelected = photoInfo;
             Intent intent = new Intent(SocialPhotoAlbums.this, SocialImageLibrary.class);
             startActivity(intent);
-            // photoInfoSelected = photoInfo;
-            // Intent intent = new Intent(SocialPhotoAlbums.this,
-            // CoverFlowExample.class);
-            // startActivity(intent);
           }
         });
 
@@ -179,7 +171,7 @@ public class SocialPhotoAlbums extends MyActionBar {
       LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
       View view = inflate.inflate(R.layout.social_photo_albums_item_layout, this);
       albumsAvatar = (ImageView) view.findViewById(R.id.albums_image);
-      Bitmap bitmap = PhotoUltils.shrinkBitmap(info.getAlbumsAvatar(), 320, 240);
+      Bitmap bitmap = PhotoUltils.shrinkBitmap(info.getAlbumsAvatar(), 160, 120);
       albumsAvatar.setImageBitmap(bitmap);
 
       albumsName = (TextView) view.findViewById(R.id.albums_name);

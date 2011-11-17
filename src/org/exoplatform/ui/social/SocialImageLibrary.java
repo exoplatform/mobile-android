@@ -39,7 +39,7 @@ public class SocialImageLibrary extends MyActionBar {
 
   private LoadImageTask            mLoadTask;
 
-  private Bitmap                   bitmap;
+//  private Bitmap                   bitmap;
 
   public static SocialImageLibrary socialImageLibrary;
 
@@ -90,10 +90,15 @@ public class SocialImageLibrary extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-    super.onBackPressed();
     finish();
   }
-
+  
+  @Override
+  public void onLowMemory() {
+    super.onLowMemory();
+    System.out.println("onLowMemory()");
+  }
+  
   private void setAdapter(ArrayList<String> list) {
     ImageAdapter adapter = new ImageAdapter(this, list);
 
@@ -120,6 +125,8 @@ public class SocialImageLibrary extends MyActionBar {
     loadingData = bundle.getString("LoadingData");
 
   }
+  
+  
 
   private class ImageAdapter extends BaseAdapter {
     int                       mGalleryItemBackground;
@@ -161,7 +168,7 @@ public class SocialImageLibrary extends MyActionBar {
         
         if(imageView == null ) {
           
-          bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
+         Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 160, 120);
 //          if (bitmap != null) {
 //            bitmap = PhotoUltils.reflectionPhoto(bitmap);
             
@@ -176,7 +183,6 @@ public class SocialImageLibrary extends MyActionBar {
         
       }
       
-      bitmap = null;
       return imageView;
     }
   }

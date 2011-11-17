@@ -49,7 +49,7 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
     file = new File(filePath);
     setTitle(file.getName());
-    Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 200, 200);
+    Bitmap bitmap = PhotoUltils.shrinkBitmap(filePath, 1024, 860);
     imageView.setImageBitmap(bitmap);
     okButton = (Button) findViewById(R.id.social_selected_image_ok_button);
     okButton.setText(okText);
