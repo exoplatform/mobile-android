@@ -168,7 +168,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
-    if (_documentList.size() == 0) {
+    if (documentActivity._documentAdapter._documentList.size() == 0) {
       documentActivity.setEmptyView(View.VISIBLE);
     } else
       documentActivity.setEmptyView(View.GONE);
