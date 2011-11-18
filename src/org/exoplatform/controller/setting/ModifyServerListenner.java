@@ -27,7 +27,7 @@ public class ModifyServerListenner implements OnItemClickListener {
     int domainIndex = Integer.valueOf(AccountSetting.getInstance().getDomainIndex());
     if (domainIndex == pos) {
       String strCannotEdit = LocalizationHelper.getInstance().getString("CannotEditServer");
-      Toast.makeText(mContext, strCannotEdit, Toast.LENGTH_LONG).show();
+      Toast.makeText(mContext, strCannotEdit, Toast.LENGTH_SHORT).show();
     } else {
       ServerSettingHelper.getInstance().setIsNewServer(false);
       ServerSettingHelper.getInstance().setSelectedServerIndex(pos);

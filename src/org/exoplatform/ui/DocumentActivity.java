@@ -66,8 +66,9 @@ public class DocumentActivity extends MyActionBar {
   private DocumentLoadTask       mLoadTask;
 
   private View                   empty_stub;
-  
+
   public ExoFile                 _fileForCurrnentActionBar;
+
   public ExoFile                 _fileForCurrnentCell;
 
   // Constructor
@@ -100,20 +101,20 @@ public class DocumentActivity extends MyActionBar {
       finish();
       break;
     case 0:
-      
-      if(_documentAdapter._documentActionDialog == null)
-        _documentAdapter._documentActionDialog = new DocumentActionDialog(this, _fileForCurrnentActionBar);
-      
+
+      if (_documentAdapter._documentActionDialog == null)
+        _documentAdapter._documentActionDialog = new DocumentActionDialog(this,
+                                                                          _fileForCurrnentActionBar);
+
       _documentAdapter._documentActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrnentActionBar);
       _documentAdapter._documentActionDialog._documentActionAdapter.notifyDataSetChanged();
       _documentAdapter._documentActionDialog.setTileForDialog(_fileForCurrnentActionBar.fileName);
       _documentAdapter._documentActionDialog.myFile = _fileForCurrnentActionBar;
       _documentAdapter._documentActionDialog.show();
-      
 
       break;
     default:
-      
+
       break;
 
     }
@@ -121,18 +122,17 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void addOrRemoveFileActionButton() {
-    
+
     if (_fileForCurrnentActionBar.urlStr.equalsIgnoreCase(_urlDocumentHome)) {
       getActionBar().removeItem(0);
-    }
-    else {
-      if(getActionBar().getItem(0) == null) {
-    
+    } else {
+      if (getActionBar().getItem(0) == null) {
+
         addActionBarItem();
         getActionBar().getItem(0).setDrawable(R.drawable.documentdisclosureactionbutton);
       }
     }
-    
+
   }
 
   @Override
@@ -142,13 +142,12 @@ public class DocumentActivity extends MyActionBar {
     } else {
       String url = ExoDocumentUtils.getParentUrl(_fileForCurrnentActionBar.urlStr);
       String name = ExoDocumentUtils.getLastPathComponent(url);
-      _fileForCurrnentActionBar =  new ExoFile(url, name, true, "text/html");
-      
+      _fileForCurrnentActionBar = new ExoFile(url, name, true, "text/html");
+
       if (_fileForCurrnentActionBar.urlStr.length() < _urlDocumentHome.length()) {
         _documentActivityInstance = null;
-        finish(); 
-      }
-      else {
+        finish();
+      } else {
         onLoad(_fileForCurrnentActionBar.urlStr, null, 0);
       }
     }
@@ -177,13 +176,13 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void uploadFile() {
-    
+
     setViewUploadImage(false);
 
     onLoad(_documentAdapter._documentActionDialog.myFile.urlStr, null, 4);
 
   }
-  
+
   private void init() {
 
     if (_listViewDocument == null) {
@@ -194,7 +193,7 @@ public class DocumentActivity extends MyActionBar {
         public void onClick(View v) {
 
           uploadFile();
-          
+
         }
       });
 
@@ -281,12 +280,11 @@ public class DocumentActivity extends MyActionBar {
     _progressDialog.show();
   }
 
-//Add a photo: camera or photo album
+  // Add a photo: camera or photo album
   public void addAPhoto() {
-    
-    
+
   }
-  
+
   // Take a photo
   public void takePicture() {
     String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
@@ -381,6 +379,30 @@ public class DocumentActivity extends MyActionBar {
 
   }
 
+  public boolean renameFolder(String source, String destination) {
+    HttpResponse response;
+    try {
+      WebdavMethod create = new WebdavMethod("HEAD", destination);
+      response = ExoConnectionUtils.httpClient.execute(create);
+      int status = response.getStatusLine().getStatusCode();
+      if (status >= 200 && status < 300) {
+        return false;
+      } else {
+        WebdavMethod move = new WebdavMethod("MOVE", source, destination);
+
+        response = ExoConnectionUtils.httpClient.execute(move);
+        status = response.getStatusLine().getStatusCode();
+        if (status >= 200 && status < 300) {
+          return true;
+        } else
+          return false;
+      }
+    } catch (Exception e) {
+      return false;
+    }
+
+  }
+
   public boolean createFolder(String destination) {
     HttpResponse response;
     try {
@@ -389,7 +411,7 @@ public class DocumentActivity extends MyActionBar {
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
-        return true;
+        return false;
 
       } else {
         create = new WebdavMethod("MKCOL", destination);
@@ -406,7 +428,7 @@ public class DocumentActivity extends MyActionBar {
     } catch (Exception e) {
       return false;
     }
-
+    // return false;
   }
 
   public void setEmptyView(int status) {

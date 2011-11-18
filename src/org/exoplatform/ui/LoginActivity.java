@@ -56,8 +56,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   private String            password;
 
-  private LoginController   loginController;
-
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -77,15 +75,8 @@ public class LoginActivity extends Activity implements OnClickListener {
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    if (loginController != null) {
-      loginController.onCancelLoad();
-    }
-
+    this.setContentView(R.layout.login);
+    init();
   }
 
   private void init() {
@@ -126,7 +117,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     ExoDocumentUtils.repositoryHomeURL = null;
 
-    loginController = new LoginController(this, username, password);
+   new LoginController(this, username, password);
 
   }
 

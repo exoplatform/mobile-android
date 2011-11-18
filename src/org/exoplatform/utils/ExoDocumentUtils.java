@@ -91,9 +91,9 @@ public class ExoDocumentUtils {
   }
 
   // Get file array from URL
-  public static List<ExoFile> getPersonalDriveContent(String url) {
+  public static ArrayList<ExoFile> getPersonalDriveContent(String url) {
 
-    List<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
+    ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
     String responseStr = ExoConnectionUtils.getDriveContent(url);
     if (responseStr != null) {
       int local1;

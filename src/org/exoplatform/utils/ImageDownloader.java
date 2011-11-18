@@ -31,7 +31,7 @@ import android.widget.ImageView;
 
 public class ImageDownloader {
 
-  private static final int                                              HARD_CACHE_CAPACITY = 80;
+  private static final int                                              HARD_CACHE_CAPACITY = 40;
 
   private static final int                                              DELAY_BEFORE_PURGE  = 3 * 1000;
 

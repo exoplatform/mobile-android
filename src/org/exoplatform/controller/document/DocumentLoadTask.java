@@ -3,7 +3,6 @@ package org.exoplatform.controller.document;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -14,7 +13,6 @@ import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
-//import android.util.Log;
 import android.view.View;
 
 public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
@@ -40,7 +38,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   private DocumentActivity      documentActivity;
 
-  private List<ExoFile>         _documentList = new ArrayList<ExoFile>();
+  private ArrayList<ExoFile>         _documentList = new ArrayList<ExoFile>();
 
   public DocumentLoadTask(Context context,
                           DocumentActivity activity,
@@ -100,7 +98,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
                                                            "image/png");
 
       } else if (actionID == 5) {
-        result = documentActivity.moveFile(strSourceUrl, strDestinationUrl);
+        result = documentActivity.renameFolder(strSourceUrl, strDestinationUrl);
         contentString = LocalizationHelper.getInstance().getString("DocumentRenameError");
         boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
         strSourceUrl = strDestinationUrl;

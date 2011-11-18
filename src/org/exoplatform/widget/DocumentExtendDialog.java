@@ -1,9 +1,12 @@
 package org.exoplatform.widget;
 
+import java.util.ArrayList;
+
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.ExoDocumentUtils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -30,6 +33,8 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
   private String   cancelStr;
 
   private String   inputTextWarning;
+
+  private String   folderNameConflict;
 
   private int      actionId;
 
@@ -80,33 +85,42 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
 
   }
 
-//  @Override
+  // @Override
   public void onClick(View view) {
     if (view == okButton) {
       folderName = actionEditText.getText().toString();
       if ((folderName != null) && (folderName.length() > 0)) {
-        if (actionId == 5) {
-          int index = selectedFile.urlStr.lastIndexOf("/");
-          String lastPathComponent = selectedFile.urlStr.substring(0, index + 1);
-          String destinationUrl = lastPathComponent.concat(folderName);
-
-         
-          DocumentActivity._documentActivityInstance.onLoad(selectedFile.urlStr, destinationUrl, 5);
-
+        int index = selectedFile.urlStr.lastIndexOf("/");
+        String lastPathComponent = selectedFile.urlStr.substring(0, index + 1);
+        String currentFolderName = selectedFile.urlStr.substring(index + 1);
+        if (folderName.equalsIgnoreCase(currentFolderName)) {
+          Toast toast = Toast.makeText(mContext, folderNameConflict, Toast.LENGTH_SHORT);
+          toast.setGravity(Gravity.CENTER, 0, 0);
+          toast.show();
         } else {
-          StringBuffer buffer = new StringBuffer();
-          buffer.append(selectedFile.urlStr);
-          buffer.append("/");
-          buffer.append(folderName);
-          String desUrl = buffer.toString();
-          
-          DocumentActivity._documentActivityInstance.onLoad(selectedFile.urlStr, desUrl, 6);
+          if (actionId == 5) {
 
+            String destinationUrl = lastPathComponent.concat(folderName);
+            DocumentActivity._documentActivityInstance.onLoad(selectedFile.urlStr,
+                                                              destinationUrl,
+                                                              5);
+
+          } else {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(selectedFile.urlStr);
+            buffer.append("/");
+            buffer.append(folderName);
+            String desUrl = buffer.toString();
+
+            DocumentActivity._documentActivityInstance.onLoad(selectedFile.urlStr, desUrl, 6);
+
+          }
+          dismiss();
         }
-        dismiss();
+
       } else {
-        Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
       }
 
@@ -125,7 +139,8 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
     createActionTitle = local.getString("DocumentCreateContent");
     okStr = local.getString("OK");
     cancelStr = local.getString("Cancel");
-    inputTextWarning = local.getString("InputTextWarning");
+    inputTextWarning = local.getString("DocumentFolderNameEmpty");
+    folderNameConflict = local.getString("DocumentFolderNameConflict");
 
   }
 

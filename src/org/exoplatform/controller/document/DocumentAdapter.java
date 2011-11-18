@@ -1,6 +1,6 @@
 package org.exoplatform.controller.document;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DocumentAdapter extends BaseAdapter {
-  public List<ExoFile>        _documentList;
+  public ArrayList<ExoFile>   _documentList;
 
   private Context             _mContext;
 

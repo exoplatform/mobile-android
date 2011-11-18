@@ -52,7 +52,7 @@ public class SettingServerEditionController {
     if (myServerObj._strServerName.equalsIgnoreCase("")
         || myServerObj._strServerUrl.equalsIgnoreCase("")) {
       // Server name or server url is empty
-      Toast.makeText(mContext, serverIsEmpty, Toast.LENGTH_LONG).show();
+      Toast.makeText(mContext, serverIsEmpty, Toast.LENGTH_SHORT).show();
       return;
     }
     if (isNewServer) {
@@ -61,7 +61,7 @@ public class SettingServerEditionController {
         ServerObjInfo tmp = serverInfoList.get(i);
         if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
           isExisted = true;
-          Toast.makeText(mContext, serverisExisted, Toast.LENGTH_LONG).show();
+          Toast.makeText(mContext, serverisExisted, Toast.LENGTH_SHORT).show();
           break;
           // New server is the same with the old one
         }
@@ -86,7 +86,7 @@ public class SettingServerEditionController {
 
         if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
           isExisted = false;
-          Toast.makeText(mContext, serverisExisted, Toast.LENGTH_LONG).show();
+          Toast.makeText(mContext, serverisExisted, Toast.LENGTH_SHORT).show();
           break;
           // updated server is the same with the old one
         }
