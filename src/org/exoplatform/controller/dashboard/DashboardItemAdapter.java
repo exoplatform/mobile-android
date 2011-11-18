@@ -7,10 +7,15 @@ import java.util.ArrayList;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
 import org.exoplatform.model.GadgetInfo;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.RoundedImageView;
 
@@ -101,7 +106,6 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
       convertView = mInflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
       textViewTabTitle.setText(inforGadget.getTabName());
-      
 
     } else {
       convertView = mInflater.inflate(R.layout.gadget_item_layout, parent, false);
@@ -166,29 +170,36 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
   public void showGadget(GadgetInfo gadget) {
 
     // ExoApplicationsController2.webViewMode = 0;
+    HttpParams httpParameters = new BasicHttpParams();
+    HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
+    HttpConnectionParams.setSoTimeout(httpParameters, 30000);
+    HttpConnectionParams.setTcpNoDelay(httpParameters, true);
     DefaultHttpClient client = new DefaultHttpClient();
-
+    LocalizationHelper bundle = LocalizationHelper.getInstance();
     HttpGet get = new HttpGet(gadget.getGadgetUrl());
+
     try {
+      get.setHeader("cookie", ExoConnectionUtils._strCookie);
+      client.getCredentialsProvider().setCredentials(AccountSetting.getInstance().getAuthScope(),
+                                                     AccountSetting.getInstance().getCredentials());
       HttpResponse response = client.execute(get);
       int status = response.getStatusLine().getStatusCode();
       if (status < 200 || status >= 300) {
-        LocalizationHelper bundle = LocalizationHelper.getInstance();
-        Toast.makeText(mContext, bundle.getString("ConnectionTimedOut"), Toast.LENGTH_LONG).show();
-        return;
+
+        Toast.makeText(mContext, bundle.getString("ConnectionTimedOut"), Toast.LENGTH_SHORT).show();
+      } else {
+        WebViewActivity._titlebar = gadget.getGadgetName();
+        WebViewActivity._url = gadget.getGadgetUrl();
+
+        Intent next = new Intent(mContext, WebViewActivity.class);
+        next.putExtra(ExoConstants.WEB_VIEW_TYPE, 0);
+        mContext.startActivity(next);
       }
     } catch (Exception e) {
-
-      return;
+      Toast.makeText(mContext, bundle.getString("ConnectionTimedOut"), Toast.LENGTH_SHORT).show();
+    } finally {
+      client.getConnectionManager().shutdown();
     }
-
-    WebViewActivity._titlebar = gadget.getGadgetName();
-    WebViewActivity._url = gadget.getGadgetUrl();
-
-    Intent next = new Intent(mContext, WebViewActivity.class);
-    next.putExtra(ExoConstants.WEB_VIEW_TYPE, 0);
-    mContext.startActivity(next);
-    // ((Activity) mContext).finish();
 
   }
 

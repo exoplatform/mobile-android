@@ -51,7 +51,6 @@ public class SocialActivity extends MyActionBar {
   }
 
   private void init() {
-    SocialDetailHelper.getInstance().imageDownloader = new ImageDownloader();
     socialController = new SocialController(this, activityStreamWrap);
     socialController.onLoad();
 

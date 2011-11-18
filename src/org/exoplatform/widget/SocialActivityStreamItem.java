@@ -93,8 +93,10 @@ public class SocialActivityStreamItem extends LinearLayout {
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl == null) {
       imageViewAvatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
-    } else
+    } else {
       imageViewAvatar.setUrl(avatarUrl);
+    }
+      
 
     try {
       String userName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");

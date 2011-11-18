@@ -193,7 +193,7 @@ public class ExoConnectionUtils {
       // httpClient.getConnectionManager().shutdown();
     } catch (Exception e) {
       String error = e.getMessage();
-      if (error.contains("No route")) {
+      if (error != null && (error.contains("No route"))) {
         return ExoConstants.LOGIN_UNREACHABLE;
       } else
         return null;

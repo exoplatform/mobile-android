@@ -7,7 +7,9 @@ import org.exoplatform.controller.home.HomeActionListenner;
 import org.exoplatform.controller.home.HomeAdapter;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.widget.LogoutDialog;
 import org.exoplatform.widget.MyActionBar;
 
@@ -41,6 +43,7 @@ public class HomeActivity extends MyActionBar {
     // super.setTitle("eXo");
     init();
     changeLanguage();
+    SocialDetailHelper.getInstance().imageDownloader = new ImageDownloader();
   }
 
   @Override

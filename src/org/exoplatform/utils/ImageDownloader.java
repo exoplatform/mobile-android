@@ -31,7 +31,7 @@ import android.widget.ImageView;
 
 public class ImageDownloader {
 
-  private static final int                                              HARD_CACHE_CAPACITY = 40;
+  private static final int                                              HARD_CACHE_CAPACITY = 100;
 
   private static final int                                              DELAY_BEFORE_PURGE  = 3 * 1000;
 
@@ -66,6 +66,10 @@ public class ImageDownloader {
                                                                                               }
                                                                                             };
 
+  public ImageDownloader() {
+    clearCache();
+  }
+
   /**
    * Download the specified image from the Internet and binds it to the provided
    * ImageView. The binding is immediate if the image is found in the cache and
@@ -89,13 +93,15 @@ public class ImageDownloader {
    * @param cookie A cookie String that will be used by the http connection.
    */
   public void download(String url, ImageView imageView, String cookie) {
-    resetPurgeTimer();
+//    resetPurgeTimer();
     Bitmap bitmap = getBitmapFromCache(url);
 
     if (bitmap == null) {
       forceDownload(url, imageView, cookie);
+      System.out.println("Bitmap does not exist");
       // imageView.setImageResource(R.drawable.documenticonforunknown);
     } else {
+      System.out.println("Bitmap existed");
       cancelPotentialDownload(url, imageView);
       imageView.setImageBitmap(bitmap);
     }
@@ -263,11 +269,12 @@ public class ImageDownloader {
           InputStream inputStream = null;
           try {
             inputStream = entity.getContent();
+            if (inputStream != null) {
+              Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+              bitmap = PhotoUltils.resizeImage(bitmap, 350);
 
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            bitmap = PhotoUltils.resizeImage(bitmap, 350);
-
-            return bitmap;
+              return bitmap;
+            }
 
           } catch (RuntimeException e) {
             return null;
@@ -298,10 +305,10 @@ public class ImageDownloader {
       // Add bitmap to cache
       if (bitmap != null) {
         synchronized (sHardBitmapCache) {
-          if(!sHardBitmapCache.containsValue(bitmap)){
+          if (!sHardBitmapCache.containsValue(bitmap)) {
             sHardBitmapCache.put(url, bitmap);
           }
-          
+
         }
       }
 
