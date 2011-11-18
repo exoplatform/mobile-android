@@ -98,10 +98,8 @@ public class ImageDownloader {
 
     if (bitmap == null) {
       forceDownload(url, imageView, cookie);
-      System.out.println("Bitmap does not exist");
       // imageView.setImageResource(R.drawable.documenticonforunknown);
     } else {
-      System.out.println("Bitmap existed");
       cancelPotentialDownload(url, imageView);
       imageView.setImageBitmap(bitmap);
     }
@@ -145,10 +143,10 @@ public class ImageDownloader {
     sSoftBitmapCache.clear();
   }
 
-  private void resetPurgeTimer() {
-    purgeHandler.removeCallbacks(purger);
-    purgeHandler.postDelayed(purger, DELAY_BEFORE_PURGE);
-  }
+//  private void resetPurgeTimer() {
+//    purgeHandler.removeCallbacks(purger);
+//    purgeHandler.postDelayed(purger, DELAY_BEFORE_PURGE);
+//  }
 
   /**
    * Returns true if the current download has been canceled or if there was no
