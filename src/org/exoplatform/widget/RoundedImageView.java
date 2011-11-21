@@ -53,7 +53,7 @@ public class RoundedImageView extends AsyncImageView {
       mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap, scaledWidth, scaledHeight, true /* filter */);
     }
 
-    mScaledBitmap = PhotoUltils.resizeImage(mScaledBitmap, 120);
+    mScaledBitmap = PhotoUltils.resizeImage(mScaledBitmap, 200);
 
     Bitmap roundBitmap = getRoundedCornerBitmap(mScaledBitmap, 5);
 
