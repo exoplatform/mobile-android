@@ -275,7 +275,7 @@ public class ImageDownloader implements OnLowMemoryListener {
               BitmapFactory.Options bmOption = new BitmapFactory.Options();
               bmOption.inSampleSize = 4;
               Bitmap bitmap = BitmapFactory.decodeStream(inputStream,null,bmOption);
-              bitmap = PhotoUltils.resizeImage(bitmap, 300);
+              bitmap = PhotoUltils.resizeImage(bitmap, 320);
 
               return bitmap;
             }

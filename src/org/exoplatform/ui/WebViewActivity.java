@@ -5,6 +5,7 @@ import greendroid.widget.ActionBarItem;
 import java.util.List;
 
 import org.apache.http.cookie.Cookie;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -43,9 +44,9 @@ public class WebViewActivity extends MyActionBar {
 
     _wvGadget = (WebView) findViewById(R.id.WebView);
     _wvGadget.getSettings().setSupportZoom(true);
-     _wvGadget.getSettings().setAppCacheEnabled(true);
+    _wvGadget.getSettings().setAppCacheEnabled(true);
     _wvGadget.getSettings().setJavaScriptEnabled(true);
-//    _wvGadget.getSettings().setAllowFileAccess(true);
+    // _wvGadget.getSettings().setAllowFileAccess(true);
     _wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
     _wvGadget.getSettings().setPluginsEnabled(true);
     _wvGadget.getSettings().setLoadsImagesAutomatically(true);
@@ -54,23 +55,29 @@ public class WebViewActivity extends MyActionBar {
     _wvGadget.getSettings().setBuiltInZoomControls(true);
 
     setTitle(_titlebar);
-//    final Activity activity = this;
-//
-//    _wvGadget.setWebChromeClient(new WebChromeClient() {
-//      public void onProgressChanged(WebView view, int progress) {
-//        // Activities and WebViews measure progress with different scales.
-//        // The progress meter will automatically disappear when we reach 100%
-//        activity.setProgress(progress * 1000);
-//      }
-//    });
-//    _wvGadget.setWebViewClient(new WebViewClient() {
-//      public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-//        Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
-//      }
-//    });
-    
-//    _url = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
+    // final Activity activity = this;
+    //
+    // _wvGadget.setWebChromeClient(new WebChromeClient() {
+    // public void onProgressChanged(WebView view, int progress) {
+    // // Activities and WebViews measure progress with different scales.
+    // // The progress meter will automatically disappear when we reach 100%
+    // activity.setProgress(progress * 1000);
+    // }
+    // });
+    // _wvGadget.setWebViewClient(new WebViewClient() {
+    // public void onReceivedError(WebView view, int errorCode, String
+    // description, String failingUrl) {
+    // Toast.makeText(activity, "Oh no! " + description,
+    // Toast.LENGTH_SHORT).show();
+    // }
+    // });
+
+    // _url = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
     System.out.println(_url);
+    // _wvGadget.setHttpAuthUsernamePassword(_url,
+    // null,
+    // AccountSetting.getInstance().getUsername(),
+    // AccountSetting.getInstance().getPassword());
     _wvGadget.loadUrl(_url);
 
     changeLanguage();
@@ -90,6 +97,10 @@ public class WebViewActivity extends MyActionBar {
 
   private void setupCookies() {
     CookieSyncManager.createInstance(this);
+
+     CookieManager.getInstance().setCookie(_url,
+     ExoConnectionUtils._strCookie);
+//     CookieSyncManager.getInstance().sync();
     List<Cookie> cookies = ExoConnectionUtils._sessionCookies;// .authenticateAndReturnCookies();
 
     if (cookies != null) {
