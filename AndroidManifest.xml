@@ -48,7 +48,7 @@
 			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.WebViewActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:finishOnTaskLaunch="true" android:configChanges="orientation" />
 
 		<activity android:name=".document.ExoFilesController"
 			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
