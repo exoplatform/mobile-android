@@ -8,8 +8,10 @@ import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.utils.ServerConfigurationUtils;
 
 import android.content.Context;
@@ -36,6 +38,7 @@ public class LaunchController {
     context = c;
     getLaunchInfo();
     getServerInfo();
+    SocialDetailHelper.getInstance().imageDownloader = new ImageDownloader(c.getApplicationContext());
   }
 
   private void getLaunchInfo() {
@@ -70,7 +73,7 @@ public class LaunchController {
     } catch (Exception e) {
       Log.i("LaunchController", e.getMessage());
     }
-    //get server version information
+    // get server version information
     ExoConnectionUtils.checkPLFVersion();
   }
 

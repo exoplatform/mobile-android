@@ -43,7 +43,6 @@ public class HomeActivity extends MyActionBar {
     // super.setTitle("eXo");
     init();
     changeLanguage();
-    SocialDetailHelper.getInstance().imageDownloader = new ImageDownloader();
   }
 
   @Override
@@ -75,6 +74,7 @@ public class HomeActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
+    homeController.onFinish();
 //    new LogoutDialog(HomeActivity.this, homeController).show();
   }
 

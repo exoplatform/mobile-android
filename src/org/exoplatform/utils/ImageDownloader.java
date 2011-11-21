@@ -1,5 +1,8 @@
 package org.exoplatform.utils;
 
+import greendroid.app.GDApplication;
+import greendroid.app.GDApplication.OnLowMemoryListener;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,6 +24,7 @@ import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -29,7 +33,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.widget.ImageView;
 
-public class ImageDownloader {
+public class ImageDownloader implements OnLowMemoryListener {
 
   private static final int                                              HARD_CACHE_CAPACITY = 100;
 
@@ -66,8 +70,9 @@ public class ImageDownloader {
                                                                                               }
                                                                                             };
 
-  public ImageDownloader() {
-    clearCache();
+  public ImageDownloader(Context context) {
+    ((GDApplication) context).registerOnLowMemoryListener(this);
+     resetPurgeTimer();
   }
 
   /**
@@ -93,7 +98,7 @@ public class ImageDownloader {
    * @param cookie A cookie String that will be used by the http connection.
    */
   public void download(String url, ImageView imageView, String cookie) {
-//    resetPurgeTimer();
+    // resetPurgeTimer();
     Bitmap bitmap = getBitmapFromCache(url);
 
     if (bitmap == null) {
@@ -121,7 +126,6 @@ public class ImageDownloader {
     // and cache keys.
     if (url == null) {
       imageView.setImageDrawable(null);
-
       return;
     }
 
@@ -143,10 +147,10 @@ public class ImageDownloader {
     sSoftBitmapCache.clear();
   }
 
-//  private void resetPurgeTimer() {
-//    purgeHandler.removeCallbacks(purger);
-//    purgeHandler.postDelayed(purger, DELAY_BEFORE_PURGE);
-//  }
+  private void resetPurgeTimer() {
+    purgeHandler.removeCallbacks(purger);
+    purgeHandler.postDelayed(purger, DELAY_BEFORE_PURGE);
+  }
 
   /**
    * Returns true if the current download has been canceled or if there was no
@@ -268,13 +272,15 @@ public class ImageDownloader {
           try {
             inputStream = entity.getContent();
             if (inputStream != null) {
-              Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-              bitmap = PhotoUltils.resizeImage(bitmap, 350);
+              BitmapFactory.Options bmOption = new BitmapFactory.Options();
+              bmOption.inSampleSize = 4;
+              Bitmap bitmap = BitmapFactory.decodeStream(inputStream,null,bmOption);
+              bitmap = PhotoUltils.resizeImage(bitmap, 300);
 
               return bitmap;
             }
 
-          } catch (RuntimeException e) {
+          } catch (Exception e) {
             return null;
           } finally {
             if (inputStream != null) {
@@ -353,5 +359,10 @@ public class ImageDownloader {
     public BitmapDownloaderTask getBitmapDownloaderTask() {
       return bitmapDownloaderTaskReference.get();
     }
+  }
+
+  @Override
+  public void onLowMemoryReceived() {
+     resetPurgeTimer();
   }
 }

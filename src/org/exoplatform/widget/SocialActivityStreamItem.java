@@ -1,5 +1,7 @@
 package org.exoplatform.widget;
 
+import greendroid.widget.AsyncImageView;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Set;
@@ -357,6 +359,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
     if (SocialDetailHelper.getInstance().taskIsFinish = true) {
+//      attachImage.setUrl(url);
       SocialDetailHelper.getInstance().imageDownloader.download(url,
                                                                 attachImage,
                                                                 ExoConnectionUtils._strCookie);

@@ -1,5 +1,7 @@
 package org.exoplatform.widget;
 
+import org.exoplatform.utils.PhotoUltils;
+
 import greendroid.widget.AsyncImageView;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -51,6 +53,8 @@ public class RoundedImageView extends AsyncImageView {
       mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap, scaledWidth, scaledHeight, true /* filter */);
     }
 
+    mScaledBitmap = PhotoUltils.resizeImage(mScaledBitmap, 120);
+
     Bitmap roundBitmap = getRoundedCornerBitmap(mScaledBitmap, 5);
 
     canvas.drawBitmap(roundBitmap, 0, 0, null);
@@ -58,12 +62,14 @@ public class RoundedImageView extends AsyncImageView {
   }
 
   public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
-    Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+    int width = bitmap.getWidth();
+    int heigth = bitmap.getHeight();
+    Bitmap output = Bitmap.createBitmap(width, heigth, Config.ARGB_8888);
     Canvas canvas = new Canvas(output);
 
     final int color = 0xff424242;
     final Paint paint = new Paint();
-    final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+    final Rect rect = new Rect(0, 0, width, heigth);
     final RectF rectF = new RectF(rect);
     final float roundPx = pixels;
 
