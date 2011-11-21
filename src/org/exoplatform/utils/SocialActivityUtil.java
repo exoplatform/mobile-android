@@ -2,7 +2,9 @@ package org.exoplatform.utils;
 
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.List;
 
+import org.apache.http.cookie.Cookie;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -12,6 +14,8 @@ import android.content.Context;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -216,6 +220,8 @@ public class SocialActivityUtil {
         return 9;
       } else if (type.contains("ks-answer")) {
         return 10;
+      } else if (type.contains("cs-calendar:spaces")) {
+        return 11;
       } else
         return 0;
     } else
@@ -258,6 +264,9 @@ public class SocialActivityUtil {
     case 10:
       returnType = R.drawable.activity_type_answer;
       break;
+    case 11:
+      returnType = R.drawable.activity_type_calendar;
+
     }
     imageView.setImageResource(returnType);
   }
@@ -288,6 +297,29 @@ public class SocialActivityUtil {
           }
         }
       }
+    }
+  }
+
+  private void setupCookies(Context mContext) {
+    CookieSyncManager.createInstance(mContext);
+
+    // CookieManager.getInstance().setCookie(_url,
+    // ExoConnectionUtils._strCookie);
+    // CookieSyncManager.getInstance().sync();
+    List<Cookie> cookies = ExoConnectionUtils._sessionCookies;// .authenticateAndReturnCookies();
+
+    if (cookies != null) {
+
+      for (Cookie cookie : cookies) {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(cookie.getName());
+        buffer.append("=");
+        buffer.append(cookie.getValue());
+        CookieManager.getInstance().setCookie(cookie.getDomain(), buffer.toString());
+      }
+
+      CookieSyncManager.getInstance().sync();
+
     }
   }
 

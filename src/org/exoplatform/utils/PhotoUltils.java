@@ -109,6 +109,17 @@ public class PhotoUltils {
     return dateFormat;
   }
 
+  public static String getDateFromString(String value) {
+    String dateFormat = null;
+    if (value != null) {
+      long minus = Long.valueOf(value);
+      String inFormat = new String("dd/MM/yyyy hh:mm");
+      dateFormat = (String) DateFormat.format(inFormat, minus);
+    }
+
+    return dateFormat;
+  }
+
   public static String getImageFileName() {
     StringBuffer buffer = new StringBuffer();
     buffer.append("MobileImage_");
@@ -139,27 +150,30 @@ public class PhotoUltils {
     return bitmap;
   }
 
-//  public static Bitmap shrinkBitmap(InputStream inputStream, int width, int height) {
-//
-//    BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-//    bmpFactoryOptions.inJustDecodeBounds = true;
-//    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-//
-//    int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float) height);
-//    int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth / (float) width);
-//
-//    if (heightRatio > 1 || widthRatio > 1) {
-//      if (heightRatio > widthRatio) {
-//        bmpFactoryOptions.inSampleSize = heightRatio;
-//      } else {
-//        bmpFactoryOptions.inSampleSize = widthRatio;
-//      }
-//    }
-//
-//    bmpFactoryOptions.inJustDecodeBounds = false;
-//    bitmap = BitmapFactory.decodeStream(inputStream, null, bmpFactoryOptions);
-//    return bitmap;
-//  }
+  // public static Bitmap shrinkBitmap(InputStream inputStream, int width, int
+  // height) {
+  //
+  // BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
+  // bmpFactoryOptions.inJustDecodeBounds = true;
+  // Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+  //
+  // int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float)
+  // height);
+  // int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth / (float)
+  // width);
+  //
+  // if (heightRatio > 1 || widthRatio > 1) {
+  // if (heightRatio > widthRatio) {
+  // bmpFactoryOptions.inSampleSize = heightRatio;
+  // } else {
+  // bmpFactoryOptions.inSampleSize = widthRatio;
+  // }
+  // }
+  //
+  // bmpFactoryOptions.inJustDecodeBounds = false;
+  // bitmap = BitmapFactory.decodeStream(inputStream, null, bmpFactoryOptions);
+  // return bitmap;
+  // }
 
   public static Bitmap reflectionPhoto(Bitmap originalImage) {
     // The gap we want between the reflection and the original image

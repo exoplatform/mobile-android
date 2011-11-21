@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -64,16 +65,27 @@ public class WebViewActivity extends MyActionBar {
     // activity.setProgress(progress * 1000);
     // }
     // });
-    // _wvGadget.setWebViewClient(new WebViewClient() {
-    // public void onReceivedError(WebView view, int errorCode, String
-    // description, String failingUrl) {
-    // Toast.makeText(activity, "Oh no! " + description,
-    // Toast.LENGTH_SHORT).show();
-    // }
-    // });
+    _wvGadget.setWebViewClient(new WebViewClient() {
+      public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+
+      }
+
+      @Override
+      public void onReceivedHttpAuthRequest(WebView view,
+                                            HttpAuthHandler handler,
+                                            String host,
+                                            String realm) {
+        // super.onReceivedHttpAuthRequest(view, handler, host, realm);
+        System.out.println("onReceivedHttpAuthRequest");
+        _wvGadget.setHttpAuthUsernamePassword(_url,
+                                              "",
+                                              AccountSetting.getInstance().getUsername(),
+                                              AccountSetting.getInstance().getPassword());
+      }
+    });
 
     // _url = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
-    System.out.println(_url);
+ 
     // _wvGadget.setHttpAuthUsernamePassword(_url,
     // null,
     // AccountSetting.getInstance().getUsername(),
@@ -98,9 +110,8 @@ public class WebViewActivity extends MyActionBar {
   private void setupCookies() {
     CookieSyncManager.createInstance(this);
 
-     CookieManager.getInstance().setCookie(_url,
-     ExoConnectionUtils._strCookie);
-//     CookieSyncManager.getInstance().sync();
+    CookieManager.getInstance().setCookie(_url, ExoConnectionUtils._strCookie);
+    // CookieSyncManager.getInstance().sync();
     List<Cookie> cookies = ExoConnectionUtils._sessionCookies;// .authenticateAndReturnCookies();
 
     if (cookies != null) {

@@ -98,7 +98,6 @@ public class SocialActivityStreamItem extends LinearLayout {
     } else {
       imageViewAvatar.setUrl(avatarUrl);
     }
-      
 
     try {
       String userName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
@@ -214,6 +213,16 @@ public class SocialActivityStreamItem extends LinearLayout {
     case 10:
       // ks-answer
       setActivityTypeAnswer();
+      break;
+
+    case 11:
+      Map<String, String> templateMap = activityInfo.templateParams;
+      Set<String> set = templateMap.keySet();
+      for (String param : set) {
+        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+            + templateMap.get(param));
+      }
+      setActivityTypeCalendar();
       break;
     default:
       break;
@@ -338,12 +347,92 @@ public class SocialActivityStreamItem extends LinearLayout {
       answerBuffer.append("</body></html>");
 
       textViewName.setText(Html.fromHtml(answerBuffer.toString()));
-      
+
       String answerBody = activityInfo.getBody();
       if (answerBody != null) {
         answerBody = new String(answerBody.getBytes("ISO-8859-1"), "UTF-8");
         textViewMessage.setText(Html.fromHtml(answerBody), TextView.BufferType.SPANNABLE);
       }
+    } catch (UnsupportedEncodingException e) {
+    }
+  }
+
+  private void setActivityTypeCalendar() {
+    try {
+      StringBuffer forumBuffer = new StringBuffer();
+      forumBuffer.append("<html><body>");
+      String forumUserName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
+      forumBuffer.append(forumUserName);
+      forumBuffer.append(" ");
+      String actType = activityInfo.templateParams.get("EventType");
+      String actTypeDesc = null;
+      String forumName = null;
+      forumBuffer.append("<font color=\"#696969\">");
+      if (actType.equalsIgnoreCase("EventAdded")) {
+        actTypeDesc = LocalizationHelper.getInstance().getString("AddedAnEvent");
+        forumBuffer.append(actTypeDesc);
+      } else if (actType.equalsIgnoreCase("EventUpdated")) {
+        actTypeDesc = LocalizationHelper.getInstance().getString("UpdatedAnEvent");
+        forumBuffer.append(actTypeDesc);
+      } else if (actType.equalsIgnoreCase("TaskAdded")) {
+        actTypeDesc = LocalizationHelper.getInstance().getString("AddedATask");
+        forumBuffer.append(actTypeDesc);
+      } else if (actType.equalsIgnoreCase("TaskUpdated")) {
+        actTypeDesc = LocalizationHelper.getInstance().getString("UpdatedATask");
+        forumBuffer.append(actTypeDesc);
+      }
+      forumBuffer.append("</font>");
+      forumBuffer.append(" ");
+      forumBuffer.append("<a>");
+      forumName = activityInfo.templateParams.get("EventSummary");
+      forumName = new String(forumName.getBytes("ISO-8859-1"), "UTF-8");
+      forumBuffer.append("<font color=\"#000000\">");
+      forumBuffer.append(forumName);
+      forumBuffer.append("</font>");
+      forumBuffer.append("</a>");
+      forumBuffer.append("</body></html>");
+
+      textViewName.setText(Html.fromHtml(forumBuffer.toString()));
+      setCaledarContent(textViewMessage);
+
+    } catch (UnsupportedEncodingException e) {
+    }
+
+  }
+
+  private void setCaledarContent(TextView textView) {
+    try {
+      StringBuffer caledarBuffer = new StringBuffer();
+      caledarBuffer.append("<html><body>");
+      caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarDescription"));
+      caledarBuffer.append(" ");
+      String description = activityInfo.templateParams.get("EventDescription");
+      if (description != null) {
+        description = new String(description.getBytes("ISO-8859-1"), "UTF-8");
+        caledarBuffer.append(description);
+      }
+      caledarBuffer.append("<br>");
+      caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarLocation"));
+      caledarBuffer.append(" ");
+      String location = activityInfo.templateParams.get("EventLocale");
+      if (location != null) {
+        location = new String(location.getBytes("ISO-8859-1"), "UTF-8");
+        caledarBuffer.append(location);
+      }
+      caledarBuffer.append("<br>");
+      caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarStart"));
+      caledarBuffer.append(" ");
+      String startTime = activityInfo.templateParams.get("EventStartTime");
+      startTime = PhotoUltils.getDateFromString(startTime);
+      caledarBuffer.append(startTime);
+      caledarBuffer.append("<br>");
+      caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarEnd"));
+      caledarBuffer.append(" ");
+      String endTime = activityInfo.templateParams.get("EventEndTime");
+      endTime = PhotoUltils.getDateFromString(endTime);
+      caledarBuffer.append(endTime);
+      caledarBuffer.append("</body></html>");
+      textView.setText(Html.fromHtml(caledarBuffer.toString()));
     } catch (UnsupportedEncodingException e) {
     }
   }
@@ -359,7 +448,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
     if (SocialDetailHelper.getInstance().taskIsFinish = true) {
-//      attachImage.setUrl(url);
+      // attachImage.setUrl(url);
       SocialDetailHelper.getInstance().imageDownloader.download(url,
                                                                 attachImage,
                                                                 ExoConnectionUtils._strCookie);
