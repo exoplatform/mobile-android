@@ -19,7 +19,7 @@
 
 		<!-- First Activity of the Application -->
 		<activity android:name=".ui.LoginActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation">
+			android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -27,58 +27,58 @@
 		</activity>
 
 		<activity android:name=".ui.HomeActivity"
-			android:clearTaskOnLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.SettingActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.SettingServerListEditionActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.ChatListActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.DocumentActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.DocumentActionDialog"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.DashboardActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.WebViewActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="orientation" />
+			android:configChanges="orientation" />
 
 		<activity android:name=".document.ExoFilesController"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.ChatDetailActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".chat.ExoChatListController"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.social.SocialActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.social.SocialDetailActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.social.ComposeMessageActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.social.SocialImageLibrary"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.social.SelectedImageActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.social.SocialPhotoAlbums"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 		<activity android:name=".ui.social.SocialAttachedImageActivity"
-			android:finishOnTaskLaunch="true" android:configChanges="keyboardHidden|orientation" />
+			android:configChanges="keyboardHidden|orientation" />
 
 	</application>
 </manifest> 
