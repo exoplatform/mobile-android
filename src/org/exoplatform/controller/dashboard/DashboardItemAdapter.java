@@ -135,6 +135,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
       }
 
       RoundedImageView imageViewAvatar = (RoundedImageView) convertView.findViewById(R.id.gadget_image);
+      imageViewAvatar.setDefaultImageResource(R.drawable.gadgetplaceholder);
       imageViewAvatar.setUrl(inforGadget.getStrGadgetIcon());
       TextView textViewName = (TextView) convertView.findViewById(R.id.gadget_title);
       textViewName.setText(inforGadget.getGadgetName());
