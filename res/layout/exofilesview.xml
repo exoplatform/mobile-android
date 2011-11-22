@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/MainLayout" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="@drawable/home_background">
+	android:background="#DCDCDCDC">
 
 	<ViewStub android:id="@+id/file_empty_stub"
 		android:inflatedId="@+id/file_empty_stub_inflated" android:layout="@layout/empty_screen"

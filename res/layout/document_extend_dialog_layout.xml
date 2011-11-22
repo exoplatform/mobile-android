@@ -4,7 +4,7 @@
 
 	<ImageView android:id="@+id/ImageView_Navigationbar"
 		android:layout_width="fill_parent" android:layout_height="40dip"
-		android:background="@drawable/serveraddingbackgroundtitlepanel" />
+		android:background="#4E4E4E" />
 
 	<TextView android:id="@+id/document_extend_dialog_title"
 		android:layout_width="fill_parent" android:layout_height="40dip"
@@ -16,7 +16,7 @@
 		android:layout_below="@id/ImageView_Navigationbar"
 		android:paddingBottom="15dp" android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:background="@drawable/serveraddingbackgroundtextfieldspanel">
+		android:background="#DCDCDCDC">
 
 		<TextView android:id="@+id/document_extend_textview"
 			android:padding="5dp" android:layout_width="fill_parent"

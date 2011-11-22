@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="@drawable/home_background">
+	android:background="#DCDCDCDC">
 
 	<ViewStub android:id="@+id/social_empty_stub"
 		android:inflatedId="@+id/social_empty_stub_inflted" android:layout="@layout/empty_screen"

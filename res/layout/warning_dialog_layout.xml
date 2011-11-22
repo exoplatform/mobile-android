@@ -4,7 +4,7 @@
 	android:minWidth="280dip" android:layout_height="wrap_content">
 	<LinearLayout android:layout_width="fill_parent"
 		android:gravity="center" android:layout_height="40dip"
-		android:background="@drawable/serveraddingbackgroundtitlepanel">
+		android:background="#DCDCDCDC">
 		<TextView android:id="@+id/warning_dialog_title_view"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:shadowColor="#000000" android:shadowDx="1.0"

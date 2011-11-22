@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout android:orientation="vertical"
-		android:background="@drawable/home_background" android:layout_width="fill_parent"
+		android:background="#DCDCDCDC" android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 
 		<ScrollView android:layout_weight="1" android:layout_width="fill_parent"
@@ -60,7 +60,7 @@
 			android:textSize="12dp" android:textColorHint="#FFFFFF" android:hint="Your comment..." />
 	</LinearLayout>
 	<LinearLayout android:id="@+id/details_start_screen"
-		android:background="@drawable/home_background" android:layout_width="fill_parent"
+		android:background="#DCDCDCDC" android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 	</LinearLayout>
 </RelativeLayout>

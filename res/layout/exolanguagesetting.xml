@@ -4,7 +4,7 @@
 
 	<ImageView android:id="@+id/ImageView_Navigationbar"
 		android:layout_width="fill_parent" android:layout_height="40dip"
-		android:background="@drawable/serveraddingbackgroundtitlepanel" />
+		android:background="#4E4E4E" />
 
 	<TextView android:id="@+id/TextView_Title"
 		android:layout_width="fill_parent" android:layout_height="40dip"

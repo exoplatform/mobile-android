@@ -7,8 +7,8 @@
 		android:layout_width="wrap_content" android:layout_height="wrap_content" />
 	<TextView android:id="@+id/icon_text" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_marginTop="10dip"
-		android:text="TextView" android:gravity="center" android:textColor="#FFFFFFFF"
-		android:shadowColor="#000000" android:shadowRadius="2.5"
+		android:text="TextView" android:gravity="center" android:textColor="#333333"
+		android:shadowColor="#999999" android:shadowRadius="2.5"
 		android:shadowDx="1.0" android:shadowDy="1.0" android:textStyle="bold">
 	</TextView>
 </LinearLayout>

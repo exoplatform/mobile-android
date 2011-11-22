@@ -17,7 +17,7 @@
 		android:layout_width="fill_parent">
 
 		<RelativeLayout android:id="@+id/RelativeLayout_Account"
-			android:layout_below="@id/authenticate_logo_imageview"
+			android:layout_marginBottom="-2dp" android:layout_below="@id/authenticate_logo_imageview"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:layout_marginLeft="30dp" android:background="@drawable/authenticatepanelbuttonbgon">
 
@@ -33,8 +33,8 @@
 		</RelativeLayout>
 
 		<RelativeLayout android:id="@+id/RelativeLayout_Server"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:layout_below="@id/authenticate_logo_imageview"
+			android:layout_marginBottom="-2dp" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_below="@id/authenticate_logo_imageview"
 			android:layout_toRightOf="@id/RelativeLayout_Account"
 			android:layout_marginLeft="-5dp">
 

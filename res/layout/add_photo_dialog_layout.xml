@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="wrap_content"
 	android:minWidth="280dip" android:layout_height="wrap_content"
-	android:background="@drawable/serveraddingbackgroundtextfieldspanel">
+	android:background="#DCDCDCDC">
 
 	<LinearLayout android:layout_width="fill_parent"
 		android:gravity="center" android:layout_height="40dip"
-		android:background="@drawable/serveraddingbackgroundtitlepanel">
+		android:background="#4E4E4E">
 		<TextView android:id="@+id/add_photo_dialog_title_view"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:shadowColor="#000000" android:shadowDx="1.0"
