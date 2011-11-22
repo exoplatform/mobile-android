@@ -36,12 +36,12 @@
 
 	<RelativeLayout android:id="@+id/RelativeLayout_ButtonPanel"
 		android:layout_below="@id/RelativeLayout_TextfieldPanel"
-		android:layout_width="fill_parent" android:layout_height="60dip"
+		android:layout_width="fill_parent" android:layout_height="60dip" android:gravity="center"
 		android:background="@drawable/serveraddbuttonpanelbackground">
 
 		<Button android:id="@+id/document_extend_cancel"
 			android:layout_width="100dip" android:layout_height="44dip"
-			android:layout_marginLeft="10dip" android:layout_marginTop="7dip"
+			android:layout_marginLeft="10dip" 
 			android:background="@drawable/androiddeletedbuttonbg"
 			android:textColor="#ffffff" android:text="Cancel"
 			android:shadowColor="#000000" android:shadowDx="1.0"
@@ -49,7 +49,7 @@
 
 		<Button android:id="@+id/document_extend_ok"
 			android:layout_width="100dip" android:layout_alignParentRight="true"
-			android:layout_marginRight="10dip" android:layout_marginTop="7dip"
+			android:layout_marginRight="10dip" 
 			android:layout_height="44dip" android:background="@drawable/androidokbuttonbg"
 			android:shadowColor="#888888" android:shadowDx="1.0"
 			android:shadowDy="2.0" android:shadowRadius="1.0" android:text="OK" />

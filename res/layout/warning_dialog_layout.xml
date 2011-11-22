@@ -38,7 +38,7 @@
 			android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
 			android:textStyle="bold" android:layout_margin="5dp"
 			android:background="@drawable/cancel_button_background_shape"
-			android:layout_width="fill_parent" android:layout_height="40dp" />
+			android:layout_width="fill_parent" android:layout_height="44dp" />
 
 	</LinearLayout>
 

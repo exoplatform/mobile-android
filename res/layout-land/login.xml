@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/RelativeLayout_Login" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:orientation="horizontal"
-	android:gravity="center_vertical" style="@style/background_color">
+	android:gravity="center_vertical" android:background="@drawable/login_background_land">
 	<LinearLayout android:padding="5dp"
 		android:layout_marginLeft="7dp" android:layout_width="wrap_content"
 		android:layout_height="fill_parent">
