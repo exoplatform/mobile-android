@@ -20,6 +20,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -127,6 +128,7 @@ public class HomeActionListenner implements OnItemClickListener {
 
     if (createActivityStreamConnetion() == true) {
       Intent next = new Intent(mContext, SocialActivity.class);
+      
       mContext.startActivity(next);
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);

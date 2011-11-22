@@ -80,21 +80,30 @@ public class LoginActivity extends Activity implements OnClickListener {
   }
 
   private void init() {
-
+    changeLanguage();
     _imageAccount = (ImageView) findViewById(R.id.Image_Account);
     _imageServer = (ImageView) findViewById(R.id.Image_Server);
 
     _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
-    _edtxUserName.setText(AccountSetting.getInstance().getUsername());
+    _edtxUserName.setHint(userNameHint);
+    String strUserName = AccountSetting.getInstance().getUsername();
+    if (strUserName != null && !strUserName.equals("")) {
+      _edtxUserName.setText(strUserName);
+    }
 
     _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
-    _edtxPassword.setText(AccountSetting.getInstance().getPassword());
+    _edtxPassword.setHint(passWordHint);
+    String strPassword = AccountSetting.getInstance().getPassword();
+    if (strPassword != null && !strPassword.equals("")) {
+      _edtxPassword.setText(strPassword);
+    }
 
     _btnAccount = (Button) findViewById(R.id.Button_Account);
     _btnAccount.setOnClickListener(this);
     _btnServer = (Button) findViewById(R.id.Button_Server);
     _btnServer.setOnClickListener(this);
     _btnLogIn = (Button) findViewById(R.id.Button_Login);
+    _btnLogIn.setText(strSignIn);
     _btnLogIn.setOnClickListener(this);
     _listViewServer = (ListView) findViewById(R.id.ListView_Servers);
     _listViewServer.setVisibility(View.INVISIBLE);
@@ -102,7 +111,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     _listViewServer.setFadingEdgeLength(0);
     _listViewServer.setDivider(null);
     _listViewServer.setDividerHeight(1);
-    changeLanguage();
     setServerAdapter();
 
   }
@@ -117,7 +125,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     ExoDocumentUtils.repositoryHomeURL = null;
 
-   new LoginController(this, username, password);
+    new LoginController(this, username, password);
 
   }
 
@@ -126,10 +134,8 @@ public class LoginActivity extends Activity implements OnClickListener {
     strSignIn = local.getString("SignInButton");
     settingText = local.getString("Settings");
     userNameHint = local.getString("UserNameCellTitle");
-    _edtxUserName.setHint(userNameHint);
     passWordHint = local.getString("PasswordCellTitle");
-    _edtxPassword.setHint(passWordHint);
-    _btnLogIn.setText(strSignIn);
+
   }
 
   public boolean onCreateOptionsMenu(Menu menu) {

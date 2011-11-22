@@ -95,7 +95,6 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           streamInfo.setLikeNumber(act.getTotalNumberOfLikes());
           streamInfo.setCommentNumber(act.getTotalNumberOfComments());
           streamInfo.setType(act.getType());
-          System.out.println(act.getType());
           streamInfo.templateParams = act.getTemplateParams();
           listActivity.add(streamInfo);
         }

@@ -216,12 +216,12 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
 
     case 11:
-      Map<String, String> templateMap = activityInfo.templateParams;
-      Set<String> set = templateMap.keySet();
-      for (String param : set) {
-        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-            + templateMap.get(param));
-      }
+//      Map<String, String> templateMap = activityInfo.templateParams;
+//      Set<String> set = templateMap.keySet();
+//      for (String param : set) {
+//        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+//            + templateMap.get(param));
+//      }
       setActivityTypeCalendar();
       break;
     default:
