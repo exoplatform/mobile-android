@@ -4,7 +4,6 @@
 	android:layout_height="wrap_content">
 	<Button android:id="@+id/social_show_more_btn" android:text="Show More"
 		android:textStyle="bold" android:layout_width="fill_parent"
-		android:padding="7dp" android:layout_height="wrap_content"
-		android:background="#E9E9E9" />
+		android:layout_height="44dp" android:background="@drawable/send_button_background_shape" />
 
 </LinearLayout>

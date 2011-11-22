@@ -54,7 +54,7 @@
 			android:layout_marginTop="-4dp" android:layout_height="150dp"
 			android:layout_below="@id/RelativeLayout_Server" android:background="@drawable/authenticate_panel_bg">
 
-			<EditText android:id="@+id/EditText_UserName" android:hint="Username"
+			<EditText android:id="@+id/EditText_UserName"
 				android:textColorHint="#FFFFFF" android:layout_marginTop="10dp"
 				android:layout_marginLeft="15dp" android:layout_marginRight="15dp"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
 
 		<Button android:id="@+id/Button_Login" android:layout_width="fill_parent"
 			android:layout_marginTop="10dp" android:layout_below="@id/Image_Panel_Background"
-			android:layout_marginLeft="15dp" android:layout_marginRight="15dp"
+			android:layout_marginLeft="17dp" android:layout_marginRight="17dp"
 			android:layout_height="wrap_content" android:textSize="16dip"
 			android:textStyle="bold" android:background="@drawable/login_button_background_shape"
 			android:textColor="#000000" />
