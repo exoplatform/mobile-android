@@ -1,91 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-          <groupId>org.exoplatform.mobile.platform</groupId>
-          <artifactId>exo-mobile</artifactId>
-          <version>2.0-Beta3-SNAPSHOT</version>
-	</parent>
-	<artifactId>exo-mobile-android</artifactId>
-	<packaging>apk</packaging>
-	<name>eXo Mobile Android</name> 
-	<description>eXo Mobile Android projects.</description>
-	<properties>
-		<!-- Runtimes -->
-		<com.google.android.version>2.1.2</com.google.android.version>
-		<!-- Libraries -->
-		<org.jivesoftware.smack.version>3.1.0</org.jivesoftware.smack.version>
-		<commons-lang.version>2.4</commons-lang.version>
-		<!-- Default version of SDK to use -->
-		<android.sdk.platform>7</android.sdk.platform>
-		<!-- Maven Plugins -->
-		<maven-android-plugin.plugin-version>2.9.0-beta-3</maven-android-plugin.plugin-version>
-	</properties>
-	<dependencies>
-     	<!-- Dependency With Social Client Library -->
-         <dependency>
-              <groupId>org.exoplatform.social</groupId>
-              <artifactId>exo.social.client</artifactId>
-              <version>1.0.0-alpha2-SNAPSHOT</version>
-              <exclusions>
-                <!-- Exclusion for slf4j not compatible with android -->
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-              </exclusions>
-         </dependency>
-         <!-- Dependency With Android -->
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>android</artifactId>
-			<version>${com.google.android.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>jivesoftware</groupId>
-			<artifactId>smack</artifactId>
-			<version>${org.jivesoftware.smack.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>${commons-lang.version}</version>
-		</dependency>
-	    <!-- Dependency With SLF4J for Android -->
-		<dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-android</artifactId>
-            <version>1.6.1-RC1</version>
-            <scope>compile</scope>
-         </dependency>
-          <!-- Dependency With Greendroid library for Android -->
-		<dependency>
-			<groupId>com.greendroid</groupId>
-			<artifactId>greendroid</artifactId>
-			<version>67aa3ed</version>
-			<type>apklib</type>
-		</dependency>
-	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-				<artifactId>maven-android-plugin</artifactId>
-				<version>${maven-android-plugin.plugin-version}</version>
-				<configuration>
-                                        <jvmArguments>
-                                               <argument>-Xshare:auto</argument>
-                                               <argument>-Xms128M</argument>
-                                               <argument>-Xmx1G</argument>
-                                               <argument>-XX:MaxPermSize=256M</argument>
-                                        </jvmArguments>
-					<deleteConflictingFiles>true</deleteConflictingFiles>
-				</configuration> 
-				<extensions>true</extensions>
-			</plugin>
-		</plugins>
-		<sourceDirectory>src</sourceDirectory>
-	</build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.exoplatform.mobile.platform</groupId>
+    <artifactId>exo-mobile</artifactId>
+    <version>2.0-Beta3-SNAPSHOT</version>
+  </parent>
+  <artifactId>exo-mobile-android</artifactId>
+  <packaging>apk</packaging>
+  <name>eXo Mobile Android</name>
+  <description>eXo Mobile Android projects.</description>
+  <properties>
+    <!-- Runtimes -->
+    <com.google.android.version>2.1.2</com.google.android.version>
+    <!-- Libraries -->
+    <org.jivesoftware.smack.version>3.1.0</org.jivesoftware.smack.version>
+    <commons-lang.version>2.4</commons-lang.version>
+    <!-- Default version of SDK to use -->
+    <android.sdk.platform>7</android.sdk.platform>
+    <!-- Maven Plugins -->
+    <maven-android-plugin.plugin-version>2.9.0-beta-3</maven-android-plugin.plugin-version>
+  </properties>
+  <dependencies>
+    <!-- Dependency With Social Client Library -->
+    <dependency>
+      <groupId>org.exoplatform.social</groupId>
+      <artifactId>exo.social.client</artifactId>
+      <version>1.0.0-alpha2-SNAPSHOT</version>
+      <exclusions>
+        <!-- Exclusion for slf4j not compatible with android -->
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- Dependency With Android -->
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>${com.google.android.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jivesoftware</groupId>
+      <artifactId>smack</artifactId>
+      <version>${org.jivesoftware.smack.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>${commons-lang.version}</version>
+    </dependency>
+    <!-- Dependency With SLF4J for Android -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-android</artifactId>
+      <version>1.6.1-RC1</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- Dependency With Greendroid library for Android -->
+    <dependency>
+      <groupId>com.greendroid</groupId>
+      <artifactId>greendroid</artifactId>
+      <version>67aa3ed</version>
+      <type>apklib</type>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+        <artifactId>maven-android-plugin</artifactId>
+        <version>${maven-android-plugin.plugin-version}</version>
+        <configuration>
+          <jvmArguments>
+            <argument>-Xshare:auto</argument>
+            <argument>-Xms128M</argument>
+            <argument>-Xmx1G</argument>
+            <argument>-XX:MaxPermSize=256M</argument>
+          </jvmArguments>
+          <deleteConflictingFiles>true</deleteConflictingFiles>
+        </configuration>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+    <sourceDirectory>src</sourceDirectory>
+  </build>
 </project>
