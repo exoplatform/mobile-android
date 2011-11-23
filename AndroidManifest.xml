@@ -39,11 +39,7 @@
 
 		<activity android:configChanges="orientation" android:name=".ui.WebViewActivity"/>
 
-		<activity android:configChanges="keyboardHidden|orientation" android:name=".document.ExoFilesController"/>
-
 		<activity android:configChanges="keyboardHidden|orientation" android:name=".ui.ChatDetailActivity"/>
-
-		<activity android:configChanges="keyboardHidden|orientation" android:name=".chat.ExoChatListController"/>
 
 		<activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialActivity"/>
 
