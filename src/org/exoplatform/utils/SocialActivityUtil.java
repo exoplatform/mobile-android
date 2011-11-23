@@ -9,13 +9,20 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.ui.WebViewActivity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
+import android.text.method.MovementMethod;
 import android.text.style.URLSpan;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -271,16 +278,15 @@ public class SocialActivityUtil {
     imageView.setImageResource(returnType);
   }
 
-  public static void setTextLinkfy(Context mContext, TextView textView) {
+  public static void setTextLinkfy(final Context mContext, TextView textView) {
     URLSpan[] list = textView.getUrls();
     if (list != null) {
       Spannable spannable = (Spannable) textView.getText();
       for (URLSpan span : list) {
-        String spanUrl = span.getURL();
+        final String spanUrl = span.getURL();
         if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
-          textView.setMovementMethod(LinkMovementMethod.getInstance());
+
         } else {
-          // if (spanUrl.contains("profile")) {
           try {
             int start = spannable.getSpanStart(span);
             int stop = spannable.getSpanEnd(span);
@@ -291,36 +297,62 @@ public class SocialActivityUtil {
 
             spannable.setSpan(myUrlSpan, start, stop, flags);
             textView.setText(spannable);
-            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            // textView.setMovementMethod(LinkMovementMethod.getInstance());
           } catch (Exception e) {
 
           }
         }
+        textView.setMovementMethod(new MovementMethod() {
+
+          @Override
+          public boolean onTrackballEvent(TextView widget, Spannable text, MotionEvent event) {
+            return false;
+          }
+
+          @Override
+          public boolean onTouchEvent(TextView widget, Spannable text, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+              WebViewActivity._titlebar = text.toString();
+              WebViewActivity._url = spanUrl;
+              Intent in = new Intent(mContext, WebViewActivity.class);
+              mContext.startActivity(in);
+            }
+
+            return true;
+          }
+
+          @Override
+          public void onTakeFocus(TextView widget, Spannable text, int direction) {
+
+          }
+
+          @Override
+          public boolean onKeyUp(TextView widget, Spannable text, int keyCode, KeyEvent event) {
+            return false;
+          }
+
+          @Override
+          public boolean onKeyOther(TextView view, Spannable text, KeyEvent event) {
+            return false;
+          }
+
+          @Override
+          public boolean onKeyDown(TextView widget, Spannable text, int keyCode, KeyEvent event) {
+            return false;
+          }
+
+          @Override
+          public void initialize(TextView widget, Spannable text) {
+          }
+
+          @Override
+          public boolean canSelectArbitrarily() {
+            return true;
+          }
+        });
       }
     }
   }
 
-  private void setupCookies(Context mContext) {
-    CookieSyncManager.createInstance(mContext);
-
-    // CookieManager.getInstance().setCookie(_url,
-    // ExoConnectionUtils._strCookie);
-    // CookieSyncManager.getInstance().sync();
-    List<Cookie> cookies = ExoConnectionUtils._sessionCookies;// .authenticateAndReturnCookies();
-
-    if (cookies != null) {
-
-      for (Cookie cookie : cookies) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(cookie.getName());
-        buffer.append("=");
-        buffer.append(cookie.getValue());
-        CookieManager.getInstance().setCookie(cookie.getDomain(), buffer.toString());
-      }
-
-      CookieSyncManager.getInstance().sync();
-
-    }
-  }
 
 }

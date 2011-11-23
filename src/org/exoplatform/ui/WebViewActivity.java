@@ -34,6 +34,8 @@ public class WebViewActivity extends MyActionBar {
 
   public static String _titlebar;
 
+  private String       loadingStr;
+
   public void onCreate(Bundle icicle) {
 
     super.onCreate(icicle);
@@ -42,12 +44,12 @@ public class WebViewActivity extends MyActionBar {
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     setupCookies();
+    changeLanguage();
 
     _wvGadget = (WebView) findViewById(R.id.WebView);
     _wvGadget.getSettings().setSupportZoom(true);
     _wvGadget.getSettings().setAppCacheEnabled(true);
     _wvGadget.getSettings().setJavaScriptEnabled(true);
-    // _wvGadget.getSettings().setAllowFileAccess(true);
     _wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
     _wvGadget.getSettings().setPluginsEnabled(true);
     _wvGadget.getSettings().setLoadsImagesAutomatically(true);
@@ -55,44 +57,20 @@ public class WebViewActivity extends MyActionBar {
 
     _wvGadget.getSettings().setBuiltInZoomControls(true);
 
-    setTitle(_titlebar);
-    // final Activity activity = this;
-    //
-    // _wvGadget.setWebChromeClient(new WebChromeClient() {
-    // public void onProgressChanged(WebView view, int progress) {
-    // // Activities and WebViews measure progress with different scales.
-    // // The progress meter will automatically disappear when we reach 100%
-    // activity.setProgress(progress * 1000);
-    // }
-    // });
-    _wvGadget.setWebViewClient(new WebViewClient() {
-      public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+    final Activity activity = this;
 
-      }
+    _wvGadget.setWebChromeClient(new WebChromeClient() {
+      public void onProgressChanged(WebView view, int progress) {
+        setTitle(loadingStr);
+        activity.setProgress(progress * 100);
+        if (progress == 100)
+          setTitle(_titlebar);
 
-      @Override
-      public void onReceivedHttpAuthRequest(WebView view,
-                                            HttpAuthHandler handler,
-                                            String host,
-                                            String realm) {
-        // super.onReceivedHttpAuthRequest(view, handler, host, realm);
-        System.out.println("onReceivedHttpAuthRequest");
-        _wvGadget.setHttpAuthUsernamePassword(_url,
-                                              "",
-                                              AccountSetting.getInstance().getUsername(),
-                                              AccountSetting.getInstance().getPassword());
       }
     });
 
-    // _url = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
- 
-    // _wvGadget.setHttpAuthUsernamePassword(_url,
-    // null,
-    // AccountSetting.getInstance().getUsername(),
-    // AccountSetting.getInstance().getPassword());
     _wvGadget.loadUrl(_url);
 
-    changeLanguage();
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -136,6 +114,7 @@ public class WebViewActivity extends MyActionBar {
 
   public void changeLanguage() {
     LocalizationHelper local = LocalizationHelper.getInstance();
+    loadingStr = local.getString("LoadingData");
 
   }
 }
