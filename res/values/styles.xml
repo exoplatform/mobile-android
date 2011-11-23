@@ -17,6 +17,12 @@
 	<style name="TextAppearanceLarge" parent="@style/TextAppearance.Large">
 		<item name="android:textSize">18sp</item>
 	</style>
+	<style name="TitleTextAppearance" >
+		<item name="android:shadowColor">#000000</item>
+		<item name="android:shadowDx">1.0</item>
+		<item name="android:shadowDy">2.0</item>
+		<item name="android:shadowRadius">1.0</item>
+	</style>
 	<style name="DialogText">
 		<item name="android:textColor">#FF000000</item>
 		<item name="android:textSize">13sp</item>

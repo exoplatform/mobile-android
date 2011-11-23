@@ -94,13 +94,18 @@ public class ComposeMessageController {
       RestActivity restActivity = (RestActivity) activityService.get(selectedId);
 
       activityService.createComment(restActivity, comment);
-      
+
       ((Activity) mContext).finish();
-      
+
       SocialActivity.socialActivity.reloadActivity();
-      
-      
+
     } catch (RuntimeException e) {
+      String error = e.getMessage();
+      if (error != null && error.contains("HTTP")) {
+        contentString = LocalizationHelper.getInstance().getString("ErrorOnComment");
+      } else {
+        contentString = LocalizationHelper.getInstance().getString("ConnectionError");
+      }
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
@@ -115,7 +120,7 @@ public class ComposeMessageController {
     inputTextWarning = bundle.getString("InputTextWarning");
     okString = bundle.getString("OK");
     titleString = bundle.getString("Warning");
-    contentString = bundle.getString("ConnectionError");
+
   }
 
 }

@@ -37,16 +37,6 @@ public class SocialDetailController {
 
   private LinearLayout         contentDetailLayout;
 
-  // private AsyncImageView imageView_Avatar;
-  //
-  // private TextView textView_Name;
-  //
-  // private TextView textView_Message;
-  //
-  // private TextView textView_Time;
-  //
-  // private ImageView typeImageView;
-
   private TextView             textView_Like_Count;
 
   private int                  likeDrawable    = R.drawable.activity_like_button_background_shape;
@@ -159,6 +149,13 @@ public class SocialDetailController {
       }
       onLoad();
     } catch (RuntimeException e) {
+      String error = e.getMessage();
+      if (error != null && error.contains("HTTP")) {
+        likeErrorString = LocalizationHelper.getInstance().getString("ErrorOnLike");
+      } else {
+        likeErrorString = LocalizationHelper.getInstance().getString("ConnectionError");
+      }
+
       WarningDialog dialog = new WarningDialog(mContext, titleString, likeErrorString, okString);
       dialog.show();
     }
@@ -168,7 +165,5 @@ public class SocialDetailController {
     LocalizationHelper location = LocalizationHelper.getInstance();
     okString = location.getString("OK");
     titleString = location.getString("Warning");
-    likeErrorString = location.getString("ErrorOnLike");
-
   }
 }
