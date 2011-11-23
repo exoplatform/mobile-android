@@ -22,14 +22,14 @@ import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-//import com.cyrilmottier.android.greendroid.R;
-
 public class HomeActivity extends MyActionBar {
-  private GridView       gridView;
+  private GridView            gridView;
 
-  private HomeController homeController;
+  private HomeController      homeController;
 
-  private String         settingText;
+  private HomeActionListenner homeActionListenner;
+
+  private String              settingText;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -74,8 +74,11 @@ public class HomeActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
+    if (homeActionListenner != null) {
+      homeActionListenner.onCancelLoadNewsService();
+    }
     homeController.onFinish();
-//    new LogoutDialog(HomeActivity.this, homeController).show();
+    // new LogoutDialog(HomeActivity.this, homeController).show();
   }
 
   private void init() {
@@ -87,7 +90,8 @@ public class HomeActivity extends MyActionBar {
   private void createAdapter() {
     gridView = (GridView) findViewById(R.id.gridView1);
     gridView.setAdapter(new HomeAdapter(this));
-    gridView.setOnItemClickListener(new HomeActionListenner(this));
+    homeActionListenner = new HomeActionListenner(this);
+    gridView.setOnItemClickListener(homeActionListenner);
   }
 
   @Override
@@ -98,6 +102,9 @@ public class HomeActivity extends MyActionBar {
       break;
     case 0:
       // new LogoutDialog(HomeActivity.this, homeController).show();
+      if (homeActionListenner != null) {
+        homeActionListenner.onCancelLoadNewsService();
+      }
       homeController.onFinish();
       break;
     case 1:

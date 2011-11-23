@@ -29,19 +29,18 @@
 		<LinearLayout android:orientation="horizontal"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_margin="5dp">
-			<Button android:text="Send" android:layout_width="0dip"
-				android:layout_weight="1" android:layout_height="44dp"
-				android:singleLine="true" android:id="@+id/compose_send_button"
-				android:textColor="#000000" android:shadowColor="#888888"
-				android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
-				android:background="@drawable/send_button_background_shape" />
-
 			<Button android:text="Cancel" android:layout_width="0dip"
 				android:layout_weight="1" android:layout_height="44dp"
 				android:singleLine="true" android:id="@+id/compose_cancel_button"
 				android:textColor="#FFFFFF" android:shadowColor="#000000"
 				android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
-				android:background="@drawable/cancel_button_background_shape"
+				android:background="@drawable/cancel_button_background_shape" />
+			<Button android:text="Send" android:layout_width="0dip"
+				android:layout_weight="1" android:layout_height="44dp"
+				android:singleLine="true" android:id="@+id/compose_send_button"
+				android:textColor="#000000" android:shadowColor="#888888"
+				android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
+				android:background="@drawable/send_button_background_shape"
 				android:layout_marginLeft="15dip" />
 
 		</LinearLayout>

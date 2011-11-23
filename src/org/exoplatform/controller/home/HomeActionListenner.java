@@ -18,9 +18,9 @@ import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WarningDialog;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -31,19 +31,21 @@ import android.widget.AdapterView.OnItemClickListener;
  * 
  */
 public class HomeActionListenner implements OnItemClickListener {
-  private String  okString;
+  private String              okString;
 
-  private String  titleString;
+  private String              titleString;
 
-  private String  contentString;
+  private String              contentString;
 
-  private String  protocol;
+  private String              protocol;
 
-  private String  host;
+  private String              host;
 
-  private int     port;
+  private int                 port;
 
-  private Context mContext;
+  private NewsServiceLoadTask mLoadTask;
+
+  private Context             mContext;
 
   public HomeActionListenner(Context context) {
     mContext = context;
@@ -55,7 +57,7 @@ public class HomeActionListenner implements OnItemClickListener {
     HomeItem item = HomeHelper.getInstance().getHomeItemList().get(postion);
     switch (item._index) {
     case 1:
-      launchActivityStreamApp();
+      launchNewsService();
       break;
     case 2:
       launchChatApp();
@@ -76,65 +78,24 @@ public class HomeActionListenner implements OnItemClickListener {
 
   }
 
-  private void parseDomain() {
-    String domain = SocialActivityUtil.getDomain();
-    String[] domainSplits = domain.split("//");
-    protocol = domainSplits[0].substring(0, domainSplits[0].length() - 1);
-    if (domainSplits[1].contains(":")) {
-      String[] hostAddr = domainSplits[1].split(":");
-      host = hostAddr[0];
-      port = Integer.valueOf(hostAddr[1]);
-    } else {
-      host = domainSplits[1];
-      port = ExoConstants.ACTIVITY_PORT;
-    }
-  }
-
-  private boolean createActivityStreamConnetion() {
-    try {
-      parseDomain();
-      String userName = AccountSetting.getInstance().getUsername();
-      String password = AccountSetting.getInstance().getPassword();
-
-      SocialClientContext.setProtocol(protocol);
-      SocialClientContext.setHost(host);
-      SocialClientContext.setPort(port);
-      SocialClientContext.setPortalContainerName(ExoConstants.ACTIVITY_PORTAL_CONTAINER);
-      SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
-      SocialClientContext.setRestVersion(ExoConstants.ACTIVITY_REST_VERSION);
-      SocialClientContext.setUsername(userName);
-      SocialClientContext.setPassword(password);
-
-      ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
-      ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
-      IdentityService<?> identityService = clientServiceFactory.createIdentityService();
-      String userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION,
-                                                          userName);
-      SocialServiceHelper.getInstance().setActivityService(activityService);
-      SocialServiceHelper.getInstance().setIdentityService(identityService);
-      SocialServiceHelper.getInstance().setUserId(userIdentity);
-
-      return true;
-    } catch (RuntimeException e) {
-      return false;
-    }
-  }
-
   private boolean checkDocumentConnection() {
     return true;
   }
 
-  private void launchActivityStreamApp() {
+  private void launchNewsService() {
 
-    if (createActivityStreamConnetion() == true) {
-      Intent next = new Intent(mContext, SocialActivity.class);
-      
-      mContext.startActivity(next);
-    } else {
-      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
-      dialog.show();
+    if (mLoadTask == null || mLoadTask.getStatus() == NewsServiceLoadTask.Status.FINISHED) {
+      mLoadTask = (NewsServiceLoadTask) new NewsServiceLoadTask().execute();
     }
 
+  }
+  
+  public void onCancelLoadNewsService(){
+    if (mLoadTask != null && mLoadTask.getStatus() == NewsServiceLoadTask.Status.RUNNING) {
+      mLoadTask.onCancelled();
+      mLoadTask.cancel(true);
+      mLoadTask = null;
+    }
   }
 
   private void launchChatApp() {
@@ -171,5 +132,64 @@ public class HomeActionListenner implements OnItemClickListener {
     okString = location.getString("OK");
     titleString = location.getString("Warning");
     contentString = location.getString("ConnectionError");
+  }
+
+  private void parseDomain() {
+    String domain = SocialActivityUtil.getDomain();
+    String[] domainSplits = domain.split("//");
+    protocol = domainSplits[0].substring(0, domainSplits[0].length() - 1);
+    if (domainSplits[1].contains(":")) {
+      String[] hostAddr = domainSplits[1].split(":");
+      host = hostAddr[0];
+      port = Integer.valueOf(hostAddr[1]);
+    } else {
+      host = domainSplits[1];
+      port = ExoConstants.ACTIVITY_PORT;
+    }
+  }
+
+  private class NewsServiceLoadTask extends UserTask<Void, Void, Boolean> {
+
+    @Override
+    public Boolean doInBackground(Void... params) {
+      try {
+        parseDomain();
+        String userName = AccountSetting.getInstance().getUsername();
+        String password = AccountSetting.getInstance().getPassword();
+
+        SocialClientContext.setProtocol(protocol);
+        SocialClientContext.setHost(host);
+        SocialClientContext.setPort(port);
+        SocialClientContext.setPortalContainerName(ExoConstants.ACTIVITY_PORTAL_CONTAINER);
+        SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
+        SocialClientContext.setRestVersion(ExoConstants.ACTIVITY_REST_VERSION);
+        SocialClientContext.setUsername(userName);
+        SocialClientContext.setPassword(password);
+
+        ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
+        ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
+        IdentityService<?> identityService = clientServiceFactory.createIdentityService();
+        String userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION,
+                                                            userName);
+        SocialServiceHelper.getInstance().setActivityService(activityService);
+        SocialServiceHelper.getInstance().setIdentityService(identityService);
+        SocialServiceHelper.getInstance().setUserId(userIdentity);
+
+        return true;
+      } catch (RuntimeException e) {
+        return false;
+      }
+    }
+
+    @Override
+    public void onPostExecute(Boolean result) {
+      if (result) {
+        Intent next = new Intent(mContext, SocialActivity.class);
+        mContext.startActivity(next);
+      } else {
+        WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+        dialog.show();
+      }
+    }
   }
 }

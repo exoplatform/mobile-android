@@ -2,26 +2,18 @@ package org.exoplatform.ui.social;
 
 import greendroid.widget.ActionBarItem;
 
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.MyActionBar;
 
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.cyrilmottier.android.greendroid.R;
 
-public class SocialAttachedImageActivity extends MyActionBar implements OnClickListener {
+public class SocialAttachedImageActivity extends MyActionBar {
   private ImageView imageView;
-
-  private Button    okButton;
-
-  private String    okText;
 
   private String    imageUrl;
 
@@ -31,7 +23,6 @@ public class SocialAttachedImageActivity extends MyActionBar implements OnClickL
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.social_attached_image_layout);
-    onChangeLanguage();
     imageUrl = SocialDetailHelper.getInstance().getAttachedImageUrl();
     String imageName = getImageName(imageUrl);
     setTitle(imageName);
@@ -43,9 +34,6 @@ public class SocialAttachedImageActivity extends MyActionBar implements OnClickL
     SocialDetailHelper.getInstance().imageDownloader.download(imageUrl,
                                                               imageView,
                                                               ExoConnectionUtils._strCookie);
-    okButton = (Button) findViewById(R.id.social_attached_image_ok_button);
-    okButton.setText(okText);
-    okButton.setOnClickListener(this);
   }
 
   private String getImageName(String url) {
@@ -77,16 +65,5 @@ public class SocialAttachedImageActivity extends MyActionBar implements OnClickL
     finish();
   }
 
-  public void onClick(View view) {
-    if (view == okButton) {
-      finish();
-    }
-  }
-
-  private void onChangeLanguage() {
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
-    okText = bundle.getString("OK");
-
-  }
 
 }

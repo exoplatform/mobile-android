@@ -129,7 +129,7 @@ public class DocumentActivity extends MyActionBar {
       if (getActionBar().getItem(0) == null) {
 
         addActionBarItem();
-        getActionBar().getItem(0).setDrawable(R.drawable.documentdisclosureactionbutton);
+        getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
       }
     }
 

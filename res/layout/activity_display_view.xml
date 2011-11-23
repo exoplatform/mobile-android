@@ -60,7 +60,7 @@
 			android:textSize="12dp" android:textColorHint="#FFFFFF" android:hint="Your comment..." />
 	</LinearLayout>
 	<LinearLayout android:id="@+id/details_start_screen"
-		android:background="#DCDCDCDC" android:layout_width="fill_parent"
+		android:background="#DCDCDC" android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 	</LinearLayout>
 </RelativeLayout>
