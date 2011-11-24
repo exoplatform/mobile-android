@@ -13,6 +13,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
@@ -87,35 +88,11 @@ public class WebViewActivity extends MyActionBar {
   }
 
   private void setupCookies() {
-    try {
 
       CookieSyncManager.createInstance(this);
-      HttpParams httpParameters = new BasicHttpParams();
-      HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
-      HttpConnectionParams.setSoTimeout(httpParameters, 30000);
-      HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
-      DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-
-      HttpGet httpGet = new HttpGet(_url);
-      String strCookie = "";
-
-      httpClient.execute(httpGet);
-      CookieStore cookiesStore = httpClient.getCookieStore();
-      List<Cookie> cookies = cookiesStore.getCookies();
-      if (!cookies.isEmpty()) {
-        for (int i = 0; i < cookies.size(); i++) {
-          strCookie = cookies.get(i).getName().toString() + "="
-              + cookies.get(i).getValue().toString();
-        }
-      }
-
-      CookieManager.getInstance().setCookie(_url, strCookie);
+      CookieManager.getInstance().setCookie(_url, ExoConnectionUtils._strCookie);
       CookieSyncManager.getInstance().sync();
-      httpClient.getConnectionManager().shutdown();
-    } catch (Exception e) {
-
-    }
   }
 
   @Override

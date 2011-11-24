@@ -2,25 +2,17 @@ package org.exoplatform.utils;
 
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import java.util.List;
 
-import org.apache.http.cookie.Cookie;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.widget.TextMovementMethod;
 import org.exoplatform.widget.TextUrlSpan;
 
 import android.content.Context;
 import android.text.Spannable;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.text.method.MovementMethod;
-import android.text.method.ScrollingMovementMethod;
 import android.text.style.URLSpan;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
