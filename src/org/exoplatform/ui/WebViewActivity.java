@@ -4,25 +4,25 @@ import greendroid.widget.ActionBarItem;
 
 import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.cookie.Cookie;
-import org.exoplatform.singleton.AccountSetting;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.cyrilmottier.android.greendroid.R;
 
@@ -68,6 +68,7 @@ public class WebViewActivity extends MyActionBar {
 
       }
     });
+    _wvGadget.setWebViewClient(new NewsWebviewClient());
 
     _wvGadget.loadUrl(_url);
 
@@ -86,23 +87,33 @@ public class WebViewActivity extends MyActionBar {
   }
 
   private void setupCookies() {
-    CookieSyncManager.createInstance(this);
+    try {
 
-    CookieManager.getInstance().setCookie(_url, ExoConnectionUtils._strCookie);
-    // CookieSyncManager.getInstance().sync();
-    List<Cookie> cookies = ExoConnectionUtils._sessionCookies;// .authenticateAndReturnCookies();
+      CookieSyncManager.createInstance(this);
+      HttpParams httpParameters = new BasicHttpParams();
+      HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
+      HttpConnectionParams.setSoTimeout(httpParameters, 30000);
+      HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
-    if (cookies != null) {
+      DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-      for (Cookie cookie : cookies) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(cookie.getName());
-        buffer.append("=");
-        buffer.append(cookie.getValue());
-        CookieManager.getInstance().setCookie(cookie.getDomain(), buffer.toString());
+      HttpGet httpGet = new HttpGet(_url);
+      String strCookie = "";
+
+      httpClient.execute(httpGet);
+      CookieStore cookiesStore = httpClient.getCookieStore();
+      List<Cookie> cookies = cookiesStore.getCookies();
+      if (!cookies.isEmpty()) {
+        for (int i = 0; i < cookies.size(); i++) {
+          strCookie = cookies.get(i).getName().toString() + "="
+              + cookies.get(i).getValue().toString();
+        }
       }
 
+      CookieManager.getInstance().setCookie(_url, strCookie);
       CookieSyncManager.getInstance().sync();
+      httpClient.getConnectionManager().shutdown();
+    } catch (Exception e) {
 
     }
   }
@@ -116,5 +127,14 @@ public class WebViewActivity extends MyActionBar {
     LocalizationHelper local = LocalizationHelper.getInstance();
     loadingStr = local.getString("LoadingData");
 
+  }
+
+  private class NewsWebviewClient extends WebViewClient {
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+      view.loadUrl(url);
+      return super.shouldOverrideUrlLoading(view, url);
+
+    }
   }
 }

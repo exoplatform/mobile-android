@@ -154,6 +154,7 @@ public class SocialController {
           SocialDetailHelper.getInstance().setActivityId(activityId);
           SocialDetailHelper.getInstance().setAttachedImageUrl(activityInfo.getAttachedImageUrl());
           Intent intent = new Intent(mContext, SocialDetailActivity.class);
+          intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           mContext.startActivity(intent);
         }
       });

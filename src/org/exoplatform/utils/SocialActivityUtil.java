@@ -9,20 +9,18 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.widget.TextMovementMethod;
+import org.exoplatform.widget.TextUrlSpan;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.text.Spannable;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.text.style.URLSpan;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -283,76 +281,27 @@ public class SocialActivityUtil {
     if (list != null) {
       Spannable spannable = (Spannable) textView.getText();
       for (URLSpan span : list) {
-        final String spanUrl = span.getURL();
-        if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
+        try {
 
-        } else {
-          try {
-            int start = spannable.getSpanStart(span);
-            int stop = spannable.getSpanEnd(span);
-            int flags = spannable.getSpanEnd(span);
-            spannable.removeSpan(span);
-            String link = AccountSetting.getInstance().getDomainName() + spanUrl;
-            URLSpan myUrlSpan = new URLSpan(link);
-
+          int start = spannable.getSpanStart(span);
+          int stop = spannable.getSpanEnd(span);
+          int flags = spannable.getSpanEnd(span);
+          String spanUrl = span.getURL();
+          spannable.removeSpan(span);
+          if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
+            TextUrlSpan myUrlSpan = new TextUrlSpan(spanUrl);
             spannable.setSpan(myUrlSpan, start, stop, flags);
-            textView.setText(spannable);
-            // textView.setMovementMethod(LinkMovementMethod.getInstance());
-          } catch (Exception e) {
-
+          } else {
+            String link = AccountSetting.getInstance().getDomainName() + spanUrl;
+            TextUrlSpan myUrlSpan = new TextUrlSpan(link);
+            spannable.setSpan(myUrlSpan, start, stop, flags);
           }
+          textView.setText(spannable);
+          textView.setMovementMethod(LinkMovementMethod.getInstance());
+        } catch (Exception e) {
         }
-        textView.setMovementMethod(new MovementMethod() {
-
-          @Override
-          public boolean onTrackballEvent(TextView widget, Spannable text, MotionEvent event) {
-            return false;
-          }
-
-          @Override
-          public boolean onTouchEvent(TextView widget, Spannable text, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-              WebViewActivity._titlebar = text.toString();
-              WebViewActivity._url = spanUrl;
-              Intent in = new Intent(mContext, WebViewActivity.class);
-              mContext.startActivity(in);
-            }
-
-            return true;
-          }
-
-          @Override
-          public void onTakeFocus(TextView widget, Spannable text, int direction) {
-
-          }
-
-          @Override
-          public boolean onKeyUp(TextView widget, Spannable text, int keyCode, KeyEvent event) {
-            return false;
-          }
-
-          @Override
-          public boolean onKeyOther(TextView view, Spannable text, KeyEvent event) {
-            return false;
-          }
-
-          @Override
-          public boolean onKeyDown(TextView widget, Spannable text, int keyCode, KeyEvent event) {
-            return false;
-          }
-
-          @Override
-          public void initialize(TextView widget, Spannable text) {
-          }
-
-          @Override
-          public boolean canSelectArbitrarily() {
-            return true;
-          }
-        });
       }
     }
   }
-
 
 }

@@ -160,6 +160,7 @@ public class LoginController {
         boolean isCompliant = ExoConnectionUtils.checkPLFVersion();
         if (isCompliant == true) {
           Intent next = new Intent(mContext, HomeActivity.class);
+          next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           mContext.startActivity(next);
         } else {
           dialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);

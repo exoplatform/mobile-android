@@ -15,11 +15,19 @@
  */
 package org.exoplatform;
 
+import java.util.List;
+
+import org.apache.http.cookie.Cookie;
 import org.exoplatform.ui.HomeActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.SocialActivityUtil;
 
 import greendroid.app.GDApplication;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 
 public class ExoApplication extends GDApplication {
 
@@ -32,7 +40,6 @@ public class ExoApplication extends GDApplication {
   public Intent getMainApplicationIntent() {
     return new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_url)));
   }
-  
-  
+
 
 }

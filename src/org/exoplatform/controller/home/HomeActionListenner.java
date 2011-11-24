@@ -100,6 +100,7 @@ public class HomeActionListenner implements OnItemClickListener {
 
   private void launchChatApp() {
     Intent next = new Intent(mContext, ChatListActivity.class);
+    next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     mContext.startActivity(next);
 
   }
@@ -108,6 +109,7 @@ public class HomeActionListenner implements OnItemClickListener {
 
     if (checkDocumentConnection() == true) {
       Intent next = new Intent(mContext, DocumentActivity.class);
+      next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       mContext.startActivity(next);
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
@@ -117,11 +119,13 @@ public class HomeActionListenner implements OnItemClickListener {
 
   private void launchDashboardApp() {
     Intent intent = new Intent(mContext, DashboardActivity.class);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     mContext.startActivity(intent);
   }
 
   private void launchSettingApp() {
     Intent next = new Intent(mContext, SettingActivity.class);
+    next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     next.putExtra(ExoConstants.SETTING_TYPE, 1);
     mContext.startActivity(next);
 
@@ -185,6 +189,7 @@ public class HomeActionListenner implements OnItemClickListener {
     public void onPostExecute(Boolean result) {
       if (result) {
         Intent next = new Intent(mContext, SocialActivity.class);
+        next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(next);
       } else {
         WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
