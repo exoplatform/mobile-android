@@ -14,6 +14,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
@@ -88,11 +89,33 @@ public class WebViewActivity extends MyActionBar {
   }
 
   private void setupCookies() {
-
+    try {
       CookieSyncManager.createInstance(this);
 
-      CookieManager.getInstance().setCookie(_url, ExoConnectionUtils._strCookie);
+      HttpParams httpParameters = new BasicHttpParams();
+      HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
+      HttpConnectionParams.setSoTimeout(httpParameters, 30000);
+      HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+
+      DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+
+      HttpGet httpGet = new HttpGet(_url);
+
+      httpClient.execute(httpGet);
+      CookieStore cookiesStore = httpClient.getCookieStore();
+      List<Cookie> cookies = cookiesStore.getCookies();
+      String strCookie = "";
+      if (!cookies.isEmpty()) {
+        for (int i = 0; i < cookies.size(); i++) {
+          strCookie = cookies.get(i).getName().toString() + "="
+              + cookies.get(i).getValue().toString();
+        }
+      }
+
+      CookieManager.getInstance().setCookie(_url, strCookie);
       CookieSyncManager.getInstance().sync();
+    } catch (Exception e) {
+    }
   }
 
   @Override
