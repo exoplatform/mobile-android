@@ -106,7 +106,7 @@ public class SocialDetailController {
         }
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()),
                                                TextView.BufferType.SPANNABLE);
-        SocialActivityUtil.setTextLinkfy(mContext, commentItem.comTextViewMessage);
+        SocialActivityUtil.setTextLinkfy(commentItem.comTextViewMessage);
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(comment.getPostedTime()));
         commentLayoutWrap.addView(commentItem, params);
 
@@ -126,7 +126,7 @@ public class SocialDetailController {
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     contentDetailLayout.removeAllViews();
     SocialActivityStreamItem item = new SocialActivityStreamItem(mContext, streamInfo, true);
-    SocialActivityUtil.setTextLinkfy(mContext, item.textViewMessage);
+    SocialActivityUtil.setTextLinkfy(item.textViewMessage);
     contentDetailLayout.addView(item, params);
   }
 

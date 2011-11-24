@@ -268,26 +268,25 @@ public class SocialActivityUtil {
     imageView.setImageResource(returnType);
   }
 
-  public static void setTextLinkfy(final Context mContext, TextView textView) {
+  public static void setTextLinkfy(TextView textView) {
     URLSpan[] list = textView.getUrls();
     if (list != null) {
       Spannable spannable = (Spannable) textView.getText();
       for (URLSpan span : list) {
         try {
-
           int start = spannable.getSpanStart(span);
           int stop = spannable.getSpanEnd(span);
           int flags = spannable.getSpanEnd(span);
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
+          TextUrlSpan myUrlSpan = null;
           if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
-            TextUrlSpan myUrlSpan = new TextUrlSpan(spanUrl);
-            spannable.setSpan(myUrlSpan, start, stop, flags);
+            myUrlSpan = new TextUrlSpan(spanUrl);
           } else {
             String link = AccountSetting.getInstance().getDomainName() + spanUrl;
-            TextUrlSpan myUrlSpan = new TextUrlSpan(link);
-            spannable.setSpan(myUrlSpan, start, stop, flags);
+            myUrlSpan = new TextUrlSpan(link);
           }
+          spannable.setSpan(myUrlSpan, start, stop, flags);
           textView.setText(spannable);
           textView.setMovementMethod(LinkMovementMethod.getInstance());
         } catch (Exception e) {
