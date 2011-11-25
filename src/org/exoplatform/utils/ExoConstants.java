@@ -99,5 +99,8 @@ public class ExoConstants {
   public static final int    CACHE_MAX_NUMBER              = 1000;
 
   public static final int    CACHE_TIME_TO_LIVE            = 500;
+  
+  public static final String SPECIAL_CHAR_NAME_SET         = "[\\[\\]\\/\\&\\~\\?\\*\\|\\<\\>\\\"\\;\\:\\+\\\\]";
+  public static final String SPECIAL_CHAR_URL_SET          = "[\\[\\]\\&\\~\\?\\*\\|\\<\\>\\\"\\;\\+\\\\]";
 
 }

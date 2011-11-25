@@ -3,7 +3,8 @@ package org.exoplatform.utils;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.http.HttpResponse;
@@ -193,4 +194,14 @@ public class ExoDocumentUtils {
     return url.substring(url.lastIndexOf("/") + 1, url.length());
   }
 
+  public static boolean isContainSpecialChar(String str, String charSet) {
+    
+    try {
+      Pattern patt = Pattern.compile(charSet);
+      Matcher matcher = patt.matcher(str);
+      return matcher.find();
+  } catch (RuntimeException e) {
+    return false;
+  }  
+  }
 }

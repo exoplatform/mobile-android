@@ -361,7 +361,7 @@ public class ImageDownloader implements OnLowMemoryListener {
     }
   }
 
-  @Override
+//  @Override
   public void onLowMemoryReceived() {
      resetPurgeTimer();
   }

@@ -48,7 +48,7 @@ public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
     context.startActivity(intent);
   }
 
-  @Override
+//  @Override
   public int getSpanTypeId() {
     return 11;
   }

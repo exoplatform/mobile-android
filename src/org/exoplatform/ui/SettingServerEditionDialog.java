@@ -92,10 +92,14 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
     ServerObjInfo myServerObj = new ServerObjInfo();
 
     myServerObj._strServerName = editTextServerName.getText().toString();
-    // myServerObj._strServerUrl = editTextServerUrl.getText().toString();
 
     URLAnalyzer urlAnanyzer = new URLAnalyzer();
     myServerObj._strServerUrl = urlAnanyzer.parserURL(editTextServerUrl.getText().toString());
+    
+    myServerObj._strServerName = myServerObj._strServerName.trim();
+    myServerObj._strServerUrl = myServerObj._strServerUrl.trim();
+    
+    
     SettingServerEditionController editController = new SettingServerEditionController(mContext);
     if (view == btnOK) {
       editController.onAccept(myServerObj, myServerObj);

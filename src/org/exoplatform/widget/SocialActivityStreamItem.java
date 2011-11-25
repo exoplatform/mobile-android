@@ -90,9 +90,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private void initCommonInfo() {
     String avatarUrl = activityInfo.getImageUrl();
-    if (avatarUrl == null) {
-      imageViewAvatar.setImageResource(ExoConstants.DEFAULT_AVATAR);
-    } else {
+    if (avatarUrl != null) {
       imageViewAvatar.setUrl(avatarUrl);
     }
 

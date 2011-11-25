@@ -43,7 +43,8 @@ public class URLAnalyzer {
   public String parserURL(String urlStr)
   {
     
-//    Log.e("Valid:", "" + isValidUrl(urlStr));
+    if(urlStr == null || urlStr.length() == 0)
+      return "";
     
     String url = urlStr;
     

@@ -7,6 +7,7 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.ServerConfigurationUtils;
 
 import android.content.Context;
@@ -33,7 +34,9 @@ public class SettingServerEditionController {
 
   private String               serverisExisted;
   
-  private String selectedServer;
+  private String               serverNameURLInvalid;
+  
+  private String               selectedServer;
 
   public SettingServerEditionController(Context context) {
     mContext = context;
@@ -49,12 +52,22 @@ public class SettingServerEditionController {
   }
 
   public void onAccept(ServerObjInfo myServerObj, ServerObjInfo serverObj) {
-    if (myServerObj._strServerName.equalsIgnoreCase("")
-        || myServerObj._strServerUrl.equalsIgnoreCase("")) {
-      // Server name or server url is empty
+    
+    if (myServerObj._strServerName.length() == 0
+        || myServerObj._strServerUrl.length() == 0) {
+     
       Toast.makeText(mContext, serverIsEmpty, Toast.LENGTH_SHORT).show();
       return;
     }
+    
+    if(ExoDocumentUtils.isContainSpecialChar(myServerObj._strServerName, ExoConstants.SPECIAL_CHAR_NAME_SET) || 
+        ExoDocumentUtils.isContainSpecialChar(myServerObj._strServerUrl, ExoConstants.SPECIAL_CHAR_URL_SET)) {
+    
+      Toast.makeText(mContext, serverNameURLInvalid, Toast.LENGTH_SHORT).show();
+      return;
+      
+    }
+    
     if (isNewServer) {
       boolean isExisted = false;
       for (int i = 0; i < serverInfoList.size(); i++) {
@@ -143,7 +156,9 @@ public class SettingServerEditionController {
     LocalizationHelper bundle = LocalizationHelper.getInstance();
     serverIsEmpty = bundle.getString("WarningServerNameIsEmpty");
     serverisExisted = bundle.getString("WarningServerIsExist");
-
+    serverNameURLInvalid = bundle.getString("SpecialCharacters");
+    
+    
   }
 
 }
