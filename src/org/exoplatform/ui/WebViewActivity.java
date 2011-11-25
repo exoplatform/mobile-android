@@ -91,6 +91,7 @@ public class WebViewActivity extends MyActionBar {
   private void setupCookies() {
     try {
       CookieSyncManager.createInstance(this);
+      CookieSyncManager.getInstance().resetSync();
 
       HttpParams httpParameters = new BasicHttpParams();
       HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
@@ -133,7 +134,7 @@ public class WebViewActivity extends MyActionBar {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
       view.loadUrl(url);
-      return super.shouldOverrideUrlLoading(view, url);
+      return true;
 
     }
   }

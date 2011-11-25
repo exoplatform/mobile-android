@@ -14,6 +14,7 @@ import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -212,12 +213,13 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
 
     case 11:
-//      Map<String, String> templateMap = activityInfo.templateParams;
-//      Set<String> set = templateMap.keySet();
-//      for (String param : set) {
-//        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-//            + templateMap.get(param));
-//      }
+      // Map<String, String> templateMap = activityInfo.templateParams;
+      // Set<String> set = templateMap.keySet();
+      // for (String param : set) {
+      // System.out.println("type: " + activityInfo.getType() +
+      // "--template key: " + param + "-- "
+      // + templateMap.get(param));
+      // }
       setActivityTypeCalendar();
       break;
     default:
