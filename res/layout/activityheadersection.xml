@@ -3,7 +3,6 @@
 	android:layout_width="fill_parent" android:layout_height="wrap_content">
 	<TextView android:layout_height="wrap_content"
 		android:padding="3dp" android:layout_marginTop="5dp"
-		style="@style/textview_content" android:layout_alignParentRight="true"
-		android:layout_width="wrap_content" android:id="@+id/textView_Section_Title"
-		android:textColor="#000000" />
+		style="@style/textview_header" android:layout_alignParentRight="true"
+		android:layout_width="wrap_content" android:id="@+id/textView_Section_Title" />
 </RelativeLayout>

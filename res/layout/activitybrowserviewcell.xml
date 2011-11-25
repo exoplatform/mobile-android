@@ -30,7 +30,7 @@
 			android:visibility="gone" android:layout_marginTop="3dip"
 			android:layout_width="fill_parent" />
 
-		<TextView android:id="@+id/textView_Message" style="@style/textview_content"
+		<TextView android:id="@+id/textView_Message" style="@style/textview_content" 
 			android:layout_height="wrap_content" android:text="Test message"
 			android:layout_marginLeft="10dip" android:layout_marginTop="3dip"
 			android:layout_width="fill_parent" />
