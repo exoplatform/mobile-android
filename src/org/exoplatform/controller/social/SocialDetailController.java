@@ -152,7 +152,6 @@ public class SocialDetailController {
     } catch (SocialClientLibException e) {
 
       String error = e.getMessage();
-      System.out.println("" + error);
       if (error != null && error.contains("HTTP")) {
         likeErrorString = LocalizationHelper.getInstance().getString("ErrorOnLike");
       } else {

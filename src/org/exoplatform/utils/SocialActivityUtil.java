@@ -279,12 +279,12 @@ public class SocialActivityUtil {
           int flags = spannable.getSpanEnd(span);
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
-          URLSpan myUrlSpan = null;
+          TextUrlSpan myUrlSpan = null;
           if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
-            myUrlSpan = new URLSpan(spanUrl);
+            myUrlSpan = new TextUrlSpan(spanUrl);
           } else {
             String link = AccountSetting.getInstance().getDomainName() + spanUrl;
-            myUrlSpan = new URLSpan(link);
+            myUrlSpan = new TextUrlSpan(link);
           }
           spannable.setSpan(myUrlSpan, start, stop, flags);
           textView.setText(spannable);

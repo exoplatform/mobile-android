@@ -143,9 +143,9 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
       return 1;
     } catch (SocialClientLibException e) {
-      String error = e.getMessage().toLowerCase();
+      String error = e.getMessage();
 
-      if (error.contains("http")) {
+      if (error.contains("HTTP")) {
         return 0;
       }
 

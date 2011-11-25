@@ -102,7 +102,6 @@ public class ComposeMessageController {
 
     } catch (SocialClientLibException e) {
       String error = e.getMessage();
-      System.out.println("" + error);
       if (error != null && error.contains("HTTP")) {
         contentString = LocalizationHelper.getInstance().getString("ErrorOnComment");
       } else {
