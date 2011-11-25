@@ -6,6 +6,7 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
@@ -69,8 +70,8 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
                                                                          .getActivityService();
       IdentityService<?> identityService = SocialServiceHelper.getInstance().getIdentityService();
-      RestIdentity identity = (RestIdentity) identityService.get(SocialServiceHelper.getInstance()
-                                                                                    .getUserId());
+      RestIdentity identity;
+      identity = (RestIdentity) identityService.get(SocialServiceHelper.getInstance().getUserId());
       QueryParams queryParams = new QueryParamsImpl();
       queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(ExoConstants.NUMBER_OF_LIKES_PARAM));
       queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(ExoConstants.NUMBER_OF_COMMENTS_PARAM));
@@ -100,7 +101,9 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
         }
       }
       return listActivity;
-    } catch (RuntimeException e) {
+    } catch (SocialClientLibException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
       return null;
     }
   }

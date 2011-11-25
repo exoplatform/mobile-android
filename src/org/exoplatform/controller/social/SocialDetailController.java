@@ -10,6 +10,7 @@ import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
@@ -148,8 +149,10 @@ public class SocialDetailController {
         SocialServiceHelper.getInstance().getActivityService().like(activity);
       }
       onLoad();
-    } catch (RuntimeException e) {
+    } catch (SocialClientLibException e) {
+
       String error = e.getMessage();
+      System.out.println("" + error);
       if (error != null && error.contains("HTTP")) {
         likeErrorString = LocalizationHelper.getInstance().getString("ErrorOnLike");
       } else {

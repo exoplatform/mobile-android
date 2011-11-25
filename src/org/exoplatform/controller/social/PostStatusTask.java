@@ -7,11 +7,11 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.utils.WebdavMethod;
 import org.exoplatform.widget.WaitingDialog;
@@ -92,7 +92,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
       activityImlp.setTitle(composeMessage);
       SocialServiceHelper.getInstance().getActivityService().create(activityImlp);
       return 1;
-    } catch (RuntimeException e) {
+    } catch (SocialClientLibException e) {
       return 0;
     }
 

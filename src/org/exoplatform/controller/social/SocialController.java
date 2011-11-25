@@ -8,13 +8,13 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.ui.social.ComposeMessageActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
-import org.exoplatform.utils.SocialCache;
 import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.SocialHeaderLayout;
 import org.exoplatform.widget.SocialShowMoreItem;
@@ -121,7 +121,7 @@ public class SocialController {
               SocialServiceHelper.getInstance().getActivityService().like(activity);
 
             onLoad();
-          } catch (RuntimeException e) {
+          } catch (SocialClientLibException e) {
             WarningDialog dialog = new WarningDialog(mContext,
                                                      titleString,
                                                      e.getMessage(),

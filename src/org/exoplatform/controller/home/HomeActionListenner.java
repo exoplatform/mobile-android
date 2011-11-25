@@ -7,6 +7,7 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
+import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
@@ -89,8 +90,8 @@ public class HomeActionListenner implements OnItemClickListener {
     }
 
   }
-  
-  public void onCancelLoadNewsService(){
+
+  public void onCancelLoadNewsService() {
     if (mLoadTask != null && mLoadTask.getStatus() == NewsServiceLoadTask.Status.RUNNING) {
       mLoadTask.onCancelled();
       mLoadTask.cancel(true);
@@ -173,14 +174,17 @@ public class HomeActionListenner implements OnItemClickListener {
         ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
         ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
         IdentityService<?> identityService = clientServiceFactory.createIdentityService();
-        String userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION,
-                                                            userName);
-        SocialServiceHelper.getInstance().setActivityService(activityService);
-        SocialServiceHelper.getInstance().setIdentityService(identityService);
+        String userIdentity;
+        userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
         SocialServiceHelper.getInstance().setUserId(userIdentity);
 
+        SocialServiceHelper.getInstance().setActivityService(activityService);
+        SocialServiceHelper.getInstance().setIdentityService(identityService);
+
         return true;
-      } catch (RuntimeException e) {
+      } catch (SocialClientLibException e) {
+        e.printStackTrace();
+        System.out.println(e.getMessage());
         return false;
       }
     }
