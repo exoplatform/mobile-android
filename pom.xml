@@ -19,7 +19,7 @@
     <!-- Default version of SDK to use -->
     <android.sdk.platform>7</android.sdk.platform>
     <!-- Maven Plugins -->
-    <maven-android-plugin.plugin-version>3.0.0-alpha-14</maven-android-plugin.plugin-version>
+    <maven-android-plugin.plugin-version>3.0.0</maven-android-plugin.plugin-version>
     <!-- Java version -->
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
