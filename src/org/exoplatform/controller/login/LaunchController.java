@@ -71,10 +71,10 @@ public class LaunchController {
                     .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
 
     } catch (Exception e) {
-      Log.i("LaunchController", e.getMessage());
+//      Log.i("LaunchController", e.getMessage());
     }
     // get server version information
-    ExoConnectionUtils.checkPLFVersion();
+//    ExoConnectionUtils.checkPLFVersion();
   }
 
   private void getServerInfo() {

@@ -100,6 +100,7 @@
         						</versionRange>
         						<goals>
         							<goal>manifest-update</goal>
+        							<goal>proguard</goal>
         						</goals>
         					</pluginExecutionFilter>
         					<action>

@@ -343,6 +343,7 @@ public class ExoConnectionUtils {
     try {
       String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_SUFFIX_VERSION;
       String result = getPLFStream(versionUrl);
+      System.out.println("result=="+result);
       JSONObject json = (JSONObject) JSONValue.parse(result);
       String isComplicant = json.get(ExoConstants.IS_MOBILE_COMPLIANT).toString();
       if (isComplicant.equalsIgnoreCase("true")) {

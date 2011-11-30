@@ -15,19 +15,12 @@
  */
 package org.exoplatform;
 
-import java.util.List;
-
-import org.apache.http.cookie.Cookie;
-import org.exoplatform.ui.HomeActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.SocialActivityUtil;
-
 import greendroid.app.GDApplication;
-import android.content.Context;
+
+import org.exoplatform.ui.HomeActivity;
+
 import android.content.Intent;
 import android.net.Uri;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 
 public class ExoApplication extends GDApplication {
 
