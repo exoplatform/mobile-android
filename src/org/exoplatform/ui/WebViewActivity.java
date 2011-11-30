@@ -45,7 +45,7 @@ public class WebViewActivity extends MyActionBar {
 		setActionBarContentView(R.layout.webview);
 		getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
-		setupCookies();
+		setupCookies(_url);
 		changeLanguage();
 
 		_wvGadget = (WebView) findViewById(R.id.WebView);
@@ -88,7 +88,7 @@ public class WebViewActivity extends MyActionBar {
 		return true;
 	}
 
-	private void setupCookies() {
+	private void setupCookies(String url) {
 		CookieSyncManager.createInstance(this);
 		List<Cookie> cookies = ExoConnectionUtils._sessionCookies;
 		String strCookie = "";
@@ -99,7 +99,7 @@ public class WebViewActivity extends MyActionBar {
 			}
 		}
 
-		CookieManager.getInstance().setCookie(_url, strCookie);
+		CookieManager.getInstance().setCookie(url, strCookie);
 	}
 
 	@Override
@@ -119,6 +119,7 @@ public class WebViewActivity extends MyActionBar {
 	private class NewsWebviewClient extends WebViewClient {
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			setupCookies(url);
 			view.loadUrl(url);
 			return true;
 
