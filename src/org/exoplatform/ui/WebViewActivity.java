@@ -104,7 +104,10 @@ public class WebViewActivity extends MyActionBar {
 
 	@Override
 	public void onBackPressed() {
-		finish();
+		if (_wvGadget.canGoBack()) {
+			_wvGadget.goBack();
+		} else
+			finish();
 	}
 
 	public void changeLanguage() {
