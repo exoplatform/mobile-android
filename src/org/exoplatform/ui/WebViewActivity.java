@@ -30,112 +30,95 @@ import com.cyrilmottier.android.greendroid.R;
 
 //Display gadget
 public class WebViewActivity extends MyActionBar {
-  private WebView      _wvGadget;
+	private WebView _wvGadget;
 
-  public static String _url;
+	public static String _url;
 
-  public static String _titlebar;
+	public static String _titlebar;
 
-  private String       loadingStr;
+	private String loadingStr;
 
-  public void onCreate(Bundle icicle) {
+	public void onCreate(Bundle icicle) {
 
-    super.onCreate(icicle);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setActionBarContentView(R.layout.webview);
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+		super.onCreate(icicle);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setActionBarContentView(R.layout.webview);
+		getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
-    setupCookies();
-    changeLanguage();
+		setupCookies();
+		changeLanguage();
 
-    _wvGadget = (WebView) findViewById(R.id.WebView);
-    _wvGadget.getSettings().setSupportZoom(true);
-    _wvGadget.getSettings().setAppCacheEnabled(true);
-    _wvGadget.getSettings().setJavaScriptEnabled(true);
-    _wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-    _wvGadget.getSettings().setPluginsEnabled(true);
-    _wvGadget.getSettings().setLoadsImagesAutomatically(true);
-    _wvGadget.addJavascriptInterface(this, "MainScreen");
+		_wvGadget = (WebView) findViewById(R.id.WebView);
+		_wvGadget.getSettings().setSupportZoom(true);
+		_wvGadget.getSettings().setAppCacheEnabled(true);
+		_wvGadget.getSettings().setJavaScriptEnabled(true);
+		_wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+		_wvGadget.getSettings().setPluginsEnabled(true);
+		_wvGadget.getSettings().setLoadsImagesAutomatically(true);
+		_wvGadget.addJavascriptInterface(this, "MainScreen");
 
-    _wvGadget.getSettings().setBuiltInZoomControls(true);
+		_wvGadget.getSettings().setBuiltInZoomControls(true);
 
-    final Activity activity = this;
+		final Activity activity = this;
 
-    _wvGadget.setWebChromeClient(new WebChromeClient() {
-      public void onProgressChanged(WebView view, int progress) {
-        setTitle(loadingStr);
-        activity.setProgress(progress * 100);
-        if (progress == 100)
-          setTitle(_titlebar);
+		_wvGadget.setWebChromeClient(new WebChromeClient() {
+			public void onProgressChanged(WebView view, int progress) {
+				setTitle(loadingStr);
+				activity.setProgress(progress * 100);
+				if (progress == 100)
+					setTitle(_titlebar);
 
-      }
-    });
-    _wvGadget.setWebViewClient(new NewsWebviewClient());
+			}
+		});
+		_wvGadget.setWebViewClient(new NewsWebviewClient());
 
-    _wvGadget.loadUrl(_url);
+		_wvGadget.loadUrl(_url);
 
-  }
+	}
 
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    if (DashboardActivity.dashboardActivity != null) {
-      DashboardActivity.dashboardActivity.finish();
-    }
-    if (DocumentActivity._documentActivityInstance != null) {
-      DocumentActivity._documentActivityInstance.finish();
-    }
-    finish();
+	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+		if (DashboardActivity.dashboardActivity != null) {
+			DashboardActivity.dashboardActivity.finish();
+		}
+		if (DocumentActivity._documentActivityInstance != null) {
+			DocumentActivity._documentActivityInstance.finish();
+		}
+		finish();
 
-    return true;
-  }
+		return true;
+	}
 
-  private void setupCookies() {
-    try {
-      CookieSyncManager.createInstance(this);
-      CookieSyncManager.getInstance().resetSync();
+	private void setupCookies() {
+		CookieSyncManager.createInstance(this);
+		List<Cookie> cookies = ExoConnectionUtils._sessionCookies;
+		String strCookie = "";
+		if (!cookies.isEmpty()) {
+			for (int i = 0; i < cookies.size(); i++) {
+				strCookie = cookies.get(i).getName().toString() + "="
+						+ cookies.get(i).getValue().toString();
+			}
+		}
 
-      HttpParams httpParameters = new BasicHttpParams();
-      HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
-      HttpConnectionParams.setSoTimeout(httpParameters, 30000);
-      HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+		CookieManager.getInstance().setCookie(_url, strCookie);
+	}
 
-      DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+	@Override
+	public void onBackPressed() {
+		finish();
+	}
 
-      HttpGet httpGet = new HttpGet(_url);
+	public void changeLanguage() {
+		LocalizationHelper local = LocalizationHelper.getInstance();
+		loadingStr = local.getString("LoadingData");
 
-      httpClient.execute(httpGet);
-      CookieStore cookiesStore = httpClient.getCookieStore();
-      List<Cookie> cookies = cookiesStore.getCookies();
-      String strCookie = "";
-      if (!cookies.isEmpty()) {
-        for (int i = 0; i < cookies.size(); i++) {
-          strCookie = cookies.get(i).getName().toString() + "="
-              + cookies.get(i).getValue().toString();
-        }
-      }
+	}
 
-      CookieManager.getInstance().setCookie(_url, strCookie);
-      CookieSyncManager.getInstance().sync();
-    } catch (Exception e) {
-    }
-  }
+	private class NewsWebviewClient extends WebViewClient {
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			view.loadUrl(url);
+			return true;
 
-  @Override
-  public void onBackPressed() {
-    finish();
-  }
-
-  public void changeLanguage() {
-    LocalizationHelper local = LocalizationHelper.getInstance();
-    loadingStr = local.getString("LoadingData");
-
-  }
-
-  private class NewsWebviewClient extends WebViewClient {
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-      view.loadUrl(url);
-      return true;
-
-    }
-  }
+		}
+	}
 }
