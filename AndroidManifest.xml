@@ -50,6 +50,7 @@
 			android:name=".ui.DashboardActivity" />
 
 		<activity android:configChanges="orientation" android:name=".ui.WebViewActivity">
+		    
 		</activity>
 
 		<activity android:configChanges="keyboardHidden|orientation"
