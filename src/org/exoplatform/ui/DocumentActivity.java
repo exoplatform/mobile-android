@@ -47,8 +47,6 @@ public class DocumentActivity extends MyActionBar {
 
   private ImageView              _imgViewUpLoadPhoto;
 
-  private ImageView              _imgViewEmptyPage;
-
   private Button                 _btnUploadImage;
 
   private Button                 _btnCancelUploadImage;    // "/sdcard/eXo/";
@@ -206,9 +204,6 @@ public class DocumentActivity extends MyActionBar {
       });
 
       _imgViewUpLoadPhoto = (ImageView) findViewById(R.id.ImageView);
-
-      _imgViewEmptyPage = (ImageView) findViewById(R.id.ImageViewEmptyPage);
-      _imgViewEmptyPage.setVisibility(View.INVISIBLE);
 
       _textViewEmptyPage = (TextView) findViewById(R.id.TextView_EmptyPage);
       _textViewEmptyPage.setVisibility(View.INVISIBLE);
