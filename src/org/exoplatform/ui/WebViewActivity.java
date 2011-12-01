@@ -68,11 +68,6 @@ public class WebViewActivity extends MyActionBar {
 		_wvGadget.loadUrl(_url);
 
 	}
-	@Override
-	protected void onResume() {
-		super.onResume();
-		cleaCache();
-	}
 
 	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 		if (DashboardActivity.dashboardActivity != null) {
@@ -103,21 +98,19 @@ public class WebViewActivity extends MyActionBar {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		System.out.println("-------detroy---------");
 		cleaCache();
 	}
 
 	@Override
 	public void onBackPressed() {
-		cleaCache();
 		if (_wvGadget.canGoBack()) {
+			cleaCache();
 			_wvGadget.goBack();
 		} else
 			finish();
 	}
 
 	private void cleaCache() {
-		System.out.println("------clear cache ----------");
 		this.deleteDatabase("webview.db");
 		this.deleteDatabase("webviewCache.db");
 		File dir = getCacheDir();
