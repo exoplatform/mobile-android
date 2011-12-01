@@ -9,11 +9,8 @@
 		android:visibility="gone" android:layout_centerInParent="true"
 		android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
-	<ImageView android:id="@+id/ImageViewEmptyPage"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:background="@drawable/emptypage" />
 
-	<TextView android:layout_below="@id/ImageViewEmptyPage"
+	<TextView
 		android:text="Empty page" android:layout_marginTop="300dip"
 		android:layout_width="fill_parent" android:layout_height="40dip"
 		android:id="@+id/TextView_EmptyPage" android:textSize="18dip"
