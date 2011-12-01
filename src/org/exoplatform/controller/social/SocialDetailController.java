@@ -128,6 +128,7 @@ public class SocialDetailController {
     contentDetailLayout.removeAllViews();
     SocialActivityStreamItem item = new SocialActivityStreamItem(mContext, streamInfo, true);
     SocialActivityUtil.setTextLinkfy(item.textViewMessage);
+    SocialActivityUtil.setTextLinkfy(item.textViewName);
     contentDetailLayout.addView(item, params);
   }
 

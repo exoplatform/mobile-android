@@ -2,19 +2,12 @@ package org.exoplatform.ui;
 
 import greendroid.widget.ActionBarItem;
 
+import java.io.File;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
@@ -75,6 +68,11 @@ public class WebViewActivity extends MyActionBar {
 		_wvGadget.loadUrl(_url);
 
 	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		cleaCache();
+	}
 
 	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 		if (DashboardActivity.dashboardActivity != null) {
@@ -103,11 +101,43 @@ public class WebViewActivity extends MyActionBar {
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		System.out.println("-------detroy---------");
+		cleaCache();
+	}
+
+	@Override
 	public void onBackPressed() {
+		cleaCache();
 		if (_wvGadget.canGoBack()) {
 			_wvGadget.goBack();
 		} else
 			finish();
+	}
+
+	private void cleaCache() {
+		System.out.println("------clear cache ----------");
+		this.deleteDatabase("webview.db");
+		this.deleteDatabase("webviewCache.db");
+		File dir = getCacheDir();
+
+		if (dir != null && dir.isDirectory()) {
+			try {
+				File[] children = dir.listFiles();
+				if (children.length > 0) {
+					for (int i = 0; i < children.length; i++) {
+						File[] temp = children[i].listFiles();
+						for (int x = 0; x < temp.length; x++) {
+							temp[x].delete();
+						}
+					}
+				}
+			} catch (Exception e) {
+				// Log.e("Cache", "failed cache clean");
+			}
+		}
+
 	}
 
 	public void changeLanguage() {

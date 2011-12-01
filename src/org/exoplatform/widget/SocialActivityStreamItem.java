@@ -1,6 +1,8 @@
 package org.exoplatform.widget;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
+import java.util.Set;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -8,7 +10,6 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.SocialActivityUtil;
 
@@ -33,7 +34,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
 	private RoundedImageView imageViewAvatar;
 
-	private TextView textViewName;
+	public TextView textViewName;
 
 	public TextView textViewMessage;
 
@@ -80,6 +81,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 		contentLayoutWrap = (LinearLayout) view
 				.findViewById(R.id.relativeLayout_Content);
 		textViewName = (TextView) view.findViewById(R.id.textView_Name);
+		textViewName.setLinkTextColor(Color.rgb(21, 94, 173));
 		textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
 		textViewTempMessage = (TextView) view
 				.findViewById(R.id.textview_temp_message);
@@ -103,7 +105,8 @@ public class SocialActivityStreamItem extends LinearLayout {
 		try {
 			String userName = new String(activityInfo.getUserName().getBytes(
 					"ISO-8859-1"), "UTF-8");
-			textViewName.setText(Html.fromHtml(userName));
+			textViewName.setText(Html.fromHtml(userName),
+					TextView.BufferType.SPANNABLE);
 			String title = new String(activityInfo.getTitle().getBytes(
 					"ISO-8859-1"), "UTF-8");
 			textViewMessage.setText(Html.fromHtml(title),
@@ -128,6 +131,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 			contentLayoutWrap.setPadding(5, -2, 5, 5);
 			buttonComment.setVisibility(View.GONE);
 			buttonLike.setVisibility(View.GONE);
+
 		} else
 			textViewMessage.setMaxLines(15);
 
@@ -137,17 +141,11 @@ public class SocialActivityStreamItem extends LinearLayout {
 		switch (typeId) {
 		case 1:
 			// ks-forum:spaces
+
 			setActivityTypeForum();
 			break;
 		case 2:
 			// ks-wiki:spaces
-			// Map<String, String> templateMap = activityInfo.templateParams;
-			// Set<String> set = templateMap.keySet();
-			// for (String param : set) {
-			// System.out.println("type: " + activityInfo.getType() +
-			// "--template key: " + param + "-- "
-			// + templateMap.get(param));
-			// }
 			setActivityTypeWiki();
 			break;
 		case 3:
@@ -225,6 +223,14 @@ public class SocialActivityStreamItem extends LinearLayout {
 			break;
 
 		case 11:
+			//calendar
+//			Map<String, String> templateMap = activityInfo.templateParams;
+//			Set<String> set = templateMap.keySet();
+//			for (String param : set) {
+//				System.out.println("type: " + activityInfo.getType()
+//						+ "--template key: " + param + "-- "
+//						+ templateMap.get(param));
+//			}
 			setActivityTypeCalendar();
 			break;
 		default:
@@ -234,6 +240,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
 	private void setActivityTypeForum() {
 		try {
+			String forumLink = null;
 			StringBuffer forumBuffer = new StringBuffer();
 			forumBuffer.append("<html><body>");
 			String forumUserName = new String(activityInfo.getUserName()
@@ -245,21 +252,25 @@ public class SocialActivityStreamItem extends LinearLayout {
 			String forumName = null;
 			forumBuffer.append("<font color=\"#696969\">");
 			if (actType.equalsIgnoreCase("AddPost")) {
+				forumLink = activityInfo.templateParams.get("PostLink");
 				actTypeDesc = LocalizationHelper.getInstance().getString(
 						"HasAddANewPost");
 				forumBuffer.append(actTypeDesc);
 				forumName = activityInfo.templateParams.get("PostName");
 			} else if (actType.equalsIgnoreCase("UpdatePost")) {
+				forumLink = activityInfo.templateParams.get("PostLink");
 				actTypeDesc = LocalizationHelper.getInstance().getString(
 						"HasUpdateANewPost");
 				forumBuffer.append(actTypeDesc);
 				forumName = activityInfo.templateParams.get("PostName");
 			} else if (actType.equalsIgnoreCase("AddTopic")) {
+				forumLink = activityInfo.templateParams.get("TopicLink");
 				actTypeDesc = LocalizationHelper.getInstance().getString(
 						"HasPostedAnewTopic");
 				forumBuffer.append(actTypeDesc);
 				forumName = activityInfo.templateParams.get("TopicName");
 			} else if (actType.equalsIgnoreCase("UpdateTopic")) {
+				forumLink = activityInfo.templateParams.get("TopicLink");
 				actTypeDesc = LocalizationHelper.getInstance().getString(
 						"HasUpdateAnewTopic");
 				forumBuffer.append(actTypeDesc);
@@ -267,13 +278,16 @@ public class SocialActivityStreamItem extends LinearLayout {
 			}
 			forumBuffer.append("</font>");
 			forumBuffer.append(" ");
-			forumBuffer.append("<a>");
+			forumBuffer.append("<a href=");
+			forumBuffer.append(forumLink);
+			forumBuffer.append(">");
 			forumName = new String(forumName.getBytes("ISO-8859-1"), "UTF-8");
 			forumBuffer.append(forumName);
 			forumBuffer.append("</a>");
 			forumBuffer.append("</body></html>");
 
-			textViewName.setText(Html.fromHtml(forumBuffer.toString()));
+			textViewName.setText(Html.fromHtml(forumBuffer.toString()),
+					TextView.BufferType.SPANNABLE);
 			String forumBody = activityInfo.getBody();
 			if (forumBody != null) {
 				forumBody = new String(forumBody.getBytes("ISO-8859-1"),
@@ -289,6 +303,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
 	private void setActivityTypeWiki() {
 		try {
+			String wiki_url = null;
 			StringBuffer buffer = new StringBuffer();
 			buffer.append("<html><body>");
 			buffer.append("<a>");
@@ -300,25 +315,32 @@ public class SocialActivityStreamItem extends LinearLayout {
 			buffer.append("<font color=\"#696969\">");
 			String act_key = activityInfo.templateParams.get("act_key");
 			String act_key_des = null;
-			if (act_key.equalsIgnoreCase("update_page")) {
-				act_key_des = LocalizationHelper.getInstance().getString(
-						"HasEditWikiPage");
-				buffer.append(act_key_des);
-			} else if (act_key.equalsIgnoreCase("add_page")) {
-				act_key_des = LocalizationHelper.getInstance().getString(
-						"HasCreatWikiPage");
-				buffer.append(act_key_des);
+			if (act_key != null) {
+				if (act_key.equalsIgnoreCase("update_page")) {
+					wiki_url = activityInfo.templateParams
+							.get("view_change_url");
+					act_key_des = LocalizationHelper.getInstance().getString(
+							"HasEditWikiPage");
+					buffer.append(act_key_des);
+				} else if (act_key.equalsIgnoreCase("add_page")) {
+					wiki_url = activityInfo.templateParams.get("page_url");
+					act_key_des = LocalizationHelper.getInstance().getString(
+							"HasCreatWikiPage");
+					buffer.append(act_key_des);
+				}
 			}
 			buffer.append("</font>");
 			buffer.append(" ");
 			String page_name = new String(activityInfo.templateParams.get(
 					"page_name").getBytes("ISO-8859-1"), "UTF-8");
-			buffer.append("<a>");
+			buffer.append("<a href=");
+			buffer.append(wiki_url);
+			buffer.append(">");
 			buffer.append(page_name);
 			buffer.append("</a>");
 			buffer.append("</body></html>");
-
-			textViewName.setText(Html.fromHtml(buffer.toString()));
+			textViewName.setText(Html.fromHtml(buffer.toString()),
+					TextView.BufferType.SPANNABLE);
 			String wikiBody = activityInfo.getBody();
 			if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
 				textViewMessage.setVisibility(View.GONE);
@@ -333,6 +355,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
 	private void setActivityTypeAnswer() {
 		try {
+			String answer_link = null;
 			StringBuffer answerBuffer = new StringBuffer();
 			answerBuffer.append("<html><body>");
 			answerBuffer.append("<a>");
@@ -359,14 +382,18 @@ public class SocialActivityStreamItem extends LinearLayout {
 			}
 			answerBuffer.append("</font>");
 			answerBuffer.append(" ");
+			answer_link = activityInfo.templateParams.get("Link");
 			String page_name = new String(activityInfo.templateParams.get(
 					"Name").getBytes("ISO-8859-1"), "UTF-8");
-			answerBuffer.append("<a>");
+			answerBuffer.append("<a href=");
+			answerBuffer.append(answer_link);
+			answerBuffer.append(">");
 			answerBuffer.append(page_name);
 			answerBuffer.append("</a>");
 			answerBuffer.append("</body></html>");
 
-			textViewName.setText(Html.fromHtml(answerBuffer.toString()));
+			textViewName.setText(Html.fromHtml(answerBuffer.toString()),
+					TextView.BufferType.SPANNABLE);
 
 			String answerBody = activityInfo.getBody();
 			if (answerBody != null) {
@@ -419,7 +446,8 @@ public class SocialActivityStreamItem extends LinearLayout {
 			forumBuffer.append("</a>");
 			forumBuffer.append("</body></html>");
 
-			textViewName.setText(Html.fromHtml(forumBuffer.toString()));
+			textViewName.setText(Html.fromHtml(forumBuffer.toString()),
+					TextView.BufferType.SPANNABLE);
 			setCaledarContent(textViewMessage);
 
 		} catch (UnsupportedEncodingException e) {
