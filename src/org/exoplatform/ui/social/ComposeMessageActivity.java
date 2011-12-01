@@ -12,24 +12,29 @@ import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ScrollView;
 
 import com.cyrilmottier.android.greendroid.R;
 
 public class ComposeMessageActivity extends MyActionBar implements View.OnClickListener {
   private int                          composeType;
 
+  private ScrollView				   composeScrollView;
   private EditText                     composeEditText;
 
   private static LinearLayout          fileAttachWrap;
@@ -77,6 +82,18 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   private void initComponents() {
     messageController = new ComposeMessageController(this, composeType);
+    
+    composeScrollView = (ScrollView) findViewById(R.id.compose_textfield_scroll);
+    composeScrollView.setOnTouchListener(new View.OnTouchListener() {
+    	@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			mgr.showSoftInput(composeEditText, InputMethodManager.SHOW_IMPLICIT);
+			
+			return true;
+		}
+	});
+    
     composeEditText = (EditText) findViewById(R.id.compose_text_view);
     fileAttachWrap = (LinearLayout) findViewById(R.id.compose_attach_file_wrap);
     sendButton = (Button) findViewById(R.id.compose_send_button);
@@ -169,11 +186,11 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   // @Override
   public void onClick(View view) {
-    if (view == sendButton) {
+	  
+	if (view == sendButton) {
       composeMessage = composeEditText.getText().toString();
       messageController.onSendMessage(composeMessage, sdcard_temp_dir);
-    }
-    if (view == cancelButton) {
+    } else if (view == cancelButton) {
       destroy();
     }
   }

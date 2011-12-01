@@ -10,7 +10,8 @@
 			android:layout_alignParentTop="true" android:padding="10dp"
 			android:minHeight="150dp" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:background="@drawable/compose_textfield_background">
-			<ScrollView android:layout_width="fill_parent"
+			<ScrollView android:id="@+id/compose_textfield_scroll"
+				android:layout_width="fill_parent"
 				android:layout_weight="1" android:layout_height="fill_parent">
 				<EditText android:id="@+id/compose_text_view"
 					android:inputType="textCapSentences|textMultiLine"
