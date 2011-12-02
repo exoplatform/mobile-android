@@ -1,17 +1,12 @@
 package org.exoplatform.model;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.WebdavMethod;
 
-import android.util.Log;
 
 //	File info
 public class ExoFile {

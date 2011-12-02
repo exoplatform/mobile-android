@@ -1,5 +1,7 @@
 package org.exoplatform.controller.chat;
 
+import greendroid.util.Config;
+
 import java.net.URI;
 
 import org.exoplatform.singleton.AccountSetting;
@@ -70,7 +72,9 @@ public class ChatListLoadTask extends UserTask<Void, Void, Boolean> {
       ChatServiceHelper.getInstance().setXMPPConnection(connection);
       return true;
     } catch (XMPPException e) {
-      Log.i("XMPPException", e.getMessage());
+    	if (Config.GD_INFO_LOGS_ENABLED)
+    		Log.i("XMPPException", e.getMessage());
+    	
       connection.disconnect();
       connection = null;
       return false;

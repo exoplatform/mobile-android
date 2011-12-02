@@ -218,7 +218,6 @@ public class MyActionBar extends Activity implements ActionBarActivity {
 
     public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
       
-      Log.e("123", "123");
         return true;
     }
 

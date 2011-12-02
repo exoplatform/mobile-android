@@ -1,8 +1,7 @@
 package org.exoplatform.widget;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Map;
-import java.util.Set;
+
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;

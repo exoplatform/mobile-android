@@ -86,13 +86,13 @@ public class SocialCache implements KCache {
     return size.get();
   }
 
-  public Map getAll(Collection collection) {
-    Map ret = new HashMap();
-    for (Object o : collection) {
-      ret.put(o, cache.get(o));
-    }
-    return ret;
-  }
+//  public Map getAll(Collection collection) {
+//    Map ret = new HashMap();
+//    for (Object o : collection) {
+//      ret.put(o, cache.get(o));
+//    }
+//    return ret;
+//  }
 
   public void clear() {
     cache.clear();

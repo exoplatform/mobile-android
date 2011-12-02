@@ -4,7 +4,6 @@ import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.social.SocialController;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 

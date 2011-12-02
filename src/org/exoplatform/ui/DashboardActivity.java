@@ -5,7 +5,6 @@ import greendroid.widget.ActionBarItem;
 import org.exoplatform.R;
 import org.exoplatform.controller.dashboard.DashboardController;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.utils.WebdavMethod;
 import org.exoplatform.widget.MyActionBar;
 
 import android.graphics.Color;

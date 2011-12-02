@@ -1,5 +1,7 @@
 package org.exoplatform.singleton;
 
+import greendroid.util.Config;
+
 import java.util.ResourceBundle;
 
 import android.content.SharedPreferences;
@@ -68,7 +70,8 @@ public class LocalizationHelper {
 //      return new String(resBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
       return resBundle.getString(key);
     } catch (Exception e) {
-      Log.e("LOCALIZATION", "Missing key " + key + " in localization resources");
+    	if (Config.GD_ERROR_LOGS_ENABLED)
+    		Log.e("LOCALIZATION", "Missing key " + key + " in localization resources");
       return null;
     }
 

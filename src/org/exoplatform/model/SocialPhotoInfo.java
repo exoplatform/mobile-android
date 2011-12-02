@@ -2,8 +2,6 @@ package org.exoplatform.model;
 
 import java.util.ArrayList;
 
-import android.graphics.Bitmap;
-
 public class SocialPhotoInfo {
   private String            albumsName;
 

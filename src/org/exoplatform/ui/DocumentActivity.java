@@ -1,5 +1,6 @@
 package org.exoplatform.ui;
 
+import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
@@ -154,14 +155,16 @@ public class DocumentActivity extends MyActionBar {
 
   public void onLoad(String source, String destination, int action) {
     if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
-      Log.i("DocumentLoadTask", "onLoad");
+    	if (Config.GD_INFO_LOGS_ENABLED)
+    		Log.i("DocumentLoadTask", "onLoad");
       mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this, this, source, destination, action).execute();
     }
   }
 
   public void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == DocumentLoadTask.Status.RUNNING) {
-      Log.i("DocumentLoadTask", "onCancelLoad");
+    	if (Config.GD_INFO_LOGS_ENABLED)
+    		Log.i("DocumentLoadTask", "onCancelLoad");
       mLoadTask.cancel(true);
       mLoadTask = null;
     }

@@ -7,6 +7,8 @@
 
 package org.exoplatform.utils;
 
+import greendroid.util.Config;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -249,7 +251,8 @@ public class ServerConfigurationUtils {
 
     } catch (IOException e) {
 
-      Log.e("IOException", "exception in createNewFile() method");
+    	if (Config.GD_ERROR_LOGS_ENABLED)
+    		Log.e("IOException", "exception in createNewFile() method");
       return returnValue;
     }
 
@@ -260,8 +263,8 @@ public class ServerConfigurationUtils {
       fileos = new FileOutputStream(newxmlfile);
 
     } catch (FileNotFoundException e) {
-
-      Log.e("FileNotFoundException", "can't create FileOutputStream");
+    	if (Config.GD_ERROR_LOGS_ENABLED)
+    		Log.e("FileNotFoundException", "can't create FileOutputStream");
     }
 
     // we create a XmlSerializer in order to write xml data
@@ -311,7 +314,8 @@ public class ServerConfigurationUtils {
 
     } catch (Exception e) {
 
-      Log.e("Exception", "error occurred while creating xml file");
+    	if (Config.GD_ERROR_LOGS_ENABLED)
+    		Log.e("Exception", "error occurred while creating xml file");
     }
 
     return returnValue;

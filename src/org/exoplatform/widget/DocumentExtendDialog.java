@@ -1,13 +1,10 @@
 package org.exoplatform.widget;
 
-import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;
-import org.exoplatform.utils.ExoDocumentUtils;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;

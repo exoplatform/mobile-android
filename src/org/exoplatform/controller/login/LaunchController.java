@@ -9,7 +9,6 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.utils.ServerConfigurationUtils;
@@ -18,7 +17,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
-import android.util.Log;
 
 public class LaunchController {
   private SharedPreferences        sharedPreference;

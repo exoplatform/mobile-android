@@ -6,7 +6,6 @@ import org.exoplatform.controller.chat.ChatListController;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.widget.MyActionBar;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;

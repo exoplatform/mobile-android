@@ -7,10 +7,7 @@ import org.exoplatform.controller.home.HomeActionListenner;
 import org.exoplatform.controller.home.HomeAdapter;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ImageDownloader;
-import org.exoplatform.widget.LogoutDialog;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
@@ -19,8 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.GridView;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 
 public class HomeActivity extends MyActionBar {
   private GridView            gridView;

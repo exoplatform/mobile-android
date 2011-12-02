@@ -3,7 +3,6 @@ package org.exoplatform.controller.home;
 import java.util.ArrayList;
 
 import org.exoplatform.model.HomeItem;
-import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ChatServiceHelper;
 import org.exoplatform.singleton.HomeHelper;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -20,7 +19,7 @@ import com.cyrilmottier.android.greendroid.R;
 public class HomeController {
   private String  activityStreamsText;
 
-  private String  chatText;
+//  private String  chatText;
 
   private String  documentText;
 
@@ -72,7 +71,7 @@ public class HomeController {
   private void changeLanguage() {
     LocalizationHelper location = LocalizationHelper.getInstance();
     activityStreamsText = location.getString("ActivityStream");
-    chatText = location.getString("ChatApplication");
+//    chatText = location.getString("ChatApplication");
     documentText = location.getString("Documents");
     dashboardText = location.getString("Dashboard");
   }

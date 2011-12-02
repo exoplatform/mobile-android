@@ -1,5 +1,6 @@
 package org.exoplatform.ui;
 
+import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
@@ -139,7 +140,8 @@ public class ChatDetailActivity extends MyActionBar {
             setListAdapter();
 
           } catch (Exception e) {
-            Log.e("Chat Error", e.getMessage());
+        	  if (Config.GD_ERROR_LOGS_ENABLED)
+        		  Log.e("Chat Error", e.getMessage());
             WarningDialog warning = new WarningDialog(ChatDetailActivity.this,
                                                       titleString,
                                                       e.getMessage(),
@@ -202,7 +204,8 @@ public class ChatDetailActivity extends MyActionBar {
       ChatServiceHelper.getInstance().getXMPPConnection().addPacketListener(packetListener, filter);
       setListAdapter();
     } catch (Exception e) {
-      Log.e("Packet Listenner Error", e.getMessage());
+    	if (Config.GD_ERROR_LOGS_ENABLED)
+    		Log.e("Packet Listenner Error", e.getMessage());
       if (ChatServiceHelper.getInstance().getXMPPConnection() != null) {
         ChatServiceHelper.getInstance().getXMPPConnection().disconnect();
         ChatServiceHelper.getInstance().setXMPPConnection(null);

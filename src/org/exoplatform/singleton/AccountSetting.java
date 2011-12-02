@@ -1,10 +1,8 @@
 package org.exoplatform.singleton;
 
-import java.util.ArrayList;
-
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.exoplatform.model.ServerObjInfo;
+
 
 /*
  * This class is for manage all the account information

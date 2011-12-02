@@ -16,6 +16,8 @@
 
 package org.exoplatform.utils;
 
+import greendroid.util.Config;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -31,6 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
+import android.util.Log;
 
 /**
  * <p>
@@ -224,7 +227,8 @@ public abstract class UserTask<Params, Progress, Result> {
 				try {
 					result = get();
 				} catch (InterruptedException e) {
-					android.util.Log.w(LOG_TAG, e);
+					if (Config.GD_WARNING_LOGS_ENABLED)
+						Log.w(LOG_TAG, e);
 				} catch (ExecutionException e) {
 					throw new RuntimeException(
 							"An error occured while executing doInBackground()",

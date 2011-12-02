@@ -1,7 +1,5 @@
 package org.exoplatform.widget;
 
-import greendroid.widget.AsyncImageView;
-
 import org.exoplatform.R;
 
 import android.content.Context;

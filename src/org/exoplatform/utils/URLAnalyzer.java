@@ -99,9 +99,12 @@ public class URLAnalyzer {
         url += ":" + port; 
       
     } catch (URISyntaxException e) {
-      String msg = e.getMessage();
-      String reason = e.getReason();
-      Log.e("URISyntaxException",msg+"  "+reason);
+    	if(Log.isLoggable("URISyntaxException", Log.ERROR)) {
+    		String msg = e.getMessage();
+    	    String reason = e.getReason();
+    	    Log.e("URISyntaxException",msg+"  "+reason);
+    	      
+    	}
       
       url = null;
     }

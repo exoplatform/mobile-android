@@ -30,7 +30,7 @@ public class SocialActivityInfo {
 
   private String             attachImageUrl;
 
-  private String             attachedImageName;
+//  private String             attachedImageName;
 
   public Map<String, String> templateParams;
 

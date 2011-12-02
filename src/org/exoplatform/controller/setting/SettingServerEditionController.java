@@ -28,15 +28,11 @@ public class SettingServerEditionController {
 
   private int                  selectedServerIndex;
 
-  private String               version;
-
   private String               serverIsEmpty;
 
   private String               serverisExisted;
   
   private String               serverNameURLInvalid;
-  
-  private String               selectedServer;
 
   public SettingServerEditionController(Context context) {
     mContext = context;

@@ -30,7 +30,7 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   
   private File file;
 
-  private String    selectedPhotoTitle;
+//  private String    selectedPhotoTitle;
 
   private String    okText;
 
