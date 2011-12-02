@@ -155,7 +155,8 @@ public class HomeActionListenner implements OnItemClickListener {
 
   private class NewsServiceLoadTask extends UserTask<Void, Void, Boolean> {
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public Boolean doInBackground(Void... params) {
       try {
         parseDomain();
@@ -172,7 +173,8 @@ public class HomeActionListenner implements OnItemClickListener {
         SocialClientContext.setPassword(password);
 
         ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
-        ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
+        @SuppressWarnings("unchecked")
+		ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
         IdentityService<?> identityService = clientServiceFactory.createIdentityService();
         String userIdentity;
         userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);

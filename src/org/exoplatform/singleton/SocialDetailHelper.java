@@ -9,8 +9,6 @@ public class SocialDetailHelper {
 
   private String                    attachImageUrl;
 
-  private String                    attachedImageName;
-
   public ImageDownloader            imageDownloader;
 
   public boolean                    taskIsFinish = false;

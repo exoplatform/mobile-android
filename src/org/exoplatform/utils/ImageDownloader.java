@@ -43,7 +43,8 @@ public class ImageDownloader implements OnLowMemoryListener {
   // milliseconds
 
   // Hard cache, with a fixed maximum capacity and a life duration
-  private final HashMap<String, Bitmap>                                 sHardBitmapCache    = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2,
+  @SuppressWarnings("serial")
+private final HashMap<String, Bitmap>                                 sHardBitmapCache    = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2,
                                                                                                                                 0.75f,
                                                                                                                                 true) {
 

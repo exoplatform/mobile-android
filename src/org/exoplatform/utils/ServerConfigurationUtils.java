@@ -48,12 +48,9 @@ public class ServerConfigurationUtils {
 
   public static String        version;
 
-  private static Context      _context;
 
   public ServerConfigurationUtils(Context context) {
 
-    _context = context;
-//    _arrServerList = new ArrayList<ServerObj>();
   }
 
   // Constructor
