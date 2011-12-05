@@ -91,8 +91,9 @@ public class SocialActivityStreamItem extends LinearLayout {
 		typeImageView = (ImageView) view.findViewById(R.id.activity_image_type);
 		textViewTime = (TextView) view.findViewById(R.id.textView_Time);
 
-		setDetailView();
 		initCommonInfo();
+		setDetailView();
+		
 	}
 
 	private void initCommonInfo() {
@@ -104,12 +105,15 @@ public class SocialActivityStreamItem extends LinearLayout {
 		try {
 			String userName = new String(activityInfo.getUserName().getBytes(
 					"ISO-8859-1"), "UTF-8");
-			textViewName.setText(Html.fromHtml(userName),
-					TextView.BufferType.SPANNABLE);
+			textViewName.setText(Html.fromHtml(userName));
 			String title = new String(activityInfo.getTitle().getBytes(
 					"ISO-8859-1"), "UTF-8");
-			textViewMessage.setText(Html.fromHtml(title),
-					TextView.BufferType.SPANNABLE);
+			if(isDetail) {
+				textViewMessage.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
+			}
+			else
+				textViewMessage.setText(Html.fromHtml(title));
+			
 		} catch (UnsupportedEncodingException e) {
 		}
 
@@ -130,9 +134,11 @@ public class SocialActivityStreamItem extends LinearLayout {
 			contentLayoutWrap.setPadding(5, -2, 5, 5);
 			buttonComment.setVisibility(View.GONE);
 			buttonLike.setVisibility(View.GONE);
+			
+			textViewName.setMaxLines(100);
+			textViewMessage.setMaxLines(100);
 
-		} else
-			textViewMessage.setMaxLines(15);
+		}
 
 	}
 
@@ -254,7 +260,6 @@ public class SocialActivityStreamItem extends LinearLayout {
 				forumLink = activityInfo.templateParams.get("PostLink");
 				actTypeDesc = LocalizationHelper.getInstance().getString(
 						"HasAddANewPost");
-				forumBuffer.append(actTypeDesc);
 				forumName = activityInfo.templateParams.get("PostName");
 			} else if (actType.equalsIgnoreCase("UpdatePost")) {
 				forumLink = activityInfo.templateParams.get("PostLink");
@@ -276,7 +281,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 				forumName = activityInfo.templateParams.get("TopicName");
 			}
 			forumBuffer.append("</font>");
-			forumBuffer.append(" ");
+			forumBuffer.append("<br><br>");
 			forumBuffer.append("<a href=");
 			forumBuffer.append(forumLink);
 			forumBuffer.append(">");
@@ -285,14 +290,18 @@ public class SocialActivityStreamItem extends LinearLayout {
 			forumBuffer.append("</a>");
 			forumBuffer.append("</body></html>");
 
-			textViewName.setText(Html.fromHtml(forumBuffer.toString()),
-					TextView.BufferType.SPANNABLE);
+			textViewName.setText(Html.fromHtml(forumBuffer.toString()));
 			String forumBody = activityInfo.getBody();
 			if (forumBody != null) {
 				forumBody = new String(forumBody.getBytes("ISO-8859-1"),
 						"UTF-8");
-				textViewMessage.setText(Html.fromHtml(forumBody),
-						TextView.BufferType.SPANNABLE);
+				
+				if(isDetail) {
+					
+					textViewMessage.setText(Html.fromHtml(forumBody), TextView.BufferType.SPANNABLE);
+				}
+				else
+					textViewMessage.setText(Html.fromHtml(forumBody), TextView.BufferType.NORMAL);
 			}
 
 		} catch (UnsupportedEncodingException e) {
@@ -309,8 +318,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 			String wikiUserName = new String(activityInfo.getUserName()
 					.getBytes("ISO-8859-1"), "UTF-8");
 			buffer.append(wikiUserName);
-			buffer.append(" ");
-			buffer.append("</a>");
+			buffer.append("</a> ");
 			buffer.append("<font color=\"#696969\">");
 			String act_key = activityInfo.templateParams.get("act_key");
 			String act_key_des = null;
@@ -329,7 +337,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 				}
 			}
 			buffer.append("</font>");
-			buffer.append(" ");
+			buffer.append("<br><br>");
 			String page_name = new String(activityInfo.templateParams.get(
 					"page_name").getBytes("ISO-8859-1"), "UTF-8");
 			buffer.append("<a href=");
@@ -338,15 +346,19 @@ public class SocialActivityStreamItem extends LinearLayout {
 			buffer.append(page_name);
 			buffer.append("</a>");
 			buffer.append("</body></html>");
-			textViewName.setText(Html.fromHtml(buffer.toString()),
-					TextView.BufferType.SPANNABLE);
+			textViewName.setText(Html.fromHtml(buffer.toString()));
 			String wikiBody = activityInfo.getBody();
 			if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
 				textViewMessage.setVisibility(View.GONE);
 			} else {
 				wikiBody = new String(wikiBody.getBytes("ISO-8859-1"), "UTF-8");
-				textViewMessage.setText(Html.fromHtml(wikiBody),
-						TextView.BufferType.SPANNABLE);
+				
+				if(isDetail) {
+					
+					textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
+				}
+				else
+					textViewMessage.setText(Html.fromHtml(wikiBody));
 			}
 		} catch (UnsupportedEncodingException e) {
 		}
@@ -361,8 +373,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 			String answerUserName = new String(activityInfo.getUserName()
 					.getBytes("ISO-8859-1"), "UTF-8");
 			answerBuffer.append(answerUserName);
-			answerBuffer.append(" ");
-			answerBuffer.append("</a>");
+			answerBuffer.append("</a> ");
 			answerBuffer.append("<font color=\"#696969\">");
 			String act_key = activityInfo.templateParams.get("ActivityType");
 			String act_key_des = null;
@@ -380,7 +391,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 				answerBuffer.append(act_key_des);
 			}
 			answerBuffer.append("</font>");
-			answerBuffer.append(" ");
+			answerBuffer.append("<br><br>");
 			answer_link = activityInfo.templateParams.get("Link");
 			String page_name = new String(activityInfo.templateParams.get(
 					"Name").getBytes("ISO-8859-1"), "UTF-8");
@@ -391,15 +402,20 @@ public class SocialActivityStreamItem extends LinearLayout {
 			answerBuffer.append("</a>");
 			answerBuffer.append("</body></html>");
 
-			textViewName.setText(Html.fromHtml(answerBuffer.toString()),
-					TextView.BufferType.SPANNABLE);
+			textViewName.setText(Html.fromHtml(answerBuffer.toString()));
 
 			String answerBody = activityInfo.getBody();
 			if (answerBody != null) {
 				answerBody = new String(answerBody.getBytes("ISO-8859-1"),
 						"UTF-8");
-				textViewMessage.setText(Html.fromHtml(answerBody),
-						TextView.BufferType.SPANNABLE);
+				if(isDetail)
+				{
+					
+					textViewMessage.setText(Html.fromHtml(answerBody), TextView.BufferType.SPANNABLE);
+				}
+				else
+					textViewMessage.setText(Html.fromHtml(answerBody));
+					
 			}
 		} catch (UnsupportedEncodingException e) {
 		}
@@ -435,7 +451,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 				forumBuffer.append(actTypeDesc);
 			}
 			forumBuffer.append("</font>");
-			forumBuffer.append(" ");
+			forumBuffer.append("<br><br>");
 			forumBuffer.append("<a>");
 			forumName = activityInfo.templateParams.get("EventSummary");
 			forumName = new String(forumName.getBytes("ISO-8859-1"), "UTF-8");
@@ -460,7 +476,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 			caledarBuffer.append("<html><body>");
 			caledarBuffer.append(LocalizationHelper.getInstance().getString(
 					"CalendarDescription"));
-			caledarBuffer.append(" ");
+			caledarBuffer.append("\n");
 			String description = activityInfo.templateParams
 					.get("EventDescription");
 			if (description != null) {
