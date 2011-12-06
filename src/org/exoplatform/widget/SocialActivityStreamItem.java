@@ -108,11 +108,8 @@ public class SocialActivityStreamItem extends LinearLayout {
 			textViewName.setText(Html.fromHtml(userName));
 			String title = new String(activityInfo.getTitle().getBytes(
 					"ISO-8859-1"), "UTF-8");
-			if(isDetail) {
-				textViewMessage.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
-			}
-			else
-				textViewMessage.setText(Html.fromHtml(title));
+			
+			textViewMessage.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
 			
 		} catch (UnsupportedEncodingException e) {
 		}
@@ -290,18 +287,13 @@ public class SocialActivityStreamItem extends LinearLayout {
 			forumBuffer.append("</a>");
 			forumBuffer.append("</body></html>");
 
-			textViewName.setText(Html.fromHtml(forumBuffer.toString()));
+			textViewName.setText(Html.fromHtml(forumBuffer.toString()), TextView.BufferType.SPANNABLE);
 			String forumBody = activityInfo.getBody();
 			if (forumBody != null) {
 				forumBody = new String(forumBody.getBytes("ISO-8859-1"),
 						"UTF-8");
-				
-				if(isDetail) {
-					
-					textViewMessage.setText(Html.fromHtml(forumBody), TextView.BufferType.SPANNABLE);
-				}
-				else
-					textViewMessage.setText(Html.fromHtml(forumBody), TextView.BufferType.NORMAL);
+			
+				textViewMessage.setText(Html.fromHtml(forumBody), TextView.BufferType.SPANNABLE);
 			}
 
 		} catch (UnsupportedEncodingException e) {
@@ -346,19 +338,14 @@ public class SocialActivityStreamItem extends LinearLayout {
 			buffer.append(page_name);
 			buffer.append("</a>");
 			buffer.append("</body></html>");
-			textViewName.setText(Html.fromHtml(buffer.toString()));
+			textViewName.setText(Html.fromHtml(buffer.toString()), TextView.BufferType.SPANNABLE);
 			String wikiBody = activityInfo.getBody();
 			if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
 				textViewMessage.setVisibility(View.GONE);
 			} else {
 				wikiBody = new String(wikiBody.getBytes("ISO-8859-1"), "UTF-8");
-				
-				if(isDetail) {
-					
-					textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
-				}
-				else
-					textViewMessage.setText(Html.fromHtml(wikiBody));
+
+				textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
 			}
 		} catch (UnsupportedEncodingException e) {
 		}
@@ -402,19 +389,14 @@ public class SocialActivityStreamItem extends LinearLayout {
 			answerBuffer.append("</a>");
 			answerBuffer.append("</body></html>");
 
-			textViewName.setText(Html.fromHtml(answerBuffer.toString()));
+			textViewName.setText(Html.fromHtml(answerBuffer.toString()), TextView.BufferType.SPANNABLE);
 
 			String answerBody = activityInfo.getBody();
 			if (answerBody != null) {
 				answerBody = new String(answerBody.getBytes("ISO-8859-1"),
 						"UTF-8");
-				if(isDetail)
-				{
-					
-					textViewMessage.setText(Html.fromHtml(answerBody), TextView.BufferType.SPANNABLE);
-				}
-				else
-					textViewMessage.setText(Html.fromHtml(answerBody));
+
+				textViewMessage.setText(Html.fromHtml(answerBody), TextView.BufferType.SPANNABLE);
 					
 			}
 		} catch (UnsupportedEncodingException e) {
