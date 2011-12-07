@@ -83,6 +83,7 @@ public class WebViewActivity extends MyActionBar {
         SocialActivity.socialActivity.finish();
       }
     }
+    cleaCache();
     finish();
     return true;
   }

@@ -246,7 +246,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       String actType = activityInfo.templateParams.get("ActivityType");
       String actTypeDesc = null;
       String forumName = null;
-      forumBuffer.append("<font color=\"#696969\">");
+      forumBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
       if (actType.equalsIgnoreCase("AddPost")) {
         forumLink = activityInfo.templateParams.get("PostLink");
         actTypeDesc = LocalizationHelper.getInstance().getString("HasAddANewPost");
@@ -304,13 +304,12 @@ public class SocialActivityStreamItem extends LinearLayout {
         if (act_key.equalsIgnoreCase("update_page")) {
           wiki_url = activityInfo.templateParams.get("view_change_url");
           act_key_des = LocalizationHelper.getInstance().getString("HasEditWikiPage");
-          buffer.append(act_key_des);
         } else if (act_key.equalsIgnoreCase("add_page")) {
           wiki_url = activityInfo.templateParams.get("page_url");
           act_key_des = LocalizationHelper.getInstance().getString("HasCreatWikiPage");
-          buffer.append(act_key_des);
         }
       }
+      buffer.append(act_key_des);
       buffer.append("</font>");
       buffer.append("<br>");
       String page_name = new String(activityInfo.templateParams.get("page_name")
@@ -348,14 +347,12 @@ public class SocialActivityStreamItem extends LinearLayout {
       String act_key_des = null;
       if (act_key.equalsIgnoreCase("QuestionUpdate")) {
         act_key_des = LocalizationHelper.getInstance().getString("HasUpdatedQuestion");
-        answerBuffer.append(act_key_des);
       } else if (act_key.equalsIgnoreCase("QuestionAdd")) {
         act_key_des = LocalizationHelper.getInstance().getString("HasAskAnswer");
-        answerBuffer.append(act_key_des);
       } else if (act_key.equalsIgnoreCase("AnswerAdd")) {
         act_key_des = LocalizationHelper.getInstance().getString("HasAnswerQuestion");
-        answerBuffer.append(act_key_des);
       }
+      answerBuffer.append(act_key_des);
       answerBuffer.append("</font>");
       answerBuffer.append("<br>");
       answer_link = activityInfo.templateParams.get("Link");
@@ -394,17 +391,14 @@ public class SocialActivityStreamItem extends LinearLayout {
       forumBuffer.append("<font color=\"#696969\">");
       if (actType.equalsIgnoreCase("EventAdded")) {
         actTypeDesc = LocalizationHelper.getInstance().getString("AddedAnEvent");
-        forumBuffer.append(actTypeDesc);
       } else if (actType.equalsIgnoreCase("EventUpdated")) {
         actTypeDesc = LocalizationHelper.getInstance().getString("UpdatedAnEvent");
-        forumBuffer.append(actTypeDesc);
       } else if (actType.equalsIgnoreCase("TaskAdded")) {
         actTypeDesc = LocalizationHelper.getInstance().getString("AddedATask");
-        forumBuffer.append(actTypeDesc);
       } else if (actType.equalsIgnoreCase("TaskUpdated")) {
         actTypeDesc = LocalizationHelper.getInstance().getString("UpdatedATask");
-        forumBuffer.append(actTypeDesc);
       }
+      forumBuffer.append(actTypeDesc);
       forumBuffer.append("</font>");
       forumBuffer.append("<br>");
       forumBuffer.append("<a>");
