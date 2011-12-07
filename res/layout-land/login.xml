@@ -1,89 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/RelativeLayout_Login" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:orientation="horizontal"
-	android:gravity="center_vertical" android:background="@drawable/login_background_land">
-	<LinearLayout android:padding="5dp"
-		android:layout_marginLeft="7dp" android:layout_width="wrap_content"
-		android:layout_height="fill_parent">
-		<ImageView android:id="@+id/authenticate_logo_imageview"
-			android:layout_marginTop="40dp" android:src="@drawable/authenticate_logo"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    android:id="@+id/RelativeLayout_Login"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/login_background_land"
+    android:gravity="center"
+    android:orientation="horizontal" >
 
-	</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="7dp"
+        android:padding="5dp" >
 
-	<RelativeLayout android:id="@+id/login_frame"
-		android:layout_marginTop="10dp" android:layout_height="fill_parent"
-		android:layout_width="fill_parent">
+        <ImageView
+            android:id="@+id/authenticate_logo_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/authenticate_logo" />
+    </LinearLayout>
 
-		<RelativeLayout android:id="@+id/RelativeLayout_Account"
-			android:layout_marginBottom="-2dp" android:layout_below="@id/authenticate_logo_imageview"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:layout_marginLeft="30dp" android:background="@drawable/authenticatepanelbuttonbgon">
+    <RelativeLayout
+        android:id="@+id/login_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10dp" >
 
-			<Button android:id="@+id/Button_Account" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_centerInParent="true"
-				android:background="@drawable/authenticatepanelbuttonbgon" />
+        <RelativeLayout
+            android:id="@+id/Image_Panel_Background"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:layout_below="@+id/RelativeLayout_Server"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="-4dp"
+            android:background="@drawable/authenticate_panel_bg"
+            android:padding="10dp" >
 
-			<ImageView android:id="@+id/Image_Account"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:layout_centerInParent="true"
-				android:background="@drawable/authenticate_credentials_icon_on" />
+            <EditText
+                android:id="@+id/EditText_UserName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/authenticate_textfied_background"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textSize="16dip"
+                android:textStyle="bold" />
 
-		</RelativeLayout>
+            <EditText
+                android:id="@+id/EditText_Password"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/EditText_UserName"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/authenticate_textfied_background"
+                android:gravity="center"
+                android:password="true"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textSize="16dip"
+                android:textStyle="bold" />
 
-		<RelativeLayout android:id="@+id/RelativeLayout_Server"
-			android:layout_marginBottom="-2dp" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_below="@id/authenticate_logo_imageview"
-			android:layout_toRightOf="@id/RelativeLayout_Account"
-			android:layout_marginLeft="-5dp">
+            <ListView
+                android:id="@+id/ListView_Servers"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/Image_Account"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="5dp" />
+        </RelativeLayout>
 
-			<Button android:id="@+id/Button_Server" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_centerInParent="true"
-				android:background="@drawable/authenticatepanelbuttonbgoff" />
-			<ImageView android:id="@+id/Image_Server"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:layout_centerInParent="true"
-				android:background="@drawable/authenticateserversiconiphoneoff" />
+        <RelativeLayout
+            android:id="@+id/RelativeLayout_Account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-2dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/authenticatepanelbuttonbgon" >
 
-		</RelativeLayout>
+            <Button
+                android:id="@+id/Button_Account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/authenticatepanelbuttonbgon" />
 
-		<RelativeLayout android:id="@+id/Image_Panel_Background"
-			android:padding="10dp" android:layout_width="fill_parent"
-			android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
-			android:layout_marginTop="-4dp" android:layout_height="150dp"
-			android:layout_below="@id/RelativeLayout_Server" android:background="@drawable/authenticate_panel_bg">
+            <ImageView
+                android:id="@+id/Image_Account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/authenticate_credentials_icon_on" />
+        </RelativeLayout>
 
-			<EditText android:id="@+id/EditText_UserName"
-				android:textColorHint="#FFFFFF" android:layout_marginTop="10dp"
-				android:layout_marginLeft="15dp" android:layout_marginRight="15dp"
-				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:textStyle="bold" android:textSize="16dip" android:gravity="center"
-				android:textColor="#FFFFFF" android:singleLine="true"
-				android:background="@drawable/authenticate_textfied_background" />
+        <RelativeLayout
+            android:id="@+id/RelativeLayout_Server"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/authenticate_logo_imageview"
+            android:layout_marginBottom="-2dp"
+            android:layout_marginLeft="-5dp"
+            android:layout_toRightOf="@id/RelativeLayout_Account" >
 
-			<EditText android:id="@+id/EditText_Password"
-				android:textColorHint="#FFFFFF" android:layout_below="@id/EditText_UserName"
-				android:layout_width="fill_parent" android:layout_marginTop="10dp"
-				android:layout_marginLeft="15dp" android:layout_marginRight="15dp"
-				android:layout_height="wrap_content" android:textStyle="bold"
-				android:textSize="16dip" android:gravity="center" android:textColor="#FFFFFF"
-				android:singleLine="true" android:password="true"
-				android:background="@drawable/authenticate_textfied_background" />
+            <Button
+                android:id="@+id/Button_Server"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/authenticatepanelbuttonbgoff" />
 
-			<ListView android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:id="@+id/ListView_Servers"
-				android:layout_below="@id/Image_Account" android:layout_marginTop="5dp"
-				android:layout_marginLeft="7dp" android:layout_marginRight="7dp"
-				android:layout_marginBottom="10dp" />
-		</RelativeLayout>
+            <ImageView
+                android:id="@+id/Image_Server"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/authenticateserversiconiphoneoff" />
+        </RelativeLayout>
 
-		<Button android:id="@+id/Button_Login" android:layout_width="fill_parent"
-			android:layout_marginTop="10dp" android:layout_below="@id/Image_Panel_Background"
-			android:layout_marginLeft="19dp" android:layout_marginRight="19dp"
-			android:layout_height="wrap_content" android:textSize="16dip"
-			android:textStyle="bold" android:background="@drawable/login_button_background_shape"
-			android:textColor="#000000" />
-	</RelativeLayout>
+        <Button
+            android:id="@+id/Button_Login"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Image_Panel_Background"
+            android:layout_marginLeft="19dp"
+            android:layout_marginRight="19dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/login_button_background_shape"
+            android:textColor="#000000"
+            android:textSize="16dip"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
 </LinearLayout>
-
