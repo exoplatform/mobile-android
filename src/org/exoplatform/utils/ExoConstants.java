@@ -36,7 +36,7 @@ public class ExoConstants {
 
   public static final int    NUMBER_OF_LIKES_PARAM         = 50;
 
-  public static final int    NUMBER_OF_COMMENTS_PARAM      = 10;
+  public static final int    NUMBER_OF_COMMENTS_PARAM      = 50;
 
   public static final int    NUMBER_OF_MORE_COMMENTS_PARAM = 5;
 
@@ -96,11 +96,8 @@ public class ExoConstants {
 
   public static final String IMAGE_TYPE                    = "image/png";
 
-  public static final int    CACHE_MAX_NUMBER              = 1000;
-
-  public static final int    CACHE_TIME_TO_LIVE            = 500;
-  
   public static final String SPECIAL_CHAR_NAME_SET         = "[\\[\\]\\/\\&\\~\\?\\*\\|\\<\\>\\\"\\;\\:\\+\\\\]";
+
   public static final String SPECIAL_CHAR_URL_SET          = "[\\[\\]\\&\\~\\?\\*\\|\\<\\>\\\"\\;\\+\\\\]";
 
 }

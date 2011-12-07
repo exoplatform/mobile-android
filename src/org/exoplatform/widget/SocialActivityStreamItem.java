@@ -175,7 +175,6 @@ public class SocialActivityStreamItem extends LinearLayout {
     case 6:
       // LINK_ACTIVITY
       String templateComment = activityInfo.templateParams.get("comment");
-      System.out.println(templateComment);
       String description = activityInfo.templateParams.get("description");
       try {
         if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
@@ -370,9 +369,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       String answerBody = activityInfo.getBody();
       if (answerBody != null) {
         answerBody = new String(answerBody.getBytes("ISO-8859-1"), "UTF-8");
-
         textViewMessage.setText(Html.fromHtml(answerBody), TextView.BufferType.SPANNABLE);
-
       }
     } catch (UnsupportedEncodingException e) {
     }
