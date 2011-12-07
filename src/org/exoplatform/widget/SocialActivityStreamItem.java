@@ -134,6 +134,8 @@ public class SocialActivityStreamItem extends LinearLayout {
 			
 			textViewName.setMaxLines(100);
 			textViewMessage.setMaxLines(100);
+			textViewTempMessage.setMaxLines(100);
+			textViewCommnet.setMaxLines(100);
 
 		}
 
@@ -173,10 +175,10 @@ public class SocialActivityStreamItem extends LinearLayout {
 			if (docLink != null) {
 				String docName = activityInfo.templateParams.get("DOCNAME");
 				if (PhotoUltils.isImages(docName)) {
-					displayAttachImage(domain + docLink);
+					displayAttachImage(domain + docLink, docName, null);
 				}
-
 			}
+			
 			break;
 		case 5:
 			// DEFAULT_ACTIVITY
@@ -194,7 +196,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
 			String imageParams = activityInfo.templateParams.get("image");
 			if ((imageParams != null) && (imageParams.contains("http"))) {
-				displayAttachImage(imageParams);
+				displayAttachImage(imageParams, "", activityInfo.templateParams.get("description"));
 			}
 
 			break;
@@ -212,9 +214,9 @@ public class SocialActivityStreamItem extends LinearLayout {
 				String contentType = activityInfo.templateParams
 						.get("mimeType");
 				if (contentType != null
-						&& (contentType.equalsIgnoreCase("image/png"))) {
+						&& (contentType.equalsIgnoreCase("image/jpeg"))) {
 					contentLink = domain + "/rest/private/jcr/" + contentLink;
-					displayAttachImage(contentLink);
+					displayAttachImage(contentLink, "", null);
 				}
 
 			}
@@ -496,18 +498,32 @@ public class SocialActivityStreamItem extends LinearLayout {
 		}
 	}
 
-	private void displayAttachImage(String url) {
+	private void displayAttachImage(String url, String name, String description) {
 		if (attachStubView == null) {
-			initAttachStubView(url);
+			initAttachStubView(url, name, description);
 		}
 		attachStubView.setVisibility(View.VISIBLE);
 	}
 
-	private void initAttachStubView(final String url) {
+	private void initAttachStubView(final String url, String fileName, String description) {
 		attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity))
 				.inflate();
 		ImageView attachImage = (ImageView) attachStubView
 				.findViewById(R.id.attached_image_view);
+		TextView txtViewFileName = (TextView) attachStubView
+				.findViewById(R.id.textView_file_name);
+		if(description == null)
+			txtViewFileName.setText(fileName);
+		else {
+			LayoutParams params = (LayoutParams) txtViewFileName.getLayoutParams();
+			params.setMargins(12, params.topMargin, 12, params.bottomMargin);
+			txtViewFileName.setLayoutParams(params);
+			txtViewFileName.setText(description);
+			if(isDetail)
+				txtViewFileName.setMaxLines(100);
+			
+		}
+		
 		if (SocialDetailHelper.getInstance().taskIsFinish = true) {
 			// attachImage.setUrl(url);
 			SocialDetailHelper.getInstance().imageDownloader.download(url,
