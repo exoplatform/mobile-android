@@ -63,7 +63,13 @@ public class RoundedImageView extends AsyncImageView {
 
   public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
     int width = bitmap.getWidth();
+    if (width > 100) {
+      width = 100;
+    }
     int heigth = bitmap.getHeight();
+    if (heigth > 100) {
+      heigth = 100;
+    }
     Bitmap output = Bitmap.createBitmap(width, heigth, Config.ARGB_8888);
     Canvas canvas = new Canvas(output);
 
