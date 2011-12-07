@@ -34,8 +34,6 @@ public class HomeActivity extends MyActionBar {
     super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_logout_button);
-    // addActionBarItem(R.drawable.action_bar_logout_button);
-    // super.setTitle("eXo");
     init();
     changeLanguage();
   }
