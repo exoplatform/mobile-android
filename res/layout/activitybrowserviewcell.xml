@@ -48,17 +48,6 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/activity_comment_view"
-            style="@style/textview_content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_marginTop="3dip"
-            android:maxLines="5"
-            android:text="Test message"
-            android:visibility="gone" />
-
-        <TextView
             android:id="@+id/textView_Message"
             style="@style/textview_content"
             android:layout_width="fill_parent"
@@ -81,14 +70,24 @@
 
         <ViewStub
             android:id="@+id/attached_image_stub_activity"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="3dp"
-            android:layout_marginTop="5dip"
+            android:layout_marginBottom="2dp"
             android:inflatedId="@+id/attached_image_stub_inflate"
             android:layout="@layout/activity_image_display_layout"
             android:padding="5dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/activity_comment_view"
+            style="@style/textview_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="3dip"
+            android:maxLines="5"
+            android:text="activity_comment_view"
             android:visibility="gone" />
 
         <LinearLayout

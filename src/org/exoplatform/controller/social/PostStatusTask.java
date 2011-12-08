@@ -92,7 +92,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
       activityImlp.setTitle(composeMessage);
       SocialServiceHelper.getInstance().getActivityService().create(activityImlp);
       return 1;
-    } catch (SocialClientLibException e) {
+    } catch (Exception e) {
       return 0;
     }
 

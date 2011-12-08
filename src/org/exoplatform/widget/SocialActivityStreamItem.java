@@ -1,6 +1,8 @@
 package org.exoplatform.widget;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
+import java.util.Set;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -49,6 +51,8 @@ public class SocialActivityStreamItem extends LinearLayout {
   private TextView           textViewTime;
 
   private View               attachStubView;
+
+  private TextView           txtViewFileName;
 
   private String             domain;
 
@@ -174,24 +178,14 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 6:
       // LINK_ACTIVITY
-      String templateComment = activityInfo.templateParams.get("comment");
-      String description = activityInfo.templateParams.get("description");
-      try {
-        if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
-          String commentStr = new String(templateComment.getBytes("ISO-8859-1"), "UTF-8");
-          textViewCommnet.setText(Html.fromHtml(commentStr));
-          textViewCommnet.setVisibility(View.VISIBLE);
-        }
-        if (description != null) {
-          description = new String(description.getBytes("ISO-8859-1"), "UTF-8");
-        }
-      } catch (UnsupportedEncodingException e) {
-      }
 
-      String imageParams = activityInfo.templateParams.get("image");
-      if ((imageParams != null) && (imageParams.contains("http"))) {
-        displayAttachImage(imageParams, "", description);
+      Map<String, String> templateMap = activityInfo.templateParams;
+      Set<String> set = templateMap.keySet();
+      for (String param : set) {
+        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+            + templateMap.get(param));
       }
+      setActivityTypeLink();
 
       break;
     case 7:
@@ -452,6 +446,39 @@ public class SocialActivityStreamItem extends LinearLayout {
     }
   }
 
+  private void setActivityTypeLink() {
+    StringBuffer linkBuffer = new StringBuffer();
+    String linkTitle = activityInfo.templateParams.get("title").trim();
+    String linkUrl = activityInfo.templateParams.get("link");
+    String templateComment = activityInfo.templateParams.get("comment");
+    String description = activityInfo.templateParams.get("description").trim();
+    linkBuffer.append("<html><body>");
+    try {
+      linkTitle = new String(linkTitle.getBytes("ISO-8859-1"), "UTF-8");
+
+      if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
+        String commentStr = new String(templateComment.getBytes("ISO-8859-1"), "UTF-8");
+        textViewCommnet.setText(Html.fromHtml(commentStr), TextView.BufferType.SPANNABLE);
+        textViewCommnet.setVisibility(View.VISIBLE);
+      }
+      if (description != null) {
+        description = new String(description.getBytes("ISO-8859-1"), "UTF-8");
+      }
+    } catch (UnsupportedEncodingException e) {
+    }
+    linkBuffer.append("<a href=");
+    linkBuffer.append(linkUrl);
+    linkBuffer.append(">");
+    linkBuffer.append(linkTitle);
+    linkBuffer.append("</a>");
+    linkBuffer.append("</body></html>");
+
+    String imageParams = activityInfo.templateParams.get("image");
+    if ((imageParams != null) && (imageParams.contains("http"))) {
+      displayAttachImage(imageParams, "", linkBuffer.toString());
+    }
+  }
+
   private void displayAttachImage(String url, String name, String description) {
     if (attachStubView == null) {
       initAttachStubView(url, name, description);
@@ -462,16 +489,21 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void initAttachStubView(final String url, String fileName, String description) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
-    TextView txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
+    if (txtViewFileName == null) {
+      txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
+    }
     if (description == null)
       txtViewFileName.setText(fileName);
     else {
       // LayoutParams params = (LayoutParams) txtViewFileName.getLayoutParams();
       // params.setMargins(12, params.topMargin, 12, params.bottomMargin);
       // txtViewFileName.setLayoutParams(params);
-      txtViewFileName.setText(description);
-      if (isDetail)
+      txtViewFileName.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
+
+      if (isDetail) {
+        SocialActivityUtil.setTextLinkfy(txtViewFileName);
         txtViewFileName.setMaxLines(100);
+      }
 
     }
 

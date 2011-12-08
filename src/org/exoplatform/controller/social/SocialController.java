@@ -21,7 +21,9 @@ import org.exoplatform.widget.SocialShowMoreItem;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -98,8 +100,10 @@ public class SocialController {
 
         if (postedTimeTitle.equalsIgnoreCase(today))
           headerLayout.titleView.setBackgroundDrawable(resource.getDrawable(R.drawable.social_activity_browse_header_highlighted_bg));
-        else
+        else {
           headerLayout.titleView.setBackgroundDrawable(resource.getDrawable(R.drawable.social_activity_browse_header_normal_bg));
+          headerLayout.titleView.setTextColor(Color.rgb(59, 59, 59));
+        }
 
         actHeaderTitle.put(postedTimeTitle, "YES");
         activityStreamWrap.addView(headerLayout, params);

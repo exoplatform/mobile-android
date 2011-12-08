@@ -142,7 +142,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       }
 
       return 1;
-    } catch (SocialClientLibException e) {
+    } catch (Exception e) {
       String error = e.getMessage();
 
       if (error.contains("HTTP")) {
