@@ -119,9 +119,8 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
         SocialActivity.socialActivity.setEmptyView(View.VISIBLE);
       } else {
         SocialActivity.socialActivity.setEmptyView(View.GONE);
-        socialController.setActivityList(result);
       }
-
+      socialController.setActivityList(result);
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
