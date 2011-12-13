@@ -15,6 +15,7 @@ import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.text.Html;
 import android.util.AttributeSet;
@@ -96,6 +97,9 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void initCommonInfo() {
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl != null) {
+      BitmapFactory.Options options = new BitmapFactory.Options();
+      options.inSampleSize = 2;
+      imageViewAvatar.setOptions(options);
       imageViewAvatar.setUrl(avatarUrl);
     }
 
@@ -103,7 +107,6 @@ public class SocialActivityStreamItem extends LinearLayout {
       String userName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
       textViewName.setText(Html.fromHtml(userName));
       String title = new String(activityInfo.getTitle().getBytes("ISO-8859-1"), "UTF-8");
-
       textViewMessage.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
 
     } catch (UnsupportedEncodingException e) {

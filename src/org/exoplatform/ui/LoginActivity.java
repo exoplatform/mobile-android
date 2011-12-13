@@ -25,6 +25,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class LoginActivity extends Activity implements OnClickListener {
   private SharedPreferences sharedPreference;
@@ -98,6 +100,8 @@ public class LoginActivity extends Activity implements OnClickListener {
     if (strPassword != null && !strPassword.equals("")) {
       _edtxPassword.setText(strPassword);
     }
+
+    // Get the screen's density scale
 
     _btnAccount = (Button) findViewById(R.id.Button_Account);
     _btnAccount.setOnClickListener(this);

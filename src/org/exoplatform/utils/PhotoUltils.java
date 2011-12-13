@@ -21,6 +21,8 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Shader.TileMode;
 import android.os.Environment;
 import android.text.format.DateFormat;
@@ -326,6 +328,36 @@ public class PhotoUltils {
       return null;
     }
 
+  }
+
+  public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
+    bitmap = resizeImage(bitmap, 100);
+    int width = bitmap.getWidth();
+    if (width > 100) {
+      width = 100;
+    }
+    int heigth = bitmap.getHeight();
+    if (heigth > 100) {
+      heigth = 100;
+    }
+    Bitmap output = Bitmap.createBitmap(width, heigth, Config.ARGB_8888);
+    Canvas canvas = new Canvas(output);
+
+    final int color = 0xff424242;
+    final Paint paint = new Paint();
+    final Rect rect = new Rect(0, 0, width, heigth);
+    final RectF rectF = new RectF(rect);
+    final float roundPx = pixels;
+
+    paint.setAntiAlias(true);
+    canvas.drawARGB(0, 0, 0, 0);
+    paint.setColor(color);
+    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+    canvas.drawBitmap(bitmap, rect, rect, paint);
+
+    return output;
   }
 
 }

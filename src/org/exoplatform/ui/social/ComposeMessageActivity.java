@@ -34,7 +34,8 @@ import com.cyrilmottier.android.greendroid.R;
 public class ComposeMessageActivity extends MyActionBar implements View.OnClickListener {
   private int                          composeType;
 
-  private ScrollView				   composeScrollView;
+  private ScrollView                   composeScrollView;
+
   private EditText                     composeEditText;
 
   private static LinearLayout          fileAttachWrap;
@@ -82,18 +83,18 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   private void initComponents() {
     messageController = new ComposeMessageController(this, composeType);
-    
+
     composeScrollView = (ScrollView) findViewById(R.id.compose_textfield_scroll);
     composeScrollView.setOnTouchListener(new View.OnTouchListener() {
-    	@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-			mgr.showSoftInput(composeEditText, InputMethodManager.SHOW_IMPLICIT);
-			
-			return true;
-		}
-	});
-    
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.showSoftInput(composeEditText, InputMethodManager.SHOW_IMPLICIT);
+
+        return true;
+      }
+    });
+
     composeEditText = (EditText) findViewById(R.id.compose_text_view);
     fileAttachWrap = (LinearLayout) findViewById(R.id.compose_attach_file_wrap);
     sendButton = (Button) findViewById(R.id.compose_send_button);
@@ -128,16 +129,12 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == ExoConstants.TAKE_PICTURE_WITH_CAMERA) {
-
+      String sdcard_dir = messageController.getSdCardTempDir();
+      File file = new File(sdcard_dir);
       if (resultCode == Activity.RESULT_OK) {
-        String sdcard_dir = messageController.getSdCardTempDir();
-        File file = new File(sdcard_dir);
-        if (resultCode == Activity.RESULT_OK) {
-          addImageToMessage(file);
-
-        } else {
-          file.delete();
-        }
+        addImageToMessage(file);
+      } else {
+        file.delete();
       }
     }
 
@@ -151,7 +148,6 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       options.inSampleSize = 8;
       FileInputStream fis = new FileInputStream(file);
       Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
-//      bitmap.
       fis.close();
       ImageView image = new ImageView(composeMessageActivity);
       image.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -186,8 +182,8 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   // @Override
   public void onClick(View view) {
-	  
-	if (view == sendButton) {
+
+    if (view == sendButton) {
       composeMessage = composeEditText.getText().toString();
       messageController.onSendMessage(composeMessage, sdcard_temp_dir);
     } else if (view == cancelButton) {

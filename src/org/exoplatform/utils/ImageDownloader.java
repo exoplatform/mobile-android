@@ -30,6 +30,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Debug;
 import android.os.Handler;
 import android.widget.ImageView;
 
@@ -44,7 +45,7 @@ public class ImageDownloader implements OnLowMemoryListener {
 
   // Hard cache, with a fixed maximum capacity and a life duration
   @SuppressWarnings("serial")
-private final HashMap<String, Bitmap>                                 sHardBitmapCache    = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2,
+  private final HashMap<String, Bitmap>                                 sHardBitmapCache    = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2,
                                                                                                                                 0.75f,
                                                                                                                                 true) {
 
@@ -73,7 +74,7 @@ private final HashMap<String, Bitmap>                                 sHardBitma
 
   public ImageDownloader(Context context) {
     ((GDApplication) context).registerOnLowMemoryListener(this);
-     resetPurgeTimer();
+    resetPurgeTimer();
   }
 
   /**
@@ -271,15 +272,20 @@ private final HashMap<String, Bitmap>                                 sHardBitma
         if (entity != null) {
           InputStream inputStream = null;
           try {
+            long heapFreeSize = Debug.getNativeHeapFreeSize();
+            Bitmap bitmap = null;
             inputStream = entity.getContent();
             if (inputStream != null) {
-              BitmapFactory.Options bmOption = new BitmapFactory.Options();
-              bmOption.inSampleSize = 4;
-              Bitmap bitmap = BitmapFactory.decodeStream(inputStream,null,bmOption);
-              bitmap = PhotoUltils.resizeImage(bitmap, 640);
-
-              return bitmap;
+              if (entity.getContentLength() > heapFreeSize) {
+                BitmapFactory.Options bmOption = new BitmapFactory.Options();
+                bmOption.inSampleSize = 4;
+                bitmap = BitmapFactory.decodeStream(inputStream, null, bmOption);
+              } else {
+                bitmap = BitmapFactory.decodeStream(inputStream);
+              }
             }
+            bitmap = PhotoUltils.resizeImage(bitmap, 640);
+            return bitmap;
 
           } catch (Exception e) {
             return null;
@@ -362,8 +368,8 @@ private final HashMap<String, Bitmap>                                 sHardBitma
     }
   }
 
-//  @Override
+  // @Override
   public void onLowMemoryReceived() {
-     resetPurgeTimer();
+    resetPurgeTimer();
   }
 }

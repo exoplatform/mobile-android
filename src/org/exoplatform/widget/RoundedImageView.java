@@ -13,6 +13,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
 public class RoundedImageView extends AsyncImageView {
@@ -53,41 +54,10 @@ public class RoundedImageView extends AsyncImageView {
       mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap, scaledWidth, scaledHeight, true /* filter */);
     }
 
-    mScaledBitmap = PhotoUltils.resizeImage(mScaledBitmap, 200);
-
-    Bitmap roundBitmap = getRoundedCornerBitmap(mScaledBitmap, 5);
+    Bitmap roundBitmap = PhotoUltils.getRoundedCornerBitmap(mScaledBitmap, 5);
 
     canvas.drawBitmap(roundBitmap, 0, 0, null);
 
-  }
-
-  public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
-    int width = bitmap.getWidth();
-    if (width > 100) {
-      width = 100;
-    }
-    int heigth = bitmap.getHeight();
-    if (heigth > 100) {
-      heigth = 100;
-    }
-    Bitmap output = Bitmap.createBitmap(width, heigth, Config.ARGB_8888);
-    Canvas canvas = new Canvas(output);
-
-    final int color = 0xff424242;
-    final Paint paint = new Paint();
-    final Rect rect = new Rect(0, 0, width, heigth);
-    final RectF rectF = new RectF(rect);
-    final float roundPx = pixels;
-
-    paint.setAntiAlias(true);
-    canvas.drawARGB(0, 0, 0, 0);
-    paint.setColor(color);
-    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-    canvas.drawBitmap(bitmap, rect, rect, paint);
-
-    return output;
   }
 
 }
