@@ -18,6 +18,7 @@ package org.exoplatform.utils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import android.util.Log;
 import android.webkit.URLUtil;
@@ -110,5 +111,23 @@ public class URLAnalyzer {
     }
     
     return url;
+  }
+  
+  public static String encodeUrl(String urlString) {
+	  
+	  String encodedUrl = "";
+	  try {
+		
+		  URL url = new URL(urlString);
+		  URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), 
+				  url.getPath(), url.getQuery(), url.getRef());
+			
+		  encodedUrl = uri.toASCIIString();
+			
+	  } catch (Exception e) {
+		
+	  }
+	  
+	  return encodedUrl;
   }
 }

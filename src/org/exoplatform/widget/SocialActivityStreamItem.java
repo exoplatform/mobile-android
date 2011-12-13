@@ -12,6 +12,7 @@ import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.URLAnalyzer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -494,6 +495,9 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void initAttachStubView(final String url, String fileName, String description) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
+    attachImage.setMaxHeight(200);
+    attachImage.setMaxWidth(200);
+    
     if (txtViewFileName == null) {
       txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
     }
@@ -513,18 +517,31 @@ public class SocialActivityStreamItem extends LinearLayout {
     }
 
     if (SocialDetailHelper.getInstance().taskIsFinish = true) {
-      // attachImage.setUrl(url);
-      SocialDetailHelper.getInstance().imageDownloader.download(url,
-                                                                attachImage,
-                                                                ExoConnectionUtils._strCookie);
+    	String encodedUrl = URLAnalyzer.encodeUrl(url);
+		SocialDetailHelper.getInstance().imageDownloader.download(encodedUrl,
+				attachImage, ExoConnectionUtils._strCookie);
+		
+		String title = new String(activityInfo.getTitle());
+		String linkTagStr = "<a href=\"";
+		int index = title.indexOf(linkTagStr);
+		String modifiedTitle = title;
+		if(index >= 0) {
+			modifiedTitle = title.substring(0, index + linkTagStr.length());
+			modifiedTitle += encodedUrl;
+			index = title.indexOf("\">");
+			modifiedTitle += title.substring(index);
+		}
+			
+		textViewMessage.setText(Html.fromHtml(modifiedTitle), TextView.BufferType.SPANNABLE);
       if (isDetail) {
         attachImage.setOnClickListener(new OnClickListener() {
 
           // @Override
           public void onClick(View v) {
-            SocialDetailHelper.getInstance().setAttachedImageUrl(url);
-            Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);
-            mContext.startActivity(intent);
+        	  String encodedUrl = URLAnalyzer.encodeUrl(url);
+        	  SocialDetailHelper.getInstance().setAttachedImageUrl(encodedUrl);
+        	  Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);
+        	  mContext.startActivity(intent);
           }
         });
       }
