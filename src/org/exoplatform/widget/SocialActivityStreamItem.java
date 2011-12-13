@@ -459,13 +459,15 @@ public class SocialActivityStreamItem extends LinearLayout {
     try {
       linkTitle = new String(linkTitle.getBytes("ISO-8859-1"), "UTF-8");
 
-      if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
-        String commentStr = new String(templateComment.getBytes("ISO-8859-1"), "UTF-8");
-        textViewCommnet.setText(Html.fromHtml(commentStr), TextView.BufferType.SPANNABLE);
-        textViewCommnet.setVisibility(View.VISIBLE);
-      }
+//      if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
+//        String commentStr = new String(templateComment.getBytes("ISO-8859-1"), "UTF-8");
+//        textViewCommnet.setText(Html.fromHtml(commentStr), TextView.BufferType.SPANNABLE);
+//        textViewCommnet.setVisibility(View.VISIBLE);
+//      }
       if (description != null) {
         description = new String(description.getBytes("ISO-8859-1"), "UTF-8");
+        textViewCommnet.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
+        textViewCommnet.setVisibility(View.VISIBLE);
       }
     } catch (UnsupportedEncodingException e) {
     }

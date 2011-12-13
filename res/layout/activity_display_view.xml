@@ -1,66 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
-	<LinearLayout android:orientation="vertical"
-		android:background="#DCDCDCDC" android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-		<ScrollView android:layout_weight="1" android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:fillViewport="true"
-			android:fadingEdge="none">
-			<LinearLayout android:orientation="vertical"
-				android:layout_width="fill_parent" android:layout_height="fill_parent">
-				<LinearLayout android:id="@+id/social_detail_wrap_layout"
-					android:paddingTop="5dp" android:paddingLeft="5dp"
-					android:paddingRight="5dp" android:paddingBottom="15dp"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:background="@drawable/social_activity_detail_message_bg">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#DCDCDCDC"
+        android:orientation="vertical" >
 
-				</LinearLayout>
-				<RelativeLayout android:id="@+id/relativeLayout_Like"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:layout_marginTop="-3dip" android:padding="5dp">
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:fadingEdge="none"
+            android:fillViewport="true" >
 
-					<Button android:id="@+id/like_button" android:layout_height="wrap_content"
-						android:layout_width="wrap_content" android:layout_marginRight="3dp"
-						android:layout_alignParentRight="true" android:layout_marginTop="5dip"
-						android:background="@null" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
 
-					<TextView android:id="@+id/textView_Like_Count" style="@style/textview_like"
-						android:layout_height="wrap_content" android:layout_marginLeft="5dip"
-						android:layout_marginTop="5dip" android:layout_toLeftOf="@id/like_button"
-						android:layout_width="fill_parent" />
+                <LinearLayout
+                    android:id="@+id/social_detail_wrap_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/social_activity_detail_message_bg"
+                    android:paddingBottom="15dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp" >
+                </LinearLayout>
 
-				</RelativeLayout>
-				<LinearLayout android:background="@drawable/activity_detail_like_comment_separator"
-					android:layout_marginTop="5dp" android:layout_marginLeft="10dp"
-					android:layout_marginRight="10dp" android:layout_width="fill_parent"
-					android:layout_height="0.5dp">
-				</LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/relativeLayout_Like"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-3dip"
+                    android:padding="5dp" >
 
-				<ViewStub android:id="@+id/comment_details_empty_stub"
-					android:layout_marginTop="5dp" android:layout_weight="1"
-					android:inflatedId="@+id/social_empty_stub_inflted" android:layout="@layout/empty_screen"
-					android:visibility="gone" android:layout_gravity="center"
-					android:layout_width="fill_parent" android:layout_height="fill_parent" />
-				<LinearLayout android:id="@+id/activity_display_comment_wrap"
-					android:orientation="vertical" android:padding="2dp"
-					android:layout_width="fill_parent" android:layout_height="wrap_content">
-				</LinearLayout>
+                    <Button
+                        android:id="@+id/like_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="5dip"
+                        android:background="@null" />
 
+                    <TextView
+                        android:id="@+id/textView_Like_Count"
+                        style="@style/textview_like"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginTop="5dip"
+                        android:layout_toLeftOf="@id/like_button" />
+                </RelativeLayout>
 
-			</LinearLayout>
-		</ScrollView>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/activity_detail_like_comment_separator" >
+                </LinearLayout>
 
-		<EditText android:id="@+id/editText_Comment"
-			android:layout_marginTop="-7dp" android:background="@drawable/comment_textfield_background"
-			android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:textColor="#FFFFFF" android:editable="false"
-			android:textSize="12dp" android:textColorHint="#FFFFFF" android:hint="Your comment..." />
-	</LinearLayout>
-	<LinearLayout android:id="@+id/details_start_screen"
-		android:background="#DCDCDC" android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
-	</LinearLayout>
+                <ViewStub
+                    android:id="@+id/comment_details_empty_stub"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:inflatedId="@+id/social_empty_stub_inflted"
+                    android:layout="@layout/empty_screen"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/activity_display_comment_wrap"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="2dp" >
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <EditText
+            android:id="@+id/editText_Comment"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-7dp"
+            android:background="@drawable/comment_textfield_background"
+            android:editable="false"
+            android:hint="Your comment..."
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/details_start_screen"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#DCDCDC" >
+    </LinearLayout>
+
 </RelativeLayout>
