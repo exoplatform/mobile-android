@@ -105,8 +105,8 @@ public class SocialActivityStreamItem extends LinearLayout {
     }
 
     try {
-      String userName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
-      textViewName.setText(Html.fromHtml(userName));
+//      String userName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
+      textViewName.setText(Html.fromHtml(activityInfo.getUserName()));
       String title = new String(activityInfo.getTitle().getBytes("ISO-8859-1"), "UTF-8");
       textViewMessage.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
 
