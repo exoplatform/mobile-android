@@ -101,7 +101,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
         }
       }
       return listActivity;
-    } catch (Exception e) {
+    } catch (SocialClientLibException e) {
       return null;
     }
   }

@@ -34,8 +34,6 @@ public class SocialActivity extends MyActionBar {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // setTheme(R.style.Theme_eXo);
-
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);

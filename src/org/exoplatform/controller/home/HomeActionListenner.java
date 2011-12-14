@@ -185,8 +185,6 @@ public class HomeActionListenner implements OnItemClickListener {
 
         return true;
       } catch (SocialClientLibException e) {
-//        e.printStackTrace();
-        System.out.println(e.getMessage());
         return false;
       }
     }

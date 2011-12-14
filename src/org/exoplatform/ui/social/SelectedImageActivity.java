@@ -30,8 +30,6 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   
   private File file;
 
-//  private String    selectedPhotoTitle;
-
   private String    okText;
 
   @Override
@@ -87,8 +85,6 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   public void onClick(View view) {
     if (view == okButton) {
       if (filePath != null) {
-//        File file = new File(filePath);
-
         if (DocumentActivity._documentActivityInstance != null) {
           DocumentActivity._documentActivityInstance._sdcard_temp_dir = filePath;
           DocumentActivity._documentActivityInstance.uploadFile();
@@ -110,8 +106,6 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
 
   private void onChangeLanguage() {
     LocalizationHelper bundle = LocalizationHelper.getInstance();
-//    selectedPhotoTitle = bundle.getString("SelectedPhoto");
-//    setTitle(selectedPhotoTitle);
     okText = bundle.getString("OK");
 
   }

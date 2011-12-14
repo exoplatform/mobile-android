@@ -5,6 +5,7 @@ import java.io.File;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
@@ -99,7 +100,7 @@ public class ComposeMessageController {
 
       SocialActivity.socialActivity.reloadActivity();
 
-    } catch (Exception e) {
+    } catch (SocialClientLibException e) {
       String error = e.getMessage();
       if (error != null && error.contains("HTTP")) {
         contentString = LocalizationHelper.getInstance().getString("ErrorOnComment");

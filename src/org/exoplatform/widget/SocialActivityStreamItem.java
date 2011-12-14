@@ -154,13 +154,6 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 4:
       // DOC_ACTIVITY
-      // Map<String, String> templateMap = activityInfo.templateParams;
-      // Set<String> set = templateMap.keySet();
-      // for (String param : set) {
-      // System.out.println("type: " + activityInfo.getType() +
-      // "--template key: " + param + "-- "
-      // + templateMap.get(param));
-      // }
 
       String tempMessage = activityInfo.templateParams.get("MESSAGE");
       if (tempMessage != null) {
@@ -183,12 +176,6 @@ public class SocialActivityStreamItem extends LinearLayout {
     case 6:
       // LINK_ACTIVITY
 
-      Map<String, String> templateMap = activityInfo.templateParams;
-      Set<String> set = templateMap.keySet();
-      for (String param : set) {
-        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-            + templateMap.get(param));
-      }
       setActivityTypeLink();
 
       break;
@@ -504,9 +491,6 @@ public class SocialActivityStreamItem extends LinearLayout {
     if (description == null)
       txtViewFileName.setText(fileName);
     else {
-      // LayoutParams params = (LayoutParams) txtViewFileName.getLayoutParams();
-      // params.setMargins(12, params.topMargin, 12, params.bottomMargin);
-      // txtViewFileName.setLayoutParams(params);
       txtViewFileName.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
 
       if (isDetail) {
