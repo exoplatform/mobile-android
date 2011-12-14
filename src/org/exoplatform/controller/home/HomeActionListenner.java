@@ -17,6 +17,7 @@ import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.ui.social.SocialActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.UserTask;
@@ -56,25 +57,29 @@ public class HomeActionListenner implements OnItemClickListener {
   // @Override
   public void onItemClick(AdapterView<?> adapter, View view, int postion, long id) {
     HomeItem item = HomeHelper.getInstance().getHomeItemList().get(postion);
-    switch (item._index) {
-    case 1:
-      launchNewsService();
-      break;
-    case 2:
-      launchChatApp();
-      break;
-    case 3:
-      launchDocumentApp();
-      break;
-    case 4:
-      launchDashboardApp();
-      break;
-    case 5:
-      launchSettingApp();
-      break;
-    default:
-      break;
+    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+      switch (item._index) {
+      case 1:
+        launchNewsService();
+        break;
+      case 2:
+        launchChatApp();
+        break;
+      case 3:
+        launchDocumentApp();
+        break;
+      case 4:
+        launchDashboardApp();
+        break;
+      // case 5:
+      // launchSettingApp();
+      // break;
+      default:
+        break;
 
+      }
+    } else {
+      new WarningDialog(mContext, titleString, contentString, okString).show();
     }
 
   }
@@ -156,7 +161,7 @@ public class HomeActionListenner implements OnItemClickListener {
   private class NewsServiceLoadTask extends UserTask<Void, Void, Boolean> {
 
     @SuppressWarnings("deprecation")
-	@Override
+    @Override
     public Boolean doInBackground(Void... params) {
       try {
         parseDomain();
@@ -174,7 +179,7 @@ public class HomeActionListenner implements OnItemClickListener {
 
         ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
         @SuppressWarnings("unchecked")
-		ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
+        ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
         IdentityService<?> identityService = clientServiceFactory.createIdentityService();
         String userIdentity;
         userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
@@ -186,7 +191,7 @@ public class HomeActionListenner implements OnItemClickListener {
         return true;
       } catch (SocialClientLibException e) {
         return false;
-      }
+      } 
     }
 
     @Override

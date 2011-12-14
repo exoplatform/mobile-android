@@ -13,15 +13,16 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.ui.social.ComposeMessageActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.SocialHeaderLayout;
 import org.exoplatform.widget.SocialShowMoreItem;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.view.View;
@@ -71,8 +72,12 @@ public class SocialController {
   }
 
   public void onLoad() {
-    if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
-      mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this).execute(number_of_activity);
+    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+      if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
+        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this).execute(number_of_activity);
+      }
+    } else {
+      new ConnectionErrorDialog(mContext).show();
     }
   }
 
@@ -115,22 +120,26 @@ public class SocialController {
       likeButton.setOnClickListener(new View.OnClickListener() {
 
         public void onClick(View v) {
-          try {
-            RestActivity activity = SocialServiceHelper.getInstance()
-                                                       .getActivityService()
-                                                       .get(activityInfo.getActivityId());
-            if (activity.isLiked())
-              SocialServiceHelper.getInstance().getActivityService().unlike(activity);
-            else
-              SocialServiceHelper.getInstance().getActivityService().like(activity);
+          if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+            try {
+              RestActivity activity = SocialServiceHelper.getInstance()
+                                                         .getActivityService()
+                                                         .get(activityInfo.getActivityId());
+              if (activity.isLiked())
+                SocialServiceHelper.getInstance().getActivityService().unlike(activity);
+              else
+                SocialServiceHelper.getInstance().getActivityService().like(activity);
 
-            onLoad();
-          } catch (SocialClientLibException e) {
-            WarningDialog dialog = new WarningDialog(mContext,
-                                                     titleString,
-                                                     e.getMessage(),
-                                                     okString);
-            dialog.show();
+              onLoad();
+            } catch (SocialClientLibException e) {
+              WarningDialog dialog = new WarningDialog(mContext,
+                                                       titleString,
+                                                       e.getMessage(),
+                                                       okString);
+              dialog.show();
+            }
+          } else {
+            new ConnectionErrorDialog(mContext).show();
           }
 
         }

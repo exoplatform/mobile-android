@@ -13,9 +13,11 @@ import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.CommentItemLayout;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.WarningDialog;
 
@@ -69,8 +71,12 @@ public class SocialDetailController {
   }
 
   public void onLoad() {
-    if (mLoadTask == null || mLoadTask.getStatus() == SocialDetailLoadTask.Status.FINISHED) {
-      mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this).execute();
+    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+      if (mLoadTask == null || mLoadTask.getStatus() == SocialDetailLoadTask.Status.FINISHED) {
+        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this).execute();
+      }
+    } else {
+      new ConnectionErrorDialog(mContext).show();
     }
   }
 
@@ -138,29 +144,26 @@ public class SocialDetailController {
 
   public void onLikePress() {
     boolean liked = SocialDetailHelper.getInstance().getLiked();
-    try {
-      RestActivity activity = SocialServiceHelper.getInstance()
-                                                 .getActivityService()
-                                                 .get(activityId);
+    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+      try {
+        RestActivity activity = SocialServiceHelper.getInstance()
+                                                   .getActivityService()
+                                                   .get(activityId);
 
-      if (liked == true) {
-        SocialServiceHelper.getInstance().getActivityService().unlike(activity);
-        SocialDetailHelper.getInstance().setLiked(false);
-      } else {
-        SocialServiceHelper.getInstance().getActivityService().like(activity);
+        if (liked == true) {
+          SocialServiceHelper.getInstance().getActivityService().unlike(activity);
+          SocialDetailHelper.getInstance().setLiked(false);
+        } else {
+          SocialServiceHelper.getInstance().getActivityService().like(activity);
+        }
+        onLoad();
+      } catch (SocialClientLibException e) {
+
+        WarningDialog dialog = new WarningDialog(mContext, titleString, likeErrorString, okString);
+        dialog.show();
       }
-      onLoad();
-    } catch (SocialClientLibException e) {
-
-      String error = e.getMessage();
-      if (error != null && error.contains("HTTP")) {
-        likeErrorString = LocalizationHelper.getInstance().getString("ErrorOnLike");
-      } else {
-        likeErrorString = LocalizationHelper.getInstance().getString("ConnectionError");
-      }
-
-      WarningDialog dialog = new WarningDialog(mContext, titleString, likeErrorString, okString);
-      dialog.show();
+    } else {
+      new ConnectionErrorDialog(mContext).show();
     }
   }
 
@@ -168,5 +171,6 @@ public class SocialDetailController {
     LocalizationHelper location = LocalizationHelper.getInstance();
     okString = location.getString("OK");
     titleString = location.getString("Warning");
+    likeErrorString = LocalizationHelper.getInstance().getString("ErrorOnLike");
   }
 }

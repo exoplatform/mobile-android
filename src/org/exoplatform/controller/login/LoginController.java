@@ -12,6 +12,7 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
@@ -85,9 +86,14 @@ public class LoginController {
   }
 
   private void onLoad() {
-    if (mLoadTask == null || mLoadTask.getStatus() == LoginTask.Status.FINISHED) {
-      mLoadTask = (LoginTask) new LoginTask().execute();
+    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+      if (mLoadTask == null || mLoadTask.getStatus() == LoginTask.Status.FINISHED) {
+        mLoadTask = (LoginTask) new LoginTask().execute();
+      }
+    } else {
+      new ConnectionErrorDialog(mContext).show();
     }
+
   }
 
   public void onCancelLoad() {
@@ -176,7 +182,7 @@ public class LoginController {
       } else if (result.contains(ExoConstants.LOGIN_UNREACHABLE)) {
         dialog = new WarningDialog(mContext, titleString, strServerUnreachable, okString);
         dialog.show();
-      }else {
+      } else {
         dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
         dialog.show();
       }

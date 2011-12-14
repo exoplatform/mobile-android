@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout_Login"
+    android:id="@+id/login_layout_wrapper"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/login_background"
@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_marginBottom="5dp"
+            android:padding="5dp"
             android:src="@drawable/exo_logo_large" />
     </LinearLayout>
 

@@ -175,7 +175,12 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 6:
       // LINK_ACTIVITY
-
+      Map<String, String> templateMap = activityInfo.templateParams;
+      Set<String> set = templateMap.keySet();
+      for (String param : set) {
+        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+            + templateMap.get(param));
+      }
       setActivityTypeLink();
 
       break;
@@ -447,11 +452,11 @@ public class SocialActivityStreamItem extends LinearLayout {
     try {
       linkTitle = new String(linkTitle.getBytes("ISO-8859-1"), "UTF-8");
 
-//      if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
-//        String commentStr = new String(templateComment.getBytes("ISO-8859-1"), "UTF-8");
-//        textViewCommnet.setText(Html.fromHtml(commentStr), TextView.BufferType.SPANNABLE);
-//        textViewCommnet.setVisibility(View.VISIBLE);
-//      }
+      if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
+        String commentStr = new String(templateComment.getBytes("ISO-8859-1"), "UTF-8");
+        textViewMessage.setText(Html.fromHtml(commentStr), TextView.BufferType.SPANNABLE);
+        // textViewCommnet.setVisibility(View.VISIBLE);
+      }
       if (description != null) {
         description = new String(description.getBytes("ISO-8859-1"), "UTF-8");
         textViewCommnet.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
@@ -484,7 +489,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
     attachImage.setMaxHeight(200);
     attachImage.setMaxWidth(200);
-    
+
     if (txtViewFileName == null) {
       txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
     }
@@ -501,31 +506,32 @@ public class SocialActivityStreamItem extends LinearLayout {
     }
 
     if (SocialDetailHelper.getInstance().taskIsFinish = true) {
-    	String encodedUrl = URLAnalyzer.encodeUrl(url);
-		SocialDetailHelper.getInstance().imageDownloader.download(encodedUrl,
-				attachImage, ExoConnectionUtils._strCookie);
-		
-		String title = new String(activityInfo.getTitle());
-		String linkTagStr = "<a href=\"";
-		int index = title.indexOf(linkTagStr);
-		String modifiedTitle = title;
-		if(index >= 0) {
-			modifiedTitle = title.substring(0, index + linkTagStr.length());
-			modifiedTitle += encodedUrl;
-			index = title.indexOf("\">");
-			modifiedTitle += title.substring(index);
-		}
-			
-		textViewMessage.setText(Html.fromHtml(modifiedTitle), TextView.BufferType.SPANNABLE);
+      String encodedUrl = URLAnalyzer.encodeUrl(url);
+      SocialDetailHelper.getInstance().imageDownloader.download(encodedUrl,
+                                                                attachImage,
+                                                                ExoConnectionUtils._strCookie);
+
+//      String title = new String(activityInfo.getTitle());
+//      String linkTagStr = "<a href=\"";
+//      int index = title.indexOf(linkTagStr);
+//      String modifiedTitle = title;
+//      if (index >= 0) {
+//        modifiedTitle = title.substring(0, index + linkTagStr.length());
+//        modifiedTitle += encodedUrl;
+//        index = title.indexOf("\">");
+//        modifiedTitle += title.substring(index);
+//      }
+//
+//      textViewMessage.setText(Html.fromHtml(modifiedTitle), TextView.BufferType.SPANNABLE);
       if (isDetail) {
         attachImage.setOnClickListener(new OnClickListener() {
 
           // @Override
           public void onClick(View v) {
-        	  String encodedUrl = URLAnalyzer.encodeUrl(url);
-        	  SocialDetailHelper.getInstance().setAttachedImageUrl(encodedUrl);
-        	  Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);
-        	  mContext.startActivity(intent);
+            String encodedUrl = URLAnalyzer.encodeUrl(url);
+            SocialDetailHelper.getInstance().setAttachedImageUrl(encodedUrl);
+            Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);
+            mContext.startActivity(intent);
           }
         });
       }

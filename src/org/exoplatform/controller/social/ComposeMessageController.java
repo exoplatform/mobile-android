@@ -10,8 +10,10 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
 import org.exoplatform.ui.social.SocialActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUltils;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
@@ -60,10 +62,14 @@ public class ComposeMessageController {
 
   public void onSendMessage(String composeMessage, String sdcard) {
     if ((composeMessage != null) && (composeMessage.length() > 0)) {
-      if (composeType == 0) {
-        onPostTask(composeMessage, sdcard);
+      if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+        if (composeType == 0) {
+          onPostTask(composeMessage, sdcard);
+        } else {
+          onCommentTask(composeMessage);
+        }
       } else {
-        onCommentTask(composeMessage);
+        new ConnectionErrorDialog(mContext).show();
       }
     } else {
       Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_LONG);
@@ -101,12 +107,6 @@ public class ComposeMessageController {
       SocialActivity.socialActivity.reloadActivity();
 
     } catch (SocialClientLibException e) {
-      String error = e.getMessage();
-      if (error != null && error.contains("HTTP")) {
-        contentString = LocalizationHelper.getInstance().getString("ErrorOnComment");
-      } else {
-        contentString = LocalizationHelper.getInstance().getString("ConnectionError");
-      }
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
@@ -121,7 +121,7 @@ public class ComposeMessageController {
     inputTextWarning = bundle.getString("InputTextWarning");
     okString = bundle.getString("OK");
     titleString = bundle.getString("Warning");
-
+    contentString = LocalizationHelper.getInstance().getString("ErrorOnComment");
   }
 
 }

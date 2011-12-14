@@ -16,8 +16,10 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.WebdavMethod;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WaitingDialog;
+import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -154,17 +156,21 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void onLoad(String source, String destination, int action) {
-    if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
-    	if (Config.GD_INFO_LOGS_ENABLED)
-    		Log.i("DocumentLoadTask", "onLoad");
-      mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this, this, source, destination, action).execute();
+    if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
+      if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
+        if (Config.GD_INFO_LOGS_ENABLED)
+          Log.i("DocumentLoadTask", "onLoad");
+        mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this, this, source, destination, action).execute();
+      }
+    } else {
+      new ConnectionErrorDialog(this).show();
     }
   }
 
   public void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == DocumentLoadTask.Status.RUNNING) {
-    	if (Config.GD_INFO_LOGS_ENABLED)
-    		Log.i("DocumentLoadTask", "onCancelLoad");
+      if (Config.GD_INFO_LOGS_ENABLED)
+        Log.i("DocumentLoadTask", "onCancelLoad");
       mLoadTask.cancel(true);
       mLoadTask = null;
     }

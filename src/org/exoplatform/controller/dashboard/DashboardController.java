@@ -7,6 +7,7 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -19,8 +20,8 @@ public class DashboardController {
   private DashboardLoadTask mLoadTask;
 
   private ListView          listView;
-  
-  private String dashboardsCannotBeRetrieved = "";
+
+  private String            dashboardsCannotBeRetrieved = "";
 
   public DashboardController(DashboardActivity context, ListView list) {
     activity = context;
@@ -28,9 +29,12 @@ public class DashboardController {
   }
 
   public void onLoad() {
-
-    if (mLoadTask == null || mLoadTask.getStatus() == DashboardLoadTask.Status.FINISHED) {
-      mLoadTask = (DashboardLoadTask) new DashboardLoadTask(activity, this).execute();
+    if (ExoConnectionUtils.isNetworkAvailableExt(activity)) {
+      if (mLoadTask == null || mLoadTask.getStatus() == DashboardLoadTask.Status.FINISHED) {
+        mLoadTask = (DashboardLoadTask) new DashboardLoadTask(activity, this).execute();
+      }
+    } else {
+      new ConnectionErrorDialog(activity).show();
     }
   }
 
@@ -84,7 +88,7 @@ public class DashboardController {
   public ArrayList<GadgetInfo> getGadgetInTab(String tabName, String url) {
 
     try {
-      
+
       String result = ExoConnectionUtils.convertStreamToString(ExoConnectionUtils.sendRequestWithAuthorization(url));
       ArrayList<GadgetInfo> gadgets = new ArrayList<GadgetInfo>();
 
@@ -93,7 +97,7 @@ public class DashboardController {
       int count = 0;
 
       for (Object obj : array) {
-        
+
         JSONObject json = (JSONObject) obj;
 
         String gadgetIcon = "";
@@ -105,14 +109,18 @@ public class DashboardController {
           gadgetIcon = json.get("gadgetIcon").toString();
         if (json.get("gadgetUrl") != null)
           gadgetUrl = json.get("gadgetUrl").toString();
-        if (json.get("gadgetName") != null) 
+        if (json.get("gadgetName") != null)
           gadgetName = json.get("gadgetName").toString();
-         
+
         if (json.get("gadgetDescription") != null)
           gadgetDescription = json.get("gadgetDescription").toString();
 
-        GadgetInfo gadget = new GadgetInfo(gadgetName, gadgetDescription,
-                                           gadgetUrl, gadgetIcon, null, count);
+        GadgetInfo gadget = new GadgetInfo(gadgetName,
+                                           gadgetDescription,
+                                           gadgetUrl,
+                                           gadgetIcon,
+                                           null,
+                                           count);
 
         gadgets.add(gadget);
 
@@ -120,14 +128,14 @@ public class DashboardController {
       }
 
       return gadgets;
-      
+
     } catch (Exception e) {
 
-      if(dashboardsCannotBeRetrieved.length() == 0)
+      if (dashboardsCannotBeRetrieved.length() == 0)
         dashboardsCannotBeRetrieved += tabName;
       else
         dashboardsCannotBeRetrieved += ", " + tabName;
-      
+
       return null;
     }
 

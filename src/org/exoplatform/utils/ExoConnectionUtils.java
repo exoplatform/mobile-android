@@ -28,6 +28,10 @@ import org.exoplatform.singleton.ServerSettingHelper;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 //interact with server
 public class ExoConnectionUtils {
 
@@ -46,6 +50,26 @@ public class ExoConnectionUtils {
                                                          // time
 
   // login
+  public static boolean isNetworkAvailableExt(Context paramContext) {
+    ConnectivityManager localConnectivityManager = (ConnectivityManager) paramContext.getSystemService("connectivity");
+    if (localConnectivityManager == null) {
+      return false;
+    }
+    while (true) {
+      //
+      NetworkInfo localNetworkInfo = localConnectivityManager.getActiveNetworkInfo();
+      if ((localNetworkInfo == null)
+          || (localNetworkInfo.getState() != NetworkInfo.State.CONNECTED))
+        return false;
+      if (localNetworkInfo.getType() == 1) {
+        return true;
+      }
+      if (localNetworkInfo.getType() == 0) {
+        return true;
+      }
+      return true;
+    }
+  }
 
   private static byte[] zeroPad(int length, byte[] bytes) {
     byte[] padded = new byte[length]; // initialized to zero by JVM
