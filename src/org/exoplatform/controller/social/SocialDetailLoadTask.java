@@ -1,6 +1,5 @@
 package org.exoplatform.controller.social;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -111,14 +110,8 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
             likeLinkedList.addFirst(socialLike);
             SocialDetailHelper.getInstance().setLiked(true);
           } else {
-            try {
-              String likeName = new String(like.getProfile().getFullName().getBytes("ISO-8859-1"),
-                                           "UTF-8");
-              socialLike.setLikeName(likeName);
-            } catch (UnsupportedEncodingException e) {
-
-            }
-
+            String likeName = like.getProfile().getFullName();
+            socialLike.setLikeName(likeName);
             likeLinkedList.add(socialLike);
           }
 
@@ -143,15 +136,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
       return 1;
     } catch (SocialClientLibException e) {
-      String error = e.getMessage();
-
-      if (error.contains("HTTP")) {
-        return 0;
-      }
-
-      return -1;
-    }catch (RuntimeException re) {
-      return -1;
+      return 0;
     }
   }
 
@@ -167,13 +152,6 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       dialog = new SocialDetailsWarningDialog(mContext,
                                               titleString,
                                               detailsErrorStr,
-                                              okString,
-                                              hasContent);
-      dialog.show();
-    } else {
-      dialog = new SocialDetailsWarningDialog(mContext,
-                                              titleString,
-                                              networkNotReachable,
                                               okString,
                                               hasContent);
       dialog.show();

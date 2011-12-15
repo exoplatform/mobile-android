@@ -1,9 +1,5 @@
 package org.exoplatform.widget;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
-import java.util.Set;
-
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -58,6 +54,8 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private String             domain;
 
+  private String             userName;
+
   private Context            mContext;
 
   private SocialActivityInfo activityInfo;
@@ -104,14 +102,9 @@ public class SocialActivityStreamItem extends LinearLayout {
       imageViewAvatar.setUrl(avatarUrl);
     }
 
-    try {
-//      String userName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
-      textViewName.setText(Html.fromHtml(activityInfo.getUserName()));
-      String title = new String(activityInfo.getTitle().getBytes("ISO-8859-1"), "UTF-8");
-      textViewMessage.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE);
-
-    } catch (UnsupportedEncodingException e) {
-    }
+    userName = activityInfo.getUserName();
+    textViewName.setText(Html.fromHtml(userName));
+    textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()), TextView.BufferType.SPANNABLE);
 
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
@@ -175,14 +168,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 6:
       // LINK_ACTIVITY
-      Map<String, String> templateMap = activityInfo.templateParams;
-      Set<String> set = templateMap.keySet();
-      for (String param : set) {
-        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-            + templateMap.get(param));
-      }
       setActivityTypeLink();
-
       break;
     case 7:
       // exosocial:relationship
@@ -225,221 +211,188 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void setActivityTypeForum() {
-    try {
-      String forumLink = null;
-      StringBuffer forumBuffer = new StringBuffer();
-      forumBuffer.append("<html><body>");
-      String forumUserName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
-      forumBuffer.append(forumUserName);
-      forumBuffer.append(" ");
-      String actType = activityInfo.templateParams.get("ActivityType");
-      String actTypeDesc = null;
-      String forumName = null;
-      forumBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-      if (actType.equalsIgnoreCase("AddPost")) {
-        forumLink = activityInfo.templateParams.get("PostLink");
-        actTypeDesc = LocalizationHelper.getInstance().getString("HasAddANewPost");
-        forumName = activityInfo.templateParams.get("PostName");
-      } else if (actType.equalsIgnoreCase("UpdatePost")) {
-        forumLink = activityInfo.templateParams.get("PostLink");
-        actTypeDesc = LocalizationHelper.getInstance().getString("HasUpdateANewPost");
-        forumName = activityInfo.templateParams.get("PostName");
-      } else if (actType.equalsIgnoreCase("AddTopic")) {
-        forumLink = activityInfo.templateParams.get("TopicLink");
-        actTypeDesc = LocalizationHelper.getInstance().getString("HasPostedAnewTopic");
-        forumName = activityInfo.templateParams.get("TopicName");
-      } else if (actType.equalsIgnoreCase("UpdateTopic")) {
-        forumLink = activityInfo.templateParams.get("TopicLink");
-        actTypeDesc = LocalizationHelper.getInstance().getString("HasUpdateAnewTopic");
-        forumName = activityInfo.templateParams.get("TopicName");
-      }
-      forumBuffer.append(actTypeDesc);
-      forumBuffer.append("</font>");
-      forumBuffer.append("<br>");
-      forumBuffer.append("<a href=");
-      forumBuffer.append(forumLink);
-      forumBuffer.append(">");
-      forumName = new String(forumName.getBytes("ISO-8859-1"), "UTF-8");
-      forumBuffer.append(forumName);
-      forumBuffer.append("</a>");
-      forumBuffer.append("</body></html>");
-
-      textViewName.setText(Html.fromHtml(forumBuffer.toString()), TextView.BufferType.SPANNABLE);
-      String forumBody = activityInfo.getBody();
-      if (forumBody != null) {
-        forumBody = new String(forumBody.getBytes("ISO-8859-1"), "UTF-8");
-
-        textViewMessage.setText(Html.fromHtml(forumBody), TextView.BufferType.SPANNABLE);
-      }
-
-    } catch (UnsupportedEncodingException e) {
+    String forumLink = null;
+    StringBuffer forumBuffer = new StringBuffer();
+    forumBuffer.append("<html><body>");
+    forumBuffer.append(userName);
+    forumBuffer.append(" ");
+    String actType = activityInfo.templateParams.get("ActivityType");
+    String actTypeDesc = null;
+    String forumName = null;
+    forumBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+    if (actType.equalsIgnoreCase("AddPost")) {
+      forumLink = activityInfo.templateParams.get("PostLink");
+      actTypeDesc = LocalizationHelper.getInstance().getString("HasAddANewPost");
+      forumName = activityInfo.templateParams.get("PostName");
+    } else if (actType.equalsIgnoreCase("UpdatePost")) {
+      forumLink = activityInfo.templateParams.get("PostLink");
+      actTypeDesc = LocalizationHelper.getInstance().getString("HasUpdateANewPost");
+      forumName = activityInfo.templateParams.get("PostName");
+    } else if (actType.equalsIgnoreCase("AddTopic")) {
+      forumLink = activityInfo.templateParams.get("TopicLink");
+      actTypeDesc = LocalizationHelper.getInstance().getString("HasPostedAnewTopic");
+      forumName = activityInfo.templateParams.get("TopicName");
+    } else if (actType.equalsIgnoreCase("UpdateTopic")) {
+      forumLink = activityInfo.templateParams.get("TopicLink");
+      actTypeDesc = LocalizationHelper.getInstance().getString("HasUpdateAnewTopic");
+      forumName = activityInfo.templateParams.get("TopicName");
     }
+    forumBuffer.append(actTypeDesc);
+    forumBuffer.append("</font>");
+    forumBuffer.append("<br>");
+    forumBuffer.append("<a href=");
+    forumBuffer.append(forumLink);
+    forumBuffer.append(">");
+    forumBuffer.append(forumName);
+    forumBuffer.append("</a>");
+    forumBuffer.append("</body></html>");
+
+    textViewName.setText(Html.fromHtml(forumBuffer.toString()), TextView.BufferType.SPANNABLE);
+    String forumBody = activityInfo.getBody();
+
+    textViewMessage.setText(Html.fromHtml(forumBody), TextView.BufferType.SPANNABLE);
 
   }
 
   private void setActivityTypeWiki() {
-    try {
-      String wiki_url = null;
-      StringBuffer buffer = new StringBuffer();
-      buffer.append("<html><body>");
-      buffer.append("<a>");
-      String wikiUserName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
-      buffer.append(wikiUserName);
-      buffer.append("</a> ");
-      buffer.append("<font color=\"#696969\">");
-      String act_key = activityInfo.templateParams.get("act_key");
-      String act_key_des = null;
-      if (act_key != null) {
-        if (act_key.equalsIgnoreCase("update_page")) {
-          wiki_url = activityInfo.templateParams.get("view_change_url");
-          act_key_des = LocalizationHelper.getInstance().getString("HasEditWikiPage");
-        } else if (act_key.equalsIgnoreCase("add_page")) {
-          wiki_url = activityInfo.templateParams.get("page_url");
-          act_key_des = LocalizationHelper.getInstance().getString("HasCreatWikiPage");
-        }
+    String wiki_url = null;
+    StringBuffer buffer = new StringBuffer();
+    buffer.append("<html><body>");
+    buffer.append("<a>");
+    buffer.append(userName);
+    buffer.append("</a> ");
+    buffer.append("<font color=\"#696969\">");
+    String act_key = activityInfo.templateParams.get("act_key");
+    String act_key_des = null;
+    if (act_key != null) {
+      if (act_key.equalsIgnoreCase("update_page")) {
+        wiki_url = activityInfo.templateParams.get("view_change_url");
+        act_key_des = LocalizationHelper.getInstance().getString("HasEditWikiPage");
+      } else if (act_key.equalsIgnoreCase("add_page")) {
+        wiki_url = activityInfo.templateParams.get("page_url");
+        act_key_des = LocalizationHelper.getInstance().getString("HasCreatWikiPage");
       }
-      buffer.append(act_key_des);
-      buffer.append("</font>");
-      buffer.append("<br>");
-      String page_name = new String(activityInfo.templateParams.get("page_name")
-                                                               .getBytes("ISO-8859-1"), "UTF-8");
-      buffer.append("<a href=");
-      buffer.append(wiki_url);
-      buffer.append(">");
-      buffer.append(page_name);
-      buffer.append("</a>");
-      buffer.append("</body></html>");
-      textViewName.setText(Html.fromHtml(buffer.toString()), TextView.BufferType.SPANNABLE);
-      String wikiBody = activityInfo.getBody();
-      if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
-        textViewMessage.setVisibility(View.GONE);
-      } else {
-        wikiBody = new String(wikiBody.getBytes("ISO-8859-1"), "UTF-8");
-
-        textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
-      }
-    } catch (UnsupportedEncodingException e) {
+    }
+    buffer.append(act_key_des);
+    buffer.append("</font>");
+    buffer.append("<br>");
+    String page_name = activityInfo.templateParams.get("page_name");
+    buffer.append("<a href=");
+    buffer.append(wiki_url);
+    buffer.append(">");
+    buffer.append(page_name);
+    buffer.append("</a>");
+    buffer.append("</body></html>");
+    textViewName.setText(Html.fromHtml(buffer.toString()), TextView.BufferType.SPANNABLE);
+    String wikiBody = activityInfo.getBody();
+    if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
+      textViewMessage.setVisibility(View.GONE);
+    } else {
+      textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
     }
   }
 
   private void setActivityTypeAnswer() {
-    try {
-      String answer_link = null;
-      StringBuffer answerBuffer = new StringBuffer();
-      answerBuffer.append("<html><body>");
-      answerBuffer.append("<a>");
-      String answerUserName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
-      answerBuffer.append(answerUserName);
-      answerBuffer.append("</a> ");
-      answerBuffer.append("<font color=\"#696969\">");
-      String act_key = activityInfo.templateParams.get("ActivityType");
-      String act_key_des = null;
-      if (act_key.equalsIgnoreCase("QuestionUpdate")) {
-        act_key_des = LocalizationHelper.getInstance().getString("HasUpdatedQuestion");
-      } else if (act_key.equalsIgnoreCase("QuestionAdd")) {
-        act_key_des = LocalizationHelper.getInstance().getString("HasAskAnswer");
-      } else if (act_key.equalsIgnoreCase("AnswerAdd")) {
-        act_key_des = LocalizationHelper.getInstance().getString("HasAnswerQuestion");
-      }
-      answerBuffer.append(act_key_des);
-      answerBuffer.append("</font>");
-      answerBuffer.append("<br>");
-      answer_link = activityInfo.templateParams.get("Link");
-      String page_name = new String(activityInfo.templateParams.get("Name").getBytes("ISO-8859-1"),
-                                    "UTF-8");
-      answerBuffer.append("<a href=");
-      answerBuffer.append(answer_link);
-      answerBuffer.append(">");
-      answerBuffer.append(page_name);
-      answerBuffer.append("</a>");
-      answerBuffer.append("</body></html>");
+    String answer_link = null;
+    StringBuffer answerBuffer = new StringBuffer();
+    answerBuffer.append("<html><body>");
+    answerBuffer.append("<a>");
+    answerBuffer.append(userName);
+    answerBuffer.append("</a> ");
+    answerBuffer.append("<font color=\"#696969\">");
+    String act_key = activityInfo.templateParams.get("ActivityType");
+    String act_key_des = null;
+    if (act_key.equalsIgnoreCase("QuestionUpdate")) {
+      act_key_des = LocalizationHelper.getInstance().getString("HasUpdatedQuestion");
+    } else if (act_key.equalsIgnoreCase("QuestionAdd")) {
+      act_key_des = LocalizationHelper.getInstance().getString("HasAskAnswer");
+    } else if (act_key.equalsIgnoreCase("AnswerAdd")) {
+      act_key_des = LocalizationHelper.getInstance().getString("HasAnswerQuestion");
+    }
+    answerBuffer.append(act_key_des);
+    answerBuffer.append("</font>");
+    answerBuffer.append("<br>");
+    answer_link = activityInfo.templateParams.get("Link");
+    String page_name = activityInfo.templateParams.get("Name");
+    answerBuffer.append("<a href=");
+    answerBuffer.append(answer_link);
+    answerBuffer.append(">");
+    answerBuffer.append(page_name);
+    answerBuffer.append("</a>");
+    answerBuffer.append("</body></html>");
 
-      textViewName.setText(Html.fromHtml(answerBuffer.toString()), TextView.BufferType.SPANNABLE);
+    textViewName.setText(Html.fromHtml(answerBuffer.toString()), TextView.BufferType.SPANNABLE);
 
-      String answerBody = activityInfo.getBody();
-      if (answerBody != null) {
-        answerBody = new String(answerBody.getBytes("ISO-8859-1"), "UTF-8");
-        textViewMessage.setText(Html.fromHtml(answerBody), TextView.BufferType.SPANNABLE);
-      }
-    } catch (UnsupportedEncodingException e) {
+    String answerBody = activityInfo.getBody();
+    if (answerBody != null) {
+      textViewMessage.setText(Html.fromHtml(answerBody), TextView.BufferType.SPANNABLE);
     }
   }
 
   private void setActivityTypeCalendar() {
-    try {
-      StringBuffer forumBuffer = new StringBuffer();
-      forumBuffer.append("<html><body>");
-      String forumUserName = new String(activityInfo.getUserName().getBytes("ISO-8859-1"), "UTF-8");
-      forumBuffer.append(forumUserName);
-      forumBuffer.append(" ");
-      String actType = activityInfo.templateParams.get("EventType");
-      String actTypeDesc = null;
-      String forumName = null;
-      forumBuffer.append("<font color=\"#696969\">");
-      if (actType.equalsIgnoreCase("EventAdded")) {
-        actTypeDesc = LocalizationHelper.getInstance().getString("AddedAnEvent");
-      } else if (actType.equalsIgnoreCase("EventUpdated")) {
-        actTypeDesc = LocalizationHelper.getInstance().getString("UpdatedAnEvent");
-      } else if (actType.equalsIgnoreCase("TaskAdded")) {
-        actTypeDesc = LocalizationHelper.getInstance().getString("AddedATask");
-      } else if (actType.equalsIgnoreCase("TaskUpdated")) {
-        actTypeDesc = LocalizationHelper.getInstance().getString("UpdatedATask");
-      }
-      forumBuffer.append(actTypeDesc);
-      forumBuffer.append("</font>");
-      forumBuffer.append("<br>");
-      forumBuffer.append("<a>");
-      forumName = activityInfo.templateParams.get("EventSummary");
-      forumName = new String(forumName.getBytes("ISO-8859-1"), "UTF-8");
-      forumBuffer.append("<font color=\"#000000\">");
-      forumBuffer.append(forumName);
-      forumBuffer.append("</font>");
-      forumBuffer.append("</a>");
-      forumBuffer.append("</body></html>");
-
-      textViewName.setText(Html.fromHtml(forumBuffer.toString()), TextView.BufferType.SPANNABLE);
-      setCaledarContent(textViewMessage);
-
-    } catch (UnsupportedEncodingException e) {
+    StringBuffer forumBuffer = new StringBuffer();
+    forumBuffer.append("<html><body>");
+    forumBuffer.append(userName);
+    forumBuffer.append(" ");
+    String actType = activityInfo.templateParams.get("EventType");
+    String actTypeDesc = null;
+    String forumName = null;
+    forumBuffer.append("<font color=\"#696969\">");
+    if (actType.equalsIgnoreCase("EventAdded")) {
+      actTypeDesc = LocalizationHelper.getInstance().getString("AddedAnEvent");
+    } else if (actType.equalsIgnoreCase("EventUpdated")) {
+      actTypeDesc = LocalizationHelper.getInstance().getString("UpdatedAnEvent");
+    } else if (actType.equalsIgnoreCase("TaskAdded")) {
+      actTypeDesc = LocalizationHelper.getInstance().getString("AddedATask");
+    } else if (actType.equalsIgnoreCase("TaskUpdated")) {
+      actTypeDesc = LocalizationHelper.getInstance().getString("UpdatedATask");
     }
+    forumBuffer.append(actTypeDesc);
+    forumBuffer.append("</font>");
+    forumBuffer.append("<br>");
+    forumBuffer.append("<a>");
+    forumName = activityInfo.templateParams.get("EventSummary");
+    forumBuffer.append("<font color=\"#000000\">");
+    forumBuffer.append(forumName);
+    forumBuffer.append("</font>");
+    forumBuffer.append("</a>");
+    forumBuffer.append("</body></html>");
+
+    textViewName.setText(Html.fromHtml(forumBuffer.toString()), TextView.BufferType.SPANNABLE);
+    setCaledarContent(textViewMessage);
 
   }
 
   private void setCaledarContent(TextView textView) {
-    try {
-      StringBuffer caledarBuffer = new StringBuffer();
-      caledarBuffer.append("<html><body>");
-      caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarDescription"));
-      caledarBuffer.append("\n");
-      String description = activityInfo.templateParams.get("EventDescription");
-      if (description != null) {
-        description = new String(description.getBytes("ISO-8859-1"), "UTF-8");
-        caledarBuffer.append(description);
-      }
-      caledarBuffer.append("<br>");
-      caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarLocation"));
-      caledarBuffer.append(" ");
-      String location = activityInfo.templateParams.get("EventLocale");
-      if (location != null) {
-        location = new String(location.getBytes("ISO-8859-1"), "UTF-8");
-        caledarBuffer.append(location);
-      }
-      caledarBuffer.append("<br>");
-      caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarStart"));
-      caledarBuffer.append(" ");
-      String startTime = activityInfo.templateParams.get("EventStartTime");
-      startTime = PhotoUltils.getDateFromString(startTime);
-      caledarBuffer.append(startTime);
-      caledarBuffer.append("<br>");
-      caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarEnd"));
-      caledarBuffer.append(" ");
-      String endTime = activityInfo.templateParams.get("EventEndTime");
-      endTime = PhotoUltils.getDateFromString(endTime);
-      caledarBuffer.append(endTime);
-      caledarBuffer.append("</body></html>");
-      textView.setText(Html.fromHtml(caledarBuffer.toString()));
-    } catch (UnsupportedEncodingException e) {
+    StringBuffer caledarBuffer = new StringBuffer();
+    caledarBuffer.append("<html><body>");
+    caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarDescription"));
+    caledarBuffer.append("\n");
+    String description = activityInfo.templateParams.get("EventDescription");
+    if (description != null) {
+      caledarBuffer.append(description);
     }
+    caledarBuffer.append("<br>");
+    caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarLocation"));
+    caledarBuffer.append(" ");
+    String location = activityInfo.templateParams.get("EventLocale");
+    if (location != null) {
+      caledarBuffer.append(location);
+    }
+    caledarBuffer.append("<br>");
+    caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarStart"));
+    caledarBuffer.append(" ");
+    String startTime = activityInfo.templateParams.get("EventStartTime");
+    startTime = PhotoUltils.getDateFromString(startTime);
+    caledarBuffer.append(startTime);
+    caledarBuffer.append("<br>");
+    caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarEnd"));
+    caledarBuffer.append(" ");
+    String endTime = activityInfo.templateParams.get("EventEndTime");
+    endTime = PhotoUltils.getDateFromString(endTime);
+    caledarBuffer.append(endTime);
+    caledarBuffer.append("</body></html>");
+    textView.setText(Html.fromHtml(caledarBuffer.toString()));
   }
 
   private void setActivityTypeLink() {
@@ -449,20 +402,13 @@ public class SocialActivityStreamItem extends LinearLayout {
     String templateComment = activityInfo.templateParams.get("comment");
     String description = activityInfo.templateParams.get("description").trim();
     linkBuffer.append("<html><body>");
-    try {
-      linkTitle = new String(linkTitle.getBytes("ISO-8859-1"), "UTF-8");
 
-      if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
-        String commentStr = new String(templateComment.getBytes("ISO-8859-1"), "UTF-8");
-        textViewMessage.setText(Html.fromHtml(commentStr), TextView.BufferType.SPANNABLE);
-        // textViewCommnet.setVisibility(View.VISIBLE);
-      }
-      if (description != null) {
-        description = new String(description.getBytes("ISO-8859-1"), "UTF-8");
-        textViewCommnet.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
-        textViewCommnet.setVisibility(View.VISIBLE);
-      }
-    } catch (UnsupportedEncodingException e) {
+    if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
+      textViewMessage.setText(Html.fromHtml(templateComment), TextView.BufferType.SPANNABLE);
+    }
+    if (description != null) {
+      textViewCommnet.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
+      textViewCommnet.setVisibility(View.VISIBLE);
     }
     linkBuffer.append("<a href=");
     linkBuffer.append(linkUrl);
@@ -474,6 +420,10 @@ public class SocialActivityStreamItem extends LinearLayout {
     String imageParams = activityInfo.templateParams.get("image");
     if ((imageParams != null) && (imageParams.contains("http"))) {
       displayAttachImage(imageParams, "", linkBuffer.toString());
+    } else {
+      textViewTempMessage.setText(Html.fromHtml(linkBuffer.toString()),
+                                  TextView.BufferType.SPANNABLE);
+      textViewTempMessage.setVisibility(View.VISIBLE);
     }
   }
 
@@ -487,8 +437,6 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void initAttachStubView(final String url, String fileName, String description) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
-    attachImage.setMaxHeight(200);
-    attachImage.setMaxWidth(200);
 
     if (txtViewFileName == null) {
       txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
@@ -511,18 +459,6 @@ public class SocialActivityStreamItem extends LinearLayout {
                                                                 attachImage,
                                                                 ExoConnectionUtils._strCookie);
 
-//      String title = new String(activityInfo.getTitle());
-//      String linkTagStr = "<a href=\"";
-//      int index = title.indexOf(linkTagStr);
-//      String modifiedTitle = title;
-//      if (index >= 0) {
-//        modifiedTitle = title.substring(0, index + linkTagStr.length());
-//        modifiedTitle += encodedUrl;
-//        index = title.indexOf("\">");
-//        modifiedTitle += title.substring(index);
-//      }
-//
-//      textViewMessage.setText(Html.fromHtml(modifiedTitle), TextView.BufferType.SPANNABLE);
       if (isDetail) {
         attachImage.setOnClickListener(new OnClickListener() {
 

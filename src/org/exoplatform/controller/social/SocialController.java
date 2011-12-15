@@ -131,7 +131,7 @@ public class SocialController {
                 SocialServiceHelper.getInstance().getActivityService().like(activity);
 
               onLoad();
-            } catch (SocialClientLibException e) {
+            } catch (Exception e) {
               WarningDialog dialog = new WarningDialog(mContext,
                                                        titleString,
                                                        e.getMessage(),
