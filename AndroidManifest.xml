@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.exoplatform"
     android:versionCode="1"
-    android:versionName="2.0-Beta3-SNAPSHOT" >
+    android:versionName="2.1-SNAPSHOT" >
 
     <!-- Application Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -26,7 +26,7 @@
     <application
         android:debuggable="true"
         android:icon="@drawable/application_icon"
-        android:label="eXo Application"
+        android:label="eXo Mobile"
         android:name=".ExoApplication"
         android:theme="@style/Theme.eXo" >
 
