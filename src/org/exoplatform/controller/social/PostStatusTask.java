@@ -11,6 +11,7 @@ import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.utils.WebdavMethod;
@@ -69,17 +70,18 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
         File file = new File(sdcard_temp_dir);
         String imageDir = uploadUrl + "/" + file.getName();
         if (file != null) {
-          ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, "image/jpeg");
+          ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, ExoConstants.IMAGE_TYPE);
           Map<String, String> templateParams = new HashMap<String, String>();
 
           activityImlp.setType("DOC_ACTIVITY");
           String pathExtension = "jcr/repository/collaboration";
           int indexOfDocLink = imageDir.indexOf(pathExtension);
-          String docLink = "/portal/rest/" + imageDir.substring(indexOfDocLink);
+          StringBuffer docBuffer = new StringBuffer("/portal/rest/");
+          docBuffer.append(imageDir.substring(indexOfDocLink));
           String docPath = imageDir.substring(indexOfDocLink + pathExtension.length());
           templateParams.put("DOCPATH", docPath);
           templateParams.put("MESSAGE", "");
-          templateParams.put("DOCLINK", docLink);
+          templateParams.put("DOCLINK", docBuffer.toString());
           templateParams.put("WORKSPACE", "collaboration");
           templateParams.put("REPOSITORY", "repository");
           templateParams.put("DOCNAME", file.getName());
