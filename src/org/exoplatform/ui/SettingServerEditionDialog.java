@@ -15,30 +15,31 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SettingServerEditionDialog extends Dialog implements android.view.View.OnClickListener {
 
-  private Button    btnOK;
+  private Button        btnOK;
 
-  private Button    btnDeleteCancel;
+  private Button        btnDeleteCancel;
 
-  private TextView  txtvTittle;
+  private TextView      txtvTittle;
 
-  private TextView  txtvServerName;
+  private TextView      txtvServerName;
 
-  private TextView  txtvServerUrl;
+  private TextView      txtvServerUrl;
 
-  private EditText  editTextServerName;
+  private EditText      editTextServerName;
 
-  private EditText  editTextServerUrl;
+  private EditText      editTextServerUrl;
 
   private ServerObjInfo serverObj;
 
-  private Context   mContext;
+  private Context       mContext;
 
-  private boolean   isNewServer;
+  private boolean       isNewServer;
 
-  private ListView  listViewServer;
+  private ListView      listViewServer;
 
   public SettingServerEditionDialog(Context context, ListView listView) {
     super(context);
@@ -65,14 +66,14 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
     editTextServerName = (EditText) findViewById(R.id.EditText_Server_Name);
     editTextServerUrl = (EditText) findViewById(R.id.EditText_Server_URL);
-    
+
     isNewServer = ServerSettingHelper.getInstance().getIsNewServer();
     if (isNewServer) {
       serverObj = new ServerObjInfo();
       serverObj._bSystemServer = false;
       serverObj._strServerName = "";
       serverObj._strServerUrl = "";
-      
+
     } else {
       serverObj = ServerSettingHelper.getInstance()
                                      .getServerInfoList()
@@ -84,10 +85,10 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
     editTextServerUrl.setText(serverObj._strServerUrl);
 
     changeLanguage();
-    
+
   }
 
-//  @Override
+  // @Override
   public void onClick(View view) {
     ServerObjInfo myServerObj = new ServerObjInfo();
 
@@ -95,22 +96,26 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
     URLAnalyzer urlAnanyzer = new URLAnalyzer();
     myServerObj._strServerUrl = urlAnanyzer.parserURL(editTextServerUrl.getText().toString());
-    
-    myServerObj._strServerName = myServerObj._strServerName.trim();
-    myServerObj._strServerUrl = myServerObj._strServerUrl.trim();
-    
-    
-    SettingServerEditionController editController = new SettingServerEditionController(mContext);
-    if (view == btnOK) {
-      editController.onAccept(myServerObj, myServerObj);
+    if (myServerObj._strServerUrl != null) {
+      myServerObj._strServerName = myServerObj._strServerName.trim();
+      myServerObj._strServerUrl = myServerObj._strServerUrl.trim();
+
+      SettingServerEditionController editController = new SettingServerEditionController(mContext);
+      if (view.equals(btnOK)) {
+        editController.onAccept(myServerObj, myServerObj);
+      }
+
+      if (view.equals(btnDeleteCancel)) {
+        editController.onDelete(myServerObj, myServerObj);
+      }
+
+      dismiss();
+      editController.onResetAdapter(listViewServer);
+    } else {
+      String serverNameURLInvalid = LocalizationHelper.getInstance().getString("SpecialCharacters");
+      Toast.makeText(mContext, serverNameURLInvalid, Toast.LENGTH_SHORT).show();
     }
 
-    if (view == btnDeleteCancel) {
-      editController.onDelete(myServerObj, myServerObj);
-    }
-    
-    dismiss();
-    editController.onResetAdapter(listViewServer);
   }
 
   public void changeLanguage() {
