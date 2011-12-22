@@ -84,9 +84,17 @@ public class ExoConnectionUtils {
 
   private static String splitLines(String string) {
     String lines = "";
+
     for (int i = 0; i < string.length(); i += splitLinesAt) {
-      lines += string.substring(i, Math.min(string.length(), i + splitLinesAt));
-      lines += "\r\n";
+      StringBuffer lineBuffer = new StringBuffer();
+      lineBuffer.append(lines);
+      lineBuffer.append(string.substring(i, Math.min(string.length(), i + splitLinesAt)));
+      lineBuffer.append("\r\n");
+      // lines += string.substring(i, Math.min(string.length(), i +
+      // splitLinesAt));
+      //
+      // lines += "\r\n";
+      lines = lineBuffer.toString();
     }
     return lines;
 
@@ -94,9 +102,14 @@ public class ExoConnectionUtils {
 
   // Encode String to Base64String
   public static String stringEncodedWithBase64(String str) {
-    String base64code = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz" + "0123456789"
-        + "+/";
+    StringBuffer buffer = new StringBuffer();
+    buffer.append("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    buffer.append("abcdefghijklmnopqrstuvwxyz");
+    buffer.append("0123456789");
+    buffer.append("+/");
+    String base64code = buffer.toString();
     String encoded = "";
+
     byte[] stringArray;
     try {
       // use appropriate encoding string!
@@ -114,9 +127,16 @@ public class ExoConnectionUtils {
     for (int i = 0; i < stringArray.length; i += 3) {
       int j = ((stringArray[i] & 0xff) << 16) + ((stringArray[i + 1] & 0xff) << 8)
           + (stringArray[i + 2] & 0xff);
-
-      encoded = encoded + base64code.charAt((j >> 18) & 0x3f) + base64code.charAt((j >> 12) & 0x3f)
-          + base64code.charAt((j >> 6) & 0x3f) + base64code.charAt(j & 0x3f);
+      StringBuffer encodedBuffer = new StringBuffer();
+      encodedBuffer.append(encoded);
+      encodedBuffer.append(base64code.charAt((j >> 18) & 0x3f));
+      encodedBuffer.append(base64code.charAt((j >> 12) & 0x3f));
+      encodedBuffer.append(base64code.charAt((j >> 6) & 0x3f));
+      encodedBuffer.append(base64code.charAt(j & 0x3f));
+      encoded = encodedBuffer.toString();
+      // encoded = encoded + base64code.charAt((j >> 18) & 0x3f) +
+      // base64code.charAt((j >> 12) & 0x3f)
+      // + base64code.charAt((j >> 6) & 0x3f) + base64code.charAt(j & 0x3f);
     }
     // replace encoded padding nulls with "="
     return splitLines(encoded.substring(0, encoded.length() - paddingCount)
@@ -139,7 +159,6 @@ public class ExoConnectionUtils {
       try {
         is.close();
       } catch (IOException e) {
-        e.printStackTrace();
       }
     }
     // System.out.println("convertStreamToString "+sb.toString());

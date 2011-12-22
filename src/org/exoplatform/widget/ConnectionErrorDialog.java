@@ -34,7 +34,7 @@ public class ConnectionErrorDialog extends Dialog implements android.view.View.O
   }
 
   public void onClick(View view) {
-    if (view == okButton) {
+    if (view.equals(okButton)) {
       dismiss();
     }
   }

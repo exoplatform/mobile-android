@@ -39,7 +39,7 @@ public class UnreadableFileDialog extends Dialog implements android.view.View.On
   }
 
   public void onClick(View view) {
-    if (view == okButton) {
+    if (view.equals(okButton)) {
       dismiss();
     }
   }

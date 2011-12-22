@@ -70,12 +70,6 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     init();
   }
 
-  // @Override
-  // protected void onResume() {
-  // super.onResume();
-  // init();
-  // }
-
   private void init() {
     txtvLanguage = (TextView) findViewById(R.id.TextView_Language);
     txtvServer = (TextView) findViewById(R.id.TextView_Server_List);
@@ -102,13 +96,12 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     String serverVersion = ServerSettingHelper.getInstance().getServerVersion();
     TextView severValueText = (TextView) findViewById(R.id.setting_server_info_value_text);
     severValueText.setText(serverVersion);
-    
+
     serverEditionText = (TextView) findViewById(R.id.setting_server_edition_info_title_text);
     String serverEdition = ServerSettingHelper.getInstance().getServerEdition();
     TextView severEditionValueText = (TextView) findViewById(R.id.setting_server_edition_info_value_text);
     severEditionValueText.setText(serverEdition);
-    
-    
+
     applicationInfoText = (TextView) findViewById(R.id.setting_app_info_title_text);
     TextView appValueText = (TextView) findViewById(R.id.setting_app_info_value_text);
     String appVersion = ServerSettingHelper.getInstance().getApplicationVersion();
@@ -165,15 +158,15 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
   // @Override
   public void onClick(View view) {
-    if (view == vEngLish) {
+    if (view.equals(vEngLish)) {
       setttingController.setEnglishLocation();
       updateLocation(ExoConstants.ENGLISH_LOCALIZATION);
     }
-    if (view == vFrench) {
+    if (view.equals(vFrench)) {
       setttingController.setFrenchLocation();
       updateLocation(ExoConstants.FRENCH_LOCALIZATION);
     }
-    if (view == modifyServerBtn) {
+    if (view.equals(modifyServerBtn)) {
       if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {
         WarningDialog dialog = new WarningDialog(SettingActivity.this,
                                                  titleString,

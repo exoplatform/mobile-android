@@ -30,7 +30,7 @@ public class WarningDialog extends Dialog implements android.view.View.OnClickLi
   }
 
   public void onClick(View view) {
-    if (view == okButton) {
+    if (view.equals(okButton)) {
       dismiss();
     }
   }

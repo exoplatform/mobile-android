@@ -8,7 +8,6 @@ import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.SocialActivityUtil;
-import org.exoplatform.utils.URLAnalyzer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -49,8 +48,6 @@ public class SocialActivityStreamItem extends LinearLayout {
   private TextView           textViewTime;
 
   private View               attachStubView;
-
-  private TextView           txtViewFileName;
 
   private String             domain;
 
@@ -150,7 +147,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
       String tempMessage = activityInfo.templateParams.get("MESSAGE");
       if (tempMessage != null) {
-        textViewTempMessage.setText(tempMessage);
+        textViewTempMessage.setText(tempMessage.trim());
         textViewTempMessage.setVisibility(View.VISIBLE);
       }
 
@@ -158,7 +155,8 @@ public class SocialActivityStreamItem extends LinearLayout {
       if (docLink != null) {
         String docName = activityInfo.templateParams.get("DOCNAME");
         if (PhotoUltils.isImages(docName)) {
-          displayAttachImage(domain + docLink, docName, null);
+          String url = domain + docLink;
+          displayAttachImage(url, docName, null);
         }
       }
 
@@ -183,8 +181,11 @@ public class SocialActivityStreamItem extends LinearLayout {
       if (contentLink != null) {
         String contentType = activityInfo.templateParams.get("mimeType");
         if (contentType != null && (contentType.equalsIgnoreCase("image/jpeg"))) {
-          contentLink = domain + "/rest/private/jcr/" + contentLink;
-          displayAttachImage(contentLink, "", null);
+          StringBuffer buffer = new StringBuffer();
+          buffer.append(domain);
+          buffer.append("/portal/rest/jcr/");
+          buffer.append(contentLink);
+          displayAttachImage(buffer.toString(), "", null);
         }
 
       }
@@ -437,10 +438,7 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void initAttachStubView(final String url, String fileName, String description) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
-
-    if (txtViewFileName == null) {
-      txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
-    }
+    TextView txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
     if (description == null)
       txtViewFileName.setText(fileName);
     else {
@@ -454,8 +452,8 @@ public class SocialActivityStreamItem extends LinearLayout {
     }
 
     if (SocialDetailHelper.getInstance().taskIsFinish = true) {
-      String encodedUrl = URLAnalyzer.encodeUrl(url);
-      SocialDetailHelper.getInstance().imageDownloader.download(encodedUrl,
+      // String encodedUrl = URLAnalyzer.encodeUrl(url);
+      SocialDetailHelper.getInstance().imageDownloader.download(url,
                                                                 attachImage,
                                                                 ExoConnectionUtils._strCookie);
 
@@ -464,8 +462,8 @@ public class SocialActivityStreamItem extends LinearLayout {
 
           // @Override
           public void onClick(View v) {
-            String encodedUrl = URLAnalyzer.encodeUrl(url);
-            SocialDetailHelper.getInstance().setAttachedImageUrl(encodedUrl);
+            // String encodedUrl = URLAnalyzer.encodeUrl(url);
+            SocialDetailHelper.getInstance().setAttachedImageUrl(url);
             Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);
             mContext.startActivity(intent);
           }

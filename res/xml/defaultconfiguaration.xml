@@ -8,6 +8,7 @@
 	</Languages>
 	<Servers>
 		<server name="eXo Intranet" serverURL="http://int.exoplatform.org" />
+		<server name="Cloud workspaces" serverURL="http://exoplatform.cloud-workspaces.com" />
 		<server name="Your Cloud-workspaces" serverURL="http://yourtenant.cloud-workspaces.com" />
 	</Servers>
 </xml>

@@ -118,13 +118,13 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
 
   // @Override
   public void onClick(View view) {
-    if (view == editTextComment) {
+    if (view.equals(editTextComment)) {
       Intent intent = new Intent(this, ComposeMessageActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_COMMENT_TYPE);
       startActivity(intent);
     }
-    if (view == likeButton) {
+    if (view.equals(likeButton)) {
       detailController.onLikePress();
     }
   }

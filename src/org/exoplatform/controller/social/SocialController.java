@@ -8,7 +8,6 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.ui.social.ComposeMessageActivity;
 import org.exoplatform.ui.social.SocialActivity;
@@ -42,8 +41,6 @@ public class SocialController {
 
   private LinearLayout   activityStreamWrap;
 
-  // private boolean isShowMore = false;
-
   private String         showMoreText;
 
   private String         today;
@@ -61,6 +58,8 @@ public class SocialController {
   private String         okString;
 
   private String         titleString;
+
+//  private ListView       socialListView;
 
   public SocialController(SocialActivity context, LinearLayout layout) {
     mContext = context;
@@ -88,6 +87,12 @@ public class SocialController {
       mLoadTask = null;
     }
   }
+
+//  public void setListAdapter(ArrayList<SocialActivityInfo> result) {
+//    SocialAdapter adapter = new SocialAdapter(mContext, result);
+//    socialListView.setAdapter(adapter);
+//    socialListView.setOnScrollListener(new ListAdapterScrollListener(adapter));
+//  }
 
   public void setActivityList(ArrayList<SocialActivityInfo> result) {
 
@@ -174,7 +179,6 @@ public class SocialController {
       activityStreamWrap.addView(item, params);
 
     }
-    // System.out.println("result size =   " + result.size());
     if (result.size() > number_of_activity || result.size() == number_of_activity) {
       SocialShowMoreItem showmore = new SocialShowMoreItem(mContext);
       showmore.showMoreBtn.setText(showMoreText);

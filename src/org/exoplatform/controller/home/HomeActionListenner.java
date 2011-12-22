@@ -15,7 +15,6 @@ import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
 import org.exoplatform.ui.ChatListActivity;
 import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.ui.DocumentActivity;
-import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -129,13 +128,13 @@ public class HomeActionListenner implements OnItemClickListener {
     mContext.startActivity(intent);
   }
 
-  private void launchSettingApp() {
+  /*private void launchSettingApp() {
     Intent next = new Intent(mContext, SettingActivity.class);
     next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     next.putExtra(ExoConstants.SETTING_TYPE, 1);
     mContext.startActivity(next);
 
-  }
+  }*/
 
   private void changeLanguage() {
     LocalizationHelper location = LocalizationHelper.getInstance();

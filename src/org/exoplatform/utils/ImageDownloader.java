@@ -30,7 +30,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Debug;
 import android.os.Handler;
 import android.widget.ImageView;
 
@@ -149,7 +148,7 @@ public class ImageDownloader implements OnLowMemoryListener {
     sSoftBitmapCache.clear();
   }
 
-  private void resetPurgeTimer() {
+  public void resetPurgeTimer() {
     purgeHandler.removeCallbacks(purger);
     purgeHandler.postDelayed(purger, DELAY_BEFORE_PURGE);
   }
@@ -272,21 +271,25 @@ public class ImageDownloader implements OnLowMemoryListener {
         if (entity != null) {
           InputStream inputStream = null;
           try {
-            long heapFreeSize = Debug.getNativeHeapFreeSize();
             Bitmap bitmap = null;
             inputStream = entity.getContent();
+            long contentLength = entity.getContentLength();
             if (inputStream != null) {
-              if (entity.getContentLength() > heapFreeSize) {
-                BitmapFactory.Options bmOption = new BitmapFactory.Options();
-                bmOption.inSampleSize = 4;
-                bitmap = BitmapFactory.decodeStream(inputStream, null, bmOption);
+              BitmapFactory.Options bmOption = new BitmapFactory.Options();
+              if (contentLength < 10000) {
+                bmOption.inSampleSize = 1;
+              } else if (contentLength < 50000) {
+                bmOption.inSampleSize = 2;
               } else {
-                bitmap = BitmapFactory.decodeStream(inputStream);
+                bmOption.inSampleSize = 4;
               }
-            }
-            bitmap = PhotoUltils.resizeImage(bitmap, 640);
-            return bitmap;
 
+              bitmap = BitmapFactory.decodeStream(inputStream, null, bmOption);
+            }
+            return bitmap;
+          } catch (OutOfMemoryError e) {
+            clearCache();
+            return null;
           } catch (Exception e) {
             return null;
           } finally {

@@ -30,7 +30,7 @@ public class ExoConstants {
 
   public static final int    COMPOSE_COMMENT_TYPE          = 1;
 
-  public static final int    NUMBER_OF_ACTIVITY            = 50;
+  public static final int    NUMBER_OF_ACTIVITY            = 20;
 
   public static final int    NUMBER_OF_MORE_ACTIVITY       = 20;
 

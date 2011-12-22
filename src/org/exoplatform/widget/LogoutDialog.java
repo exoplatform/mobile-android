@@ -36,12 +36,12 @@ public class LogoutDialog extends Dialog implements OnClickListener {
 
 //  @Override
   public void onClick(View view) {
-    if (view == okButton) {
+    if (view.equals(okButton)) {
       homeController.onFinish();
       dismiss();
     }
 
-    if (view == cancelButton) {
+    if (view.equals(cancelButton)) {
       dismiss();
     }
   }

@@ -26,4 +26,11 @@
         </LinearLayout>
     </ScrollView>
 
+    <!-- <ListView android:background="@null"
+        android:id="@+id/social_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fadingEdge="none" >
+    </ListView> -->
+
 </RelativeLayout>

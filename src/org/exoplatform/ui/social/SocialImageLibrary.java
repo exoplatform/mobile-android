@@ -96,7 +96,6 @@ public class SocialImageLibrary extends MyActionBar {
   @Override
   public void onLowMemory() {
     super.onLowMemory();
-    System.out.println("onLowMemory()");
   }
   
   private void setAdapter(ArrayList<String> list) {

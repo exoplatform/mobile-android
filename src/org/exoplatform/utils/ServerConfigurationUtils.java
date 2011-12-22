@@ -38,16 +38,7 @@ import android.util.Xml;
 
 public class ServerConfigurationUtils {
 
-//  public ArrayList<ServerObj> _arrUserServerList;
-//
-//  public ArrayList<ServerObj> _arrDefaulServerList;
-//
-//  public ArrayList<ServerObj> _arrDeletedServerList;
-//
-//  public ArrayList<ServerObj> _arrServerList;
-
-  public static String        version;
-
+  public static String version;
 
   public ServerConfigurationUtils(Context context) {
 
@@ -189,8 +180,11 @@ public class ServerConfigurationUtils {
   public static ArrayList<ServerObjInfo> getServerListWithFileName(String name) {
 
     ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
-
-    String filePath = Environment.getExternalStorageDirectory() + "/eXo/" + name;
+    StringBuffer pathBuffer = new StringBuffer();
+    pathBuffer.append(Environment.getExternalStorageDirectory());
+    pathBuffer.append("/eXo/");
+    pathBuffer.append(name);
+    String filePath = pathBuffer.toString();
     File file = new File(filePath);
     if (!file.exists()) {
       return arrServerList;
@@ -241,15 +235,18 @@ public class ServerConfigurationUtils {
                                                     String fileName,
                                                     String appVersion) {
     boolean returnValue = false;
-    String path = Environment.getExternalStorageDirectory() + "/eXo/" + fileName;
-    File newxmlfile = new File(path);
+    StringBuffer pathBuffer = new StringBuffer();
+    pathBuffer.append(Environment.getExternalStorageDirectory());
+    pathBuffer.append("/eXo/");
+    pathBuffer.append(fileName);
+    File newxmlfile = new File(pathBuffer.toString());
     try {
       newxmlfile.createNewFile();
 
     } catch (IOException e) {
 
-    	if (Config.GD_ERROR_LOGS_ENABLED)
-    		Log.e("IOException", "exception in createNewFile() method");
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("IOException", "exception in createNewFile() method");
       return returnValue;
     }
 
@@ -260,8 +257,8 @@ public class ServerConfigurationUtils {
       fileos = new FileOutputStream(newxmlfile);
 
     } catch (FileNotFoundException e) {
-    	if (Config.GD_ERROR_LOGS_ENABLED)
-    		Log.e("FileNotFoundException", "can't create FileOutputStream");
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("FileNotFoundException", "can't create FileOutputStream");
     }
 
     // we create a XmlSerializer in order to write xml data
@@ -311,8 +308,8 @@ public class ServerConfigurationUtils {
 
     } catch (Exception e) {
 
-    	if (Config.GD_ERROR_LOGS_ENABLED)
-    		Log.e("Exception", "error occurred while creating xml file");
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("Exception", "error occurred while creating xml file");
     }
 
     return returnValue;

@@ -29,6 +29,8 @@ public class SocialActivity extends MyActionBar {
   private String               title;
 
   private String               emptyString;
+  
+//  private ListView socialListView;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,11 @@ public class SocialActivity extends MyActionBar {
     getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
     setActionBarContentView(R.layout.activitybrowserview);
     socialActivity = this;
+//    socialListView = (ListView) findViewById(R.id.social_listview);
+//    socialListView.setDividerHeight(0);
+//    socialListView.setSmoothScrollbarEnabled(true);
+//    socialListView.setScrollbarFadingEnabled(false);
+    
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     changeLanguage();
     init();

@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
@@ -151,6 +152,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       fis.close();
       ImageView image = new ImageView(composeMessageActivity);
       image.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+      image.setScaleType(ScaleType.FIT_XY);
       image.setImageBitmap(bitmap);
       image.setOnClickListener(new OnClickListener() {
 
@@ -160,7 +162,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
           composeMessageActivity.startActivity(intent);
         }
       });
-      LayoutParams params = new LayoutParams(50, 50);
+      LayoutParams params = new LayoutParams(70, 50);
       params.setMargins(2, 2, 2, 2);
       fileAttachWrap.removeAllViews();
       fileAttachWrap.addView(image, params);
@@ -183,10 +185,11 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
   // @Override
   public void onClick(View view) {
 
-    if (view == sendButton) {
+    if (view.equals(sendButton)) {
       composeMessage = composeEditText.getText().toString();
       messageController.onSendMessage(composeMessage, sdcard_temp_dir);
-    } else if (view == cancelButton) {
+    }
+    if (view.equals(cancelButton)) {
       destroy();
     }
   }

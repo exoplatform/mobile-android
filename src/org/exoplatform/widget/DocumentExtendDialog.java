@@ -1,6 +1,5 @@
 package org.exoplatform.widget;
 
-
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -84,7 +83,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
 
   // @Override
   public void onClick(View view) {
-    if (view == okButton) {
+    if (view.equals(okButton)) {
       folderName = actionEditText.getText().toString();
       if ((folderName != null) && (folderName.length() > 0)) {
         int index = selectedFile.urlStr.lastIndexOf("/");
@@ -122,7 +121,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
       }
 
     }
-    if (view == cancelButton) {
+    if (view.equals(cancelButton)) {
       dismiss();
     }
 

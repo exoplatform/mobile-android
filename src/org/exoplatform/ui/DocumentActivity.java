@@ -19,7 +19,6 @@ import org.exoplatform.utils.WebdavMethod;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WaitingDialog;
-import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
 import android.content.Intent;

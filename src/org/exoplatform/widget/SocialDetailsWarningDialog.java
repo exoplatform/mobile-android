@@ -41,7 +41,7 @@ public class SocialDetailsWarningDialog extends Dialog implements android.view.V
   }
 
   public void onClick(View view) {
-    if (view == okButton) {
+    if (view.equals(okButton)) {
       dismiss();
       if (hasContent == false) {
         ((Activity) mContext).finish();

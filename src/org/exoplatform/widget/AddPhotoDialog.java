@@ -78,20 +78,20 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
   }
 
   public void onClick(View view) {
-    if (view == takePhotoButton) {
+    if (view.equals(takePhotoButton)) {
       dismiss();
       if (messageController == null)
         fileActionDialog._documentActionAdapter.initCamera();
       else
         messageController.initCamera();
     }
-    if (view == libraryButton) {
+    if (view.equals(libraryButton)) {
       dismiss();
       Intent intent = new Intent(mContext, SocialPhotoAlbums.class);
       mContext.startActivity(intent);
 
     }
-    if (view == cancelButton) {
+    if (view.equals(cancelButton)) {
       dismiss();
     }
   }

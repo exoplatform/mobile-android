@@ -24,110 +24,118 @@ import android.util.Log;
 import android.webkit.URLUtil;
 
 /**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          exo@exoplatform.com
- * Aug 25, 2011  
+ * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Aug
+ * 25, 2011
  */
 public class URLAnalyzer {
 
-  public URLAnalyzer()
-  {
-    
+  public URLAnalyzer() {
+
   }
-  
-  public boolean isValidUrl(String urlStr)
-  {
+
+  public boolean isValidUrl(String urlStr) {
     return URLUtil.isValidUrl(urlStr);
   }
-  
-  public String parserURL(String urlStr)
-  {
-    
-    if(urlStr == null || urlStr.length() == 0)
+
+  public String parserURL(String urlStr) {
+
+    if (urlStr == null || urlStr.length() == 0)
       return "";
-    
+
     String url = urlStr;
-    
+
     boolean isHTTPSUrl = false;
 
-
     try {
-      
+
       int indexOfProtocol;
-      
-      
+
       indexOfProtocol = urlStr.indexOf(ExoConstants.HTTP_PROTOCOL);
-      if(indexOfProtocol == 0)
+      if (indexOfProtocol == 0)
         url = urlStr.substring(ExoConstants.HTTP_PROTOCOL.length() + 3);
-      
+
       indexOfProtocol = urlStr.indexOf(ExoConstants.HTTPS_PROTOCOL);
-      if(indexOfProtocol == 0) {
+      if (indexOfProtocol == 0) {
         url = urlStr.substring(ExoConstants.HTTPS_PROTOCOL.length() + 3);
         isHTTPSUrl = true;
       }
-      
-      while(url.charAt(0) == '/')
-      {
-        if(url.length() > 1)
+
+      while (url.charAt(0) == '/') {
+        if (url.length() > 1)
           url = url.substring(1);
         else
           url = null;
       }
-      
-      
+
     } catch (Exception e) {
       url = null;
     }
-    
-    
+
     try {
-      
-      URI uri;	
-    	
+
+      URI uri;
+      StringBuffer urlBuffer = new StringBuffer();
+
       if (!(isHTTPSUrl)) {
-    	  url = ExoConstants.HTTP_PROTOCOL + "://" + url;
-    	  uri = new URI(ExoConstants.HTTP_PROTOCOL + url);
-    	  url = ExoConstants.HTTP_PROTOCOL + "://" + uri.getHost();
+        urlBuffer.append(ExoConstants.HTTP_PROTOCOL);
+        urlBuffer.append("://");
+        urlBuffer.append(url);
+        uri = new URI(ExoConstants.HTTP_PROTOCOL + urlBuffer.toString());
+        urlBuffer = new StringBuffer();
+        urlBuffer.append(ExoConstants.HTTP_PROTOCOL);
+        urlBuffer.append("://");
+        urlBuffer.append(uri.getHost());
       } else {
-    	  url = ExoConstants.HTTPS_PROTOCOL + "://" + url;
-    	  uri = new URI(ExoConstants.HTTPS_PROTOCOL + url);
-    	  url = ExoConstants.HTTPS_PROTOCOL + "://" + uri.getHost();
+        urlBuffer.append(ExoConstants.HTTPS_PROTOCOL);
+        urlBuffer.append("://");
+        urlBuffer.append(url);
+        uri = new URI(ExoConstants.HTTPS_PROTOCOL + urlBuffer.toString());
+        urlBuffer = new StringBuffer();
+        urlBuffer.append(ExoConstants.HTTPS_PROTOCOL);
+        urlBuffer.append("://");
+        urlBuffer.append(uri.getHost());
       }
-      
-      int port = uri.getPort(); 
-      if(port > 0)
-        url += ":" + port; 
-      
+
+      int port = uri.getPort();
+      if (port > 0) {
+        urlBuffer.append(":");
+        urlBuffer.append(port);
+      }
+      url = urlBuffer.toString();
     } catch (URISyntaxException e) {
-    	if(Log.isLoggable("URISyntaxException", Log.ERROR)) {
-    		String msg = e.getMessage();
-    	    String reason = e.getReason();
-    	    Log.e("URISyntaxException",msg+"  "+reason);
-    	      
-    	}
-      
+      if (Log.isLoggable("URISyntaxException", Log.ERROR)) {
+        String msg = e.getMessage();
+        String reason = e.getReason();
+        Log.e("URISyntaxException", msg + "  " + reason);
+
+      }
+
       url = null;
     }
-    
+
     return url;
   }
-  
+
   public static String encodeUrl(String urlString) {
-	  
-	  String encodedUrl = "";
-	  try {
-		
-		  URL url = new URL(urlString);
-		  URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), 
-				  url.getPath(), url.getQuery(), url.getRef());
-			
-		  encodedUrl = uri.toASCIIString();
-			
-	  } catch (Exception e) {
-		
-	  }
-	  
-	  return encodedUrl;
+
+    String encodedUrl = "";
+    try {
+
+      URL url = new URL(urlString);
+      URI uri = new URI(url.getProtocol(),
+                        url.getUserInfo(),
+                        url.getHost(),
+                        url.getPort(),
+                        url.getPath(),
+                        url.getQuery(),
+                        url.getRef());
+
+      encodedUrl = uri.toASCIIString();
+
+    } catch (Exception e) {
+
+    }
+
+    return encodedUrl;
   }
 }

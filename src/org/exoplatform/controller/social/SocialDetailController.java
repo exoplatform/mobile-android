@@ -101,15 +101,8 @@ public class SocialDetailController {
           commentItem.comAvatarImage.setImageResource(ExoConstants.DEFAULT_AVATAR);
         } else
           commentItem.comAvatarImage.setUrl(avatarUrl);
-//        try {
           String commentName = comment.getCommentName();
-//          if (commentName != null) {
-//            String userName = new String(commentName.getBytes("ISO-8859-1"), "UTF-8");
             commentItem.comTextViewName.setText(commentName);
-//          }
-
-//        } catch (UnsupportedEncodingException e) {
-//        }
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()),
                                                TextView.BufferType.SPANNABLE);
         SocialActivityUtil.setTextLinkfy(commentItem.comTextViewMessage);
