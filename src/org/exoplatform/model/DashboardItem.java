@@ -3,13 +3,13 @@ package org.exoplatform.model;
 //	Dashboard tab
 public class DashboardItem {
 
-  public String          id;   // Dashboard ID
+  public String id;   // Dashboard ID
 
-  public String          html;    // Dashboard html
+  public String html; // Dashboard html
 
-  public String          link;    // Dashboard link
+  public String link; // Dashboard link
 
-  public String          label;    // Dashboard link
+  public String label; // Dashboard link
 
   // Constructor
 
