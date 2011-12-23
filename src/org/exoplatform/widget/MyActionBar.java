@@ -1,17 +1,14 @@
-
 package org.exoplatform.widget;
-
-import com.cyrilmottier.android.greendroid.R;
 
 import greendroid.app.ActionBarActivity;
 import greendroid.app.GDApplication;
 import greendroid.graphics.drawable.ActionBarDrawable;
 import greendroid.widget.ActionBar;
+import greendroid.widget.ActionBar.OnActionBarListener;
+import greendroid.widget.ActionBar.Type;
 import greendroid.widget.ActionBarHost;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.NormalActionBarItem;
-import greendroid.widget.ActionBar.OnActionBarListener;
-import greendroid.widget.ActionBar.Type;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -23,150 +20,150 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
+import com.cyrilmottier.android.greendroid.R;
+
 public class MyActionBar extends Activity implements ActionBarActivity {
 
-   
-    private boolean mDefaultConstructorUsed = false;
+  private boolean       mDefaultConstructorUsed = false;
 
-    private Type mActionBarType = Type.Normal;
-    private ActionBarHost mActionBarHost;
+  private Type          mActionBarType          = Type.Normal;
 
-    public MyActionBar() {
-        
-        mDefaultConstructorUsed = true;
+  private ActionBarHost mActionBarHost;
+
+  public MyActionBar() {
+
+    mDefaultConstructorUsed = true;
+  }
+
+  public MyActionBar(ActionBar.Type actionBarType) {
+    super();
+
+    if (actionBarType == ActionBar.Type.Dashboard)
+      mActionBarType = ActionBar.Type.Dashboard;
+    else if (actionBarType == ActionBar.Type.Normal)
+      mActionBarType = ActionBar.Type.Normal;
+    else if (actionBarType == ActionBar.Type.Empty)
+      mActionBarType = ActionBar.Type.Empty;
+    else
+      mActionBarType = actionBarType;
+
+  }
+
+  @Override
+  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    ensureLayout();
+    super.onRestoreInstanceState(savedInstanceState);
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    if (mDefaultConstructorUsed) {
+      // HACK cyril: This should have been done is the default
+      // constructor. Unfortunately, the getApplication() method returns
+      // null there. Hence, this has to be done here.
+      if (getClass().equals(getGDApplication().getHomeActivityClass())) {
+
+        mActionBarType = Type.Normal;
+      }
+    }
+  }
+
+  @Override
+  protected void onPostCreate(Bundle savedInstanceState) {
+    super.onPostCreate(savedInstanceState);
+    ensureLayout();
+  }
+
+  public ActionBar.Type getActionBarType() {
+    return mActionBarType;
+  }
+
+  public int createLayout() {
+    if (mActionBarType == Type.Dashboard)
+      return R.layout.gd_content_dashboard;
+
+    return R.layout.gd_content_normal;
+  }
+
+  protected void ensureLayout() {
+    if (!verifyLayout()) {
+      setContentView(createLayout());
+    }
+  }
+
+  protected boolean verifyLayout() {
+    return mActionBarHost != null;
+  }
+
+  @Override
+  public void onContentChanged() {
+    super.onContentChanged();
+
+    onPreContentChanged();
+    onPostContentChanged();
+  }
+
+  public void onPreContentChanged() {
+    mActionBarHost = (ActionBarHost) findViewById(R.id.gd_action_bar_host);
+    if (mActionBarHost == null) {
+      throw new RuntimeException("Your content must have an ActionBarHost whose id attribute is R.id.gd_action_bar_host");
+    }
+    mActionBarHost.getActionBar().setOnActionBarListener(mActionBarListener);
+  }
+
+  public void onPostContentChanged() {
+
+    boolean titleSet = false;
+
+    final Intent intent = getIntent();
+    if (intent != null) {
+      String title = intent.getStringExtra(ActionBarActivity.GD_ACTION_BAR_TITLE);
+      if (title != null) {
+        titleSet = true;
+        setTitle(title);
+      }
     }
 
-    public MyActionBar(ActionBar.Type actionBarType) {
-        super();
-
-        if(actionBarType == ActionBar.Type.Dashboard)
-          mActionBarType = ActionBar.Type.Dashboard;
-        else if(actionBarType == ActionBar.Type.Normal)
-          mActionBarType = ActionBar.Type.Normal;
-        else if(actionBarType == ActionBar.Type.Empty)
-          mActionBarType = ActionBar.Type.Empty;
-        else
-          mActionBarType = actionBarType;
-        
-          
-            
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        ensureLayout();
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (mDefaultConstructorUsed) {
-            // HACK cyril: This should have been done is the default
-            // constructor. Unfortunately, the getApplication() method returns
-            // null there. Hence, this has to be done here.
-            if (getClass().equals(getGDApplication().getHomeActivityClass())) {
-             
-              mActionBarType = Type.Normal;
-            }
+    if (!titleSet) {
+      // No title has been set via the Intent. Let's look in the
+      // ActivityInfo
+      try {
+        final ActivityInfo activityInfo = getPackageManager().getActivityInfo(getComponentName(), 0);
+        if (activityInfo.labelRes != 0) {
+          setTitle(activityInfo.labelRes);
         }
+      } catch (NameNotFoundException e) {
+        // Do nothing
+      }
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        ensureLayout();
-    }
+    final int visibility = intent.getIntExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY,
+                                              View.VISIBLE);
+    getActionBar().setVisibility(visibility);
+  }
 
-    public ActionBar.Type getActionBarType() {
-        return mActionBarType;
-    }
+  @Override
+  public void setTitle(CharSequence title) {
+    getActionBar().setTitle(title);
+  }
 
-    public int createLayout() {
-      if(mActionBarType == Type.Dashboard)
-        return R.layout.gd_content_dashboard;
-      
-      return R.layout.gd_content_normal;
-    }
+  @Override
+  public void setTitle(int titleId) {
+    setTitle(getString(titleId));
+  }
 
-    protected void ensureLayout() {
-        if (!verifyLayout()) {
-            setContentView(createLayout());
-        }
-    }
+  public ActionBar getActionBar() {
+    ensureLayout();
+    return mActionBarHost.getActionBar();
+  }
 
-    protected boolean verifyLayout() {
-        return mActionBarHost != null;
-    }
+  public ActionBarItem addActionBarItem(ActionBarItem item) {
+    return getActionBar().addItem(item);
+  }
 
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-
-        onPreContentChanged();
-        onPostContentChanged();
-    }
-
-    public void onPreContentChanged() {
-        mActionBarHost = (ActionBarHost) findViewById(R.id.gd_action_bar_host);
-        if (mActionBarHost == null) {
-            throw new RuntimeException(
-                    "Your content must have an ActionBarHost whose id attribute is R.id.gd_action_bar_host");
-        }
-        mActionBarHost.getActionBar().setOnActionBarListener(mActionBarListener);
-    }
-
-    public void onPostContentChanged() {
-
-        boolean titleSet = false;
-
-        final Intent intent = getIntent();
-        if (intent != null) {
-            String title = intent.getStringExtra(ActionBarActivity.GD_ACTION_BAR_TITLE);
-            if (title != null) {
-                titleSet = true;
-                setTitle(title);
-            }
-        }
-
-        if (!titleSet) {
-            // No title has been set via the Intent. Let's look in the
-            // ActivityInfo
-            try {
-                final ActivityInfo activityInfo = getPackageManager().getActivityInfo(getComponentName(), 0);
-                if (activityInfo.labelRes != 0) {
-                    setTitle(activityInfo.labelRes);
-                }
-            } catch (NameNotFoundException e) {
-                // Do nothing
-            }
-        }
-
-        final int visibility = intent.getIntExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.VISIBLE);
-        getActionBar().setVisibility(visibility);
-    }
-
-    @Override
-    public void setTitle(CharSequence title) {
-        getActionBar().setTitle(title);
-    }
-
-    @Override
-    public void setTitle(int titleId) {
-        setTitle(getString(titleId));
-    }
-
-    public ActionBar getActionBar() {
-        ensureLayout();
-        return mActionBarHost.getActionBar();
-    }
-
-    public ActionBarItem addActionBarItem(ActionBarItem item) {
-        return getActionBar().addItem(item);
-    }
-
-    public ActionBarItem addActionBarItem() {
+  public ActionBarItem addActionBarItem() {
 
     ActionBarItem item = getActionBar().newActionBarItem(NormalActionBarItem.class);
 
@@ -174,64 +171,63 @@ public class MyActionBar extends Activity implements ActionBarActivity {
 
   }
 
-    public ActionBarItem addActionBarItem(int itemId) {
-      
-      @SuppressWarnings("deprecation")
-	final Drawable d = new ActionBarDrawable(this.getResources(), itemId);
+  public ActionBarItem addActionBarItem(int itemId) {
 
-      ActionBarItem item = getActionBar().newActionBarItem(NormalActionBarItem.class).setDrawable(d);
-      
-      return getActionBar().addItem(item);
+    @SuppressWarnings("deprecation")
+    final Drawable d = new ActionBarDrawable(this.getResources(), itemId);
+
+    ActionBarItem item = getActionBar().newActionBarItem(NormalActionBarItem.class).setDrawable(d);
+
+    return getActionBar().addItem(item);
 
   }
-    
-    public ActionBarItem addActionBarItem(ActionBarItem item, int itemId) {
-        return getActionBar().addItem(item, itemId);
-    }
 
-    public ActionBarItem addActionBarItem(ActionBarItem.Type actionBarItemType) {
-        return getActionBar().addItem(actionBarItemType);
-    }
+  public ActionBarItem addActionBarItem(ActionBarItem item, int itemId) {
+    return getActionBar().addItem(item, itemId);
+  }
 
-    public ActionBarItem addActionBarItem(ActionBarItem.Type actionBarItemType, int itemId) {
-      
-        return getActionBar().addItem(actionBarItemType, itemId);
-    }
+  public ActionBarItem addActionBarItem(ActionBarItem.Type actionBarItemType) {
+    return getActionBar().addItem(actionBarItemType);
+  }
 
-  
-    public FrameLayout getContentView() {
-        ensureLayout();
-        return mActionBarHost.getContentView();
-    }
+  public ActionBarItem addActionBarItem(ActionBarItem.Type actionBarItemType, int itemId) {
 
-    public void setActionBarContentView(int resID) {
-        LayoutInflater.from(this).inflate(resID, getContentView());
-    }
+    return getActionBar().addItem(actionBarItemType, itemId);
+  }
 
-    public void setActionBarContentView(View view, LayoutParams params) {
-        getContentView().addView(view, params);
-    }
+  public FrameLayout getContentView() {
+    ensureLayout();
+    return mActionBarHost.getContentView();
+  }
 
-    public void setActionBarContentView(View view) {
-        getContentView().addView(view);
-    }
+  public void setActionBarContentView(int resID) {
+    LayoutInflater.from(this).inflate(resID, getContentView());
+  }
 
-    public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-      
-        return true;
-    }
+  public void setActionBarContentView(View view, LayoutParams params) {
+    getContentView().addView(view, params);
+  }
 
-    private OnActionBarListener mActionBarListener = new OnActionBarListener() {
-        public void onActionBarItemClicked(int position) {
-          
-          onHandleActionBarItemClick(getActionBar().getItem(position), position);
+  public void setActionBarContentView(View view) {
+    getContentView().addView(view);
+  }
 
-        }
-    };
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
-    public GDApplication getGDApplication() {
-      return (GDApplication) getApplication();
-    }
+    return true;
+  }
 
-    
+  private OnActionBarListener mActionBarListener = new OnActionBarListener() {
+                                                   public void onActionBarItemClicked(int position) {
+
+                                                     onHandleActionBarItemClick(getActionBar().getItem(position),
+                                                                                position);
+
+                                                   }
+                                                 };
+
+  public GDApplication getGDApplication() {
+    return (GDApplication) getApplication();
+  }
+
 }

@@ -72,9 +72,9 @@ public class ChatListLoadTask extends UserTask<Void, Void, Boolean> {
       ChatServiceHelper.getInstance().setXMPPConnection(connection);
       return true;
     } catch (XMPPException e) {
-    	if (Config.GD_INFO_LOGS_ENABLED)
-    		Log.i("XMPPException", e.getMessage());
-    	
+      if (Config.GD_INFO_LOGS_ENABLED)
+        Log.i("XMPPException", e.getMessage());
+
       connection.disconnect();
       connection = null;
       return false;

@@ -83,20 +83,20 @@ public class ExoConnectionUtils {
   }
 
   private static String splitLines(String string) {
-    String lines = "";
-
+    // String lines = "";
+    StringBuffer lineBuffer = new StringBuffer();
     for (int i = 0; i < string.length(); i += splitLinesAt) {
-      StringBuffer lineBuffer = new StringBuffer();
-      lineBuffer.append(lines);
+
+      // lineBuffer.append(lines);
       lineBuffer.append(string.substring(i, Math.min(string.length(), i + splitLinesAt)));
       lineBuffer.append("\r\n");
       // lines += string.substring(i, Math.min(string.length(), i +
       // splitLinesAt));
       //
       // lines += "\r\n";
-      lines = lineBuffer.toString();
+      // lines = lineBuffer.toString();
     }
-    return lines;
+    return lineBuffer.toString();
 
   }
 
@@ -124,20 +124,21 @@ public class ExoConnectionUtils {
     stringArray = zeroPad(stringArray.length + paddingCount, stringArray);
     // process 3 bytes at a time, churning out 4 output bytes
     // worry about CRLF insertions later
+    StringBuffer encodedBuffer = new StringBuffer();
     for (int i = 0; i < stringArray.length; i += 3) {
       int j = ((stringArray[i] & 0xff) << 16) + ((stringArray[i + 1] & 0xff) << 8)
           + (stringArray[i + 2] & 0xff);
-      StringBuffer encodedBuffer = new StringBuffer();
-      encodedBuffer.append(encoded);
+      // encodedBuffer.append(encoded);
       encodedBuffer.append(base64code.charAt((j >> 18) & 0x3f));
       encodedBuffer.append(base64code.charAt((j >> 12) & 0x3f));
       encodedBuffer.append(base64code.charAt((j >> 6) & 0x3f));
       encodedBuffer.append(base64code.charAt(j & 0x3f));
-      encoded = encodedBuffer.toString();
+      // encoded = encodedBuffer.toString();
       // encoded = encoded + base64code.charAt((j >> 18) & 0x3f) +
       // base64code.charAt((j >> 12) & 0x3f)
       // + base64code.charAt((j >> 6) & 0x3f) + base64code.charAt(j & 0x3f);
     }
+    encoded = encodedBuffer.toString();
     // replace encoded padding nulls with "="
     return splitLines(encoded.substring(0, encoded.length() - paddingCount)
         + "==".substring(0, paddingCount));

@@ -12,21 +12,11 @@ import android.util.Log;
  */
 public class LocalizationHelper {
 
-  private SharedPreferences         sharedPreference;                 // for
-                                                                       // accessing
-                                                                       // and
-                                                                       // modifying
-                                                                       // preference
-                                                                       // data
+  private SharedPreferences         sharedPreference;
 
-  private ResourceBundle            resBundle;                        // provide
-                                                                       // Locate
-                                                                       // specific
-                                                                       // resource
+  private ResourceBundle            resBundle;
 
-  private String                    localization;                     // name
-                                                                       // of
-                                                                       // localization
+  private String                    localization;
 
   private static LocalizationHelper bundle = new LocalizationHelper();
 
@@ -67,11 +57,10 @@ public class LocalizationHelper {
    */
   public String getString(String key) {
     try {
-//      return new String(resBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
       return resBundle.getString(key);
     } catch (Exception e) {
-    	if (Config.GD_ERROR_LOGS_ENABLED)
-    		Log.e("LOCALIZATION", "Missing key " + key + " in localization resources");
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("LOCALIZATION", "Missing key " + key + " in localization resources");
       return null;
     }
 
