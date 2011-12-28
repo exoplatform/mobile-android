@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SettingServerEditionDialog extends Dialog implements android.view.View.OnClickListener {
 
@@ -95,7 +96,7 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
     URLAnalyzer urlAnanyzer = new URLAnalyzer();
     myServerObj._strServerUrl = urlAnanyzer.parserURL(editTextServerUrl.getText().toString());
-    
+    if (myServerObj._strServerUrl != null) {
     myServerObj._strServerName = myServerObj._strServerName.trim();
     myServerObj._strServerUrl = myServerObj._strServerUrl.trim();
     
@@ -111,6 +112,10 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
     
     dismiss();
     editController.onResetAdapter(listViewServer);
+    } else {
+      String serverNameURLInvalid = LocalizationHelper.getInstance().getString("SpecialCharacters");
+      Toast.makeText(mContext, serverNameURLInvalid, Toast.LENGTH_SHORT).show();
+    }
   }
 
   public void changeLanguage() {
