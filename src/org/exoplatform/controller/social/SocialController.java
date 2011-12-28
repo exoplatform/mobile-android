@@ -8,7 +8,6 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.ui.social.ComposeMessageActivity;
 import org.exoplatform.ui.social.SocialActivity;
@@ -41,8 +40,6 @@ public class SocialController {
   private SocialLoadTask mLoadTask;
 
   private LinearLayout   activityStreamWrap;
-
-  // private boolean isShowMore = false;
 
   private String         showMoreText;
 

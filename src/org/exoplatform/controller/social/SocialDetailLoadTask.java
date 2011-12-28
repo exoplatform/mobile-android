@@ -46,8 +46,6 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
   private String                       titleString;
 
-  private String                       networkNotReachable;
-
   private String                       detailsErrorStr;
 
   private SocialDetailController       detailController;
@@ -167,7 +165,6 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
     youText = location.getString("You");
     okString = location.getString("OK");
     titleString = location.getString("Warning");
-    networkNotReachable = location.getString("ConnectionError");
     detailsErrorStr = location.getString("DetailsNotAvaiable");
 
   }

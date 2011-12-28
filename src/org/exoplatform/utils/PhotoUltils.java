@@ -33,6 +33,7 @@ public class PhotoUltils {
   private static final String   dotSign = ".";
 
   public static boolean isImages(File file) {
+
     String name = file.getName();
     for (int i = 0; i < suffix.length; i++) {
       if (name.endsWith(suffix[i]))
@@ -310,6 +311,7 @@ public class PhotoUltils {
 
     } else
       return originalImage;
+    // originalImage.recycle();
     return resizedBitmap;
 
   }
@@ -331,33 +333,38 @@ public class PhotoUltils {
   }
 
   public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
-    bitmap = resizeImage(bitmap, 100);
-    int width = bitmap.getWidth();
-    if (width > 100) {
-      width = 100;
+    try {
+
+      bitmap = resizeImage(bitmap, 100);
+      int width = bitmap.getWidth();
+      if (width > 100) {
+        width = 100;
+      }
+      int heigth = bitmap.getHeight();
+      if (heigth > 100) {
+        heigth = 100;
+      }
+
+      Bitmap output = Bitmap.createBitmap(width, heigth, Config.ARGB_8888);
+      Canvas canvas = new Canvas(output);
+
+      final int color = 0xff424242;
+      final Paint paint = new Paint();
+      final Rect rect = new Rect(0, 0, width, heigth);
+      final RectF rectF = new RectF(rect);
+      final float roundPx = pixels;
+
+      paint.setAntiAlias(true);
+      canvas.drawARGB(0, 0, 0, 0);
+      paint.setColor(color);
+      canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+      paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+      canvas.drawBitmap(bitmap, rect, rect, paint);
+      bitmap.recycle();
+      return output;
+    } catch (OutOfMemoryError e) {
+      return null;
     }
-    int heigth = bitmap.getHeight();
-    if (heigth > 100) {
-      heigth = 100;
-    }
-    Bitmap output = Bitmap.createBitmap(width, heigth, Config.ARGB_8888);
-    Canvas canvas = new Canvas(output);
-
-    final int color = 0xff424242;
-    final Paint paint = new Paint();
-    final Rect rect = new Rect(0, 0, width, heigth);
-    final RectF rectF = new RectF(rect);
-    final float roundPx = pixels;
-
-    paint.setAntiAlias(true);
-    canvas.drawARGB(0, 0, 0, 0);
-    paint.setColor(color);
-    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-    canvas.drawBitmap(bitmap, rect, rect, paint);
-
-    return output;
   }
 
 }

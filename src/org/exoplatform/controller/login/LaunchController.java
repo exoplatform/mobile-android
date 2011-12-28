@@ -126,6 +126,11 @@ public class LaunchController {
 
       if (_arrDefaulServerList.size() > 0)
         _arrServerList.addAll(_arrDefaulServerList);
+      else {
+        _arrDefaulServerList = ServerConfigurationUtils.getDefaultServerList(context);
+        if (_arrDefaulServerList.size() > 0)
+          _arrServerList.addAll(_arrDefaulServerList);
+      }
     }
 
     ServerSettingHelper.getInstance().setServerInfoList(_arrServerList);

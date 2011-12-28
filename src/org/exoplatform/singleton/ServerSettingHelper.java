@@ -10,6 +10,7 @@ import org.exoplatform.model.ServerObjInfo;
  */
 
 public class ServerSettingHelper {
+
   // The index of server url was selected in setting
   private int                        selectedServerIndex;
 
@@ -24,12 +25,12 @@ public class ServerSettingHelper {
 
   private String                     serverEdition;
 
-//  public boolean                     isMobileCompliant = false;
+  // public boolean isMobileCompliant = false;
 
   // List of server url
   private ArrayList<ServerObjInfo>   serverInfoList;
 
-  private static ServerSettingHelper helper            = new ServerSettingHelper();
+  private static ServerSettingHelper helper = new ServerSettingHelper();
 
   private ServerSettingHelper() {
 
