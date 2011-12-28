@@ -4,7 +4,6 @@ import org.exoplatform.model.HomeItem;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.HomeHelper;
 import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
@@ -39,6 +38,8 @@ public class HomeActionListenner implements OnItemClickListener {
   private String              titleString;
 
   private String              contentString;
+
+  private String              socialErrorString;
 
   private String              protocol;
 
@@ -143,6 +144,8 @@ public class HomeActionListenner implements OnItemClickListener {
     okString = location.getString("OK");
     titleString = location.getString("Warning");
     contentString = location.getString("ConnectionError");
+    socialErrorString = location.getString("LoadingDataError");
+
   }
 
   private void parseDomain() {
@@ -193,7 +196,6 @@ public class HomeActionListenner implements OnItemClickListener {
 
         return true;
       } catch (SocialClientLibException e) {
-        e.printStackTrace();
         return false;
       }
     }
@@ -205,7 +207,7 @@ public class HomeActionListenner implements OnItemClickListener {
         next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(next);
       } else {
-        WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+        WarningDialog dialog = new WarningDialog(mContext, titleString, socialErrorString, okString);
         dialog.show();
       }
     }
