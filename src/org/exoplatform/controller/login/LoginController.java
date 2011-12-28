@@ -38,8 +38,6 @@ public class LoginController {
 
   private String             blankError;
 
-  private String             strNetworkConnectionFailed;
-
   private String             strServerUnreachable;
 
   private String             strServerInvalid;
@@ -106,7 +104,6 @@ public class LoginController {
   private void getLanguage() {
     bundle = LocalizationHelper.getInstance();
     strSigning = bundle.getString("SigningIn");
-    strNetworkConnectionFailed = bundle.getString("ConnectionError");
     strUserNamePasswordFailed = bundle.getString("UserNamePasswordFailed");
     mobileNotCompilant = bundle.getString("CompliantMessage");
     strServerInvalid = bundle.getString("ServerInvalid");
@@ -148,7 +145,7 @@ public class LoginController {
     @Override
     public void onPostExecute(String result) {
       if (result == null) {
-        dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
+        dialog = new WarningDialog(mContext, titleString, strServerUnreachable, okString);
         dialog.show();
       } else if (result.equalsIgnoreCase(ExoConstants.LOGIN_YES)) {
         AccountSetting accountSetting = AccountSetting.getInstance();
@@ -181,9 +178,6 @@ public class LoginController {
         dialog.show();
       } else if (result.contains(ExoConstants.LOGIN_UNREACHABLE)) {
         dialog = new WarningDialog(mContext, titleString, strServerUnreachable, okString);
-        dialog.show();
-      } else {
-        dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
         dialog.show();
       }
       _progressDialog.dismiss();

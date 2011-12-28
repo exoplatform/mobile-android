@@ -10,10 +10,6 @@ public class ExoConstants {
 
   public static final String IS_MOBILE_COMPLIANT           = "isMobileCompliant";
 
-  public static final String PLATFORM_VERSION_350          = "3.5.0";
-
-  public static final String PLATFORM_VERSION_351          = "3.5.1";
-
   public static final String LOGIN_YES                     = "YES";
 
   public static final String LOGIN_NO                      = "NO";
@@ -57,10 +53,6 @@ public class ExoConstants {
   public static final String ACTIVITY_PORTAL_CONTAINER     = "portal";
 
   public static final String ACTIVITY_REST_CONTEXT         = "rest";
-
-  public static final String ACTIVITY_REST_VERSION_ANPHA2  = "v1-alpha2";
-
-  public static final String ACTIVITY_REST_VERSION_ANPHA3  = "v1-alpha3";
 
   public static final String ACTIVITY_ORGANIZATION         = "organization";
 

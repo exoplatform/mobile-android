@@ -130,13 +130,13 @@ public class HomeActionListenner implements OnItemClickListener {
     mContext.startActivity(intent);
   }
 
-//  private void launchSettingApp() {
-//    Intent next = new Intent(mContext, SettingActivity.class);
-//    next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//    next.putExtra(ExoConstants.SETTING_TYPE, 1);
-//    mContext.startActivity(next);
-//
-//  }
+  // private void launchSettingApp() {
+  // Intent next = new Intent(mContext, SettingActivity.class);
+  // next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+  // next.putExtra(ExoConstants.SETTING_TYPE, 1);
+  // mContext.startActivity(next);
+  //
+  // }
 
   private void changeLanguage() {
     LocalizationHelper location = LocalizationHelper.getInstance();
@@ -177,17 +177,8 @@ public class HomeActionListenner implements OnItemClickListener {
         SocialClientContext.setUsername(userName);
         SocialClientContext.setPassword(password);
         ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
-        //Check and set rest version
-        String platformVersion = ServerSettingHelper.getInstance().getServerVersion();
-        String activityRestVersion = null;
-        if (platformVersion.contains(ExoConstants.PLATFORM_VERSION_350)) {
-          activityRestVersion = ExoConstants.ACTIVITY_REST_VERSION_ANPHA2;
-        } else if (platformVersion.contains(ExoConstants.PLATFORM_VERSION_351)) {
-          activityRestVersion = ExoConstants.ACTIVITY_REST_VERSION_ANPHA3;
-        } else {
-          VersionService versionService = clientServiceFactory.createVersionService();
-          activityRestVersion = versionService.getLatest();
-        }
+        VersionService versionService = clientServiceFactory.createVersionService();
+        String activityRestVersion = versionService.getLatest();
         SocialClientContext.setRestVersion(activityRestVersion);
 
         @SuppressWarnings("unchecked")
@@ -202,6 +193,7 @@ public class HomeActionListenner implements OnItemClickListener {
 
         return true;
       } catch (SocialClientLibException e) {
+        e.printStackTrace();
         return false;
       }
     }
