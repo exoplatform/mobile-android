@@ -59,7 +59,6 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
     loadingData = location.getString("LoadingData");
     okString = location.getString("OK");
     titleString = location.getString("Warning");
-    contentString = location.getString("ConnectionError");
   }
 
   @Override

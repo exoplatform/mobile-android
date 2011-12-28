@@ -9,6 +9,7 @@ import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.api.net.SocialHttpClientException;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.VersionService;
@@ -22,6 +23,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WarningDialog;
+import org.omg.CORBA.CTX_RESTRICT_SCOPE;
 
 import android.content.Context;
 import android.content.Intent;
@@ -179,10 +181,11 @@ public class HomeActionListenner implements OnItemClickListener {
         SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
         SocialClientContext.setUsername(userName);
         SocialClientContext.setPassword(password);
+        
         ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
         VersionService versionService = clientServiceFactory.createVersionService();
-        String activityRestVersion = versionService.getLatest();
-        SocialClientContext.setRestVersion(activityRestVersion);
+        SocialClientContext.setRestVersion(versionService.getLatest());
+        clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
 
         @SuppressWarnings("unchecked")
         ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
@@ -195,7 +198,8 @@ public class HomeActionListenner implements OnItemClickListener {
         SocialServiceHelper.getInstance().setIdentityService(identityService);
 
         return true;
-      } catch (SocialClientLibException e) {
+      } catch (Exception e) {
+        e.printStackTrace();
         return false;
       }
     }
