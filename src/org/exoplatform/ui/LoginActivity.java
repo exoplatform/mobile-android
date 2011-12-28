@@ -137,13 +137,18 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   }
 
-  public boolean onCreateOptionsMenu(Menu menu) {
-
+  @Override
+  public boolean onPrepareOptionsMenu(Menu menu) {
+    menu.clear();
     menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
-
     return true;
-
   }
+
+  // public boolean onCreateOptionsMenu(Menu menu) {
+  // menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
+  // return true;
+  //
+  // }
 
   public boolean onOptionsItemSelected(MenuItem item) {
 

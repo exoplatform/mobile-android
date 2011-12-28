@@ -69,10 +69,7 @@ public class LaunchController {
                     .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
 
     } catch (Exception e) {
-      // Log.i("LaunchController", e.getMessage());
     }
-    // get server version information
-    // ExoConnectionUtils.checkPLFVersion();
   }
 
   private void getServerInfo() {
@@ -127,6 +124,7 @@ public class LaunchController {
       if (_arrDefaulServerList.size() > 0)
         _arrServerList.addAll(_arrDefaulServerList);
       else {
+        // get server list from default xml file
         _arrDefaulServerList = ServerConfigurationUtils.getDefaultServerList(context);
         if (_arrDefaulServerList.size() > 0)
           _arrServerList.addAll(_arrDefaulServerList);
