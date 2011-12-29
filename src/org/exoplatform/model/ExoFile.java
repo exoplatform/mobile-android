@@ -7,7 +7,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.WebdavMethod;
 
-
 //	File info
 public class ExoFile {
 
@@ -29,35 +28,34 @@ public class ExoFile {
 
   // Construtor
   public ExoFile(String urlString, String file_Name) {
-    
+
     try {
-      
+
       urlStr = urlString;
       fileName = file_Name;
-      
+
       HttpResponse response;
-      
+
       WebdavMethod webDav = new WebdavMethod("PROPFIND", urlStr);
       response = ExoConnectionUtils.httpClient.execute(webDav);
-      
-      String strResponse = ExoConnectionUtils.convertStreamToString(response.getEntity().getContent());
+
+      String strResponse = ExoConnectionUtils.convertStreamToString(response.getEntity()
+                                                                            .getContent());
       int indexOfCollectionType = strResponse.indexOf("<D:collection/>");
-      if(indexOfCollectionType > 0)
+      if (indexOfCollectionType > 0)
         isFolder = true;
-      else
-      {
+      else {
         isFolder = false;
         int indexOfContentTypeOpen = strResponse.indexOf("D:getcontenttype");
         int indexOfContentTypeClose = strResponse.indexOf("/D:getcontenttype");
-        if(indexOfContentTypeOpen > 0 && indexOfContentTypeClose > 0)
+        if (indexOfContentTypeOpen > 0 && indexOfContentTypeClose > 0)
           contentType = strResponse.substring(indexOfContentTypeOpen, indexOfContentTypeClose);
-        
+
       }
 
     } catch (ClientProtocolException e) {
-      e.getMessage();
     } catch (IOException e) {
-      
+
     }
 
   }

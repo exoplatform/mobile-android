@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;
@@ -38,7 +39,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   private DocumentActivity      documentActivity;
 
-  private ArrayList<ExoFile>         _documentList = new ArrayList<ExoFile>();
+  private ArrayList<ExoFile>    _documentList = new ArrayList<ExoFile>();
 
   public DocumentLoadTask(Context context,
                           DocumentActivity activity,
@@ -155,8 +156,11 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
       documentActivity.addOrRemoveFileActionButton();
 
       try {
-        String title = new String(ExoDocumentUtils.getLastPathComponent(strSourceUrl)
-                                                  .getBytes("ISO-8859-1"), "UTF-8");
+        String title = new String(ExoDocumentUtils.getLastPathComponent(strSourceUrl).getBytes(),
+                                  "UTF-8");
+        if (title.contains("%20")) {
+          title = title.replace("%20", " ");
+        }
         documentActivity.setTitle(title);
       } catch (UnsupportedEncodingException e) {
       }

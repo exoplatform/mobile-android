@@ -1,10 +1,11 @@
 package org.exoplatform.widget;
 
-
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.ExoDocumentUtils;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;
@@ -85,7 +86,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
   // @Override
   public void onClick(View view) {
     if (view == okButton) {
-      folderName = actionEditText.getText().toString();
+      folderName = ExoDocumentUtils.replaceSpace(actionEditText.getText().toString());
       if ((folderName != null) && (folderName.length() > 0)) {
         int index = selectedFile.urlStr.lastIndexOf("/");
         String lastPathComponent = selectedFile.urlStr.substring(0, index + 1);

@@ -276,12 +276,17 @@ public class ImageDownloader implements OnLowMemoryListener {
             long contentLength = entity.getContentLength();
             if (inputStream != null) {
               BitmapFactory.Options bmOption = new BitmapFactory.Options();
-              if (contentLength < 10000) {
+
+              if (contentLength <= 15000) {
                 bmOption.inSampleSize = 1;
-              } else if (contentLength < 50000) {
+              } else if (15000 < contentLength && contentLength <= 80000) {
                 bmOption.inSampleSize = 2;
-              } else {
+              } else if (80000 < contentLength && contentLength <= 200000) {
                 bmOption.inSampleSize = 4;
+              } else if (200000 < contentLength && contentLength <= 400000) {
+                bmOption.inSampleSize = 6;
+              } else {
+                bmOption.inSampleSize = 8;
               }
 
               bitmap = BitmapFactory.decodeStream(inputStream, null, bmOption);
@@ -334,7 +339,7 @@ public class ImageDownloader implements OnLowMemoryListener {
           if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
           } else
-            imageView.setImageResource(R.drawable.documenticonforunknown);
+            imageView.setImageResource(R.drawable.documentactionpopupdeleteicon);
         }
       }
     }

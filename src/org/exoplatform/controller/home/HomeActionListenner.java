@@ -7,9 +7,7 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
-import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
-import org.exoplatform.social.client.api.net.SocialHttpClientException;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.VersionService;
@@ -23,7 +21,6 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WarningDialog;
-import org.omg.CORBA.CTX_RESTRICT_SCOPE;
 
 import android.content.Context;
 import android.content.Intent;

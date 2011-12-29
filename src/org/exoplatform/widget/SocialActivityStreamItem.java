@@ -1,11 +1,13 @@
 package org.exoplatform.widget;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUltils;
 import org.exoplatform.utils.SocialActivityUtil;
 
@@ -129,12 +131,13 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void setViewByType(int typeId) {
-//    Map<String, String> templateMap = activityInfo.templateParams;
-//    Set<String> set = templateMap.keySet();
-//    for (String param : set) {
-//      System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-//          + templateMap.get(param));
-//    }
+    // Map<String, String> templateMap = activityInfo.templateParams;
+    // Set<String> set = templateMap.keySet();
+    // for (String param : set) {
+    // System.out.println("type: " + activityInfo.getType() + "--template key: "
+    // + param + "-- "
+    // + templateMap.get(param));
+    // }
     switch (typeId) {
     case 1:
       // ks-forum:spaces
@@ -435,6 +438,7 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void displayAttachImage(String url, String name, String description) {
+    url = ExoDocumentUtils.replaceSpace(url);
     if (attachStubView == null) {
       initAttachStubView(url, name, description);
     }

@@ -12,8 +12,11 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -23,6 +26,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.json.simple.JSONObject;
@@ -297,6 +301,48 @@ public class ExoConnectionUtils {
       return null;
     }
 
+  }
+
+  public static String getEncodeDriveContent(String url) {
+    DefaultHttpClient httpClient = null;
+    try {
+      HttpParams httpParameters = new BasicHttpParams();
+      HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
+      HttpConnectionParams.setSoTimeout(httpParameters, 30000);
+      HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+      httpClient = new DefaultHttpClient(httpParameters);
+      HttpGet httpGet = new HttpGet(url);
+      httpGet.setHeader("charset", "utf-8");
+      httpGet.setHeader("Cookie", _strCookie);
+      ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
+
+        @Override
+        public String handleResponse(HttpResponse response) throws ClientProtocolException,
+                                                           IOException {
+          StatusLine statusLine = response.getStatusLine();
+          if (statusLine.getStatusCode() >= 300) {
+            throw new HttpResponseException(statusLine.getStatusCode(),
+                                            statusLine.getReasonPhrase());
+          }
+
+          HttpEntity entity = response.getEntity();
+          return entity == null ? null : EntityUtils.toString(entity, "UTF-8");
+
+        }
+
+      };
+      httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
+                                                                       .getAuthScope(),
+                                                         AccountSetting.getInstance()
+                                                                       .getCredentials());
+      String result = httpClient.execute(httpGet, responseHandler);
+
+      return result;
+    } catch (Exception e) {
+      return null;
+    } finally {
+      httpClient.getConnectionManager().shutdown();
+    }
   }
 
   // Get input stream from URL

@@ -83,8 +83,12 @@ public class DocumentAdapter extends BaseAdapter {
           DocumentActivity._documentActivityInstance.addOrRemoveFileActionButton();
           if (myFile.contentType != null
               && (myFile.contentType.contains("image") || myFile.contentType.contains("text"))) {
+            String webViewTitle = myFile.fileName;
+            if (webViewTitle.contains("%20")) {
+              webViewTitle = webViewTitle.replace("%20", " ");
+            }
             WebViewActivity._url = myFile.urlStr;
-            WebViewActivity._titlebar = myFile.fileName;
+            WebViewActivity._titlebar = webViewTitle;
             Intent intent = new Intent(_mContext, WebViewActivity.class);
             _mContext.startActivity(intent);
           } else {

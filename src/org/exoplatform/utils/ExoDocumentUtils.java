@@ -204,4 +204,7 @@ public class ExoDocumentUtils {
     return false;
   }  
   }
+  public static String replaceSpace(String str){
+    return str.trim().replace(" ", "%20");
+  }
 }
