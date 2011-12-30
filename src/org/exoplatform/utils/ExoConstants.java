@@ -84,7 +84,10 @@ public class ExoConstants {
 
   public static final String FRENCH_LOCALIZATION           = "LocalizeFR.properties";
 
-  public static final String DOCUMENT_PATH                 = "/rest/private/jcr/repository/collaboration/Users";
+  // public static final String DOCUMENT_PATH =
+  // "/rest/private/jcr/repository/collaboration/Users";
+
+  public static final String DOCUMENT_PATH                 = "/portal/rest/jcr/repository/collaboration/Users";
 
   public static final String DASHBOARD_PATH                = "/rest/private/dashboards";
 
