@@ -17,13 +17,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -243,12 +240,6 @@ public class ImageDownloader implements OnLowMemoryListener {
     public Bitmap doInBackground(String... params) {
       url = params[0];
 
-      HttpParams httpParameters = new BasicHttpParams();
-      HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
-      HttpConnectionParams.setSoTimeout(httpParameters, 30000);
-      HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-
-      DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
       HttpGet getRequest = null;
       try {
         getRequest = new HttpGet(url);
@@ -257,11 +248,10 @@ public class ImageDownloader implements OnLowMemoryListener {
           getRequest.setHeader("cookie", cookie);
         }
 
-        httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
-                                                                         .getAuthScope(),
-                                                           AccountSetting.getInstance()
-                                                                         .getCredentials());
-        HttpResponse response = httpClient.execute(getRequest);
+        ExoConnectionUtils.httpClient.getCredentialsProvider()
+                                     .setCredentials(AccountSetting.getInstance().getAuthScope(),
+                                                     AccountSetting.getInstance().getCredentials());
+        HttpResponse response = ExoConnectionUtils.httpClient.execute(getRequest);
         int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode != HttpStatus.SC_OK) {
           return null;
@@ -306,8 +296,6 @@ public class ImageDownloader implements OnLowMemoryListener {
         }
       } catch (Exception e) {
         return null;
-      } finally {
-        httpClient.getConnectionManager().shutdown();
       }
       return null;
     }
@@ -334,13 +322,11 @@ public class ImageDownloader implements OnLowMemoryListener {
       if (imageViewReference != null) {
         ImageView imageView = imageViewReference.get();
         BitmapDownloaderTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
-        // Change bitmap only if this process is still associated with it
-        if (this == bitmapDownloaderTask) {
-          if (bitmap != null) {
-            imageView.setImageBitmap(bitmap);
-          } else
-            imageView.setImageResource(R.drawable.documentactionpopupdeleteicon);
-        }
+        // if (this == bitmapDownloaderTask) {
+        BitmapDisplayer bd = new BitmapDisplayer(bitmap, imageView);
+        Activity a = (Activity) imageView.getContext();
+        a.runOnUiThread(bd);
+        // }
       }
     }
 
@@ -350,6 +336,24 @@ public class ImageDownloader implements OnLowMemoryListener {
       while ((read = in.read(b)) != -1) {
         out.write(b, 0, read);
       }
+    }
+  }
+
+  class BitmapDisplayer implements Runnable {
+    Bitmap    bitmap;
+
+    ImageView imageView;
+
+    public BitmapDisplayer(Bitmap b, ImageView p) {
+      bitmap = b;
+      imageView = p;
+    }
+
+    public void run() {
+      if (bitmap != null)
+        imageView.setImageBitmap(bitmap);
+      else
+        imageView.setImageResource(R.drawable.documentactionpopupdeleteicon);
     }
   }
 

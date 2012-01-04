@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;

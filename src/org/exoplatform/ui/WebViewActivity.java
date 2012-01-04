@@ -90,16 +90,7 @@ public class WebViewActivity extends MyActionBar {
 
   private void setupCookies(String url) {
     CookieSyncManager.createInstance(this);
-    List<Cookie> cookies = ExoConnectionUtils._sessionCookies;
-    String strCookie = "";
-    if (!cookies.isEmpty()) {
-      for (int i = 0; i < cookies.size(); i++) {
-        strCookie = cookies.get(i).getName().toString() + "="
-            + cookies.get(i).getValue().toString();
-      }
-    }
-
-    CookieManager.getInstance().setCookie(url, strCookie);
+    CookieManager.getInstance().setCookie(url, ExoConnectionUtils._strCookie);
   }
 
   @Override
