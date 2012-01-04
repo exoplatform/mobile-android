@@ -20,7 +20,7 @@
     <uses-sdk android:minSdkVersion="7"/>
 
     <!-- Application Informations -->
-    <application android:debuggable="true" android:icon="@drawable/application_icon" android:label="eXo Application" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
+    <application android:debuggable="true" android:icon="@drawable/application_icon" android:label="eXo 2.0.1" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
 
         <!-- First Activity of the Application -->
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.LoginActivity" android:windowSoftInputMode="stateUnchanged|adjustResize">
