@@ -3,6 +3,7 @@ package org.exoplatform.model;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.social.client.api.model.RestActivityStream;
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestLike;
 
@@ -30,9 +31,9 @@ public class SocialActivityInfo {
 
   private String             attachImageUrl;
 
-//  private String             attachedImageName;
-
   public Map<String, String> templateParams;
+
+  public RestActivityStream  restActivityStream;
 
   private List<RestComment>  commentList;
 
@@ -81,6 +82,7 @@ public class SocialActivityInfo {
   public String getTitle() {
     return title;
   }
+
   public void setBody(String bod) {
     body = bod;
   }

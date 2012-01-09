@@ -35,7 +35,6 @@ public class HomeActivity extends MyActionBar {
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_logout_button);
     init();
-    changeLanguage();
   }
 
   @Override
@@ -45,10 +44,9 @@ public class HomeActivity extends MyActionBar {
   }
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-
+  public boolean onPrepareOptionsMenu(Menu menu) {
+    menu.clear();
     menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
-
     return true;
   }
 
@@ -78,6 +76,7 @@ public class HomeActivity extends MyActionBar {
     homeController = new HomeController(this);
     homeController.initScreen();
     createAdapter();
+    changeLanguage();
   }
 
   private void createAdapter() {

@@ -88,6 +88,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
           RestActivity act = activityList.get(i);
           streamInfo = new SocialActivityInfo();
           profile = act.getPosterIdentity().getProfile();
+          streamInfo.restActivityStream = act.getActivityStream();
           streamInfo.setActivityId(act.getId());
           streamInfo.setImageUrl(profile.getAvatarUrl());
           streamInfo.setUserName(profile.getFullName());
@@ -105,8 +106,8 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
     } catch (SocialClientLibException e) {
       Log.e("SocialException", e.getMessage());
       return null;
-    }catch (Exception e) {
-      Log.e("Exception", e.getMessage());
+    } catch (Exception e) {
+      // Log.e("Exception", e.getMessage());
       return null;
     }
   }
@@ -126,7 +127,7 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
         SocialActivity.socialActivity.setEmptyView(View.GONE);
       }
       socialController.setActivityList(result);
-//      socialController.setListAdapter(result);
+      // socialController.setListAdapter(result);
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();

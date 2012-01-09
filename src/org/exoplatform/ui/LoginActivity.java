@@ -137,13 +137,18 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   }
 
-  public boolean onCreateOptionsMenu(Menu menu) {
-
+  @Override
+  public boolean onPrepareOptionsMenu(Menu menu) {
+    menu.clear();
     menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
-
     return true;
-
   }
+
+  // public boolean onCreateOptionsMenu(Menu menu) {
+  // menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
+  // return true;
+  //
+  // }
 
   public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -159,11 +164,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   // @Override
   public void onClick(View view) {
-    if (view.equals(_btnLogIn)) {
+    if (view == _btnLogIn) {
       onLogin();
     }
 
-    if (view.equals(_btnServer)) {
+    if (view == _btnServer) {
       view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
       _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneon);
       _btnAccount.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
@@ -173,7 +178,7 @@ public class LoginActivity extends Activity implements OnClickListener {
       _btnLogIn.setVisibility(View.INVISIBLE);
       _listViewServer.setVisibility(View.VISIBLE);
     }
-    if (view.equals(_btnAccount)) {
+    if (view == _btnAccount) {
       view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
       _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_on);
       _btnServer.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);

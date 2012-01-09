@@ -95,6 +95,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       streamInfo.setCommentNumber(selectedRestActivity.getTotalNumberOfComments());
       activityType = selectedRestActivity.getType();
       streamInfo.setType(activityType);
+      streamInfo.restActivityStream = selectedRestActivity.getActivityStream();
       streamInfo.templateParams = selectedRestActivity.getTemplateParams();
 
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();

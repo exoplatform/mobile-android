@@ -42,7 +42,7 @@ public class ServerAdapter extends BaseAdapter {
 
   // @Override
   public Object getItem(int pos) {
-    return pos;
+    return serverInfoList.get(pos);
   }
 
   // @Override

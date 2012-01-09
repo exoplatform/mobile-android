@@ -1,9 +1,13 @@
 package org.exoplatform.widget;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.social.client.api.model.RestActivityStream;
 import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.PhotoUltils;
@@ -91,6 +95,7 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void initCommonInfo() {
+
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl != null) {
       BitmapFactory.Options options = new BitmapFactory.Options();
@@ -129,6 +134,8 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void setViewByType(int typeId) {
+    
+    System.out.println("-------------------"+typeId);
     switch (typeId) {
     case 1:
       // ks-forum:spaces
@@ -137,10 +144,19 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 2:
       // ks-wiki:spaces
+      // Map<String, String> templateMap = activityInfo.templateParams;
+      // Set<String> set = templateMap.keySet();
+      // for (String param : set) {
+      // System.out.println("type: " + activityInfo.getType() +
+      // "--template key: " + param + "-- "
+      // + templateMap.get(param));
+      // }
       setActivityTypeWiki();
       break;
     case 3:
       // exosocial:spaces
+
+      setActivityTypeSocialSpace();
       break;
     case 4:
       // DOC_ACTIVITY
@@ -197,13 +213,6 @@ public class SocialActivityStreamItem extends LinearLayout {
 
     case 11:
       // calendar
-      // Map<String, String> templateMap = activityInfo.templateParams;
-      // Set<String> set = templateMap.keySet();
-      // for (String param : set) {
-      // System.out.println("type: " + activityInfo.getType()
-      // + "--template key: " + param + "-- "
-      // + templateMap.get(param));
-      // }
       setActivityTypeCalendar();
       break;
     default:
@@ -211,11 +220,35 @@ public class SocialActivityStreamItem extends LinearLayout {
     }
   }
 
+  private String addSpaceInfo() {
+    StringBuffer spaceBuffer = new StringBuffer();
+    spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+    spaceBuffer.append(LocalizationHelper.getInstance().getString("In"));
+    spaceBuffer.append("</font>");
+    spaceBuffer.append(" ");
+    RestActivityStream actStream = activityInfo.restActivityStream;
+    String nameSpace = actStream.getFullName();
+    String spaceLink = actStream.getPermaLink();
+    System.out.println("spaceLink------------------" + spaceLink);
+    spaceBuffer.append("<a href=");
+    spaceBuffer.append(spaceLink);
+    spaceBuffer.append(">");
+    spaceBuffer.append(nameSpace);
+    spaceBuffer.append("</a>");
+    spaceBuffer.append(" ");
+    spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+    spaceBuffer.append(LocalizationHelper.getInstance().getString("Space"));
+    spaceBuffer.append("</font>");
+    return spaceBuffer.toString();
+  }
+
   private void setActivityTypeForum() {
     String forumLink = null;
     StringBuffer forumBuffer = new StringBuffer();
     forumBuffer.append("<html><body>");
     forumBuffer.append(userName);
+    forumBuffer.append(" ");
+    forumBuffer.append(addSpaceInfo());
     forumBuffer.append(" ");
     String actType = activityInfo.templateParams.get("ActivityType");
     String actTypeDesc = null;
@@ -262,8 +295,14 @@ public class SocialActivityStreamItem extends LinearLayout {
     buffer.append("<a>");
     buffer.append(userName);
     buffer.append("</a> ");
+    buffer.append(addSpaceInfo());
+    buffer.append(" ");
     buffer.append("<font color=\"#696969\">");
     String act_key = activityInfo.templateParams.get("act_key");
+    // String space_name =activityInfo.templateParams.get("page_owner");
+    // if(space_name!=null){
+    //
+    // }
     String act_key_des = null;
     if (act_key != null) {
       if (act_key.equalsIgnoreCase("update_page")) {
@@ -300,6 +339,8 @@ public class SocialActivityStreamItem extends LinearLayout {
     answerBuffer.append("<a>");
     answerBuffer.append(userName);
     answerBuffer.append("</a> ");
+    answerBuffer.append(addSpaceInfo());
+    answerBuffer.append(" ");
     answerBuffer.append("<font color=\"#696969\">");
     String act_key = activityInfo.templateParams.get("ActivityType");
     String act_key_des = null;
@@ -426,6 +467,17 @@ public class SocialActivityStreamItem extends LinearLayout {
                                   TextView.BufferType.SPANNABLE);
       textViewTempMessage.setVisibility(View.VISIBLE);
     }
+  }
+
+  private void setActivityTypeSocialSpace() {
+    StringBuffer socialBuffer = new StringBuffer();
+    socialBuffer.append("<html><body>");
+    socialBuffer.append("<a>");
+    socialBuffer.append(userName);
+    socialBuffer.append("</a> ");
+    socialBuffer.append(addSpaceInfo());
+    socialBuffer.append("</body></html>");
+    textViewName.setText(Html.fromHtml(socialBuffer.toString()), TextView.BufferType.SPANNABLE);
   }
 
   private void displayAttachImage(String url, String name, String description) {
