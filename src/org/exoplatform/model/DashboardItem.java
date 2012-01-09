@@ -1,6 +1,5 @@
 package org.exoplatform.model;
 
-//	Dashboard tab
 public class DashboardItem {
 
   public String id;   // Dashboard ID

@@ -7,7 +7,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.WebdavMethod;
 
-//	File info
 public class ExoFile {
 
   public String  urlStr;     // File URL
