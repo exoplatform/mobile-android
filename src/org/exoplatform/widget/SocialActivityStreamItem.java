@@ -1,8 +1,5 @@
 package org.exoplatform.widget;
 
-import java.util.Map;
-import java.util.Set;
-
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -135,7 +132,6 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private void setViewByType(int typeId) {
     
-    System.out.println("-------------------"+typeId);
     switch (typeId) {
     case 1:
       // ks-forum:spaces
@@ -155,8 +151,6 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 3:
       // exosocial:spaces
-
-      setActivityTypeSocialSpace();
       break;
     case 4:
       // DOC_ACTIVITY
@@ -229,7 +223,6 @@ public class SocialActivityStreamItem extends LinearLayout {
     RestActivityStream actStream = activityInfo.restActivityStream;
     String nameSpace = actStream.getFullName();
     String spaceLink = actStream.getPermaLink();
-    System.out.println("spaceLink------------------" + spaceLink);
     spaceBuffer.append("<a href=");
     spaceBuffer.append(spaceLink);
     spaceBuffer.append(">");
@@ -299,10 +292,6 @@ public class SocialActivityStreamItem extends LinearLayout {
     buffer.append(" ");
     buffer.append("<font color=\"#696969\">");
     String act_key = activityInfo.templateParams.get("act_key");
-    // String space_name =activityInfo.templateParams.get("page_owner");
-    // if(space_name!=null){
-    //
-    // }
     String act_key_des = null;
     if (act_key != null) {
       if (act_key.equalsIgnoreCase("update_page")) {
@@ -469,17 +458,6 @@ public class SocialActivityStreamItem extends LinearLayout {
     }
   }
 
-  private void setActivityTypeSocialSpace() {
-    StringBuffer socialBuffer = new StringBuffer();
-    socialBuffer.append("<html><body>");
-    socialBuffer.append("<a>");
-    socialBuffer.append(userName);
-    socialBuffer.append("</a> ");
-    socialBuffer.append(addSpaceInfo());
-    socialBuffer.append("</body></html>");
-    textViewName.setText(Html.fromHtml(socialBuffer.toString()), TextView.BufferType.SPANNABLE);
-  }
-
   private void displayAttachImage(String url, String name, String description) {
     if (attachStubView == null) {
       initAttachStubView(url, name, description);
@@ -504,7 +482,6 @@ public class SocialActivityStreamItem extends LinearLayout {
     }
 
     if (SocialDetailHelper.getInstance().taskIsFinish = true) {
-      // String encodedUrl = URLAnalyzer.encodeUrl(url);
       SocialDetailHelper.getInstance().imageDownloader.download(url,
                                                                 attachImage,
                                                                 ExoConnectionUtils._strCookie);
@@ -514,7 +491,6 @@ public class SocialActivityStreamItem extends LinearLayout {
 
           // @Override
           public void onClick(View v) {
-            // String encodedUrl = URLAnalyzer.encodeUrl(url);
             SocialDetailHelper.getInstance().setAttachedImageUrl(url);
             Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);
             mContext.startActivity(intent);
