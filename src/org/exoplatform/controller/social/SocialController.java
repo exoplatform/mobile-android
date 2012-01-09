@@ -59,7 +59,11 @@ public class SocialController {
 
   private String         titleString;
 
-//  private ListView       socialListView;
+  private int            title_high_light = R.drawable.social_activity_browse_header_highlighted_bg;
+
+  private int            title_normal     = R.drawable.social_activity_browse_header_normal_bg;
+
+  // private ListView socialListView;
 
   public SocialController(SocialActivity context, LinearLayout layout) {
     mContext = context;
@@ -88,11 +92,11 @@ public class SocialController {
     }
   }
 
-//  public void setListAdapter(ArrayList<SocialActivityInfo> result) {
-//    SocialAdapter adapter = new SocialAdapter(mContext, result);
-//    socialListView.setAdapter(adapter);
-//    socialListView.setOnScrollListener(new ListAdapterScrollListener(adapter));
-//  }
+  // public void setListAdapter(ArrayList<SocialActivityInfo> result) {
+  // SocialAdapter adapter = new SocialAdapter(mContext, result);
+  // socialListView.setAdapter(adapter);
+  // socialListView.setOnScrollListener(new ListAdapterScrollListener(adapter));
+  // }
 
   public void setActivityList(ArrayList<SocialActivityInfo> result) {
 
@@ -109,9 +113,9 @@ public class SocialController {
         headerLayout.titleView.setText(postedTimeTitle);
 
         if (postedTimeTitle.equalsIgnoreCase(today))
-          headerLayout.titleView.setBackgroundDrawable(resource.getDrawable(R.drawable.social_activity_browse_header_highlighted_bg));
+          headerLayout.titleView.setBackgroundDrawable(resource.getDrawable(title_high_light));
         else {
-          headerLayout.titleView.setBackgroundDrawable(resource.getDrawable(R.drawable.social_activity_browse_header_normal_bg));
+          headerLayout.titleView.setBackgroundDrawable(resource.getDrawable(title_normal));
           headerLayout.titleView.setTextColor(Color.rgb(59, 59, 59));
         }
 
