@@ -7,10 +7,10 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
-import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
+import org.exoplatform.social.client.api.service.VersionService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
 import org.exoplatform.ui.ChatListActivity;
 import org.exoplatform.ui.DashboardActivity;
@@ -37,6 +37,8 @@ public class HomeActionListenner implements OnItemClickListener {
   private String              titleString;
 
   private String              contentString;
+
+  private String              socialErrorString;
 
   private String              protocol;
 
@@ -128,19 +130,21 @@ public class HomeActionListenner implements OnItemClickListener {
     mContext.startActivity(intent);
   }
 
-  /*private void launchSettingApp() {
-    Intent next = new Intent(mContext, SettingActivity.class);
-    next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    next.putExtra(ExoConstants.SETTING_TYPE, 1);
-    mContext.startActivity(next);
-
-  }*/
+  // private void launchSettingApp() {
+  // Intent next = new Intent(mContext, SettingActivity.class);
+  // next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+  // next.putExtra(ExoConstants.SETTING_TYPE, 1);
+  // mContext.startActivity(next);
+  //
+  // }
 
   private void changeLanguage() {
     LocalizationHelper location = LocalizationHelper.getInstance();
     okString = location.getString("OK");
     titleString = location.getString("Warning");
     contentString = location.getString("ConnectionError");
+    socialErrorString = location.getString("LoadingDataError");
+
   }
 
   private void parseDomain() {
@@ -172,11 +176,14 @@ public class HomeActionListenner implements OnItemClickListener {
         SocialClientContext.setPort(port);
         SocialClientContext.setPortalContainerName(ExoConstants.ACTIVITY_PORTAL_CONTAINER);
         SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
-        SocialClientContext.setRestVersion(ExoConstants.ACTIVITY_REST_VERSION);
         SocialClientContext.setUsername(userName);
         SocialClientContext.setPassword(password);
-
+        
         ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
+        VersionService versionService = clientServiceFactory.createVersionService();
+        SocialClientContext.setRestVersion(versionService.getLatest());
+        clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
+
         @SuppressWarnings("unchecked")
         ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
         IdentityService<?> identityService = clientServiceFactory.createIdentityService();
@@ -188,9 +195,10 @@ public class HomeActionListenner implements OnItemClickListener {
         SocialServiceHelper.getInstance().setIdentityService(identityService);
 
         return true;
-      } catch (SocialClientLibException e) {
+      } catch (Exception e) {
+        e.printStackTrace();
         return false;
-      } 
+      }
     }
 
     @Override
@@ -200,7 +208,7 @@ public class HomeActionListenner implements OnItemClickListener {
         next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(next);
       } else {
-        WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+        WarningDialog dialog = new WarningDialog(mContext, titleString, socialErrorString, okString);
         dialog.show();
       }
     }
