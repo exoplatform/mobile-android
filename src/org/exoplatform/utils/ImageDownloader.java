@@ -35,43 +35,45 @@ import android.widget.ImageView;
 
 public class ImageDownloader implements OnLowMemoryListener {
 
-  private static final int                                              HARD_CACHE_CAPACITY = 100;
+  private static final int                                       HARD_CACHE_CAPACITY = 100;
 
-  private static final int                                              DELAY_BEFORE_PURGE  = 3 * 1000;
+  private static final int                                       DELAY_BEFORE_PURGE  = 3 * 1000;
 
   // in
   // milliseconds
 
   // Hard cache, with a fixed maximum capacity and a life duration
   @SuppressWarnings("serial")
-  private final HashMap<String, Bitmap>                                 sHardBitmapCache    = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2,
-                                                                                                                                0.75f,
-                                                                                                                                true) {
-
-                                                                                              @Override
-                                                                                              protected boolean removeEldestEntry(Map.Entry<String, Bitmap> eldest) {
-                                                                                                if (size() > HARD_CACHE_CAPACITY) {
-                                                                                                  sSoftBitmapCache.put(eldest.getKey(),
-                                                                                                                       new SoftReference<Bitmap>(eldest.getValue()));
-                                                                                                  return true;
-                                                                                                } else {
-                                                                                                  return false;
-                                                                                                }
-                                                                                              }
-                                                                                            };
+  private final HashMap<String, Bitmap>                          sHardBitmapCache;
 
   // Soft cache for bitmap kicked out of hard cache
-  private final static ConcurrentHashMap<String, SoftReference<Bitmap>> sSoftBitmapCache    = new ConcurrentHashMap<String, SoftReference<Bitmap>>(HARD_CACHE_CAPACITY / 2);
+  private final ConcurrentHashMap<String, SoftReference<Bitmap>> sSoftBitmapCache;
 
-  private final Handler                                                 purgeHandler        = new Handler();
+  private final Handler                                          purgeHandler        = new Handler();
 
-  private final Runnable                                                purger              = new Runnable() {
-                                                                                              public void run() {
-                                                                                                clearCache();
-                                                                                              }
-                                                                                            };
+  private final Runnable                                         purger;
 
   public ImageDownloader(Context context) {
+    sHardBitmapCache = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2, 0.75f, true) {
+
+      @Override
+      protected boolean removeEldestEntry(Map.Entry<String, Bitmap> eldest) {
+        if (size() > HARD_CACHE_CAPACITY) {
+          sSoftBitmapCache.put(eldest.getKey(), new SoftReference<Bitmap>(eldest.getValue()));
+          return true;
+        } else {
+          return false;
+        }
+      }
+    };
+    sSoftBitmapCache = new ConcurrentHashMap<String, SoftReference<Bitmap>>(HARD_CACHE_CAPACITY / 2);
+
+    purger = new Runnable() {
+      public void run() {
+        clearCache();
+      }
+    };
+
     ((GDApplication) context).registerOnLowMemoryListener(this);
     resetPurgeTimer();
   }
