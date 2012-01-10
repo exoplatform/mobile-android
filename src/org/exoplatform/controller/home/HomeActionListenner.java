@@ -196,7 +196,6 @@ public class HomeActionListenner implements OnItemClickListener {
 
         return true;
       } catch (Exception e) {
-        e.printStackTrace();
         return false;
       }
     }

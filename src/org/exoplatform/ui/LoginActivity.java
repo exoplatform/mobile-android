@@ -158,11 +158,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   // @Override
   public void onClick(View view) {
-    if (view == _btnLogIn) {
+    if (view.equals(_btnLogIn)) {
       onLogin();
     }
 
-    if (view == _btnServer) {
+    if (view.equals(_btnServer)) {
       view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
       _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneon);
       _btnAccount.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
@@ -172,7 +172,7 @@ public class LoginActivity extends Activity implements OnClickListener {
       _btnLogIn.setVisibility(View.INVISIBLE);
       _listViewServer.setVisibility(View.VISIBLE);
     }
-    if (view == _btnAccount) {
+    if (view.equals(_btnAccount)) {
       view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
       _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_on);
       _btnServer.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
