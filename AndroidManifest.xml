@@ -80,13 +80,8 @@
             android:name=".ui.social.ComposeMessageActivity" />
         <activity
             android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.social.SocialImageLibrary" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.social.SelectedImageActivity" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.social.SocialPhotoAlbums" />
+            android:name=".ui.social.SelectedImageActivity" >
+        </activity>
         <activity
             android:configChanges="keyboardHidden|orientation"
             android:name=".ui.social.SocialAttachedImageActivity" />
