@@ -1,21 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="#DCDCDCDC"
-	android:orientation="vertical">
-	<ImageView android:id="@+id/social_selected_image"
-		android:padding="5dp" android:layout_weight="1" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" />
-	<LinearLayout android:layout_width="fill_parent"
-		android:padding="5dp" android:gravity="center" android:layout_height="60dp"
-		android:background="@drawable/serveraddbuttonpanelbackground">
-		<Button android:gravity="center" android:id="@+id/social_selected_image_ok_button"
-			android:text="OK" android:layout_width="fill_parent"
-			android:layout_height="44dp" android:textColor="#000000"
-			android:shadowColor="#888888" android:shadowDx="1.0"
-			android:shadowDy="2.0" android:shadowRadius="1.0"
-			android:background="@drawable/send_button_background_shape" />
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#DCDCDCDC"
+    android:orientation="vertical" >
 
-	</LinearLayout>
+    <ImageView
+        android:id="@+id/social_selected_image"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:padding="5dp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/social_selected_image_remove_button"
+            android:layout_width="0dip"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:background="@drawable/cancel_button_background_shape"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="2.0"
+            android:shadowRadius="1.0"
+            android:singleLine="true"
+            android:text="Remove"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/social_selected_image_ok_button"
+            android:layout_width="0dip"
+            android:layout_height="44dp"
+            android:layout_marginLeft="15dip"
+            android:layout_weight="1"
+            android:background="@drawable/send_button_background_shape"
+            android:shadowColor="#888888"
+            android:shadowDx="1.0"
+            android:shadowDy="2.0"
+            android:shadowRadius="1.0"
+            android:singleLine="true"
+            android:text="OK"
+            android:textColor="#000000" />
+    </LinearLayout>
 
 </LinearLayout>
