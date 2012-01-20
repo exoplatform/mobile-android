@@ -7,7 +7,7 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.social.client.api.model.RestActivityStream;
 import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.PhotoUltils;
+import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
@@ -164,7 +164,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       String docLink = activityInfo.templateParams.get("DOCLINK");
       if (docLink != null) {
         String docName = activityInfo.templateParams.get("DOCNAME");
-        if (PhotoUltils.isImages(docName)) {
+        if (PhotoUtils.isImages(docName)) {
           String url = domain + docLink;
           displayAttachImage(url, docName, null);
         }
@@ -363,7 +363,10 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void setActivityTypeCalendar() {
     StringBuffer forumBuffer = new StringBuffer();
     forumBuffer.append("<html><body>");
+    forumBuffer.append("<a>");
     forumBuffer.append(userName);
+    forumBuffer.append("</a> ");
+    forumBuffer.append(addSpaceInfo());
     forumBuffer.append(" ");
     String actType = activityInfo.templateParams.get("EventType");
     String actTypeDesc = null;
@@ -414,13 +417,13 @@ public class SocialActivityStreamItem extends LinearLayout {
     caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarStart"));
     caledarBuffer.append(" ");
     String startTime = activityInfo.templateParams.get("EventStartTime");
-    startTime = PhotoUltils.getDateFromString(startTime);
+    startTime = PhotoUtils.getDateFromString(startTime);
     caledarBuffer.append(startTime);
     caledarBuffer.append("<br>");
     caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarEnd"));
     caledarBuffer.append(" ");
     String endTime = activityInfo.templateParams.get("EventEndTime");
-    endTime = PhotoUltils.getDateFromString(endTime);
+    endTime = PhotoUtils.getDateFromString(endTime);
     caledarBuffer.append(endTime);
     caledarBuffer.append("</body></html>");
     textView.setText(Html.fromHtml(caledarBuffer.toString()));

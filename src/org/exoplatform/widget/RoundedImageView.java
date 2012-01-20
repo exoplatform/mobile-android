@@ -3,7 +3,7 @@ package org.exoplatform.widget;
 import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.utils.PhotoUltils;
+import org.exoplatform.utils.PhotoUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -50,7 +50,7 @@ public class RoundedImageView extends AsyncImageView {
       } else {
         mScaledBitmap = Bitmap.createScaledBitmap(fullSizeBitmap, scaledWidth, scaledHeight, true /* filter */);
       }
-      mScaledBitmap = PhotoUltils.getRoundedCornerBitmap(mScaledBitmap, 5);
+      mScaledBitmap = PhotoUtils.getRoundedCornerBitmap(mScaledBitmap, 5);
       if (mScaledBitmap != null) {
         canvas.drawBitmap(mScaledBitmap, 0, 0, null);
       }

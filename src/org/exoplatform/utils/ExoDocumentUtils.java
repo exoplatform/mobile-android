@@ -27,7 +27,7 @@ public class ExoDocumentUtils {
   public static String repositoryHomeURL = null;
 
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
-    File tempFile = PhotoUltils.reziseFileImage(fileManager);
+    File tempFile = PhotoUtils.reziseFileImage(fileManager);
     HttpResponse response = null;
     try {
 
@@ -332,13 +332,13 @@ public class ExoDocumentUtils {
   }
 
   public static boolean isContainSpecialChar(String str, String charSet) {
-    
+
     try {
       Pattern patt = Pattern.compile(charSet);
       Matcher matcher = patt.matcher(str);
       return matcher.find();
-  } catch (RuntimeException e) {
-    return false;
-  }  
+    } catch (RuntimeException e) {
+      return false;
+    }
   }
 }

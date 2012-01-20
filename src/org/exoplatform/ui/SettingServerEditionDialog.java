@@ -112,6 +112,9 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
       dismiss();
       editController.onResetAdapter(listViewServer);
     } else {
+      if (view.equals(btnDeleteCancel)) {
+        dismiss();
+      }
       String serverNameURLInvalid = LocalizationHelper.getInstance().getString("SpecialCharacters");
       Toast.makeText(mContext, serverNameURLInvalid, Toast.LENGTH_SHORT).show();
     }

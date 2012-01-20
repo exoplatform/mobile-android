@@ -1,12 +1,11 @@
 package org.exoplatform.controller.dashboard;
 
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
-import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.model.DashboardItem;
+import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DashboardActivity;
@@ -34,8 +33,6 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
 
   private DashboardWaitingDialog _progressDialog;
 
-  private boolean                canWorkWithDashboardService;
-
   public DashboardLoadTask(DashboardActivity context, DashboardController controller) {
     dashboardActivity = context;
     dashboardController = controller;
@@ -52,7 +49,6 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
   public ArrayList<DashboardItem> doInBackground(Void... params) {
 
     HttpResponse response;
-    canWorkWithDashboardService = true;
     try {
 
       WebdavMethod copy = new WebdavMethod("HEAD", AccountSetting.getInstance().getDomainName());
@@ -61,19 +57,13 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return dashboardController.getDashboards();
-      }
+      } else
+        return null;
 
     } catch (Exception e) {
-
-      if (e instanceof SocketTimeoutException)
-        canWorkWithDashboardService = true;
-      else
-        canWorkWithDashboardService = false;
-
       return null;
     }
 
-    return null;
   }
 
   @Override
@@ -86,7 +76,8 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
         for (int i = 0; i < result.size(); i++) {
           DashboardItem gadgetTab = result.get(i);
 
-          List<GadgetInfo> gadgets = dashboardController.getGadgetInTab(gadgetTab.label, gadgetTab.link);
+          List<GadgetInfo> gadgets = dashboardController.getGadgetInTab(gadgetTab.label,
+                                                                        gadgetTab.link);
           if (gadgets != null && gadgets.size() > 0) {
             items.add(new GadgetInfo(gadgetTab.label));
             items.addAll(gadgets);
@@ -100,11 +91,6 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
 
     } else {
 
-      if (canWorkWithDashboardService)
-        contentString = LocalizationHelper.getInstance().getString("ConnectionError");
-      else
-        contentString = LocalizationHelper.getInstance().getString("CompliantMessage");
-
       WarningDialog dialog = new WarningDialog(dashboardActivity,
                                                titleString,
                                                contentString,
@@ -112,16 +98,11 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
       dialog.show();
     }
     _progressDialog.dismiss();
-    
+
     String strGadgetsErrorList = dashboardController.getGadgetsErrorList();
-    if(strGadgetsErrorList.length() > 0) {
-      
-      contentString = LocalizationHelper.getInstance().getString("GadgetsCannotBeRetrieved");
-      
-      WarningDialog dialog = new WarningDialog(dashboardActivity,
-                                               titleString,
-                                               "Apps: " + strGadgetsErrorList + " " + contentString,
-                                               okString);
+    if (strGadgetsErrorList.length() > 0) {
+      WarningDialog dialog = new WarningDialog(dashboardActivity, titleString, "Apps: "
+          + strGadgetsErrorList + " " + contentString, okString);
       dialog.show();
     }
 
@@ -132,7 +113,7 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
     loadingData = location.getString("LoadingData");
     okString = location.getString("OK");
     titleString = location.getString("Warning");
-    contentString = location.getString("ConnectionError");
+    contentString = location.getString("GadgetsCannotBeRetrieved");
   }
 
   private class DashboardWaitingDialog extends WaitingDialog {

@@ -11,17 +11,17 @@ import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentLoadTask;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.ui.social.SelectedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.utils.PhotoUltils;
+import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.URLAnalyzer;
 import org.exoplatform.utils.WebdavMethod;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WaitingDialog;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -313,7 +313,7 @@ public class DocumentActivity extends MyActionBar {
   // Take a photo
   public void takePicture() {
     String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-    _sdcard_temp_dir = parentPath + PhotoUltils.getImageFileName();
+    _sdcard_temp_dir = parentPath + PhotoUtils.getImageFileName();
 
     Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
@@ -321,27 +321,36 @@ public class DocumentActivity extends MyActionBar {
     startActivityForResult(takePictureFromCameraIntent, ExoConstants.TAKE_PICTURE_WITH_CAMERA);
 
   }
+  public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    super.onActivityResult(requestCode, resultCode, intent);
+    if (resultCode == RESULT_OK) {
+      switch (requestCode) {
+      case ExoConstants.TAKE_PICTURE_WITH_CAMERA:
+        File file = new File(_sdcard_temp_dir);
+        setViewUploadImage(true);
+        try {
+          BitmapFactory.Options options = new BitmapFactory.Options();
+          options.inSampleSize = 8;
+          FileInputStream fis = new FileInputStream(file);
+          Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
+          fis.close();
+          // Bitmap bmp = (Bitmap) data.getExtras().get("data");
+          _imgViewUpLoadPhoto.setImageBitmap(bitmap);
+        } catch (Exception e) {
+        }
+        break;
 
-  // Take photo app
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == ExoConstants.TAKE_PICTURE_WITH_CAMERA || resultCode == Activity.RESULT_OK) {
-      File file = new File(_sdcard_temp_dir);
-      setViewUploadImage(true);
-      try {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 8;
-        FileInputStream fis = new FileInputStream(file);
-        Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
-        fis.close();
-        // Bitmap bmp = (Bitmap) data.getExtras().get("data");
-        _imgViewUpLoadPhoto.setImageBitmap(bitmap);
-      } catch (Exception e) {
+      case ExoConstants.REQUEST_ADD_PHOTO:
+        Intent intent2 = new Intent(this, SelectedImageActivity.class);
+        intent.putExtra(ExoConstants.SELECTED_IMAGE_MODE, 2);
+        intent2.setData(intent.getData());
+        if (intent.getExtras() != null) {
+          intent2.putExtras(intent.getExtras());
+        }
+        startActivity(intent2);
+        break;
       }
-
-    } else if (resultCode == Activity.RESULT_CANCELED) {
-      return;
     }
-
   }
 
   // Delete file/folder method

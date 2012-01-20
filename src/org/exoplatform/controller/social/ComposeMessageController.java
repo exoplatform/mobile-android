@@ -5,14 +5,13 @@ import java.io.File;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.core.model.RestCommentImpl;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.PhotoUltils;
+import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WarningDialog;
 
@@ -51,7 +50,7 @@ public class ComposeMessageController {
 
   public void initCamera() {
     String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-    sdcard_temp_dir = parentPath + PhotoUltils.getImageFileName();
+    sdcard_temp_dir = parentPath + PhotoUtils.getImageFileName();
 
     Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
@@ -106,7 +105,7 @@ public class ComposeMessageController {
 
       SocialActivity.socialActivity.reloadActivity();
 
-    } catch (SocialClientLibException e) {
+    } catch (Exception e) {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }

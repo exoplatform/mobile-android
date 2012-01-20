@@ -42,6 +42,10 @@ public class ExoConstants {
 
   public static final int    TAKE_PICTURE_WITH_CAMERA      = 7;
 
+  public static final int    REQUEST_ADD_PHOTO             = 8;
+
+  public static final String PHOTO_ALBUM_IMAGE_TYPE        = "image/*";                                           ;
+
   public static final String HTTP_PROTOCOL                 = "http";
 
   public static final String HTTPS_PROTOCOL                = "https";
@@ -65,6 +69,8 @@ public class ExoConstants {
   public static final String ACTIVITY_ID_EXTRA             = "ACTIVITY_ID_EXTRA";
 
   public static final String SELECTED_IMAGE_EXTRA          = "SELECTED_IMAGE_EXTRA";
+
+  public static final String SELECTED_IMAGE_MODE           = "SELECTED_IMAGE_MODE";
 
   public static final String SOCIAL_LINKFY_EXTRA           = "SOCIAL_LINKFY_EXTRA";
 

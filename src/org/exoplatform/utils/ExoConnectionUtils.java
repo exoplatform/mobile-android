@@ -12,6 +12,8 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -39,6 +41,8 @@ public class ExoConnectionUtils {
   public static DefaultHttpClient httpClient;
 
   public static HttpURLConnection con;
+
+  private static String           domainUrl;
 
   private static int              splitLinesAt = 76;
 
@@ -84,18 +88,11 @@ public class ExoConnectionUtils {
   }
 
   private static String splitLines(String string) {
-    // String lines = "";
     StringBuffer lineBuffer = new StringBuffer();
     for (int i = 0; i < string.length(); i += splitLinesAt) {
 
-      // lineBuffer.append(lines);
       lineBuffer.append(string.substring(i, Math.min(string.length(), i + splitLinesAt)));
       lineBuffer.append("\r\n");
-      // lines += string.substring(i, Math.min(string.length(), i +
-      // splitLinesAt));
-      //
-      // lines += "\r\n";
-      // lines = lineBuffer.toString();
     }
     return lineBuffer.toString();
 
@@ -129,15 +126,10 @@ public class ExoConnectionUtils {
     for (int i = 0; i < stringArray.length; i += 3) {
       int j = ((stringArray[i] & 0xff) << 16) + ((stringArray[i + 1] & 0xff) << 8)
           + (stringArray[i + 2] & 0xff);
-      // encodedBuffer.append(encoded);
       encodedBuffer.append(base64code.charAt((j >> 18) & 0x3f));
       encodedBuffer.append(base64code.charAt((j >> 12) & 0x3f));
       encodedBuffer.append(base64code.charAt((j >> 6) & 0x3f));
       encodedBuffer.append(base64code.charAt(j & 0x3f));
-      // encoded = encodedBuffer.toString();
-      // encoded = encoded + base64code.charAt((j >> 18) & 0x3f) +
-      // base64code.charAt((j >> 12) & 0x3f)
-      // + base64code.charAt((j >> 6) & 0x3f) + base64code.charAt(j & 0x3f);
     }
     encoded = encodedBuffer.toString();
     // replace encoded padding nulls with "="
@@ -205,7 +197,7 @@ public class ExoConnectionUtils {
         loginStr = redirectStr.substring(0, indexOfPrivate).concat("/j_security_check");
       else
         loginStr = redirectStr.concat("/j_security_check");
-
+      domainUrl = loginStr;
       HttpPost httpPost = new HttpPost(loginStr);
       List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
       nvps.add(new BasicNameValuePair("j_username", username));
@@ -253,6 +245,33 @@ public class ExoConnectionUtils {
     return strAuthor.substring(0, strAuthor.length() - 2);
   }
 
+  // re authenticate when login session timeout
+  public static void reAuthenticate() {
+    try {
+      if (httpClient == null) {
+        HttpParams httpParameters = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
+        HttpConnectionParams.setSoTimeout(httpParameters, 30000);
+        HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+
+        httpClient = new DefaultHttpClient(httpParameters);
+
+      }
+      String strUserName = AccountSetting.getInstance().getUsername();
+      String strPassword = AccountSetting.getInstance().getPassword();
+      HttpPost httpPost = new HttpPost(domainUrl);
+      List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
+      nvps.add(new BasicNameValuePair("j_username", strUserName));
+      nvps.add(new BasicNameValuePair("j_password", strPassword));
+      httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+      httpClient.execute(httpPost);
+    } catch (Exception e) {
+    }
+    httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance().getAuthScope(),
+                                                       AccountSetting.getInstance()
+                                                                     .getCredentials());
+  }
+
   // Get input stream from URL with authentication
   public static InputStream sendRequestWithAuthorization(String urlStr) {
 
@@ -274,11 +293,6 @@ public class ExoConnectionUtils {
 
       // pull the information back from the URL
       ipstr = con.getInputStream();
-      /*
-       * StringBuffer buf = new StringBuffer(); int c; while ((c = ipstr.read())
-       * != -1) { buf.append((char) c); }
-       */
-      // con.disconnect();
 
     } catch (ClientProtocolException e) {
       e.getMessage();
@@ -379,6 +393,14 @@ public class ExoConnectionUtils {
   // get the JSONObject string of PLF
   private static String getPLFStream(String url) {
     return convertStreamToString(sendRequestWithoutAuthen(url));
+  }
+
+  // create Authorization
+  public static void createAuthorization(String url, int port, String userName, String password) {
+    AuthScope auth = new AuthScope(url, port);
+    AccountSetting.getInstance().setAuthScope(auth);
+    UsernamePasswordCredentials credential = new UsernamePasswordCredentials(userName, password);
+    AccountSetting.getInstance().setCredentials(credential);
   }
 
   /*

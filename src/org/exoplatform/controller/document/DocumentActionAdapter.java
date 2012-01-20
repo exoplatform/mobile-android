@@ -10,6 +10,7 @@ import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.DocumentExtendDialog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   public ExoFile                      _selectedFile;
 
-  private Context                     _mContext;
+  private Activity                     _mContext;
 
   private DocumentActionDialog        _delegate;
 
@@ -50,7 +51,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   private DocumentExtendDialog        extendDialog;
 
-  public DocumentActionAdapter(Context context, DocumentActionDialog parent, ExoFile file) {
+  public DocumentActionAdapter(Activity context, DocumentActionDialog parent, ExoFile file) {
     _mContext = context;
     _delegate = parent;
     _selectedFile = file;

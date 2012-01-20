@@ -63,7 +63,6 @@ public class SettingServerListEditionActivity extends MyActionBar {
     if (selectedItemIndex == 1) {
       ServerSettingHelper.getInstance().setIsNewServer(true);
       new SettingServerEditionDialog(this, listViewServer).show();
-
     }
 
     return false;

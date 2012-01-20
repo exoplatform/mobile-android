@@ -116,13 +116,6 @@ public class LoginController {
 
   }
 
-  private void createAuthorization(String url, int port, String userName, String password) {
-    AuthScope auth = new AuthScope(url, port);
-    AccountSetting.getInstance().setAuthScope(auth);
-    UsernamePasswordCredentials credential = new UsernamePasswordCredentials(userName, password);
-    AccountSetting.getInstance().setCredentials(credential);
-  }
-
   public class LoginTask extends UserTask<Void, Void, String> {
     @Override
     public void onPreExecute() {
@@ -152,7 +145,7 @@ public class LoginController {
         dialog.show();
       } else if (result.equalsIgnoreCase(ExoConstants.LOGIN_YES)) {
         AccountSetting accountSetting = AccountSetting.getInstance();
-        createAuthorization(uri.getHost(), uri.getPort(), userName, password);
+        ExoConnectionUtils.createAuthorization(uri.getHost(), uri.getPort(), userName, password);
         SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());

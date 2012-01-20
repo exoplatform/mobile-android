@@ -6,7 +6,6 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
@@ -22,7 +21,6 @@ import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 
 public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActivityInfo>> {
@@ -103,13 +101,9 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
         }
       }
       return listActivity;
-    } catch (SocialClientLibException e) {
-      Log.e("SocialException", e.getMessage());
-      return null;
     } catch (Exception e) {
-      // Log.e("Exception", e.getMessage());
       return null;
-    }
+    } 
   }
 
   @Override

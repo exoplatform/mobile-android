@@ -6,6 +6,7 @@ import org.exoplatform.model.DocumentActionDescription;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
@@ -25,7 +26,7 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
   Context                      mContext;                   // context
 
-  public ExoFile                      myFile;                     // Current file
+  public ExoFile               myFile;                     // Current file
 
   // Localization string
   String                       strClose;
@@ -50,24 +51,24 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
     myFile = file;
 
-    _documentActionAdapter = new DocumentActionAdapter(getContext(), this, myFile);
+    _documentActionAdapter = new DocumentActionAdapter((Activity) context, this, myFile);
 
     init();
 
     setTileForDialog(myFile.name);
-    
+
   }
 
   public void setTileForDialog(String title) {
     _txtvFileName.setText(title);
   }
-  
+
   private void init() {
 
     _listViewFileAction = (ListView) findViewById(R.id.ListView0_FileAction);
 
     _txtvFileName = (TextView) findViewById(R.id.TextView_Title);
-    
+
     changeLanguage();
 
     setDocumentActionAdapter();

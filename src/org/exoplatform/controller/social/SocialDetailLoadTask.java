@@ -10,7 +10,6 @@ import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.model.RestIdentity;
@@ -134,7 +133,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       }
 
       return 1;
-    } catch (SocialClientLibException e) {
+    } catch (Exception e) {
       return 0;
     }
   }

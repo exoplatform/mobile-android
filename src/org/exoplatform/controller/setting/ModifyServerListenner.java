@@ -8,9 +8,9 @@ import org.exoplatform.ui.SettingServerEditionDialog;
 import android.content.Context;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ModifyServerListenner implements OnItemClickListener {
   private Context  mContext;
