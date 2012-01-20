@@ -1,7 +1,6 @@
 package org.exoplatform.controller.document;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.exoplatform.model.ExoFile;
@@ -38,7 +37,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   private DocumentActivity      documentActivity;
 
-  private ArrayList<ExoFile>         _documentList = new ArrayList<ExoFile>();
+  private ArrayList<ExoFile>	_documentList = new ArrayList<ExoFile>();
 
   public DocumentLoadTask(Context context,
                           DocumentActivity activity,
@@ -50,7 +49,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
     strSourceUrl = source;
     strDestinationUrl = destination;
     actionID = action;
-
+    
     changeLanguage();
   }
 
@@ -111,7 +110,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
       }
       if (result == true) {
-        _documentList = ExoDocumentUtils.getPersonalDriveContent(strSourceUrl);
+        _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity._fileForCurrentActionBar);
       }
 
       return result;
@@ -129,39 +128,38 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
   @Override
   public void onPostExecute(Boolean result) {
     if (result) {
-
-      documentActivity._fileForCurrnentActionBar = new ExoFile(strSourceUrl,
-                                                               ExoDocumentUtils.getLastPathComponent(strSourceUrl),
-                                                               true,
-                                                               "text/html");
-
+    	
       if (actionID == 0 || actionID == 1 || actionID == 4 || actionID == 5 || actionID == 6) {
 
         if (actionID == 5) {
           boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
-          String type = documentActivity._documentAdapter._documentActionDialog.myFile.contentType;
-          documentActivity._fileForCurrnentActionBar.isFolder = isFolder;
-          documentActivity._fileForCurrnentActionBar.contentType = type;
+          String type = documentActivity._documentAdapter._documentActionDialog.myFile.nodeType;
+          documentActivity._fileForCurrentActionBar.isFolder = isFolder;
+          documentActivity._fileForCurrentActionBar.nodeType = type;
         }
       }
 
       if (documentActivity._documentAdapter == null) {
 
         documentActivity._documentAdapter = new DocumentAdapter(documentActivity,
-                                                                documentActivity._urlDocumentHome);
+                                                                documentActivity._fileForCurrentActionBar);
         documentActivity.setDocumentAdapter();
       }
+      
+      if(DocumentActivity._documentActivityInstance._fileForCurrentActionBar == null)
+      	DocumentActivity._documentActivityInstance.setListViewPadding(5, 0, 5, 0);
+      else
+      	DocumentActivity._documentActivityInstance.setListViewPadding(-2, 0, -2, 0);
+      
       documentActivity._documentAdapter._documentList = _documentList;
       documentActivity._documentAdapter.notifyDataSetChanged();
       documentActivity.addOrRemoveFileActionButton();
-
-      try {
-        String title = new String(ExoDocumentUtils.getLastPathComponent(strSourceUrl)
-                                                  .getBytes("ISO-8859-1"), "UTF-8");
-        documentActivity.setTitle(title);
-      } catch (UnsupportedEncodingException e) {
-      }
-
+      
+      if(documentActivity._fileForCurrentActionBar == null)
+    	  documentActivity.setTitle(LocalizationHelper.getInstance().getString("Documents"));
+      else
+    	  documentActivity.setTitle(documentActivity._fileForCurrentActionBar.name);
+      
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
@@ -171,7 +169,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
     } else
       documentActivity.setEmptyView(View.GONE);
     _progressDialog.dismiss();
-
+    
   }
 
   private class DocumentWaitingDialog extends WaitingDialog {

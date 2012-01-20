@@ -87,7 +87,12 @@ public class ExoConstants {
   public static final String FRENCH_LOCALIZATION           = "LocalizeFR.properties";
 
   public static final String DOCUMENT_PATH                 = "/rest/private/jcr/repository/collaboration/Users";
-
+  public static final String DOCUMENT_JCR_PATH_REST        = "/rest/private/jcr/repository/collaboration";
+  public static final String DOCUMENT_DRIVE_PATH_REST      = "/portal/rest/managedocument/getDrives?driveType=";
+  public static final String DOCUMENT_FILE_PATH_REST       = "/portal/rest/managedocument/getFoldersAndFiles?driveName=";
+  public static final String DOCUMENT_WORKSPACE_NAME       = "&workspaceName="; 
+  public static final String DOCUMENT_CURRENT_FOLDER       = "&currentFolder="; 
+  
   public static final String DASHBOARD_PATH                = "/rest/private/dashboards";
 
   public static final String DOMAIN_SUFFIX                 = "/portal/private/intranet";

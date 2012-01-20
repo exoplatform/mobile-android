@@ -1,17 +1,26 @@
 package org.exoplatform.utils;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
+import org.exoplatform.singleton.AccountSetting;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
 
 public class ExoDocumentUtils {
 
@@ -92,44 +101,163 @@ public class ExoDocumentUtils {
   }
 
   // Get file array from URL
-  public static ArrayList<ExoFile> getPersonalDriveContent(String url) {
+  public static ArrayList<ExoFile> getPersonalDriveContent(ExoFile file) {
 
-    ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
-    String responseStr = ExoConnectionUtils.getDriveContent(url);
-    if (responseStr != null) {
-      int local1;
-      int local2;
-      do {
-        local1 = responseStr.indexOf("alt=\"\"> ");
+	  ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
 
-        if (local1 > 0) {
-          int local3 = responseStr.indexOf("<a href=\"");
-          int local4 = responseStr.indexOf("\"><img src");
-          String urlStr = responseStr.substring(local3 + 9, local4);
-
-          responseStr = responseStr.substring(local1 + 8);
-          local2 = responseStr.indexOf("</a>");
-          String fileName = responseStr.substring(0, local2);
-          if (!fileName.equalsIgnoreCase("..")) {
-            fileName = StringEscapeUtils.unescapeHtml(fileName);
-            fileName = StringEscapeUtils.unescapeJava(fileName);
-            try {
-              fileName = new String(fileName.getBytes(), "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-            }
-            ExoFile file = new ExoFile(urlStr, fileName);
-            arrFilesTmp.add(file);
-          }
-
-          if (local2 > 0)
-            responseStr = responseStr.substring(local2);
-        }
-
-      } while (local1 > 0);
-    }
-    return arrFilesTmp;
+	  if(file == null) {
+		  arrFilesTmp.add(null);
+		  arrFilesTmp.addAll(getDrives("personal"));
+		  arrFilesTmp.add(null);
+		  arrFilesTmp.addAll(getDrives("group"));
+	  } else {
+		  arrFilesTmp.addAll(getContentOfFolder(file));
+	  }
+	  
+	  return arrFilesTmp;
   }
 
+  public static String fullURLofFile(String url) {
+
+	  String domain = AccountSetting.getInstance().getDomainName();
+	  return domain + ExoConstants.DOCUMENT_JCR_PATH_REST + url;
+	    
+  }
+  
+  public static ArrayList<ExoFile> getDrives(String driveName) {
+	  
+	  String domain = AccountSetting.getInstance().getDomainName();
+	  String urlStr = domain + ExoConstants.DOCUMENT_DRIVE_PATH_REST + driveName;
+	    // Initialize the blogEntries MutableArray that we declared in the header
+	  ArrayList<ExoFile> folderArray = new ArrayList<ExoFile>();	
+		
+      Document obj_doc = null;
+      DocumentBuilderFactory doc_build_fact = null;
+      DocumentBuilder doc_builder = null;
+      try {
+    	  String str = ExoConnectionUtils.getDriveContent(urlStr);
+          doc_build_fact = DocumentBuilderFactory.newInstance();
+          doc_builder = doc_build_fact.newDocumentBuilder();
+          StringReader sr = new StringReader(str);
+          InputSource is = new InputSource(sr);
+          obj_doc = doc_builder.parse(is);
+
+          
+          NodeList obj_nod_list = null;
+          if (null != obj_doc) {
+            org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+            obj_nod_list = feed.getElementsByTagName("Folder");
+
+            for (int i = 0; i < obj_nod_list.getLength(); i++) {
+              Node itemNode = obj_nod_list.item(i);
+              if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element itemElement = (Element) itemNode;
+                
+                ExoFile file = new ExoFile();
+                
+                file.name = itemElement.getAttribute("name");
+    	        file.workspaceName = itemElement.getAttribute("workspaceName");
+    	        file.driveName = file.name;
+    	        file.currentFolder = itemElement.getAttribute("currentFolder");
+    	        if(file.currentFolder == null)
+    	            file.currentFolder = "";
+    	        file.isFolder = true;
+    	        
+                
+    	        folderArray.add(file);
+              }
+            }
+          }
+
+        } catch (Exception e) {
+        	folderArray = null;
+      }
+      
+	return folderArray;
+  }
+  
+  public static ArrayList<ExoFile> getContentOfFolder(ExoFile file) {
+	  
+	  String domain = AccountSetting.getInstance().getDomainName();
+	  String urlStr = domain + ExoConstants.DOCUMENT_FILE_PATH_REST + file.driveName
+	  + ExoConstants.DOCUMENT_WORKSPACE_NAME + file.workspaceName + ExoConstants.DOCUMENT_CURRENT_FOLDER + file.currentFolder;
+	  
+	  urlStr = URLAnalyzer.encodeUrl(urlStr);
+	  
+	    // Initialize the blogEntries MutableArray that we declared in the header
+	  ArrayList<ExoFile> folderArray = new ArrayList<ExoFile>();	
+		
+      Document obj_doc = null;
+      DocumentBuilderFactory doc_build_fact = null;
+      DocumentBuilder doc_builder = null;
+      try {
+    	  String str = ExoConnectionUtils.getDriveContent(urlStr);
+          doc_build_fact = DocumentBuilderFactory.newInstance();
+          doc_builder = doc_build_fact.newDocumentBuilder();
+          StringReader sr = new StringReader(str);
+          InputSource is = new InputSource(sr);
+          obj_doc = doc_builder.parse(is);
+
+          NodeList obj_nod_list = null;
+          if (null != obj_doc) {
+            org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+            
+//            Get folders
+            obj_nod_list = feed.getElementsByTagName("Folder");
+
+            for (int i = 0; i < obj_nod_list.getLength(); i++) {
+              Node itemNode = obj_nod_list.item(i);
+              if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element itemElement = (Element) itemNode;
+                if(i > 0) {
+                	ExoFile newFile = new ExoFile();
+                    
+                    newFile.name = itemElement.getAttribute("name");;
+                    newFile.path = fullURLofFile(itemElement.getAttribute("path")); 
+                    newFile.workspaceName = itemElement.getAttribute("workspaceName");
+                    newFile.driveName = itemElement.getAttribute("driveName");
+                    newFile.currentFolder = itemElement.getAttribute("currentFolder");
+        	        if(newFile.currentFolder == null)
+        	        	newFile.currentFolder = "";
+        	        newFile.isFolder = true;
+        	        
+        	        folderArray.add(newFile);
+                }
+                
+              }
+            }
+            
+//          Get files
+            obj_nod_list = feed.getElementsByTagName("File");
+
+            for (int i = 0; i < obj_nod_list.getLength(); i++) {
+              Node itemNode = obj_nod_list.item(i);
+              if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element itemElement = (Element) itemNode;
+                
+                ExoFile newFile = new ExoFile();
+                newFile.path = fullURLofFile(itemElement.getAttribute("path"));
+                newFile.name = itemElement.getAttribute("name");
+                newFile.workspaceName = itemElement.getAttribute("workspaceName");
+                newFile.driveName = file.name;
+                newFile.currentFolder = itemElement.getAttribute("currentFolder");
+                newFile.nodeType = itemElement.getAttribute("nodeType");
+    	        newFile.isFolder = false;
+    	        
+    	        folderArray.add(newFile);
+              }
+            }
+            
+          }
+
+        } catch (Exception e) {
+
+      }
+      
+	return folderArray;
+	
+  }
+  
   // Get file/folder icon file name form content type
   static public String getFileFolderIconName(String contentType) {
     String strIconFileName = "documenticonforunknown";
@@ -186,12 +314,21 @@ public class ExoDocumentUtils {
 
   public static String getParentUrl(String url) {
 
-    return url.substring(0, url.lastIndexOf("/"));
+	  int index = url.lastIndexOf("/");
+	  if(index > 0)
+		  return url.substring(0, index);
+	  
+	  return "";
   }
 
   public static String getLastPathComponent(String url) {
 
-    return url.substring(url.lastIndexOf("/") + 1, url.length());
+	  int index = url.lastIndexOf("/");
+	  if(index > 0)
+		  return url.substring(url.lastIndexOf("/") + 1, url.length());
+	  
+	  return url;
+	  
   }
 
   public static boolean isContainSpecialChar(String str, String charSet) {

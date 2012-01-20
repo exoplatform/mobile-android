@@ -6,6 +6,7 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.DocumentExtendDialog;
 
@@ -96,31 +97,36 @@ public class DocumentActionAdapter extends BaseAdapter {
             _fileCopied = null;
             _fileMoved = null;
 
-            DocumentActivity._documentActivityInstance.onLoad(_selectedFile.urlStr,
-                                                              _selectedFile.urlStr,
+            String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+      	  
+            if(currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
+                currentFolder = ExoDocumentUtils.getParentUrl(currentFolder);
+                DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = ExoDocumentUtils.getLastPathComponent(currentFolder);
+                DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
+            }
+            
+            DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
+                                                              _selectedFile.path,
                                                               1);
           } else {
             // Copy file
             if (_fileCopied != null) {
-              int index = _fileCopied.urlStr.lastIndexOf("/");
-              String lastPathComponent = _fileCopied.urlStr.substring(index);
-              String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
+              String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
+              String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-              DocumentActivity._documentActivityInstance.onLoad(_fileCopied.urlStr,
+              DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path,
                                                                 destinationUrl,
                                                                 2);
 
             }
             if (_fileMoved != null) {
-              if (!_fileMoved.urlStr.equalsIgnoreCase(_selectedFile.urlStr)) {
-                int index = _fileMoved.urlStr.lastIndexOf("/");
-                String lastPathComponent = _fileMoved.urlStr.substring(index);
-                String destinationUrl = _selectedFile.urlStr.concat(lastPathComponent);
+              if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
+                String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
+                String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-                DocumentActivity._documentActivityInstance.onLoad(_fileMoved.urlStr,
+                DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
                                                                   destinationUrl,
                                                                   3);
-
               }
 
             }

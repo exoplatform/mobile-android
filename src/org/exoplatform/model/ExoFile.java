@@ -1,62 +1,35 @@
 package org.exoplatform.model;
 
-import java.io.IOException;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.WebdavMethod;
+import java.util.Date;
 
 public class ExoFile {
 
-  public String  urlStr;     // File URL
+	  public String  path;	//File's jcr url
+	  public boolean isFolder;		//Is folder
+	  public String  name;	//name of the file/folder
+	  public boolean canAddChild; //can add new file or folder as it content
+	  public boolean canRemove;	//can remove the file/folder
+	  public String  currentFolder; //the path of file
+	  public String  driveName;	//drive name of file
+	  public boolean hasChild;	//if the folder contains any files or folders
+	  public String  workspaceName;	//work space of file
+	  public String  nodeType;	//file content type
+	  public String  creator;	//Name of the one who created the file
+	  public Date dateCreated;	//the time that the file is created
+	  public Date dateModified;	//the time that the file is modified
+	  public int size;	//size of file
+	  
+	  // Default constructors
+	  public ExoFile() {
+	  }
+	  
 
-  public String  fileName;   // File name
-
-  public String  contentType; // File content type
-
-  public boolean isFolder;   // is folder
-
-  // Default constructors
-  public ExoFile(String url, String name, boolean folder, String type) {
-    urlStr = url;
-    fileName = name;
-    isFolder = folder;
-    contentType = type;
-  }
-
-  // Construtor
-  public ExoFile(String urlString, String file_Name) {
-
-    try {
-
-      urlStr = urlString;
-      fileName = file_Name;
-
-      HttpResponse response;
-
-      WebdavMethod webDav = new WebdavMethod("PROPFIND", urlStr);
-      response = ExoConnectionUtils.httpClient.execute(webDav);
-
-      String strResponse = ExoConnectionUtils.convertStreamToString(response.getEntity()
-                                                                            .getContent());
-      int indexOfCollectionType = strResponse.indexOf("<D:collection/>");
-      if (indexOfCollectionType > 0)
-        isFolder = true;
-      else {
-        isFolder = false;
-        int indexOfContentTypeOpen = strResponse.indexOf("D:getcontenttype");
-        int indexOfContentTypeClose = strResponse.indexOf("/D:getcontenttype");
-        if (indexOfContentTypeOpen > 0 && indexOfContentTypeClose > 0)
-          contentType = strResponse.substring(indexOfContentTypeOpen, indexOfContentTypeClose);
-
-      }
-
-    } catch (ClientProtocolException e) {
-    } catch (IOException e) {
-
-    }
-
-  }
-
+	  public ExoFile(String url, String _name, boolean folder) {
+		    path = url;
+		    name = _name;
+		    isFolder = folder;
+		  }
+		  
+	  
+	  
 }

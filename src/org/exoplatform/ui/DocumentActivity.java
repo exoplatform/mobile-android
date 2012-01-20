@@ -15,6 +15,7 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUltils;
+import org.exoplatform.utils.URLAnalyzer;
 import org.exoplatform.utils.WebdavMethod;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
@@ -34,6 +35,7 @@ import android.view.ViewStub;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -67,7 +69,7 @@ public class DocumentActivity extends MyActionBar {
 
   private View                   empty_stub;
 
-  public ExoFile                 _fileForCurrnentActionBar;
+  public ExoFile                 _fileForCurrentActionBar;
 
   public ExoFile                 _fileForCurrnentCell;
 
@@ -82,7 +84,6 @@ public class DocumentActivity extends MyActionBar {
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     _documentActivityInstance = this;
-    setTitle("Documents");
     init();
 
     setViewUploadImage(false);
@@ -91,6 +92,16 @@ public class DocumentActivity extends MyActionBar {
 
     onLoad(_urlDocumentHome, null, 0);
 
+  }
+  
+  public void setListViewLayoutParam(LinearLayout.LayoutParams lastTxtParams) {
+	  _listViewDocument.setLayoutParams(lastTxtParams);
+	  _listViewDocument.invalidate();
+  }
+  
+  public void setListViewPadding(int l, int t, int r, int b) {
+	  _listViewDocument.setPadding(l, t, r, b);
+	  _listViewDocument.invalidate();
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -104,12 +115,12 @@ public class DocumentActivity extends MyActionBar {
 
       if (_documentAdapter._documentActionDialog == null)
         _documentAdapter._documentActionDialog = new DocumentActionDialog(this,
-                                                                          _fileForCurrnentActionBar);
+                                                                          _fileForCurrentActionBar);
 
-      _documentAdapter._documentActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrnentActionBar);
+      _documentAdapter._documentActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrentActionBar);
       _documentAdapter._documentActionDialog._documentActionAdapter.notifyDataSetChanged();
-      _documentAdapter._documentActionDialog.setTileForDialog(_fileForCurrnentActionBar.fileName);
-      _documentAdapter._documentActionDialog.myFile = _fileForCurrnentActionBar;
+      _documentAdapter._documentActionDialog.setTileForDialog(_fileForCurrentActionBar.name);
+      _documentAdapter._documentActionDialog.myFile = _fileForCurrentActionBar;
       _documentAdapter._documentActionDialog.show();
 
       break;
@@ -123,7 +134,7 @@ public class DocumentActivity extends MyActionBar {
 
   public void addOrRemoveFileActionButton() {
 
-    if (_fileForCurrnentActionBar.urlStr.equalsIgnoreCase(_urlDocumentHome)) {
+    if (_fileForCurrentActionBar == null) {
       getActionBar().removeItem(0);
     } else {
       if (getActionBar().getItem(0) == null) {
@@ -138,18 +149,28 @@ public class DocumentActivity extends MyActionBar {
   @Override
   public void onBackPressed() {
     if (_documentAdapter == null) {
-      finish();
+    	_documentActivityInstance = null;
+    	finish();
     } else {
-      String url = ExoDocumentUtils.getParentUrl(_fileForCurrnentActionBar.urlStr);
-      String name = ExoDocumentUtils.getLastPathComponent(url);
-      _fileForCurrnentActionBar = new ExoFile(url, name, true, "text/html");
-
-      if (_fileForCurrnentActionBar.urlStr.length() < _urlDocumentHome.length()) {
-        _documentActivityInstance = null;
-        finish();
-      } else {
-        onLoad(_fileForCurrnentActionBar.urlStr, null, 0);
-      }
+    	
+    	if(_fileForCurrentActionBar == null) {
+    		_documentActivityInstance = null;
+    		finish();
+    		
+    	}else if(_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
+    		_fileForCurrentActionBar = null;
+    		onLoad(null, null, 0);
+    		
+    	}else {
+    		_fileForCurrentActionBar.currentFolder = ExoDocumentUtils.getParentUrl(_fileForCurrentActionBar.currentFolder);
+    		_fileForCurrentActionBar.name = ExoDocumentUtils.getLastPathComponent(_fileForCurrentActionBar.currentFolder);
+    		if(_fileForCurrentActionBar.name.equalsIgnoreCase(""))
+    			_fileForCurrentActionBar.name = _fileForCurrentActionBar.driveName;
+    		
+    		onLoad(_fileForCurrentActionBar.path, null, 0);
+    	}
+    	
+      
     }
 
   }
@@ -185,7 +206,7 @@ public class DocumentActivity extends MyActionBar {
 
     setViewUploadImage(false);
 
-    onLoad(_documentAdapter._documentActionDialog.myFile.urlStr, null, 4);
+    onLoad(_documentAdapter._documentActionDialog.myFile.path, null, 4);
 
   }
 
@@ -193,7 +214,8 @@ public class DocumentActivity extends MyActionBar {
 
     if (_listViewDocument == null) {
       _listViewDocument = (ListView) findViewById(R.id.ListView_Files);
-
+      _listViewDocument.setDivider(null);
+      
       _btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
       _btnUploadImage.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
@@ -327,6 +349,8 @@ public class DocumentActivity extends MyActionBar {
     HttpResponse response;
     try {
 
+    	url = URLAnalyzer.encodeUrl(url);
+    	
       WebdavMethod delete = new WebdavMethod("DELETE", url);
 
       response = ExoConnectionUtils.httpClient.execute(delete);
@@ -348,6 +372,8 @@ public class DocumentActivity extends MyActionBar {
     HttpResponse response;
     try {
 
+    	source = URLAnalyzer.encodeUrl(source);
+    	destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod copy = new WebdavMethod("COPY", source, destination);
 
       response = ExoConnectionUtils.httpClient.execute(copy);
@@ -367,6 +393,9 @@ public class DocumentActivity extends MyActionBar {
     HttpResponse response;
     try {
 
+    	source = URLAnalyzer.encodeUrl(source);
+    	destination = URLAnalyzer.encodeUrl(destination);
+    	
       WebdavMethod move = new WebdavMethod("MOVE", source, destination);
 
       response = ExoConnectionUtils.httpClient.execute(move);
@@ -385,6 +414,9 @@ public class DocumentActivity extends MyActionBar {
   public boolean renameFolder(String source, String destination) {
     HttpResponse response;
     try {
+    	source = URLAnalyzer.encodeUrl(source);
+    	destination = URLAnalyzer.encodeUrl(destination);
+    	
       WebdavMethod create = new WebdavMethod("HEAD", destination);
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
@@ -410,6 +442,9 @@ public class DocumentActivity extends MyActionBar {
     HttpResponse response;
     try {
 
+    	
+    	destination = URLAnalyzer.encodeUrl(destination);
+    	
       WebdavMethod create = new WebdavMethod("HEAD", destination);
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();

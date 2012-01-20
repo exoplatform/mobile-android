@@ -31,6 +31,7 @@ import org.json.simple.JSONValue;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 //interact with server
 public class ExoConnectionUtils {
@@ -314,6 +315,7 @@ public class ExoConnectionUtils {
       }
 
     } catch (Exception e) {
+    	Log.e(e.toString(), e.getMessage());
       return null;
     }
 

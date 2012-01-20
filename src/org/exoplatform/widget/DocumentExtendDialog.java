@@ -1,9 +1,13 @@
 package org.exoplatform.widget;
 
+import java.util.ArrayList;
+
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.ExoDocumentUtils;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;
@@ -85,30 +89,45 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
   public void onClick(View view) {
     if (view.equals(okButton)) {
       folderName = actionEditText.getText().toString();
-      if ((folderName != null) && (folderName.length() > 0)) {
-        int index = selectedFile.urlStr.lastIndexOf("/");
-        String lastPathComponent = selectedFile.urlStr.substring(0, index + 1);
-        String currentFolderName = selectedFile.urlStr.substring(index + 1);
-        if (folderName.equalsIgnoreCase(currentFolderName)) {
-          Toast toast = Toast.makeText(mContext, folderNameConflict, Toast.LENGTH_SHORT);
+      
+      ArrayList<ExoFile> files = DocumentActivity._documentActivityInstance._documentAdapter._documentList;
+      boolean fileExisted = false;
+      for(ExoFile file : files) {
+    	  if(file.name.equalsIgnoreCase(folderName)) {
+    		  fileExisted = true;
+    		  break;
+    	  }
+      }
+      if(fileExisted) {
+    	  Toast toast = Toast.makeText(mContext, folderNameConflict, Toast.LENGTH_SHORT);
           toast.setGravity(Gravity.CENTER, 0, 0);
           toast.show();
-        } else {
+          
+          return;
+      }
+      
+      if ((folderName != null) && (folderName.length() > 0)) {
+        
           if (actionId == 5) {
 
-            String destinationUrl = lastPathComponent.concat(folderName);
-            DocumentActivity._documentActivityInstance.onLoad(selectedFile.urlStr,
+        	String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+        	  
+            String destinationUrl = ExoDocumentUtils.getParentUrl(selectedFile.path) + "/" + folderName;
+            if(currentFolder.equalsIgnoreCase(selectedFile.currentFolder)) {
+            	DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
+                currentFolder = ExoDocumentUtils.getParentUrl(currentFolder) + "/" + folderName;
+                DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
+            }
+            
+             
+            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
                                                               destinationUrl,
                                                               5);
 
           } else {
-            StringBuffer buffer = new StringBuffer();
-            buffer.append(selectedFile.urlStr);
-            buffer.append("/");
-            buffer.append(folderName);
-            String desUrl = buffer.toString();
-
-            DocumentActivity._documentActivityInstance.onLoad(selectedFile.urlStr, desUrl, 6);
+            
+            String desUrl = selectedFile.path + "/" + folderName;
+            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, desUrl, 6);
 
           }
           dismiss();
@@ -119,8 +138,6 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
       }
-
-    }
     if (view.equals(cancelButton)) {
       dismiss();
     }

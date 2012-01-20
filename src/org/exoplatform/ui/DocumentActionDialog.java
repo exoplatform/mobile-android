@@ -54,7 +54,7 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
     init();
 
-    setTileForDialog(myFile.fileName);
+    setTileForDialog(myFile.name);
     
   }
 
