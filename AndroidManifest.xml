@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="3" android:versionName="2.0.1" package="org.exoplatform">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="3" android:versionName="2.0.1-SNAPSHOT" package="eXo.eXoPlatform">
 
     <!-- Application Permissions -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -20,7 +20,7 @@
     <uses-sdk android:minSdkVersion="7"/>
 
     <!-- Application Informations -->
-    <application android:debuggable="true" android:icon="@drawable/application_icon" android:label="eXo Mobile" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
+    <application android:debuggable="false" android:icon="@drawable/application_icon" android:label="eXo Mobile" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
 
         <!-- First Activity of the Application -->
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.LoginActivity" android:windowSoftInputMode="stateUnchanged|adjustResize">
