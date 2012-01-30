@@ -162,8 +162,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       bitmap = PhotoUtils.resizeImageBitmap(composeMessageActivity, bitmap);
       RetangleImageView image = new RetangleImageView(composeMessageActivity);
       image.setPadding(1, 1, 1, 1);
-       image.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-       LayoutParams.WRAP_CONTENT));
+      image.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
       image.setImageBitmap(bitmap);
       image.setOnClickListener(new OnClickListener() {
 

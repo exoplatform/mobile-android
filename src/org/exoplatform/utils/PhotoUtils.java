@@ -26,9 +26,9 @@ import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 
 public class PhotoUtils {
-  private static final String[] suffix               = { ".jpeg", ".jpg", ".png", ".bmp", ".gif" };
+  private static final String[] suffix  = { ".jpeg", ".jpg", ".png", ".bmp", ".gif" };
 
-  private static final String   dotSign              = ".";
+  private static final String   dotSign = ".";
 
   public static boolean isImages(File file) {
 
@@ -212,12 +212,22 @@ public class PhotoUtils {
     int widthScreen = displayMetrics.widthPixels;
     // the fixed size is 1/4 the screen width
     int fixedSize = widthScreen / 4;
+    // the minimum size is 1/9 the screen width
+    int minSize = widthScreen / 9;
 
     // get the real size of image
     int scaledWidth = bm.getWidth();
     int scaledHeight = bm.getHeight();
+    
     int height = 0;
     int width = 0;
+    // set the minimum size
+    if (scaledHeight <= minSize) {
+      scaledHeight = minSize;
+    }
+    if (scaledWidth <= minSize) {
+      scaledWidth = minSize;
+    }
 
     // resize the image
     if (scaledWidth > scaledHeight) {
