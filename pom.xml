@@ -24,6 +24,20 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
   </properties>
+  
+   <!-- Profiles definition for Android build -->
+  <profiles>
+    <profile>
+      <id>release</id>
+      <properties>
+        <!-- To be able to retrieve an unsigned apk
+             and use it for publication on android market  -->
+        <android.sign.debug>both</android.sign.debug>
+      </properties>
+    </profile>
+  </profiles>
+  
+  
   <dependencies>
     <!-- Dependency With Social Client Library -->
     <dependency>
@@ -71,6 +85,8 @@
       <type>apklib</type>
     </dependency>
   </dependencies>
+  
+  
   <build>
     <pluginManagement>
       <plugins>
