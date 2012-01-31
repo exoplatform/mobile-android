@@ -160,16 +160,16 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
       else
         documentActivity.setTitle(documentActivity._fileForCurrentActionBar.name);
 
-    } else {
-      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
-      dialog.show();
-    }
-    if (documentActivity._documentAdapter._documentList != null) {
       if (documentActivity._documentAdapter._documentList.size() == 0) {
         documentActivity.setEmptyView(View.VISIBLE);
       } else
         documentActivity.setEmptyView(View.GONE);
+
+    } else {
+      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+      dialog.show();
     }
+
     _progressDialog.dismiss();
 
   }

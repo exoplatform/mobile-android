@@ -1,9 +1,7 @@
 package org.exoplatform.utils;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +19,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 public class ExoDocumentUtils {
 
@@ -135,11 +132,8 @@ public class ExoDocumentUtils {
     DocumentBuilderFactory doc_build_fact = null;
     DocumentBuilder doc_builder = null;
     try {
-      // String str = ExoConnectionUtils.getDriveContent(urlStr);
       doc_build_fact = DocumentBuilderFactory.newInstance();
       doc_builder = doc_build_fact.newDocumentBuilder();
-      // StringReader sr = new StringReader(str);
-      // InputSource is = new InputSource(sr);
       InputStream is = ExoConnectionUtils.sendRequest(urlStr);
       obj_doc = doc_builder.parse(is);
 
@@ -191,11 +185,8 @@ public class ExoDocumentUtils {
     DocumentBuilderFactory doc_build_fact = null;
     DocumentBuilder doc_builder = null;
     try {
-      // String str = ExoConnectionUtils.getDriveContent(urlStr);
       doc_build_fact = DocumentBuilderFactory.newInstance();
       doc_builder = doc_build_fact.newDocumentBuilder();
-      // StringReader sr = new StringReader(str);
-      // InputSource is = new InputSource(sr);
       InputStream is = ExoConnectionUtils.sendRequest(urlStr);
       obj_doc = doc_builder.parse(is);
 
