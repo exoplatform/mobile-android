@@ -3,7 +3,6 @@ package org.exoplatform.singleton;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
-
 /*
  * This class is for manage all the account information
  * 
@@ -26,14 +25,6 @@ public class AccountSetting {
                                                                              // checked
                                                                              // server
                                                                              // url
-
-  // private ArrayList<ServerObj> serverInfoList; // List of server url
-
-//  private boolean                     isNewVersion;                         // is
-                                                                             // new
-                                                                             // version
-                                                                             // or
-                                                                             // not
 
   private AuthScope                   auth;                                 // the
                                                                              // authentication
@@ -87,14 +78,6 @@ public class AccountSetting {
   public void setDomainIndex(String index) {
     domainIndex = index;
   }
-
-//  public void setIsNewVersion(boolean is) {
-//    isNewVersion = is;
-//  }
-//
-//  public boolean getIsNewVersion() {
-//    return isNewVersion;
-//  }
 
   public void setAuthScope(AuthScope au) {
     auth = au;

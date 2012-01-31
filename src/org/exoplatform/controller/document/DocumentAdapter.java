@@ -62,46 +62,46 @@ public class DocumentAdapter extends BaseAdapter {
 
     if (myFile == null) {
 
-        convertView = inflater.inflate(R.layout.gadget_tab_layout, parent, false);
-        TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
-        LocalizationHelper local = LocalizationHelper.getInstance();
-        if(pos == 0)
-        	textViewTabTitle.setText(local.getString("Personal"));
-        else
-        	textViewTabTitle.setText(local.getString("Group"));
-        
-        return (convertView);
-      }
-    
+      convertView = inflater.inflate(R.layout.gadget_tab_layout, parent, false);
+      TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
+      LocalizationHelper local = LocalizationHelper.getInstance();
+      if (pos == 0)
+        textViewTabTitle.setText(local.getString("Personal"));
+      else
+        textViewTabTitle.setText(local.getString("Group"));
+
+      return (convertView);
+    }
+
     Button btnAction = (Button) rowView.findViewById(R.id.Button_FileAction);
     ImageView icon = (ImageView) rowView.findViewById(R.id.icon);
     TextView lb = (TextView) rowView.findViewById(R.id.label);
     lb.setText(myFile.name);
-    
+
     ExoFile file = DocumentActivity._documentActivityInstance._fileForCurrentActionBar;
-    if(file == null) {
-    
-    	if(position == 0) {
-        	if(_documentList.size() == 1)
-        		rowView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
-        	else {
-        		rowView.setBackgroundResource(R.drawable.dashboard_top_background_shape);
-        	}
-        } else {
-        	ExoFile previousItem = _documentList.get(position - 1);
-        	if(previousItem == null)
-        		rowView.setBackgroundResource(R.drawable.dashboard_top_background_shape);
-        	else if(position + 1 == _documentList.size())
-        		rowView.setBackgroundResource(R.drawable.dasboard_bottom_background_shape);
-        	else
-        		rowView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
+    if (file == null) {
+
+      if (position == 0) {
+        if (_documentList.size() == 1)
+          rowView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
+        else {
+          rowView.setBackgroundResource(R.drawable.dashboard_top_background_shape);
         }
-    	
-    	btnAction.setVisibility(View.INVISIBLE);
-    	
+      } else {
+        ExoFile previousItem = _documentList.get(position - 1);
+        if (previousItem == null)
+          rowView.setBackgroundResource(R.drawable.dashboard_top_background_shape);
+        else if (position + 1 == _documentList.size())
+          rowView.setBackgroundResource(R.drawable.dasboard_bottom_background_shape);
+        else
+          rowView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
+      }
+
+      btnAction.setVisibility(View.INVISIBLE);
+
     } else {
-    	
-    	rowView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
+
+      rowView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
     }
 
     if (!myFile.isFolder) {
@@ -130,7 +130,6 @@ public class DocumentAdapter extends BaseAdapter {
           }
 
         } else {
-        	
           DocumentActivity._documentActivityInstance._fileForCurrentActionBar = myFile;
           DocumentActivity._documentActivityInstance.onLoad(myFile.path, null, 0);
         }
@@ -138,7 +137,6 @@ public class DocumentAdapter extends BaseAdapter {
       }
     });
 
-    
     btnAction.setOnClickListener(new View.OnClickListener() {
 
       public void onClick(View v) {

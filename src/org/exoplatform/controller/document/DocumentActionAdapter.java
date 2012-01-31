@@ -3,6 +3,7 @@ package org.exoplatform.controller.document;
 import org.exoplatform.R;
 import org.exoplatform.model.DocumentActionDescription;
 import org.exoplatform.model.ExoFile;
+import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
@@ -23,13 +24,13 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   public ExoFile                      _selectedFile;
 
-  private Activity                     _mContext;
+  private Activity                    _mContext;
 
   private DocumentActionDialog        _delegate;
 
   // Localization string
 
-  private String                      strAddAPhoto = "";
+  private String                      strAddAPhoto   = "";
 
   private String                      strCopy        = "";
 
@@ -45,9 +46,9 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   private DocumentActionDescription[] fileActionList = null;
 
-  private ExoFile                     _fileCopied;
-
-  private ExoFile                     _fileMoved;
+  // private ExoFile _fileCopied = null;
+  //
+  // private ExoFile _fileMoved = null;
 
   private DocumentExtendDialog        extendDialog;
 
@@ -68,7 +69,7 @@ public class DocumentActionAdapter extends BaseAdapter {
   public void initCamera() {
     DocumentActivity._documentActivityInstance.takePicture();
   }
-  
+
   public View getView(int position, View convertView, ViewGroup parent) {
 
     final int pos = position;
@@ -85,41 +86,45 @@ public class DocumentActionAdapter extends BaseAdapter {
 
         } else if (pos == 1)// Copy file
         {
-          _fileCopied = _selectedFile;
-          _fileMoved = null;
+          DocumentHelper.getInstance().setFileCopy(_selectedFile);
+          DocumentHelper.getInstance().setFileMove(null);
+          // _fileCopied = _selectedFile;
+          // _fileMoved = null;
         } else if (pos == 2)// move file
         {
-          _fileMoved = _selectedFile;
-          _fileCopied = null;
+          DocumentHelper.getInstance().setFileMove(_selectedFile);
+          DocumentHelper.getInstance().setFileCopy(null);
+          // _fileMoved = _selectedFile;
+          // _fileCopied = null;
         } else if (pos == 3 || pos == 4) {
 
           if (pos == 4)// Delete file, folder
           {
-            _fileCopied = null;
-            _fileMoved = null;
+            // _fileCopied = null;
+            // _fileMoved = null;
 
             String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
-      	  
-            if(currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
-                currentFolder = ExoDocumentUtils.getParentUrl(currentFolder);
-                DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = ExoDocumentUtils.getLastPathComponent(currentFolder);
-                DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
+
+            if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
+              currentFolder = ExoDocumentUtils.getParentUrl(currentFolder);
+              DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = ExoDocumentUtils.getLastPathComponent(currentFolder);
+              DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
             }
-            
+
             DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
                                                               _selectedFile.path,
                                                               1);
           } else {
             // Copy file
+            ExoFile _fileCopied = DocumentHelper.getInstance().getFileCopy();
             if (_fileCopied != null) {
               String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
               String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-              DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path,
-                                                                destinationUrl,
-                                                                2);
+              DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path, destinationUrl, 2);
 
             }
+            ExoFile _fileMoved = DocumentHelper.getInstance().getFileMove();
             if (_fileMoved != null) {
               if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
                 String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
@@ -132,13 +137,15 @@ public class DocumentActionAdapter extends BaseAdapter {
 
             }
           }
+          DocumentHelper.getInstance().setFileMove(null);
+          DocumentHelper.getInstance().setFileCopy(null);
 
         } else if (pos == 5)// Rename file
         {
           extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, 5);
           extendDialog.show();
 
-        } else if (pos == 6) { //Create folder
+        } else if (pos == 6) { // Create folder
           extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, 6);
           extendDialog.show();
         }
@@ -157,13 +164,14 @@ public class DocumentActionAdapter extends BaseAdapter {
     label.setText(fileAction.actionName);
     ImageView icon = (ImageView) view.findViewById(R.id.icon);
     icon.setImageResource(fileAction.imageID);
-    
+
     if (_selectedFile.isFolder) {
       if (fileAction.actionName.equalsIgnoreCase(strCopy)
           || fileAction.actionName.equalsIgnoreCase(strMove)
-          || (fileAction.actionName.equalsIgnoreCase(strPaste) && (_fileCopied == null && _fileMoved == null))) {
+          || (fileAction.actionName.equalsIgnoreCase(strPaste) && (DocumentHelper.getInstance()
+                                                                                 .getFileCopy() == null && DocumentHelper.getInstance()
+                                                                                                                         .getFileMove() == null))) {
 
-        
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
       }

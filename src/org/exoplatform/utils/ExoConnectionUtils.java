@@ -33,7 +33,6 @@ import org.json.simple.JSONValue;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 //interact with server
 public class ExoConnectionUtils {
@@ -303,44 +302,43 @@ public class ExoConnectionUtils {
     return ipstr;
   }
 
-  public static String getDriveContent(String url) {
-
-    try {
-      HttpGet get = new HttpGet(url);
-      get.setHeader("Cookie", _strCookie);
-      httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
-                                                                       .getAuthScope(),
-                                                         AccountSetting.getInstance()
-                                                                       .getCredentials());
-      HttpResponse response;
-      response = httpClient.execute(get);
-      int status = response.getStatusLine().getStatusCode();
-      if (status >= 200 && status < 300) {
-        HttpEntity entity = response.getEntity();
-        if (entity != null) {
-          InputStream instream = entity.getContent();
-          String strResult = convertStreamToString(instream);
-          return strResult;
-        } else {
-          return null;
-        }
-      } else {
-        return "Timeout";
-      }
-
-    } catch (Exception e) {
-    	Log.e(e.toString(), e.getMessage());
-      return null;
-    }
-
-  }
+//  public static InputStream getDriveContent(String url) {
+//
+//    try {
+//      HttpGet get = new HttpGet(url);
+//      get.setHeader("Cookie", _strCookie);
+//      httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
+//                                                                       .getAuthScope(),
+//                                                         AccountSetting.getInstance()
+//                                                                       .getCredentials());
+//      HttpResponse response;
+//      response = httpClient.execute(get);
+//      int status = response.getStatusLine().getStatusCode();
+//      if (status >= 200 && status < 300) {
+//        HttpEntity entity = response.getEntity();
+//        if (entity != null) {
+//          InputStream instream = entity.getContent();
+//          // String strResult = convertStreamToString(instream);
+//          return instream;
+//        } else {
+//          return null;
+//        }
+//      } else {
+//        return null;
+//      }
+//
+//    } catch (Exception e) {
+//      Log.e(e.toString(), e.getMessage());
+//      return null;
+//    }
+//
+//  }
 
   // Get input stream from URL
   public static InputStream sendRequest(String strUrlRequest) {
     try {
       HttpResponse response;
       HttpEntity entity;
-      // DefaultHttpClient httpClient = new DefaultHttpClient();
       httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
                                                                        .getAuthScope(),
                                                          AccountSetting.getInstance()

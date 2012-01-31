@@ -37,7 +37,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   private DocumentActivity      documentActivity;
 
-  private ArrayList<ExoFile>	_documentList = new ArrayList<ExoFile>();
+  private ArrayList<ExoFile>    _documentList = new ArrayList<ExoFile>();
 
   public DocumentLoadTask(Context context,
                           DocumentActivity activity,
@@ -49,7 +49,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
     strSourceUrl = source;
     strDestinationUrl = destination;
     actionID = action;
-    
+
     changeLanguage();
   }
 
@@ -128,7 +128,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
   @Override
   public void onPostExecute(Boolean result) {
     if (result) {
-    	
+
       if (actionID == 0 || actionID == 1 || actionID == 4 || actionID == 5 || actionID == 6) {
 
         if (actionID == 5) {
@@ -145,31 +145,33 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
                                                                 documentActivity._fileForCurrentActionBar);
         documentActivity.setDocumentAdapter();
       }
-      
-      if(DocumentActivity._documentActivityInstance._fileForCurrentActionBar == null)
-      	DocumentActivity._documentActivityInstance.setListViewPadding(5, 0, 5, 0);
+
+      if (DocumentActivity._documentActivityInstance._fileForCurrentActionBar == null)
+        DocumentActivity._documentActivityInstance.setListViewPadding(5, 0, 5, 0);
       else
-      	DocumentActivity._documentActivityInstance.setListViewPadding(-2, 0, -2, 0);
-      
+        DocumentActivity._documentActivityInstance.setListViewPadding(-2, 0, -2, 0);
+
       documentActivity._documentAdapter._documentList = _documentList;
       documentActivity._documentAdapter.notifyDataSetChanged();
       documentActivity.addOrRemoveFileActionButton();
-      
-      if(documentActivity._fileForCurrentActionBar == null)
-    	  documentActivity.setTitle(LocalizationHelper.getInstance().getString("Documents"));
+
+      if (documentActivity._fileForCurrentActionBar == null)
+        documentActivity.setTitle(LocalizationHelper.getInstance().getString("Documents"));
       else
-    	  documentActivity.setTitle(documentActivity._fileForCurrentActionBar.name);
-      
+        documentActivity.setTitle(documentActivity._fileForCurrentActionBar.name);
+
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
-    if (documentActivity._documentAdapter._documentList.size() == 0) {
-      documentActivity.setEmptyView(View.VISIBLE);
-    } else
-      documentActivity.setEmptyView(View.GONE);
+    if (documentActivity._documentAdapter._documentList != null) {
+      if (documentActivity._documentAdapter._documentList.size() == 0) {
+        documentActivity.setEmptyView(View.VISIBLE);
+      } else
+        documentActivity.setEmptyView(View.GONE);
+    }
     _progressDialog.dismiss();
-    
+
   }
 
   private class DocumentWaitingDialog extends WaitingDialog {
