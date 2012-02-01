@@ -89,55 +89,53 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
   public void onClick(View view) {
     if (view.equals(okButton)) {
       folderName = actionEditText.getText().toString();
-      
+
       ArrayList<ExoFile> files = DocumentActivity._documentActivityInstance._documentAdapter._documentList;
       boolean fileExisted = false;
-      for(ExoFile file : files) {
-    	  if(file.name.equalsIgnoreCase(folderName)) {
-    		  fileExisted = true;
-    		  break;
-    	  }
-      }
-      if(fileExisted) {
-    	  Toast toast = Toast.makeText(mContext, folderNameConflict, Toast.LENGTH_SHORT);
-          toast.setGravity(Gravity.CENTER, 0, 0);
-          toast.show();
-          
-          return;
-      }
-      
-      if ((folderName != null) && (folderName.length() > 0)) {
-        
-          if (actionId == 5) {
-
-        	String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
-        	  
-            String destinationUrl = ExoDocumentUtils.getParentUrl(selectedFile.path) + "/" + folderName;
-            if(currentFolder.equalsIgnoreCase(selectedFile.currentFolder)) {
-            	DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
-                currentFolder = ExoDocumentUtils.getParentUrl(currentFolder) + "/" + folderName;
-                DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
-            }
-            
-             
-            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
-                                                              destinationUrl,
-                                                              5);
-
-          } else {
-            
-            String desUrl = selectedFile.path + "/" + folderName;
-            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, desUrl, 6);
-
-          }
-          dismiss();
+      for (ExoFile file : files) {
+        if (file.name.equalsIgnoreCase(folderName)) {
+          fileExisted = true;
+          break;
         }
-
-      } else {
-        Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_SHORT);
+      }
+      if (fileExisted) {
+        Toast toast = Toast.makeText(mContext, folderNameConflict, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+
+        return;
       }
+
+      if ((folderName != null) && (folderName.length() > 0)) {
+
+        if (actionId == 5) {
+
+          String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+
+          String destinationUrl = ExoDocumentUtils.getParentUrl(selectedFile.path) + "/"
+              + folderName;
+          if (currentFolder.equalsIgnoreCase(selectedFile.currentFolder)) {
+            DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
+            currentFolder = ExoDocumentUtils.getParentUrl(currentFolder) + "/" + folderName;
+            DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
+          }
+
+          DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, destinationUrl, 5);
+
+        } else {
+
+          String desUrl = selectedFile.path + "/" + folderName;
+          DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, desUrl, 6);
+
+        }
+        dismiss();
+      }
+
+    } else {
+      Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_SHORT);
+      toast.setGravity(Gravity.CENTER, 0, 0);
+      toast.show();
+    }
     if (view.equals(cancelButton)) {
       dismiss();
     }

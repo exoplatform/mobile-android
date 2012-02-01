@@ -5,6 +5,8 @@ import greendroid.widget.ActionBarItem;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.apache.http.HttpResponse;
 import org.exoplatform.controller.document.DocumentAdapter;
@@ -93,15 +95,15 @@ public class DocumentActivity extends MyActionBar {
     onLoad(_urlDocumentHome, null, 0);
 
   }
-  
+
   public void setListViewLayoutParam(LinearLayout.LayoutParams lastTxtParams) {
-	  _listViewDocument.setLayoutParams(lastTxtParams);
-	  _listViewDocument.invalidate();
+    _listViewDocument.setLayoutParams(lastTxtParams);
+    _listViewDocument.invalidate();
   }
-  
+
   public void setListViewPadding(int l, int t, int r, int b) {
-	  _listViewDocument.setPadding(l, t, r, b);
-	  _listViewDocument.invalidate();
+    _listViewDocument.setPadding(l, t, r, b);
+    _listViewDocument.invalidate();
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -149,28 +151,27 @@ public class DocumentActivity extends MyActionBar {
   @Override
   public void onBackPressed() {
     if (_documentAdapter == null) {
-    	_documentActivityInstance = null;
-    	finish();
+      _documentActivityInstance = null;
+      finish();
     } else {
-    	
-    	if(_fileForCurrentActionBar == null) {
-    		_documentActivityInstance = null;
-    		finish();
-    		
-    	}else if(_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
-    		_fileForCurrentActionBar = null;
-    		onLoad(null, null, 0);
-    		
-    	}else {
-    		_fileForCurrentActionBar.currentFolder = ExoDocumentUtils.getParentUrl(_fileForCurrentActionBar.currentFolder);
-    		_fileForCurrentActionBar.name = ExoDocumentUtils.getLastPathComponent(_fileForCurrentActionBar.currentFolder);
-    		if(_fileForCurrentActionBar.name.equalsIgnoreCase(""))
-    			_fileForCurrentActionBar.name = _fileForCurrentActionBar.driveName;
-    		
-    		onLoad(_fileForCurrentActionBar.path, null, 0);
-    	}
-    	
-      
+
+      if (_fileForCurrentActionBar == null) {
+        _documentActivityInstance = null;
+        finish();
+
+      } else if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
+        _fileForCurrentActionBar = null;
+        onLoad(null, null, 0);
+
+      } else {
+        _fileForCurrentActionBar.currentFolder = ExoDocumentUtils.getParentUrl(_fileForCurrentActionBar.currentFolder);
+        _fileForCurrentActionBar.name = ExoDocumentUtils.getLastPathComponent(_fileForCurrentActionBar.currentFolder);
+        if (_fileForCurrentActionBar.name.equalsIgnoreCase(""))
+          _fileForCurrentActionBar.name = _fileForCurrentActionBar.driveName;
+
+        onLoad(_fileForCurrentActionBar.path, null, 0);
+      }
+
     }
 
   }
@@ -215,7 +216,7 @@ public class DocumentActivity extends MyActionBar {
     if (_listViewDocument == null) {
       _listViewDocument = (ListView) findViewById(R.id.ListView_Files);
       _listViewDocument.setDivider(null);
-      
+
       _btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
       _btnUploadImage.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
@@ -289,18 +290,10 @@ public class DocumentActivity extends MyActionBar {
   public void showProgressDialog(boolean isloadingData) {
     LocalizationHelper local = LocalizationHelper.getInstance();
     String strLoadingDataFromServer = "";
-    try {
-      if (isloadingData)
-        strLoadingDataFromServer = local.getString("LoadingDataFromServer");
-
-      else
-        strLoadingDataFromServer = local.getString("FileProcessing");
-
-    } catch (Exception e) {
-
-      strLoadingDataFromServer = "";
-    }
-
+    if (isloadingData)
+      strLoadingDataFromServer = local.getString("LoadingDataFromServer");
+    else
+      strLoadingDataFromServer = local.getString("FileProcessing");
     _progressDialog = new WaitingDialog(this, null, strLoadingDataFromServer);
     _progressDialog.show();
   }
@@ -321,6 +314,7 @@ public class DocumentActivity extends MyActionBar {
     startActivityForResult(takePictureFromCameraIntent, ExoConstants.TAKE_PICTURE_WITH_CAMERA);
 
   }
+
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     super.onActivityResult(requestCode, resultCode, intent);
     if (resultCode == RESULT_OK) {
@@ -336,7 +330,12 @@ public class DocumentActivity extends MyActionBar {
           fis.close();
           // Bitmap bmp = (Bitmap) data.getExtras().get("data");
           _imgViewUpLoadPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
+          if (Config.GD_ERROR_LOGS_ENABLED)
+            Log.e("FileNotFoundException", "TAKE_PICTURE_WITH_CAMERA error!");
+        } catch (IOException e) {
+          if (Config.GD_ERROR_LOGS_ENABLED)
+            Log.e("IOException", "TAKE_PICTURE_WITH_CAMERA error!");
         }
         break;
 
@@ -357,11 +356,8 @@ public class DocumentActivity extends MyActionBar {
   public boolean deleteFile(String url) {
     HttpResponse response;
     try {
-
-    	url = URLAnalyzer.encodeUrl(url);
-    	
+      url = URLAnalyzer.encodeUrl(url);
       WebdavMethod delete = new WebdavMethod("DELETE", url);
-
       response = ExoConnectionUtils.httpClient.execute(delete);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
@@ -369,7 +365,7 @@ public class DocumentActivity extends MyActionBar {
       } else
         return false;
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       return false;
     }
 
@@ -380,11 +376,9 @@ public class DocumentActivity extends MyActionBar {
 
     HttpResponse response;
     try {
-
-    	source = URLAnalyzer.encodeUrl(source);
-    	destination = URLAnalyzer.encodeUrl(destination);
+      source = URLAnalyzer.encodeUrl(source);
+      destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod copy = new WebdavMethod("COPY", source, destination);
-
       response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
@@ -392,7 +386,7 @@ public class DocumentActivity extends MyActionBar {
       } else
         return false;
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       return false;
     }
   }
@@ -402,9 +396,9 @@ public class DocumentActivity extends MyActionBar {
     HttpResponse response;
     try {
 
-    	source = URLAnalyzer.encodeUrl(source);
-    	destination = URLAnalyzer.encodeUrl(destination);
-    	
+      source = URLAnalyzer.encodeUrl(source);
+      destination = URLAnalyzer.encodeUrl(destination);
+
       WebdavMethod move = new WebdavMethod("MOVE", source, destination);
 
       response = ExoConnectionUtils.httpClient.execute(move);
@@ -414,7 +408,7 @@ public class DocumentActivity extends MyActionBar {
       } else
         return false;
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       return false;
     }
 
@@ -423,9 +417,9 @@ public class DocumentActivity extends MyActionBar {
   public boolean renameFolder(String source, String destination) {
     HttpResponse response;
     try {
-    	source = URLAnalyzer.encodeUrl(source);
-    	destination = URLAnalyzer.encodeUrl(destination);
-    	
+      source = URLAnalyzer.encodeUrl(source);
+      destination = URLAnalyzer.encodeUrl(destination);
+
       WebdavMethod create = new WebdavMethod("HEAD", destination);
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
@@ -441,7 +435,7 @@ public class DocumentActivity extends MyActionBar {
         } else
           return false;
       }
-    } catch (Exception e) {
+    } catch (IOException e) {
       return false;
     }
 
@@ -451,9 +445,8 @@ public class DocumentActivity extends MyActionBar {
     HttpResponse response;
     try {
 
-    	
-    	destination = URLAnalyzer.encodeUrl(destination);
-    	
+      destination = URLAnalyzer.encodeUrl(destination);
+
       WebdavMethod create = new WebdavMethod("HEAD", destination);
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
@@ -472,7 +465,7 @@ public class DocumentActivity extends MyActionBar {
         return false;
       }
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       return false;
     }
     // return false;

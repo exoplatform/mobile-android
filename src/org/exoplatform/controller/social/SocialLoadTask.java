@@ -6,6 +6,7 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
@@ -101,9 +102,9 @@ public class SocialLoadTask extends UserTask<Integer, Void, ArrayList<SocialActi
         }
       }
       return listActivity;
-    } catch (Exception e) {
+    } catch (SocialClientLibException e) {
       return null;
-    } 
+    }
   }
 
   @Override

@@ -1,5 +1,8 @@
 package org.exoplatform.controller.login;
 
+import greendroid.util.Config;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -17,6 +20,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
+import android.util.Log;
 
 public class LaunchController {
   private SharedPreferences        sharedPreference;
@@ -68,8 +72,9 @@ public class LaunchController {
       AccountSetting.getInstance()
                     .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
 
-    } catch (Exception e) {
-      // Log.i("LaunchController", e.getMessage());
+    } catch (IOException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("Exception", "Launch information is error!");
     }
     // get server version information
     // ExoConnectionUtils.checkPLFVersion();
@@ -85,6 +90,8 @@ public class LaunchController {
       appVer = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
       ServerSettingHelper.getInstance().setApplicationVersion(appVer);
     } catch (NameNotFoundException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("NameNotFoundException", "Get package information is error!");
     }
 
     if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {

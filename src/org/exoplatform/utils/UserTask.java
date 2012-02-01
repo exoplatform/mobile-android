@@ -241,7 +241,7 @@ public abstract class UserTask<Params, Progress, Result> {
                                                                       (Result[]) null));
           message.sendToTarget();
           return;
-        } catch (Throwable t) {
+        } catch (Exception t) {
           throw new RuntimeException("An error occured while executing " + "doInBackground()", t);
         }
 

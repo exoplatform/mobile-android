@@ -1,8 +1,5 @@
 package org.exoplatform.widget;
 
-import java.util.Map;
-import java.util.Set;
-
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;

@@ -1,5 +1,6 @@
 package org.exoplatform.ui;
 
+import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -133,6 +135,8 @@ public class WebViewActivity extends MyActionBar {
           }
         }
       } catch (Exception e) {
+        if (Config.GD_ERROR_LOGS_ENABLED)
+          Log.e("Exception", "Cannot clear  file cache!");
       }
     }
 

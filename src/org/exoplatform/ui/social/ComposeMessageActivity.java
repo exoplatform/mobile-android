@@ -1,9 +1,11 @@
 package org.exoplatform.ui.social;
 
+import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import org.exoplatform.controller.social.ComposeMessageController;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -18,6 +20,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -176,7 +179,9 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
       fileAttachWrap.removeAllViews();
       fileAttachWrap.addView(image, params);
-    } catch (Exception e) {
+    } catch (IOException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("Exception", "Error when adding image to message!");
 
     }
 

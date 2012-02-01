@@ -1,5 +1,7 @@
 package org.exoplatform.utils;
 
+import greendroid.util.Config;
+
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
@@ -12,6 +14,7 @@ import org.exoplatform.widget.TextUrlSpan;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -291,6 +294,8 @@ public class SocialActivityUtil {
           textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
       } catch (Exception e) {
+        if (Config.GD_ERROR_LOGS_ENABLED)
+          Log.e("Exception", "LinkMovementMethod error!");
       }
     }
   }

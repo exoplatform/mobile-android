@@ -1,12 +1,14 @@
 package org.exoplatform.controller.social;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.core.model.RestActivityImpl;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
@@ -93,7 +95,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
       activityImlp.setTitle(composeMessage);
       SocialServiceHelper.getInstance().getActivityService().create(activityImlp);
       return 1;
-    } catch (Exception e) {
+    } catch (SocialClientLibException e) {
       return 0;
     }
 
@@ -136,7 +138,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
         return false;
       }
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       return false;
     }
   }

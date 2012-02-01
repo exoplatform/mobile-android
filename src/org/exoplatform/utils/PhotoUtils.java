@@ -3,6 +3,7 @@ package org.exoplatform.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 
 import android.app.Activity;
@@ -148,7 +149,7 @@ public class PhotoUtils {
       FileOutputStream out = new FileOutputStream(tempFile);
       output.writeTo(out);
       return tempFile;
-    } catch (Exception e) {
+    } catch (IOException e) {
       return null;
     }
 
@@ -218,7 +219,7 @@ public class PhotoUtils {
     // get the real size of image
     int scaledWidth = bm.getWidth();
     int scaledHeight = bm.getHeight();
-    
+
     int height = 0;
     int width = 0;
     // set the minimum size

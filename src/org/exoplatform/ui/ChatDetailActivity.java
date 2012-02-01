@@ -1,6 +1,5 @@
 package org.exoplatform.ui;
 
-import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import org.exoplatform.model.ChatMessageContent;
 import org.exoplatform.singleton.ChatServiceHelper;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.WarningDialog;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.filter.MessageTypeFilter;
@@ -22,7 +20,6 @@ import org.jivesoftware.smack.util.StringUtils;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,9 +72,9 @@ public class ChatDetailActivity extends MyActionBar {
 
   private String                         meText;
 
-  private String                         titleString;
+  // private String titleString;
 
-  private String                         okString;
+  // private String okString;
 
   private String                         messageFromText;
 
@@ -128,26 +125,26 @@ public class ChatDetailActivity extends MyActionBar {
         // Send a message using content of the edit text widget
         String msg = messageEditText.getText().toString();
         if (msg != null && !msg.equalsIgnoreCase("")) {
-          try {
+          // try {
 
-            Message message = new Message(currentChatStr, Message.Type.chat);
-            message.setBody(msg);
-            connection.sendPacket(message);
+          Message message = new Message(currentChatStr, Message.Type.chat);
+          message.setBody(msg);
+          connection.sendPacket(message);
 
-            listChatContent.add(new ChatMessageContent(meText, msg));
-            messageEditText.setText("");
+          listChatContent.add(new ChatMessageContent(meText, msg));
+          messageEditText.setText("");
 
-            setListAdapter();
+          setListAdapter();
 
-          } catch (Exception e) {
-            if (Config.GD_ERROR_LOGS_ENABLED)
-              Log.e("Chat Error", e.getMessage());
-            WarningDialog warning = new WarningDialog(ChatDetailActivity.this,
-                                                      titleString,
-                                                      e.getMessage(),
-                                                      okString);
-            warning.show();
-          }
+          // } catch (Exception e) {
+          // if (Config.GD_ERROR_LOGS_ENABLED)
+          // Log.e("Chat Error", e.getMessage());
+          // WarningDialog warning = new WarningDialog(ChatDetailActivity.this,
+          // titleString,
+          // e.getMessage(),
+          // okString);
+          // warning.show();
+          // }
         }
 
       }
@@ -199,23 +196,23 @@ public class ChatDetailActivity extends MyActionBar {
         }
       }
     };
-    try {
-      ChatServiceHelper.getInstance().setPacketListener(packetListener);
-      ChatServiceHelper.getInstance().getXMPPConnection().addPacketListener(packetListener, filter);
-      setListAdapter();
-    } catch (Exception e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("Packet Listenner Error", e.getMessage());
-      if (ChatServiceHelper.getInstance().getXMPPConnection() != null) {
-        ChatServiceHelper.getInstance().getXMPPConnection().disconnect();
-        ChatServiceHelper.getInstance().setXMPPConnection(null);
-      }
-      WarningDialog warning = new WarningDialog(ChatDetailActivity.this,
-                                                titleString,
-                                                e.getMessage(),
-                                                okString);
-      warning.show();
-    }
+    // try {
+    ChatServiceHelper.getInstance().setPacketListener(packetListener);
+    ChatServiceHelper.getInstance().getXMPPConnection().addPacketListener(packetListener, filter);
+    setListAdapter();
+    // } catch (Exception e) {
+    // if (Config.GD_ERROR_LOGS_ENABLED)
+    // Log.e("Packet Listenner Error", e.getMessage());
+    // if (ChatServiceHelper.getInstance().getXMPPConnection() != null) {
+    // ChatServiceHelper.getInstance().getXMPPConnection().disconnect();
+    // ChatServiceHelper.getInstance().setXMPPConnection(null);
+    // }
+    // WarningDialog warning = new WarningDialog(ChatDetailActivity.this,
+    // titleString,
+    // e.getMessage(),
+    // okString);
+    // warning.show();
+    // }
 
   }
 
@@ -296,8 +293,8 @@ public class ChatDetailActivity extends MyActionBar {
     String strsendMessageBtn = bundle.getString("Send");
     meText = bundle.getString("Me");
     messageFromText = bundle.getString("MessageFrom");
-    titleString = bundle.getString("Warning");
-    okString = bundle.getString("OK");
+    // titleString = bundle.getString("Warning");
+    // okString = bundle.getString("OK");
     sendMessageBtn.setText(strsendMessageBtn);
 
   }

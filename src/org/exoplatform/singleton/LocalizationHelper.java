@@ -58,7 +58,7 @@ public class LocalizationHelper {
   public String getString(String key) {
     try {
       return resBundle.getString(key);
-    } catch (Exception e) {
+    } catch (RuntimeException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("LOCALIZATION", "Missing key " + key + " in localization resources");
       return null;

@@ -1,6 +1,7 @@
 package org.exoplatform.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -8,6 +9,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPut;
@@ -19,6 +21,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class ExoDocumentUtils {
 
@@ -41,7 +44,7 @@ public class ExoDocumentUtils {
       } else
         return false;
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       return false;
     } finally {
       tempFile.delete();
@@ -86,7 +89,7 @@ public class ExoDocumentUtils {
         else
           repositoryHomeURL = domain + ExoConstants.DOCUMENT_PATH + "/" + userName;
         return true;
-      } catch (Exception e) {
+      } catch (IOException e) {
 
         repositoryHomeURL = null;
         return false;
@@ -162,7 +165,11 @@ public class ExoDocumentUtils {
         }
       }
 
-    } catch (Exception e) {
+    } catch (ParserConfigurationException e) {
+      folderArray = null;
+    } catch (SAXException e) {
+      folderArray = null;
+    } catch (IOException e) {
       folderArray = null;
     }
 
@@ -241,8 +248,12 @@ public class ExoDocumentUtils {
 
       }
 
-    } catch (Exception e) {
-
+    } catch (ParserConfigurationException e) {
+      return null;
+    } catch (SAXException e) {
+      return null;
+    } catch (IOException e) {
+      return null;
     }
 
     return folderArray;
@@ -324,12 +335,12 @@ public class ExoDocumentUtils {
 
   public static boolean isContainSpecialChar(String str, String charSet) {
 
-    try {
-      Pattern patt = Pattern.compile(charSet);
-      Matcher matcher = patt.matcher(str);
-      return matcher.find();
-    } catch (RuntimeException e) {
-      return false;
-    }
+    // try {
+    Pattern patt = Pattern.compile(charSet);
+    Matcher matcher = patt.matcher(str);
+    return matcher.find();
+    // } catch (RuntimeException e) {
+    // return false;
+    // }
   }
 }

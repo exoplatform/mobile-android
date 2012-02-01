@@ -292,7 +292,7 @@ public class ImageDownloader implements OnLowMemoryListener {
           } catch (OutOfMemoryError e) {
             clearCache();
             return null;
-          } catch (Exception e) {
+          } catch (IOException e) {
             return null;
           } finally {
             if (inputStream != null) {
@@ -301,7 +301,7 @@ public class ImageDownloader implements OnLowMemoryListener {
             entity.consumeContent();
           }
         }
-      } catch (Exception e) {
+      } catch (IOException e) {
         return null;
       } finally {
         httpClient.getConnectionManager().shutdown();

@@ -3,6 +3,7 @@ package org.exoplatform.widget;
 import greendroid.app.ActionBarActivity;
 import greendroid.app.GDApplication;
 import greendroid.graphics.drawable.ActionBarDrawable;
+import greendroid.util.Config;
 import greendroid.widget.ActionBar;
 import greendroid.widget.ActionBar.OnActionBarListener;
 import greendroid.widget.ActionBar.Type;
@@ -15,6 +16,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -135,6 +137,8 @@ public class MyActionBar extends Activity implements ActionBarActivity {
           setTitle(activityInfo.labelRes);
         }
       } catch (NameNotFoundException e) {
+        if (Config.GD_ERROR_LOGS_ENABLED)
+          Log.e("NameNotFoundException", "Cannot find title name!");
         // Do nothing
       }
     }

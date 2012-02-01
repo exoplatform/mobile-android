@@ -7,6 +7,7 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
+import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
@@ -178,7 +179,7 @@ public class HomeActionListenner implements OnItemClickListener {
         SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
         SocialClientContext.setUsername(userName);
         SocialClientContext.setPassword(password);
-        
+
         ClientServiceFactory clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
         VersionService versionService = clientServiceFactory.createVersionService();
         SocialClientContext.setRestVersion(versionService.getLatest());
@@ -195,7 +196,7 @@ public class HomeActionListenner implements OnItemClickListener {
         SocialServiceHelper.getInstance().setIdentityService(identityService);
 
         return true;
-      } catch (Exception e) {
+      } catch (SocialClientLibException e) {
         return false;
       }
     }

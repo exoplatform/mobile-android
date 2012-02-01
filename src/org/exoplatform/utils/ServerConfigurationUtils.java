@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
@@ -26,6 +27,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
@@ -57,8 +59,8 @@ public class ServerConfigurationUtils {
         else
           returnValue = f.createNewFile();
       }
-    } catch (Exception e) {
-
+    } catch (IOException e) {
+      return false;
     }
 
     return returnValue;
@@ -103,8 +105,14 @@ public class ServerConfigurationUtils {
           }
         }
 
-      } catch (Exception e) {
-
+      } catch (ParserConfigurationException e) {
+        return "0";
+      } catch (FileNotFoundException e) {
+        return "0";
+      } catch (SAXException e) {
+        return "0";
+      } catch (IOException e) {
+        return "0";
       }
     }
 
@@ -150,26 +158,19 @@ public class ServerConfigurationUtils {
         try {
           eventType = parser.next();
         } catch (Exception e) {
-
           eventType = 0;
         }
 
       }
     } catch (XmlPullParserException e) {
-      throw new RuntimeException("Cannot parse XML");
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("XmlPullParserException", "Cannot parse XML");
     }
 
     String filePath = Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml";
     File file = new File(filePath);
     if (!file.exists()) {
-      try {
-
-        createXmlDataWithServerList(arrServerList, "DefaultServerList.xml", "0");
-
-      } catch (Exception e) {
-
-      }
-
+      createXmlDataWithServerList(arrServerList, "DefaultServerList.xml", "0");
     }
 
     return arrServerList;
@@ -223,8 +224,12 @@ public class ServerConfigurationUtils {
         }
       }
 
-    } catch (Exception e) {
-
+    } catch (IOException e) {
+      return null;
+    } catch (ParserConfigurationException e) {
+      return null;
+    } catch (SAXException e) {
+      return null;
     }
 
     return arrServerList;
@@ -306,10 +311,9 @@ public class ServerConfigurationUtils {
 
       fileos.close();
 
-    } catch (Exception e) {
+    } catch (IOException e) {
 
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("Exception", "error occurred while creating xml file");
+      return false;
     }
 
     return returnValue;

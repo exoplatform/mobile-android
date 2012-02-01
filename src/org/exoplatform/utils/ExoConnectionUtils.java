@@ -1,9 +1,12 @@
 package org.exoplatform.utils;
 
+import greendroid.util.Config;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,6 +36,7 @@ import org.json.simple.JSONValue;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 //interact with server
 public class ExoConnectionUtils {
@@ -111,7 +115,7 @@ public class ExoConnectionUtils {
     try {
       // use appropriate encoding string!
       stringArray = str.getBytes("UTF-8");
-    } catch (Exception ignored) {
+    } catch (UnsupportedEncodingException ignored) {
       // use local default rather than croak
       stringArray = str.getBytes();
     }
@@ -147,11 +151,12 @@ public class ExoConnectionUtils {
         sb.append(line + "\n");
       }
     } catch (IOException e) {
-      // e.printStackTrace();
+      return null;
     } finally {
       try {
         is.close();
       } catch (IOException e) {
+        return null;
       }
     }
     // System.out.println("convertStreamToString "+sb.toString());
@@ -227,7 +232,7 @@ public class ExoConnectionUtils {
         return null;
       }
       // httpClient.getConnectionManager().shutdown();
-    } catch (Exception e) {
+    } catch (IOException e) {
       String error = e.getMessage();
       if (error != null && (error.contains("No route"))) {
         return ExoConstants.LOGIN_UNREACHABLE;
@@ -264,7 +269,9 @@ public class ExoConnectionUtils {
       nvps.add(new BasicNameValuePair("j_password", strPassword));
       httpPost.setEntity(new UrlEncodedFormEntity(nvps));
       httpClient.execute(httpPost);
-    } catch (Exception e) {
+    } catch (IOException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("Exception", "Cannot reauthenticate");
     }
     httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance().getAuthScope(),
                                                        AccountSetting.getInstance()
@@ -302,37 +309,37 @@ public class ExoConnectionUtils {
     return ipstr;
   }
 
-//  public static InputStream getDriveContent(String url) {
-//
-//    try {
-//      HttpGet get = new HttpGet(url);
-//      get.setHeader("Cookie", _strCookie);
-//      httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
-//                                                                       .getAuthScope(),
-//                                                         AccountSetting.getInstance()
-//                                                                       .getCredentials());
-//      HttpResponse response;
-//      response = httpClient.execute(get);
-//      int status = response.getStatusLine().getStatusCode();
-//      if (status >= 200 && status < 300) {
-//        HttpEntity entity = response.getEntity();
-//        if (entity != null) {
-//          InputStream instream = entity.getContent();
-//          // String strResult = convertStreamToString(instream);
-//          return instream;
-//        } else {
-//          return null;
-//        }
-//      } else {
-//        return null;
-//      }
-//
-//    } catch (Exception e) {
-//      Log.e(e.toString(), e.getMessage());
-//      return null;
-//    }
-//
-//  }
+  // public static InputStream getDriveContent(String url) {
+  //
+  // try {
+  // HttpGet get = new HttpGet(url);
+  // get.setHeader("Cookie", _strCookie);
+  // httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
+  // .getAuthScope(),
+  // AccountSetting.getInstance()
+  // .getCredentials());
+  // HttpResponse response;
+  // response = httpClient.execute(get);
+  // int status = response.getStatusLine().getStatusCode();
+  // if (status >= 200 && status < 300) {
+  // HttpEntity entity = response.getEntity();
+  // if (entity != null) {
+  // InputStream instream = entity.getContent();
+  // // String strResult = convertStreamToString(instream);
+  // return instream;
+  // } else {
+  // return null;
+  // }
+  // } else {
+  // return null;
+  // }
+  //
+  // } catch (Exception e) {
+  // Log.e(e.toString(), e.getMessage());
+  // return null;
+  // }
+  //
+  // }
 
   // Get input stream from URL
   public static InputStream sendRequest(String strUrlRequest) {
@@ -351,7 +358,7 @@ public class ExoConnectionUtils {
         return entity.getContent();
       }
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       return null;
     }
     return null;

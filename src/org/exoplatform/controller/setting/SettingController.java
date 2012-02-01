@@ -1,5 +1,6 @@
 package org.exoplatform.controller.setting;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -48,7 +49,7 @@ public class SettingController {
       ResourceBundle bundle = new PropertyResourceBundle(mContext.getAssets().open(localize));
       LocalizationHelper.getInstance().setResourceBundle(bundle);
       return true;
-    } catch (Exception e) {
+    } catch (IOException e) {
       return false;
     }
 

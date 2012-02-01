@@ -16,6 +16,7 @@
  */
 package org.exoplatform.utils;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -132,8 +133,10 @@ public class URLAnalyzer {
 
       encodedUrl = uri.toASCIIString();
 
-    } catch (Exception e) {
-
+    } catch (MalformedURLException e) {
+      return null;
+    } catch (URISyntaxException e) {
+      return null;
     }
 
     return encodedUrl;
