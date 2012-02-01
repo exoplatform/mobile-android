@@ -210,6 +210,9 @@ public class ExoConnectionUtils {
       httpPost.setHeader("Cookie", strCookie);
       _strCookie = strCookie;
       response = httpClient.execute(httpPost);
+
+      int status = response.getStatusLine().getStatusCode();
+      System.out.println("--------------" + status);
       entity = response.getEntity();
 
       _sessionCookies = new ArrayList<Cookie>(cookies);
@@ -257,9 +260,7 @@ public class ExoConnectionUtils {
         HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
         HttpConnectionParams.setSoTimeout(httpParameters, 30000);
         HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-
         httpClient = new DefaultHttpClient(httpParameters);
-
       }
       String strUserName = AccountSetting.getInstance().getUsername();
       String strPassword = AccountSetting.getInstance().getPassword();

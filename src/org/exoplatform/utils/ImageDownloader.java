@@ -88,6 +88,9 @@ public class ImageDownloader implements OnLowMemoryListener {
    * @param imageView The ImageView to bind the downloaded image to.
    */
   public void download(String url, ImageView imageView) {
+    if (url.contains(" ")) {
+      url = url.replace(" ", "%20");
+    }
     download(url, imageView, null);
   }
 
@@ -301,7 +304,7 @@ public class ImageDownloader implements OnLowMemoryListener {
             entity.consumeContent();
           }
         }
-      } catch (IOException e) {
+      } catch (Exception e) {
         return null;
       } finally {
         httpClient.getConnectionManager().shutdown();
