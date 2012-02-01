@@ -1,5 +1,8 @@
 package org.exoplatform.widget;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -7,6 +10,7 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.social.client.api.model.RestActivityStream;
 import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 
@@ -131,7 +135,7 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void setViewByType(int typeId) {
-    
+
     switch (typeId) {
     case 1:
       // ks-forum:spaces
@@ -140,13 +144,12 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 2:
       // ks-wiki:spaces
-      // Map<String, String> templateMap = activityInfo.templateParams;
-      // Set<String> set = templateMap.keySet();
-      // for (String param : set) {
-      // System.out.println("type: " + activityInfo.getType() +
-      // "--template key: " + param + "-- "
-      // + templateMap.get(param));
-      // }
+      Map<String, String> templateMap = activityInfo.templateParams;
+      Set<String> set = templateMap.keySet();
+      for (String param : set) {
+        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
+            + templateMap.get(param));
+      }
       setActivityTypeWiki();
       break;
     case 3:
@@ -164,10 +167,8 @@ public class SocialActivityStreamItem extends LinearLayout {
       String docLink = activityInfo.templateParams.get("DOCLINK");
       if (docLink != null) {
         String docName = activityInfo.templateParams.get("DOCNAME");
-        if (PhotoUtils.isImages(docName)) {
-          String url = domain + docLink;
-          displayAttachImage(url, docName, null);
-        }
+        String url = domain + docLink;
+        displayAttachImage(url, docName, null);
       }
 
       break;
@@ -215,23 +216,26 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private String addSpaceInfo() {
-    StringBuffer spaceBuffer = new StringBuffer();
-    spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-    spaceBuffer.append(LocalizationHelper.getInstance().getString("In"));
-    spaceBuffer.append("</font>");
-    spaceBuffer.append(" ");
     RestActivityStream actStream = activityInfo.restActivityStream;
-    String nameSpace = actStream.getFullName();
-    String spaceLink = actStream.getPermaLink();
-    spaceBuffer.append("<a href=");
-    spaceBuffer.append(spaceLink);
-    spaceBuffer.append(">");
-    spaceBuffer.append(nameSpace);
-    spaceBuffer.append("</a>");
-    spaceBuffer.append(" ");
-    spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-    spaceBuffer.append(LocalizationHelper.getInstance().getString("Space"));
-    spaceBuffer.append("</font>");
+    String spaceType = actStream.getType();
+    StringBuffer spaceBuffer = new StringBuffer();
+    if (spaceType.equalsIgnoreCase(ExoConstants.SOCIAL_SPACE)) {
+      spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+      spaceBuffer.append(LocalizationHelper.getInstance().getString("In"));
+      spaceBuffer.append("</font>");
+      spaceBuffer.append(" ");
+      String nameSpace = actStream.getFullName();
+      String spaceLink = actStream.getPermaLink();
+      spaceBuffer.append("<a href=");
+      spaceBuffer.append(spaceLink);
+      spaceBuffer.append(">");
+      spaceBuffer.append(nameSpace);
+      spaceBuffer.append("</a>");
+      spaceBuffer.append(" ");
+      spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+      spaceBuffer.append(LocalizationHelper.getInstance().getString("Space"));
+      spaceBuffer.append("</font>");
+    }
     return spaceBuffer.toString();
   }
 

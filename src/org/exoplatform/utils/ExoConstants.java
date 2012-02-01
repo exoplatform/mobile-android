@@ -44,7 +44,7 @@ public class ExoConstants {
 
   public static final int    REQUEST_ADD_PHOTO             = 8;
 
-  public static final String PHOTO_ALBUM_IMAGE_TYPE        = "image/*";                                           ;
+  public static final String PHOTO_ALBUM_IMAGE_TYPE        = "image/*";                                                   ;
 
   public static final String HTTP_PROTOCOL                 = "http";
 
@@ -74,6 +74,8 @@ public class ExoConstants {
 
   public static final String SOCIAL_LINKFY_EXTRA           = "SOCIAL_LINKFY_EXTRA";
 
+  public static final String SOCIAL_SPACE                  = "space";
+
   public static final String EXO_PREFERENCE                = "exo_preference";
 
   public static final String EXO_PRF_DOMAIN                = "exo_prf_domain";
@@ -93,12 +95,17 @@ public class ExoConstants {
   public static final String FRENCH_LOCALIZATION           = "LocalizeFR.properties";
 
   public static final String DOCUMENT_PATH                 = "/rest/private/jcr/repository/collaboration/Users";
+
   public static final String DOCUMENT_JCR_PATH_REST        = "/rest/private/jcr/repository/collaboration";
+
   public static final String DOCUMENT_DRIVE_PATH_REST      = "/portal/rest/managedocument/getDrives?driveType=";
+
   public static final String DOCUMENT_FILE_PATH_REST       = "/portal/rest/managedocument/getFoldersAndFiles?driveName=";
-  public static final String DOCUMENT_WORKSPACE_NAME       = "&workspaceName="; 
-  public static final String DOCUMENT_CURRENT_FOLDER       = "&currentFolder="; 
-  
+
+  public static final String DOCUMENT_WORKSPACE_NAME       = "&workspaceName=";
+
+  public static final String DOCUMENT_CURRENT_FOLDER       = "&currentFolder=";
+
   public static final String DASHBOARD_PATH                = "/rest/private/dashboards";
 
   public static final String DOMAIN_SUFFIX                 = "/portal/private/intranet";
