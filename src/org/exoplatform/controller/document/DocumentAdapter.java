@@ -61,7 +61,6 @@ public class DocumentAdapter extends BaseAdapter {
     final ExoFile myFile = _documentList.get(pos);
 
     if (myFile == null) {
-
       convertView = inflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
       LocalizationHelper local = LocalizationHelper.getInstance();
@@ -97,7 +96,7 @@ public class DocumentAdapter extends BaseAdapter {
           rowView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
       }
 
-//      btnAction.setVisibility(View.INVISIBLE);
+      // btnAction.setVisibility(View.INVISIBLE);
 
     } else {
 
@@ -146,7 +145,6 @@ public class DocumentAdapter extends BaseAdapter {
 
         if (_documentActionDialog == null)
           _documentActionDialog = new DocumentActionDialog(_mContext, file);
-
         _documentActionDialog.myFile = file;
         _documentActionDialog._documentActionAdapter.setSelectedFile(file);
         _documentActionDialog._documentActionAdapter.notifyDataSetChanged();

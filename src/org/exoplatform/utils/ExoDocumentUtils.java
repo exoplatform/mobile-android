@@ -31,7 +31,7 @@ public class ExoDocumentUtils {
     File tempFile = PhotoUtils.reziseFileImage(fileManager);
     HttpResponse response = null;
     try {
-
+      url = url.replaceAll(" ", "%20");
       HttpPut put = new HttpPut(url);
       FileEntity fileEntity = new FileEntity(tempFile, fileType);
       put.setEntity(fileEntity);
@@ -149,9 +149,7 @@ public class ExoDocumentUtils {
           Node itemNode = obj_nod_list.item(i);
           if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
             Element itemElement = (Element) itemNode;
-
             ExoFile file = new ExoFile();
-
             file.name = itemElement.getAttribute("name");
             file.workspaceName = itemElement.getAttribute("workspaceName");
             file.driveName = file.name;
@@ -159,7 +157,7 @@ public class ExoDocumentUtils {
             if (file.currentFolder == null)
               file.currentFolder = "";
             file.isFolder = true;
-
+            file.path = getRootDriverPath(file);
             folderArray.add(file);
           }
         }
@@ -176,13 +174,53 @@ public class ExoDocumentUtils {
     return folderArray;
   }
 
-  public static ArrayList<ExoFile> getContentOfFolder(ExoFile file) {
-
+  // return the driver url
+  private static String getDriverUrl(ExoFile file) {
     String domain = AccountSetting.getInstance().getDomainName();
     String urlStr = domain + ExoConstants.DOCUMENT_FILE_PATH_REST + file.driveName
         + ExoConstants.DOCUMENT_WORKSPACE_NAME + file.workspaceName
         + ExoConstants.DOCUMENT_CURRENT_FOLDER + file.currentFolder;
+    return urlStr;
+  }
 
+  // get path for driver folder (ex. Public/Private)
+  private static String getRootDriverPath(ExoFile file) {
+    String path = null;
+    String urlStr = getDriverUrl(file);
+    urlStr = URLAnalyzer.encodeUrl(urlStr);
+    Document obj_doc = null;
+    DocumentBuilderFactory doc_build_fact = null;
+    DocumentBuilder doc_builder = null;
+    try {
+      doc_build_fact = DocumentBuilderFactory.newInstance();
+      doc_builder = doc_build_fact.newDocumentBuilder();
+      InputStream is = ExoConnectionUtils.sendRequest(urlStr);
+      obj_doc = doc_builder.parse(is);
+
+      if (null != obj_doc) {
+        org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+
+        // Get folders
+        NodeList obj_nod_list = feed.getElementsByTagName("Folder");
+        Node rootNode = obj_nod_list.item(0);
+        if (rootNode.getNodeType() == Node.ELEMENT_NODE) {
+          Element itemElement = (Element) rootNode;
+          path = fullURLofFile(itemElement.getAttribute("path"));
+        }
+      }
+    } catch (ParserConfigurationException e) {
+      return null;
+    } catch (SAXException e) {
+      return null;
+    } catch (IOException e) {
+      return null;
+    }
+    return path;
+  }
+
+  public static ArrayList<ExoFile> getContentOfFolder(ExoFile file) {
+
+    String urlStr = getDriverUrl(file);
     urlStr = URLAnalyzer.encodeUrl(urlStr);
 
     // Initialize the blogEntries MutableArray that we declared in the header

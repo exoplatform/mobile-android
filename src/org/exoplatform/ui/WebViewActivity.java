@@ -41,6 +41,7 @@ public class WebViewActivity extends MyActionBar {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.webview);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    _url = _url.replaceAll(" ", "%20");
     setupCookies(_url);
     changeLanguage();
 

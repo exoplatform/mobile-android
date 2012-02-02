@@ -92,10 +92,15 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
 
       ArrayList<ExoFile> files = DocumentActivity._documentActivityInstance._documentAdapter._documentList;
       boolean fileExisted = false;
-      for (ExoFile file : files) {
-        if (file.name.equalsIgnoreCase(folderName)) {
-          fileExisted = true;
-          break;
+      if (files != null) {
+        for (ExoFile file : files) {
+          if (file != null) {
+            if (file.name.equalsIgnoreCase(folderName)) {
+              fileExisted = true;
+              break;
+            }
+          }
+
         }
       }
       if (fileExisted) {
@@ -109,24 +114,21 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
       if ((folderName != null) && (folderName.length() > 0)) {
 
         if (actionId == 5) {
-
-          String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
-
-          String destinationUrl = ExoDocumentUtils.getParentUrl(selectedFile.path) + "/"
-              + folderName;
-          if (currentFolder.equalsIgnoreCase(selectedFile.currentFolder)) {
-            DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
-            currentFolder = ExoDocumentUtils.getParentUrl(currentFolder) + "/" + folderName;
-            DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
+          if (DocumentActivity._documentActivityInstance._fileForCurrentActionBar != null) {
+            String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+            String destinationUrl = ExoDocumentUtils.getParentUrl(selectedFile.path) + "/"
+                + folderName;
+            if (currentFolder.equalsIgnoreCase(selectedFile.currentFolder)) {
+              DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
+              currentFolder = ExoDocumentUtils.getParentUrl(currentFolder) + "/" + folderName;
+              DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
+            }
+            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, destinationUrl, 5);
           }
 
-          DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, destinationUrl, 5);
-
         } else {
-
           String desUrl = selectedFile.path + "/" + folderName;
           DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, desUrl, 6);
-
         }
         dismiss();
       }

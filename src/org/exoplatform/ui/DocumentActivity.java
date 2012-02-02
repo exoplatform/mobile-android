@@ -192,9 +192,6 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void uploadFile() {
-
-    // setViewUploadImage(false);
-
     onLoad(_documentAdapter._documentActionDialog.myFile.path, null, 4);
 
   }

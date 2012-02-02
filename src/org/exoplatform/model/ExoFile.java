@@ -10,7 +10,8 @@ public class ExoFile {
 
   public String  name;         // name of the file/folder
 
-  public boolean canAddChild;  // can add new file or folder as it content
+  public boolean canAddChild;  // can add new file or folder as it
+                                // content
 
   public boolean canRemove;    // can remove the file/folder
 
@@ -18,7 +19,8 @@ public class ExoFile {
 
   public String  driveName;    // drive name of file
 
-  public boolean hasChild;     // if the folder contains any files or folders
+  public boolean hasChild;     // if the folder contains any files or
+                                // folders
 
   public String  workspaceName; // work space of file
 

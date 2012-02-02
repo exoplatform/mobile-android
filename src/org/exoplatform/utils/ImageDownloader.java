@@ -90,7 +90,7 @@ public class ImageDownloader implements OnLowMemoryListener {
    * @param imageView The ImageView to bind the downloaded image to.
    */
   public void download(String url, ImageView imageView) {
-
+    url = url.replaceAll(" ", "%20");
     download(url, imageView, null);
   }
 
