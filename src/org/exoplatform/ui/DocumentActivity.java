@@ -4,8 +4,6 @@ import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.http.HttpResponse;
@@ -25,8 +23,6 @@ import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WaitingDialog;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,7 +31,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -50,12 +45,6 @@ public class DocumentActivity extends MyActionBar {
   private ListView               _listViewDocument;
 
   private TextView               _textViewEmptyPage;
-
-  private ImageView              _imgViewUpLoadPhoto;
-
-  private Button                 _btnUploadImage;
-
-  private Button                 _btnCancelUploadImage;    // "/sdcard/eXo/";
 
   private WaitingDialog          _progressDialog;
 
@@ -88,8 +77,7 @@ public class DocumentActivity extends MyActionBar {
     _documentActivityInstance = this;
     init();
 
-    setViewUploadImage(false);
-
+    // setViewUploadImage(false);
     _urlDocumentHome = ExoDocumentUtils.repositoryHomeURL;
 
     onLoad(_urlDocumentHome, null, 0);
@@ -205,7 +193,7 @@ public class DocumentActivity extends MyActionBar {
 
   public void uploadFile() {
 
-    setViewUploadImage(false);
+    // setViewUploadImage(false);
 
     onLoad(_documentAdapter._documentActionDialog.myFile.path, null, 4);
 
@@ -216,26 +204,6 @@ public class DocumentActivity extends MyActionBar {
     if (_listViewDocument == null) {
       _listViewDocument = (ListView) findViewById(R.id.ListView_Files);
       _listViewDocument.setDivider(null);
-
-      _btnUploadImage = (Button) findViewById(R.id.ButtonUpImage);
-      _btnUploadImage.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-
-          uploadFile();
-
-        }
-      });
-
-      _btnCancelUploadImage = (Button) findViewById(R.id.ButtonCancel);
-      _btnCancelUploadImage.setOnClickListener(new View.OnClickListener() {
-
-        public void onClick(View v) {
-          setViewUploadImage(false);
-        }
-      });
-
-      _imgViewUpLoadPhoto = (ImageView) findViewById(R.id.ImageView);
-
       _textViewEmptyPage = (TextView) findViewById(R.id.TextView_EmptyPage);
       _textViewEmptyPage.setVisibility(View.INVISIBLE);
     }
@@ -247,24 +215,6 @@ public class DocumentActivity extends MyActionBar {
   public void setDocumentAdapter() {
 
     _listViewDocument.setAdapter(_documentAdapter);
-  }
-
-  // Show/hide taken photo
-  private void setViewUploadImage(boolean isVieweXoImage) {
-    int viewImageMode;
-    int viewFileMode;
-    if (isVieweXoImage) {
-      viewImageMode = View.VISIBLE;
-      viewFileMode = View.INVISIBLE;
-    } else {
-      viewImageMode = View.INVISIBLE;
-      viewFileMode = View.VISIBLE;
-    }
-
-    _listViewDocument.setVisibility(viewFileMode);
-    _imgViewUpLoadPhoto.setVisibility(viewImageMode);
-    _btnUploadImage.setVisibility(viewImageMode);
-    _btnCancelUploadImage.setVisibility(viewImageMode);
   }
 
   // Refresh files view
@@ -298,11 +248,6 @@ public class DocumentActivity extends MyActionBar {
     _progressDialog.show();
   }
 
-  // Add a photo: camera or photo album
-  public void addAPhoto() {
-
-  }
-
   // Take a photo
   public void takePicture() {
     String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
@@ -320,23 +265,9 @@ public class DocumentActivity extends MyActionBar {
     if (resultCode == RESULT_OK) {
       switch (requestCode) {
       case ExoConstants.TAKE_PICTURE_WITH_CAMERA:
-        File file = new File(_sdcard_temp_dir);
-        setViewUploadImage(true);
-        try {
-          BitmapFactory.Options options = new BitmapFactory.Options();
-          options.inSampleSize = 8;
-          FileInputStream fis = new FileInputStream(file);
-          Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
-          fis.close();
-          // Bitmap bmp = (Bitmap) data.getExtras().get("data");
-          _imgViewUpLoadPhoto.setImageBitmap(bitmap);
-        } catch (FileNotFoundException e) {
-          if (Config.GD_ERROR_LOGS_ENABLED)
-            Log.e("FileNotFoundException", "TAKE_PICTURE_WITH_CAMERA error!");
-        } catch (IOException e) {
-          if (Config.GD_ERROR_LOGS_ENABLED)
-            Log.e("IOException", "TAKE_PICTURE_WITH_CAMERA error!");
-        }
+        Intent intent1 = new Intent(_documentActivityInstance, SelectedImageActivity.class);
+        intent1.putExtra(ExoConstants.SELECTED_IMAGE_EXTRA, _sdcard_temp_dir);
+        startActivity(intent1);
         break;
 
       case ExoConstants.REQUEST_ADD_PHOTO:
@@ -468,7 +399,6 @@ public class DocumentActivity extends MyActionBar {
     } catch (IOException e) {
       return false;
     }
-    // return false;
   }
 
   public void setEmptyView(int status) {
@@ -490,14 +420,8 @@ public class DocumentActivity extends MyActionBar {
   public void changeLanguage() {
 
     LocalizationHelper local = LocalizationHelper.getInstance();
-
-    String strUploadFile = local.getString("Upload");
-    String strCancel = local.getString("Cancel");
     String strEmptyPage = local.getString("EmptyPage");
     emptyFolderString = local.getString("EmptyFolder");
-
-    _btnUploadImage.setText(strUploadFile);
-    _btnCancelUploadImage.setText(strCancel);
     _textViewEmptyPage.setText(strEmptyPage);
   }
 

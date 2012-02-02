@@ -121,7 +121,6 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
           DocumentActivity._documentActivityInstance._sdcard_temp_dir = filePath;
           DocumentActivity._documentActivityInstance.uploadFile();
         }
-
         else
           ComposeMessageActivity.addImageToMessage(file);
       }

@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -88,9 +90,7 @@ public class ImageDownloader implements OnLowMemoryListener {
    * @param imageView The ImageView to bind the downloaded image to.
    */
   public void download(String url, ImageView imageView) {
-    if (url.contains(" ")) {
-      url = url.replace(" ", "%20");
-    }
+
     download(url, imageView, null);
   }
 

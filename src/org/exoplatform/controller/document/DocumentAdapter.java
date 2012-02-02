@@ -97,7 +97,7 @@ public class DocumentAdapter extends BaseAdapter {
           rowView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
       }
 
-      btnAction.setVisibility(View.INVISIBLE);
+//      btnAction.setVisibility(View.INVISIBLE);
 
     } else {
 

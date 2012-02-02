@@ -210,11 +210,7 @@ public class ExoConnectionUtils {
       httpPost.setHeader("Cookie", strCookie);
       _strCookie = strCookie;
       response = httpClient.execute(httpPost);
-
-      int status = response.getStatusLine().getStatusCode();
-      System.out.println("--------------" + status);
       entity = response.getEntity();
-
       _sessionCookies = new ArrayList<Cookie>(cookies);
 
       if (entity != null) {
