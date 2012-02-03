@@ -69,17 +69,21 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
       filePath = PhotoUtils.extractFilenameFromUri(mImageUri, this);
     } else
       filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
-
-    imageView = (ImageView) findViewById(R.id.social_selected_image);
-
-    file = new File(filePath);
-    setTitle(file.getName());
-    Bitmap bitmap = PhotoUtils.shrinkBitmap(filePath, SCALE_WIDTH, SCALE_HEIGHT);
-
-    imageView.setImageBitmap(bitmap);
+    
     okButton = (Button) findViewById(R.id.social_selected_image_ok_button);
     okButton.setText(okText);
     okButton.setOnClickListener(this);
+    
+    imageView = (ImageView) findViewById(R.id.social_selected_image);
+    try {
+      file = new File(filePath);
+      setTitle(file.getName());
+      Bitmap bitmap = PhotoUtils.shrinkBitmap(filePath, SCALE_WIDTH, SCALE_HEIGHT);
+      imageView.setImageBitmap(bitmap);
+    } catch (NullPointerException e) {
+      setTitle("");
+      okButton.setClickable(false);
+    }
 
     removeButton = (Button) findViewById(R.id.social_selected_image_remove_button);
     if (modeId == EDIT_MODE) {
@@ -120,8 +124,7 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
         if (DocumentActivity._documentActivityInstance != null) {
           DocumentActivity._documentActivityInstance._sdcard_temp_dir = filePath;
           DocumentActivity._documentActivityInstance.uploadFile();
-        }
-        else
+        } else
           ComposeMessageActivity.addImageToMessage(file);
       }
 
