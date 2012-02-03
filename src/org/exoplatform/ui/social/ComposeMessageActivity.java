@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ScrollView;
 
 import com.cyrilmottier.android.greendroid.R;
 
@@ -38,7 +39,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   private EditText                     composeEditText;
 
-  private LinearLayout                 composeTextFileWrap;
+  private ScrollView                   textFieldScrollView;
 
   private static LinearLayout          fileAttachWrap;
 
@@ -86,16 +87,18 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
   private void initComponents() {
     messageController = new ComposeMessageController(this, composeType);
     composeEditText = (EditText) findViewById(R.id.compose_text_view);
-    composeTextFileWrap = (LinearLayout) findViewById(R.id.compose_textfield_wrap);
-    composeTextFileWrap.setOnTouchListener(new View.OnTouchListener() {
+    textFieldScrollView = (ScrollView) findViewById(R.id.compose_textfield_scroll);
+    textFieldScrollView.setOnTouchListener(new View.OnTouchListener() {
       @Override
       public boolean onTouch(View v, MotionEvent event) {
-        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.showSoftInput(composeEditText, InputMethodManager.SHOW_IMPLICIT);
-
-        return true;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+          InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+          mgr.showSoftInput(composeEditText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        }
+        return false;
       }
     });
+
     fileAttachWrap = (LinearLayout) findViewById(R.id.compose_attach_file_wrap);
     sendButton = (Button) findViewById(R.id.compose_send_button);
     sendButton.setText(sendText);
@@ -116,7 +119,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       if (SocialDetailActivity.socialDetailActivity != null) {
         SocialDetailActivity.socialDetailActivity.finish();
       }
-      destroy();
+      finish();
       break;
 
     case 0:
@@ -192,17 +195,12 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
     composeMessageActivity.sdcard_temp_dir = null;
   }
 
-  private void destroy() {
-    super.onDestroy();
+  @Override
+  public void onBackPressed() {
     finish();
   }
 
   @Override
-  public void onBackPressed() {
-    destroy();
-  }
-
-  // @Override
   public void onClick(View view) {
 
     if (view.equals(sendButton)) {
@@ -210,7 +208,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       messageController.onSendMessage(composeMessage, sdcard_temp_dir);
     }
     if (view.equals(cancelButton)) {
-      destroy();
+      finish();
     }
   }
 
