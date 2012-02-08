@@ -2,8 +2,11 @@ package org.exoplatform.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Calendar;
 
 import android.app.Activity;
@@ -23,6 +26,7 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 
@@ -193,14 +197,57 @@ public class PhotoUtils {
   /*
    * This method for getting the image url which return from Intent.ACTION_PICK
    */
+  // public static String extractFilenameFromUri(Uri uri, Activity activity) {
+  //
+  // String filePath = null;
+  // String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
+  //
+  // Cursor c = activity.managedQuery(uri, projection, null, null, null);
+  // if (c != null && c.moveToFirst()) {
+  // filePath = c.getString(0);
+  // }
+  // return filePath;
+  // }
+
+  /*
+   * This method for getting the image url which return from Intent.ACTION_PICK
+   * include extra photos (from Picasa, etc...)
+   */
   public static String extractFilenameFromUri(Uri uri, Activity activity) {
 
     String filePath = null;
     String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
 
-    Cursor c = activity.managedQuery(uri, projection, null, null, null);
-    if (c != null && c.moveToFirst()) {
-      filePath = c.getString(0);
+    Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
+    if (cursor != null && cursor.moveToFirst()) {
+      int columnIndex = cursor.getColumnIndex(MediaColumns.DATA);
+      if (columnIndex != -1) {
+        // regular processing for gallery files
+        filePath = cursor.getString(columnIndex);
+      } else {
+        // this is for get image from other provider (exp. Picasa ...)
+        columnIndex = cursor.getColumnIndex(MediaColumns.DISPLAY_NAME);
+        if (columnIndex != -1) {
+          try {
+            String name = cursor.getString(columnIndex);
+            final InputStream is = activity.getContentResolver().openInputStream(uri);
+            String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
+            File file = new File(parentPath, name);
+            OutputStream out = new FileOutputStream(file);
+            byte buf[] = new byte[1024];
+            int len;
+            while ((len = is.read(buf)) > 0)
+              out.write(buf, 0, len);
+            out.close();
+            is.close();
+            filePath = file.getAbsolutePath();
+          } catch (FileNotFoundException e) {
+            return null;
+          } catch (IOException e) {
+            return null;
+          }
+        }
+      }
     }
     return filePath;
   }
