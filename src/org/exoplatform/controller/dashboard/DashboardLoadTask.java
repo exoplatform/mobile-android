@@ -53,7 +53,6 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
 
       WebdavMethod copy = new WebdavMethod("HEAD", AccountSetting.getInstance().getDomainName());
       response = ExoConnectionUtils.httpClient.execute(copy);
-
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return dashboardController.getDashboards();

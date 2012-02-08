@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
@@ -70,7 +71,8 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   @Override
   public Boolean doInBackground(Integer... params) {
-
+    // Send authenticate each time we access to document driver or folder
+    ExoConnectionUtils.reAuthenticate();
     boolean result = true;
 
     try {

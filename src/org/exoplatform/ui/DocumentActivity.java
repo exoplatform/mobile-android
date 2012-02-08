@@ -326,9 +326,7 @@ public class DocumentActivity extends MyActionBar {
 
       source = URLAnalyzer.encodeUrl(source);
       destination = URLAnalyzer.encodeUrl(destination);
-
       WebdavMethod move = new WebdavMethod("MOVE", source, destination);
-
       response = ExoConnectionUtils.httpClient.execute(move);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
@@ -347,7 +345,6 @@ public class DocumentActivity extends MyActionBar {
     try {
       source = URLAnalyzer.encodeUrl(source);
       destination = URLAnalyzer.encodeUrl(destination);
-
       WebdavMethod create = new WebdavMethod("HEAD", destination);
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
@@ -355,7 +352,6 @@ public class DocumentActivity extends MyActionBar {
         return false;
       } else {
         WebdavMethod move = new WebdavMethod("MOVE", source, destination);
-
         response = ExoConnectionUtils.httpClient.execute(move);
         status = response.getStatusLine().getStatusCode();
         if (status >= 200 && status < 300) {
@@ -374,7 +370,6 @@ public class DocumentActivity extends MyActionBar {
     try {
 
       destination = URLAnalyzer.encodeUrl(destination);
-
       WebdavMethod create = new WebdavMethod("HEAD", destination);
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
