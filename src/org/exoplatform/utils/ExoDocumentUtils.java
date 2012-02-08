@@ -36,13 +36,15 @@ public class ExoDocumentUtils {
       FileEntity fileEntity = new FileEntity(tempFile, fileType);
       put.setEntity(fileEntity);
       fileEntity.setContentType(fileType);
-
+      // Re authenticate when we upload file
+      ExoConnectionUtils.reAuthenticate();
       response = ExoConnectionUtils.httpClient.execute(put);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
-      } else
+      } else {
         return false;
+      }
 
     } catch (IOException e) {
       return false;
@@ -84,20 +86,21 @@ public class ExoDocumentUtils {
         WebdavMethod copy = new WebdavMethod("HEAD", buffer.toString());
         int status = ExoConnectionUtils.httpClient.execute(copy).getStatusLine().getStatusCode();
 
-        if (status >= 200 && status < 300)
+        if (status >= 200 && status < 300) {
           repositoryHomeURL = buffer.toString();
-        else
+          return true;
+        } else {
           repositoryHomeURL = domain + ExoConstants.DOCUMENT_PATH + "/" + userName;
-        return true;
-      } catch (IOException e) {
+          return false;
+        }
 
+      } catch (IOException e) {
         repositoryHomeURL = null;
         return false;
       }
 
     }
     return true;
-    // Log.e("123: ", repositoryHomeURL);
 
   }
 
@@ -138,31 +141,32 @@ public class ExoDocumentUtils {
       doc_build_fact = DocumentBuilderFactory.newInstance();
       doc_builder = doc_build_fact.newDocumentBuilder();
       InputStream is = ExoConnectionUtils.sendRequest(urlStr);
-      obj_doc = doc_builder.parse(is);
+      if (is != null) {
+        obj_doc = doc_builder.parse(is);
 
-      NodeList obj_nod_list = null;
-      if (null != obj_doc) {
-        org.w3c.dom.Element feed = obj_doc.getDocumentElement();
-        obj_nod_list = feed.getElementsByTagName("Folder");
+        NodeList obj_nod_list = null;
+        if (null != obj_doc) {
+          org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+          obj_nod_list = feed.getElementsByTagName("Folder");
 
-        for (int i = 0; i < obj_nod_list.getLength(); i++) {
-          Node itemNode = obj_nod_list.item(i);
-          if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
-            Element itemElement = (Element) itemNode;
-            ExoFile file = new ExoFile();
-            file.name = itemElement.getAttribute("name");
-            file.workspaceName = itemElement.getAttribute("workspaceName");
-            file.driveName = file.name;
-            file.currentFolder = itemElement.getAttribute("currentFolder");
-            if (file.currentFolder == null)
-              file.currentFolder = "";
-            file.isFolder = true;
-            file.path = getRootDriverPath(file);
-            folderArray.add(file);
+          for (int i = 0; i < obj_nod_list.getLength(); i++) {
+            Node itemNode = obj_nod_list.item(i);
+            if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+              Element itemElement = (Element) itemNode;
+              ExoFile file = new ExoFile();
+              file.name = itemElement.getAttribute("name");
+              file.workspaceName = itemElement.getAttribute("workspaceName");
+              file.driveName = file.name;
+              file.currentFolder = itemElement.getAttribute("currentFolder");
+              if (file.currentFolder == null)
+                file.currentFolder = "";
+              file.isFolder = true;
+              file.path = getRootDriverPath(file);
+              folderArray.add(file);
+            }
           }
         }
       }
-
     } catch (ParserConfigurationException e) {
       folderArray = null;
     } catch (SAXException e) {
@@ -195,19 +199,22 @@ public class ExoDocumentUtils {
       doc_build_fact = DocumentBuilderFactory.newInstance();
       doc_builder = doc_build_fact.newDocumentBuilder();
       InputStream is = ExoConnectionUtils.sendRequest(urlStr);
-      obj_doc = doc_builder.parse(is);
+      if (is != null) {
+        obj_doc = doc_builder.parse(is);
 
-      if (null != obj_doc) {
-        org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+        if (null != obj_doc) {
+          org.w3c.dom.Element feed = obj_doc.getDocumentElement();
 
-        // Get folders
-        NodeList obj_nod_list = feed.getElementsByTagName("Folder");
-        Node rootNode = obj_nod_list.item(0);
-        if (rootNode.getNodeType() == Node.ELEMENT_NODE) {
-          Element itemElement = (Element) rootNode;
-          path = fullURLofFile(itemElement.getAttribute("path"));
+          // Get folders
+          NodeList obj_nod_list = feed.getElementsByTagName("Folder");
+          Node rootNode = obj_nod_list.item(0);
+          if (rootNode.getNodeType() == Node.ELEMENT_NODE) {
+            Element itemElement = (Element) rootNode;
+            path = fullURLofFile(itemElement.getAttribute("path"));
+          }
         }
       }
+
     } catch (ParserConfigurationException e) {
       return null;
     } catch (SAXException e) {
@@ -233,57 +240,59 @@ public class ExoDocumentUtils {
       doc_build_fact = DocumentBuilderFactory.newInstance();
       doc_builder = doc_build_fact.newDocumentBuilder();
       InputStream is = ExoConnectionUtils.sendRequest(urlStr);
-      obj_doc = doc_builder.parse(is);
+      if (is != null) {
+        obj_doc = doc_builder.parse(is);
 
-      NodeList obj_nod_list = null;
-      if (null != obj_doc) {
-        org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+        NodeList obj_nod_list = null;
+        if (null != obj_doc) {
+          org.w3c.dom.Element feed = obj_doc.getDocumentElement();
 
-        // Get folders
-        obj_nod_list = feed.getElementsByTagName("Folder");
+          // Get folders
+          obj_nod_list = feed.getElementsByTagName("Folder");
 
-        for (int i = 0; i < obj_nod_list.getLength(); i++) {
-          Node itemNode = obj_nod_list.item(i);
-          if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
-            Element itemElement = (Element) itemNode;
-            if (i > 0) {
+          for (int i = 0; i < obj_nod_list.getLength(); i++) {
+            Node itemNode = obj_nod_list.item(i);
+            if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+              Element itemElement = (Element) itemNode;
+              if (i > 0) {
+                ExoFile newFile = new ExoFile();
+                newFile.name = itemElement.getAttribute("name");
+                newFile.path = fullURLofFile(itemElement.getAttribute("path"));
+                newFile.workspaceName = itemElement.getAttribute("workspaceName");
+                newFile.driveName = itemElement.getAttribute("driveName");
+                newFile.currentFolder = itemElement.getAttribute("currentFolder");
+                if (newFile.currentFolder == null)
+                  newFile.currentFolder = "";
+                newFile.isFolder = true;
+
+                folderArray.add(newFile);
+              }
+
+            }
+          }
+
+          // Get files
+          obj_nod_list = feed.getElementsByTagName("File");
+
+          for (int i = 0; i < obj_nod_list.getLength(); i++) {
+            Node itemNode = obj_nod_list.item(i);
+            if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+              Element itemElement = (Element) itemNode;
+
               ExoFile newFile = new ExoFile();
-              newFile.name = itemElement.getAttribute("name");
               newFile.path = fullURLofFile(itemElement.getAttribute("path"));
+              newFile.name = itemElement.getAttribute("name");
               newFile.workspaceName = itemElement.getAttribute("workspaceName");
-              newFile.driveName = itemElement.getAttribute("driveName");
+              newFile.driveName = file.name;
               newFile.currentFolder = itemElement.getAttribute("currentFolder");
-              if (newFile.currentFolder == null)
-                newFile.currentFolder = "";
-              newFile.isFolder = true;
+              newFile.nodeType = itemElement.getAttribute("nodeType");
+              newFile.isFolder = false;
 
               folderArray.add(newFile);
             }
-
           }
+
         }
-
-        // Get files
-        obj_nod_list = feed.getElementsByTagName("File");
-
-        for (int i = 0; i < obj_nod_list.getLength(); i++) {
-          Node itemNode = obj_nod_list.item(i);
-          if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
-            Element itemElement = (Element) itemNode;
-
-            ExoFile newFile = new ExoFile();
-            newFile.path = fullURLofFile(itemElement.getAttribute("path"));
-            newFile.name = itemElement.getAttribute("name");
-            newFile.workspaceName = itemElement.getAttribute("workspaceName");
-            newFile.driveName = file.name;
-            newFile.currentFolder = itemElement.getAttribute("currentFolder");
-            newFile.nodeType = itemElement.getAttribute("nodeType");
-            newFile.isFolder = false;
-
-            folderArray.add(newFile);
-          }
-        }
-
       }
 
     } catch (ParserConfigurationException e) {
@@ -373,12 +382,8 @@ public class ExoDocumentUtils {
 
   public static boolean isContainSpecialChar(String str, String charSet) {
 
-    // try {
     Pattern patt = Pattern.compile(charSet);
     Matcher matcher = patt.matcher(str);
     return matcher.find();
-    // } catch (RuntimeException e) {
-    // return false;
-    // }
   }
 }

@@ -165,7 +165,6 @@ public class ExoConnectionUtils {
 
   // Send request with authentication
   public static String sendAuthentication(String domain, String username, String password) {
-
     try {
       HttpResponse response;
       HttpEntity entity;
@@ -266,13 +265,17 @@ public class ExoConnectionUtils {
       nvps.add(new BasicNameValuePair("j_password", strPassword));
       httpPost.setEntity(new UrlEncodedFormEntity(nvps));
       httpClient.execute(httpPost);
+      List<Cookie> cookies = httpClient.getCookieStore().getCookies();
+      _sessionCookies = new ArrayList<Cookie>(cookies);
+      httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
+                                                                       .getAuthScope(),
+                                                         AccountSetting.getInstance()
+                                                                       .getCredentials());
     } catch (IOException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("Exception", "Cannot reauthenticate");
     }
-    httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance().getAuthScope(),
-                                                       AccountSetting.getInstance()
-                                                                     .getCredentials());
+
   }
 
   // Get input stream from URL with authentication
@@ -306,53 +309,22 @@ public class ExoConnectionUtils {
     return ipstr;
   }
 
-  // public static InputStream getDriveContent(String url) {
-  //
-  // try {
-  // HttpGet get = new HttpGet(url);
-  // get.setHeader("Cookie", _strCookie);
-  // httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
-  // .getAuthScope(),
-  // AccountSetting.getInstance()
-  // .getCredentials());
-  // HttpResponse response;
-  // response = httpClient.execute(get);
-  // int status = response.getStatusLine().getStatusCode();
-  // if (status >= 200 && status < 300) {
-  // HttpEntity entity = response.getEntity();
-  // if (entity != null) {
-  // InputStream instream = entity.getContent();
-  // // String strResult = convertStreamToString(instream);
-  // return instream;
-  // } else {
-  // return null;
-  // }
-  // } else {
-  // return null;
-  // }
-  //
-  // } catch (Exception e) {
-  // Log.e(e.toString(), e.getMessage());
-  // return null;
-  // }
-  //
-  // }
-
   // Get input stream from URL
   public static InputStream sendRequest(String strUrlRequest) {
     try {
       HttpResponse response;
       HttpEntity entity;
-      httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
-                                                                       .getAuthScope(),
-                                                         AccountSetting.getInstance()
-                                                                       .getCredentials());
       HttpGet httpGet = new HttpGet(strUrlRequest);
-      httpGet.setHeader("Cookie", _strCookie);
+      // httpGet.setHeader("Cookie", _strCookie);
       response = httpClient.execute(httpGet);
-      entity = response.getEntity();
-      if (entity != null) {
-        return entity.getContent();
+      int statusCode = response.getStatusLine().getStatusCode();
+      if (statusCode >= 200 && statusCode < 300) {
+        entity = response.getEntity();
+        if (entity != null) {
+          return entity.getContent();
+        }
+      } else {
+        return null;
       }
 
     } catch (IOException e) {
