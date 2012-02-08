@@ -123,9 +123,13 @@ public class ServerConfigurationUtils {
   public static ArrayList<ServerObjInfo> getDefaultServerList(Context _context) {
 
     ArrayList<ServerObjInfo> arrServerList = getServerListWithFileName("");
+    if (arrServerList == null) {
+      arrServerList = new ArrayList<ServerObjInfo>();
+    }
     XmlResourceParser parser = _context.getResources().getXml(R.xml.defaultconfiguaration);
 
     try {
+
       int eventType = parser.getEventType();
 
       while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -197,6 +201,7 @@ public class ServerConfigurationUtils {
     DocumentBuilder doc_builder = null;
     try {
       obj_is = new FileInputStream(filePath);
+      
       doc_build_fact = DocumentBuilderFactory.newInstance();
       doc_builder = doc_build_fact.newDocumentBuilder();
 
@@ -225,11 +230,14 @@ public class ServerConfigurationUtils {
       }
 
     } catch (IOException e) {
-      return null;
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("IOException", "getServerListWithFileName");
     } catch (ParserConfigurationException e) {
-      return null;
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("ParserConfigurationException", "getServerListWithFileName");
     } catch (SAXException e) {
-      return null;
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("SAXException", "getServerListWithFileName");
     }
 
     return arrServerList;

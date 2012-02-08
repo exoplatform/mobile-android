@@ -17,10 +17,8 @@
 package org.exoplatform.model;
 
 /**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          exo@exoplatform.com
- * Jul 12, 2011  
+ * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
+ * 12, 2011
  */
 public class ServerObjInfo {
 
@@ -29,5 +27,9 @@ public class ServerObjInfo {
   public String  _strServerUrl; // URL of server
 
   public boolean _bSystemServer; // Is default server
-  
+
+  public ServerObjInfo() {
+
+  }
+
 }
