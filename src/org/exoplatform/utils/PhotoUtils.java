@@ -29,6 +29,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 public class PhotoUtils {
   private static final String[] suffix  = { ".jpeg", ".jpg", ".png", ".bmp", ".gif" };
@@ -225,14 +226,16 @@ public class PhotoUtils {
         // regular processing for gallery files
         filePath = cursor.getString(columnIndex);
       } else {
+        Log.i("PHOTO_PICKER", "Get image from Picasa Album");
         // this is for get image from other provider (exp. Picasa ...)
         columnIndex = cursor.getColumnIndex(MediaColumns.DISPLAY_NAME);
         if (columnIndex != -1) {
           try {
             String name = cursor.getString(columnIndex);
+            Log.i("PHOTO_PICKER", "Image Name: " + name);
             final InputStream is = activity.getContentResolver().openInputStream(uri);
             String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-            File file = new File(parentPath, name);
+            File file = new File(parentPath + name);
             OutputStream out = new FileOutputStream(file);
             byte buf[] = new byte[1024];
             int len;
@@ -242,8 +245,10 @@ public class PhotoUtils {
             is.close();
             filePath = file.getAbsolutePath();
           } catch (FileNotFoundException e) {
+            Log.e("PHOTO_PICKER", "could not find the path");
             return null;
           } catch (IOException e) {
+            Log.e("PHOTO_PICKER", "error in write file to sdcard");
             return null;
           }
         }

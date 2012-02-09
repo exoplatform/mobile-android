@@ -6,8 +6,11 @@ import java.io.File;
 
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
@@ -52,6 +55,8 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
 
   private Uri              mImageUri;
 
+  private DisplayImageTask mLoadTask;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -61,30 +66,14 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     modeId = getIntent().getIntExtra(ExoConstants.SELECTED_IMAGE_MODE, 0);
     onChangeLanguage();
     init();
+    onLoad(modeId);
   }
 
   private void init() {
-    if (modeId == SELECT_MODE) {
-      mImageUri = getIntent().getData();
-      filePath = PhotoUtils.extractFilenameFromUri(mImageUri, this);
-    } else
-      filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
-    
     okButton = (Button) findViewById(R.id.social_selected_image_ok_button);
     okButton.setText(okText);
     okButton.setOnClickListener(this);
-    
     imageView = (ImageView) findViewById(R.id.social_selected_image);
-    try {
-      file = new File(filePath);
-      setTitle(file.getName());
-      Bitmap bitmap = PhotoUtils.shrinkBitmap(filePath, SCALE_WIDTH, SCALE_HEIGHT);
-      imageView.setImageBitmap(bitmap);
-    } catch (NullPointerException e) {
-      setTitle("");
-      okButton.setClickable(false);
-    }
-
     removeButton = (Button) findViewById(R.id.social_selected_image_remove_button);
     if (modeId == EDIT_MODE) {
       removeButton.setText(removeText);
@@ -94,6 +83,24 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
 
     removeButton.setOnClickListener(this);
 
+  }
+
+  private void onLoad(int id) {
+    if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
+      if (mLoadTask == null || mLoadTask.getStatus() == DisplayImageTask.Status.FINISHED) {
+        mLoadTask = (DisplayImageTask) new DisplayImageTask().execute(id);
+      }
+    } else {
+      new ConnectionErrorDialog(this).show();
+    }
+  }
+
+  private void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == DisplayImageTask.Status.RUNNING) {
+      mLoadTask.onCancelled();
+      mLoadTask.cancel(true);
+      mLoadTask = null;
+    }
   }
 
   @Override
@@ -115,6 +122,7 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
 
   @Override
   public void onBackPressed() {
+    onCancelLoad();
     finish();
   }
 
@@ -155,6 +163,38 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     okText = bundle.getString("OK");
     cancelText = bundle.getString("Cancel");
     removeText = bundle.getString("Remove");
+
+  }
+
+  private class DisplayImageTask extends UserTask<Integer, Void, Bitmap> {
+
+    @Override
+    public Bitmap doInBackground(Integer... params) {
+      int modeId = params[0];
+      if (modeId == SELECT_MODE) {
+        mImageUri = getIntent().getData();
+        filePath = PhotoUtils.extractFilenameFromUri(mImageUri, SelectedImageActivity.this);
+      } else
+        filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
+      try {
+        file = new File(filePath);
+        return PhotoUtils.shrinkBitmap(filePath, SCALE_WIDTH, SCALE_HEIGHT);
+      } catch (NullPointerException e) {
+        return null;
+      }
+
+    }
+
+    @Override
+    public void onPostExecute(Bitmap result) {
+      if (result != null) {
+        imageView.setImageBitmap(result);
+        setTitle(file.getName());
+      } else {
+        setTitle("");
+        okButton.setClickable(false);
+      }
+    }
 
   }
 

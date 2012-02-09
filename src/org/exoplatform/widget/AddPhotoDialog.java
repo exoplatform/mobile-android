@@ -85,10 +85,11 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
       else
         messageController.initCamera();
     }
-    //Start the native album photo 
+    // Start the native album photo
     if (view.equals(libraryButton)) {
       dismiss();
-      Intent intent = new Intent(Intent.ACTION_PICK);
+      Intent intent = new Intent(Intent.ACTION_PICK,
+                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
       intent.setType(ExoConstants.PHOTO_ALBUM_IMAGE_TYPE);
       mContext.startActivityForResult(intent, ExoConstants.REQUEST_ADD_PHOTO);
     }
