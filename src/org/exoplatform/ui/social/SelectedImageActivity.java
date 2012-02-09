@@ -173,7 +173,7 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
       int modeId = params[0];
       if (modeId == SELECT_MODE) {
         mImageUri = getIntent().getData();
-        filePath = PhotoUtils.extractFilenameFromUri(mImageUri, SelectedImageActivity.this);
+        filePath = PhotoUtils.getFileFromUri(mImageUri, SelectedImageActivity.this);
       } else
         filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
       try {
@@ -190,6 +190,7 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
       if (result != null) {
         imageView.setImageBitmap(result);
         setTitle(file.getName());
+//        new WarningDialog(SelectedImageActivity.this, "PHOTO_PICKER", mImageUri.getPath(), "OK").show();
       } else {
         setTitle("");
         okButton.setClickable(false);

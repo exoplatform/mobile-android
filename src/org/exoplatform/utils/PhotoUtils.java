@@ -9,6 +9,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -198,17 +207,59 @@ public class PhotoUtils {
   /*
    * This method for getting the image url which return from Intent.ACTION_PICK
    */
-  // public static String extractFilenameFromUri(Uri uri, Activity activity) {
-  //
-  // String filePath = null;
-  // String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
-  //
-  // Cursor c = activity.managedQuery(uri, projection, null, null, null);
-  // if (c != null && c.moveToFirst()) {
-  // filePath = c.getString(0);
-  // }
-  // return filePath;
-  // }
+  public static String getFileFromUri(Uri uri, Activity activity) {
+
+    String filePath = null;
+    if (uri.getPath().contains("http")) {
+      String url = uri.getPath();
+      String name = uri.getLastPathSegment();
+      filePath = downloadFile(url, name);
+    } else {
+      String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
+      Cursor c = activity.managedQuery(uri, projection, null, null, null);
+      if (c != null && c.moveToFirst()) {
+        int columnIndex = c.getColumnIndex(MediaColumns.DATA);
+        filePath = c.getString(columnIndex);
+      }
+    }
+
+    return filePath;
+  }
+
+  private static String downloadFile(String url, String name) {
+    String filePath = null;
+    HttpParams httpParameters = new BasicHttpParams();
+    HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
+    HttpConnectionParams.setSoTimeout(httpParameters, 30000);
+    HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+
+    DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+    HttpGet httpGet = new HttpGet(url);
+    try {
+      HttpResponse response = httpClient.execute(httpGet);
+      HttpEntity entity = response.getEntity();
+      if (entity != null) {
+        InputStream is = entity.getContent();
+        String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
+        File file = new File(parentPath + name);
+        OutputStream out = new FileOutputStream(file);
+        byte buf[] = new byte[1024];
+        int len;
+        while ((len = is.read(buf)) > 0)
+          out.write(buf, 0, len);
+        out.close();
+        is.close();
+        filePath = file.getAbsolutePath();
+      }
+
+    } catch (ClientProtocolException e) {
+      return null;
+    } catch (IOException e) {
+      return null;
+    }
+
+    return filePath;
+  }
 
   /*
    * This method for getting the image url which return from Intent.ACTION_PICK
@@ -217,12 +268,14 @@ public class PhotoUtils {
   public static String extractFilenameFromUri(Uri uri, Activity activity) {
 
     String filePath = null;
-    String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
+    String[] projection = { MediaStore.Images.ImageColumns.DATA, MediaColumns.DISPLAY_NAME };
 
     Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
     if (cursor != null && cursor.moveToFirst()) {
       int columnIndex = cursor.getColumnIndex(MediaColumns.DATA);
       if (columnIndex != -1) {
+        // String dataUri = cursor.getString(columnIndex);
+
         // regular processing for gallery files
         filePath = cursor.getString(columnIndex);
       } else {
