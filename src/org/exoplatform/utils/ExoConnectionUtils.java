@@ -159,7 +159,6 @@ public class ExoConnectionUtils {
         return null;
       }
     }
-    // System.out.println("convertStreamToString "+sb.toString());
     return sb.toString();
   }
 
@@ -215,15 +214,19 @@ public class ExoConnectionUtils {
       if (entity != null) {
         InputStream instream = entity.getContent();
         _strFirstLoginContent = convertStreamToString(instream);
-        if (_strFirstLoginContent.contains("Sign in failed. Wrong username or password.")) {
-          return ExoConstants.LOGIN_NO;
-        } else if (_strFirstLoginContent.contains("error', '/main?url")) {
-          _strFirstLoginContent = null;
-          return "ERROR";
-        } else if (_strFirstLoginContent.contains("eXo.env.portal")) {
-          return ExoConstants.LOGIN_YES;
+        if (_strFirstLoginContent == null) {
+          return null;
         } else {
-          return ExoConstants.LOGIN_INVALID;
+          if (_strFirstLoginContent.contains("Sign in failed. Wrong username or password.")) {
+            return ExoConstants.LOGIN_NO;
+          } else if (_strFirstLoginContent.contains("error', '/main?url")) {
+            _strFirstLoginContent = null;
+            return "ERROR";
+          } else if (_strFirstLoginContent.contains("eXo.env.portal")) {
+            return ExoConstants.LOGIN_YES;
+          } else {
+            return ExoConstants.LOGIN_INVALID;
+          }
         }
 
       } else {
@@ -265,8 +268,6 @@ public class ExoConnectionUtils {
       nvps.add(new BasicNameValuePair("j_password", strPassword));
       httpPost.setEntity(new UrlEncodedFormEntity(nvps));
       httpClient.execute(httpPost);
-      List<Cookie> cookies = httpClient.getCookieStore().getCookies();
-      _sessionCookies = new ArrayList<Cookie>(cookies);
       httpClient.getCredentialsProvider().setCredentials(AccountSetting.getInstance()
                                                                        .getAuthScope(),
                                                          AccountSetting.getInstance()

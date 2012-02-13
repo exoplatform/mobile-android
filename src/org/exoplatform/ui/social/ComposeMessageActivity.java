@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -144,11 +145,20 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       // SelectedImageActivity class
       case ExoConstants.REQUEST_ADD_PHOTO:
         Intent intent2 = new Intent(this, SelectedImageActivity.class);
-        intent.putExtra(ExoConstants.SELECTED_IMAGE_MODE, 2);
-        intent2.setData(intent.getData());
-        if (intent.getExtras() != null) {
-          intent2.putExtras(intent.getExtras());
+        Uri uri = intent.getData();
+        String uriStr = intent.getDataString();
+        if (uriStr.contains("http")) {
+          String name = uri.getLastPathSegment();
+          File filePath = PhotoUtils.downloadFile(uriStr, name);
+          intent.putExtra(ExoConstants.SELECTED_IMAGE_EXTRA, filePath.getAbsolutePath());
+        } else {
+          intent.putExtra(ExoConstants.SELECTED_IMAGE_MODE, 2);
+          intent2.setData(uri);
+          if (intent.getExtras() != null) {
+            intent2.putExtras(intent.getExtras());
+          }
         }
+
         startActivity(intent2);
         break;
       }

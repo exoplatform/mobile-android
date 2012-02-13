@@ -208,26 +208,32 @@ public class PhotoUtils {
    * This method for getting the image url which return from Intent.ACTION_PICK
    */
   public static String getFileFromUri(Uri uri, Activity activity) {
-
     String filePath = null;
-    if (uri.getPath().contains("http")) {
-      String url = uri.getPath();
-      String name = uri.getLastPathSegment();
-      filePath = downloadFile(url, name);
-    } else {
-      String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
-      Cursor c = activity.managedQuery(uri, projection, null, null, null);
-      if (c != null && c.moveToFirst()) {
-        int columnIndex = c.getColumnIndex(MediaColumns.DATA);
-        filePath = c.getString(columnIndex);
-      }
+    // if (uri.getPath().contains("http")) {
+    // String url = uri.getPath();
+    // String name = uri.getLastPathSegment();
+    // filePath = downloadFile(url, name);
+    // } else {
+    // String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
+    // Cursor c = activity.managedQuery(uri, projection, null, null, null);
+    // if (c != null && c.moveToFirst()) {
+    // int columnIndex = c.getColumnIndex(MediaColumns.DATA);
+    // filePath = c.getString(columnIndex);
+    // }
+    // }
+
+    String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
+    Cursor c = activity.managedQuery(uri, projection, null, null, null);
+    if (c != null && c.moveToFirst()) {
+      int columnIndex = c.getColumnIndex(MediaColumns.DATA);
+      filePath = c.getString(columnIndex);
     }
 
     return filePath;
   }
 
-  private static String downloadFile(String url, String name) {
-    String filePath = null;
+  public static File downloadFile(String url, String name) {
+    File file = null;
     HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
     HttpConnectionParams.setSoTimeout(httpParameters, 30000);
@@ -241,7 +247,7 @@ public class PhotoUtils {
       if (entity != null) {
         InputStream is = entity.getContent();
         String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-        File file = new File(parentPath + name);
+        file = new File(parentPath + name);
         OutputStream out = new FileOutputStream(file);
         byte buf[] = new byte[1024];
         int len;
@@ -249,16 +255,17 @@ public class PhotoUtils {
           out.write(buf, 0, len);
         out.close();
         is.close();
-        filePath = file.getAbsolutePath();
       }
 
     } catch (ClientProtocolException e) {
       return null;
     } catch (IOException e) {
       return null;
+    } finally {
+      httpClient.getConnectionManager().shutdown();
     }
 
-    return filePath;
+    return file;
   }
 
   /*
