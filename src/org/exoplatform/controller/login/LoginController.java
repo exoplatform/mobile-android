@@ -3,8 +3,6 @@ package org.exoplatform.controller.login;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.HomeActivity;

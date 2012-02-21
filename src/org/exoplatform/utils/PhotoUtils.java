@@ -232,7 +232,7 @@ public class PhotoUtils {
     return filePath;
   }
 
-  public static File downloadFile(String url, String name) {
+  public static String downloadFile(String url, String name) {
     File file = null;
     HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
@@ -265,7 +265,7 @@ public class PhotoUtils {
       httpClient.getConnectionManager().shutdown();
     }
 
-    return file;
+    return file.getAbsolutePath();
   }
 
   /*

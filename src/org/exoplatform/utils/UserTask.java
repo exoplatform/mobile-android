@@ -461,12 +461,10 @@ public abstract class UserTask<Params, Progress, Result> {
   }
 
   private static class UserTaskResult<Data> {
-    @SuppressWarnings("unchecked")
     final UserTask mTask;
 
     final Data[]   mData;
 
-    @SuppressWarnings("unchecked")
     UserTaskResult(UserTask task, Data... data) {
       mTask = task;
       mData = data;

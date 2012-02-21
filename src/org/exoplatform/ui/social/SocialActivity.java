@@ -41,7 +41,9 @@ public class SocialActivity extends MyActionBar {
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     addActionBarItem();
     getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
+    
     setActionBarContentView(R.layout.activitybrowserview);
+    
     socialActivity = this;
 //    socialListView = (ListView) findViewById(R.id.social_listview);
 //    socialListView.setDividerHeight(0);

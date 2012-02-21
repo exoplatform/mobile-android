@@ -10,6 +10,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -20,168 +21,178 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 public class LoginActivity extends Activity implements OnClickListener {
-  private SharedPreferences sharedPreference;
+	private SharedPreferences sharedPreference;
 
-  private ImageView         _imageAccount;
+	private ImageView _imageAccount;
 
-  private ImageView         _imageServer;
+	private ImageView _imageServer;
 
-  private Button            _btnAccount;
+	private Button _btnAccount;
 
-  private Button            _btnServer;
+	private Button _btnServer;
 
-  private Button            _btnLogIn;
+	private Button _btnLogIn;
 
-  private EditText          _edtxUserName;
+	private EditText _edtxUserName;
 
-  private EditText          _edtxPassword;
+	private EditText _edtxPassword;
 
-  private ListView          _listViewServer;
+	private ListView _listViewServer;
 
-  private String            strSignIn;
+	private String strSignIn;
 
-  private String            settingText;
+	private String settingText;
 
-  private String            userNameHint;
+	private String userNameHint;
 
-  private String            passWordHint;
+	private String passWordHint;
 
-  private String            username;
+	private String username;
 
-  private String            password;
+	private String password;
 
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-    this.setContentView(R.layout.login);
-    new LaunchController(this, sharedPreference);
-    init();
-  }
+		this.setContentView(R.layout.login);
+		new LaunchController(this, sharedPreference);
+		init();
+	}
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    setInfomation();
-  }
+	@Override
+	protected void onResume() {
+		super.onResume();
+		setInfomation();
+	}
 
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    this.setContentView(R.layout.login);
-    init();
-  }
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		this.setContentView(R.layout.login);
+		init();
+	}
 
-  private void init() {
-    _imageAccount = (ImageView) findViewById(R.id.Image_Account);
-    _imageServer = (ImageView) findViewById(R.id.Image_Server);
-    _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
-    _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
-    _btnAccount = (Button) findViewById(R.id.Button_Account);
-    _btnAccount.setOnClickListener(this);
-    _btnServer = (Button) findViewById(R.id.Button_Server);
-    _btnServer.setOnClickListener(this);
-    _btnLogIn = (Button) findViewById(R.id.Button_Login);
-    _btnLogIn.setOnClickListener(this);
-    _listViewServer = (ListView) findViewById(R.id.ListView_Servers);
-    _listViewServer.setVisibility(View.INVISIBLE);
-    _listViewServer.setCacheColorHint(Color.TRANSPARENT);
-    _listViewServer.setFadingEdgeLength(0);
-    _listViewServer.setDivider(null);
-    _listViewServer.setDividerHeight(1);
-    setInfomation();
-  }
+	private void init() {
+		_imageAccount = (ImageView) findViewById(R.id.Image_Account);
+		_imageServer = (ImageView) findViewById(R.id.Image_Server);
+		_edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
+		_edtxPassword = (EditText) findViewById(R.id.EditText_Password);
+		_btnAccount = (Button) findViewById(R.id.Button_Account);
+		_btnAccount.setOnClickListener(this);
+		_btnServer = (Button) findViewById(R.id.Button_Server);
+		_btnServer.setOnClickListener(this);
+		_btnLogIn = (Button) findViewById(R.id.Button_Login);
+		_btnLogIn.setOnClickListener(this);
+		_listViewServer = (ListView) findViewById(R.id.ListView_Servers);
+		_listViewServer.setVisibility(View.INVISIBLE);
+		_listViewServer.setCacheColorHint(Color.TRANSPARENT);
+		_listViewServer.setFadingEdgeLength(0);
+		_listViewServer.setDivider(null);
+		_listViewServer.setDividerHeight(1);
+		setInfomation();
+	}
 
-  private void setInfomation() {
-    changeLanguage();
-    _edtxUserName.setHint(userNameHint);
-    String strUserName = AccountSetting.getInstance().getUsername();
-    if (strUserName != null && !strUserName.equals("")) {
-      _edtxUserName.setText(strUserName);
-    }
-    _edtxPassword.setHint(passWordHint);
-    String strPassword = AccountSetting.getInstance().getPassword();
-    if (strPassword != null && !strPassword.equals("")) {
-      _edtxPassword.setText(strPassword);
-    }
-    _btnLogIn.setText(strSignIn);
-    setServerAdapter();
-  }
+	private void setInfomation() {
+		changeLanguage();
+		_edtxUserName.setHint(userNameHint);
+		String strUserName = AccountSetting.getInstance().getUsername();
+		if (strUserName != null && !strUserName.equals("")) {
+			_edtxUserName.setText(strUserName);
+		}
+		_edtxPassword.setHint(passWordHint);
+		String strPassword = AccountSetting.getInstance().getPassword();
+		if (strPassword != null && !strPassword.equals("")) {
+			_edtxPassword.setText(strPassword);
+		}
+		_btnLogIn.setText(strSignIn);
+		setServerAdapter();
+	}
 
-  private void setServerAdapter() {
-    _listViewServer.setAdapter(new ServerAdapter(this, _listViewServer));
-  }
+	private void setServerAdapter() {
+		_listViewServer.setAdapter(new ServerAdapter(this, _listViewServer));
+	}
 
-  private void onLogin() {
-    username = _edtxUserName.getText().toString();
-    password = _edtxPassword.getText().toString();
+	private void onLogin() {
+		username = _edtxUserName.getText().toString();
+		password = _edtxPassword.getText().toString();
 
-    ExoDocumentUtils.repositoryHomeURL = null;
+		ExoDocumentUtils.repositoryHomeURL = null;
 
-    new LoginController(this, username, password);
+		new LoginController(this, username, password);
 
-  }
+	}
 
-  public void changeLanguage() {
-    LocalizationHelper local = LocalizationHelper.getInstance();
-    strSignIn = local.getString("SignInButton");
-    settingText = local.getString("Settings");
-    userNameHint = local.getString("UserNameCellTitle");
-    passWordHint = local.getString("PasswordCellTitle");
+	public void changeLanguage() {
+		LocalizationHelper local = LocalizationHelper.getInstance();
+		strSignIn = local.getString("SignInButton");
+		settingText = local.getString("Settings");
+		userNameHint = local.getString("UserNameCellTitle");
+		passWordHint = local.getString("PasswordCellTitle");
 
-  }
+	}
 
-  @Override
-  public boolean onPrepareOptionsMenu(Menu menu) {
-    menu.clear();
-    menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
-    return true;
-  }
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
+		menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
+		return true;
+	}
 
-  public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 
-    int selectedItemIndex = item.getItemId();
+		int selectedItemIndex = item.getItemId();
 
-    if (selectedItemIndex == 1) {
-      Intent next = new Intent(LoginActivity.this, SettingActivity.class);
-      next.putExtra(ExoConstants.SETTING_TYPE, 0);
-      startActivity(next);
-    }
-    return false;
-  }
+		if (selectedItemIndex == 1) {
+			Intent next = new Intent(LoginActivity.this, SettingActivity.class);
+			next.putExtra(ExoConstants.SETTING_TYPE, 0);
+			startActivity(next);
+		}
+		return false;
+	}
 
-  // @Override
-  public void onClick(View view) {
-    if (view.equals(_btnLogIn)) {
-      onLogin();
-    }
+	// @Override
+	public void onClick(View view) {
+		if (view.equals(_btnLogIn)) {
+			onLogin();
+		}
 
-    if (view.equals(_btnServer)) {
-      view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
-      _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneon);
-      _btnAccount.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
-      _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_off);
-      _edtxUserName.setVisibility(View.INVISIBLE);
-      _edtxPassword.setVisibility(View.INVISIBLE);
-      _btnLogIn.setVisibility(View.INVISIBLE);
-      _listViewServer.setVisibility(View.VISIBLE);
-    }
-    if (view.equals(_btnAccount)) {
-      view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
-      _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_on);
-      _btnServer.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
-      _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
-      _edtxUserName.setVisibility(View.VISIBLE);
-      _edtxPassword.setVisibility(View.VISIBLE);
-      _btnLogIn.setVisibility(View.VISIBLE);
-      _listViewServer.setVisibility(View.INVISIBLE);
-    }
-  }
+		if (view.equals(_btnServer)) {
+			view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
+			_imageServer
+					.setBackgroundResource(R.drawable.authenticateserversiconiphoneon);
+			_btnAccount
+					.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
+			_imageAccount
+					.setBackgroundResource(R.drawable.authenticate_credentials_icon_off);
+			_edtxUserName.setVisibility(View.INVISIBLE);
+			_edtxPassword.setVisibility(View.INVISIBLE);
+			_btnLogIn.setVisibility(View.INVISIBLE);
+			_listViewServer.setVisibility(View.VISIBLE);
+			InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			mgr.showSoftInput(_edtxUserName,
+					InputMethodManager.HIDE_IMPLICIT_ONLY);
+		}
+		if (view.equals(_btnAccount)) {
+			view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
+			_imageAccount
+					.setBackgroundResource(R.drawable.authenticate_credentials_icon_on);
+			_btnServer
+					.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
+			_imageServer
+					.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
+			_edtxUserName.setVisibility(View.VISIBLE);
+			_edtxPassword.setVisibility(View.VISIBLE);
+			_btnLogIn.setVisibility(View.VISIBLE);
+			_listViewServer.setVisibility(View.INVISIBLE);
+		}
+	}
 
 }

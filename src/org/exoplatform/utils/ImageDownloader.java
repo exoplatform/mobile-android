@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -45,7 +43,6 @@ public class ImageDownloader implements OnLowMemoryListener {
   // milliseconds
 
   // Hard cache, with a fixed maximum capacity and a life duration
-  @SuppressWarnings("serial")
   private final HashMap<String, Bitmap>                          sHardBitmapCache;
 
   // Soft cache for bitmap kicked out of hard cache
@@ -58,7 +55,12 @@ public class ImageDownloader implements OnLowMemoryListener {
   public ImageDownloader(Context context) {
     sHardBitmapCache = new LinkedHashMap<String, Bitmap>(HARD_CACHE_CAPACITY / 2, 0.75f, true) {
 
-      @Override
+      /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+	@Override
       protected boolean removeEldestEntry(Map.Entry<String, Bitmap> eldest) {
         if (size() > HARD_CACHE_CAPACITY) {
           sSoftBitmapCache.put(eldest.getKey(), new SoftReference<Bitmap>(eldest.getValue()));
