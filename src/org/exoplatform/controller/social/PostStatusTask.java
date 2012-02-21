@@ -120,7 +120,6 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
     HttpResponse response;
     try {
       // Re authenticate when we upload file from social
-      ExoConnectionUtils.reAuthenticate();
       WebdavMethod copy = new WebdavMethod("HEAD", uploadUrl);
       response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();

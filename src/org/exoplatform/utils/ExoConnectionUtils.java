@@ -45,8 +45,6 @@ public class ExoConnectionUtils {
 
 	public static HttpURLConnection con;
 
-	private static String domainUrl;
-
 	private static int splitLinesAt = 76;
 
 	public static List<Cookie> _sessionCookies; // Cookie array
@@ -178,8 +176,8 @@ public class ExoConnectionUtils {
 			String redirectStr = domain.concat(ExoConstants.DOMAIN_SUFFIX);
 
 			HttpParams httpParameters = new BasicHttpParams();
-			HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
-			HttpConnectionParams.setSoTimeout(httpParameters, 30000);
+//			HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
+			HttpConnectionParams.setSoTimeout(httpParameters, 10000);
 			HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
 			httpClient = new DefaultHttpClient(httpParameters);
@@ -205,7 +203,6 @@ public class ExoConnectionUtils {
 						"/j_security_check");
 			else
 				loginStr = redirectStr.concat("/j_security_check");
-			domainUrl = loginStr;
 			HttpPost httpPost = new HttpPost(loginStr);
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
 			nvps.add(new BasicNameValuePair("j_username", username));
@@ -269,12 +266,6 @@ public class ExoConnectionUtils {
 		return context;
 	}
 
-	// re authenticate when login session timeout
-	public static void reAuthenticate() {
-		IOException ex = new IOException();
-		httpClient.getHttpRequestRetryHandler().retryRequest(ex, 1000,
-				createHttpContext());
-	}
 
 	// Get input stream from URL with authentication
 	public static InputStream sendRequestWithAuthorization(String urlStr) {
@@ -314,7 +305,6 @@ public class ExoConnectionUtils {
 			HttpResponse response;
 			HttpEntity entity;
 			HttpGet httpGet = new HttpGet(strUrlRequest);
-			// httpGet.setHeader("Cookie", _strCookie);
 			response = httpClient.execute(httpGet);
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode >= 200 && statusCode < 300) {

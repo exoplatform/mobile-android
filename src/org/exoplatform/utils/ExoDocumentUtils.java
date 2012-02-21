@@ -37,7 +37,6 @@ public class ExoDocumentUtils {
       put.setEntity(fileEntity);
       fileEntity.setContentType(fileType);
       // Re authenticate when we upload file
-      ExoConnectionUtils.reAuthenticate();
       response = ExoConnectionUtils.httpClient.execute(put);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
@@ -82,7 +81,6 @@ public class ExoDocumentUtils {
       buffer.append(userName);
 
       try {
-
         WebdavMethod copy = new WebdavMethod("HEAD", buffer.toString());
         int status = ExoConnectionUtils.httpClient.execute(copy).getStatusLine().getStatusCode();
 
