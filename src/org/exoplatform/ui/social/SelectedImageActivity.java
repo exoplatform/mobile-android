@@ -134,6 +134,9 @@ public class SelectedImageActivity extends MyActionBar implements
 				ComposeMessageActivity.composeMessageActivity.finish();
 			if (SocialActivity.socialActivity != null)
 				SocialActivity.socialActivity.finish();
+			if (DocumentActivity._documentActivityInstance != null) {
+				DocumentActivity._documentActivityInstance.finish();
+			}
 			break;
 
 		case 0:

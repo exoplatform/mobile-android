@@ -99,7 +99,7 @@ public class DocumentActivity extends MyActionBar {
 
     case -1:
       _documentActivityInstance = null;
-      onFinish();
+      finish();
       break;
     case 0:
 
@@ -140,12 +140,12 @@ public class DocumentActivity extends MyActionBar {
   public void onBackPressed() {
     if (_documentAdapter == null) {
       _documentActivityInstance = null;
-      onFinish();
+      finish();
     } else {
 
       if (_fileForCurrentActionBar == null) {
         _documentActivityInstance = null;
-        onFinish();
+        finish();
 
       } else if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
         _fileForCurrentActionBar = null;
@@ -162,11 +162,6 @@ public class DocumentActivity extends MyActionBar {
 
     }
 
-  }
-  
-  private void onFinish(){
-	  DocumentActivity._documentActivityInstance=null;
-	  finish();
   }
 
   public void onLoad(String source, String destination, int action) {
