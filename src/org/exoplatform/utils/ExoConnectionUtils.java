@@ -164,55 +164,73 @@ public class ExoConnectionUtils {
 		return sb.toString();
 	}
 
+	public static void onReLogin() {
+		String domain = AccountSetting.getInstance().getDomainName();
+		String username = AccountSetting.getInstance().getUsername();
+		String password = AccountSetting.getInstance().getPassword();
+
+		try {
+			onPrepareLogin(domain, username, password);
+		} catch (IOException e) {
+			e.getMessage();
+		}
+
+	}
+
+	private static HttpResponse onPrepareLogin(String domain, String username,
+			String password) throws IOException {
+		HttpResponse response;
+		CookieStore cookiesStore;
+		String strCookie = "";
+
+		String redirectStr = domain.concat(ExoConstants.DOMAIN_SUFFIX);
+
+		HttpParams httpParameters = new BasicHttpParams();
+		HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+		HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+
+		httpClient = new DefaultHttpClient(httpParameters);
+
+		HttpGet httpGet = new HttpGet(redirectStr);
+
+		response = httpClient.execute(httpGet);
+		cookiesStore = httpClient.getCookieStore();
+		List<Cookie> cookies = cookiesStore.getCookies();
+		if (!cookies.isEmpty()) {
+			for (int i = 0; i < cookies.size(); i++) {
+				strCookie = cookies.get(i).getName().toString() + "="
+						+ cookies.get(i).getValue().toString();
+			}
+		}
+		int indexOfPrivate = redirectStr.indexOf("/classic");
+
+		// Request to login
+		String loginStr;
+		if (indexOfPrivate > 0)
+			loginStr = redirectStr.substring(0, indexOfPrivate).concat(
+					"/j_security_check");
+		else
+			loginStr = redirectStr.concat("/j_security_check");
+		HttpPost httpPost = new HttpPost(loginStr);
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
+		nvps.add(new BasicNameValuePair("j_username", username));
+		nvps.add(new BasicNameValuePair("j_password", password));
+		httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+		httpPost.setHeader("Cookie", strCookie);
+		_strCookie = strCookie;
+		response = httpClient.execute(httpPost);
+		_sessionCookies = new ArrayList<Cookie>(cookies);
+		return response;
+	}
+
 	// Send request with authentication
 	public static String sendAuthentication(String domain, String username,
 			String password) {
 		try {
 			HttpResponse response;
 			HttpEntity entity;
-			CookieStore cookiesStore;
-			String strCookie = "";
-
-			String redirectStr = domain.concat(ExoConstants.DOMAIN_SUFFIX);
-
-			HttpParams httpParameters = new BasicHttpParams();
-//			HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
-			HttpConnectionParams.setSoTimeout(httpParameters, 10000);
-			HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-
-			httpClient = new DefaultHttpClient(httpParameters);
-
-			HttpGet httpGet = new HttpGet(redirectStr);
-
-			response = httpClient.execute(httpGet);
-			cookiesStore = httpClient.getCookieStore();
-			List<Cookie> cookies = cookiesStore.getCookies();
-			if (!cookies.isEmpty()) {
-				for (int i = 0; i < cookies.size(); i++) {
-					strCookie = cookies.get(i).getName().toString() + "="
-							+ cookies.get(i).getValue().toString();
-				}
-			}
-
-			int indexOfPrivate = redirectStr.indexOf("/classic");
-
-			// Request to login
-			String loginStr;
-			if (indexOfPrivate > 0)
-				loginStr = redirectStr.substring(0, indexOfPrivate).concat(
-						"/j_security_check");
-			else
-				loginStr = redirectStr.concat("/j_security_check");
-			HttpPost httpPost = new HttpPost(loginStr);
-			List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
-			nvps.add(new BasicNameValuePair("j_username", username));
-			nvps.add(new BasicNameValuePair("j_password", password));
-			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-			httpPost.setHeader("Cookie", strCookie);
-			_strCookie = strCookie;
-			response = httpClient.execute(httpPost);
+			response = onPrepareLogin(domain, username, password);
 			entity = response.getEntity();
-			_sessionCookies = new ArrayList<Cookie>(cookies);
 
 			if (entity != null) {
 				InputStream instream = entity.getContent();
@@ -265,7 +283,6 @@ public class ExoConnectionUtils {
 				.getInstance().getCredentials());
 		return context;
 	}
-
 
 	// Get input stream from URL with authentication
 	public static InputStream sendRequestWithAuthorization(String urlStr) {

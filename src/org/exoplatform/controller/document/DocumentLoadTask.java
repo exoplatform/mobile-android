@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
@@ -74,6 +75,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
     boolean result = true;
 
     try {
+    	ExoConnectionUtils.onReLogin();
       if (actionID == 1) {
         result = documentActivity.deleteFile(strSourceUrl);
         contentString = LocalizationHelper.getInstance().getString("DocumentCannotDelete");

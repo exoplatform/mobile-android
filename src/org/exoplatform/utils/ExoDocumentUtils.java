@@ -41,8 +41,11 @@ public class ExoDocumentUtils {
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
-      } else {
+      } else if(status==401){
+    	  ExoConnectionUtils.onReLogin();
         return false;
+      }else{
+    	  return false;
       }
 
     } catch (IOException e) {
