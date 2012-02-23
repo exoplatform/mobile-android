@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#DCDCDCDC"
-    android:minWidth="180dip"
+    android:minWidth="200dip"
     android:orientation="vertical" >
 
     <LinearLayout
