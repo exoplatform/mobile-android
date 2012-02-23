@@ -19,6 +19,7 @@ public class RemoveAttachedPhotoDialog extends Dialog implements
 		super(context);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.remove_photo_dialog_layout);
+		setCanceledOnTouchOutside(true);
 		removePhotoButton = (Button) findViewById(R.id.remove_photo_remove_button);
 		TextView titleView = (TextView) findViewById(R.id.remove_photo_dialog_title_view);
 		removePhotoButton.setOnClickListener(this);
