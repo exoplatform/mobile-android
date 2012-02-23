@@ -13,6 +13,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.RemoveAttachedPhotoDialog;
 import org.exoplatform.widget.RetangleImageView;
 
 import android.content.Context;
@@ -25,6 +26,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -189,6 +191,15 @@ public class ComposeMessageActivity extends MyActionBar implements
 					intent.putExtra(ExoConstants.SELECTED_IMAGE_MODE, 1);
 					intent.putExtra(ExoConstants.SELECTED_IMAGE_EXTRA, filePath);
 					composeMessageActivity.startActivity(intent);
+				}
+			});
+			image.setOnLongClickListener(new OnLongClickListener() {
+
+				@Override
+				public boolean onLongClick(View v) {
+					new RemoveAttachedPhotoDialog(composeMessageActivity)
+							.show();
+					return true;
 				}
 			});
 			LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT,

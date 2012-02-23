@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#DCDCDCDC"
+    android:minWidth="180dip"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:background="#4E4E4E"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/remove_photo_dialog_title_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="2.0"
+            android:shadowRadius="1.0"
+            android:textColor="#FFFFFFFF"
+            android:textSize="18dip" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/remove_photo_remove_button"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/cancel_button_background_shape"
+        android:shadowColor="#000000"
+        android:shadowDx="1.0"
+        android:shadowDy="2.0"
+        android:shadowRadius="1.0"
+        android:text="Remove"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>
