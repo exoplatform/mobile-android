@@ -9,7 +9,7 @@ import org.apache.http.HttpResponse;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
-import org.exoplatform.social.client.core.model.RestActivityImpl;
+import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -64,7 +64,7 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
   public Integer doInBackground(Void... params) {
 
     try {
-      RestActivityImpl activityImlp = new RestActivityImpl();
+      RestActivity activityImlp = new RestActivity();
       if (sdcard_temp_dir != null) {
         createFolder();
 

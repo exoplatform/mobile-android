@@ -7,8 +7,8 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.service.ActivityService;
-import org.exoplatform.social.client.core.model.RestCommentImpl;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -93,7 +93,7 @@ public class ComposeMessageController {
 
   private void onCommentTask(String composeMessage) {
     try {
-      RestCommentImpl comment = new RestCommentImpl();
+      RestComment comment = new RestComment();
       comment.setText(composeMessage);
       String selectedId = SocialDetailHelper.getInstance().getActivityId();
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
