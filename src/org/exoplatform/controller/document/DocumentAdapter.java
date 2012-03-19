@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.ui.WebViewActivity;
@@ -22,17 +22,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DocumentAdapter extends BaseAdapter {
-  public ArrayList<ExoFile>   _documentList;
+  private ArrayList<ExoFile>  _documentList;
 
   private Context             _mContext;
 
   public DocumentActionDialog _documentActionDialog;
 
-  public DocumentAdapter(Context context, ExoFile file) {
+  public DocumentAdapter(Context context, ArrayList<ExoFile> list) {
 
     _mContext = context;
-
-    _documentList = ExoDocumentUtils.getPersonalDriveContent(file);
+    _documentList = list;
+    // _documentList = ExoDocumentUtils.getPersonalDriveContent(file);
 
   }
 
@@ -63,11 +63,10 @@ public class DocumentAdapter extends BaseAdapter {
     if (myFile == null) {
       convertView = inflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
-      LocalizationHelper local = LocalizationHelper.getInstance();
       if (pos == 0)
-        textViewTabTitle.setText(local.getString("Personal"));
+        textViewTabTitle.setText(_mContext.getResources().getString(R.string.Personal));
       else
-        textViewTabTitle.setText(local.getString("Group"));
+        textViewTabTitle.setText(_mContext.getResources().getString(R.string.Group));
 
       return (convertView);
     }
@@ -77,7 +76,7 @@ public class DocumentAdapter extends BaseAdapter {
     TextView lb = (TextView) rowView.findViewById(R.id.label);
     lb.setText(myFile.name);
 
-    ExoFile file = DocumentActivity._documentActivityInstance._fileForCurrentActionBar;
+    final ExoFile file = DocumentActivity._documentActivityInstance._fileForCurrentActionBar;
     if (file == null) {
 
       if (position == 0) {
@@ -130,6 +129,12 @@ public class DocumentAdapter extends BaseAdapter {
 
         } else {
           DocumentActivity._documentActivityInstance._fileForCurrentActionBar = myFile;
+          /*
+           * Put the selected file and its parent to mapping dictionary
+           */
+          // if
+          // (!DocumentHelper.getInstance().fileStructureMap.containsKey(myFile))
+          DocumentHelper.getInstance().currentFileMap.put(myFile, file);
           DocumentActivity._documentActivityInstance.onLoad(myFile.path, null, 0);
         }
 
@@ -141,7 +146,8 @@ public class DocumentAdapter extends BaseAdapter {
       public void onClick(View v) {
 
         ExoFile file = _documentList.get(pos);
-        DocumentActivity._documentActivityInstance._fileForCurrnentCell = file;
+        // DocumentActivity._documentActivityInstance._fileForCurrnentCell =
+        // file;
 
         if (_documentActionDialog == null)
           _documentActionDialog = new DocumentActionDialog(_mContext, file);

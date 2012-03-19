@@ -4,25 +4,24 @@ import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import org.apache.http.HttpResponse;
 import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentLoadTask;
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.social.SelectedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
-import org.exoplatform.utils.URLAnalyzer;
-import org.exoplatform.utils.WebdavMethod;
 import org.exoplatform.widget.ConnectionErrorDialog;
+import org.exoplatform.widget.DocumentWaitingDialog;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.WaitingDialog;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -46,7 +45,7 @@ public class DocumentActivity extends MyActionBar {
 
   private TextView               _textViewEmptyPage;
 
-  private WaitingDialog          _progressDialog;
+  private DocumentWaitingDialog  _progressDialog;
 
   private String                 emptyFolderString;
 
@@ -62,8 +61,6 @@ public class DocumentActivity extends MyActionBar {
 
   public ExoFile                 _fileForCurrentActionBar;
 
-  public ExoFile                 _fileForCurrnentCell;
-
   // Constructor
   @Override
   public void onCreate(Bundle icicle) {
@@ -73,13 +70,14 @@ public class DocumentActivity extends MyActionBar {
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.exofilesview);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-
     _documentActivityInstance = this;
     init();
-
-    // setViewUploadImage(false);
     _urlDocumentHome = ExoDocumentUtils.repositoryHomeURL;
-
+    /*
+     * Initialize 2 dictionaries for mapping each time document starting
+     */
+    DocumentHelper.getInstance().childFilesMap = new HashMap<ExoFile, ArrayList<ExoFile>>();
+    DocumentHelper.getInstance().currentFileMap = new HashMap<ExoFile, ExoFile>();
     onLoad(_urlDocumentHome, null, 0);
 
   }
@@ -106,7 +104,6 @@ public class DocumentActivity extends MyActionBar {
       if (_documentAdapter._documentActionDialog == null)
         _documentAdapter._documentActionDialog = new DocumentActionDialog(this,
                                                                           _fileForCurrentActionBar);
-
       _documentAdapter._documentActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrentActionBar);
       _documentAdapter._documentActionDialog._documentActionAdapter.notifyDataSetChanged();
       _documentAdapter._documentActionDialog.setTileForDialog(_fileForCurrentActionBar.name);
@@ -123,17 +120,14 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void addOrRemoveFileActionButton() {
-
     if (_fileForCurrentActionBar == null) {
       getActionBar().removeItem(0);
     } else {
       if (getActionBar().getItem(0) == null) {
-
         addActionBarItem();
         getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
       }
     }
-
   }
 
   @Override
@@ -142,26 +136,58 @@ public class DocumentActivity extends MyActionBar {
       _documentActivityInstance = null;
       finish();
     } else {
+      /*
+       * Each time press on back button, return to parent folder and get parents
+       * list file which is retrieved from 2 mapping dictionaries {@link
+       * currentFileMap} and {@link childFileMap}
+       * @param: parent The parent folder
+       * @param: documentList The parents list file
+       */
 
       if (_fileForCurrentActionBar == null) {
         _documentActivityInstance = null;
         finish();
-
-      } else if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
-        _fileForCurrentActionBar = null;
-        onLoad(null, null, 0);
-
       } else {
-        _fileForCurrentActionBar.currentFolder = ExoDocumentUtils.getParentUrl(_fileForCurrentActionBar.currentFolder);
-        _fileForCurrentActionBar.name = ExoDocumentUtils.getLastPathComponent(_fileForCurrentActionBar.currentFolder);
-        if (_fileForCurrentActionBar.name.equalsIgnoreCase(""))
-          _fileForCurrentActionBar.name = _fileForCurrentActionBar.driveName;
+        if (DocumentActivity._documentActivityInstance._fileForCurrentActionBar == null)
+          DocumentActivity._documentActivityInstance.setListViewPadding(5, 0, 5, 0);
+        else
+          DocumentActivity._documentActivityInstance.setListViewPadding(-2, 0, -2, 0);
 
-        onLoad(_fileForCurrentActionBar.path, null, 0);
+        ExoFile parent = null;
+        ArrayList<ExoFile> documentList = null;
+
+        if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
+          _fileForCurrentActionBar = null;
+          parent = DocumentHelper.getInstance().currentFileMap.get(null);
+
+        } else {
+          parent = DocumentHelper.getInstance().currentFileMap.get(_fileForCurrentActionBar);
+          documentList = DocumentHelper.getInstance().childFilesMap.get(parent);
+          DocumentHelper.getInstance().currentFileMap.remove(_fileForCurrentActionBar);
+          _fileForCurrentActionBar = parent;
+        }
+        /*
+         * Reset ListView
+         */
+        documentList = DocumentHelper.getInstance().childFilesMap.get(parent);
+        _documentAdapter = new DocumentAdapter(this, documentList);
+        setDocumentAdapter();
+        addOrRemoveFileActionButton();
+
+        if (_fileForCurrentActionBar == null)
+          setTitle(getResources().getString(R.string.Documents));
+        else
+          setTitle(_fileForCurrentActionBar.name);
+        setEmptyView(View.GONE);
       }
 
     }
 
+  }
+
+  private void clearMappingCache() {
+    DocumentHelper.getInstance().childFilesMap.clear();
+    DocumentHelper.getInstance().currentFileMap.clear();
   }
 
   public void onLoad(String source, String destination, int action) {
@@ -169,7 +195,12 @@ public class DocumentActivity extends MyActionBar {
       if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
         if (Config.GD_INFO_LOGS_ENABLED)
           Log.i("DocumentLoadTask", "onLoad");
-        mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this, this, source, destination, action).execute();
+        mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this,
+                                                            this,
+                                                            source,
+                                                            destination,
+                                                            action,
+                                                            _progressDialog).execute();
       }
     } else {
       new ConnectionErrorDialog(this).show();
@@ -191,19 +222,25 @@ public class DocumentActivity extends MyActionBar {
     init();
   }
 
+  @Override
+  public void finish() {
+    if (_progressDialog != null) {
+      _progressDialog.dismiss();
+    }
+    clearMappingCache();
+    super.finish();
+  }
+
   public void uploadFile() {
     onLoad(_documentAdapter._documentActionDialog.myFile.path, null, 4);
-
   }
 
   private void init() {
 
-    if (_listViewDocument == null) {
-      _listViewDocument = (ListView) findViewById(R.id.ListView_Files);
-      _listViewDocument.setDivider(null);
-      _textViewEmptyPage = (TextView) findViewById(R.id.TextView_EmptyPage);
-      _textViewEmptyPage.setVisibility(View.INVISIBLE);
-    }
+    _listViewDocument = (ListView) findViewById(R.id.ListView_Files);
+    _listViewDocument.setDivider(null);
+    _textViewEmptyPage = (TextView) findViewById(R.id.TextView_EmptyPage);
+    _textViewEmptyPage.setVisibility(View.INVISIBLE);
 
     changeLanguage();
 
@@ -212,37 +249,6 @@ public class DocumentActivity extends MyActionBar {
   public void setDocumentAdapter() {
 
     _listViewDocument.setAdapter(_documentAdapter);
-  }
-
-  // Refresh files view
-  Runnable        reloadFileAdapter     = new Runnable() {
-
-                                          public void run() {
-
-                                            onResume();
-
-                                          }
-                                        };
-
-  // Dismiss progress dialog
-  public Runnable dismissProgressDialog = new Runnable() {
-
-                                          public void run() {
-
-                                            _progressDialog.dismiss();
-                                          }
-                                        };
-
-  // Show progress dialog
-  public void showProgressDialog(boolean isloadingData) {
-    LocalizationHelper local = LocalizationHelper.getInstance();
-    String strLoadingDataFromServer = "";
-    if (isloadingData)
-      strLoadingDataFromServer = local.getString("LoadingDataFromServer");
-    else
-      strLoadingDataFromServer = local.getString("FileProcessing");
-    _progressDialog = new WaitingDialog(this, null, strLoadingDataFromServer);
-    _progressDialog.show();
   }
 
   // Take a photo
@@ -280,119 +286,6 @@ public class DocumentActivity extends MyActionBar {
     }
   }
 
-  // Delete file/folder method
-  public boolean deleteFile(String url) {
-    HttpResponse response;
-    try {
-      url = URLAnalyzer.encodeUrl(url);
-      WebdavMethod delete = new WebdavMethod("DELETE", url);
-      response = ExoConnectionUtils.httpClient.execute(delete);
-      int status = response.getStatusLine().getStatusCode();
-      if (status >= 200 && status < 300) {
-        return true;
-      } else
-        return false;
-
-    } catch (IOException e) {
-      return false;
-    }
-
-  }
-
-  // Copy file/folder method
-  public boolean copyFile(String source, String destination) {
-
-    HttpResponse response;
-    try {
-      source = URLAnalyzer.encodeUrl(source);
-      destination = URLAnalyzer.encodeUrl(destination);
-      WebdavMethod copy = new WebdavMethod("COPY", source, destination);
-      response = ExoConnectionUtils.httpClient.execute(copy);
-      int status = response.getStatusLine().getStatusCode();
-      if (status >= 200 && status < 300) {
-        return true;
-      } else
-        return false;
-
-    } catch (IOException e) {
-      return false;
-    }
-  }
-
-  // Move file/folder method
-  public boolean moveFile(String source, String destination) {
-    HttpResponse response;
-    try {
-
-      source = URLAnalyzer.encodeUrl(source);
-      destination = URLAnalyzer.encodeUrl(destination);
-      WebdavMethod move = new WebdavMethod("MOVE", source, destination);
-      response = ExoConnectionUtils.httpClient.execute(move);
-      int status = response.getStatusLine().getStatusCode();
-      if (status >= 200 && status < 300) {
-        return true;
-      } else
-        return false;
-
-    } catch (IOException e) {
-      return false;
-    }
-
-  }
-
-  public boolean renameFolder(String source, String destination) {
-    HttpResponse response;
-    try {
-      source = URLAnalyzer.encodeUrl(source);
-      destination = URLAnalyzer.encodeUrl(destination);
-      WebdavMethod create = new WebdavMethod("HEAD", destination);
-      response = ExoConnectionUtils.httpClient.execute(create);
-      int status = response.getStatusLine().getStatusCode();
-      if (status >= 200 && status < 300) {
-        return false;
-      } else {
-        WebdavMethod move = new WebdavMethod("MOVE", source, destination);
-        response = ExoConnectionUtils.httpClient.execute(move);
-        status = response.getStatusLine().getStatusCode();
-        if (status >= 200 && status < 300) {
-          return true;
-        } else
-          return false;
-      }
-    } catch (IOException e) {
-      return false;
-    }
-
-  }
-
-  public boolean createFolder(String destination) {
-    HttpResponse response;
-    try {
-
-      destination = URLAnalyzer.encodeUrl(destination);
-      WebdavMethod create = new WebdavMethod("HEAD", destination);
-      response = ExoConnectionUtils.httpClient.execute(create);
-      int status = response.getStatusLine().getStatusCode();
-      if (status >= 200 && status < 300) {
-        return false;
-
-      } else {
-        create = new WebdavMethod("MKCOL", destination);
-        response = ExoConnectionUtils.httpClient.execute(create);
-        status = response.getStatusLine().getStatusCode();
-
-        if (status >= 200 && status < 300) {
-          return true;
-        }
-
-        return false;
-      }
-
-    } catch (IOException e) {
-      return false;
-    }
-  }
-
   public void setEmptyView(int status) {
     if (empty_stub == null) {
       initStubView();
@@ -410,11 +303,9 @@ public class DocumentActivity extends MyActionBar {
 
   // Set language
   public void changeLanguage() {
-
-    LocalizationHelper local = LocalizationHelper.getInstance();
-    String strEmptyPage = local.getString("EmptyPage");
-    emptyFolderString = local.getString("EmptyFolder");
-    _textViewEmptyPage.setText(strEmptyPage);
+    Resources resource = getResources();
+    emptyFolderString = resource.getString(R.string.EmptyFolder);
+    _textViewEmptyPage.setText(emptyFolderString);
   }
 
 }

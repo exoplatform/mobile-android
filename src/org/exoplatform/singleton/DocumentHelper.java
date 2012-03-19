@@ -16,6 +16,9 @@
  */
 package org.exoplatform.singleton;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.exoplatform.model.ExoFile;
 
 /**
@@ -24,11 +27,19 @@ import org.exoplatform.model.ExoFile;
  */
 public class DocumentHelper {
 
-  private static DocumentHelper documentHelper = new DocumentHelper();
+  private static DocumentHelper               documentHelper = new DocumentHelper();
 
-  private ExoFile               _fileCopied;
+  private ExoFile                             _fileCopied;
 
-  private ExoFile               _fileMoved;
+  private ExoFile                             _fileMoved;
+/*
+ * The dictionary for mapping between parent folder and its child files
+ */
+  public HashMap<ExoFile, ArrayList<ExoFile>> childFilesMap;
+  /*
+   * The dictionary for mapping between the current selected file and its parent
+   */
+  public HashMap<ExoFile, ExoFile>            currentFileMap;
 
   private DocumentHelper() {
 

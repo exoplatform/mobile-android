@@ -4,7 +4,6 @@ import org.exoplatform.R;
 import org.exoplatform.model.DocumentActionDescription;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.DocumentHelper;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoDocumentUtils;
@@ -13,6 +12,7 @@ import org.exoplatform.widget.DocumentExtendDialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,10 +45,6 @@ public class DocumentActionAdapter extends BaseAdapter {
   private String                      strCreateFolder;
 
   private DocumentActionDescription[] fileActionList = null;
-
-  // private ExoFile _fileCopied = null;
-  //
-  // private ExoFile _fileMoved = null;
 
   private DocumentExtendDialog        extendDialog;
 
@@ -88,21 +84,14 @@ public class DocumentActionAdapter extends BaseAdapter {
         {
           DocumentHelper.getInstance().setFileCopy(_selectedFile);
           DocumentHelper.getInstance().setFileMove(null);
-          // _fileCopied = _selectedFile;
-          // _fileMoved = null;
         } else if (pos == 2)// move file
         {
           DocumentHelper.getInstance().setFileMove(_selectedFile);
           DocumentHelper.getInstance().setFileCopy(null);
-          // _fileMoved = _selectedFile;
-          // _fileCopied = null;
         } else if (pos == 3 || pos == 4) {
 
           if (pos == 4)// Delete file, folder
           {
-            // _fileCopied = null;
-            // _fileMoved = null;
-
             String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
 
             if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
@@ -206,16 +195,15 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   // Set language
   public void changeLanguage() {
+    Resources resource = _mContext.getResources();
 
-    LocalizationHelper local = LocalizationHelper.getInstance();
-
-    strAddAPhoto = local.getString("AddAPhoto");
-    strCopy = local.getString("Copy");
-    strMove = local.getString("Move");
-    strDelete = local.getString("Delete");
-    strRename = local.getString("Rename");
-    strPaste = local.getString("Paste");
-    strCreateFolder = local.getString("CreateFolder");
+    strAddAPhoto = resource.getString(R.string.AddAPhoto);
+    strCopy = resource.getString(R.string.Copy);
+    strMove = resource.getString(R.string.Move);
+    strDelete = resource.getString(R.string.Delete);
+    strRename = resource.getString(R.string.Rename);
+    strPaste = resource.getString(R.string.Paste);
+    strCreateFolder = resource.getString(R.string.CreateFolder);
 
     fileActionList = new DocumentActionDescription[] {
         new DocumentActionDescription(strAddAPhoto, R.drawable.documentactionpopupphotoicon),
