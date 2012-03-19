@@ -1,10 +1,10 @@
 package org.exoplatform.widget;
 
 import org.exoplatform.R;
-import org.exoplatform.singleton.LocalizationHelper;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -21,14 +21,15 @@ public class ConnectionErrorDialog extends Dialog implements android.view.View.O
     super(context);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.warning_dialog_layout);
+    Resources res = context.getResources();
     titleView = (TextView) findViewById(R.id.warning_dialog_title_view);
-    String titleString = LocalizationHelper.getInstance().getString("Warning");
+    String titleString = res.getString(R.string.Warning);
     titleView.setText(titleString);
     contentView = (TextView) findViewById(R.id.warning_content);
-    String contentString = LocalizationHelper.getInstance().getString("ConnectionError");
+    String contentString = res.getString(R.string.ConnectionError);
     contentView.setText(contentString);
     okButton = (Button) findViewById(R.id.warning_ok_button);
-    String okString = LocalizationHelper.getInstance().getString("OK");
+    String okString = res.getString(R.string.OK);
     okButton.setText(okString);
     okButton.setOnClickListener(this);
   }

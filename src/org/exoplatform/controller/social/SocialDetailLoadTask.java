@@ -1,5 +1,6 @@
 package org.exoplatform.controller.social;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
 import org.exoplatform.model.SocialLikeInfo;
-import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
@@ -19,15 +20,19 @@ import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.social.SocialDetailActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.UserTask;
+import org.exoplatform.widget.SocialDetailWaitingDialog;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
-import org.exoplatform.widget.WaitingDialog;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.view.View;
 
-public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
+import com.cyrilmottier.android.greendroid.R;
+
+public class SocialDetailLoadTask extends AsyncTask<Void, Void, Integer> {
   private RestActivity                 selectedRestActivity;
 
   private LinkedList<SocialLikeInfo>   likeLinkedList    = new LinkedList<SocialLikeInfo>();
@@ -56,22 +61,28 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
 
   private boolean                      hasContent        = false;
 
-  public SocialDetailLoadTask(Context context, SocialDetailController controller) {
+  public SocialDetailLoadTask(Context context,
+                              SocialDetailController controller,
+                              SocialDetailWaitingDialog progressDialog) {
     mContext = context;
     detailController = controller;
+    _progressDialog = progressDialog;
     changeLanguage();
+
   }
 
   @Override
   public void onPreExecute() {
-    _progressDialog = new SocialDetailWaitingDialog(mContext, null, loadingData);
+    _progressDialog = new SocialDetailWaitingDialog(mContext, detailController, null, loadingData);
     _progressDialog.show();
   }
 
   @Override
   public Integer doInBackground(Void... params) {
-
     try {
+      if (ExoConnectionUtils.getResponseCode(AccountSetting.getInstance().getDomainName()) == 0) {
+        ExoConnectionUtils.onReLogin();
+      }
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
                                                                          .getActivityService();
 
@@ -136,6 +147,8 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       return 1;
     } catch (SocialClientLibException e) {
       return 0;
+    } catch (IOException e) {
+      return -1;
     }
   }
 
@@ -147,7 +160,7 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
       detailController.setComponentInfo(streamInfo);
       detailController.createCommentList(socialCommentList);
       detailController.setLikeInfo(likeLinkedList);
-    } else if (result == 0) {
+    } else {
       dialog = new SocialDetailsWarningDialog(mContext,
                                               titleString,
                                               detailsErrorStr,
@@ -161,26 +174,12 @@ public class SocialDetailLoadTask extends UserTask<Void, Void, Integer> {
   }
 
   private void changeLanguage() {
-    LocalizationHelper location = LocalizationHelper.getInstance();
-    loadingData = location.getString("LoadingData");
-    youText = location.getString("You");
-    okString = location.getString("OK");
-    titleString = location.getString("Warning");
-    detailsErrorStr = location.getString("DetailsNotAvaiable");
-
-  }
-
-  private class SocialDetailWaitingDialog extends WaitingDialog {
-
-    public SocialDetailWaitingDialog(Context context, String titleString, String contentString) {
-      super(context, titleString, contentString);
-    }
-
-    @Override
-    public void onBackPressed() {
-      super.onBackPressed();
-      detailController.onCancelLoad();
-    }
+    Resources resource = mContext.getResources();
+    loadingData = resource.getString(R.string.LoadingData);
+    youText = resource.getString(R.string.You);
+    okString = resource.getString(R.string.OK);
+    titleString = resource.getString(R.string.Warning);
+    detailsErrorStr = resource.getString(R.string.DetailsNotAvaiable);
 
   }
 

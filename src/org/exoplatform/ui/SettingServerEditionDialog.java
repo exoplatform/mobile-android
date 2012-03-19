@@ -3,12 +3,12 @@ package org.exoplatform.ui;
 import org.exoplatform.R;
 import org.exoplatform.controller.setting.SettingServerEditionController;
 import org.exoplatform.model.ServerObjInfo;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.URLAnalyzer;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -32,6 +32,8 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
   private EditText      editTextServerName;
 
   private EditText      editTextServerUrl;
+
+  private String        serverNameURLInvalid;
 
   private ServerObjInfo serverObj;
 
@@ -115,14 +117,14 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
       if (view.equals(btnDeleteCancel)) {
         dismiss();
       }
-      String serverNameURLInvalid = LocalizationHelper.getInstance().getString("SpecialCharacters");
       Toast.makeText(mContext, serverNameURLInvalid, Toast.LENGTH_SHORT).show();
     }
 
   }
 
   public void changeLanguage() {
-    LocalizationHelper local = LocalizationHelper.getInstance();
+
+    Resources resource = mContext.getResources();
     String strTittle = "";
     String strServerName = "";
     String strServerUrl = "";
@@ -132,19 +134,19 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
     if (isNewServer) // New server
     {
-      strTittle = local.getString("NewServer");
-      strDeleteCancelButton = local.getString("Cancel");
+      strTittle = resource.getString(R.string.NewServer);
+      strDeleteCancelButton = resource.getString(R.string.Cancel);
     } else // Server detail
     {
-      strTittle = local.getString("ServerDetail");
-      strDeleteCancelButton = local.getString("Delete");
+      strTittle = resource.getString(R.string.ServerDetail);
+      strDeleteCancelButton = resource.getString(R.string.Delete);
 
     }
 
-    strServerName = local.getString("NameOfTheServer");
-    strServerUrl = local.getString("URLOfTheSerVer");
-
-    strOKButton = local.getString("OK");
+    strServerName = resource.getString(R.string.NameOfTheServer);
+    strServerUrl = resource.getString(R.string.URLOfTheSerVer);
+    serverNameURLInvalid = resource.getString(R.string.SpecialCharacters);
+    strOKButton = resource.getString(R.string.OK);
 
     txtvTittle.setText(strTittle);
 

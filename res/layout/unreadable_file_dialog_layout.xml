@@ -6,6 +6,7 @@
 		android:gravity="center" android:layout_height="40dip"
 		android:background="@drawable/serveraddingbackgroundtitlepanel">
 		<TextView android:id="@+id/unreadable_file_dialog_title_view"
+		    android:text="@string/UnreachableFileTitle"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:shadowColor="#000000" android:shadowDx="1.0"
 			android:shadowDy="2.0" android:shadowRadius="1.0" android:textSize="18dip"
@@ -22,7 +23,7 @@
 				android:layout_height="wrap_content" android:background="@drawable/icon_for_unreadable_file" />
 			<TextView android:id="@+id/unreadable_content"
 				android:textSize="16sp"
-				android:text="Ce fichier ne peut pas être ouvert depuis l'application"
+				android:text="@string/UnreachableFile"
 				android:paddingRight="8dip" android:paddingLeft="8dip"
 				android:paddingBottom="3dip" android:paddingTop="3dip"
 				android:textColor="#000000" android:layout_marginTop="5dp"
@@ -34,7 +35,7 @@
 		android:padding="5dp" android:gravity="center" android:layout_height="60dp"
 		android:background="@drawable/serveraddbuttonpanelbackground">
 		<Button android:layout_marginTop="15dp" android:id="@+id/unreadable_ok_button"
-			android:text="Ok" android:textColor="#FFFFFF" android:shadowColor="#000000"
+			android:text="@string/OK" android:textColor="#FFFFFF" android:shadowColor="#000000"
 			android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
 			android:textStyle="bold" android:layout_margin="5dp"
 			android:background="@drawable/cancel_button_background_shape"

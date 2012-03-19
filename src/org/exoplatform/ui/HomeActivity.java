@@ -6,7 +6,6 @@ import org.exoplatform.R;
 import org.exoplatform.controller.home.HomeActionListenner;
 import org.exoplatform.controller.home.HomeAdapter;
 import org.exoplatform.controller.home.HomeController;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
@@ -23,8 +22,6 @@ public class HomeActivity extends MyActionBar {
   private HomeController      homeController;
 
   private HomeActionListenner homeActionListenner;
-
-  private String              settingText;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +43,8 @@ public class HomeActivity extends MyActionBar {
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     menu.clear();
-    menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
+    menu.add(0, 1, 0, getResources().getString(R.string.Settings))
+        .setIcon(R.drawable.optionsettingsbutton);
     return true;
   }
 
@@ -76,7 +74,6 @@ public class HomeActivity extends MyActionBar {
     homeController = new HomeController(this);
     homeController.initScreen();
     createAdapter();
-    changeLanguage();
   }
 
   private void createAdapter() {
@@ -104,11 +101,6 @@ public class HomeActivity extends MyActionBar {
     }
     return true;
 
-  }
-
-  public void changeLanguage() {
-    LocalizationHelper local = LocalizationHelper.getInstance();
-    settingText = local.getString("Settings");
   }
 
 }

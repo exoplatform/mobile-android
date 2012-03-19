@@ -18,43 +18,162 @@
 -->
 
 <resources>
-    
-    <string name="app_name">GDCatalog</string>
-    <string name="app_url">http://github.com/cyrilmottier/GreenDroid</string>
-    
-    <string name="more_info_on_greendroid">For more information on the GreenDroid library, go to the GitHub project\'s web page:</string>
-    
-    <!-- Activities labels -->
-    <string name="general_info_label">General information</string>
-    <string name="basic_item_label">Basic items</string>
-    <string name="xml_item_label">XML items</string>
-    <string name="tweaked_item_view_label">Tweaked itemviews</string>
-    <string name="segmented_label">SegmentedBar</string>
-    <string name="action_bar_activity_label">ActionBarActivity</string>
-    <string name="quick_action_label">QuickAction</string>
-    <string name="simple_async_image_view_label">Simple AsyncImageView</string>
-    <string name="async_image_view_list_view_label">AsyncImageView in ListView</string>
-    
-    <string name="about">About</string>
-    <string name="license">License</string>
-    
-    <!-- String used in the SegmentedActivity -->
-    <string name="segment_1">Jeff</string>
-    <string name="segment_2">Romain</string>
-    <string name="segment_3">Adam</string>
-    <string name="segment_4">Dan</string>
-    
-    <string name="show_image_1">Set image 1</string>
-    <string name="show_image_2">Set image 2</string>
-    <string name="show_image_3">Set image 3</string>
-    
-    <string name="first_screen">First screen</string>
-    
-    <string name="refresh_pressed">You\'ve just pressed a ActionBarItem.Type.Refresh button</string>
-    <string name="custom_drawable">Custom drawable. Click on another item instead</string>
-    
-    <string name="image_for_position">Image for position </string>
-    
-    <string name="about_content">GreenDroid is a development library for the Android platform. It is intented to make UI developments easier and consistent through your applications.\n\nThe GreenDroid project has been initiated by <a href="http://www.cyrilmottier.com">Cyril Mottier</a></string>
-    
+
+    <string name="SignInPageTitle">Login Page</string>
+    <string name="SignInButton">Login</string>
+    <string name="SignInInformation">Login information</string>
+    <string name="PleaseWait">Please wait!</string>
+    <string name="SigningIn">Logging in...</string>
+    <string name="CannotLogin"> Can not login</string>
+    <string name="LoadingDataFromServer">Loading data from server...</string>
+    <string name="FileProcessing">Data being processed</string>
+    <string name="ConnectionTimedOut">Connection timed out!</string>
+    <string name="NoServerSelected"> Please select a server</string>
+    <string name="NoUsernameEnter"> Please enter username</string>
+    <string name="NoPasswordEnter"> Please enter password</string>
+    <string name="UserNamePasswordFailed">Invalid username/password combination!</string>
+    <string name="ServerInvalid">  Invalid server address</string>
+    <string name="ServerUnreachable">  Server address is unreachable</string>
+    <string name="ChatServer">Chat server is not available</string>
+    <string name="SignOutButton">Log Out</string>
+    <string name="DomainCellTitle">Server</string>
+    <string name="UserNameCellTitle">Username</string>
+    <string name="PasswordCellTitle">Password</string>
+    <string name="Language">LANGUAGE</string>
+    <string name="Server">SERVER</string>
+    <string name="ServerList"> Server List</string>
+    <string name="AddAServer"> Add a Server</string>
+    <string name="ModifyServerList">Modify the List</string>
+    <string name="ServerDetail">Server Configuration</string>
+    <string name="NewServer">New Server</string>
+    <string name="NameOfTheServer">Name of the server</string>
+    <string name="URLOfTheSerVer">URL of the server</string>
+    <string name="CannotEditServer"> The server can not modify/delete. It is current in use. </string>
+    <string name="English">English</string>
+    <string name="French">French</string>
+    <string name="CompliantMessage"> Mobile is not compliant with this PLF version</string>
+    <string name="BackButton">Back</string>
+    <string name="CloseButton">Close</string>
+    <string name="UserGuide">User Guide</string>
+    <string name="View">View</string>
+    <string name="TakePicture">Take Picture</string>
+    <string name="Delete">Delete</string>
+    <string name="Copy">Copy</string>
+    <string name="Move">Cut</string>
+    <string name="Rename">Rename</string>
+    <string name="CreateFolder"> Create Folder</string>
+    <string name="AddFolder">New Folder</string>
+    <string name="Send">Send</string>
+    <string name="Paste">Paste</string>
+    <string name="Upload">Upload</string>
+    <string name="Cancel">Cancel</string>
+    <string name="OK">OK</string>
+    <string name="Remove"> Remove</string>
+    <string name="Documents"> Documents</string>
+    <string name="Dashboard"> Apps</string>
+    <string name="Settings"> Settings</string>
+    <string name="NativeApplicationsHeader">eXo Native Applications</string>
+    <string name="GadgetsHeader">My Dashboard</string>
+    <string name="GadgetsCannotBeRetrieved">Gadgets Cannot Be Retrieved.</string>
+    <string name="FilesApplication">Files</string>
+    <string name="ChatApplication">Chat</string>
+    <string name="NoService"> Service is unavaiable</string>
+    <string name="ActivityStream"> News</string>
+    <string name="ActivityDetail"> Details</string>
+    <string name="You"> You</string>
+    <string name="Me"> Me</string>
+    <string name="MessageFrom"> Message from</string>
+    <string name="ShowMore"> Show More</string>
+    <string name="LoadingData"> Loading data ...</string>
+    <string name="LoadingImage"> Loading image ...</string>
+    <string name="SendingData">  Sending data ...</string>
+    <string name="YourComment"> Your comment ....</string>
+    <string name="Comment"> Comment</string>
+    <string name="StatusUpdate"> Post</string>
+    <string name="NoLike"> No like for the moment</string>
+    <string name="LikedThis"> liked this</string>
+    <string name="And"> and</string>
+    <string name="PeoplesLikedThis"> peoples liked this</string>
+    <string name="PeopleLikedThis"> people liked this</string>
+    <string name="LessThanAMinute"> less than a minute</string>
+    <string name="AboutAMinuteAgo"> about a minute ago</string>
+    <string name="About"> about</string>
+    <string name="MinutesAgo"> minutes ago</string>
+    <string name="AboutAnHourAgo"> about an hour ago</string>
+    <string name="HoursAgo"> hours ago</string>
+    <string name="AboutADayAgo"> about a day ago</string>
+    <string name="DaysAgo"> days ago</string>
+    <string name="AboutAMonthAgo"> about a month ago</string>
+    <string name="MonthsAgo"> months ago</string>
+    <string name="InputTextWarning"> Please, input some text!</string>
+    <string name="Minute"> minute</string>
+    <string name="Minutes"> minutes</string>
+    <string name="Hour"> hour</string>
+    <string name="Hours"> hours</string>
+    <string name="Today"> today</string>
+    <string name="Yesterday"> Yesterday</string>
+    <string name="AddAPhoto"> Add a Photo</string>
+    <string name="TakeAPhoto">  Take a Photo</string>
+    <string name="PhotoLibrary"> Photo Library </string>
+    <string name="SelectedPhoto"> Selected Image</string>
+    <string name="AttachedPhoto"> Attached Photo</string>
+    <string name="Warning"> Warning</string>
+    <string name="PostSuccess"> Post an activity successfully! </string>
+    <string name="PostError"> Error on post an activity! </string>
+    <string name="ConnectionError"> The network can not be reached!</string>
+    <string name="LoadingDataError"> Error on loading data!</string>
+    <string name="DoNotHavePermision"> You don\'t have permission for this because SDCard is not available!</string>
+    <string name="WarningServerNameIsEmpty"> Server name or url is empty. Please enter it again!</string>
+    <string name="WarningServerIsExist"> The server is existed!</string>
+    <string name="DetailsNotAvaiable"> Details of the news are not available</string>
+    <string name="ErrorOnLike"> You can not like or unlike this activity!</string>
+    <string name="ErrorOnComment"> You can not comment this activity!</string>
+    <string name="LogoutTitle"> Logout Dialog</string>
+    <string name="LogoutContent"> Do you want to exit?</string>
+    <string name="ApplicationInformation"> APPLICATION INFORMATIONS</string>
+    <string name="ServerVersion"> Server Version</string>
+    <string name="ServerEdition"> Server Edition</string>
+    <string name="ApplicationVersion"> Application Version</string>
+    <string name="EmptyFolder"> The content of this folder is empty</string>
+    <string name="UnreachableFileTitle"> Unreadable File</string>
+    <string name="UnreachableFile"> This file cannot be opened on the application</string>
+    <string name="EmptyDashboard"> You haven\'t got any gadgets on your apps</string>
+    <string name="EmptyActivity"> Any activities has been posted on your activity stream</string>
+    <string name="EmptyContact"> Your chat buddies list is empty</string>
+    <string name="EmptyComment"> No one has commented, be the first one</string>
+    <string name="HasEditWikiPage"> has edited Wiki page:</string>
+    <string name="HasCreatWikiPage"> has created Wiki page:</string>
+    <string name="HasPostedAnewTopic">  has posted a new topic:</string>
+    <string name="HasUpdateAnewTopic">  has updated a topic:</string>
+    <string name="HasAddANewPost"> has added a new post:</string>
+    <string name="HasUpdateANewPost"> has updated a post:</string>
+    <string name="HasAskAnswer"> has asked:</string>
+    <string name="HasUpdatedQuestion">  has updated question: </string>
+    <string name="HasAnswerQuestion">has answered for question:</string>
+    <string name="AddedAnEvent"> added an event:</string>
+    <string name="UpdatedAnEvent"> has just updated the event:</string>
+    <string name="AddedATask">added a task:</string>
+    <string name="UpdatedATask"> has just updated the task:</string>
+    <string name="DocumentRenameTitle">  Rename Folder</string>
+    <string name="DocumentRenameContent"> Enter a new name:</string>
+    <string name="DocumentCreateTitle"> Create Folder</string>
+    <string name="DocumentCreateContent">  Enter the name of folder:</string>
+    <string name="DocumentCannotDelete"> Can not delete this file.</string>
+    <string name="DocumentCopyPasteError"> Paste file error!</string>
+    <string name="DocumentUploadError"> Upload file error!</string>
+    <string name="DocumentRenameError"> Rename folder error!</string>
+    <string name="DocumentCreateFolderError"> Create folder error! </string>
+    <string name="DocumentFolderNameConflict"> This name already existed! </string>
+    <string name="DocumentFolderNameEmpty"> Please input folder name!</string>
+    <string name="CalendarDescription"> Description:</string>
+    <string name="CalendarLocation"> Location:</string>
+    <string name="CalendarStart"> Start Time:</string>
+    <string name="CalendarEnd"> End Time:</string>
+    <string name="SpecialCharacters"> Special characters are not allowed.</string>
+    <string name="In"> in</string>
+    <string name="Space"> space</string>
+    <string name="SpecialCharacters"> Special characters are not allowed.</string>
+    <string name="Personal"> Personal</string>
+    <string name="Group"> Group</string>
+
 </resources>

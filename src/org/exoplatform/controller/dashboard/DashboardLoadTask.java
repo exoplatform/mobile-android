@@ -1,5 +1,6 @@
 package org.exoplatform.controller.dashboard;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,18 +8,19 @@ import org.apache.http.HttpResponse;
 import org.exoplatform.model.DashboardItem;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.UserTask;
-import org.exoplatform.utils.WebdavMethod;
-import org.exoplatform.widget.WaitingDialog;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.DashboardWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.content.Context;
+import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.view.View;
 
-public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardItem>> {
+import com.cyrilmottier.android.greendroid.R;
+
+public class DashboardLoadTask extends AsyncTask<Void, Void, ArrayList<DashboardItem>> {
   private DashboardController    dashboardController;
 
   private DashboardActivity      dashboardActivity;
@@ -33,9 +35,10 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
 
   private DashboardWaitingDialog _progressDialog;
 
-  public DashboardLoadTask(DashboardActivity context, DashboardController controller) {
+  public DashboardLoadTask(DashboardActivity context, DashboardWaitingDialog dialog) {
     dashboardActivity = context;
-    dashboardController = controller;
+    dashboardController = new DashboardController();
+    _progressDialog = dialog;
     changeLanguage();
   }
 
@@ -47,19 +50,26 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
 
   @Override
   public ArrayList<DashboardItem> doInBackground(Void... params) {
-
-    HttpResponse response;
     try {
+      HttpResponse response;
+      String urlForDahboards = AccountSetting.getInstance().getDomainName()
+          + ExoConstants.DASHBOARD_PATH;
 
-      WebdavMethod copy = new WebdavMethod("HEAD", AccountSetting.getInstance().getDomainName());
-      response = ExoConnectionUtils.httpClient.execute(copy);
+      response = ExoConnectionUtils.getRequestResponse(urlForDahboards);
+      /*
+       * Checking the session status each time we retrieve dashboard items. If
+       * time out, re logging in
+       */
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
-        return dashboardController.getDashboards();
-      } else
-        return null;
+        return dashboardController.getDashboards(response);
+      } else {
+        // Re logging in if connection session time out
+        ExoConnectionUtils.onReLogin();
+        return dashboardController.getDashboards(response);
+      }
 
-    } catch (Exception e) {
+    } catch (IOException e) {
       return null;
     }
 
@@ -68,28 +78,36 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
   @Override
   public void onPostExecute(ArrayList<DashboardItem> result) {
     if (result != null) {
+
       if (result.size() == 0) {
         dashboardActivity.setEmptyView(View.VISIBLE);
       } else {
         ArrayList<GadgetInfo> items = new ArrayList<GadgetInfo>();
         for (int i = 0; i < result.size(); i++) {
           DashboardItem gadgetTab = result.get(i);
-
-          List<GadgetInfo> gadgets = dashboardController.getGadgetInTab(gadgetTab.label,
-                                                                        gadgetTab.link);
-          if (gadgets != null && gadgets.size() > 0) {
-            items.add(new GadgetInfo(gadgetTab.label));
-            items.addAll(gadgets);
+          try {
+            HttpResponse response = ExoConnectionUtils.getRequestResponse(gadgetTab.link);
+            List<GadgetInfo> gadgets = dashboardController.getGadgetInTab(response,
+                                                                          gadgetTab.label,
+                                                                          gadgetTab.link);
+            if (gadgets != null && gadgets.size() > 0) {
+              items.add(new GadgetInfo(gadgetTab.label));
+              items.addAll(gadgets);
+            }
+          } catch (IOException e) {
+            e.getMessage();
           }
 
         }
-
-        dashboardController.setAdapter(items);
-        dashboardActivity.setEmptyView(View.GONE);
+        if (items.size() > 0) {
+          dashboardActivity.setAdapter(items);
+          dashboardActivity.setEmptyView(View.GONE);
+        } else
+          dashboardActivity.setEmptyView(View.VISIBLE);
       }
 
     } else {
-
+      dashboardActivity.setEmptyView(View.VISIBLE);
       WarningDialog dialog = new WarningDialog(dashboardActivity,
                                                titleString,
                                                contentString,
@@ -108,23 +126,11 @@ public class DashboardLoadTask extends UserTask<Void, Void, ArrayList<DashboardI
   }
 
   private void changeLanguage() {
-    LocalizationHelper location = LocalizationHelper.getInstance();
-    loadingData = location.getString("LoadingData");
-    okString = location.getString("OK");
-    titleString = location.getString("Warning");
-    contentString = location.getString("GadgetsCannotBeRetrieved");
+    Resources resource = dashboardActivity.getResources();
+    loadingData = resource.getString(R.string.LoadingData);
+    okString = resource.getString(R.string.OK);
+    titleString = resource.getString(R.string.Warning);
+    contentString = resource.getString(R.string.GadgetsCannotBeRetrieved);
   }
 
-  private class DashboardWaitingDialog extends WaitingDialog {
-
-    public DashboardWaitingDialog(Context context, String titleString, String contentString) {
-      super(context, titleString, contentString);
-    }
-
-    @Override
-    public void onBackPressed() {
-      super.onBackPressed();
-      dashboardController.onCancelLoad();
-    }
-  }
 }

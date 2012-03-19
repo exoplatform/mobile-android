@@ -10,6 +10,8 @@ import org.exoplatform.model.ServerObjInfo;
  */
 
 public class ServerSettingHelper {
+  
+  
   // The index of server url was selected in setting
   private int                        selectedServerIndex;
 

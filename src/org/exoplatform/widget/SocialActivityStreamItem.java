@@ -2,7 +2,6 @@ package org.exoplatform.widget;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.social.client.api.model.RestActivityStream;
 import org.exoplatform.ui.social.SocialAttachedImageActivity;
@@ -13,6 +12,7 @@ import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.text.Html;
@@ -61,6 +61,8 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private boolean            isDetail;
 
+  private Resources          resource;
+
   public SocialActivityStreamItem(Context context, AttributeSet attrs) {
     super(context, attrs);
 
@@ -69,6 +71,7 @@ public class SocialActivityStreamItem extends LinearLayout {
   public SocialActivityStreamItem(Context context, SocialActivityInfo info, boolean is) {
     super(context);
     mContext = context;
+    resource = mContext.getResources();
     activityInfo = info;
     isDetail = is;
     LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -106,7 +109,8 @@ public class SocialActivityStreamItem extends LinearLayout {
     textViewName.setText(Html.fromHtml(userName));
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()), TextView.BufferType.SPANNABLE);
 
-    textViewTime.setText(SocialActivityUtil.getPostedTimeString(activityInfo.getPostedTime()));
+    textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
+                                                                activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());
@@ -141,12 +145,13 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 2:
       // ks-wiki:spaces
-//      Map<String, String> templateMap = activityInfo.templateParams;
-//      Set<String> set = templateMap.keySet();
-//      for (String param : set) {
-//        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-//            + templateMap.get(param));
-//      }
+      // Map<String, String> templateMap = activityInfo.templateParams;
+      // Set<String> set = templateMap.keySet();
+      // for (String param : set) {
+      // System.out.println("type: " + activityInfo.getType() +
+      // "--template key: " + param + "-- "
+      // + templateMap.get(param));
+      // }
       setActivityTypeWiki();
       break;
     case 3:
@@ -185,15 +190,18 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 9:
       // contents:spaces
+
       String contentLink = activityInfo.templateParams.get("contenLink");
       if (contentLink != null) {
+
         String contentType = activityInfo.templateParams.get("mimeType");
-        if (contentType != null && (contentType.equalsIgnoreCase("image/jpeg"))) {
+        if (contentType != null && (contentType.equalsIgnoreCase(ExoConstants.IMAGE_TYPE))) {
+          String contentName = activityInfo.templateParams.get("contentName");
           StringBuffer buffer = new StringBuffer();
           buffer.append(domain);
           buffer.append("/portal/rest/jcr/");
           buffer.append(contentLink);
-          displayAttachImage(buffer.toString(), "", null);
+          displayAttachImage(buffer.toString(), contentName, null);
         }
 
       }
@@ -218,7 +226,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     StringBuffer spaceBuffer = new StringBuffer();
     if (spaceType.equalsIgnoreCase(ExoConstants.SOCIAL_SPACE)) {
       spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-      spaceBuffer.append(LocalizationHelper.getInstance().getString("In"));
+      spaceBuffer.append(resource.getString(R.string.In));
       spaceBuffer.append("</font>");
       spaceBuffer.append(" ");
       String nameSpace = actStream.getFullName();
@@ -230,7 +238,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       spaceBuffer.append("</a>");
       spaceBuffer.append(" ");
       spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-      spaceBuffer.append(LocalizationHelper.getInstance().getString("Space"));
+      spaceBuffer.append(resource.getString(R.string.Space));
       spaceBuffer.append("</font>");
     }
     return spaceBuffer.toString();
@@ -250,19 +258,19 @@ public class SocialActivityStreamItem extends LinearLayout {
     forumBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
     if (actType.equalsIgnoreCase("AddPost")) {
       forumLink = activityInfo.templateParams.get("PostLink");
-      actTypeDesc = LocalizationHelper.getInstance().getString("HasAddANewPost");
+      actTypeDesc = resource.getString(R.string.HasAddANewPost);
       forumName = activityInfo.templateParams.get("PostName");
     } else if (actType.equalsIgnoreCase("UpdatePost")) {
       forumLink = activityInfo.templateParams.get("PostLink");
-      actTypeDesc = LocalizationHelper.getInstance().getString("HasUpdateANewPost");
+      actTypeDesc = resource.getString(R.string.HasUpdateANewPost);
       forumName = activityInfo.templateParams.get("PostName");
     } else if (actType.equalsIgnoreCase("AddTopic")) {
       forumLink = activityInfo.templateParams.get("TopicLink");
-      actTypeDesc = LocalizationHelper.getInstance().getString("HasPostedAnewTopic");
+      actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
       forumName = activityInfo.templateParams.get("TopicName");
     } else if (actType.equalsIgnoreCase("UpdateTopic")) {
       forumLink = activityInfo.templateParams.get("TopicLink");
-      actTypeDesc = LocalizationHelper.getInstance().getString("HasUpdateAnewTopic");
+      actTypeDesc = resource.getString(R.string.HasUpdateAnewTopic);
       forumName = activityInfo.templateParams.get("TopicName");
     }
     forumBuffer.append(actTypeDesc);
@@ -297,10 +305,10 @@ public class SocialActivityStreamItem extends LinearLayout {
     if (act_key != null) {
       if (act_key.equalsIgnoreCase("update_page")) {
         wiki_url = activityInfo.templateParams.get("view_change_url");
-        act_key_des = LocalizationHelper.getInstance().getString("HasEditWikiPage");
+        act_key_des = resource.getString(R.string.HasEditWikiPage);
       } else if (act_key.equalsIgnoreCase("add_page")) {
         wiki_url = activityInfo.templateParams.get("page_url");
-        act_key_des = LocalizationHelper.getInstance().getString("HasCreatWikiPage");
+        act_key_des = resource.getString(R.string.HasCreatWikiPage);
       }
     }
     buffer.append(act_key_des);
@@ -335,11 +343,11 @@ public class SocialActivityStreamItem extends LinearLayout {
     String act_key = activityInfo.templateParams.get("ActivityType");
     String act_key_des = null;
     if (act_key.equalsIgnoreCase("QuestionUpdate")) {
-      act_key_des = LocalizationHelper.getInstance().getString("HasUpdatedQuestion");
+      act_key_des = resource.getString(R.string.HasUpdatedQuestion);
     } else if (act_key.equalsIgnoreCase("QuestionAdd")) {
-      act_key_des = LocalizationHelper.getInstance().getString("HasAskAnswer");
+      act_key_des = resource.getString(R.string.HasAskAnswer);
     } else if (act_key.equalsIgnoreCase("AnswerAdd")) {
-      act_key_des = LocalizationHelper.getInstance().getString("HasAnswerQuestion");
+      act_key_des = resource.getString(R.string.HasAnswerQuestion);
     }
     answerBuffer.append(act_key_des);
     answerBuffer.append("</font>");
@@ -374,13 +382,13 @@ public class SocialActivityStreamItem extends LinearLayout {
     String forumName = null;
     forumBuffer.append("<font color=\"#696969\">");
     if (actType.equalsIgnoreCase("EventAdded")) {
-      actTypeDesc = LocalizationHelper.getInstance().getString("AddedAnEvent");
+      actTypeDesc = resource.getString(R.string.AddedAnEvent);
     } else if (actType.equalsIgnoreCase("EventUpdated")) {
-      actTypeDesc = LocalizationHelper.getInstance().getString("UpdatedAnEvent");
+      actTypeDesc = resource.getString(R.string.UpdatedAnEvent);
     } else if (actType.equalsIgnoreCase("TaskAdded")) {
-      actTypeDesc = LocalizationHelper.getInstance().getString("AddedATask");
+      actTypeDesc = resource.getString(R.string.AddedATask);
     } else if (actType.equalsIgnoreCase("TaskUpdated")) {
-      actTypeDesc = LocalizationHelper.getInstance().getString("UpdatedATask");
+      actTypeDesc = resource.getString(R.string.UpdatedATask);
     }
     forumBuffer.append(actTypeDesc);
     forumBuffer.append("</font>");
@@ -401,27 +409,27 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void setCaledarContent(TextView textView) {
     StringBuffer caledarBuffer = new StringBuffer();
     caledarBuffer.append("<html><body>");
-    caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarDescription"));
+    caledarBuffer.append(resource.getString(R.string.CalendarDescription));
     caledarBuffer.append("\n");
     String description = activityInfo.templateParams.get("EventDescription");
     if (description != null) {
       caledarBuffer.append(description);
     }
     caledarBuffer.append("<br>");
-    caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarLocation"));
+    caledarBuffer.append(resource.getString(R.string.CalendarLocation));
     caledarBuffer.append(" ");
     String location = activityInfo.templateParams.get("EventLocale");
     if (location != null) {
       caledarBuffer.append(location);
     }
     caledarBuffer.append("<br>");
-    caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarStart"));
+    caledarBuffer.append(resource.getString(R.string.CalendarStart));
     caledarBuffer.append(" ");
     String startTime = activityInfo.templateParams.get("EventStartTime");
     startTime = PhotoUtils.getDateFromString(startTime);
     caledarBuffer.append(startTime);
     caledarBuffer.append("<br>");
-    caledarBuffer.append(LocalizationHelper.getInstance().getString("CalendarEnd"));
+    caledarBuffer.append(resource.getString(R.string.CalendarEnd));
     caledarBuffer.append(" ");
     String endTime = activityInfo.templateParams.get("EventEndTime");
     endTime = PhotoUtils.getDateFromString(endTime);

@@ -1,15 +1,13 @@
 package org.exoplatform.widget;
 
-import java.util.ArrayList;
-
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoDocumentUtils;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -33,8 +31,6 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
   private String   cancelStr;
 
   private String   inputTextWarning;
-
-  private String   folderNameConflict;
 
   private int      actionId;
 
@@ -90,26 +86,28 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
     if (view.equals(okButton)) {
       folderName = actionEditText.getText().toString();
 
-      ArrayList<ExoFile> files = DocumentActivity._documentActivityInstance._documentAdapter._documentList;
-      boolean fileExisted = false;
-      if (files != null) {
-        for (ExoFile file : files) {
-          if (file != null) {
-            if (file.name.equalsIgnoreCase(folderName)) {
-              fileExisted = true;
-              break;
-            }
-          }
-
-        }
-      }
-      if (fileExisted) {
-        Toast toast = Toast.makeText(mContext, folderNameConflict, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-
-        return;
-      }
+      // ArrayList<ExoFile> files =
+      // DocumentActivity._documentActivityInstance._documentAdapter._documentList;
+      // boolean fileExisted = false;
+      // if (files != null) {
+      // for (ExoFile file : files) {
+      // if (file != null) {
+      // if (file.name.equalsIgnoreCase(folderName)) {
+      // fileExisted = true;
+      // break;
+      // }
+      // }
+      //
+      // }
+      // }
+      // if (fileExisted) {
+      // Toast toast = Toast.makeText(mContext, folderNameConflict,
+      // Toast.LENGTH_SHORT);
+      // toast.setGravity(Gravity.CENTER, 0, 0);
+      // toast.show();
+      //
+      // return;
+      // }
 
       if ((folderName != null) && (folderName.length() > 0)) {
 
@@ -145,15 +143,14 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
   }
 
   private void onChangeLanguage() {
-    LocalizationHelper local = LocalizationHelper.getInstance();
-    renameTitleStr = local.getString("DocumentRenameTitle");
-    renameActionTitle = local.getString("DocumentRenameContent");
-    createTitleStr = local.getString("DocumentCreateTitle");
-    createActionTitle = local.getString("DocumentCreateContent");
-    okStr = local.getString("OK");
-    cancelStr = local.getString("Cancel");
-    inputTextWarning = local.getString("DocumentFolderNameEmpty");
-    folderNameConflict = local.getString("DocumentFolderNameConflict");
+    Resources res = mContext.getResources();
+    renameTitleStr = res.getString(R.string.DocumentRenameTitle);
+    renameActionTitle = res.getString(R.string.DocumentRenameContent);
+    createTitleStr = res.getString(R.string.DocumentCreateTitle);
+    createActionTitle = res.getString(R.string.DocumentCreateContent);
+    okStr = res.getString(R.string.OK);
+    cancelStr = res.getString(R.string.Cancel);
+    inputTextWarning = res.getString(R.string.DocumentFolderNameEmpty);
 
   }
 

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/login_layout_wrapper"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/login_background"
-    android:isScrollContainer="false"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -48,7 +46,7 @@
                     android:id="@+id/EditText_UserName"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_below="@+id/RelativeLayout_Server"
+                    android:layout_below="@id/RelativeLayout_Server"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
@@ -56,10 +54,10 @@
                     android:background="@drawable/authenticate_textfied_background"
                     android:ellipsize="start"
                     android:gravity="center|center_horizontal"
+                    android:hint="@string/UserNameCellTitle"
                     android:singleLine="true"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#AAAAAAAA"
-                    android:hint="username"
                     android:textSize="16dip"
                     android:textStyle="bold" />
 
@@ -75,6 +73,7 @@
                     android:background="@drawable/authenticate_textfied_background"
                     android:ellipsize="start"
                     android:gravity="center|center_horizontal"
+                    android:hint="@string/PasswordCellTitle"
                     android:password="true"
                     android:singleLine="true"
                     android:textColor="#FFFFFF"
@@ -145,6 +144,7 @@
 
     <Button
         android:id="@+id/Button_Login"
+        android:text="@string/SignInButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="19dp"

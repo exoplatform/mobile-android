@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.http.cookie.Cookie;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
@@ -19,6 +18,7 @@ import android.util.Log;
 import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -33,8 +33,6 @@ public class WebViewActivity extends MyActionBar {
 
   public static String _titlebar;
 
-  private String       loadingStr;
-
   public void onCreate(Bundle icicle) {
 
     super.onCreate(icicle);
@@ -43,8 +41,6 @@ public class WebViewActivity extends MyActionBar {
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     _url = _url.replaceAll(" ", "%20");
     setupCookies(_url);
-    changeLanguage();
-
     _wvGadget = (WebView) findViewById(R.id.WebView);
     _wvGadget.getSettings().setSupportZoom(true);
     _wvGadget.getSettings().setJavaScriptEnabled(true);
@@ -52,18 +48,24 @@ public class WebViewActivity extends MyActionBar {
     _wvGadget.getSettings().setPluginsEnabled(true);
     _wvGadget.getSettings().setLoadsImagesAutomatically(true);
     _wvGadget.addJavascriptInterface(this, "MainScreen");
-
     _wvGadget.getSettings().setBuiltInZoomControls(true);
 
     final Activity activity = this;
 
     _wvGadget.setWebChromeClient(new WebChromeClient() {
       public void onProgressChanged(WebView view, int progress) {
-        setTitle(loadingStr);
+        setTitle(getResources().getString(R.string.LoadingData));
         activity.setProgress(progress * 100);
         if (progress == 100)
           setTitle(_titlebar);
 
+      }
+
+      @Override
+      public boolean onJsTimeout() {
+        ExoConnectionUtils.onReLogin();
+        setupCookies(_url);
+        return super.onJsTimeout();
       }
     });
     _wvGadget.setWebViewClient(new NewsWebviewClient());
@@ -120,10 +122,7 @@ public class WebViewActivity extends MyActionBar {
   }
 
   private void cleaCache() {
-    this.deleteDatabase("webview.db");
-    this.deleteDatabase("webviewCache.db");
     File dir = getCacheDir();
-
     if (dir != null && dir.isDirectory()) {
       try {
         File[] children = dir.listFiles();
@@ -143,12 +142,6 @@ public class WebViewActivity extends MyActionBar {
 
   }
 
-  public void changeLanguage() {
-    LocalizationHelper local = LocalizationHelper.getInstance();
-    loadingStr = local.getString("LoadingData");
-
-  }
-
   private class NewsWebviewClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -156,6 +149,20 @@ public class WebViewActivity extends MyActionBar {
       view.loadUrl(url);
       return true;
 
+    }
+
+    // Re logging in if receive the Http Authorization Request
+
+    @Override
+    public void onReceivedHttpAuthRequest(WebView view,
+                                          HttpAuthHandler handler,
+                                          String host,
+                                          String realm) {
+      super.onReceivedHttpAuthRequest(view, handler, host, realm);
+      // Relogin
+      ExoConnectionUtils.onReLogin();
+      setupCookies(host);
+      view.reload();
     }
   }
 }

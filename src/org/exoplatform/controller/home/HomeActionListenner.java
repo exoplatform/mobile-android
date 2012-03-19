@@ -1,9 +1,11 @@
 package org.exoplatform.controller.home;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.exoplatform.model.HomeItem;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.HomeHelper;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
@@ -20,18 +22,17 @@ import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
-import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-/*
- * 
- */
+import com.cyrilmottier.android.greendroid.R;
+
 public class HomeActionListenner implements OnItemClickListener {
   private String              okString;
 
@@ -100,7 +101,6 @@ public class HomeActionListenner implements OnItemClickListener {
 
   public void onCancelLoadNewsService() {
     if (mLoadTask != null && mLoadTask.getStatus() == NewsServiceLoadTask.Status.RUNNING) {
-      mLoadTask.onCancelled();
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
@@ -108,7 +108,6 @@ public class HomeActionListenner implements OnItemClickListener {
 
   private void launchChatApp() {
     Intent next = new Intent(mContext, ChatListActivity.class);
-    next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     mContext.startActivity(next);
 
   }
@@ -117,7 +116,6 @@ public class HomeActionListenner implements OnItemClickListener {
 
     if (checkDocumentConnection() == true) {
       Intent next = new Intent(mContext, DocumentActivity.class);
-      next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       mContext.startActivity(next);
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
@@ -127,7 +125,6 @@ public class HomeActionListenner implements OnItemClickListener {
 
   private void launchDashboardApp() {
     Intent intent = new Intent(mContext, DashboardActivity.class);
-    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     mContext.startActivity(intent);
   }
 
@@ -140,11 +137,10 @@ public class HomeActionListenner implements OnItemClickListener {
   // }
 
   private void changeLanguage() {
-    LocalizationHelper location = LocalizationHelper.getInstance();
-    okString = location.getString("OK");
-    titleString = location.getString("Warning");
-    contentString = location.getString("ConnectionError");
-    socialErrorString = location.getString("LoadingDataError");
+    okString = mContext.getResources().getString(R.string.OK);
+    titleString = mContext.getResources().getString(R.string.Warning);
+    contentString = mContext.getResources().getString(R.string.ConnectionError);
+    socialErrorString = mContext.getResources().getString(R.string.LoadingDataError);
 
   }
 
@@ -162,19 +158,19 @@ public class HomeActionListenner implements OnItemClickListener {
     }
   }
 
-  private class NewsServiceLoadTask extends UserTask<Void, Void, Boolean> {
+  private class NewsServiceLoadTask extends AsyncTask<Void, Void, Boolean> {
 
     @SuppressWarnings("deprecation")
     @Override
     public Boolean doInBackground(Void... params) {
       try {
-        parseDomain();
+//        parseDomain();
         String userName = AccountSetting.getInstance().getUsername();
         String password = AccountSetting.getInstance().getPassword();
-
-        SocialClientContext.setProtocol(protocol);
-        SocialClientContext.setHost(host);
-        SocialClientContext.setPort(port);
+        URL url = new URL(SocialActivityUtil.getDomain());
+        SocialClientContext.setProtocol(url.getProtocol());
+        SocialClientContext.setHost(url.getHost());
+        SocialClientContext.setPort(url.getPort());
         SocialClientContext.setPortalContainerName(ExoConstants.ACTIVITY_PORTAL_CONTAINER);
         SocialClientContext.setRestContextName(ExoConstants.ACTIVITY_REST_CONTEXT);
         SocialClientContext.setUsername(userName);
@@ -198,6 +194,10 @@ public class HomeActionListenner implements OnItemClickListener {
         return true;
       } catch (SocialClientLibException e) {
         return false;
+      } catch (RuntimeException e) {
+        return false;
+      } catch (MalformedURLException e) {
+        return false;
       }
     }
 
@@ -205,7 +205,6 @@ public class HomeActionListenner implements OnItemClickListener {
     public void onPostExecute(Boolean result) {
       if (result) {
         Intent next = new Intent(mContext, SocialActivity.class);
-        next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(next);
       } else {
         WarningDialog dialog = new WarningDialog(mContext, titleString, socialErrorString, okString);

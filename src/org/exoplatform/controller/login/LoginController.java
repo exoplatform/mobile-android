@@ -1,15 +1,18 @@
 package org.exoplatform.controller.login;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.http.HttpResponse;
+import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.utils.UserTask;
+import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -17,10 +20,10 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.os.AsyncTask;
 
 public class LoginController {
-
-  private LocalizationHelper bundle;
 
   private String             userName;
 
@@ -56,8 +59,11 @@ public class LoginController {
 
   private LoginWaitingDialog _progressDialog;
 
+  private Resources          resource;
+
   public LoginController(Context context, String user, String pass) {
     mContext = context;
+    resource = mContext.getResources();
     userName = user;
     password = pass;
     _strDomain = AccountSetting.getInstance().getDomainName();
@@ -73,11 +79,11 @@ public class LoginController {
 
   private boolean checkLogin() {
     if (userName == null || userName.length() == 0) {
-      blankError = bundle.getString("NoUsernameEnter");
+      blankError = resource.getString(R.string.NoUsernameEnter);
     } else if (password == null || password.length() == 0) {
-      blankError = bundle.getString("NoPasswordEnter");
+      blankError = resource.getString(R.string.NoPasswordEnter);
     } else if (_strDomain == null || _strDomain.length() == 0) {
-      blankError = bundle.getString("NoServerSelected");
+      blankError = resource.getString(R.string.NoServerSelected);
     } else
       return true;
     return false;
@@ -102,19 +108,18 @@ public class LoginController {
   }
 
   private void getLanguage() {
-    bundle = LocalizationHelper.getInstance();
-    strSigning = bundle.getString("SigningIn");
-    strNetworkConnectionFailed = bundle.getString("ConnectionError");
-    strUserNamePasswordFailed = bundle.getString("UserNamePasswordFailed");
-    mobileNotCompilant = bundle.getString("CompliantMessage");
-    strServerInvalid = bundle.getString("ServerInvalid");
-    strServerUnreachable = bundle.getString("ServerUnreachable");
-    titleString = bundle.getString("Warning");
-    okString = bundle.getString("OK");
+    strSigning = resource.getString(R.string.SigningIn);
+    strNetworkConnectionFailed = resource.getString(R.string.ConnectionError);
+    strUserNamePasswordFailed = resource.getString(R.string.UserNamePasswordFailed);
+    mobileNotCompilant = resource.getString(R.string.CompliantMessage);
+    strServerInvalid = resource.getString(R.string.ServerInvalid);
+    strServerUnreachable = resource.getString(R.string.ServerUnreachable);
+    titleString = resource.getString(R.string.Warning);
+    okString = resource.getString(R.string.OK);
 
   }
 
-  public class LoginTask extends UserTask<Void, Void, String> {
+  public class LoginTask extends AsyncTask<Void, Void, String> {
     @Override
     public void onPreExecute() {
       _progressDialog = new LoginWaitingDialog(mContext, null, strSigning);
@@ -127,10 +132,13 @@ public class LoginController {
       try {
 
         uri = new URI(_strDomain);
-        String resultStr = ExoConnectionUtils.sendAuthentication(_strDomain, userName, password);
+        HttpResponse response = ExoConnectionUtils.onPrepareLogin(_strDomain, userName, password);
+        String resultStr = ExoConnectionUtils.sendAuthentication(response);
         return resultStr;
 
       } catch (URISyntaxException e) {
+        return null;
+      } catch (IOException e) {
         return null;
       }
 
@@ -143,7 +151,7 @@ public class LoginController {
         dialog.show();
       } else if (result.equalsIgnoreCase(ExoConstants.LOGIN_YES)) {
         AccountSetting accountSetting = AccountSetting.getInstance();
-        ExoConnectionUtils.createAuthorization(uri.getHost(), uri.getPort(), userName, password);
+//        ExoConnectionUtils.createAuthorization(uri.getHost(), uri.getPort(), userName, password);
         SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());
@@ -153,8 +161,12 @@ public class LoginController {
         accountSetting.setUsername(userName);
         accountSetting.setPassword(password);
         ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
-
-        boolean isCompliant = ExoConnectionUtils.checkPLFVersion();
+        /*
+         * Checking platform version
+         */
+        String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_SUFFIX_VERSION;
+        HttpResponse response = ExoConnectionUtils.getPlatformResponse(versionUrl);
+        boolean isCompliant = ExoConnectionUtils.checkPLFVersion(response);
         if (isCompliant == true) {
           Intent next = new Intent(mContext, HomeActivity.class);
           next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -3,13 +3,13 @@ package org.exoplatform.ui;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.setting.SettingController;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -119,18 +119,18 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
   }
 
   private void changeLanguage() {
-    LocalizationHelper local = LocalizationHelper.getInstance();
-    String strLanguageTittle = local.getString("Language");
-    String strServerTittle = local.getString("Server");
-    String strEnglish = local.getString("English");
-    String strFrench = local.getString("French");
-    String applicationInfos = local.getString("ApplicationInformation");
-    String serverVersion = local.getString("ServerVersion");
-    String serverEdition = local.getString("ServerEdition");
-    String appVersion = local.getString("ApplicationVersion");
-    String settings = local.getString("Settings");
+    Resources resource = getResources();
+    String strLanguageTittle = resource.getString(R.string.Language);
+    String strServerTittle = resource.getString(R.string.Server);
+    String strEnglish = resource.getString(R.string.English);
+    String strFrench = resource.getString(R.string.French);
+    String applicationInfos = resource.getString(R.string.ApplicationInformation);
+    String serverVersion = resource.getString(R.string.ServerVersion);
+    String serverEdition = resource.getString(R.string.ServerEdition);
+    String appVersion = resource.getString(R.string.ApplicationVersion);
+    String settings = resource.getString(R.string.Settings);
     setTitle(settings);
-    String modifyListText = local.getString("ModifyServerList");
+    String modifyListText = resource.getString(R.string.ModifyServerList);
     modifyServerBtn.setText(modifyListText);
     txtvEnglish.setText(strEnglish);
     txtvFrench.setText(strFrench);
@@ -140,9 +140,9 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     applicationInfoText.setText(appVersion);
     serverInfoText.setText(serverVersion);
     serverEditionText.setText(serverEdition);
-    errorMessage = local.getString("DoNotHavePermision");
-    okString = local.getString("OK");
-    titleString = local.getString("Warning");
+    errorMessage = resource.getString(R.string.DoNotHavePermision);
+    okString = resource.getString(R.string.OK);
+    titleString = resource.getString(R.string.Warning);
 
   }
 

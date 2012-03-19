@@ -48,7 +48,7 @@ public class ServerConfigurationUtils {
 
   // Constructor
 
-  public static boolean createLocalFileDirectory(String path, boolean isFolder) {
+  private static boolean createLocalFileDirectory(String path, boolean isFolder) {
     boolean returnValue = false;
 
     File f = new File(path);
@@ -244,7 +244,6 @@ public class ServerConfigurationUtils {
   public static boolean createXmlDataWithServerList(ArrayList<ServerObjInfo> objList,
                                                     String fileName,
                                                     String appVersion) {
-    boolean returnValue = false;
     StringBuffer pathBuffer = new StringBuffer();
     pathBuffer.append(Environment.getExternalStorageDirectory());
     pathBuffer.append("/eXo/");
@@ -253,27 +252,13 @@ public class ServerConfigurationUtils {
     try {
       newxmlfile.createNewFile();
 
-    } catch (IOException e) {
+      // we have to bind the new file with a FileOutputStream
+      FileOutputStream fileos = null;
 
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("IOException", "exception in createNewFile() method");
-      return returnValue;
-    }
-
-    // we have to bind the new file with a FileOutputStream
-    FileOutputStream fileos = null;
-
-    try {
       fileos = new FileOutputStream(newxmlfile);
 
-    } catch (FileNotFoundException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("FileNotFoundException", "can't create FileOutputStream");
-    }
-
-    // we create a XmlSerializer in order to write xml data
-    XmlSerializer serializer = Xml.newSerializer();
-    try {
+      // we create a XmlSerializer in order to write xml data
+      XmlSerializer serializer = Xml.newSerializer();
       // we set the FileOutputStream as output for the serializer, using UTF-8
       // encoding
       serializer.setOutput(fileos, "UTF-8");
@@ -315,13 +300,12 @@ public class ServerConfigurationUtils {
       // finally we close the file stream
 
       fileos.close();
+      return true;
 
     } catch (IOException e) {
-
       return false;
     }
 
-    return returnValue;
   }
 
 }

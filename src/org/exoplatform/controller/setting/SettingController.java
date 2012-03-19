@@ -1,19 +1,18 @@
 package org.exoplatform.controller.setting;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.ServerItemLayout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,25 +32,26 @@ public class SettingController {
 
   public void initLocation() {
     String locallize = LocalizationHelper.getInstance().getLocation();
-    if (locallize.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) {
-      setFrenchLocation();
+    if (locallize != null) {
+      if (locallize.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) {
+        setFrenchLocation();
+      } else {
+        setEnglishLocation();
+      }
     } else {
       setEnglishLocation();
     }
+
   }
 
   public boolean updateLocallize(String localize) {
-    try {
-      SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
-      editor.putString(ExoConstants.EXO_PRF_LOCALIZE, localize);
-      editor.commit();
-      LocalizationHelper.getInstance().setLocation(localize);
-      ResourceBundle bundle = new PropertyResourceBundle(mContext.getAssets().open(localize));
-      LocalizationHelper.getInstance().setResourceBundle(bundle);
-      return true;
-    } catch (IOException e) {
-      return false;
-    }
+    SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
+    editor.putString(ExoConstants.EXO_PRF_LOCALIZE, localize);
+    editor.commit();
+    LocalizationHelper.getInstance().setLocation(localize);
+    Configuration config = new Configuration();
+    SettingUtils.setLocalization(mContext, config, localize);
+    return true;
 
   }
 

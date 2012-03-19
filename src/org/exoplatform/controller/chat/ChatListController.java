@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.exoplatform.R;
 import org.exoplatform.model.ChatMemberInfo;
 import org.exoplatform.model.ChatMessageContent;
 import org.exoplatform.singleton.ChatServiceHelper;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.ChatDetailActivity;
 import org.exoplatform.ui.ChatListActivity;
 import org.exoplatform.widget.WarningDialog;
@@ -108,11 +108,12 @@ public class ChatListController {
                 ((Activity) mContext).runOnUiThread(new Runnable() {
 
                   public void run() {
-                    
-                    LocalizationHelper bundle = LocalizationHelper.getInstance();
-                    
+
                     Toast msg = Toast.makeText(mContext,
-                                               bundle.getString("MessageFrom") + " " + chatFromName,
+                                               mContext.getResources()
+                                                       .getString(R.string.MessageFrom)
+                                                   + " "
+                                                   + chatFromName,
                                                Toast.LENGTH_LONG);
                     msg.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                     msg.show();
@@ -252,7 +253,6 @@ public class ChatListController {
 
   public void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == ChatListLoadTask.Status.RUNNING) {
-      mLoadTask.onCancelled();
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
@@ -260,8 +260,7 @@ public class ChatListController {
 
   // Set language
   private void changeLanguage() {
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
-    titleString = bundle.getString("Warning");
-    okString = bundle.getString("OK");
+    titleString = mContext.getResources().getString(R.string.Warning);
+    okString = mContext.getResources().getString(R.string.OK);
   }
 }

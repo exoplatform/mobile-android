@@ -3,15 +3,16 @@ package org.exoplatform.ui.social;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.social.SocialDetailController;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.SocialDetailWaitingDialog;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewStub;
 import android.view.View.OnClickListener;
+import android.view.ViewStub;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialDetailActivity extends MyActionBar implements OnClickListener {
+  private SocialDetailWaitingDialog  _progressDialog;
 
   public LinearLayout                startScreen;
 
@@ -77,7 +79,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
                                                   commentLayoutWrap,
                                                   likeButton,
                                                   contentDetailLayout,
-                                                  textView_Like_Count);
+                                                  textView_Like_Count,
+                                                  _progressDialog);
     detailController.onLoad();
   }
 
@@ -87,10 +90,13 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     detailController.onLoad();
   }
 
-  private void destroy() {
-    super.onDestroy();
+  @Override
+  public void finish() {
     detailController.onCancelLoad();
-    finish();
+    if (_progressDialog != null) {
+      _progressDialog.dismiss();
+    }
+    super.finish();
   }
 
   @Override
@@ -105,7 +111,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
       if (SocialActivity.socialActivity != null) {
         SocialActivity.socialActivity.finish();
       }
-      destroy();
+      finish();
       break;
     case 0:
       detailController.onLoad();
@@ -146,11 +152,11 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   }
 
   private void changeLanguage() {
-    LocalizationHelper location = LocalizationHelper.getInstance();
-    String strTitle = location.getString("ActivityDetail");
+    Resources resource = getResources();
+    String strTitle = resource.getString(R.string.ActivityDetail);
     setTitle(strTitle);
-    yourCommentText = location.getString("YourComment");
-    commentEmptyString = location.getString("EmptyComment");
+    yourCommentText = resource.getString(R.string.YourComment);
+    commentEmptyString = resource.getString(R.string.EmptyComment);
   }
 
 }

@@ -2,7 +2,6 @@ package org.exoplatform.widget;
 
 import org.exoplatform.R;
 import org.exoplatform.controller.social.ComposeMessageController;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.utils.ExoConstants;
 
@@ -12,11 +11,8 @@ import android.content.Intent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class AddPhotoDialog extends Dialog implements android.view.View.OnClickListener {
-
-  private TextView                 titleView;
 
   private Button                   takePhotoButton;
 
@@ -24,15 +20,7 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
 
   private Button                   cancelButton;
 
-  private String                   cancelText;
-
   private Activity                 mContext;
-
-  private String                   addPhotoTitle;
-
-  private String                   takePhotoText;
-
-  private String                   photoLibraryText;
 
   private ComposeMessageController messageController;
 
@@ -61,18 +49,11 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
 
   private void init() {
 
-    changeLanguage();
-
-    titleView = (TextView) findViewById(R.id.add_photo_dialog_title_view);
-    titleView.setText(addPhotoTitle);
     takePhotoButton = (Button) findViewById(R.id.add_photo_take_button);
-    takePhotoButton.setText(takePhotoText);
     takePhotoButton.setOnClickListener(this);
     libraryButton = (Button) findViewById(R.id.add_photo_library_button);
-    libraryButton.setText(photoLibraryText);
     libraryButton.setOnClickListener(this);
     cancelButton = (Button) findViewById(R.id.add_photo_cancel_button);
-    cancelButton.setText(cancelText);
     cancelButton.setOnClickListener(this);
 
   }
@@ -98,11 +79,4 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
     }
   }
 
-  private void changeLanguage() {
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
-    cancelText = bundle.getString("Cancel");
-    addPhotoTitle = bundle.getString("AddAPhoto");
-    takePhotoText = bundle.getString("TakeAPhoto");
-    photoLibraryText = bundle.getString("PhotoLibrary");
-  }
 }

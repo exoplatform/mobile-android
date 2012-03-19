@@ -3,11 +3,12 @@ package org.exoplatform.ui.social;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.social.SocialController;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.SocialWaitingDialog;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialActivity extends MyActionBar {
+  private SocialWaitingDialog  _progressDialog;
+
   private LinearLayout         activityStreamWrap;
 
   private SocialController     socialController;
@@ -29,8 +32,8 @@ public class SocialActivity extends MyActionBar {
   private String               title;
 
   private String               emptyString;
-  
-//  private ListView socialListView;
+
+  // private ListView socialListView;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -41,22 +44,22 @@ public class SocialActivity extends MyActionBar {
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     addActionBarItem();
     getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
-    
+
     setActionBarContentView(R.layout.activitybrowserview);
-    
+
     socialActivity = this;
-//    socialListView = (ListView) findViewById(R.id.social_listview);
-//    socialListView.setDividerHeight(0);
-//    socialListView.setSmoothScrollbarEnabled(true);
-//    socialListView.setScrollbarFadingEnabled(false);
-    
+    // socialListView = (ListView) findViewById(R.id.social_listview);
+    // socialListView.setDividerHeight(0);
+    // socialListView.setSmoothScrollbarEnabled(true);
+    // socialListView.setScrollbarFadingEnabled(false);
+
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     changeLanguage();
     init();
   }
 
   private void init() {
-    socialController = new SocialController(this, activityStreamWrap);
+    socialController = new SocialController(this, activityStreamWrap, _progressDialog);
     socialController.onLoad();
 
   }
@@ -78,6 +81,14 @@ public class SocialActivity extends MyActionBar {
 
   public void reloadActivity() {
     socialController.onLoad();
+  }
+
+  @Override
+  public void finish() {
+    if (_progressDialog != null) {
+      _progressDialog.dismiss();
+    }
+    super.finish();
   }
 
   @Override
@@ -109,10 +120,10 @@ public class SocialActivity extends MyActionBar {
   }
 
   private void changeLanguage() {
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
-    title = bundle.getString("ActivityStream");
+    Resources resource = getResources();
+    title = resource.getString(R.string.ActivityStream);
     setTitle(title);
-    emptyString = bundle.getString("EmptyActivity");
+    emptyString = resource.getString(R.string.EmptyActivity);
   }
 
 }

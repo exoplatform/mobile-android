@@ -4,10 +4,9 @@ import greendroid.util.Config;
 
 import java.net.URI;
 
+import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ChatServiceHelper;
-import org.exoplatform.singleton.LocalizationHelper;
-import org.exoplatform.utils.UserTask;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -15,9 +14,10 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
-public class ChatListLoadTask extends UserTask<Void, Void, Boolean> {
+public class ChatListLoadTask extends AsyncTask<Void, Void, Boolean> {
   private String                loadingData;
 
   private String                okString;
@@ -95,11 +95,10 @@ public class ChatListLoadTask extends UserTask<Void, Void, Boolean> {
   }
 
   private void changeLanguage() {
-    LocalizationHelper location = LocalizationHelper.getInstance();
-    loadingData = location.getString("LoadingData");
-    okString = location.getString("OK");
-    titleString = location.getString("Warning");
-    contentString = location.getString("ConnectionError");
+    loadingData = mContext.getResources().getString(R.string.LoadingData);
+    okString =mContext.getResources().getString(R.string.OK); 
+    titleString =mContext.getResources().getString(R.string.Warning); 
+    contentString =mContext.getResources().getString(R.string.ConnectionError); 
   }
 
   private class ChatListWaitingDialog extends WaitingDialog {

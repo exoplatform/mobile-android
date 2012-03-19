@@ -30,7 +30,7 @@ public class ExoConstants {
 
   public static final int    COMPOSE_COMMENT_TYPE          = 1;
 
-  public static final int    NUMBER_OF_ACTIVITY            = 20;
+  public static final int    NUMBER_OF_ACTIVITY            = 50;
 
   public static final int    NUMBER_OF_MORE_ACTIVITY       = 20;
 
@@ -49,8 +49,6 @@ public class ExoConstants {
   public static final String HTTP_PROTOCOL                 = "http";
 
   public static final String HTTPS_PROTOCOL                = "https";
-
-  public static final String ACTIVITY_HOST                 = "192.168.1.83";
 
   public static final int    ACTIVITY_PORT                 = 80;
 
@@ -90,9 +88,9 @@ public class ExoConstants {
 
   public static final String EXO_PRF_LOCALIZE              = "exo_prf_localize";
 
-  public static final String ENGLISH_LOCALIZATION          = "LocalizeEN.properties";
+  public static final String ENGLISH_LOCALIZATION          = "LocalizeEN";
 
-  public static final String FRENCH_LOCALIZATION           = "LocalizeFR.properties";
+  public static final String FRENCH_LOCALIZATION           = "LocalizeFR";
 
   public static final String DOCUMENT_PATH                 = "/rest/private/jcr/repository/collaboration/Users";
 

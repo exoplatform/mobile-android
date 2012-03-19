@@ -2,6 +2,7 @@ package org.exoplatform.controller.setting;
 
 import java.util.ArrayList;
 
+import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.LocalizationHelper;
@@ -12,27 +13,28 @@ import org.exoplatform.utils.ServerConfigurationUtils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class SettingServerEditionController {
-  private Context              mContext;
+  private Context                  mContext;
 
-  private ArrayList<ServerObjInfo> serverInfoList;     // List
+  private ArrayList<ServerObjInfo> serverInfoList;      // List
 
   // of
   // server
   // url
 
-  private boolean              isNewServer;
+  private boolean                  isNewServer;
 
-  private int                  selectedServerIndex;
+  private int                      selectedServerIndex;
 
-  private String               serverIsEmpty;
+  private String                   serverIsEmpty;
 
-  private String               serverisExisted;
-  
-  private String               serverNameURLInvalid;
+  private String                   serverisExisted;
+
+  private String                   serverNameURLInvalid;
 
   public SettingServerEditionController(Context context) {
     mContext = context;
@@ -43,27 +45,28 @@ public class SettingServerEditionController {
     serverInfoList = ServerSettingHelper.getInstance().getServerInfoList();
     isNewServer = ServerSettingHelper.getInstance().getIsNewServer();
     selectedServerIndex = ServerSettingHelper.getInstance().getSelectedServerIndex();
-//    version = ServerSettingHelper.getInstance().getVersion();
+    // version = ServerSettingHelper.getInstance().getVersion();
     changeLanguage();
   }
 
   public void onAccept(ServerObjInfo myServerObj, ServerObjInfo serverObj) {
-    
-    if (myServerObj._strServerName.length() == 0
-        || myServerObj._strServerUrl.length() == 0) {
-     
+
+    if (myServerObj._strServerName.length() == 0 || myServerObj._strServerUrl.length() == 0) {
+
       Toast.makeText(mContext, serverIsEmpty, Toast.LENGTH_SHORT).show();
       return;
     }
-    
-    if(ExoDocumentUtils.isContainSpecialChar(myServerObj._strServerName, ExoConstants.SPECIAL_CHAR_NAME_SET) || 
-        ExoDocumentUtils.isContainSpecialChar(myServerObj._strServerUrl, ExoConstants.SPECIAL_CHAR_URL_SET)) {
-    
+
+    if (ExoDocumentUtils.isContainSpecialChar(myServerObj._strServerName,
+                                              ExoConstants.SPECIAL_CHAR_NAME_SET)
+        || ExoDocumentUtils.isContainSpecialChar(myServerObj._strServerUrl,
+                                                 ExoConstants.SPECIAL_CHAR_URL_SET)) {
+
       Toast.makeText(mContext, serverNameURLInvalid, Toast.LENGTH_SHORT).show();
       return;
-      
+
     }
-    
+
     if (isNewServer) {
       boolean isExisted = false;
       for (int i = 0; i < serverInfoList.size(); i++) {
@@ -80,8 +83,8 @@ public class SettingServerEditionController {
         myServerObj._bSystemServer = false;
         serverInfoList.add(myServerObj);
         ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
-                                                           "DefaultServerList.xml",
-                                                           "");
+                                                             "DefaultServerList.xml",
+                                                             "");
       }
     } else // Update server
     {
@@ -107,8 +110,8 @@ public class SettingServerEditionController {
         serverObj._strServerUrl = myServerObj._strServerUrl;
         serverInfoList.add(selectedServerIndex, serverObj);
         ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
-                                                           "DefaultServerList.xml",
-                                                           "");
+                                                             "DefaultServerList.xml",
+                                                             "");
       }
     }
     onSave();
@@ -127,8 +130,8 @@ public class SettingServerEditionController {
       }
       serverInfoList.remove(selectedServerIndex);
       ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
-                                                         "DefaultServerList.xml",
-                                                         "");
+                                                           "DefaultServerList.xml",
+                                                           "");
 
     }
     onSave();
@@ -149,12 +152,11 @@ public class SettingServerEditionController {
   }
 
   private void changeLanguage() {
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
-    serverIsEmpty = bundle.getString("WarningServerNameIsEmpty");
-    serverisExisted = bundle.getString("WarningServerIsExist");
-    serverNameURLInvalid = bundle.getString("SpecialCharacters");
-    
-    
+    Resources resource = mContext.getResources();
+    serverIsEmpty = resource.getString(R.string.WarningServerNameIsEmpty);
+    serverisExisted = resource.getString(R.string.WarningServerIsExist);
+    serverNameURLInvalid = resource.getString(R.string.SpecialCharacters);
+
   }
 
 }

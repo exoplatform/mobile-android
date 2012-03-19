@@ -30,6 +30,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.widget.ImageView;
 
@@ -58,9 +59,9 @@ public class ImageDownloader implements OnLowMemoryListener {
       /**
 		 * 
 		 */
-		private static final long serialVersionUID = 1L;
+      private static final long serialVersionUID = 1L;
 
-	@Override
+      @Override
       protected boolean removeEldestEntry(Map.Entry<String, Bitmap> eldest) {
         if (size() > HARD_CACHE_CAPACITY) {
           sSoftBitmapCache.put(eldest.getKey(), new SoftReference<Bitmap>(eldest.getValue()));
@@ -107,6 +108,7 @@ public class ImageDownloader implements OnLowMemoryListener {
    */
   public void download(String url, ImageView imageView, String cookie) {
     // resetPurgeTimer();
+    url = url.replaceAll(" ", "%20");
     Bitmap bitmap = getBitmapFromCache(url);
 
     if (bitmap == null) {
@@ -232,7 +234,7 @@ public class ImageDownloader implements OnLowMemoryListener {
   /**
    * The actual AsyncTask that will asynchronously download the image.
    */
-  class BitmapDownloaderTask extends UserTask<String, Void, Bitmap> {
+  class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
     private static final int               IO_BUFFER_SIZE = 4 * 1024;
 
     private String                         url;

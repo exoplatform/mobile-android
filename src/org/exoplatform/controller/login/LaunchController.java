@@ -2,10 +2,7 @@ package org.exoplatform.controller.login;
 
 import greendroid.util.Config;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -15,17 +12,17 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.utils.ServerConfigurationUtils;
+import org.exoplatform.utils.SettingUtils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.os.Environment;
 import android.util.Log;
 
 public class LaunchController {
   private SharedPreferences        sharedPreference;
-
-  private ResourceBundle           bundle;
 
   private Context                  context;
 
@@ -51,33 +48,25 @@ public class LaunchController {
     String strLocalize;
     strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE,
                                              ExoConstants.EXO_PRF_LOCALIZE);
+    /*
+     * check if localize file name is null or not assigned then default locale
+     * is English
+     */
 
-    // check if localize file name is null or not assigned then default is
-    // "LocalizeEN.properties" file
     if (strLocalize == null || strLocalize.equalsIgnoreCase(ExoConstants.EXO_PRF_LOCALIZE))
       strLocalize = ExoConstants.ENGLISH_LOCALIZATION;
+    Configuration config = new Configuration();
+    SettingUtils.setLocalization(context, config, strLocalize);
 
-    try {
-      bundle = new PropertyResourceBundle(context.getAssets().open(strLocalize));
-      LocalizationHelper.getInstance().setLocation(strLocalize);
-
-      LocalizationHelper.getInstance().setResourceBundle(bundle);
-      AccountSetting.getInstance()
-                    .setUsername(sharedPreference.getString(ExoConstants.EXO_PRF_USERNAME, ""));
-      AccountSetting.getInstance()
-                    .setPassword(sharedPreference.getString(ExoConstants.EXO_PRF_PASSWORD, ""));
-      AccountSetting.getInstance()
-                    .setDomainIndex(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX,
-                                                               "-1"));
-      AccountSetting.getInstance()
-                    .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
-
-    } catch (IOException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("Exception", "Launch information is error!");
-    }
-    // get server version information
-    // ExoConnectionUtils.checkPLFVersion();
+    AccountSetting.getInstance()
+                  .setUsername(sharedPreference.getString(ExoConstants.EXO_PRF_USERNAME, ""));
+    AccountSetting.getInstance()
+                  .setPassword(sharedPreference.getString(ExoConstants.EXO_PRF_PASSWORD, ""));
+    AccountSetting.getInstance()
+                  .setDomainIndex(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX,
+                                                             "-1"));
+    AccountSetting.getInstance()
+                  .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
   }
 
   private void getServerInfo() {

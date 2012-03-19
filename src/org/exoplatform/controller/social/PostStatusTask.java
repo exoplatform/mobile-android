@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
-import org.exoplatform.singleton.LocalizationHelper;
+import org.exoplatform.R;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
@@ -14,15 +14,17 @@ import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.utils.UserTask;
+import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.WebdavMethod;
-import org.exoplatform.widget.WaitingDialog;
+import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.os.AsyncTask;
 
-public class PostStatusTask extends UserTask<Void, Void, Integer> {
+public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
   private PostWaitingDialog        _progressDialog;
 
   private Context                  mContext;
@@ -46,17 +48,19 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
   public PostStatusTask(Context context,
                         String dir,
                         String content,
-                        ComposeMessageController controller) {
+                        ComposeMessageController controller,
+                        PostWaitingDialog dialog) {
     mContext = context;
     messageController = controller;
     sdcard_temp_dir = dir;
     composeMessage = content;
+    _progressDialog = dialog;
     changeLanguage();
   }
 
   @Override
   public void onPreExecute() {
-    _progressDialog = new PostWaitingDialog(mContext, null, sendingData);
+    _progressDialog = new PostWaitingDialog(mContext, messageController, null, sendingData);
     _progressDialog.show();
   }
 
@@ -71,9 +75,13 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
         File file = new File(sdcard_temp_dir);
         String imageDir = uploadUrl + "/" + file.getName();
         if (file != null) {
-          ExoDocumentUtils.putFileToServerFromLocal(imageDir, file, ExoConstants.IMAGE_TYPE);
-          Map<String, String> templateParams = new HashMap<String, String>();
 
+          File tempFile = PhotoUtils.reziseFileImage(file);
+          if (tempFile != null) {
+            ExoDocumentUtils.putFileToServerFromLocal(imageDir, tempFile, ExoConstants.IMAGE_TYPE);
+            tempFile.delete();
+          }
+          Map<String, String> templateParams = new HashMap<String, String>();
           activityImlp.setType("DOC_ACTIVITY");
           String pathExtension = "jcr/repository/collaboration";
           int indexOfDocLink = imageDir.indexOf(pathExtension);
@@ -144,24 +152,11 @@ public class PostStatusTask extends UserTask<Void, Void, Integer> {
   }
 
   private void changeLanguage() {
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
-    sendingData = bundle.getString("SendingData");
-    okString = bundle.getString("OK");
-    errorString = bundle.getString("PostError");
-    warningTitle = bundle.getString("Warning");
+    Resources resource = mContext.getResources();
+    sendingData = resource.getString(R.string.SendingData);
+    okString = resource.getString(R.string.OK);
+    errorString = resource.getString(R.string.PostError);
+    warningTitle = resource.getString(R.string.Warning);
   }
 
-  private class PostWaitingDialog extends WaitingDialog {
-
-    public PostWaitingDialog(Context context, String titleString, String contentString) {
-      super(context, titleString, contentString);
-    }
-
-    @Override
-    public void onBackPressed() {
-      super.onBackPressed();
-      messageController.onCancelPostTask();
-    }
-
-  }
 }

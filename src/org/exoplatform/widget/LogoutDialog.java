@@ -2,10 +2,10 @@ package org.exoplatform.widget;
 
 import org.exoplatform.R;
 import org.exoplatform.controller.home.HomeController;
-import org.exoplatform.singleton.LocalizationHelper;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,9 +20,12 @@ public class LogoutDialog extends Dialog implements OnClickListener {
 
   private HomeController homeController;
 
+  private Context        mContext;
+
   public LogoutDialog(Context context, HomeController controller) {
     super(context);
     setContentView(R.layout.logout_dialog_layout);
+    mContext = context;
     homeController = controller;
     contentView = (TextView) findViewById(R.id.logout_content);
 
@@ -34,7 +37,7 @@ public class LogoutDialog extends Dialog implements OnClickListener {
     changeLanguage();
   }
 
-//  @Override
+  // @Override
   public void onClick(View view) {
     if (view.equals(okButton)) {
       homeController.onFinish();
@@ -47,15 +50,14 @@ public class LogoutDialog extends Dialog implements OnClickListener {
   }
 
   private void changeLanguage() {
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
-    String titleString = bundle.getString("LogoutTitle");
+    Resources res = mContext.getResources();
+    String titleString = res.getString(R.string.LogoutTitle);
     setTitle(titleString);
-    String contentString = bundle.getString("LogoutContent");
+    String contentString = res.getString(R.string.LogoutContent);
     contentView.setText(contentString);
-    String okString = bundle.getString("OK");
+    String okString = res.getString(R.string.OK);
     okButton.setText(okString);
-    String cancelString = bundle.getString("Cancel");
+    String cancelString = res.getString(R.string.Cancel);
     cancelButton.setText(cancelString);
   }
-
 }

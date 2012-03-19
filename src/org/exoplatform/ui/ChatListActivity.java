@@ -3,9 +3,9 @@ package org.exoplatform.ui;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.chat.ChatListController;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.widget.MyActionBar;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
@@ -43,10 +43,10 @@ public class ChatListActivity extends MyActionBar {
   }
 
   private void changeLanguage() {
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
-    String strTitle = bundle.getString("ChatTitle");
+    Resources resource = getResources();
+    String strTitle = resource.getString(R.string.ChatApplication);
     setTitle(strTitle);
-    emptyChatString = bundle.getString("EmptyContact");
+    emptyChatString = resource.getString(R.string.EmptyContact);
   }
 
   // set empty view

@@ -4,19 +4,9 @@ import greendroid.image.ImageProcessor;
 
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
 import org.exoplatform.model.GadgetInfo;
-import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.WebViewActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.RoundedImageView;
 
 import android.content.Context;
@@ -34,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor {
 
@@ -169,38 +158,11 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
   }
 
   public void showGadget(GadgetInfo gadget) {
-
-    // ExoApplicationsController2.webViewMode = 0;
-    HttpParams httpParameters = new BasicHttpParams();
-    HttpConnectionParams.setConnectionTimeout(httpParameters, 30000);
-    HttpConnectionParams.setSoTimeout(httpParameters, 30000);
-    HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-    DefaultHttpClient client = new DefaultHttpClient();
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
-    HttpGet get = new HttpGet(gadget.getGadgetUrl());
-
-    try {
-      get.setHeader("cookie", ExoConnectionUtils._strCookie);
-      client.getCredentialsProvider().setCredentials(AccountSetting.getInstance().getAuthScope(),
-                                                     AccountSetting.getInstance().getCredentials());
-      HttpResponse response = client.execute(get);
-      int status = response.getStatusLine().getStatusCode();
-      if (status < 200 || status >= 300) {
-
-        Toast.makeText(mContext, bundle.getString("ConnectionTimedOut"), Toast.LENGTH_SHORT).show();
-      } else {
-        WebViewActivity._titlebar = gadget.getGadgetName();
-        WebViewActivity._url = gadget.getGadgetUrl();
-
-        Intent next = new Intent(mContext, WebViewActivity.class);
-        next.putExtra(ExoConstants.WEB_VIEW_TYPE, 0);
-        mContext.startActivity(next);
-      }
-    } catch (Exception e) {
-      Toast.makeText(mContext, bundle.getString("ConnectionTimedOut"), Toast.LENGTH_SHORT).show();
-    } finally {
-      client.getConnectionManager().shutdown();
-    }
+    String gadgetUrl = gadget.getGadgetUrl();
+    WebViewActivity._titlebar = gadget.getGadgetName();
+    WebViewActivity._url = gadgetUrl;
+    Intent next = new Intent(mContext, WebViewActivity.class);
+    mContext.startActivity(next);
 
   }
 

@@ -8,7 +8,6 @@ import java.util.List;
 import org.exoplatform.model.ChatMemberInfo;
 import org.exoplatform.model.ChatMessageContent;
 import org.exoplatform.singleton.ChatServiceHelper;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.widget.MyActionBar;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
@@ -18,6 +17,7 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.util.StringUtils;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -289,12 +289,10 @@ public class ChatDetailActivity extends MyActionBar {
 
   // Set language
   private void changeLanguage() {
-    LocalizationHelper bundle = LocalizationHelper.getInstance();
-    String strsendMessageBtn = bundle.getString("Send");
-    meText = bundle.getString("Me");
-    messageFromText = bundle.getString("MessageFrom");
-    // titleString = bundle.getString("Warning");
-    // okString = bundle.getString("OK");
+    Resources resource = getResources();
+    String strsendMessageBtn = resource.getString(R.string.Send);
+    meText = resource.getString(R.string.Me);
+    messageFromText = resource.getString(R.string.MessageFrom);
     sendMessageBtn.setText(strsendMessageBtn);
 
   }

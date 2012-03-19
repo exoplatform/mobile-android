@@ -17,49 +17,31 @@
 package org.exoplatform.utils;
 
 import java.net.URI;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.FileEntity;
 
+import org.apache.http.client.methods.HttpRequestBase;
 
 /**
- * Created by The eXo Platform SAS
- * Author : eXoPlatform
- *          exo@exoplatform.com
- * Aug 17, 2011  
+ * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Aug
+ * 17, 2011
  */
-public class WebdavMethod extends HttpRequestBase{
+public class WebdavMethod extends HttpRequestBase {
 
-  String method;
-  String sourceUriStr, destinationUriStr;
-  FileEntity entity;
-  
-  //Constructor for delete, create new folder, check reachability url
-  public WebdavMethod(String method, String url)
-  {
+  private String method;
+
+  // Constructor for delete, create new folder, check reachability url
+  public WebdavMethod(String method, String sourceUriStr) {
     this.method = method;
-    this.sourceUriStr = url;
     this.setURI(URI.create(sourceUriStr));
   }
-  
-//Constructor for upload
-  public WebdavMethod(String method, String url, FileEntity fileEntity)
-  {
-    this.method = method;
-    this.sourceUriStr = url;
-    this.entity = fileEntity;
-  }
 
-  //Constructor for copy, move
-  public WebdavMethod(String method, String source, String destination)
-  {
+  // Constructor for copy, move
+  public WebdavMethod(String method, String sourceUriStr, String destinationUriStr) {
     this.method = method;
-    this.sourceUriStr = source;
-    this.destinationUriStr = destination;
     this.setURI(URI.create(sourceUriStr));
     this.setHeader("Overwrite", "T");
     this.setHeader("Destination", destinationUriStr);
   }
-    
+
   @Override
   public String getMethod() {
     return method;

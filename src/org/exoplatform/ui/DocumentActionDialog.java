@@ -4,7 +4,6 @@ import org.exoplatform.R;
 import org.exoplatform.controller.document.DocumentActionAdapter;
 import org.exoplatform.model.DocumentActionDescription;
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.LocalizationHelper;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -69,23 +68,12 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
     _txtvFileName = (TextView) findViewById(R.id.TextView_Title);
 
-    changeLanguage();
-
     setDocumentActionAdapter();
 
   }
 
   public void setDocumentActionAdapter() {
     _listViewFileAction.setAdapter(_documentActionAdapter);
-  }
-
-  // Set language
-  public void changeLanguage() {
-
-    LocalizationHelper local = LocalizationHelper.getInstance();
-
-    strCannotBackToPreviousPage = local.getString("CannotBackToPreviousPage");
-
   }
 
   public void onClick(View v) {

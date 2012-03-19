@@ -1,83 +1,54 @@
 package org.exoplatform.controller.dashboard;
 
+import java.io.InputStream;
 import java.util.ArrayList;
-import org.exoplatform.model.GadgetInfo;
+
+import org.apache.http.HttpResponse;
 import org.exoplatform.model.DashboardItem;
-import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.ui.DashboardActivity;
+import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.ConnectionErrorDialog;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import android.widget.ListView;
 
 public class DashboardController {
 
-  private DashboardActivity activity;
+  private String dashboardsCannotBeRetrieved = "";
 
-  private DashboardLoadTask mLoadTask;
-
-  private ListView          listView;
-
-  private String            dashboardsCannotBeRetrieved = "";
-
-  public DashboardController(DashboardActivity context, ListView list) {
-    activity = context;
-    listView = list;
-  }
-
-  public void onLoad() {
-    if (ExoConnectionUtils.isNetworkAvailableExt(activity)) {
-      if (mLoadTask == null || mLoadTask.getStatus() == DashboardLoadTask.Status.FINISHED) {
-        mLoadTask = (DashboardLoadTask) new DashboardLoadTask(activity, this).execute();
-      }
-    } else {
-      new ConnectionErrorDialog(activity).show();
-    }
-  }
-
-  public void onCancelLoad() {
-    if (mLoadTask != null && mLoadTask.getStatus() == DashboardLoadTask.Status.RUNNING) {
-      mLoadTask.onCancelled();
-      mLoadTask.cancel(true);
-      mLoadTask = null;
-    }
-  }
-
-  public void setAdapter(ArrayList<GadgetInfo> result) {
-    listView.setAdapter(new DashboardItemAdapter(activity, result));
+  public DashboardController() {
   }
 
   // Get Dashboards
-  public ArrayList<DashboardItem> getDashboards() {
+  public ArrayList<DashboardItem> getDashboards(HttpResponse response) {
 
-    AccountSetting acc = AccountSetting.getInstance();
-    String urlForDahboards = acc.getDomainName() + ExoConstants.DASHBOARD_PATH;
-    String result = ExoConnectionUtils.convertStreamToString(ExoConnectionUtils.sendRequestWithAuthorization(urlForDahboards));
+   
+    InputStream input = ExoConnectionUtils.sendRequest(response);
     ArrayList<DashboardItem> dashboards = new ArrayList<DashboardItem>();
+    if (input != null) {
 
-    JSONArray array = (JSONArray) JSONValue.parse(result);
+      String result = ExoConnectionUtils.convertStreamToString(input);
 
-    for (Object obj : array) {
-      JSONObject json = (JSONObject) obj;
-      String id = "";
-      String html = "";
-      String link = "";
-      String label = "";
-      if (json.get("id") != null)
-        id = json.get("id").toString();
-      if (json.get("html") != null)
-        html = json.get("html").toString();
-      if (json.get("link") != null)
-        link = json.get("link").toString();
-      if (json.get("label") != null)
-        label = json.get("label").toString();
+      JSONArray array = (JSONArray) JSONValue.parse(result);
 
-      DashboardItem dashboardItem = new DashboardItem(id, html, link, label);
+      for (Object obj : array) {
+        JSONObject json = (JSONObject) obj;
+        String id = "";
+        String html = "";
+        String link = "";
+        String label = "";
+        if (json.get("id") != null)
+          id = json.get("id").toString().trim();
+        if (json.get("html") != null)
+          html = json.get("html").toString().trim();
+        if (json.get("link") != null)
+          link = json.get("link").toString().trim();
+        if (json.get("label") != null)
+          label = json.get("label").toString().trim();
 
-      dashboards.add(dashboardItem);
+        DashboardItem dashboardItem = new DashboardItem(id, html, link, label);
+
+        dashboards.add(dashboardItem);
+      }
     }
 
     return dashboards;
@@ -85,46 +56,50 @@ public class DashboardController {
   }
 
   // Get Gadget in Dashboard
-  public ArrayList<GadgetInfo> getGadgetInTab(String tabName, String url) {
+  public ArrayList<GadgetInfo> getGadgetInTab(HttpResponse response,String tabName, String url) {
 
     try {
 
-      String result = ExoConnectionUtils.convertStreamToString(ExoConnectionUtils.sendRequestWithAuthorization(url));
+      InputStream input = ExoConnectionUtils.sendRequest(response);
       ArrayList<GadgetInfo> gadgets = new ArrayList<GadgetInfo>();
+      if (input != null) {
 
-      JSONArray array = (JSONArray) JSONValue.parse(result);
+        String result = ExoConnectionUtils.convertStreamToString(input);
 
-      int count = 0;
+        JSONArray array = (JSONArray) JSONValue.parse(result);
 
-      for (Object obj : array) {
+        int count = 0;
 
-        JSONObject json = (JSONObject) obj;
+        for (Object obj : array) {
 
-        String gadgetIcon = "";
-        String gadgetUrl = "";
-        String gadgetName = "";
-        String gadgetDescription = "";
+          JSONObject json = (JSONObject) obj;
 
-        if (json.get("gadgetIcon") != null)
-          gadgetIcon = json.get("gadgetIcon").toString();
-        if (json.get("gadgetUrl") != null)
-          gadgetUrl = json.get("gadgetUrl").toString();
-        if (json.get("gadgetName") != null)
-          gadgetName = json.get("gadgetName").toString();
+          String gadgetIcon = "";
+          String gadgetUrl = "";
+          String gadgetName = "";
+          String gadgetDescription = "";
 
-        if (json.get("gadgetDescription") != null)
-          gadgetDescription = json.get("gadgetDescription").toString();
+          if (json.get("gadgetIcon") != null)
+            gadgetIcon = json.get("gadgetIcon").toString();
+          if (json.get("gadgetUrl") != null)
+            gadgetUrl = json.get("gadgetUrl").toString();
+          if (json.get("gadgetName") != null)
+            gadgetName = json.get("gadgetName").toString();
 
-        GadgetInfo gadget = new GadgetInfo(gadgetName,
-                                           gadgetDescription,
-                                           gadgetUrl,
-                                           gadgetIcon,
-                                           null,
-                                           count);
+          if (json.get("gadgetDescription") != null)
+            gadgetDescription = json.get("gadgetDescription").toString();
 
-        gadgets.add(gadget);
+          GadgetInfo gadget = new GadgetInfo(gadgetName,
+                                             gadgetDescription,
+                                             gadgetUrl,
+                                             gadgetIcon,
+                                             null,
+                                             count);
 
-        count++;
+          gadgets.add(gadget);
+
+          count++;
+        }
       }
 
       return gadgets;

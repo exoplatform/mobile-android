@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
@@ -20,6 +19,7 @@ import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.SocialHeaderLayout;
 import org.exoplatform.widget.SocialShowMoreItem;
+import org.exoplatform.widget.SocialWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Intent;
@@ -32,44 +32,48 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class SocialController {
-  private int            number_of_activity;
 
-  private int            number_of_more_activity;
+  private SocialWaitingDialog _progressDialog;
 
-  private SocialActivity mContext;
+  private int                 number_of_activity;
 
-  private SocialLoadTask mLoadTask;
+  private int                 number_of_more_activity;
 
-  private LinearLayout   activityStreamWrap;
+  private SocialActivity      mContext;
 
-  private String         showMoreText;
+  private SocialLoadTask      mLoadTask;
 
-  private String         today;
+  private LinearLayout        activityStreamWrap;
 
-  private Resources      resource;
+  private String              showMoreText;
 
-  private String         minute;
+  private String              today;
 
-  private String         minutes;
+  private Resources           resource;
 
-  private String         hour;
+  private String              minute;
 
-  private String         hours;
+  private String              minutes;
 
-  private String         okString;
+  private String              hour;
 
-  private String         titleString;
+  private String              hours;
 
-  private int            title_high_light = R.drawable.social_activity_browse_header_highlighted_bg;
+  private String              okString;
 
-  private int            title_normal     = R.drawable.social_activity_browse_header_normal_bg;
+  private String              titleString;
+
+  private int                 title_high_light = R.drawable.social_activity_browse_header_highlighted_bg;
+
+  private int                 title_normal     = R.drawable.social_activity_browse_header_normal_bg;
 
   // private ListView socialListView;
 
-  public SocialController(SocialActivity context, LinearLayout layout) {
+  public SocialController(SocialActivity context, LinearLayout layout, SocialWaitingDialog dialog) {
     mContext = context;
     activityStreamWrap = layout;
     resource = context.getResources();
+    _progressDialog = dialog;
     onChangeLanguage();
     number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
     number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
@@ -78,7 +82,7 @@ public class SocialController {
   public void onLoad() {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this).execute(number_of_activity);
+        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this, _progressDialog).execute(number_of_activity);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -92,12 +96,6 @@ public class SocialController {
       mLoadTask = null;
     }
   }
-
-  // public void setListAdapter(ArrayList<SocialActivityInfo> result) {
-  // SocialAdapter adapter = new SocialAdapter(mContext, result);
-  // socialListView.setAdapter(adapter);
-  // socialListView.setOnScrollListener(new ListAdapterScrollListener(adapter));
-  // }
 
   public void setActivityList(ArrayList<SocialActivityInfo> result) {
 
@@ -201,7 +199,7 @@ public class SocialController {
 
   private String getActivityStreamHeader(long postedTime) {
 
-    String strSection = SocialActivityUtil.getPostedTimeString(postedTime);
+    String strSection = SocialActivityUtil.getPostedTimeString(mContext, postedTime);
     // Check activities of today
     if (strSection.contains(minute) || strSection.contains(minutes) || strSection.contains(hour)
         || strSection.contains(hours)) {
@@ -215,15 +213,15 @@ public class SocialController {
   }
 
   private void onChangeLanguage() {
-    LocalizationHelper location = LocalizationHelper.getInstance();
-    showMoreText = location.getString("ShowMore");
-    minute = location.getString("Minute");
-    minutes = location.getString("Minutes");
-    hour = location.getString("Hour");
-    hours = location.getString("Hours");
-    today = location.getString("Today");
-    okString = location.getString("OK");
-    titleString = location.getString("Warning");
+    Resources resource = mContext.getResources();
+    showMoreText = resource.getString(R.string.ShowMore);
+    minute = resource.getString(R.string.Minute);
+    minutes = resource.getString(R.string.Minutes);
+    hour = resource.getString(R.string.Hour);
+    hours = resource.getString(R.string.Hours);
+    today = resource.getString(R.string.Today);
+    okString = resource.getString(R.string.OK);
+    titleString = resource.getString(R.string.Warning);
 
   }
 

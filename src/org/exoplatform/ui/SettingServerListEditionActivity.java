@@ -4,7 +4,6 @@ import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.setting.ModifyServerAdapter;
 import org.exoplatform.controller.setting.ModifyServerListenner;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.widget.MyActionBar;
 
@@ -30,7 +29,7 @@ public class SettingServerListEditionActivity extends MyActionBar {
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.actionbaraddbutton);
-    String serverListText = LocalizationHelper.getInstance().getString("ServerList");
+    String serverListText = getResources().getString(R.string.ServerList);
     setTitle(serverListText);
     setServerAdapter();
   }
@@ -51,7 +50,7 @@ public class SettingServerListEditionActivity extends MyActionBar {
 
   // Create Setting Menu
   public boolean onCreateOptionsMenu(Menu menu) {
-    String addServer = LocalizationHelper.getInstance().getString("AddAServer");
+    String addServer = getResources().getString(R.string.AddAServer);
     menu.add(0, 1, 0, addServer);
     return true;
   }
