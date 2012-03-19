@@ -1,21 +1,26 @@
 package org.exoplatform.controller.document;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.utils.UserTask;
-import org.exoplatform.widget.WaitingDialog;
+import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.widget.DocumentWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.view.View;
 
-public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
+import com.cyrilmottier.android.greendroid.R;
+
+public class DocumentLoadTask extends AsyncTask<Integer, Void, Boolean> {
   private DocumentWaitingDialog _progressDialog;
 
   private Context               mContext;
@@ -38,28 +43,32 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   private DocumentActivity      documentActivity;
 
-  private ArrayList<ExoFile>    _documentList = new ArrayList<ExoFile>();
+  private ArrayList<ExoFile>    _documentList;
+
+  private Resources             resource;
 
   public DocumentLoadTask(Context context,
                           DocumentActivity activity,
                           String source,
                           String destination,
-                          int action) {
+                          int action,
+                          DocumentWaitingDialog progressDialog) {
     mContext = context;
+    resource = mContext.getResources();
     documentActivity = activity;
     strSourceUrl = source;
     strDestinationUrl = destination;
     actionID = action;
+    _progressDialog = progressDialog;
 
     changeLanguage();
   }
 
   private void changeLanguage() {
-    LocalizationHelper location = LocalizationHelper.getInstance();
-    loadingData = location.getString("LoadingData");
-    okString = location.getString("OK");
-    titleString = location.getString("Warning");
-    contentString = location.getString("ConnectionError");
+    loadingData = resource.getString(R.string.LoadingData);
+    okString = resource.getString(R.string.OK);
+    titleString = resource.getString(R.string.Warning);
+    contentString = resource.getString(R.string.ConnectionError);
   }
 
   @Override
@@ -71,44 +80,53 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   @Override
   public Boolean doInBackground(Integer... params) {
-    // Send authenticate each time we access to document driver or folder
     boolean result = true;
-
+    _documentList = new ArrayList<ExoFile>();
     try {
-    	ExoConnectionUtils.onReLogin();
+      /*
+       * Checking the session status each time we retrieve files/folders. If
+       * time out, re logging in
+       */
+      if (ExoConnectionUtils.getResponseCode(strSourceUrl) == 0) {
+        ExoConnectionUtils.onReLogin();
+      }
       if (actionID == 1) {
-        result = documentActivity.deleteFile(strSourceUrl);
-        contentString = LocalizationHelper.getInstance().getString("DocumentCannotDelete");
+        result = ExoDocumentUtils.deleteFile(strSourceUrl);
+        contentString = resource.getString(R.string.DocumentCannotDelete);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
 
       } else if (actionID == 2) {
-        result = documentActivity.copyFile(strSourceUrl, strDestinationUrl);
-        contentString = LocalizationHelper.getInstance().getString("DocumentCopyPasteError");
+        result = ExoDocumentUtils.copyFile(strSourceUrl, strDestinationUrl);
+        contentString = resource.getString(R.string.DocumentCopyPasteError);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
 
       } else if (actionID == 3) {
-        result = documentActivity.moveFile(strSourceUrl, strDestinationUrl);
-        contentString = LocalizationHelper.getInstance().getString("DocumentCopyPasteError");
+        result = ExoDocumentUtils.moveFile(strSourceUrl, strDestinationUrl);
+        contentString = resource.getString(R.string.DocumentCopyPasteError);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
 
       } else if (actionID == 4) {
         File file = new File(documentActivity._sdcard_temp_dir);
-        contentString = LocalizationHelper.getInstance().getString("DocumentUploadError");
-        result = ExoDocumentUtils.putFileToServerFromLocal(strSourceUrl + "/" + file.getName(),
-                                                           file,
-                                                           "image/png");
+        contentString = resource.getString(R.string.DocumentUploadError);
+        File tempFile = PhotoUtils.reziseFileImage(file);
+        if (tempFile != null) {
+          result = ExoDocumentUtils.putFileToServerFromLocal(strSourceUrl + "/" + file.getName(),
+                                                             tempFile,
+                                                             ExoConstants.IMAGE_TYPE);
+          tempFile.delete();
+        }
 
       } else if (actionID == 5) {
-        result = documentActivity.renameFolder(strSourceUrl, strDestinationUrl);
-        contentString = LocalizationHelper.getInstance().getString("DocumentRenameError");
+        result = ExoDocumentUtils.renameFolder(strSourceUrl, strDestinationUrl);
+        contentString = resource.getString(R.string.DocumentRenameError);
         boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
         strSourceUrl = strDestinationUrl;
         if (!isFolder)
           strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
 
       } else if (actionID == 6) {
-        contentString = LocalizationHelper.getInstance().getString("DocumentCreateFolderError");
-        result = documentActivity.createFolder(strDestinationUrl);
+        contentString = resource.getString(R.string.DocumentCreateFolderError);
+        result = ExoDocumentUtils.createFolder(strDestinationUrl);
 
       }
       if (result == true) {
@@ -116,7 +134,7 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
       }
 
       return result;
-    } catch (RuntimeException e) {
+    } catch (IOException e) {
       return false;
     }
   }
@@ -140,29 +158,20 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
           documentActivity._fileForCurrentActionBar.nodeType = type;
         }
       }
-
-      if (documentActivity._documentAdapter == null) {
-
-        documentActivity._documentAdapter = new DocumentAdapter(documentActivity,
-                                                                documentActivity._fileForCurrentActionBar);
-        documentActivity.setDocumentAdapter();
-      }
-
       if (DocumentActivity._documentActivityInstance._fileForCurrentActionBar == null)
         DocumentActivity._documentActivityInstance.setListViewPadding(5, 0, 5, 0);
       else
         DocumentActivity._documentActivityInstance.setListViewPadding(-2, 0, -2, 0);
 
-      documentActivity._documentAdapter._documentList = _documentList;
-      documentActivity._documentAdapter.notifyDataSetChanged();
-      documentActivity.addOrRemoveFileActionButton();
-
       if (documentActivity._fileForCurrentActionBar == null)
-        documentActivity.setTitle(LocalizationHelper.getInstance().getString("Documents"));
+        documentActivity.setTitle(resource.getString(R.string.Documents));
       else
         documentActivity.setTitle(documentActivity._fileForCurrentActionBar.name);
+      documentActivity._documentAdapter = new DocumentAdapter(documentActivity, _documentList);
+      documentActivity.setDocumentAdapter();
+      documentActivity.addOrRemoveFileActionButton();
 
-      if (documentActivity._documentAdapter._documentList.size() == 0) {
+      if (_documentList.size() == 0) {
         documentActivity.setEmptyView(View.VISIBLE);
       } else
         documentActivity.setEmptyView(View.GONE);
@@ -176,17 +185,4 @@ public class DocumentLoadTask extends UserTask<Integer, Void, Boolean> {
 
   }
 
-  private class DocumentWaitingDialog extends WaitingDialog {
-
-    public DocumentWaitingDialog(Context context, String titleString, String contentString) {
-      super(context, titleString, contentString);
-    }
-
-    @Override
-    public void onBackPressed() {
-      super.onBackPressed();
-      DocumentActivity._documentActivityInstance.onCancelLoad();
-    }
-
-  }
 }
