@@ -2,15 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.exoplatform.mobile.platform</groupId>
-    <artifactId>exo-mobile</artifactId>
-    <version>2.1-SNAPSHOT</version>
+    <groupId>org.exoplatform</groupId>
+    <artifactId>exo.parent</artifactId>
+    <version>8.1</version>
   </parent>
+  <groupId>org.exoplatform.mobile.platform</groupId>
   <artifactId>exo-mobile-android</artifactId>
+  <version>2.1-SNAPSHOT</version>
   <packaging>apk</packaging>
   <name>eXo Mobile Android</name>
   <description>eXo Mobile Android projects.</description>
+  <scm>
+    <connection>scm:svn:https://svn.exoplatform.org/projects/mobile/exo-mobile-android/trunk</connection>
+    <developerConnection>scm:svn:https://svn.exoplatform.org/projects/mobile/exo-mobile-android/trunk</developerConnection>
+    <url>https://fisheye.exoplatform.org/browse/mobile/exo-mobile-android/trunk</url>
+  </scm>
   <properties>
+    <!-- SNAPSHOTS must be deployed in our private repository -->
+    <exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
     <!-- Runtimes -->
     <com.google.android.version>2.1.2</com.google.android.version>
     <!-- Libraries -->
