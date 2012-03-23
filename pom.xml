@@ -18,8 +18,6 @@
     <url>https://fisheye.exoplatform.org/browse/mobile/exo-mobile-android/tags/exo-mobile-2.0.1</url>
   </scm>
   <properties>
-    <!-- SNAPSHOTS must be deployed in our private repository -->
-    <exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
     <!-- Runtimes -->
     <com.google.android.version>2.1.2</com.google.android.version>
     <!-- Libraries -->
