@@ -4,15 +4,18 @@ import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.http.cookie.Cookie;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -27,11 +30,14 @@ import com.cyrilmottier.android.greendroid.R;
 
 //Display gadget
 public class WebViewActivity extends MyActionBar {
-  private WebView      _wvGadget;
 
-  public static String _url;
+  private WebViewLoadTask mLoadTask;
 
-  public static String _titlebar;
+  private WebView         _wvGadget;
+
+  public static String    _url;
+
+  public static String    _titlebar;
 
   public void onCreate(Bundle icicle) {
 
@@ -40,7 +46,6 @@ public class WebViewActivity extends MyActionBar {
     setActionBarContentView(R.layout.webview);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     _url = _url.replaceAll(" ", "%20");
-    setupCookies(_url);
     _wvGadget = (WebView) findViewById(R.id.WebView);
     _wvGadget.getSettings().setSupportZoom(true);
     _wvGadget.getSettings().setJavaScriptEnabled(true);
@@ -61,16 +66,9 @@ public class WebViewActivity extends MyActionBar {
 
       }
 
-      @Override
-      public boolean onJsTimeout() {
-        ExoConnectionUtils.onReLogin();
-        setupCookies(_url);
-        return super.onJsTimeout();
-      }
     });
     _wvGadget.setWebViewClient(new NewsWebviewClient());
-
-    _wvGadget.loadUrl(_url);
+    onLoad();
 
   }
 
@@ -108,12 +106,14 @@ public class WebViewActivity extends MyActionBar {
 
   @Override
   protected void onDestroy() {
-    super.onDestroy();
     cleaCache();
+    super.onDestroy();
+
   }
 
   @Override
   public void onBackPressed() {
+    onCancelLoad();
     if (_wvGadget.canGoBack()) {
       cleaCache();
       _wvGadget.goBack();
@@ -138,6 +138,59 @@ public class WebViewActivity extends MyActionBar {
         if (Config.GD_ERROR_LOGS_ENABLED)
           Log.e("Exception", "Cannot clear  file cache!");
       }
+    }
+
+  }
+
+  private void onLoad() {
+    if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
+      if (mLoadTask == null || mLoadTask.getStatus() == WebViewLoadTask.Status.FINISHED) {
+        mLoadTask = (WebViewLoadTask) new WebViewLoadTask().execute();
+      }
+    } else {
+      new ConnectionErrorDialog(this).show();
+    }
+
+  }
+
+  private void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == WebViewLoadTask.Status.RUNNING) {
+      mLoadTask.cancel(true);
+      mLoadTask = null;
+    }
+  }
+
+  private class WebViewLoadTask extends AsyncTask<Void, Void, Boolean> {
+    @Override
+    protected void onPreExecute() {
+      setTitle(getResources().getString(R.string.LoadingData));
+    }
+
+    @Override
+    protected Boolean doInBackground(Void... params) {
+      /*
+       * Checking the response code and re logging in if session timeout
+       */
+      try {
+        int code = ExoConnectionUtils.getResponseCode(_url);
+        if (code != 1) {
+          ExoConnectionUtils.onReLogin();
+        }
+        setupCookies(_url);
+        return true;
+      } catch (IOException e) {
+        return false;
+      }
+
+    }
+
+    @Override
+    protected void onPostExecute(Boolean result) {
+      if (result) {
+        _wvGadget.loadUrl(_url);
+      } else
+        finish();
+
     }
 
   }
