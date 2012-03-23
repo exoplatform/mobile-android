@@ -13,9 +13,9 @@
 	<name>eXo Mobile Android</name> 
 	<description>eXo Mobile Android projects.</description>
 	<scm>
-    <connection>scm:svn:https://svn.exoplatform.org/projects/mobile/exo-mobile-android/tags/2.0-Beta2</connection>
-    <developerConnection>scm:svn:https://svn.exoplatform.org/projects/mobile/exo-mobile-android/tags/2.0-Beta2</developerConnection>
-    <url>https://fisheye.exoplatform.org/browse/mobile/exo-mobile-android/tags/2.0-Beta2</url>
+    <connection>scm:svn:https://svn.exoplatform.org/projects/mobile/exo-mobile-android/tags/exo-mobile-2.0-Beta2</connection>
+    <developerConnection>scm:svn:https://svn.exoplatform.org/projects/mobile/exo-mobile-android/tags/exo-mobile-2.0-Beta2</developerConnection>
+    <url>https://fisheye.exoplatform.org/browse/mobile/exo-mobile-android/tags/exo-mobile-2.0-Beta2</url>
     </scm>
 	<properties>
 	
