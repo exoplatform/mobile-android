@@ -9,15 +9,15 @@
     </parent>
     <groupId>org.exoplatform.mobile.platform</groupId>
     <artifactId>exo-mobile-android</artifactId>
-    <version>1.0.0-CR02-SNAPSHOT</version>
+    <version>1.0.0-CR02</version>
     <packaging>apk</packaging>
     <name>eXo Mobile Android</name>
     <description>eXo Mobile Android projects.</description>
 
     <scm>
-      <connection>scm:svn:http://svn.exoplatform.org/exo-int/mobile/trunk/exo-mobile-android</connection>
-      <developerConnection>scm:svn:http://svn.exoplatform.org/exo-int/mobile/trunk/exo-mobile-android</developerConnection>
-      <url>http://fisheye.exoplatform.org/browse/exo-int/mobile/trunk/exo-mobile-android</url>
+      <connection>scm:svn:http://svn.exoplatform.org/exo-int/mobile/exo-mobile-android/tags/1.0-CR02</connection>
+      <developerConnection>scm:svn:http://svn.exoplatform.org/exo-int/mobile/exo-mobile-android/tags/1.0-CR02</developerConnection>
+      <url>http://fisheye.exoplatform.org/browse/exo-int/mobile/exo-mobile-android/tags/1.0-CR02</url>
     </scm>
 
     <properties>
