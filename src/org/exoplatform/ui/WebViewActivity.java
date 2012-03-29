@@ -2,6 +2,8 @@ package org.exoplatform.ui;
 
 import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
+import greendroid.widget.LoaderActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,13 +33,15 @@ import com.cyrilmottier.android.greendroid.R;
 //Display gadget
 public class WebViewActivity extends MyActionBar {
 
-  private WebViewLoadTask mLoadTask;
+  private WebViewLoadTask     mLoadTask;
 
-  private WebView         _wvGadget;
+  private WebView             _wvGadget;
 
-  public static String    _url;
+  public static String        _url;
 
-  public static String    _titlebar;
+  public static String        _titlebar;
+
+  private LoaderActionBarItem loaderItem;
 
   public void onCreate(Bundle icicle) {
 
@@ -45,6 +49,7 @@ public class WebViewActivity extends MyActionBar {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.webview);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    addActionBarItem(Type.Refresh, R.id.action_bar_refresh);
     _url = _url.replaceAll(" ", "%20");
     _wvGadget = (WebView) findViewById(R.id.WebView);
     _wvGadget.getSettings().setSupportZoom(true);
@@ -61,8 +66,10 @@ public class WebViewActivity extends MyActionBar {
       public void onProgressChanged(WebView view, int progress) {
         setTitle(getResources().getString(R.string.LoadingData));
         activity.setProgress(progress * 100);
-        if (progress == 100)
+        if (progress == 100) {
           setTitle(_titlebar);
+          getActionBar().removeItem(0);
+        }
 
       }
 
@@ -164,6 +171,8 @@ public class WebViewActivity extends MyActionBar {
     @Override
     protected void onPreExecute() {
       setTitle(getResources().getString(R.string.LoadingData));
+      loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+      loaderItem.setLoading(true);
     }
 
     @Override
@@ -188,8 +197,10 @@ public class WebViewActivity extends MyActionBar {
     protected void onPostExecute(Boolean result) {
       if (result) {
         _wvGadget.loadUrl(_url);
-      } else
+      } else {
+        getActionBar().removeItem(0);
         finish();
+      }
 
     }
 
@@ -213,7 +224,11 @@ public class WebViewActivity extends MyActionBar {
                                           String realm) {
       super.onReceivedHttpAuthRequest(view, handler, host, realm);
       // Relogin
-      ExoConnectionUtils.onReLogin();
+      try {
+        ExoConnectionUtils.onReLogin();
+      } catch (IOException e) {
+        e.getMessage();
+      }
       setupCookies(host);
       view.reload();
     }
