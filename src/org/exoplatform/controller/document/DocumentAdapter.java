@@ -77,8 +77,10 @@ public class DocumentAdapter extends BaseAdapter {
     lb.setText(myFile.name);
 
     final ExoFile file = DocumentActivity._documentActivityInstance._fileForCurrentActionBar;
+    /*
+     * If folder is driver, make the action button invisible
+     */
     if (file == null) {
-
       if (position == 0) {
         if (_documentList.size() == 1)
           rowView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
@@ -95,7 +97,7 @@ public class DocumentAdapter extends BaseAdapter {
           rowView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
       }
 
-      // btnAction.setVisibility(View.INVISIBLE);
+      btnAction.setVisibility(View.INVISIBLE);
 
     } else {
 

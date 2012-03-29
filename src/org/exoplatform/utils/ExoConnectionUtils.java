@@ -10,6 +10,8 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -22,6 +24,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.HomeHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -33,15 +36,13 @@ import android.net.NetworkInfo;
 //interact with server
 public class ExoConnectionUtils {
 
-  public static DefaultHttpClient httpClient;
-
   // private static int splitLinesAt = 76;
 
-  public static List<Cookie>      _sessionCookies;      // Cookie array
+  public static List<Cookie> _sessionCookies;      // Cookie array
 
-  public static String            _strCookie = "";      // Cookie string
+  public static String       _strCookie = "";      // Cookie string
 
-  private static String           _strFirstLoginContent; // String login data
+  private static String      _strFirstLoginContent; // String login data
 
   public static boolean isNetworkAvailableExt(Context paramContext) {
     ConnectivityManager localConnectivityManager = (ConnectivityManager) paramContext.getSystemService("connectivity");
@@ -90,17 +91,11 @@ public class ExoConnectionUtils {
    * Call onPrepareLogin() method to login system again
    */
 
-  public static void onReLogin() {
+  public static void onReLogin() throws IOException {
     String domain = AccountSetting.getInstance().getDomainName();
     String username = AccountSetting.getInstance().getUsername();
     String password = AccountSetting.getInstance().getPassword();
-
-    try {
-      onPrepareLogin(domain, username, password);
-    } catch (IOException e) {
-      e.getMessage();
-    }
-
+    onPrepareLogin(domain, username, password);
   }
 
   /*
@@ -112,7 +107,7 @@ public class ExoConnectionUtils {
     HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
     HttpConnectionParams.setSoTimeout(httpParameters, 10000);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-    httpClient = new DefaultHttpClient(httpParameters);
+    HomeHelper.getInstance().httpClient = new DefaultHttpClient(httpParameters);
   }
 
   /*
@@ -128,8 +123,8 @@ public class ExoConnectionUtils {
 
     HttpGet httpGet = new HttpGet(redirectStr);
     initHttpClient();
-    response = httpClient.execute(httpGet);
-    cookiesStore = httpClient.getCookieStore();
+    response = HomeHelper.getInstance().httpClient.execute(httpGet);
+    cookiesStore = HomeHelper.getInstance().httpClient.getCookieStore();
     List<Cookie> cookies = cookiesStore.getCookies();
     if (!cookies.isEmpty()) {
       for (int i = 0; i < cookies.size(); i++) {
@@ -152,7 +147,7 @@ public class ExoConnectionUtils {
     httpPost.setEntity(new UrlEncodedFormEntity(nvps));
     httpPost.setHeader("Cookie", strCookie);
     _strCookie = strCookie;
-    response = httpClient.execute(httpPost);
+    response = HomeHelper.getInstance().httpClient.execute(httpPost);
     _sessionCookies = new ArrayList<Cookie>(cookies);
     return response;
   }
@@ -195,7 +190,7 @@ public class ExoConnectionUtils {
 
   public static HttpResponse getRequestResponse(String strUrlRequest) throws IOException {
     HttpGet httpGet = new HttpGet(strUrlRequest);
-    HttpResponse response = httpClient.execute(httpGet);
+    HttpResponse response = HomeHelper.getInstance().httpClient.execute(httpGet);
     return response;
   }
 
@@ -224,7 +219,7 @@ public class ExoConnectionUtils {
     if (url != null) {
       url = url.replaceAll(" ", "%20");
       HttpGet httpGet = new HttpGet(url);
-      HttpResponse response = httpClient.execute(httpGet);
+      HttpResponse response = HomeHelper.getInstance().httpClient.execute(httpGet);
       int statusCode = response.getStatusLine().getStatusCode();
       if (statusCode >= 200 && statusCode < 300) {
         return 1;
@@ -234,6 +229,13 @@ public class ExoConnectionUtils {
     } else
       return -1;
 
+  }
+
+  public static void createAuthorization(String url, int port, String userName, String password) {
+    AuthScope auth = new AuthScope(url, port);
+    AccountSetting.getInstance().setAuthScope(auth);
+    UsernamePasswordCredentials credential = new UsernamePasswordCredentials(userName, password);
+    AccountSetting.getInstance().setCredentials(credential);
   }
 
   public static HttpResponse getPlatformResponse(String strUrlRequest) {

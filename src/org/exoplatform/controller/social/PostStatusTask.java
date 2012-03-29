@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.exoplatform.R;
+import org.exoplatform.singleton.HomeHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
@@ -129,14 +130,14 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
     try {
       // Re authenticate when we upload file from social
       WebdavMethod copy = new WebdavMethod("HEAD", uploadUrl);
-      response = ExoConnectionUtils.httpClient.execute(copy);
+      response = HomeHelper.getInstance().httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
 
       } else {
         copy = new WebdavMethod("MKCOL", uploadUrl);
-        response = ExoConnectionUtils.httpClient.execute(copy);
+        response = HomeHelper.getInstance().httpClient.execute(copy);
         status = response.getStatusLine().getStatusCode();
 
         if (status >= 200 && status < 300) {

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.exoplatform.model.HomeItem;
 import org.exoplatform.singleton.ChatServiceHelper;
 import org.exoplatform.singleton.HomeHelper;
-import org.exoplatform.utils.ExoConnectionUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -55,9 +54,9 @@ public class HomeController {
   }
 
   public void onFinish() {
-    if (ExoConnectionUtils.httpClient != null) {
-      ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
-      ExoConnectionUtils.httpClient = null;
+    if (HomeHelper.getInstance().httpClient != null) {
+      HomeHelper.getInstance().httpClient.getConnectionManager().shutdown();
+      HomeHelper.getInstance().httpClient = null;
     }
     if (ChatServiceHelper.getInstance().getXMPPConnection() != null) {
       ChatServiceHelper.getInstance().getXMPPConnection().disconnect();

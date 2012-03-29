@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.exoplatform.model.ExoFile;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -87,7 +88,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Boolean> {
        * Checking the session status each time we retrieve files/folders. If
        * time out, re logging in
        */
-      if (ExoConnectionUtils.getResponseCode(strSourceUrl) == 0) {
+      if (ExoConnectionUtils.getResponseCode(AccountSetting.getInstance().getDomainName()) != 1) {
         ExoConnectionUtils.onReLogin();
       }
       if (actionID == 1) {

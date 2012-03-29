@@ -120,12 +120,20 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void addOrRemoveFileActionButton() {
+    /*
+     * If at the document level, make the action bar button invisible
+     */
     if (_fileForCurrentActionBar == null) {
       getActionBar().removeItem(0);
     } else {
-      if (getActionBar().getItem(0) == null) {
-        addActionBarItem();
-        getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
+      // At the driver level, remove the action bar button
+      if (_fileForCurrentActionBar.path == null) {
+        getActionBar().removeItem(0);
+      } else {
+        if (getActionBar().getItem(0) == null) {
+          addActionBarItem();
+          getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
+        }
       }
     }
   }

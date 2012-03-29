@@ -151,7 +151,7 @@ public class LoginController {
         dialog.show();
       } else if (result.equalsIgnoreCase(ExoConstants.LOGIN_YES)) {
         AccountSetting accountSetting = AccountSetting.getInstance();
-//        ExoConnectionUtils.createAuthorization(uri.getHost(), uri.getPort(), userName, password);
+        ExoConnectionUtils.createAuthorization(uri.getHost(), uri.getPort(), userName, password);
         SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());
