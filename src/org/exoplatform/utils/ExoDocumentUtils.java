@@ -19,6 +19,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
+import org.exoplatform.singleton.HomeHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,7 +37,7 @@ public class ExoDocumentUtils {
       FileEntity fileEntity = new FileEntity(fileManager, fileType);
       put.setEntity(fileEntity);
       fileEntity.setContentType(fileType);
-      HttpResponse response = ExoConnectionUtils.httpClient.execute(put);
+      HttpResponse response = HomeHelper.getInstance().httpClient.execute(put);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
@@ -78,7 +79,9 @@ public class ExoDocumentUtils {
 
       try {
         WebdavMethod copy = new WebdavMethod("HEAD", buffer.toString());
-        int status = ExoConnectionUtils.httpClient.execute(copy).getStatusLine().getStatusCode();
+        int status = HomeHelper.getInstance().httpClient.execute(copy)
+                                                        .getStatusLine()
+                                                        .getStatusCode();
 
         if (status >= 200 && status < 300) {
           repositoryHomeURL = buffer.toString();
@@ -176,7 +179,7 @@ public class ExoDocumentUtils {
               if (file.currentFolder == null)
                 file.currentFolder = "";
               file.isFolder = true;
-              file.path = getRootDriverPath(file);
+//              file.path = getRootDriverPath(file);
               folderArray.add(file);
             }
           }
@@ -203,43 +206,43 @@ public class ExoDocumentUtils {
   }
 
   // get path for driver folder (ex. Public/Private)
-  private static String getRootDriverPath(ExoFile file) {
-    String path = null;
-    String urlStr = getDriverUrl(file);
-    urlStr = URLAnalyzer.encodeUrl(urlStr);
-    Document obj_doc = null;
-    DocumentBuilderFactory doc_build_fact = null;
-    DocumentBuilder doc_builder = null;
-    try {
-      HttpResponse response = ExoConnectionUtils.getRequestResponse(urlStr);
-      doc_build_fact = DocumentBuilderFactory.newInstance();
-      doc_builder = doc_build_fact.newDocumentBuilder();
-      InputStream is = ExoConnectionUtils.sendRequest(response);
-      if (is != null) {
-        obj_doc = doc_builder.parse(is);
-
-        if (null != obj_doc) {
-          org.w3c.dom.Element feed = obj_doc.getDocumentElement();
-
-          // Get folders
-          NodeList obj_nod_list = feed.getElementsByTagName("Folder");
-          Node rootNode = obj_nod_list.item(0);
-          if (rootNode.getNodeType() == Node.ELEMENT_NODE) {
-            Element itemElement = (Element) rootNode;
-            path = fullURLofFile(itemElement.getAttribute("path"));
-          }
-        }
-      }
-
-    } catch (ParserConfigurationException e) {
-      return null;
-    } catch (SAXException e) {
-      return null;
-    } catch (IOException e) {
-      return null;
-    }
-    return path;
-  }
+  // private static String getRootDriverPath(ExoFile file) {
+  // String path = null;
+  // String urlStr = getDriverUrl(file);
+  // urlStr = URLAnalyzer.encodeUrl(urlStr);
+  // Document obj_doc = null;
+  // DocumentBuilderFactory doc_build_fact = null;
+  // DocumentBuilder doc_builder = null;
+  // try {
+  // HttpResponse response = ExoConnectionUtils.getRequestResponse(urlStr);
+  // doc_build_fact = DocumentBuilderFactory.newInstance();
+  // doc_builder = doc_build_fact.newDocumentBuilder();
+  // InputStream is = ExoConnectionUtils.sendRequest(response);
+  // if (is != null) {
+  // obj_doc = doc_builder.parse(is);
+  //
+  // if (null != obj_doc) {
+  // org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+  //
+  // // Get folders
+  // NodeList obj_nod_list = feed.getElementsByTagName("Folder");
+  // Node rootNode = obj_nod_list.item(0);
+  // if (rootNode.getNodeType() == Node.ELEMENT_NODE) {
+  // Element itemElement = (Element) rootNode;
+  // path = fullURLofFile(itemElement.getAttribute("path"));
+  // }
+  // }
+  // }
+  //
+  // } catch (ParserConfigurationException e) {
+  // return null;
+  // } catch (SAXException e) {
+  // return null;
+  // } catch (IOException e) {
+  // return null;
+  // }
+  // return path;
+  // }
 
   public static ArrayList<ExoFile> getContentOfFolder(HttpResponse response, ExoFile file) {
 
@@ -406,7 +409,7 @@ public class ExoDocumentUtils {
     try {
       url = URLAnalyzer.encodeUrl(url);
       WebdavMethod delete = new WebdavMethod("DELETE", url);
-      response = ExoConnectionUtils.httpClient.execute(delete);
+      response = HomeHelper.getInstance().httpClient.execute(delete);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
@@ -427,7 +430,7 @@ public class ExoDocumentUtils {
       source = URLAnalyzer.encodeUrl(source);
       destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod copy = new WebdavMethod("COPY", source, destination);
-      response = ExoConnectionUtils.httpClient.execute(copy);
+      response = HomeHelper.getInstance().httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
@@ -447,7 +450,7 @@ public class ExoDocumentUtils {
       source = URLAnalyzer.encodeUrl(source);
       destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod move = new WebdavMethod("MOVE", source, destination);
-      response = ExoConnectionUtils.httpClient.execute(move);
+      response = HomeHelper.getInstance().httpClient.execute(move);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
@@ -466,13 +469,13 @@ public class ExoDocumentUtils {
       source = URLAnalyzer.encodeUrl(source);
       destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod create = new WebdavMethod("HEAD", destination);
-      response = ExoConnectionUtils.httpClient.execute(create);
+      response = HomeHelper.getInstance().httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return false;
       } else {
         WebdavMethod move = new WebdavMethod("MOVE", source, destination);
-        response = ExoConnectionUtils.httpClient.execute(move);
+        response = HomeHelper.getInstance().httpClient.execute(move);
         status = response.getStatusLine().getStatusCode();
         if (status >= 200 && status < 300) {
           return true;
@@ -491,14 +494,14 @@ public class ExoDocumentUtils {
 
       destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod create = new WebdavMethod("HEAD", destination);
-      response = ExoConnectionUtils.httpClient.execute(create);
+      response = HomeHelper.getInstance().httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return false;
 
       } else {
         create = new WebdavMethod("MKCOL", destination);
-        response = ExoConnectionUtils.httpClient.execute(create);
+        response = HomeHelper.getInstance().httpClient.execute(create);
         status = response.getStatusLine().getStatusCode();
 
         if (status >= 200 && status < 300) {
