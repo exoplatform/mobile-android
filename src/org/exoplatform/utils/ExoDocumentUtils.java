@@ -19,7 +19,6 @@ import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
-import org.exoplatform.singleton.HomeHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -37,7 +36,7 @@ public class ExoDocumentUtils {
       FileEntity fileEntity = new FileEntity(fileManager, fileType);
       put.setEntity(fileEntity);
       fileEntity.setContentType(fileType);
-      HttpResponse response = HomeHelper.getInstance().httpClient.execute(put);
+      HttpResponse response = ExoConnectionUtils.httpClient.execute(put);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
@@ -79,7 +78,7 @@ public class ExoDocumentUtils {
 
       try {
         WebdavMethod copy = new WebdavMethod("HEAD", buffer.toString());
-        int status = HomeHelper.getInstance().httpClient.execute(copy)
+        int status = ExoConnectionUtils.httpClient.execute(copy)
                                                         .getStatusLine()
                                                         .getStatusCode();
 
@@ -409,7 +408,7 @@ public class ExoDocumentUtils {
     try {
       url = URLAnalyzer.encodeUrl(url);
       WebdavMethod delete = new WebdavMethod("DELETE", url);
-      response = HomeHelper.getInstance().httpClient.execute(delete);
+      response = ExoConnectionUtils.httpClient.execute(delete);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
@@ -430,7 +429,7 @@ public class ExoDocumentUtils {
       source = URLAnalyzer.encodeUrl(source);
       destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod copy = new WebdavMethod("COPY", source, destination);
-      response = HomeHelper.getInstance().httpClient.execute(copy);
+      response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
@@ -450,7 +449,7 @@ public class ExoDocumentUtils {
       source = URLAnalyzer.encodeUrl(source);
       destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod move = new WebdavMethod("MOVE", source, destination);
-      response = HomeHelper.getInstance().httpClient.execute(move);
+      response = ExoConnectionUtils.httpClient.execute(move);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return true;
@@ -469,13 +468,13 @@ public class ExoDocumentUtils {
       source = URLAnalyzer.encodeUrl(source);
       destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod create = new WebdavMethod("HEAD", destination);
-      response = HomeHelper.getInstance().httpClient.execute(create);
+      response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return false;
       } else {
         WebdavMethod move = new WebdavMethod("MOVE", source, destination);
-        response = HomeHelper.getInstance().httpClient.execute(move);
+        response = ExoConnectionUtils.httpClient.execute(move);
         status = response.getStatusLine().getStatusCode();
         if (status >= 200 && status < 300) {
           return true;
@@ -494,14 +493,14 @@ public class ExoDocumentUtils {
 
       destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod create = new WebdavMethod("HEAD", destination);
-      response = HomeHelper.getInstance().httpClient.execute(create);
+      response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
         return false;
 
       } else {
         create = new WebdavMethod("MKCOL", destination);
-        response = HomeHelper.getInstance().httpClient.execute(create);
+        response = ExoConnectionUtils.httpClient.execute(create);
         status = response.getStatusLine().getStatusCode();
 
         if (status >= 200 && status < 300) {
