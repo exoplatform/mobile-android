@@ -24,7 +24,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.HomeHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -37,12 +36,13 @@ import android.net.NetworkInfo;
 public class ExoConnectionUtils {
 
   // private static int splitLinesAt = 76;
+  public static DefaultHttpClient httpClient;
 
-  public static List<Cookie> _sessionCookies;      // Cookie array
+  public static List<Cookie>      _sessionCookies;      // Cookie array
 
-  public static String       _strCookie = "";      // Cookie string
+  public static String            _strCookie = "";      // Cookie string
 
-  private static String      _strFirstLoginContent; // String login data
+  private static String           _strFirstLoginContent; // String login data
 
   public static boolean isNetworkAvailableExt(Context paramContext) {
     ConnectivityManager localConnectivityManager = (ConnectivityManager) paramContext.getSystemService("connectivity");
@@ -107,7 +107,7 @@ public class ExoConnectionUtils {
     HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
     HttpConnectionParams.setSoTimeout(httpParameters, 10000);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-    HomeHelper.getInstance().httpClient = new DefaultHttpClient(httpParameters);
+    httpClient = new DefaultHttpClient(httpParameters);
   }
 
   /*
@@ -123,8 +123,8 @@ public class ExoConnectionUtils {
 
     HttpGet httpGet = new HttpGet(redirectStr);
     initHttpClient();
-    response = HomeHelper.getInstance().httpClient.execute(httpGet);
-    cookiesStore = HomeHelper.getInstance().httpClient.getCookieStore();
+    response = httpClient.execute(httpGet);
+    cookiesStore = httpClient.getCookieStore();
     List<Cookie> cookies = cookiesStore.getCookies();
     if (!cookies.isEmpty()) {
       for (int i = 0; i < cookies.size(); i++) {
@@ -147,7 +147,7 @@ public class ExoConnectionUtils {
     httpPost.setEntity(new UrlEncodedFormEntity(nvps));
     httpPost.setHeader("Cookie", strCookie);
     _strCookie = strCookie;
-    response = HomeHelper.getInstance().httpClient.execute(httpPost);
+    response = httpClient.execute(httpPost);
     _sessionCookies = new ArrayList<Cookie>(cookies);
     return response;
   }
@@ -190,7 +190,7 @@ public class ExoConnectionUtils {
 
   public static HttpResponse getRequestResponse(String strUrlRequest) throws IOException {
     HttpGet httpGet = new HttpGet(strUrlRequest);
-    HttpResponse response = HomeHelper.getInstance().httpClient.execute(httpGet);
+    HttpResponse response = httpClient.execute(httpGet);
     return response;
   }
 
@@ -219,7 +219,7 @@ public class ExoConnectionUtils {
     if (url != null) {
       url = url.replaceAll(" ", "%20");
       HttpGet httpGet = new HttpGet(url);
-      HttpResponse response = HomeHelper.getInstance().httpClient.execute(httpGet);
+      HttpResponse response = httpClient.execute(httpGet);
       int statusCode = response.getStatusLine().getStatusCode();
       if (statusCode >= 200 && statusCode < 300) {
         return 1;
