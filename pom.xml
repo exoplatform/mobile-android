@@ -13,9 +13,9 @@
   <name>eXo Mobile Android</name>
   <description>eXo Mobile Android projects.</description>
   <scm>
-    <connection>scm:git:git:https://git.exoplatform.org/github/moved/mobile-android</connection>
-    <developerConnection>scm:git:ssh:https://git.exoplatform.org/github/moved/mobile-android</developerConnection>
-    <url>https://git.exoplatform.org/github/moved/mobile-android</url>
+ 	<connection>scm:git:ssh://github.com/exoplatform/mobile-android.git</connection>
+ 	<developerConnection>scm:git:ssh://github.com/exoplatform/mobile-android.git</developerConnection>
+ 	<url>http://fisheye.exoplatform.org/browse/mobile/exo-mobile-android</url>
   </scm>
   <properties>
     <!-- SNAPSHOTS must be deployed in our private repository -->
