@@ -1,30 +1,52 @@
 package org.exoplatform.controller.document;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.DocumentWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.view.View;
+import android.view.animation.AnimationUtils;
 
 import com.cyrilmottier.android.greendroid.R;
 
-public class DocumentLoadTask extends AsyncTask<Integer, Void, Boolean> {
-  private DocumentWaitingDialog _progressDialog;
+public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
-  private Context               mContext;
+  private static final int      RESULT_OK      = 1;
+
+  private static final int      RESULT_ERROR   = 0;
+
+  private static final int      RESULT_TIMEOUT = -1;
+
+  // delete file or folder
+  private static final int      ACTION_DELETE  = 1;
+
+  // copy file
+  private static final int      ACTION_COPY    = 2;
+
+  // move file
+  private static final int      ACTION_MOVE    = 3;
+
+  // upload file
+  private static final int      ACTION_UPLOAD  = 4;
+
+  // rename folder
+  private static final int      ACTION_RENAME  = 5;
+
+  // create new folder
+  private static final int      ACTION_CREATE  = 6;
+
+  private DocumentWaitingDialog _progressDialog;
 
   private String                loadingData;
 
@@ -32,10 +54,12 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Boolean> {
 
   private String                titleString;
 
-  private String                contentString;
+  /*
+   * This @contentWarningString is for display the error/warning message when
+   * retrieving document
+   */
+  private String                contentWarningString;
 
-  // actionID: 0-retrieve data, 1: delete file, 2: copy file, 3: move file, 4:
-  // upload file
   private int                   actionID;
 
   private String                strSourceUrl;
@@ -54,8 +78,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Boolean> {
                           String destination,
                           int action,
                           DocumentWaitingDialog progressDialog) {
-    mContext = context;
-    resource = mContext.getResources();
+    resource = activity.getResources();
     documentActivity = activity;
     strSourceUrl = source;
     strDestinationUrl = destination;
@@ -69,46 +92,47 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Boolean> {
     loadingData = resource.getString(R.string.LoadingData);
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
-    contentString = resource.getString(R.string.ConnectionError);
+    contentWarningString = resource.getString(R.string.LoadingDataError);
   }
 
   @Override
   public void onPreExecute() {
-    _progressDialog = new DocumentWaitingDialog(mContext, null, loadingData);
+    _progressDialog = new DocumentWaitingDialog(documentActivity, null, loadingData);
     _progressDialog.show();
-
   }
 
   @Override
-  public Boolean doInBackground(Integer... params) {
+  public Integer doInBackground(Integer... params) {
     boolean result = true;
     _documentList = new ArrayList<ExoFile>();
     try {
       /*
        * Checking the session status each time we retrieve files/folders. If
-       * time out, re logging in
+       * time out, re logging in. If relogging in error, pop up a error dialog
        */
-      if (ExoConnectionUtils.getResponseCode(AccountSetting.getInstance().getDomainName()) != 1) {
-        ExoConnectionUtils.onReLogin();
+      if (ExoConnectionUtils.getResponseCode(ExoDocumentUtils.repositoryHomeURL) != 1) {
+        if (!ExoConnectionUtils.onReLogin()) {
+          return RESULT_TIMEOUT;
+        }
       }
-      if (actionID == 1) {
+      if (actionID == ACTION_DELETE) {
+        contentWarningString = resource.getString(R.string.DocumentCannotDelete);
         result = ExoDocumentUtils.deleteFile(strSourceUrl);
-        contentString = resource.getString(R.string.DocumentCannotDelete);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
 
-      } else if (actionID == 2) {
+      } else if (actionID == ACTION_COPY) {
+        contentWarningString = resource.getString(R.string.DocumentCopyPasteError);
         result = ExoDocumentUtils.copyFile(strSourceUrl, strDestinationUrl);
-        contentString = resource.getString(R.string.DocumentCopyPasteError);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
 
-      } else if (actionID == 3) {
+      } else if (actionID == ACTION_MOVE) {
+        contentWarningString = resource.getString(R.string.DocumentCopyPasteError);
         result = ExoDocumentUtils.moveFile(strSourceUrl, strDestinationUrl);
-        contentString = resource.getString(R.string.DocumentCopyPasteError);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
 
-      } else if (actionID == 4) {
+      } else if (actionID == ACTION_UPLOAD) {
         File file = new File(documentActivity._sdcard_temp_dir);
-        contentString = resource.getString(R.string.DocumentUploadError);
+        contentWarningString = resource.getString(R.string.DocumentUploadError);
         File tempFile = PhotoUtils.reziseFileImage(file);
         if (tempFile != null) {
           result = ExoDocumentUtils.putFileToServerFromLocal(strSourceUrl + "/" + file.getName(),
@@ -117,26 +141,29 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Boolean> {
           tempFile.delete();
         }
 
-      } else if (actionID == 5) {
+      } else if (actionID == ACTION_RENAME) {
+        contentWarningString = resource.getString(R.string.DocumentRenameError);
         result = ExoDocumentUtils.renameFolder(strSourceUrl, strDestinationUrl);
-        contentString = resource.getString(R.string.DocumentRenameError);
         boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
         strSourceUrl = strDestinationUrl;
         if (!isFolder)
           strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
 
-      } else if (actionID == 6) {
-        contentString = resource.getString(R.string.DocumentCreateFolderError);
+      } else if (actionID == ACTION_CREATE) {
+        contentWarningString = resource.getString(R.string.DocumentCreateFolderError);
         result = ExoDocumentUtils.createFolder(strDestinationUrl);
 
       }
+      /*
+       * Get folder content
+       */
       if (result == true) {
         _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity._fileForCurrentActionBar);
       }
 
-      return result;
-    } catch (IOException e) {
-      return false;
+      return RESULT_OK;
+    } catch (Exception e) {
+      return RESULT_ERROR;
     }
   }
 
@@ -147,39 +174,27 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Boolean> {
   }
 
   @Override
-  public void onPostExecute(Boolean result) {
-    if (result) {
+  public void onPostExecute(Integer result) {
+    if (result == RESULT_OK) {
 
-      if (actionID == 0 || actionID == 1 || actionID == 4 || actionID == 5 || actionID == 6) {
-
-        if (actionID == 5) {
-          boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
-          String type = documentActivity._documentAdapter._documentActionDialog.myFile.nodeType;
-          documentActivity._fileForCurrentActionBar.isFolder = isFolder;
-          documentActivity._fileForCurrentActionBar.nodeType = type;
-        }
+      if (actionID == ACTION_RENAME) {
+        boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
+        String type = documentActivity._documentAdapter._documentActionDialog.myFile.nodeType;
+        documentActivity._fileForCurrentActionBar.isFolder = isFolder;
+        documentActivity._fileForCurrentActionBar.nodeType = type;
       }
-      if (DocumentActivity._documentActivityInstance._fileForCurrentActionBar == null)
-        DocumentActivity._documentActivityInstance.setListViewPadding(5, 0, 5, 0);
-      else
-        DocumentActivity._documentActivityInstance.setListViewPadding(-2, 0, -2, 0);
 
-      if (documentActivity._fileForCurrentActionBar == null)
-        documentActivity.setTitle(resource.getString(R.string.Documents));
-      else
-        documentActivity.setTitle(documentActivity._fileForCurrentActionBar.name);
-      documentActivity._documentAdapter = new DocumentAdapter(documentActivity, _documentList);
-      documentActivity.setDocumentAdapter();
-      documentActivity.addOrRemoveFileActionButton();
+      documentActivity.setDocumentAdapter(_documentList);
+      /*
+       * Set animation for listview when access to folder
+       */
+      documentActivity._listViewDocument.setAnimation(AnimationUtils.loadAnimation(documentActivity,
+                                                                                   R.anim.anim_right_to_left));
 
-      if (_documentList.size() == 0) {
-        documentActivity.setEmptyView(View.VISIBLE);
-      } else
-        documentActivity.setEmptyView(View.GONE);
-
-    } else {
-      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
-      dialog.show();
+    } else if (result == RESULT_ERROR) {
+      new WarningDialog(documentActivity, titleString, contentWarningString, okString).show();
+    } else if (result == RESULT_TIMEOUT) {
+      new ConnTimeOutDialog(documentActivity, titleString, okString).show();
     }
 
     _progressDialog.dismiss();

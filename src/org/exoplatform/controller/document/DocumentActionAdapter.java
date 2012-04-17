@@ -95,9 +95,7 @@ public class DocumentActionAdapter extends BaseAdapter {
             String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
 
             if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
-              currentFolder = ExoDocumentUtils.getParentUrl(currentFolder);
-              DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = ExoDocumentUtils.getLastPathComponent(currentFolder);
-              DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
+              DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
             }
 
             DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
