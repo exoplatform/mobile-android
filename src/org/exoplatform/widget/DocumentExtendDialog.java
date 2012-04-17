@@ -86,29 +86,6 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
     if (view.equals(okButton)) {
       folderName = actionEditText.getText().toString();
 
-      // ArrayList<ExoFile> files =
-      // DocumentActivity._documentActivityInstance._documentAdapter._documentList;
-      // boolean fileExisted = false;
-      // if (files != null) {
-      // for (ExoFile file : files) {
-      // if (file != null) {
-      // if (file.name.equalsIgnoreCase(folderName)) {
-      // fileExisted = true;
-      // break;
-      // }
-      // }
-      //
-      // }
-      // }
-      // if (fileExisted) {
-      // Toast toast = Toast.makeText(mContext, folderNameConflict,
-      // Toast.LENGTH_SHORT);
-      // toast.setGravity(Gravity.CENTER, 0, 0);
-      // toast.show();
-      //
-      // return;
-      // }
-
       if ((folderName != null) && (folderName.length() > 0)) {
 
         if (actionId == 5) {
