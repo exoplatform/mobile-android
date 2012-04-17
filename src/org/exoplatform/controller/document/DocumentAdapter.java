@@ -32,26 +32,25 @@ public class DocumentAdapter extends BaseAdapter {
 
     _mContext = context;
     _documentList = list;
-    // _documentList = ExoDocumentUtils.getPersonalDriveContent(file);
 
   }
 
-  // @Override
+  @Override
   public int getCount() {
     return _documentList.size();
   }
 
-  // @Override
+  @Override
   public Object getItem(int pos) {
     return pos;
   }
 
-  // @Override
+  @Override
   public long getItemId(int pos) {
     return pos;
   }
 
-  // @Override
+  @Override
   public View getView(int position, View convertView, ViewGroup parent) {
 
     final int pos = position;
@@ -77,9 +76,6 @@ public class DocumentAdapter extends BaseAdapter {
     lb.setText(myFile.name);
 
     final ExoFile file = DocumentActivity._documentActivityInstance._fileForCurrentActionBar;
-    /*
-     * If folder is driver, make the action button invisible
-     */
     if (file == null) {
       if (position == 0) {
         if (_documentList.size() == 1)
@@ -96,7 +92,9 @@ public class DocumentAdapter extends BaseAdapter {
         else
           rowView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
       }
-
+      /*
+       * If file is null, make the action button is invisible
+       */
       btnAction.setVisibility(View.INVISIBLE);
 
     } else {
@@ -120,8 +118,14 @@ public class DocumentAdapter extends BaseAdapter {
         if (!myFile.isFolder) {
           // Action for display file
           if (myFile.nodeType != null
-              && (myFile.nodeType.contains("image") || myFile.nodeType.contains("text"))) {
-            WebViewActivity._url = myFile.path;
+              && (myFile.nodeType.contains("image") || myFile.nodeType.contains("text") || myFile.nodeType.contains("pdf"))) {
+            String url = null;
+            if (myFile.nodeType.contains("pdf")) {
+              url = "http://docs.google.com/gview?embedded=true&url=" + myFile.path;
+            } else {
+              url = myFile.path;
+            }
+            WebViewActivity._url = url;
             WebViewActivity._titlebar = myFile.name;
             Intent intent = new Intent(_mContext, WebViewActivity.class);
             _mContext.startActivity(intent);
@@ -136,7 +140,7 @@ public class DocumentAdapter extends BaseAdapter {
            */
           // if
           // (!DocumentHelper.getInstance().fileStructureMap.containsKey(myFile))
-          DocumentHelper.getInstance().currentFileMap.put(myFile, file);
+          DocumentHelper.getInstance().currentFileMap.putParcelable(myFile.path, file);
           DocumentActivity._documentActivityInstance.onLoad(myFile.path, null, 0);
         }
 
