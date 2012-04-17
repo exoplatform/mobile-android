@@ -7,16 +7,24 @@ import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class UnreadableFileDialog extends Dialog implements android.view.View.OnClickListener {
 
-  private Button   okButton;
+  private Button okButton;
 
   public UnreadableFileDialog(Context context) {
     super(context);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.unreadable_file_dialog_layout);
-    okButton = (Button) findViewById(R.id.unreadable_ok_button);
+    setContentView(R.layout.warning_dialog_layout);
+    TextView titleView = (TextView) findViewById(R.id.warning_dialog_title_view);
+    titleView.setText(context.getResources().getString(R.string.UnreachableFileTitle));
+    ImageView imageView = (ImageView) findViewById(R.id.warning_image);
+    imageView.setImageResource(R.drawable.icon_for_unreadable_file);
+    TextView contentView = (TextView) findViewById(R.id.warning_content);
+    contentView.setText(context.getResources().getString(R.string.UnreachableFile));
+    okButton = (Button) findViewById(R.id.warning_ok_button);
     okButton.setOnClickListener(this);
   }
 
@@ -25,6 +33,5 @@ public class UnreadableFileDialog extends Dialog implements android.view.View.On
       dismiss();
     }
   }
-
 
 }

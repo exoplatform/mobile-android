@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ConnectionErrorDialog extends Dialog implements android.view.View.OnClickListener {
@@ -25,6 +26,8 @@ public class ConnectionErrorDialog extends Dialog implements android.view.View.O
     titleView = (TextView) findViewById(R.id.warning_dialog_title_view);
     String titleString = res.getString(R.string.Warning);
     titleView.setText(titleString);
+    ImageView imageView = (ImageView) findViewById(R.id.warning_image);
+    imageView.setImageResource(R.drawable.warning_icon);
     contentView = (TextView) findViewById(R.id.warning_content);
     String contentString = res.getString(R.string.ConnectionError);
     contentView.setText(contentString);
