@@ -16,30 +16,37 @@
  */
 package org.exoplatform.singleton;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.exoplatform.model.ExoFile;
+
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jan
  * 31, 2012
  */
-public class DocumentHelper {
+public class DocumentHelper implements Parcelable {
 
-  private static DocumentHelper               documentHelper = new DocumentHelper();
+  private static DocumentHelper documentHelper = new DocumentHelper();
 
-  private ExoFile                             _fileCopied;
+  private ExoFile               _fileCopied    = new ExoFile();
 
-  private ExoFile                             _fileMoved;
-/*
- * The dictionary for mapping between parent folder and its child files
- */
-  public HashMap<ExoFile, ArrayList<ExoFile>> childFilesMap;
+  private ExoFile               _fileMoved     = new ExoFile();
+
+  /*
+   * The dictionary for mapping between parent folder and its child files
+   */
+  // public HashMap<String, ArrayList<ExoFile>> childFilesMap;
+
+  public Bundle                 childFilesMap;
+
   /*
    * The dictionary for mapping between the current selected file and its parent
    */
-  public HashMap<ExoFile, ExoFile>            currentFileMap;
+  // public HashMap<String, ExoFile> currentFileMap;
+
+  public Bundle                 currentFileMap;
 
   private DocumentHelper() {
 
@@ -47,6 +54,10 @@ public class DocumentHelper {
 
   public static DocumentHelper getInstance() {
     return documentHelper;
+  }
+
+  public void setInstance(DocumentHelper helper) {
+    documentHelper = helper;
   }
 
   public void setFileCopy(ExoFile cFile) {
@@ -63,6 +74,49 @@ public class DocumentHelper {
 
   public ExoFile getFileMove() {
     return _fileMoved;
+  }
+
+  private DocumentHelper(Parcel in) {
+    readFromParcel(in);
+  }
+
+  public static final Parcelable.Creator<DocumentHelper> CREATOR = new Parcelable.Creator<DocumentHelper>() {
+                                                                   public DocumentHelper createFromParcel(Parcel in) {
+                                                                     return new DocumentHelper(in);
+                                                                   }
+
+                                                                   public DocumentHelper[] newArray(int size) {
+                                                                     return new DocumentHelper[size];
+                                                                   }
+                                                                 };
+
+  private void readFromParcel(Parcel in) {
+    _fileCopied = in.readParcelable(ExoFile.class.getClassLoader());
+    _fileMoved = in.readParcelable(ExoFile.class.getClassLoader());
+    currentFileMap = in.readBundle();
+    childFilesMap = in.readBundle();
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see android.os.Parcelable#describeContents()
+   */
+  @Override
+  public int describeContents() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+   */
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeParcelable(_fileCopied, flags);
+    dest.writeParcelable(_fileMoved, flags);
+    dest.writeBundle(currentFileMap);
+    dest.writeBundle(childFilesMap);
   }
 
 }

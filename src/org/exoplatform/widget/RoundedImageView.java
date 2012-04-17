@@ -55,7 +55,7 @@ public class RoundedImageView extends AsyncImageView {
         canvas.drawBitmap(mScaledBitmap, 0, 0, null);
       }
     } catch (OutOfMemoryError e) {
-      SocialDetailHelper.getInstance().imageDownloader.clearCache();
+      SocialDetailHelper.getInstance().socialImageloader.clearCache();
     }
   }
 

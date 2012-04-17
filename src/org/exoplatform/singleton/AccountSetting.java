@@ -1,43 +1,31 @@
 package org.exoplatform.singleton;
 
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /*
  * This class is for manage all the account information
  * 
  */
-public class AccountSetting {
+public class AccountSetting implements Parcelable {
 
-  private static AccountSetting       accountSetting = new AccountSetting();
+  private static AccountSetting accountSetting = new AccountSetting();
 
-  private String                      userName;                             // username
+  private String                userName;                             // username
 
-  private String                      password;                             // password
+  private String                password;                             // password
 
-  private String                      domainName;                           // checked
-                                                                             // server
-                                                                             // url
+  private String                domainName;                           // checked
+                                                                       // server
+                                                                       // url
 
-  private String                      domainIndex;                          // the
-                                                                             // index
-                                                                             // of
-                                                                             // checked
-                                                                             // server
-                                                                             // url
+  private String                domainIndex;                          // the
+                                                                       // index
+                                                                       // of
+                                                                       // checked
+                                                                       // server
 
-  private AuthScope                   auth;                                 // the
-                                                                             // authentication
-                                                                             // scope
-                                                                             // for
-                                                                             // HttpClient
-
-  private UsernamePasswordCredentials credential;                           // username
-                                                                             // and
-                                                                             // password
-                                                                             // credentials
-                                                                             // for
-                                                                             // HttpClient
+  // url
 
   private AccountSetting() {
 
@@ -45,6 +33,10 @@ public class AccountSetting {
 
   public static AccountSetting getInstance() {
     return accountSetting;
+  }
+
+  public void setInstance(AccountSetting instance) {
+    accountSetting = instance;
   }
 
   public String getUsername() {
@@ -79,20 +71,47 @@ public class AccountSetting {
     domainIndex = index;
   }
 
-  public void setAuthScope(AuthScope au) {
-    auth = au;
+  private AccountSetting(Parcel in) {
+    readFromParcel(in);
   }
 
-  public AuthScope getAuthScope() {
-    return auth;
+  public void readFromParcel(Parcel in) {
+    userName = in.readString();
+    password = in.readString();
+    domainName = in.readString();
+    domainIndex = in.readString();
+
   }
 
-  public void setCredentials(UsernamePasswordCredentials upc) {
-    credential = upc;
+  public static final Parcelable.Creator<AccountSetting> CREATOR = new Parcelable.Creator<AccountSetting>() {
+                                                                   public AccountSetting createFromParcel(Parcel in) {
+                                                                     return new AccountSetting(in);
+                                                                   }
+
+                                                                   public AccountSetting[] newArray(int size) {
+                                                                     return new AccountSetting[size];
+                                                                   }
+                                                                 };
+
+  /*
+   * (non-Javadoc)
+   * @see android.os.Parcelable#describeContents()
+   */
+  @Override
+  public int describeContents() {
+    return 0;
   }
 
-  public UsernamePasswordCredentials getCredentials() {
-    return credential;
+  /*
+   * (non-Javadoc)
+   * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+   */
+  @Override
+  public void writeToParcel(Parcel par, int flags) {
+    par.writeString(userName);
+    par.writeString(password);
+    par.writeString(domainName);
+    par.writeString(domainIndex);
   }
 
 }

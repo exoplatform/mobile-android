@@ -1,47 +1,75 @@
 package org.exoplatform.model;
 
-import java.util.Date;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class ExoFile {
+public class ExoFile implements Parcelable {
 
-  public String  path;         // File's jcr url
+  public String  path          = "";  // File's jcr url
 
-  public boolean isFolder;     // Is folder
+  public boolean isFolder      = true; // Is folder
 
-  public String  name;         // name of the file/folder
+  public String  name          = "";  // name of the file/folder
 
-  public boolean canAddChild;  // can add new file or folder as it
-                                // content
+  public String  currentFolder = "";  // the path of file
 
-  public boolean canRemove;    // can remove the file/folder
+  public String  driveName     = "";  // drive name of file
 
-  public String  currentFolder; // the path of file
+  public String  workspaceName = "";  // work space of file
 
-  public String  driveName;    // drive name of file
-
-  public boolean hasChild;     // if the folder contains any files or
-                                // folders
-
-  public String  workspaceName; // work space of file
-
-  public String  nodeType;     // file content type
-
-  public String  creator;      // Name of the one who created the file
-
-  public Date    dateCreated;  // the time that the file is created
-
-  public Date    dateModified; // the time that the file is modified
-
-  public int     size;         // size of file
+  public String  nodeType      = "";  // file content type
 
   // Default constructors
   public ExoFile() {
   }
 
-  public ExoFile(String url, String _name, boolean folder) {
-    path = url;
-    name = _name;
-    isFolder = folder;
+  private ExoFile(Parcel in) {
+    readFromParcel(in);
+  }
+
+  private void readFromParcel(Parcel in) {
+    path = in.readString();
+    in.readBooleanArray(new boolean[] { isFolder });
+    name = in.readString();
+    currentFolder = in.readString();
+    driveName = in.readString();
+    workspaceName = in.readString();
+    nodeType = in.readString();
+
+  }
+
+  public static final Parcelable.Creator<ExoFile> CREATOR = new Parcelable.Creator<ExoFile>() {
+                                                            public ExoFile createFromParcel(Parcel in) {
+                                                              return new ExoFile(in);
+                                                            }
+
+                                                            public ExoFile[] newArray(int size) {
+                                                              return new ExoFile[size];
+                                                            }
+                                                          };
+
+  /*
+   * (non-Javadoc)
+   * @see android.os.Parcelable#describeContents()
+   */
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+   */
+  @Override
+  public void writeToParcel(Parcel par, int flags) {
+    par.writeString(path);
+    par.writeBooleanArray(new boolean[] { isFolder });
+    par.writeString(name);
+    par.writeString(currentFolder);
+    par.writeString(driveName);
+    par.writeString(workspaceName);
+    par.writeString(nodeType);
   }
 
 }
