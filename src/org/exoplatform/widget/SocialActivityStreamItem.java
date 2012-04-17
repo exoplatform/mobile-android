@@ -5,7 +5,6 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.social.client.api.model.RestActivityStream;
 import org.exoplatform.ui.social.SocialAttachedImageActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
@@ -159,6 +158,18 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 4:
       // DOC_ACTIVITY
+      /*
+       * add space information
+       */
+      String space = addSpaceInfo();
+      if (space != null) {
+        StringBuffer docBuffer = new StringBuffer();
+        docBuffer.append("<html><body>");
+        docBuffer.append(userName);
+        docBuffer.append(" ");
+        docBuffer.append(space);
+        textViewName.setText(Html.fromHtml(docBuffer.toString()), TextView.BufferType.SPANNABLE);
+      }
 
       String tempMessage = activityInfo.templateParams.get("MESSAGE");
       if (tempMessage != null) {
@@ -171,6 +182,7 @@ public class SocialActivityStreamItem extends LinearLayout {
         String docName = activityInfo.templateParams.get("DOCNAME");
         String url = domain + docLink;
         displayAttachImage(url, docName, null);
+
       }
 
       break;
@@ -190,6 +202,18 @@ public class SocialActivityStreamItem extends LinearLayout {
       break;
     case 9:
       // contents:spaces
+      /*
+       * add space information
+       */
+      String contentSpace = addSpaceInfo();
+      if (contentSpace != null) {
+        StringBuffer docBuffer = new StringBuffer();
+        docBuffer.append("<html><body>");
+        docBuffer.append(userName);
+        docBuffer.append(" ");
+        docBuffer.append(contentSpace);
+        textViewName.setText(Html.fromHtml(docBuffer.toString()), TextView.BufferType.SPANNABLE);
+      }
 
       String contentLink = activityInfo.templateParams.get("contenLink");
       if (contentLink != null) {
@@ -240,8 +264,10 @@ public class SocialActivityStreamItem extends LinearLayout {
       spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
       spaceBuffer.append(resource.getString(R.string.Space));
       spaceBuffer.append("</font>");
-    }
-    return spaceBuffer.toString();
+      return spaceBuffer.toString();
+    } else
+      return null;
+
   }
 
   private void setActivityTypeForum() {
@@ -250,7 +276,10 @@ public class SocialActivityStreamItem extends LinearLayout {
     forumBuffer.append("<html><body>");
     forumBuffer.append(userName);
     forumBuffer.append(" ");
-    forumBuffer.append(addSpaceInfo());
+    String spaceInfo = addSpaceInfo();
+    if (spaceInfo != null) {
+      forumBuffer.append(spaceInfo);
+    }
     forumBuffer.append(" ");
     String actType = activityInfo.templateParams.get("ActivityType");
     String actTypeDesc = null;
@@ -297,7 +326,10 @@ public class SocialActivityStreamItem extends LinearLayout {
     buffer.append("<a>");
     buffer.append(userName);
     buffer.append("</a> ");
-    buffer.append(addSpaceInfo());
+    String spaceInfo = addSpaceInfo();
+    if (spaceInfo != null) {
+      buffer.append(spaceInfo);
+    }
     buffer.append(" ");
     buffer.append("<font color=\"#696969\">");
     String act_key = activityInfo.templateParams.get("act_key");
@@ -337,7 +369,10 @@ public class SocialActivityStreamItem extends LinearLayout {
     answerBuffer.append("<a>");
     answerBuffer.append(userName);
     answerBuffer.append("</a> ");
-    answerBuffer.append(addSpaceInfo());
+    String spaceInfo = addSpaceInfo();
+    if (spaceInfo != null) {
+      answerBuffer.append(spaceInfo);
+    }
     answerBuffer.append(" ");
     answerBuffer.append("<font color=\"#696969\">");
     String act_key = activityInfo.templateParams.get("ActivityType");
@@ -375,7 +410,10 @@ public class SocialActivityStreamItem extends LinearLayout {
     forumBuffer.append("<a>");
     forumBuffer.append(userName);
     forumBuffer.append("</a> ");
-    forumBuffer.append(addSpaceInfo());
+    String spaceInfo = addSpaceInfo();
+    if (spaceInfo != null) {
+      forumBuffer.append(spaceInfo);
+    }
     forumBuffer.append(" ");
     String actType = activityInfo.templateParams.get("EventType");
     String actTypeDesc = null;
@@ -492,23 +530,21 @@ public class SocialActivityStreamItem extends LinearLayout {
       }
 
     }
+    /*
+     * Use SocialImageLoader to get and display attached image.
+     */
+    SocialDetailHelper.getInstance().socialImageloader.displayImage(url, attachImage);
 
-    if (SocialDetailHelper.getInstance().taskIsFinish = true) {
-      SocialDetailHelper.getInstance().imageDownloader.download(url,
-                                                                attachImage,
-                                                                ExoConnectionUtils._strCookie);
+    if (isDetail) {
+      attachImage.setOnClickListener(new OnClickListener() {
 
-      if (isDetail) {
-        attachImage.setOnClickListener(new OnClickListener() {
-
-          // @Override
-          public void onClick(View v) {
-            SocialDetailHelper.getInstance().setAttachedImageUrl(url);
-            Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);
-            mContext.startActivity(intent);
-          }
-        });
-      }
+        // @Override
+        public void onClick(View v) {
+          SocialDetailHelper.getInstance().setAttachedImageUrl(url);
+          Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);
+          mContext.startActivity(intent);
+        }
+      });
     }
 
   }

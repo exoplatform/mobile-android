@@ -1,6 +1,6 @@
 package org.exoplatform.singleton;
 
-import org.exoplatform.utils.ImageDownloader;
+import org.exoplatform.utils.image.SocialImageLoader;
 
 public class SocialDetailHelper {
   private String                    activityId;
@@ -9,7 +9,7 @@ public class SocialDetailHelper {
 
   private String                    attachImageUrl;
 
-  public ImageDownloader            imageDownloader;
+  public SocialImageLoader          socialImageloader;
 
   public boolean                    taskIsFinish = false;
 

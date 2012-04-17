@@ -10,9 +10,9 @@ import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ImageDownloader;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
+import org.exoplatform.utils.image.SocialImageLoader;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -37,7 +37,12 @@ public class LaunchController {
     context = c;
     getLaunchInfo();
     getServerInfo();
-    SocialDetailHelper.getInstance().imageDownloader = new ImageDownloader(c.getApplicationContext());
+    /*
+     * Initialize SocialImageLoader when application start up and clear all data
+     * cache.
+     */
+    SocialDetailHelper.getInstance().socialImageloader = new SocialImageLoader(context);
+    SocialDetailHelper.getInstance().socialImageloader.clearCache();
   }
 
   private void getLaunchInfo() {

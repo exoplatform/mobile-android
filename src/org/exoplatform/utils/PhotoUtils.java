@@ -355,4 +355,13 @@ public class PhotoUtils {
 
     return Bitmap.createScaledBitmap(bm, width, height, true /* filter */);
   }
+
+  public static void copyStream(InputStream is, OutputStream os) throws IOException {
+    final int buffer_size = 1024;
+    byte[] bytes = new byte[buffer_size];
+    int count;
+    while ((count = is.read(bytes, 0, buffer_size)) != -1) {
+      os.write(bytes, 0, count);
+    }
+  }
 }

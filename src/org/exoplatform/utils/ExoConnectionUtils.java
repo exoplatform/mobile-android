@@ -9,16 +9,17 @@ import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -34,16 +35,19 @@ import android.net.NetworkInfo;
 
 //interact with server
 public class ExoConnectionUtils {
+  // Default connection and socket timeout of 60 seconds. Tweak to taste.
+  private static final int        SOCKET_OPERATION_TIMEOUT = 30 * 1000;
 
-  // private static int splitLinesAt = 76;
   public static DefaultHttpClient httpClient;
 
-  public static List<Cookie>      _sessionCookies;      // Cookie array
+  public static CookieStore       cookiesStore;
 
-  public static String            _strCookie = "";      // Cookie string
+  // String login data
+  private static String           _strFirstLoginContent;
 
-  private static String           _strFirstLoginContent; // String login data
-
+  /*
+   * Check mobile network and wireless status
+   */
   public static boolean isNetworkAvailableExt(Context paramContext) {
     ConnectivityManager localConnectivityManager = (ConnectivityManager) paramContext.getSystemService("connectivity");
     if (localConnectivityManager == null) {
@@ -91,21 +95,26 @@ public class ExoConnectionUtils {
    * Call onPrepareLogin() method to login system again
    */
 
-  public static void onReLogin() throws IOException {
+  public static boolean onReLogin() throws IOException {
     String domain = AccountSetting.getInstance().getDomainName();
     String username = AccountSetting.getInstance().getUsername();
     String password = AccountSetting.getInstance().getPassword();
-    onPrepareLogin(domain, username, password);
+    HttpResponse response = onPrepareLogin(domain, username, password);
+    int statusCode = response.getStatusLine().getStatusCode();
+    if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
+      return true;
+    } else
+      return false;
   }
 
   /*
    * Init DefaultHttpClient
    */
 
-  private static void initHttpClient() {
+  public static void initHttpClient() {
     HttpParams httpParameters = new BasicHttpParams();
-    HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
-    HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+    HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
+    HttpConnectionParams.setSoTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
     httpClient = new DefaultHttpClient(httpParameters);
   }
@@ -116,13 +125,13 @@ public class ExoConnectionUtils {
 
   public static HttpResponse onPrepareLogin(String domain, String username, String password) throws IOException {
     HttpResponse response;
-    CookieStore cookiesStore;
     String strCookie = "";
+    StringBuffer domainBuffer = new StringBuffer(domain);
+    domainBuffer.append(ExoConstants.DOMAIN_SUFFIX);
 
-    String redirectStr = domain.concat(ExoConstants.DOMAIN_SUFFIX);
-
-    HttpGet httpGet = new HttpGet(redirectStr);
+    String redirectStr = domainBuffer.toString();
     initHttpClient();
+    HttpGet httpGet = new HttpGet(redirectStr);
     response = httpClient.execute(httpGet);
     cookiesStore = httpClient.getCookieStore();
     List<Cookie> cookies = cookiesStore.getCookies();
@@ -135,24 +144,27 @@ public class ExoConnectionUtils {
     int indexOfPrivate = redirectStr.indexOf("/classic");
 
     // Request to login
-    String loginStr;
-    if (indexOfPrivate > 0)
-      loginStr = redirectStr.substring(0, indexOfPrivate).concat("/j_security_check");
-    else
-      loginStr = redirectStr.concat("/j_security_check");
-    HttpPost httpPost = new HttpPost(loginStr);
+    if (indexOfPrivate > 0) {
+      domainBuffer = new StringBuffer();
+      domainBuffer.append(redirectStr.substring(0, indexOfPrivate));
+    } else {
+      domainBuffer = new StringBuffer();
+      domainBuffer.append(redirectStr);
+    }
+    domainBuffer.append("/j_security_check");
+    HttpPost httpPost = new HttpPost(domainBuffer.toString());
     List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
     nvps.add(new BasicNameValuePair("j_username", username));
     nvps.add(new BasicNameValuePair("j_password", password));
     httpPost.setEntity(new UrlEncodedFormEntity(nvps));
     httpPost.setHeader("Cookie", strCookie);
-    _strCookie = strCookie;
     response = httpClient.execute(httpPost);
-    _sessionCookies = new ArrayList<Cookie>(cookies);
     return response;
   }
 
-  // Send request with authentication
+  /*
+   * Checking the login response content
+   */
   public static String sendAuthentication(HttpResponse httpResponse) {
     try {
       HttpEntity entity;
@@ -167,7 +179,7 @@ public class ExoConnectionUtils {
             return ExoConstants.LOGIN_NO;
           } else if (_strFirstLoginContent.contains("error', '/main?url")) {
             _strFirstLoginContent = null;
-            return "ERROR";
+            return ExoConstants.LOGIN_ERROR;
           } else if (_strFirstLoginContent.contains("eXo.env.portal")) {
             return ExoConstants.LOGIN_YES;
           } else {
@@ -199,7 +211,7 @@ public class ExoConnectionUtils {
     try {
       HttpEntity entity;
       int statusCode = response.getStatusLine().getStatusCode();
-      if (statusCode >= 200 && statusCode < 300) {
+      if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
         entity = response.getEntity();
         if (entity != null) {
           return entity.getContent();
@@ -219,9 +231,13 @@ public class ExoConnectionUtils {
     if (url != null) {
       url = url.replaceAll(" ", "%20");
       HttpGet httpGet = new HttpGet(url);
+      if (httpClient == null) {
+        initHttpClient();
+        httpClient.setCookieStore(cookiesStore);
+      }
       HttpResponse response = httpClient.execute(httpGet);
       int statusCode = response.getStatusLine().getStatusCode();
-      if (statusCode >= 200 && statusCode < 300) {
+      if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
         return 1;
       } else {
         return 0;
@@ -231,30 +247,17 @@ public class ExoConnectionUtils {
 
   }
 
-  public static void createAuthorization(String url, int port, String userName, String password) {
-    AuthScope auth = new AuthScope(url, port);
-    AccountSetting.getInstance().setAuthScope(auth);
-    UsernamePasswordCredentials credential = new UsernamePasswordCredentials(userName, password);
-    AccountSetting.getInstance().setCredentials(credential);
-  }
-
   public static HttpResponse getPlatformResponse(String strUrlRequest) {
-    DefaultHttpClient httpClientPlf = null;
     try {
-      HttpParams httpParameters = new BasicHttpParams();
-      HttpConnectionParams.setConnectionTimeout(httpParameters, 60000);
-      HttpConnectionParams.setSoTimeout(httpParameters, 60000);
-      HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-
-      httpClientPlf = new DefaultHttpClient(httpParameters);
+      if (httpClient == null) {
+        initHttpClient();
+      }
       HttpGet httpGet = new HttpGet(strUrlRequest);
-      HttpResponse response = httpClientPlf.execute(httpGet);
+      HttpResponse response = httpClient.execute(httpGet);
       return response;
 
     } catch (IOException e) {
       return null;
-    } finally {
-      httpClientPlf.getConnectionManager().shutdown();
     }
 
   }
@@ -306,6 +309,32 @@ public class ExoConnectionUtils {
       return false;
     }
 
+  }
+
+  public static ArrayList<String> getCookieList(CookieStore cookieStore) {
+    ArrayList<String> cookieList = new ArrayList<String>();
+    List<Cookie> cookies = cookieStore.getCookies();
+    String strCookie = "";
+    if (!cookies.isEmpty()) {
+      for (int i = 0; i < cookies.size(); i++) {
+        strCookie = cookies.get(i).getName().toString() + "="
+            + cookies.get(i).getValue().toString();
+        cookieList.add(strCookie);
+      }
+    }
+    return cookieList;
+  }
+
+  public static void setCookieStore(CookieStore cookieStore, ArrayList<String> list) {
+    cookieStore = new BasicCookieStore();
+    for (String cookieStr : list) {
+      String[] keyValue = cookieStr.split("=");
+      String key = keyValue[0];
+      String value = "";
+      if (keyValue.length > 1)
+        value = keyValue[1];
+      cookieStore.addCookie(new BasicClientCookie(key, value));
+    }
   }
 
 }

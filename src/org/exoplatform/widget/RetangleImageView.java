@@ -86,7 +86,7 @@ public class RetangleImageView extends ImageView {
       //Draw the output_bitmap to image view
       canvas.drawBitmap(output_bitmap, 0, 0, null);
     } catch (OutOfMemoryError e) {
-      SocialDetailHelper.getInstance().imageDownloader.clearCache();
+      SocialDetailHelper.getInstance().socialImageloader.clearCache();
     }
   }
 

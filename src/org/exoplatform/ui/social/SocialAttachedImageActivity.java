@@ -3,7 +3,6 @@ package org.exoplatform.ui.social;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.MyActionBar;
 
 import android.os.Bundle;
@@ -31,9 +30,7 @@ public class SocialAttachedImageActivity extends MyActionBar {
 
   private void init() {
     imageView = (ImageView) findViewById(R.id.social_attached_image_view);
-    SocialDetailHelper.getInstance().imageDownloader.download(imageUrl,
-                                                              imageView,
-                                                              ExoConnectionUtils._strCookie);
+    SocialDetailHelper.getInstance().socialImageloader.displayImage(imageUrl, imageView);
   }
 
   private String getImageName(String url) {
@@ -64,6 +61,5 @@ public class SocialAttachedImageActivity extends MyActionBar {
   public void onBackPressed() {
     finish();
   }
-
 
 }
