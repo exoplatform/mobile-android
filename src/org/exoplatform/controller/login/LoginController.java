@@ -1,8 +1,6 @@
 package org.exoplatform.controller.login;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.apache.http.HttpResponse;
 import org.exoplatform.R;
@@ -52,8 +50,6 @@ public class LoginController {
   private String             titleString;
 
   private String             okString;
-
-  private URI                uri;
 
   private WarningDialog      dialog;
 
@@ -130,14 +126,10 @@ public class LoginController {
     public String doInBackground(Void... params) {
 
       try {
-
-        uri = new URI(_strDomain);
         HttpResponse response = ExoConnectionUtils.onPrepareLogin(_strDomain, userName, password);
         String resultStr = ExoConnectionUtils.sendAuthentication(response);
         return resultStr;
 
-      } catch (URISyntaxException e) {
-        return null;
       } catch (IOException e) {
         return null;
       }
@@ -151,7 +143,6 @@ public class LoginController {
         dialog.show();
       } else if (result.equalsIgnoreCase(ExoConstants.LOGIN_YES)) {
         AccountSetting accountSetting = AccountSetting.getInstance();
-        ExoConnectionUtils.createAuthorization(uri.getHost(), uri.getPort(), userName, password);
         SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());

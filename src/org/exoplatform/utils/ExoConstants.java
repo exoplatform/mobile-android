@@ -18,6 +18,8 @@ public class ExoConstants {
 
   public static final String LOGIN_UNREACHABLE             = "UNREACHABLE";
 
+  public static final String LOGIN_ERROR                   = "ERROR";
+
   public static final String COMPOSE_TYPE                  = "COMPOSE_TYPE";
 
   public static final String SETTING_TYPE                  = "SETTING_TYPE";
