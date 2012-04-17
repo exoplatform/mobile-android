@@ -5,11 +5,11 @@ import greendroid.widget.ActionBarItem;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentLoadTask;
 import org.exoplatform.model.ExoFile;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.social.SelectedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.Window;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -38,10 +39,31 @@ import android.widget.TextView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class DocumentActivity extends MyActionBar {
+  private static final String    DOCUMENT_HELPER      = "document_helper";
+
+  private static final String    DOCUMENT_SOURCE_HOME = "mSourceHome";
+
+  private static final String    DOCUMENT_SOURCE      = "mSource";
+
+  private static final String    DOCUMENT_DESTINATION = "mDestination";
+
+  private static final String    DOCUMENT_ACTION      = "mAction";
+
+  private static final String    ACCOUNT_SETTING      = "account_setting";
+
+  private static final String    COOKIESTORE          = "cookie_store";
+
+  private static final String    CURRENT_FILE         = "current_file";
+
+  private String                 mSource;
+
+  private String                 mDestination;
+
+  private int                    mAction;
 
   public static DocumentActivity _documentActivityInstance;
 
-  private ListView               _listViewDocument;
+  public ListView                _listViewDocument;
 
   private TextView               _textViewEmptyPage;
 
@@ -61,10 +83,9 @@ public class DocumentActivity extends MyActionBar {
 
   public ExoFile                 _fileForCurrentActionBar;
 
-  // Constructor
   @Override
-  public void onCreate(Bundle icicle) {
-    super.onCreate(icicle);
+  public void onCreate(Bundle bundle) {
+    super.onCreate(bundle);
 
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
@@ -72,13 +93,52 @@ public class DocumentActivity extends MyActionBar {
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     _documentActivityInstance = this;
     init();
-    _urlDocumentHome = ExoDocumentUtils.repositoryHomeURL;
+
     /*
-     * Initialize 2 dictionaries for mapping each time document starting
+     * Restore the current state of activity
      */
-    DocumentHelper.getInstance().childFilesMap = new HashMap<ExoFile, ArrayList<ExoFile>>();
-    DocumentHelper.getInstance().currentFileMap = new HashMap<ExoFile, ExoFile>();
-    onLoad(_urlDocumentHome, null, 0);
+    if (bundle != null) {
+      DocumentHelper helper = bundle.getParcelable(DOCUMENT_HELPER);
+      DocumentHelper.getInstance().setInstance(helper);
+      AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
+      AccountSetting.getInstance().setInstance(accountSetting);
+      ArrayList<String> cookieList = bundle.getStringArrayList(COOKIESTORE);
+      ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
+      _fileForCurrentActionBar = bundle.getParcelable(CURRENT_FILE);
+      _urlDocumentHome = bundle.getString(DOCUMENT_SOURCE_HOME);
+      mSource = bundle.getString(DOCUMENT_SOURCE);
+      mDestination = bundle.getString(DOCUMENT_DESTINATION);
+      mAction = bundle.getInt(DOCUMENT_ACTION);
+      onLoad(mSource, mDestination, mAction);
+//       setDocumentAdapter(getCurrentDocumentList());
+    } else {
+      /*
+       * Initialize 2 dictionaries for mapping each time document starting
+       */
+      DocumentHelper.getInstance().childFilesMap = new Bundle();
+      DocumentHelper.getInstance().currentFileMap = new Bundle();
+      _urlDocumentHome = ExoDocumentUtils.repositoryHomeURL;
+      onLoad(_urlDocumentHome, null, 0);
+    }
+
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+   */
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
+    outState.putString(DOCUMENT_SOURCE_HOME, _urlDocumentHome);
+    outState.putString(DOCUMENT_SOURCE, mSource);
+    outState.putString(DOCUMENT_DESTINATION, mDestination);
+    outState.putInt(DOCUMENT_ACTION, mAction);
+    outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
+    outState.putStringArrayList(COOKIESTORE,
+                                ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
+    outState.putParcelable(CURRENT_FILE, _fileForCurrentActionBar);
 
   }
 
@@ -156,49 +216,48 @@ public class DocumentActivity extends MyActionBar {
         _documentActivityInstance = null;
         finish();
       } else {
-        if (DocumentActivity._documentActivityInstance._fileForCurrentActionBar == null)
-          DocumentActivity._documentActivityInstance.setListViewPadding(5, 0, 5, 0);
-        else
-          DocumentActivity._documentActivityInstance.setListViewPadding(-2, 0, -2, 0);
+        /*
+         * Set animation for listview when press back button
+         */
+        _listViewDocument.setAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_left_to_right));
 
-        ExoFile parent = null;
-        ArrayList<ExoFile> documentList = null;
-
-        if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
-          _fileForCurrentActionBar = null;
-          parent = DocumentHelper.getInstance().currentFileMap.get(null);
-
-        } else {
-          parent = DocumentHelper.getInstance().currentFileMap.get(_fileForCurrentActionBar);
-          documentList = DocumentHelper.getInstance().childFilesMap.get(parent);
-          DocumentHelper.getInstance().currentFileMap.remove(_fileForCurrentActionBar);
-          _fileForCurrentActionBar = parent;
-        }
         /*
          * Reset ListView
          */
-        documentList = DocumentHelper.getInstance().childFilesMap.get(parent);
-        _documentAdapter = new DocumentAdapter(this, documentList);
-        setDocumentAdapter();
-        addOrRemoveFileActionButton();
 
-        if (_fileForCurrentActionBar == null)
-          setTitle(getResources().getString(R.string.Documents));
-        else
-          setTitle(_fileForCurrentActionBar.name);
-        setEmptyView(View.GONE);
+        setDocumentAdapter(getCurrentDocumentList());
       }
 
     }
 
   }
 
-  private void clearMappingCache() {
-    DocumentHelper.getInstance().childFilesMap.clear();
-    DocumentHelper.getInstance().currentFileMap.clear();
+  private ArrayList<ExoFile> getCurrentDocumentList() {
+    ExoFile parent = null;
+    ArrayList<ExoFile> documentList = null;
+
+    if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
+      _fileForCurrentActionBar = null;
+      parent = DocumentHelper.getInstance().currentFileMap.getParcelable(null);
+      documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_PATH);
+
+    } else {
+      parent = DocumentHelper.getInstance().currentFileMap.getParcelable(_fileForCurrentActionBar.path);
+      DocumentHelper.getInstance().currentFileMap.remove(_fileForCurrentActionBar.path);
+      _fileForCurrentActionBar = parent;
+      if (parent == null) {
+        documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(null);
+      } else {
+        documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(parent.path);
+      }
+    }
+    return documentList;
   }
 
   public void onLoad(String source, String destination, int action) {
+    mSource = source;
+    mDestination = destination;
+    mAction = action;
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
         if (Config.GD_INFO_LOGS_ENABLED)
@@ -225,17 +284,10 @@ public class DocumentActivity extends MyActionBar {
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-    init();
-  }
-
-  @Override
   public void finish() {
     if (_progressDialog != null) {
       _progressDialog.dismiss();
     }
-    clearMappingCache();
     super.finish();
   }
 
@@ -244,7 +296,6 @@ public class DocumentActivity extends MyActionBar {
   }
 
   private void init() {
-
     _listViewDocument = (ListView) findViewById(R.id.ListView_Files);
     _listViewDocument.setDivider(null);
     _textViewEmptyPage = (TextView) findViewById(R.id.TextView_EmptyPage);
@@ -254,9 +305,28 @@ public class DocumentActivity extends MyActionBar {
 
   }
 
-  public void setDocumentAdapter() {
+  public void setDocumentAdapter(ArrayList<ExoFile> documentList) {
+    if (_fileForCurrentActionBar == null) {
+      setListViewPadding(5, 0, 5, 0);
+      setTitle(getResources().getString(R.string.Documents));
+    } else {
+      setListViewPadding(-2, 0, -2, 0);
+      setTitle(_fileForCurrentActionBar.name);
+    }
 
+    _documentAdapter = new DocumentAdapter(this, documentList);
     _listViewDocument.setAdapter(_documentAdapter);
+    addOrRemoveFileActionButton();
+
+    if (_fileForCurrentActionBar == null)
+      setTitle(getResources().getString(R.string.Documents));
+    else
+      setTitle(_fileForCurrentActionBar.name);
+    if (documentList.size() == 0) {
+      setEmptyView(View.VISIBLE);
+    } else
+      setEmptyView(View.GONE);
+
   }
 
   // Take a photo
