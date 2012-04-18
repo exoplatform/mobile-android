@@ -172,7 +172,6 @@
     <string name="SpecialCharacters"> Special characters are not allowed.</string>
     <string name="In"> in</string>
     <string name="Space"> space</string>
-    <string name="SpecialCharacters"> Special characters are not allowed.</string>
     <string name="Personal"> Personal</string>
     <string name="Group"> Group</string>
     <string name="NetworkTimeout"> Network connection timeout. Please try again!</string>
