@@ -113,7 +113,7 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
   public void onPostExecute(Integer result) {
     if (result == 1) {
       ((Activity) mContext).finish();
-      SocialActivity.socialActivity.reloadActivity();
+      SocialActivity.socialActivity.loadActivity();
     } else {
       new WarningDialog(mContext, warningTitle, errorString, okString).show();
     }

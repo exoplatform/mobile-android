@@ -35,5 +35,7 @@ public class ExoApplication extends GDApplication {
   public Intent getMainApplicationIntent() {
     return new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
   }
+  
+  
 
 }

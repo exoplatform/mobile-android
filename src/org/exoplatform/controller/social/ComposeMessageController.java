@@ -114,7 +114,7 @@ public class ComposeMessageController {
 
       ((Activity) mContext).finish();
 
-      SocialActivity.socialActivity.reloadActivity();
+      SocialActivity.socialActivity.loadActivity();
 
     } catch (SocialClientLibException e) {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);

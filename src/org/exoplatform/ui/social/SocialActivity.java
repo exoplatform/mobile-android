@@ -3,6 +3,7 @@ package org.exoplatform.ui.social;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.social.SocialController;
+import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.SocialWaitingDialog;
@@ -65,13 +66,7 @@ public class SocialActivity extends MyActionBar {
 
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     changeLanguage();
-    init();
-  }
-
-  private void init() {
-    socialController = new SocialController(this, activityStreamWrap, _progressDialog);
-    socialController.launchNewsService();
-
+    loadActivity();
   }
 
   @Override
@@ -96,23 +91,21 @@ public class SocialActivity extends MyActionBar {
     emptyStatus.setText(emptyString);
   }
 
-  public void reloadActivity() {
-    socialController.onLoad(number_of_activity);
-  }
-
-  @Override
-  public void finish() {
-    if (_progressDialog != null) {
-      _progressDialog.dismiss();
-      _progressDialog = null;
-    }
-    super.finish();
+  public void loadActivity() {
+    if (SocialServiceHelper.getInstance().getActivityService() == null) {
+      socialController = new SocialController(this, activityStreamWrap, _progressDialog);
+      socialController.launchNewsService();
+    } else
+      socialController.onLoad(number_of_activity);
   }
 
   @Override
   public void onBackPressed() {
     socialController.finishService();
-    finish();
+    if (_progressDialog != null) {
+      _progressDialog.dismiss();
+      _progressDialog = null;
+    }
   }
 
   @Override
@@ -123,7 +116,7 @@ public class SocialActivity extends MyActionBar {
       finish();
       break;
     case 0:
-      socialController.onLoad(number_of_activity);
+      loadActivity();
       break;
     case 1:
       Intent intent = new Intent(this, ComposeMessageActivity.class);
