@@ -35,22 +35,22 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="-4dp"
-            android:background="@drawable/authenticate_panel_bg_large"
+            android:background="@drawable/authenticate_panel_bg"
             android:padding="10dp" >
 
             <EditText
                 android:id="@+id/EditText_UserName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/authenticate_textfied_background"
                 android:gravity="center"
                 android:singleLine="true"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="16dip"
+                android:textSize="20dip"
                 android:textStyle="bold" />
 
             <EditText
@@ -58,8 +58,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/EditText_UserName"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/authenticate_textfied_background"
                 android:gravity="center"
@@ -76,8 +76,8 @@
                 android:layout_height="fill_parent"
                 android:layout_below="@+id/Image_Account"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginRight="27dp"
                 android:layout_marginTop="5dp" />
         </RelativeLayout>
 
@@ -86,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="-2dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="50dp"
             android:background="@drawable/authenticatepanelbuttonbgon" >
 
             <Button
@@ -133,8 +133,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/Image_Panel_Background"
-            android:layout_marginLeft="19dp"
-            android:layout_marginRight="19dp"
+            android:layout_marginLeft="39dp"
+            android:layout_marginRight="39dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/login_button_background_shape"
             android:textColor="#000000"
