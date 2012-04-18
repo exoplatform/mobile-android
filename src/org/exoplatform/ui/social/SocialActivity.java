@@ -19,6 +19,11 @@ import android.widget.TextView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialActivity extends MyActionBar {
+
+  private static final String  NUMBER_OF_ACTIVITY      = "NUMBER_OF_ACTIVITY";
+
+  private static final String  NUMBER_OF_MORE_ACTIVITY = "NUMBER_OF_MORE_ACTIVITY";
+
   private SocialWaitingDialog  _progressDialog;
 
   private LinearLayout         activityStreamWrap;
@@ -33,7 +38,9 @@ public class SocialActivity extends MyActionBar {
 
   private String               emptyString;
 
-  // private ListView socialListView;
+  public int                   number_of_activity;
+
+  public int                   number_of_more_activity;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -48,10 +55,13 @@ public class SocialActivity extends MyActionBar {
     setActionBarContentView(R.layout.activitybrowserview);
 
     socialActivity = this;
-    // socialListView = (ListView) findViewById(R.id.social_listview);
-    // socialListView.setDividerHeight(0);
-    // socialListView.setSmoothScrollbarEnabled(true);
-    // socialListView.setScrollbarFadingEnabled(false);
+    if (savedInstanceState != null) {
+      number_of_activity = savedInstanceState.getInt(NUMBER_OF_ACTIVITY);
+      number_of_more_activity = savedInstanceState.getInt(NUMBER_OF_MORE_ACTIVITY);
+    } else {
+      number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
+      number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
+    }
 
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     changeLanguage();
@@ -60,8 +70,15 @@ public class SocialActivity extends MyActionBar {
 
   private void init() {
     socialController = new SocialController(this, activityStreamWrap, _progressDialog);
-    socialController.onLoad();
+    socialController.launchNewsService();
 
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putInt(NUMBER_OF_ACTIVITY, number_of_activity);
+    outState.putInt(NUMBER_OF_MORE_ACTIVITY, number_of_more_activity);
   }
 
   public void setEmptyView(int status) {
@@ -80,20 +97,21 @@ public class SocialActivity extends MyActionBar {
   }
 
   public void reloadActivity() {
-    socialController.onLoad();
+    socialController.onLoad(number_of_activity);
   }
 
   @Override
   public void finish() {
     if (_progressDialog != null) {
       _progressDialog.dismiss();
+      _progressDialog = null;
     }
     super.finish();
   }
 
   @Override
   public void onBackPressed() {
-    socialController.onCancelLoad();
+    socialController.finishService();
     finish();
   }
 
@@ -105,7 +123,7 @@ public class SocialActivity extends MyActionBar {
       finish();
       break;
     case 0:
-      socialController.onLoad();
+      socialController.onLoad(number_of_activity);
       break;
     case 1:
       Intent intent = new Intent(this, ComposeMessageActivity.class);

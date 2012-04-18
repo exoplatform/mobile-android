@@ -63,9 +63,6 @@ public class HomeActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-    if (homeActionListenner != null) {
-      homeActionListenner.onCancelLoadNewsService();
-    }
     homeController.onFinish();
     // new LogoutDialog(HomeActivity.this, homeController).show();
   }
@@ -91,9 +88,6 @@ public class HomeActivity extends MyActionBar {
       break;
     case 0:
       // new LogoutDialog(HomeActivity.this, homeController).show();
-      if (homeActionListenner != null) {
-        homeActionListenner.onCancelLoadNewsService();
-      }
       homeController.onFinish();
       break;
     case 1:

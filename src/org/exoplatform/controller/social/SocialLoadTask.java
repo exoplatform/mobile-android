@@ -27,24 +27,21 @@ import android.view.View;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialActivityInfo>> {
-  private SocialWaitingDialog _progressDialog;
+  private Context          mContext;
 
-  private Context             mContext;
+  private String           loadingData;
 
-  private String              loadingData;
+  private String           okString;
 
-  private String              okString;
+  private String           titleString;
 
-  private String              titleString;
+  private String           contentString;
 
-  private String              contentString;
+  private SocialController socialController;
 
-  private SocialController    socialController;
-
-  public SocialLoadTask(Context context, SocialController controller, SocialWaitingDialog dialog) {
+  public SocialLoadTask(Context context, SocialController controller) {
     mContext = context;
     socialController = controller;
-    _progressDialog = dialog;
     changeLanguage();
   }
 
@@ -59,9 +56,13 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
 
   @Override
   public void onPreExecute() {
-    // progressItem = new ProgressItem(loadingData);
-    _progressDialog = new SocialWaitingDialog(mContext, socialController, null, loadingData);
-    _progressDialog.show();
+    if (socialController._progressDialog == null) {
+      socialController._progressDialog = new SocialWaitingDialog(mContext,
+                                                                 socialController,
+                                                                 null,
+                                                                 loadingData);
+      socialController._progressDialog.show();
+    }
 
   }
 
@@ -112,12 +113,6 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
   }
 
   @Override
-  public void onCancelled() {
-    super.onCancelled();
-    _progressDialog.dismiss();
-  }
-
-  @Override
   public void onPostExecute(ArrayList<SocialActivityInfo> result) {
     if (result != null) {
       if (result.size() == 0) {
@@ -131,7 +126,8 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
-    _progressDialog.dismiss();
+    socialController._progressDialog.dismiss();
+    socialController._progressDialog = null;
     SocialDetailHelper.getInstance().taskIsFinish = true;
 
   }

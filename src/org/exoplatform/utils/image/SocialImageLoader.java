@@ -68,7 +68,7 @@ public class SocialImageLoader {
   private ExecutorService        executorService;
 
   // The image drawable for progress downloading
-  private final int              STUB_ID       = R.drawable.loading39;
+  private final int              STUB_ID       = R.drawable.loading;
 
   // If the image bitmap is error or null, it will display this drawable
   private final int              FINAL_STUB_ID = R.drawable.documenticonforunknown;

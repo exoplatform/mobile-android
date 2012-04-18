@@ -33,39 +33,37 @@ import android.widget.LinearLayout;
 
 public class SocialController {
 
-  private SocialWaitingDialog _progressDialog;
+  public SocialWaitingDialog    _progressDialog;
 
-  private int                 number_of_activity;
+  private SocialActivity        mContext;
 
-  private int                 number_of_more_activity;
+  private SocialServiceLoadTask mServiceLoadTask;
 
-  private SocialActivity      mContext;
+  private SocialLoadTask        mLoadTask;
 
-  private SocialLoadTask      mLoadTask;
+  private LinearLayout          activityStreamWrap;
 
-  private LinearLayout        activityStreamWrap;
+  private String                showMoreText;
 
-  private String              showMoreText;
+  private String                today;
 
-  private String              today;
+  private Resources             resource;
 
-  private Resources           resource;
+  private String                minute;
 
-  private String              minute;
+  private String                minutes;
 
-  private String              minutes;
+  private String                hour;
 
-  private String              hour;
+  private String                hours;
 
-  private String              hours;
+  private String                okString;
 
-  private String              okString;
+  private String                titleString;
 
-  private String              titleString;
+  private int                   title_high_light = R.drawable.social_activity_browse_header_highlighted_bg;
 
-  private int                 title_high_light = R.drawable.social_activity_browse_header_highlighted_bg;
-
-  private int                 title_normal     = R.drawable.social_activity_browse_header_normal_bg;
+  private int                   title_normal     = R.drawable.social_activity_browse_header_normal_bg;
 
   // private ListView socialListView;
 
@@ -75,23 +73,46 @@ public class SocialController {
     resource = context.getResources();
     _progressDialog = dialog;
     onChangeLanguage();
-    number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
-    number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
   }
 
-  public void onLoad() {
+  public void finishService() {
+    onCancelLoadNewsService();
+    onCancelLoad();
+  }
+
+  public void launchNewsService() {
+
+    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+      if (mServiceLoadTask == null
+          || mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.FINISHED) {
+        mServiceLoadTask = (SocialServiceLoadTask) new SocialServiceLoadTask(mContext, this).execute();
+      }
+    } else {
+      new ConnectionErrorDialog(mContext).show();
+    }
+
+  }
+
+  private void onCancelLoadNewsService() {
+    if (mServiceLoadTask != null
+        && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING) {
+      mServiceLoadTask.cancel(true);
+      mServiceLoadTask = null;
+    }
+  }
+
+  public void onLoad(int number) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this, _progressDialog).execute(number_of_activity);
+        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this).execute(number);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
     }
   }
 
-  public void onCancelLoad() {
+  private void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == SocialLoadTask.Status.RUNNING) {
-      mLoadTask.onCancelled();
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
@@ -138,7 +159,7 @@ public class SocialController {
               else
                 SocialServiceHelper.getInstance().getActivityService().like(activity);
 
-              onLoad();
+              onLoad(mContext.number_of_activity);
             } catch (SocialClientLibException e) {
               WarningDialog dialog = new WarningDialog(mContext,
                                                        titleString,
@@ -182,14 +203,14 @@ public class SocialController {
       activityStreamWrap.addView(item, params);
 
     }
-    if (result.size() > number_of_activity || result.size() == number_of_activity) {
+    if (result.size() > mContext.number_of_activity || result.size() == mContext.number_of_activity) {
       SocialShowMoreItem showmore = new SocialShowMoreItem(mContext);
       showmore.showMoreBtn.setText(showMoreText);
       showmore.showMoreBtn.setOnClickListener(new OnClickListener() {
 
         public void onClick(View v) {
-          number_of_activity += number_of_more_activity;
-          onLoad();
+          mContext.number_of_activity += mContext.number_of_more_activity;
+          onLoad(mContext.number_of_activity);
 
         }
       });

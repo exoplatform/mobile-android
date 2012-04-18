@@ -18,7 +18,7 @@ public class SocialWaitingDialog extends WaitingDialog {
   @Override
   public void onBackPressed() {
     super.onBackPressed();
-    socialController.onCancelLoad();
+    socialController.finishService();
   }
 
 }
