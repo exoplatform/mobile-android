@@ -79,6 +79,8 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     changeLanguage();
     composeMessageActivity = this;
+    if (savedInstanceState != null)
+      finish();
     composeType = getIntent().getIntExtra(ExoConstants.COMPOSE_TYPE, composeType);
     if (composeType == 0) {
       setTitle(statusUpdate);

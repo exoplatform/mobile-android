@@ -6,15 +6,20 @@ import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.cookie.Cookie;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -29,14 +34,15 @@ import com.cyrilmottier.android.greendroid.R;
 
 //Display gadget
 public class WebViewActivity extends MyActionBar {
+  private static final String COOKIESTORE = "cookie_store";
 
-  // private WebViewLoadTask mLoadTask;
+  private WebViewLoadTask     mLoadTask;
 
   private WebView             _wvGadget;
 
-  public static String        _url;
+  private String              _url;
 
-  public static String        _titlebar;
+  private String              _titlebar;
 
   private LoaderActionBarItem loaderItem;
 
@@ -47,7 +53,17 @@ public class WebViewActivity extends MyActionBar {
     setActionBarContentView(R.layout.webview);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem(Type.Refresh, R.id.action_bar_refresh);
-    _url = _url.replaceAll(" ", "%20");
+    if (icicle != null) {
+      _url = icicle.getString(ExoConstants.WEB_VIEW_URL);
+      _titlebar = icicle.getString(ExoConstants.WEB_VIEW_TITLE);
+      ArrayList<String> cookieList = icicle.getStringArrayList(COOKIESTORE);
+      ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
+    } else {
+      _url = getIntent().getStringExtra(ExoConstants.WEB_VIEW_URL);
+      _url = _url.replaceAll(" ", "%20");
+      _titlebar = getIntent().getStringExtra(ExoConstants.WEB_VIEW_TITLE);
+    }
+
     setupCookies(_url);
     _wvGadget = (WebView) findViewById(R.id.WebView);
     _wvGadget.getSettings().setSupportZoom(true);
@@ -77,9 +93,17 @@ public class WebViewActivity extends MyActionBar {
 
     });
     _wvGadget.setWebViewClient(new NewsWebviewClient());
-    _wvGadget.loadUrl(_url);
-    // onLoad();
+    onLoad();
 
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putString(ExoConstants.WEB_VIEW_URL, _url);
+    outState.putString(ExoConstants.WEB_VIEW_TITLE, _titlebar);
+    outState.putStringArrayList(COOKIESTORE,
+                                ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -123,7 +147,7 @@ public class WebViewActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-    // onCancelLoad();
+    onCancelLoad();
     if (_wvGadget.canGoBack()) {
       cleaCache();
       _wvGadget.goBack();
@@ -152,64 +176,64 @@ public class WebViewActivity extends MyActionBar {
 
   }
 
-  // private void onLoad() {
-  // if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
-  // if (mLoadTask == null || mLoadTask.getStatus() ==
-  // WebViewLoadTask.Status.FINISHED) {
-  // mLoadTask = (WebViewLoadTask) new WebViewLoadTask().execute();
-  // }
-  // } else {
-  // new ConnectionErrorDialog(this).show();
-  // }
+  private void onLoad() {
+    if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
+      if (mLoadTask == null || mLoadTask.getStatus() == WebViewLoadTask.Status.FINISHED) {
+        mLoadTask = (WebViewLoadTask) new WebViewLoadTask().execute();
+      }
+    } else {
+      new ConnectionErrorDialog(this).show();
+    }
+
+  }
+
   //
-  // }
+  private void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == WebViewLoadTask.Status.RUNNING) {
+      mLoadTask.cancel(true);
+      mLoadTask = null;
+    }
+  }
+
   //
-  // private void onCancelLoad() {
-  // if (mLoadTask != null && mLoadTask.getStatus() ==
-  // WebViewLoadTask.Status.RUNNING) {
-  // mLoadTask.cancel(true);
-  // mLoadTask = null;
-  // }
-  // }
-  //
-  // private class WebViewLoadTask extends AsyncTask<Void, Void, Boolean> {
-  // @Override
-  // protected void onPreExecute() {
-  // setTitle(getResources().getString(R.string.LoadingData));
-  // loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-  // loaderItem.setLoading(true);
-  // }
-  //
-  // @Override
-  // protected Boolean doInBackground(Void... params) {
-  // /*
-  // * Checking the response code and re logging in if session timeout
-  // */
-  // try {
-  // int code = ExoConnectionUtils.getResponseCode(_url);
-  // if (code != 1) {
-  // ExoConnectionUtils.onReLogin();
-  // }
-  // setupCookies(_url);
-  // return true;
-  // } catch (IOException e) {
-  // return false;
-  // }
-  //
-  // }
-  //
-  // @Override
-  // protected void onPostExecute(Boolean result) {
-  // if (result) {
-  // _wvGadget.loadUrl(_url);
-  // } else {
-  // getActionBar().removeItem(0);
-  // finish();
-  // }
-  //
-  // }
-  //
-  // }
+  private class WebViewLoadTask extends AsyncTask<Void, Void, Boolean> {
+    @Override
+    protected void onPreExecute() {
+      setTitle(getResources().getString(R.string.LoadingData));
+      loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+      loaderItem.setLoading(true);
+    }
+
+    @Override
+    protected Boolean doInBackground(Void... params) {
+      /*
+       * Checking the response code and re logging in if session timeout
+       */
+      try {
+        int code = ExoConnectionUtils.getResponseCode(_url);
+        if (code != 1) {
+          ExoConnectionUtils.onReLogin();
+        }
+        setupCookies(_url);
+        return true;
+      } catch (IOException e) {
+        return false;
+      }
+
+    }
+
+    @Override
+    protected void onPostExecute(Boolean result) {
+      if (result) {
+        _wvGadget.loadUrl(_url);
+      } else {
+        getActionBar().removeItem(0);
+        finish();
+      }
+
+    }
+
+  }
 
   private class NewsWebviewClient extends WebViewClient {
     @Override
@@ -228,12 +252,6 @@ public class WebViewActivity extends MyActionBar {
                                           String host,
                                           String realm) {
       super.onReceivedHttpAuthRequest(view, handler, host, realm);
-      // Relogin
-      // try {
-      // ExoConnectionUtils.onReLogin();
-      // } catch (IOException e) {
-      // e.getMessage();
-      // }
       setupCookies(host);
       view.reload();
     }

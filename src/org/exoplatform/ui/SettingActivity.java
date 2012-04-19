@@ -3,6 +3,7 @@ package org.exoplatform.ui;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.controller.setting.SettingController;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
@@ -24,16 +25,20 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class SettingActivity extends MyActionBar implements OnClickListener {
 
+  private static final String   SERVER_SETTING_HELPER = "SERVER_SETTING_HELPER";
+
+  private static final String   ACCOUNT_SETTING       = "account_setting";
+
   private View                  vEngLish, vFrench;
 
   private TextView              txtvEnglish, txtvFrench;
 
   private ImageView             imgViewECheckMark, imgViewFCheckMark;
 
-  private TextView              txtvLanguage;                        // Language
+  private TextView              txtvLanguage;                                   // Language
 
-  private TextView              txtvServer;                          // Server
-                                                                      // label
+  private TextView              txtvServer;                                     // Server
+                                                                                 // label
 
   private LinearLayout          listServerWrap;
 
@@ -67,7 +72,20 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     setActionBarContentView(R.layout.exosetting);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     settingActivity = this;
+    if (savedInstanceState != null) {
+      ServerSettingHelper helper = savedInstanceState.getParcelable(SERVER_SETTING_HELPER);
+      ServerSettingHelper.getInstance().setInstance(helper);
+      AccountSetting accountSetting = savedInstanceState.getParcelable(ACCOUNT_SETTING);
+      AccountSetting.getInstance().setInstance(accountSetting);
+    }
     init();
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putParcelable(SERVER_SETTING_HELPER, ServerSettingHelper.getInstance());
+    outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
   }
 
   private void init() {

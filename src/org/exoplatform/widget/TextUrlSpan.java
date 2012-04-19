@@ -1,6 +1,7 @@
 package org.exoplatform.widget;
 
 import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.utils.ExoConstants;
 
 import android.content.Context;
 import android.content.Intent;
@@ -41,14 +42,14 @@ public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
 
   @Override
   public void onClick(View widget) {
-    WebViewActivity._titlebar = getURL();
-    WebViewActivity._url = getURL();
     Context context = widget.getContext();
     Intent intent = new Intent(context, WebViewActivity.class);
+    intent.putExtra(ExoConstants.WEB_VIEW_URL, getURL());
+    intent.putExtra(ExoConstants.WEB_VIEW_TITLE, getURL());
     context.startActivity(intent);
   }
 
-//  @Override
+  // @Override
   public int getSpanTypeId() {
     return 11;
   }

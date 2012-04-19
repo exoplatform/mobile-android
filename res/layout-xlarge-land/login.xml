@@ -50,7 +50,7 @@
                 android:singleLine="true"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="20dip"
+                android:textSize="16dip"
                 android:textStyle="bold" />
 
             <EditText

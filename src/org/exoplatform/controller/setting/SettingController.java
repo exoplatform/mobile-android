@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SettingUtils;
@@ -27,11 +26,13 @@ public class SettingController {
     mContext = context;
     imgViewECheckMark = imgViewE;
     imgViewFCheckMark = imgViewF;
-    // ExoConnectionUtils.checkPLFVersion();
   }
 
   public void initLocation() {
-    String locallize = LocalizationHelper.getInstance().getLocation();
+    String locallize = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
+                               .getString(ExoConstants.EXO_PRF_LOCALIZE,
+                                          ExoConstants.EXO_PRF_LOCALIZE);
+    ;
     if (locallize != null) {
       if (locallize.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) {
         setFrenchLocation();
@@ -45,10 +46,10 @@ public class SettingController {
   }
 
   public boolean updateLocallize(String localize) {
-    SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
+    SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
+                                              .edit();
     editor.putString(ExoConstants.EXO_PRF_LOCALIZE, localize);
     editor.commit();
-    LocalizationHelper.getInstance().setLocation(localize);
     Configuration config = new Configuration();
     SettingUtils.setLocalization(mContext, config, localize);
     return true;

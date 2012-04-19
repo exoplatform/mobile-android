@@ -73,7 +73,7 @@ public class SocialImageLoader {
   // If the image bitmap is error or null, it will display this drawable
   private final int              FINAL_STUB_ID = R.drawable.documenticonforunknown;
 
-  private final int              REQUIRED_SIZE = 70;
+  private final int              REQUIRED_SIZE = 150;
 
   public SocialImageLoader(Context context) {
     fileCache = new FileCache(context);

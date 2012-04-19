@@ -59,6 +59,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     socialDetailActivity = this;
     changeLanguage();
+    if (savedInstanceState != null)
+      finish();
     initComponent();
 
   }

@@ -13,19 +13,19 @@ import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.VersionService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.SocialWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialServiceLoadTask extends AsyncTask<Void, Void, Boolean> {
-  private Context          mContext;
+  private SocialActivity   mContext;
 
   private String           loadingData;
 
@@ -37,7 +37,7 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, Boolean> {
 
   private SocialController socialController;
 
-  public SocialServiceLoadTask(Context context, SocialController controller) {
+  public SocialServiceLoadTask(SocialActivity context, SocialController controller) {
     mContext = context;
     socialController = controller;
     changeLanguage();
@@ -107,8 +107,10 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, Boolean> {
   @Override
   public void onPostExecute(Boolean result) {
     if (result) {
-      socialController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY);
+      socialController.onLoad(mContext.number_of_activity);
     } else {
+      socialController._progressDialog.dismiss();
+      socialController._progressDialog = null;
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }

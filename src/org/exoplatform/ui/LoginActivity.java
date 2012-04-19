@@ -6,7 +6,6 @@ import org.exoplatform.controller.login.LoginController;
 import org.exoplatform.controller.login.ServerAdapter;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ExoDocumentUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -123,9 +122,6 @@ public class LoginActivity extends Activity implements OnClickListener {
   private void onLogin() {
     username = _edtxUserName.getText().toString();
     password = _edtxPassword.getText().toString();
-
-    ExoDocumentUtils.repositoryHomeURL = null;
-
     new LoginController(this, username, password);
 
   }

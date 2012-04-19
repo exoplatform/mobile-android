@@ -8,6 +8,7 @@ import org.exoplatform.R;
 import org.exoplatform.controller.dashboard.DashboardItemAdapter;
 import org.exoplatform.controller.dashboard.DashboardLoadTask;
 import org.exoplatform.model.GadgetInfo;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.DashboardWaitingDialog;
@@ -24,6 +25,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class DashboardActivity extends MyActionBar {
+  private static final String     ACCOUNT_SETTING = "account_setting";
+
+  private static final String     COOKIESTORE     = "cookie_store";
 
   private DashboardWaitingDialog  _progressDialog;
 
@@ -40,8 +44,8 @@ public class DashboardActivity extends MyActionBar {
   private DashboardLoadTask       mLoadTask;
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  public void onCreate(Bundle bundle) {
+    super.onCreate(bundle);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.dashboard_layout);
     changeLanguage();
@@ -57,8 +61,22 @@ public class DashboardActivity extends MyActionBar {
     listView.setScrollbarFadingEnabled(true);
     listView.setDivider(null);
     // listView.setDividerHeight(-1);
+    if (bundle != null) {
+      AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
+      AccountSetting.getInstance().setInstance(accountSetting);
+      ArrayList<String> cookieList = bundle.getStringArrayList(COOKIESTORE);
+      ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
+    }
 
     onLoad();
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
+    outState.putStringArrayList(COOKIESTORE,
+                                ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
   }
 
   public void onLoad() {

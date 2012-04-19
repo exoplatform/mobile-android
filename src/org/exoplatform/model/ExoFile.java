@@ -5,22 +5,29 @@ import android.os.Parcelable;
 
 public class ExoFile implements Parcelable {
 
-  public String  path          = "";  // File's jcr url
+  public String  path;         // File's jcr url
 
-  public boolean isFolder      = true; // Is folder
+  public boolean isFolder;     // Is folder
 
-  public String  name          = "";  // name of the file/folder
+  public String  name;         // name of the file/folder
 
-  public String  currentFolder = "";  // the path of file
+  public String  currentFolder; // the path of file
 
-  public String  driveName     = "";  // drive name of file
+  public String  driveName;    // drive name of file
 
-  public String  workspaceName = "";  // work space of file
+  public String  workspaceName; // work space of file
 
-  public String  nodeType      = "";  // file content type
+  public String  nodeType;     // file content type
 
   // Default constructors
   public ExoFile() {
+    path = "";
+    isFolder = true;
+    name = "";
+    currentFolder = "";
+    driveName = "";
+    workspaceName = "";
+    nodeType = "";
   }
 
   private ExoFile(Parcel in) {
@@ -29,7 +36,8 @@ public class ExoFile implements Parcelable {
 
   private void readFromParcel(Parcel in) {
     path = in.readString();
-    in.readBooleanArray(new boolean[] { isFolder });
+    isFolder =(Boolean) in.readValue(null);
+//    in.readBooleanArray(new boolean[] { isFolder });
     name = in.readString();
     currentFolder = in.readString();
     driveName = in.readString();
@@ -64,7 +72,8 @@ public class ExoFile implements Parcelable {
   @Override
   public void writeToParcel(Parcel par, int flags) {
     par.writeString(path);
-    par.writeBooleanArray(new boolean[] { isFolder });
+    par.writeValue(isFolder);
+//    par.writeBooleanArray(new boolean[] { isFolder });
     par.writeString(name);
     par.writeString(currentFolder);
     par.writeString(driveName);

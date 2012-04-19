@@ -11,21 +11,19 @@ public class AccountSetting implements Parcelable {
 
   private static AccountSetting accountSetting = new AccountSetting();
 
-  private String                userName;                             // username
+  private String                userName;
 
-  private String                password;                             // password
+  private String                password;
 
-  private String                domainName;                           // checked
-                                                                       // server
-                                                                       // url
+  /*
+   * checked server url
+   */
+  private String                domainName;
 
-  private String                domainIndex;                          // the
-                                                                       // index
-                                                                       // of
-                                                                       // checked
-                                                                       // server
-
-  // url
+  /*
+   * the index of checked server
+   */
+  private String                domainIndex;
 
   private AccountSetting() {
 

@@ -8,6 +8,7 @@ import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.image.SocialImageLoader;
 
 import android.content.Context;
 import android.content.Intent;
@@ -533,7 +534,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     /*
      * Use SocialImageLoader to get and display attached image.
      */
-    SocialDetailHelper.getInstance().socialImageloader.displayImage(url, attachImage);
+    new SocialImageLoader(mContext).displayImage(url, attachImage);
 
     if (isDetail) {
       attachImage.setOnClickListener(new OnClickListener() {

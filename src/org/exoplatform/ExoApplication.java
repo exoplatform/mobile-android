@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.net.Uri;
 
 public class ExoApplication extends GDApplication {
-  
   private String appUrl = "http://github.com/cyrilmottier/GreenDroid";
 
   @Override
@@ -35,7 +34,5 @@ public class ExoApplication extends GDApplication {
   public Intent getMainApplicationIntent() {
     return new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
   }
-  
-  
 
 }

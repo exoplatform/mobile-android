@@ -24,7 +24,9 @@ public class ExoConstants {
 
   public static final String SETTING_TYPE                  = "SETTING_TYPE";
 
-  public static final String WEB_VIEW_TYPE                 = "WEB_VIEW_TYPE";
+  public static final String WEB_VIEW_URL                  = "WEB_VIEW_URL";
+
+  public static final String WEB_VIEW_TITLE                = "WEB_VIEW_TITLE";
 
   public static final String ACTIVITY_DETAIL_EXTRA         = "ACTIVITY_DETAIL_EXTRA";
 

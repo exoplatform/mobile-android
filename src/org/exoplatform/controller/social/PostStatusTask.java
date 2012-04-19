@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.exoplatform.R;
+import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
@@ -105,6 +106,8 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
       return 1;
     } catch (SocialClientLibException e) {
       return 0;
+    } catch (RuntimeException e) {
+      return -1;
     }
 
   }
@@ -123,7 +126,7 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
 
   private boolean createFolder() {
 
-    uploadUrl = ExoDocumentUtils.repositoryHomeURL + "/Public/Mobile";
+    uploadUrl = DocumentHelper.getInstance().getRepositoryHomeUrl() + "/Public/Mobile";
 
     HttpResponse response;
     try {

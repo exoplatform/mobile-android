@@ -17,8 +17,9 @@ import android.widget.ListView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SettingServerListEditionActivity extends MyActionBar {
+  private static final String SERVER_SETTING_HELPER = "SERVER_SETTING_HELPER";
 
-  private ListView listViewServer;
+  private ListView            listViewServer;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,17 @@ public class SettingServerListEditionActivity extends MyActionBar {
     getActionBar().getItem(0).setDrawable(R.drawable.actionbaraddbutton);
     String serverListText = getResources().getString(R.string.ServerList);
     setTitle(serverListText);
+    if (savedInstanceState != null) {
+      ServerSettingHelper helper = savedInstanceState.getParcelable(SERVER_SETTING_HELPER);
+      ServerSettingHelper.getInstance().setInstance(helper);
+    }
     setServerAdapter();
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putParcelable(SERVER_SETTING_HELPER, ServerSettingHelper.getInstance());
   }
 
   @Override

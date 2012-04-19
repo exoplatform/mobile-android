@@ -3,7 +3,6 @@ package org.exoplatform.controller.social;
 import java.util.ArrayList;
 
 import org.exoplatform.model.SocialActivityInfo;
-import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
@@ -121,14 +120,12 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
         SocialActivity.socialActivity.setEmptyView(View.GONE);
       }
       socialController.setActivityList(result);
-      // socialController.setListAdapter(result);
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
     socialController._progressDialog.dismiss();
     socialController._progressDialog = null;
-    SocialDetailHelper.getInstance().taskIsFinish = true;
 
   }
 

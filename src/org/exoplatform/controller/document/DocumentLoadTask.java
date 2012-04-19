@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import org.exoplatform.model.ExoFile;
+import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -13,7 +14,6 @@ import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.DocumentWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.view.animation.AnimationUtils;
@@ -72,19 +72,12 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
   private Resources             resource;
 
-  public DocumentLoadTask(Context context,
-                          DocumentActivity activity,
-                          String source,
-                          String destination,
-                          int action,
-                          DocumentWaitingDialog progressDialog) {
+  public DocumentLoadTask(DocumentActivity activity, String source, String destination, int action) {
     resource = activity.getResources();
     documentActivity = activity;
     strSourceUrl = source;
     strDestinationUrl = destination;
     actionID = action;
-    _progressDialog = progressDialog;
-
     changeLanguage();
   }
 
@@ -110,7 +103,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
        * Checking the session status each time we retrieve files/folders. If
        * time out, re logging in. If relogging in error, pop up a error dialog
        */
-      if (ExoConnectionUtils.getResponseCode(ExoDocumentUtils.repositoryHomeURL) != 1) {
+      if (ExoConnectionUtils.getResponseCode(DocumentHelper.getInstance().getRepositoryHomeUrl()) != 1) {
         if (!ExoConnectionUtils.onReLogin()) {
           return RESULT_TIMEOUT;
         }

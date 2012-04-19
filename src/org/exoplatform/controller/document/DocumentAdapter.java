@@ -8,6 +8,7 @@ import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.UnreadableFileDialog;
 
@@ -24,11 +25,11 @@ import android.widget.TextView;
 public class DocumentAdapter extends BaseAdapter {
   private ArrayList<ExoFile>  _documentList;
 
-  private Context             _mContext;
+  private DocumentActivity    _mContext;
 
   public DocumentActionDialog _documentActionDialog;
 
-  public DocumentAdapter(Context context, ArrayList<ExoFile> list) {
+  public DocumentAdapter(DocumentActivity context, ArrayList<ExoFile> list) {
 
     _mContext = context;
     _documentList = list;
@@ -59,7 +60,7 @@ public class DocumentAdapter extends BaseAdapter {
 
     final ExoFile myFile = _documentList.get(pos);
 
-    if (myFile == null) {
+    if (myFile.name.equals("")) {
       convertView = inflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
       if (pos == 0)
@@ -76,7 +77,7 @@ public class DocumentAdapter extends BaseAdapter {
     lb.setText(myFile.name);
 
     final ExoFile file = DocumentActivity._documentActivityInstance._fileForCurrentActionBar;
-    if (file == null) {
+    if (myFile.name.equals("")) {
       if (position == 0) {
         if (_documentList.size() == 1)
           rowView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
@@ -125,9 +126,9 @@ public class DocumentAdapter extends BaseAdapter {
             } else {
               url = myFile.path;
             }
-            WebViewActivity._url = url;
-            WebViewActivity._titlebar = myFile.name;
             Intent intent = new Intent(_mContext, WebViewActivity.class);
+            intent.putExtra(ExoConstants.WEB_VIEW_URL, url);
+            intent.putExtra(ExoConstants.WEB_VIEW_TITLE, myFile.name);
             _mContext.startActivity(intent);
           } else {
             new UnreadableFileDialog(_mContext).show();

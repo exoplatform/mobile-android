@@ -2,42 +2,29 @@ package org.exoplatform.ui;
 
 import org.exoplatform.R;
 import org.exoplatform.controller.document.DocumentActionAdapter;
-import org.exoplatform.model.DocumentActionDescription;
 import org.exoplatform.model.ExoFile;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ListView;
 import android.widget.TextView;
 
 //File action list
-public class DocumentActionDialog extends Dialog implements OnClickListener {
+public class DocumentActionDialog extends Dialog {
 
-  Thread                       thread;
+  private ListView             _listViewFileAction;   // List of
+                                                       // action
 
-  ListView                     _listViewFileAction;        // List of action
+  private TextView             _txtvFileName;         // File's
+                                                       // name
 
-  TextView                     _txtvFileName;              // File's name
-
-  Context                      mContext;                   // context
-
-  public ExoFile               myFile;                     // Current file
-
-  // Localization string
-  String                       strClose;
-
-  String                       strCannotBackToPreviousPage;
-
-  DocumentActionDescription[]  fileActionList = null;
+  public ExoFile               myFile;                // Current
+                                                       // file
 
   public DocumentActionAdapter _documentActionAdapter;
 
   // Constructor
-  public DocumentActionDialog(Context context, ExoFile file) {
+  public DocumentActionDialog(DocumentActivity context, ExoFile file) {
 
     super(context);
 
@@ -46,11 +33,9 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
     setCanceledOnTouchOutside(true);
 
-    mContext = context;
-
     myFile = file;
 
-    _documentActionAdapter = new DocumentActionAdapter((Activity) context, this, myFile);
+    _documentActionAdapter = new DocumentActionAdapter(context, this, myFile);
 
     init();
 
@@ -74,10 +59,6 @@ public class DocumentActionDialog extends Dialog implements OnClickListener {
 
   public void setDocumentActionAdapter() {
     _listViewFileAction.setAdapter(_documentActionAdapter);
-  }
-
-  public void onClick(View v) {
-
   }
 
 }

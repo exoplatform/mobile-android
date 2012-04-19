@@ -2,8 +2,12 @@ package org.exoplatform.ui.social;
 
 import greendroid.widget.ActionBarItem;
 
+import java.util.ArrayList;
+
 import org.exoplatform.controller.social.SocialController;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.SocialWaitingDialog;
@@ -24,6 +28,10 @@ public class SocialActivity extends MyActionBar {
   private static final String  NUMBER_OF_ACTIVITY      = "NUMBER_OF_ACTIVITY";
 
   private static final String  NUMBER_OF_MORE_ACTIVITY = "NUMBER_OF_MORE_ACTIVITY";
+
+  private static final String  ACCOUNT_SETTING         = "account_setting";
+
+  private static final String  COOKIESTORE             = "cookie_store";
 
   private SocialWaitingDialog  _progressDialog;
 
@@ -59,6 +67,10 @@ public class SocialActivity extends MyActionBar {
     if (savedInstanceState != null) {
       number_of_activity = savedInstanceState.getInt(NUMBER_OF_ACTIVITY);
       number_of_more_activity = savedInstanceState.getInt(NUMBER_OF_MORE_ACTIVITY);
+      AccountSetting accountSetting = savedInstanceState.getParcelable(ACCOUNT_SETTING);
+      AccountSetting.getInstance().setInstance(accountSetting);
+      ArrayList<String> cookieList = savedInstanceState.getStringArrayList(COOKIESTORE);
+      ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     } else {
       number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
       number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
@@ -74,6 +86,9 @@ public class SocialActivity extends MyActionBar {
     super.onSaveInstanceState(outState);
     outState.putInt(NUMBER_OF_ACTIVITY, number_of_activity);
     outState.putInt(NUMBER_OF_MORE_ACTIVITY, number_of_more_activity);
+    outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
+    outState.putStringArrayList(COOKIESTORE,
+                                ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
   }
 
   public void setEmptyView(int status) {
@@ -106,6 +121,7 @@ public class SocialActivity extends MyActionBar {
       _progressDialog.dismiss();
       _progressDialog = null;
     }
+    finish();
   }
 
   @Override

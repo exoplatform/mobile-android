@@ -6,9 +6,7 @@ import java.util.ArrayList;
 
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
@@ -41,18 +39,16 @@ public class LaunchController {
      * Initialize SocialImageLoader when application start up and clear all data
      * cache.
      */
-    SocialDetailHelper.getInstance().socialImageloader = new SocialImageLoader(context);
-    SocialDetailHelper.getInstance().socialImageloader.clearCache();
+    new SocialImageLoader(context).clearCache();
   }
 
   private void getLaunchInfo() {
     if (sharedPreference == null) {
       sharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     }
-    LocalizationHelper.getInstance().setSharePrefs(sharedPreference);
-    String strLocalize;
-    strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE,
-                                             ExoConstants.EXO_PRF_LOCALIZE);
+    // LocalizationHelper.getInstance().setSharePrefs(sharedPreference);
+    String strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE,
+                                                    ExoConstants.EXO_PRF_LOCALIZE);
     /*
      * check if localize file name is null or not assigned then default locale
      * is English

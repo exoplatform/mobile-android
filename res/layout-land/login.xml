@@ -35,7 +35,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="-4dp"
-            android:background="@drawable/authenticate_panel_bg_large"
+            android:background="@drawable/authenticate_panel_bg"
             android:padding="10dp" >
 
             <EditText

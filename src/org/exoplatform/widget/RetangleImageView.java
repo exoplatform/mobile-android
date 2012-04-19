@@ -16,7 +16,7 @@
  */
 package org.exoplatform.widget;
 
-import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.utils.image.SocialImageLoader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -75,18 +75,18 @@ public class RetangleImageView extends ImageView {
       // Get the image bitmap frame
       Bitmap maskBm = BitmapFactory.decodeResource(getResources(),
                                                    R.drawable.social_attached_image_border);
-      //Create nine patch drawable from image bitmap frame
+      // Create nine patch drawable from image bitmap frame
       byte[] chunk = maskBm.getNinePatchChunk();
       NinePatchDrawable nicepatchDrawable = new NinePatchDrawable(maskBm, chunk, new Rect(), null);
       nicepatchDrawable.setBounds(0, 0, width, height);
-      //Draw the NinePatchDrawable to a new output_bitmap
+      // Draw the NinePatchDrawable to a new output_bitmap
       Bitmap output_bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
       canvasT = new Canvas(output_bitmap);
       nicepatchDrawable.draw(canvasT);
-      //Draw the output_bitmap to image view
+      // Draw the output_bitmap to image view
       canvas.drawBitmap(output_bitmap, 0, 0, null);
     } catch (OutOfMemoryError e) {
-      SocialDetailHelper.getInstance().socialImageloader.clearCache();
+      new SocialImageLoader(getContext()).clearCache();
     }
   }
 

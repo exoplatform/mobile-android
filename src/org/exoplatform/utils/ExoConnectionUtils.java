@@ -130,7 +130,9 @@ public class ExoConnectionUtils {
     domainBuffer.append(ExoConstants.DOMAIN_SUFFIX);
 
     String redirectStr = domainBuffer.toString();
-    initHttpClient();
+    if (httpClient == null) {
+      initHttpClient();
+    }
     HttpGet httpGet = new HttpGet(redirectStr);
     response = httpClient.execute(httpGet);
     cookiesStore = httpClient.getCookieStore();
@@ -202,6 +204,10 @@ public class ExoConnectionUtils {
 
   public static HttpResponse getRequestResponse(String strUrlRequest) throws IOException {
     HttpGet httpGet = new HttpGet(strUrlRequest);
+    if (httpClient == null) {
+      initHttpClient();
+      httpClient.setCookieStore(cookiesStore);
+    }
     HttpResponse response = httpClient.execute(httpGet);
     return response;
   }

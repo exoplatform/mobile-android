@@ -16,11 +16,14 @@
  */
 package org.exoplatform.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
  * 12, 2011
  */
-public class ServerObjInfo {
+public class ServerObjInfo implements Parcelable {
 
   public String  _strServerName; // Name of server
 
@@ -29,7 +32,41 @@ public class ServerObjInfo {
   public boolean _bSystemServer; // Is default server
 
   public ServerObjInfo() {
+    _strServerName = "";
+    _strServerUrl = "";
+    _bSystemServer = false;
+  }
 
+  private ServerObjInfo(Parcel in) {
+    readFromParcel(in);
+  }
+
+  public static final Parcelable.Creator<ServerObjInfo> CREATOR = new Parcelable.Creator<ServerObjInfo>() {
+                                                                  public ServerObjInfo createFromParcel(Parcel in) {
+                                                                    return new ServerObjInfo(in);
+                                                                  }
+
+                                                                  public ServerObjInfo[] newArray(int size) {
+                                                                    return new ServerObjInfo[size];
+                                                                  }
+                                                                };
+
+  private void readFromParcel(Parcel in) {
+    _strServerName = in.readString();
+    _strServerUrl = in.readString();
+    in.readBooleanArray(new boolean[] { _bSystemServer });
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(_strServerName);
+    dest.writeString(_strServerUrl);
+    dest.writeBooleanArray(new boolean[] { _bSystemServer });
   }
 
 }

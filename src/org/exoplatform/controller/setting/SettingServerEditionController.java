@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
@@ -140,7 +139,8 @@ public class SettingServerEditionController {
   private void onSave() {
 
     ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
-    SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
+    SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
+                                              .edit();
     editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
     editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance()
                                                                       .getDomainIndex());

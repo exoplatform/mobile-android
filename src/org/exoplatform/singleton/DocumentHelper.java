@@ -30,6 +30,8 @@ public class DocumentHelper implements Parcelable {
 
   private static DocumentHelper documentHelper = new DocumentHelper();
 
+  private String                _urlrepositoryHome;
+
   private ExoFile               _fileCopied    = new ExoFile();
 
   private ExoFile               _fileMoved     = new ExoFile();
@@ -37,14 +39,11 @@ public class DocumentHelper implements Parcelable {
   /*
    * The dictionary for mapping between parent folder and its child files
    */
-  // public HashMap<String, ArrayList<ExoFile>> childFilesMap;
-
   public Bundle                 childFilesMap;
 
   /*
    * The dictionary for mapping between the current selected file and its parent
    */
-  // public HashMap<String, ExoFile> currentFileMap;
 
   public Bundle                 currentFileMap;
 
@@ -58,6 +57,14 @@ public class DocumentHelper implements Parcelable {
 
   public void setInstance(DocumentHelper helper) {
     documentHelper = helper;
+  }
+
+  public void setRepositoryHomeUrl(String url) {
+    _urlrepositoryHome = url;
+  }
+
+  public String getRepositoryHomeUrl() {
+    return _urlrepositoryHome;
   }
 
   public void setFileCopy(ExoFile cFile) {
@@ -91,8 +98,9 @@ public class DocumentHelper implements Parcelable {
                                                                  };
 
   private void readFromParcel(Parcel in) {
-    _fileCopied = in.readParcelable(ExoFile.class.getClassLoader());
-    _fileMoved = in.readParcelable(ExoFile.class.getClassLoader());
+    _urlrepositoryHome = in.readString();
+    _fileCopied = in.readParcelable(_fileCopied.getClass().getClassLoader());
+    _fileMoved = in.readParcelable(_fileMoved.getClass().getClassLoader());
     currentFileMap = in.readBundle();
     childFilesMap = in.readBundle();
   }
@@ -113,6 +121,7 @@ public class DocumentHelper implements Parcelable {
    */
   @Override
   public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(_urlrepositoryHome);
     dest.writeParcelable(_fileCopied, flags);
     dest.writeParcelable(_fileMoved, flags);
     dest.writeBundle(currentFileMap);

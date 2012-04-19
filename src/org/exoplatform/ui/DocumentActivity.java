@@ -14,10 +14,8 @@ import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.social.SelectedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.DocumentWaitingDialog;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
@@ -39,27 +37,13 @@ import android.widget.TextView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class DocumentActivity extends MyActionBar {
-  private static final String    DOCUMENT_HELPER      = "document_helper";
+  private static final String    DOCUMENT_HELPER = "document_helper";
 
-  private static final String    DOCUMENT_SOURCE_HOME = "mSourceHome";
+  private static final String    ACCOUNT_SETTING = "account_setting";
 
-  private static final String    DOCUMENT_SOURCE      = "mSource";
+  private static final String    COOKIESTORE     = "cookie_store";
 
-  private static final String    DOCUMENT_DESTINATION = "mDestination";
-
-  private static final String    DOCUMENT_ACTION      = "mAction";
-
-  private static final String    ACCOUNT_SETTING      = "account_setting";
-
-  private static final String    COOKIESTORE          = "cookie_store";
-
-  private static final String    CURRENT_FILE         = "current_file";
-
-  private String                 mSource;
-
-  private String                 mDestination;
-
-  private int                    mAction;
+  private static final String    CURRENT_FILE    = "current_file";
 
   public static DocumentActivity _documentActivityInstance;
 
@@ -67,13 +51,9 @@ public class DocumentActivity extends MyActionBar {
 
   private TextView               _textViewEmptyPage;
 
-  private DocumentWaitingDialog  _progressDialog;
-
   private String                 emptyFolderString;
 
   public String                  _sdcard_temp_dir;
-
-  public String                  _urlDocumentHome;
 
   public DocumentAdapter         _documentAdapter;
 
@@ -105,21 +85,15 @@ public class DocumentActivity extends MyActionBar {
       ArrayList<String> cookieList = bundle.getStringArrayList(COOKIESTORE);
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
       _fileForCurrentActionBar = bundle.getParcelable(CURRENT_FILE);
-      _urlDocumentHome = bundle.getString(DOCUMENT_SOURCE_HOME);
-      mSource = bundle.getString(DOCUMENT_SOURCE);
-      mDestination = bundle.getString(DOCUMENT_DESTINATION);
-      mAction = bundle.getInt(DOCUMENT_ACTION);
-      onLoad(mSource, mDestination, mAction);
-//       setDocumentAdapter(getCurrentDocumentList());
     } else {
       /*
        * Initialize 2 dictionaries for mapping each time document starting
        */
       DocumentHelper.getInstance().childFilesMap = new Bundle();
       DocumentHelper.getInstance().currentFileMap = new Bundle();
-      _urlDocumentHome = ExoDocumentUtils.repositoryHomeURL;
-      onLoad(_urlDocumentHome, null, 0);
+      setTitle(getResources().getString(R.string.Documents));
     }
+    onLoad(DocumentHelper.getInstance().getRepositoryHomeUrl(), null, 0);
 
   }
 
@@ -131,10 +105,6 @@ public class DocumentActivity extends MyActionBar {
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
-    outState.putString(DOCUMENT_SOURCE_HOME, _urlDocumentHome);
-    outState.putString(DOCUMENT_SOURCE, mSource);
-    outState.putString(DOCUMENT_DESTINATION, mDestination);
-    outState.putInt(DOCUMENT_ACTION, mAction);
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
     outState.putStringArrayList(COOKIESTORE,
                                 ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
@@ -255,19 +225,11 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void onLoad(String source, String destination, int action) {
-    mSource = source;
-    mDestination = destination;
-    mAction = action;
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
         if (Config.GD_INFO_LOGS_ENABLED)
           Log.i("DocumentLoadTask", "onLoad");
-        mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this,
-                                                            this,
-                                                            source,
-                                                            destination,
-                                                            action,
-                                                            _progressDialog).execute();
+        mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this, source, destination, action).execute();
       }
     } else {
       new ConnectionErrorDialog(this).show();
@@ -281,14 +243,6 @@ public class DocumentActivity extends MyActionBar {
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
-  }
-
-  @Override
-  public void finish() {
-    if (_progressDialog != null) {
-      _progressDialog.dismiss();
-    }
-    super.finish();
   }
 
   public void uploadFile() {
@@ -313,20 +267,14 @@ public class DocumentActivity extends MyActionBar {
       setListViewPadding(-2, 0, -2, 0);
       setTitle(_fileForCurrentActionBar.name);
     }
-
-    _documentAdapter = new DocumentAdapter(this, documentList);
-    _listViewDocument.setAdapter(_documentAdapter);
-    addOrRemoveFileActionButton();
-
-    if (_fileForCurrentActionBar == null)
-      setTitle(getResources().getString(R.string.Documents));
-    else
-      setTitle(_fileForCurrentActionBar.name);
     if (documentList.size() == 0) {
       setEmptyView(View.VISIBLE);
     } else
       setEmptyView(View.GONE);
 
+    _documentAdapter = new DocumentAdapter(this, documentList);
+    _listViewDocument.setAdapter(_documentAdapter);
+    addOrRemoveFileActionButton();
   }
 
   // Take a photo
@@ -364,7 +312,7 @@ public class DocumentActivity extends MyActionBar {
     }
   }
 
-  public void setEmptyView(int status) {
+  private void setEmptyView(int status) {
     if (empty_stub == null) {
       initStubView();
     }
@@ -380,7 +328,7 @@ public class DocumentActivity extends MyActionBar {
   }
 
   // Set language
-  public void changeLanguage() {
+  private void changeLanguage() {
     Resources resource = getResources();
     emptyFolderString = resource.getString(R.string.EmptyFolder);
     _textViewEmptyPage.setText(emptyFolderString);

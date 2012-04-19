@@ -4,14 +4,16 @@ import java.util.ArrayList;
 
 import org.exoplatform.model.ServerObjInfo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /*
  * This class for storing the list of server url and the index of the selected 
  *  which is used for adding/repairing/deleting function in setting   
  */
 
-public class ServerSettingHelper {
-  
-  
+public class ServerSettingHelper implements Parcelable {
+
   // The index of server url was selected in setting
   private int                        selectedServerIndex;
 
@@ -26,12 +28,10 @@ public class ServerSettingHelper {
 
   private String                     serverEdition;
 
-//  public boolean                     isMobileCompliant = false;
-
   // List of server url
   private ArrayList<ServerObjInfo>   serverInfoList;
 
-  private static ServerSettingHelper helper            = new ServerSettingHelper();
+  private static ServerSettingHelper helper = new ServerSettingHelper();
 
   private ServerSettingHelper() {
 
@@ -39,6 +39,10 @@ public class ServerSettingHelper {
 
   public static ServerSettingHelper getInstance() {
     return helper;
+  }
+
+  public void setInstance(ServerSettingHelper instance) {
+    helper = instance;
   }
 
   public void setSelectedServerIndex(int index) {
@@ -87,6 +91,44 @@ public class ServerSettingHelper {
 
   public ArrayList<ServerObjInfo> getServerInfoList() {
     return serverInfoList;
+  }
+
+  private ServerSettingHelper(Parcel in) {
+    readFromParcel(in);
+  }
+
+  public static final Parcelable.Creator<ServerSettingHelper> CREATOR = new Parcelable.Creator<ServerSettingHelper>() {
+                                                                        public ServerSettingHelper createFromParcel(Parcel in) {
+                                                                          return new ServerSettingHelper(in);
+                                                                        }
+
+                                                                        public ServerSettingHelper[] newArray(int size) {
+                                                                          return new ServerSettingHelper[size];
+                                                                        }
+                                                                      };
+
+  private void readFromParcel(Parcel in) {
+    selectedServerIndex = in.readInt();
+    in.readBooleanArray(new boolean[] { isNewServer });
+    applicationVersion = in.readString();
+    serverVersion = in.readString();
+    serverEdition = in.readString();
+    in.readList(serverInfoList, null);
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(selectedServerIndex);
+    dest.writeBooleanArray(new boolean[] { isNewServer });
+    dest.writeString(applicationVersion);
+    dest.writeString(serverVersion);
+    dest.writeString(serverEdition);
+    dest.writeList(serverInfoList);
   }
 
 }

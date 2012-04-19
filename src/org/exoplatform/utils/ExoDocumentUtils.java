@@ -29,8 +29,6 @@ import android.os.Bundle;
 
 public class ExoDocumentUtils {
 
-  public static String repositoryHomeURL = null;
-
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
     try {
       url = url.replaceAll(" ", "%20");
@@ -57,7 +55,7 @@ public class ExoDocumentUtils {
 
   public static void setRepositoryHomeUrl(String userName, String domain) {
 
-    if (repositoryHomeURL == null) {
+    if (DocumentHelper.getInstance().getRepositoryHomeUrl() == null) {
       StringBuffer buffer = new StringBuffer();
       buffer.append(domain);
       buffer.append(ExoConstants.DOCUMENT_PATH);
@@ -87,17 +85,17 @@ public class ExoDocumentUtils {
         int status = ExoConnectionUtils.httpClient.execute(copy).getStatusLine().getStatusCode();
 
         if (status >= 200 && status < 300) {
-          repositoryHomeURL = buffer.toString();
+          DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
         } else {
           buffer = new StringBuffer(domain);
           buffer.append(ExoConstants.DOCUMENT_PATH);
           buffer.append("/");
           buffer.append(userName);
-          repositoryHomeURL = buffer.toString();
+          DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
         }
 
       } catch (IOException e) {
-        repositoryHomeURL = null;
+        DocumentHelper.getInstance().setRepositoryHomeUrl(null);
       }
     }
 
@@ -119,7 +117,7 @@ public class ExoDocumentUtils {
     if (file == null) {
       // personal
       StringBuffer buffer = new StringBuffer();
-      arrFilesTmp.add(null);
+      arrFilesTmp.add(new ExoFile());
       buffer.append(domain);
       buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
       buffer.append("personal");
@@ -127,7 +125,7 @@ public class ExoDocumentUtils {
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       arrFilesTmp.addAll(getDrives(response));
       // group
-      arrFilesTmp.add(null);
+      arrFilesTmp.add(new ExoFile());
       buffer = new StringBuffer();
       buffer.append(domain);
       buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);

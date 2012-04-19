@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.apache.http.HttpResponse;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.LocalizationHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -143,7 +142,11 @@ public class LoginController {
         dialog.show();
       } else if (result.equalsIgnoreCase(ExoConstants.LOGIN_YES)) {
         AccountSetting accountSetting = AccountSetting.getInstance();
-        SharedPreferences.Editor editor = LocalizationHelper.getInstance().getSharePrefs().edit();
+        // SharedPreferences.Editor editor =
+        // LocalizationHelper.getInstance().getSharePrefs().edit();
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE,
+                                                                        0)
+                                                  .edit();
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());
         editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);

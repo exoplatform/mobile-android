@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.exoplatform.R;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.RoundedImageView;
 
 import android.content.Context;
@@ -159,10 +160,10 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 
   public void showGadget(GadgetInfo gadget) {
     String gadgetUrl = gadget.getGadgetUrl();
-    WebViewActivity._titlebar = gadget.getGadgetName();
-    WebViewActivity._url = gadgetUrl;
-    Intent next = new Intent(mContext, WebViewActivity.class);
-    mContext.startActivity(next);
+    Intent intent = new Intent(mContext, WebViewActivity.class);
+    intent.putExtra(ExoConstants.WEB_VIEW_URL, gadgetUrl);
+    intent.putExtra(ExoConstants.WEB_VIEW_TITLE, gadget.getGadgetName());
+    mContext.startActivity(intent);
 
   }
 

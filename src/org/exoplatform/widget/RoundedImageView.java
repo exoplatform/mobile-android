@@ -2,8 +2,8 @@ package org.exoplatform.widget;
 
 import greendroid.widget.AsyncImageView;
 
-import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.image.SocialImageLoader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -55,7 +55,7 @@ public class RoundedImageView extends AsyncImageView {
         canvas.drawBitmap(mScaledBitmap, 0, 0, null);
       }
     } catch (OutOfMemoryError e) {
-      SocialDetailHelper.getInstance().socialImageloader.clearCache();
+      new SocialImageLoader(getContext()).clearCache();
     }
   }
 
