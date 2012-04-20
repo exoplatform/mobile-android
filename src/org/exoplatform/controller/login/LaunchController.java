@@ -44,7 +44,6 @@ public class LaunchController {
       SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(context);
       SocialDetailHelper.getInstance().socialImageLoader.clearCache();
     }
-    // new SocialImageLoader(context).clearCache();
   }
 
   private void getLaunchInfo() {

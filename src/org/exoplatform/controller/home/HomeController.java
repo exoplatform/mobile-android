@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.exoplatform.model.HomeItem;
 import org.exoplatform.singleton.ChatServiceHelper;
 import org.exoplatform.singleton.HomeHelper;
+import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 
 import android.app.Activity;
@@ -18,7 +19,7 @@ import com.cyrilmottier.android.greendroid.R;
 public class HomeController {
   private String  activityStreamsText;
 
-//  private String  chatText;
+  // private String chatText;
 
   private String  documentText;
 
@@ -38,10 +39,11 @@ public class HomeController {
     HomeItem item;
     item = new HomeItem(bm, 1, activityStreamsText);
     itemList.add(item);
-    
-//    bm = BitmapFactory.decodeResource(resource, R.drawable.homechaticoniphone);
-//    item = new HomeItem(bm, 2, chatText);
-//    itemList.add(item);
+
+    // bm = BitmapFactory.decodeResource(resource,
+    // R.drawable.homechaticoniphone);
+    // item = new HomeItem(bm, 2, chatText);
+    // itemList.add(item);
 
     bm = BitmapFactory.decodeResource(resource, R.drawable.homedocumentsiconiphone);
     item = new HomeItem(bm, 3, documentText);
@@ -62,6 +64,9 @@ public class HomeController {
     if (ChatServiceHelper.getInstance().getXMPPConnection() != null) {
       ChatServiceHelper.getInstance().getXMPPConnection().disconnect();
       ChatServiceHelper.getInstance().setXMPPConnection(null);
+    }
+    if (SocialServiceHelper.getInstance().getActivityService() != null) {
+      SocialServiceHelper.getInstance().setActivityService(null);
     }
 
     ((Activity) mContext).finish();
