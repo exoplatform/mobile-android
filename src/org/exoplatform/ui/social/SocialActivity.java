@@ -64,6 +64,8 @@ public class SocialActivity extends MyActionBar {
     setActionBarContentView(R.layout.activitybrowserview);
 
     socialActivity = this;
+    activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
+    changeLanguage();
     if (savedInstanceState != null) {
       number_of_activity = savedInstanceState.getInt(NUMBER_OF_ACTIVITY);
       number_of_more_activity = savedInstanceState.getInt(NUMBER_OF_MORE_ACTIVITY);
@@ -76,8 +78,6 @@ public class SocialActivity extends MyActionBar {
       number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
     }
 
-    activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
-    changeLanguage();
     loadActivity();
   }
 
@@ -107,8 +107,8 @@ public class SocialActivity extends MyActionBar {
   }
 
   public void loadActivity() {
+    socialController = new SocialController(this, activityStreamWrap, _progressDialog);
     if (SocialServiceHelper.getInstance().getActivityService() == null) {
-      socialController = new SocialController(this, activityStreamWrap, _progressDialog);
       socialController.launchNewsService();
     } else
       socialController.onLoad(number_of_activity);
