@@ -114,7 +114,7 @@ public class ServerSettingHelper implements Parcelable {
     applicationVersion = in.readString();
     serverVersion = in.readString();
     serverEdition = in.readString();
-    in.readList(serverInfoList, ExoFile.class.getClassLoader());
+    in.readList(serverInfoList, ServerObjInfo.class.getClassLoader());
   }
 
   @Override
