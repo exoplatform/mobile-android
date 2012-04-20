@@ -54,7 +54,7 @@ public class ServerObjInfo implements Parcelable {
   private void readFromParcel(Parcel in) {
     _strServerName = in.readString();
     _strServerUrl = in.readString();
-    in.readBooleanArray(new boolean[] { _bSystemServer });
+    _bSystemServer = (Boolean) in.readValue(null);
   }
 
   @Override
@@ -66,7 +66,7 @@ public class ServerObjInfo implements Parcelable {
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(_strServerName);
     dest.writeString(_strServerUrl);
-    dest.writeBooleanArray(new boolean[] { _bSystemServer });
+    dest.writeValue(_bSystemServer);
   }
 
 }

@@ -2,6 +2,7 @@ package org.exoplatform.singleton;
 
 import java.util.ArrayList;
 
+import org.exoplatform.model.ExoFile;
 import org.exoplatform.model.ServerObjInfo;
 
 import android.os.Parcel;
@@ -109,11 +110,11 @@ public class ServerSettingHelper implements Parcelable {
 
   private void readFromParcel(Parcel in) {
     selectedServerIndex = in.readInt();
-    in.readBooleanArray(new boolean[] { isNewServer });
+    isNewServer = (Boolean) in.readValue(null);
     applicationVersion = in.readString();
     serverVersion = in.readString();
     serverEdition = in.readString();
-    in.readList(serverInfoList, null);
+    in.readList(serverInfoList, ExoFile.class.getClassLoader());
   }
 
   @Override
@@ -124,7 +125,7 @@ public class ServerSettingHelper implements Parcelable {
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeInt(selectedServerIndex);
-    dest.writeBooleanArray(new boolean[] { isNewServer });
+    dest.writeValue(isNewServer);
     dest.writeString(applicationVersion);
     dest.writeString(serverVersion);
     dest.writeString(serverEdition);

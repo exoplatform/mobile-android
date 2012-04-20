@@ -1,5 +1,7 @@
 package org.exoplatform.controller.dashboard;
 
+import greendroid.util.Config;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,29 +13,39 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.DashboardWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import com.cyrilmottier.android.greendroid.R;
 
-public class DashboardLoadTask extends AsyncTask<Void, Void, ArrayList<DashboardItem>> {
-  private DashboardController    dashboardController;
+public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
+  private static final int         RESULT_OK      = 1;
 
-  private DashboardActivity      dashboardActivity;
+  private static final int         RESULT_ERROR   = 0;
 
-  private String                 loadingData;
+  private static final int         RESULT_TIMEOUT = -1;
 
-  private String                 okString;
+  private DashboardController      dashboardController;
 
-  private String                 titleString;
+  private DashboardActivity        dashboardActivity;
 
-  private String                 contentString;
+  private String                   loadingData;
 
-  private DashboardWaitingDialog _progressDialog;
+  private String                   okString;
+
+  private String                   titleString;
+
+  private String                   contentString;
+
+  private DashboardWaitingDialog   _progressDialog;
+
+  private ArrayList<DashboardItem> dashboarList;
 
   public DashboardLoadTask(DashboardActivity context, DashboardWaitingDialog dialog) {
     dashboardActivity = context;
@@ -49,42 +61,39 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, ArrayList<Dashboard
   }
 
   @Override
-  public ArrayList<DashboardItem> doInBackground(Void... params) {
+  public Integer doInBackground(Void... params) {
     try {
       HttpResponse response;
       String urlForDahboards = AccountSetting.getInstance().getDomainName()
           + ExoConstants.DASHBOARD_PATH;
-
-      response = ExoConnectionUtils.getRequestResponse(urlForDahboards);
       /*
-       * Checking the session status each time we retrieve dashboard items. If
-       * time out, re logging in
+       * Checking the session status each time we retrieve dashboard item list.
+       * If time out, re logging in
        */
-      int status = response.getStatusLine().getStatusCode();
-      if (status >= 200 && status < 300) {
-        return dashboardController.getDashboards(response);
-      } else {
-        // Re logging in if connection session time out
-        ExoConnectionUtils.onReLogin();
-        return dashboardController.getDashboards(response);
+      if (ExoConnectionUtils.getResponseCode(urlForDahboards) != 1) {
+        if (!ExoConnectionUtils.onReLogin())
+          return RESULT_TIMEOUT;
       }
 
+      response = ExoConnectionUtils.getRequestResponse(urlForDahboards);
+      dashboarList = dashboardController.getDashboards(response);
+      return RESULT_OK;
     } catch (IOException e) {
-      return null;
+      return RESULT_ERROR;
     }
 
   }
 
   @Override
-  public void onPostExecute(ArrayList<DashboardItem> result) {
-    if (result != null) {
+  public void onPostExecute(Integer result) {
+    if (result == RESULT_OK) {
 
-      if (result.size() == 0) {
+      if (dashboarList.size() == 0) {
         dashboardActivity.setEmptyView(View.VISIBLE);
       } else {
         ArrayList<GadgetInfo> items = new ArrayList<GadgetInfo>();
-        for (int i = 0; i < result.size(); i++) {
-          DashboardItem gadgetTab = result.get(i);
+        for (int i = 0; i < dashboarList.size(); i++) {
+          DashboardItem gadgetTab = dashboarList.get(i);
           try {
             HttpResponse response = ExoConnectionUtils.getRequestResponse(gadgetTab.link);
             List<GadgetInfo> gadgets = dashboardController.getGadgetInTab(response,
@@ -95,7 +104,8 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, ArrayList<Dashboard
               items.addAll(gadgets);
             }
           } catch (IOException e) {
-            e.getMessage();
+            if (Config.GD_ERROR_LOGS_ENABLED)
+              Log.e("DashboardLoadTask", e.getMessage());
           }
 
         }
@@ -106,20 +116,29 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, ArrayList<Dashboard
           dashboardActivity.setEmptyView(View.VISIBLE);
       }
 
-    } else {
+    } else if (result == RESULT_ERROR) {
       dashboardActivity.setEmptyView(View.VISIBLE);
       WarningDialog dialog = new WarningDialog(dashboardActivity,
                                                titleString,
                                                contentString,
                                                okString);
       dialog.show();
+    } else if (result == RESULT_TIMEOUT) {
+      new ConnTimeOutDialog(dashboardActivity, titleString, okString).show();
     }
     _progressDialog.dismiss();
 
     String strGadgetsErrorList = dashboardController.getGadgetsErrorList();
     if (strGadgetsErrorList.length() > 0) {
-      WarningDialog dialog = new WarningDialog(dashboardActivity, titleString, "Apps: "
-          + strGadgetsErrorList + " " + contentString, okString);
+      StringBuffer titleBuffer = new StringBuffer("Apps: ");
+      titleBuffer.append(strGadgetsErrorList);
+      titleBuffer.append(" ");
+      titleBuffer.append(contentString);
+
+      WarningDialog dialog = new WarningDialog(dashboardActivity,
+                                               titleString,
+                                               titleBuffer.toString(),
+                                               okString);
       dialog.show();
     }
 
