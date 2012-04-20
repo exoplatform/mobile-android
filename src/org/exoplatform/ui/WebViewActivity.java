@@ -133,9 +133,10 @@ public class WebViewActivity extends MyActionBar {
         strCookie = cookies.get(i).getName().toString() + "="
             + cookies.get(i).getValue().toString();
       }
+      CookieManager.getInstance().setCookie(url, strCookie);
     }
+    CookieSyncManager.getInstance().sync();
 
-    CookieManager.getInstance().setCookie(url, strCookie);
   }
 
   @Override
