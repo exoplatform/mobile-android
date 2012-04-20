@@ -1,5 +1,7 @@
 package org.exoplatform.singleton;
 
+import java.util.ArrayList;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -24,6 +26,8 @@ public class AccountSetting implements Parcelable {
    * the index of checked server
    */
   private String                domainIndex;
+
+  public ArrayList<String>      cookiesList;
 
   private AccountSetting() {
 
@@ -78,6 +82,8 @@ public class AccountSetting implements Parcelable {
     password = in.readString();
     domainName = in.readString();
     domainIndex = in.readString();
+    cookiesList = new ArrayList<String>();
+    in.readStringList(cookiesList);
 
   }
 
@@ -110,6 +116,7 @@ public class AccountSetting implements Parcelable {
     par.writeString(password);
     par.writeString(domainName);
     par.writeString(domainIndex);
+    par.writeStringList(cookiesList);
   }
 
 }

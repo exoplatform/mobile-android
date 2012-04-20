@@ -2,7 +2,6 @@ package org.exoplatform.singleton;
 
 import java.util.ArrayList;
 
-import org.exoplatform.model.ExoFile;
 import org.exoplatform.model.ServerObjInfo;
 
 import android.os.Parcel;
@@ -114,7 +113,8 @@ public class ServerSettingHelper implements Parcelable {
     applicationVersion = in.readString();
     serverVersion = in.readString();
     serverEdition = in.readString();
-    in.readList(serverInfoList, ServerObjInfo.class.getClassLoader());
+    serverInfoList = new ArrayList<ServerObjInfo>();
+    in.readList(serverInfoList, null);
   }
 
   @Override

@@ -25,6 +25,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -143,6 +144,7 @@ public class ExoConnectionUtils {
             + cookies.get(i).getValue().toString();
       }
     }
+    AccountSetting.getInstance().cookiesList = getCookieList(cookiesStore);
     int indexOfPrivate = redirectStr.indexOf("/classic");
 
     // Request to login
@@ -206,6 +208,9 @@ public class ExoConnectionUtils {
     HttpGet httpGet = new HttpGet(strUrlRequest);
     if (httpClient == null) {
       initHttpClient();
+      if (cookiesStore == null) {
+        setCookieStore(cookiesStore, AccountSetting.getInstance().cookiesList);
+      }
       httpClient.setCookieStore(cookiesStore);
     }
     HttpResponse response = httpClient.execute(httpGet);
@@ -239,6 +244,9 @@ public class ExoConnectionUtils {
       HttpGet httpGet = new HttpGet(url);
       if (httpClient == null) {
         initHttpClient();
+        if (cookiesStore == null) {
+          setCookieStore(cookiesStore, AccountSetting.getInstance().cookiesList);
+        }
         httpClient.setCookieStore(cookiesStore);
       }
       HttpResponse response = httpClient.execute(httpGet);

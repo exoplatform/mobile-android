@@ -41,8 +41,6 @@ public class DocumentActivity extends MyActionBar {
 
   private static final String    ACCOUNT_SETTING = "account_setting";
 
-  private static final String    COOKIESTORE     = "cookie_store";
-
   private static final String    CURRENT_FILE    = "current_file";
 
   public static DocumentActivity _documentActivityInstance;
@@ -82,8 +80,8 @@ public class DocumentActivity extends MyActionBar {
       DocumentHelper.getInstance().setInstance(helper);
       AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
       AccountSetting.getInstance().setInstance(accountSetting);
-      ArrayList<String> cookieList = bundle.getStringArrayList(COOKIESTORE);
-      ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
+      ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore,
+                                        AccountSetting.getInstance().cookiesList);
       _fileForCurrentActionBar = bundle.getParcelable(CURRENT_FILE);
     } else {
       /*
@@ -106,8 +104,6 @@ public class DocumentActivity extends MyActionBar {
     super.onSaveInstanceState(outState);
     outState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
-    outState.putStringArrayList(COOKIESTORE,
-                                ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
     outState.putParcelable(CURRENT_FILE, _fileForCurrentActionBar);
 
   }

@@ -26,8 +26,6 @@ public class HomeActivity extends MyActionBar {
 
   private static final String ACCOUNT_SETTING       = "account_setting";
 
-  private static final String COOKIESTORE           = "cookie_store";
-
   private GridView            gridView;
 
   private HomeController      homeController;
@@ -47,7 +45,7 @@ public class HomeActivity extends MyActionBar {
       AccountSetting.getInstance().setInstance(accountSetting);
       ServerSettingHelper settingHelper = bundle.getParcelable(SERVER_SETTING_HELPER);
       ServerSettingHelper.getInstance().setInstance(settingHelper);
-      ArrayList<String> cookieList = bundle.getStringArrayList(COOKIESTORE);
+      ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
     init();
@@ -58,8 +56,6 @@ public class HomeActivity extends MyActionBar {
     super.onSaveInstanceState(outState);
     outState.putParcelable(SERVER_SETTING_HELPER, ServerSettingHelper.getInstance());
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
-    outState.putStringArrayList(COOKIESTORE,
-                                ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
 
   }
 

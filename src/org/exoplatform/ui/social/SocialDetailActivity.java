@@ -94,7 +94,9 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
 
   @Override
   public void finish() {
-    detailController.onCancelLoad();
+    if (detailController != null) {
+      detailController.onCancelLoad();
+    }
     if (_progressDialog != null) {
       _progressDialog.dismiss();
     }

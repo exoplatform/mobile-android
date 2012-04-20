@@ -31,8 +31,6 @@ public class SocialActivity extends MyActionBar {
 
   private static final String  ACCOUNT_SETTING         = "account_setting";
 
-  private static final String  COOKIESTORE             = "cookie_store";
-
   private SocialWaitingDialog  _progressDialog;
 
   private LinearLayout         activityStreamWrap;
@@ -71,7 +69,7 @@ public class SocialActivity extends MyActionBar {
       number_of_more_activity = savedInstanceState.getInt(NUMBER_OF_MORE_ACTIVITY);
       AccountSetting accountSetting = savedInstanceState.getParcelable(ACCOUNT_SETTING);
       AccountSetting.getInstance().setInstance(accountSetting);
-      ArrayList<String> cookieList = savedInstanceState.getStringArrayList(COOKIESTORE);
+      ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     } else {
       number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
@@ -87,8 +85,6 @@ public class SocialActivity extends MyActionBar {
     outState.putInt(NUMBER_OF_ACTIVITY, number_of_activity);
     outState.putInt(NUMBER_OF_MORE_ACTIVITY, number_of_more_activity);
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
-    outState.putStringArrayList(COOKIESTORE,
-                                ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
   }
 
   public void setEmptyView(int status) {

@@ -27,8 +27,6 @@ import android.widget.TextView;
 public class DashboardActivity extends MyActionBar {
   private static final String     ACCOUNT_SETTING = "account_setting";
 
-  private static final String     COOKIESTORE     = "cookie_store";
-
   private DashboardWaitingDialog  _progressDialog;
 
   private ListView                listView;
@@ -64,7 +62,7 @@ public class DashboardActivity extends MyActionBar {
     if (bundle != null) {
       AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
       AccountSetting.getInstance().setInstance(accountSetting);
-      ArrayList<String> cookieList = bundle.getStringArrayList(COOKIESTORE);
+      ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
 
@@ -75,8 +73,6 @@ public class DashboardActivity extends MyActionBar {
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
-    outState.putStringArrayList(COOKIESTORE,
-                                ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
   }
 
   public void onLoad() {
