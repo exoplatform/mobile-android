@@ -77,7 +77,7 @@ public class DocumentAdapter extends BaseAdapter {
     lb.setText(myFile.name);
 
     final ExoFile file = DocumentActivity._documentActivityInstance._fileForCurrentActionBar;
-    if (myFile.name.equals("")) {
+    if (myFile.currentFolder.equals("")) {
       if (position == 0) {
         if (_documentList.size() == 1)
           rowView.setBackgroundResource(R.drawable.dashboard_single_background_shape);

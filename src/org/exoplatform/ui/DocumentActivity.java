@@ -157,7 +157,7 @@ public class DocumentActivity extends MyActionBar {
       getActionBar().removeItem(0);
     } else {
       // At the driver level, remove the action bar button
-      if (_fileForCurrentActionBar.path == null) {
+      if (_fileForCurrentActionBar.path.equals("")) {
         getActionBar().removeItem(0);
       } else {
         if (getActionBar().getItem(0) == null) {
