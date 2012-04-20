@@ -9,6 +9,7 @@ import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.ServerConfigurationUtils;
+import org.exoplatform.utils.URLAnalyzer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -48,13 +49,15 @@ public class SettingServerEditionController {
     changeLanguage();
   }
 
-  public void onAccept(ServerObjInfo myServerObj, ServerObjInfo serverObj) {
+  public void onAccept(ServerObjInfo myServerObj) {
 
     if (myServerObj._strServerName.length() == 0 || myServerObj._strServerUrl.length() == 0) {
 
       Toast.makeText(mContext, serverIsEmpty, Toast.LENGTH_SHORT).show();
       return;
     }
+    URLAnalyzer urlAnanyzer = new URLAnalyzer();
+    myServerObj._strServerUrl = urlAnanyzer.parserURL(myServerObj._strServerUrl);
 
     if (ExoDocumentUtils.isContainSpecialChar(myServerObj._strServerName,
                                               ExoConstants.SPECIAL_CHAR_NAME_SET)
@@ -105,9 +108,9 @@ public class SettingServerEditionController {
       if (isExisted) {
         // Remove the old server
         serverInfoList.remove(selectedServerIndex);
-        serverObj._strServerName = myServerObj._strServerName;
-        serverObj._strServerUrl = myServerObj._strServerUrl;
-        serverInfoList.add(selectedServerIndex, serverObj);
+        myServerObj._strServerName = myServerObj._strServerName;
+        myServerObj._strServerUrl = myServerObj._strServerUrl;
+        serverInfoList.add(selectedServerIndex, myServerObj);
         ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
                                                              "DefaultServerList.xml",
                                                              "");
@@ -116,7 +119,7 @@ public class SettingServerEditionController {
     onSave();
   }
 
-  public void onDelete(ServerObjInfo myServerObj, ServerObjInfo serverObj) {
+  public void onDelete() {
     if (!isNewServer) // Delete sever
     {
       int currentServerIndex = Integer.valueOf(AccountSetting.getInstance().getDomainIndex());

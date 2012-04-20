@@ -4,7 +4,6 @@ import org.exoplatform.R;
 import org.exoplatform.controller.setting.SettingServerEditionController;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.utils.URLAnalyzer;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -96,19 +95,18 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
     myServerObj._strServerName = editTextServerName.getText().toString();
 
-    URLAnalyzer urlAnanyzer = new URLAnalyzer();
-    myServerObj._strServerUrl = urlAnanyzer.parserURL(editTextServerUrl.getText().toString());
+    myServerObj._strServerUrl = editTextServerUrl.getText().toString();
     if (myServerObj._strServerUrl != null) {
       myServerObj._strServerName = myServerObj._strServerName.trim();
       myServerObj._strServerUrl = myServerObj._strServerUrl.trim();
 
       SettingServerEditionController editController = new SettingServerEditionController(mContext);
       if (view.equals(btnOK)) {
-        editController.onAccept(myServerObj, myServerObj);
+        editController.onAccept(myServerObj);
       }
 
       if (view.equals(btnDeleteCancel)) {
-        editController.onDelete(myServerObj, myServerObj);
+        editController.onDelete();
       }
 
       dismiss();
