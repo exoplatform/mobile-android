@@ -9,7 +9,6 @@ import org.exoplatform.controller.home.HomeActionListenner;
 import org.exoplatform.controller.home.HomeAdapter;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -26,8 +25,6 @@ public class HomeActivity extends MyActionBar {
   private static final String SERVER_SETTING_HELPER = "SERVER_SETTING_HELPER";
 
   private static final String ACCOUNT_SETTING       = "account_setting";
-
-  private static final String DOCUMENT_HELPER       = "document_helper";
 
   private static final String COOKIESTORE           = "cookie_store";
 
@@ -46,8 +43,6 @@ public class HomeActivity extends MyActionBar {
     addActionBarItem();
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_logout_button);
     if (bundle != null) {
-      DocumentHelper helper = bundle.getParcelable(DOCUMENT_HELPER);
-      DocumentHelper.getInstance().setInstance(helper);
       AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
       AccountSetting.getInstance().setInstance(accountSetting);
       ServerSettingHelper settingHelper = bundle.getParcelable(SERVER_SETTING_HELPER);
@@ -63,7 +58,6 @@ public class HomeActivity extends MyActionBar {
     super.onSaveInstanceState(outState);
     outState.putParcelable(SERVER_SETTING_HELPER, ServerSettingHelper.getInstance());
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
-    outState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
     outState.putStringArrayList(COOKIESTORE,
                                 ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
 
