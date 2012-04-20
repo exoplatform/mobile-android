@@ -132,8 +132,9 @@ public class WebViewActivity extends MyActionBar {
       for (int i = 0; i < cookies.size(); i++) {
         strCookie = cookies.get(i).getName().toString() + "="
             + cookies.get(i).getValue().toString();
+        CookieManager.getInstance().setCookie(url, strCookie);
       }
-      CookieManager.getInstance().setCookie(url, strCookie);
+     
     }
     CookieSyncManager.getInstance().sync();
 
@@ -239,13 +240,10 @@ public class WebViewActivity extends MyActionBar {
   private class NewsWebviewClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-      setupCookies(url);
       view.loadUrl(url);
       return true;
 
     }
-
-    // Re logging in if receive the Http Authorization Request
 
     @Override
     public void onReceivedHttpAuthRequest(WebView view,
@@ -253,7 +251,6 @@ public class WebViewActivity extends MyActionBar {
                                           String host,
                                           String realm) {
       super.onReceivedHttpAuthRequest(view, handler, host, realm);
-      setupCookies(host);
       view.reload();
     }
   }
