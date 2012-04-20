@@ -16,8 +16,6 @@
  */
 package org.exoplatform.widget;
 
-import org.exoplatform.utils.image.SocialImageLoader;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -29,6 +27,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.cyrilmottier.android.greendroid.R;
@@ -86,7 +85,8 @@ public class RetangleImageView extends ImageView {
       // Draw the output_bitmap to image view
       canvas.drawBitmap(output_bitmap, 0, 0, null);
     } catch (OutOfMemoryError e) {
-      new SocialImageLoader(getContext()).clearCache();
+      if (greendroid.util.Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("RetangleImageView", e.getMessage());
     }
   }
 

@@ -1,5 +1,6 @@
 package org.exoplatform.widget;
 
+import greendroid.util.Config;
 import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.utils.PhotoUtils;
@@ -10,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 
 public class RoundedImageView extends AsyncImageView {
 
@@ -55,7 +57,8 @@ public class RoundedImageView extends AsyncImageView {
         canvas.drawBitmap(mScaledBitmap, 0, 0, null);
       }
     } catch (OutOfMemoryError e) {
-      new SocialImageLoader(getContext()).clearCache();
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("RoundedImageView", e.getMessage());
     }
   }
 

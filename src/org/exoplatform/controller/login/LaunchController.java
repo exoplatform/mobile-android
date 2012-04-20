@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
@@ -39,7 +40,11 @@ public class LaunchController {
      * Initialize SocialImageLoader when application start up and clear all data
      * cache.
      */
-    new SocialImageLoader(context).clearCache();
+    if (SocialDetailHelper.getInstance().socialImageLoader == null) {
+      SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(context);
+      SocialDetailHelper.getInstance().socialImageLoader.clearCache();
+    }
+    // new SocialImageLoader(context).clearCache();
   }
 
   private void getLaunchInfo() {

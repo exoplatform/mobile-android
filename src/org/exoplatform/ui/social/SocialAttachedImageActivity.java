@@ -31,7 +31,10 @@ public class SocialAttachedImageActivity extends MyActionBar {
 
   private void init() {
     imageView = (ImageView) findViewById(R.id.social_attached_image_view);
-    new SocialImageLoader(this).displayImage(imageUrl, imageView);
+    if (SocialDetailHelper.getInstance().socialImageLoader == null) {
+      SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(this);
+    }
+    SocialDetailHelper.getInstance().socialImageLoader.displayImage(imageUrl, imageView);
   }
 
   private String getImageName(String url) {

@@ -534,7 +534,10 @@ public class SocialActivityStreamItem extends LinearLayout {
     /*
      * Use SocialImageLoader to get and display attached image.
      */
-    new SocialImageLoader(mContext).displayImage(url, attachImage);
+    if(SocialDetailHelper.getInstance().socialImageLoader==null){
+      SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
+    }
+    SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage);
 
     if (isDetail) {
       attachImage.setOnClickListener(new OnClickListener() {
