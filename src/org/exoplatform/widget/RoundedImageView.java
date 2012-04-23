@@ -4,7 +4,6 @@ import greendroid.util.Config;
 import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.utils.PhotoUtils;
-import org.exoplatform.utils.image.SocialImageLoader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
