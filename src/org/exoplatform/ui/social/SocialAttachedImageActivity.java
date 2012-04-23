@@ -23,10 +23,14 @@ public class SocialAttachedImageActivity extends MyActionBar {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.social_attached_image_layout);
-    imageUrl = SocialDetailHelper.getInstance().getAttachedImageUrl();
-    String imageName = getImageName(imageUrl);
-    setTitle(imageName);
-    init();
+    if (savedInstanceState != null)
+      finish();
+    else {
+      imageUrl = SocialDetailHelper.getInstance().getAttachedImageUrl();
+      String imageName = getImageName(imageUrl);
+      setTitle(imageName);
+      init();
+    }
   }
 
   private void init() {

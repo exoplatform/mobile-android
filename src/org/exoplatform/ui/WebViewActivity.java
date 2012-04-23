@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.cookie.Cookie;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
@@ -34,7 +35,7 @@ import com.cyrilmottier.android.greendroid.R;
 
 //Display gadget
 public class WebViewActivity extends MyActionBar {
-  private static final String COOKIESTORE = "cookie_store";
+  private static final String ACCOUNT_SETTING = "account_setting";
 
   private WebViewLoadTask     mLoadTask;
 
@@ -53,10 +54,15 @@ public class WebViewActivity extends MyActionBar {
     setActionBarContentView(R.layout.webview);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem(Type.Refresh, R.id.action_bar_refresh);
+    /*
+     * restore the previous state
+     */
     if (icicle != null) {
       _url = icicle.getString(ExoConstants.WEB_VIEW_URL);
       _titlebar = icicle.getString(ExoConstants.WEB_VIEW_TITLE);
-      ArrayList<String> cookieList = icicle.getStringArrayList(COOKIESTORE);
+      AccountSetting accountSetting = icicle.getParcelable(ACCOUNT_SETTING);
+      AccountSetting.getInstance().setInstance(accountSetting);
+      ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     } else {
       _url = getIntent().getStringExtra(ExoConstants.WEB_VIEW_URL);
@@ -102,8 +108,7 @@ public class WebViewActivity extends MyActionBar {
     super.onSaveInstanceState(outState);
     outState.putString(ExoConstants.WEB_VIEW_URL, _url);
     outState.putString(ExoConstants.WEB_VIEW_TITLE, _titlebar);
-    outState.putStringArrayList(COOKIESTORE,
-                                ExoConnectionUtils.getCookieList(ExoConnectionUtils.cookiesStore));
+    outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -134,7 +139,7 @@ public class WebViewActivity extends MyActionBar {
             + cookies.get(i).getValue().toString();
         CookieManager.getInstance().setCookie(url, strCookie);
       }
-     
+
     }
     CookieSyncManager.getInstance().sync();
 
@@ -189,7 +194,6 @@ public class WebViewActivity extends MyActionBar {
 
   }
 
-  //
   private void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == WebViewLoadTask.Status.RUNNING) {
       mLoadTask.cancel(true);
@@ -197,7 +201,6 @@ public class WebViewActivity extends MyActionBar {
     }
   }
 
-  //
   private class WebViewLoadTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPreExecute() {

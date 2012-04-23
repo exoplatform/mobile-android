@@ -61,7 +61,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     changeLanguage();
     if (savedInstanceState != null)
       finish();
-    initComponent();
+    else
+      initComponent();
 
   }
 
@@ -89,7 +90,11 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   @Override
   protected void onResume() {
     super.onResume();
-    detailController.onLoad();
+    if (detailController != null) {
+      detailController.onLoad();
+    } else
+      finish();
+
   }
 
   @Override

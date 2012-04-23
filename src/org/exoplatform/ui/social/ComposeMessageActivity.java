@@ -81,16 +81,17 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
     composeMessageActivity = this;
     if (savedInstanceState != null)
       finish();
-    composeType = getIntent().getIntExtra(ExoConstants.COMPOSE_TYPE, composeType);
-    if (composeType == 0) {
-      setTitle(statusUpdate);
-      addActionBarItem();
-      getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_photo);
-    } else {
-      setTitle(comment);
+    else {
+      composeType = getIntent().getIntExtra(ExoConstants.COMPOSE_TYPE, composeType);
+      if (composeType == 0) {
+        setTitle(statusUpdate);
+        addActionBarItem();
+        getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_photo);
+      } else {
+        setTitle(comment);
+      }
+      initComponents();
     }
-    initComponents();
-
   }
 
   private void initComponents() {

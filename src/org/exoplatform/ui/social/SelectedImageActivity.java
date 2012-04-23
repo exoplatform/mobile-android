@@ -71,9 +71,13 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.social_selected_image_layout);
-    modeId = getIntent().getIntExtra(ExoConstants.SELECTED_IMAGE_MODE, 0);
-    init();
-    onLoad(modeId);
+    if (savedInstanceState != null)
+      finish();
+    else {
+      modeId = getIntent().getIntExtra(ExoConstants.SELECTED_IMAGE_MODE, 0);
+      init();
+      onLoad(modeId);
+    }
   }
 
   @Override

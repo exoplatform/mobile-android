@@ -64,6 +64,9 @@ public class SocialActivity extends MyActionBar {
     socialActivity = this;
     activityStreamWrap = (LinearLayout) findViewById(R.id.activity_stream_wrap);
     changeLanguage();
+    /*
+     * Restore the previous state
+     */
     if (savedInstanceState != null) {
       number_of_activity = savedInstanceState.getInt(NUMBER_OF_ACTIVITY);
       number_of_more_activity = savedInstanceState.getInt(NUMBER_OF_MORE_ACTIVITY);
