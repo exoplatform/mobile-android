@@ -13,8 +13,8 @@
   <name>eXo Mobile Android</name>
   <description>eXo Mobile Android projects.</description>
   <scm>
- 	<connection>scm:git:ssh://github.com/exoplatform/mobile-android.git</connection>
- 	<developerConnection>scm:git:ssh://github.com/exoplatform/mobile-android.git</developerConnection>
+ 	<connection>scm:git:git://github.com/exoplatform/mobile-android.git</connection>
+ 	<developerConnection>scm:git:git@github.com:exoplatform/mobile-android.git</developerConnection>
  	<url>http://fisheye.exoplatform.org/browse/mobile/exo-mobile-android</url>
   </scm>
   <properties>
