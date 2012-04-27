@@ -104,6 +104,7 @@ public class DocumentAdapter extends BaseAdapter {
     }
 
     if (!myFile.isFolder) {
+      btnAction.setVisibility(View.VISIBLE);
 
       String iconFileName = ExoDocumentUtils.getFileFolderIconName(myFile.nodeType);
       icon.setImageResource(ExoDocumentUtils.getPicIDFromName(iconFileName));
