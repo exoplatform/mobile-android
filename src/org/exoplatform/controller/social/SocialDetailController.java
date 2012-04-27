@@ -74,10 +74,10 @@ public class SocialDetailController {
     changeLanguage();
   }
 
-  public void onLoad() {
+  public void onLoad(boolean isLikeAction) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialDetailLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this, _progressDialog).execute();
+        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this, _progressDialog).execute(isLikeAction);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -154,7 +154,7 @@ public class SocialDetailController {
         } else {
           SocialServiceHelper.getInstance().getActivityService().like(activity);
         }
-        onLoad();
+        onLoad(true);
       } catch (SocialClientLibException e) {
 
         WarningDialog dialog = new WarningDialog(mContext, titleString, likeErrorString, okString);

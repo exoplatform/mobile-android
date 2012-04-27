@@ -19,6 +19,7 @@ import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
+import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -32,7 +33,7 @@ import android.view.View;
 
 import com.cyrilmottier.android.greendroid.R;
 
-public class SocialDetailLoadTask extends AsyncTask<Void, Void, Integer> {
+public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
   private RestActivity                 selectedRestActivity;
 
   private LinkedList<SocialLikeInfo>   likeLinkedList    = new LinkedList<SocialLikeInfo>();
@@ -61,6 +62,8 @@ public class SocialDetailLoadTask extends AsyncTask<Void, Void, Integer> {
 
   private boolean                      hasContent        = false;
 
+  private boolean                      isLikeAction      = false;
+
   public SocialDetailLoadTask(Context context,
                               SocialDetailController controller,
                               SocialDetailWaitingDialog progressDialog) {
@@ -78,7 +81,9 @@ public class SocialDetailLoadTask extends AsyncTask<Void, Void, Integer> {
   }
 
   @Override
-  public Integer doInBackground(Void... params) {
+  public Integer doInBackground(Boolean... params) {
+    isLikeAction = params[0];
+
     try {
       if (ExoConnectionUtils.getResponseCode(AccountSetting.getInstance().getDomainName()) == 0) {
         ExoConnectionUtils.onReLogin();
@@ -160,6 +165,9 @@ public class SocialDetailLoadTask extends AsyncTask<Void, Void, Integer> {
       detailController.setComponentInfo(streamInfo);
       detailController.createCommentList(socialCommentList);
       detailController.setLikeInfo(likeLinkedList);
+      if (isLikeAction) {
+        SocialActivity.socialActivity.loadActivity();
+      }
     } else {
       dialog = new SocialDetailsWarningDialog(mContext,
                                               titleString,

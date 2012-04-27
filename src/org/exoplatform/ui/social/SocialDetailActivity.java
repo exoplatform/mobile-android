@@ -84,14 +84,14 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
                                                   contentDetailLayout,
                                                   textView_Like_Count,
                                                   _progressDialog);
-    detailController.onLoad();
+    detailController.onLoad(false);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     if (detailController != null) {
-      detailController.onLoad();
+      detailController.onLoad(false);
     } else
       finish();
 
@@ -123,7 +123,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
       finish();
       break;
     case 0:
-      detailController.onLoad();
+      detailController.onLoad(false);
       break;
 
     }
