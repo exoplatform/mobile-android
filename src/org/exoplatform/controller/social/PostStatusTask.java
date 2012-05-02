@@ -80,7 +80,6 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
           File tempFile = PhotoUtils.reziseFileImage(file);
           if (tempFile != null) {
             ExoDocumentUtils.putFileToServerFromLocal(imageDir, tempFile, ExoConstants.IMAGE_TYPE);
-            tempFile.delete();
           }
           Map<String, String> templateParams = new HashMap<String, String>();
           activityImlp.setType("DOC_ACTIVITY");
