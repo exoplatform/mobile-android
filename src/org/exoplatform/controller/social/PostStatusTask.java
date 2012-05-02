@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.exoplatform.R;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
@@ -131,6 +132,14 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
     try {
       // Re authenticate when we upload file from social
       WebdavMethod copy = new WebdavMethod("HEAD", uploadUrl);
+      if (ExoConnectionUtils.httpClient == null) {
+        ExoConnectionUtils.initHttpClient();
+      }
+      if (ExoConnectionUtils.cookiesStore == null) {
+        ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore,
+                                          AccountSetting.getInstance().cookiesList);
+      }
+      ExoConnectionUtils.httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
       response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
