@@ -132,14 +132,15 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
     try {
       // Re authenticate when we upload file from social
       WebdavMethod copy = new WebdavMethod("HEAD", uploadUrl);
-      if (ExoConnectionUtils.httpClient == null) {
-        ExoConnectionUtils.initHttpClient();
-      }
       if (ExoConnectionUtils.cookiesStore == null) {
         ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore,
                                           AccountSetting.getInstance().cookiesList);
       }
-      ExoConnectionUtils.httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
+      if (ExoConnectionUtils.httpClient == null) {
+        ExoConnectionUtils.initHttpClient();
+        ExoConnectionUtils.httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
+      }
+
       response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
       if (status >= 200 && status < 300) {
