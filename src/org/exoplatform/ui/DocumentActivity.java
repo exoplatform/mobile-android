@@ -147,13 +147,15 @@ public class DocumentActivity extends MyActionBar {
 
   public void addOrRemoveFileActionButton() {
     /*
-     * If at the document level, make the action bar button invisible
+     * If at the document level or driver level, make the action bar button
+     * invisible
      */
     if (_fileForCurrentActionBar == null) {
       getActionBar().removeItem(0);
     } else {
-      // At the driver level, remove the action bar button
-      if (_fileForCurrentActionBar.path.equals("")) {
+      if (_fileForCurrentActionBar.path == null) {
+        getActionBar().removeItem(0);
+      } else if (_fileForCurrentActionBar.path.equals("")) {
         getActionBar().removeItem(0);
       } else {
         if (getActionBar().getItem(0) == null) {
