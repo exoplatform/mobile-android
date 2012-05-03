@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
@@ -72,42 +73,42 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
     try {
       RestActivity activityImlp = new RestActivity();
       if (sdcard_temp_dir != null) {
-        createFolder();
+        if (createFolder()) {
 
-        File file = new File(sdcard_temp_dir);
-        String imageDir = uploadUrl + "/" + file.getName();
-        if (file != null) {
+          File file = new File(sdcard_temp_dir);
+          String imageDir = uploadUrl + "/" + file.getName();
+          if (file != null) {
 
-          File tempFile = PhotoUtils.reziseFileImage(file);
-          if (tempFile != null) {
-            ExoDocumentUtils.putFileToServerFromLocal(imageDir, tempFile, ExoConstants.IMAGE_TYPE);
+            File tempFile = PhotoUtils.reziseFileImage(file);
+            if (tempFile != null) {
+              ExoDocumentUtils.putFileToServerFromLocal(imageDir, tempFile, ExoConstants.IMAGE_TYPE);
+            }
+            Map<String, String> templateParams = new HashMap<String, String>();
+            activityImlp.setType("DOC_ACTIVITY");
+            String pathExtension = "jcr/repository/collaboration";
+            int indexOfDocLink = imageDir.indexOf(pathExtension);
+            StringBuffer docBuffer = new StringBuffer("/portal/rest/");
+            docBuffer.append(imageDir.substring(indexOfDocLink));
+            String docPath = imageDir.substring(indexOfDocLink + pathExtension.length());
+            templateParams.put("DOCPATH", docPath);
+            templateParams.put("MESSAGE", "");
+            templateParams.put("DOCLINK", docBuffer.toString());
+            templateParams.put("WORKSPACE", "collaboration");
+            templateParams.put("REPOSITORY", "repository");
+            templateParams.put("DOCNAME", file.getName());
+            activityImlp.setTemplateParams(templateParams);
+
           }
-          Map<String, String> templateParams = new HashMap<String, String>();
-          activityImlp.setType("DOC_ACTIVITY");
-          String pathExtension = "jcr/repository/collaboration";
-          int indexOfDocLink = imageDir.indexOf(pathExtension);
-          StringBuffer docBuffer = new StringBuffer("/portal/rest/");
-          docBuffer.append(imageDir.substring(indexOfDocLink));
-          String docPath = imageDir.substring(indexOfDocLink + pathExtension.length());
-          templateParams.put("DOCPATH", docPath);
-          templateParams.put("MESSAGE", "");
-          templateParams.put("DOCLINK", docBuffer.toString());
-          templateParams.put("WORKSPACE", "collaboration");
-          templateParams.put("REPOSITORY", "repository");
-          templateParams.put("DOCNAME", file.getName());
-          activityImlp.setTemplateParams(templateParams);
-
         }
 
       }
-
       activityImlp.setTitle(composeMessage);
       SocialServiceHelper.getInstance().getActivityService().create(activityImlp);
       return 1;
     } catch (SocialClientLibException e) {
       return 0;
     } catch (RuntimeException e) {
-      return -1;
+      return -2;
     }
 
   }
@@ -130,20 +131,11 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
 
     HttpResponse response;
     try {
-      // Re authenticate when we upload file from social
       WebdavMethod copy = new WebdavMethod("HEAD", uploadUrl);
-      if (ExoConnectionUtils.cookiesStore == null) {
-        ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore,
-                                          AccountSetting.getInstance().cookiesList);
-      }
-      if (ExoConnectionUtils.httpClient == null) {
-        ExoConnectionUtils.initHttpClient();
-        ExoConnectionUtils.httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
-      }
 
       response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
-      if (status >= 200 && status < 300) {
+      if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
         return true;
 
       } else {
@@ -151,11 +143,10 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
         response = ExoConnectionUtils.httpClient.execute(copy);
         status = response.getStatusLine().getStatusCode();
 
-        if (status >= 200 && status < 300) {
+        if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
           return true;
-        }
-
-        return false;
+        } else
+          return false;
       }
 
     } catch (IOException e) {

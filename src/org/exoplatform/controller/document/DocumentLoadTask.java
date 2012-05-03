@@ -1,6 +1,7 @@
 package org.exoplatform.controller.document;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.exoplatform.model.ExoFile;
@@ -131,7 +132,6 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
           result = ExoDocumentUtils.putFileToServerFromLocal(strSourceUrl + "/" + file.getName(),
                                                              tempFile,
                                                              ExoConstants.IMAGE_TYPE);
-          tempFile.delete();
         }
 
       } else if (actionID == ACTION_RENAME) {
@@ -155,7 +155,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
       }
 
       return RESULT_OK;
-    } catch (Exception e) {
+    } catch (IOException e) {
       return RESULT_ERROR;
     }
   }

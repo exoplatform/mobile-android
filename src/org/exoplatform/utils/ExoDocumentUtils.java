@@ -36,15 +36,6 @@ public class ExoDocumentUtils {
       FileEntity fileEntity = new FileEntity(fileManager, fileType);
       put.setEntity(fileEntity);
       fileEntity.setContentType(fileType);
-      if (ExoConnectionUtils.cookiesStore == null) {
-        ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore,
-                                          AccountSetting.getInstance().cookiesList);
-      }
-      if (ExoConnectionUtils.httpClient == null) {
-        ExoConnectionUtils.initHttpClient();
-        ExoConnectionUtils.httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
-      }
-
       HttpResponse response = ExoConnectionUtils.httpClient.execute(put);
       int status = response.getStatusLine().getStatusCode();
       if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
@@ -154,7 +145,9 @@ public class ExoDocumentUtils {
       urlStr = URLAnalyzer.encodeUrl(urlStr);
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       arrFilesTmp.addAll(getContentOfFolder(response, file));
-      if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
+      if (file.path == null) {
+        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
+      } else if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
         DocumentHelper.getInstance().childFilesMap.remove(file.path);
         DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
       } else {
