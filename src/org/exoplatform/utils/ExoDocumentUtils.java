@@ -36,14 +36,15 @@ public class ExoDocumentUtils {
       FileEntity fileEntity = new FileEntity(fileManager, fileType);
       put.setEntity(fileEntity);
       fileEntity.setContentType(fileType);
-      if (ExoConnectionUtils.httpClient == null) {
-        ExoConnectionUtils.initHttpClient();
-      }
       if (ExoConnectionUtils.cookiesStore == null) {
         ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore,
                                           AccountSetting.getInstance().cookiesList);
       }
-      ExoConnectionUtils.httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
+      if (ExoConnectionUtils.httpClient == null) {
+        ExoConnectionUtils.initHttpClient();
+        ExoConnectionUtils.httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
+      }
+
       HttpResponse response = ExoConnectionUtils.httpClient.execute(put);
       int status = response.getStatusLine().getStatusCode();
       if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
