@@ -53,48 +53,46 @@ public class ExoDocumentUtils {
 
   public static void setRepositoryHomeUrl(String userName, String domain) {
 
-    if (DocumentHelper.getInstance().getRepositoryHomeUrl() == null) {
-      StringBuffer buffer = new StringBuffer();
-      buffer.append(domain);
-      buffer.append(ExoConstants.DOCUMENT_PATH);
+    StringBuffer buffer = new StringBuffer();
+    buffer.append(domain);
+    buffer.append(ExoConstants.DOCUMENT_PATH);
 
-      int length = userName.length();
-      if (length < 4) {
-        for (int i = 1; i < length; i++) {
-          String userNameLevel = userName.substring(0, i);
-          buffer.append("/");
-          buffer.append(userNameLevel);
-          buffer.append("___");
-        }
+    int length = userName.length();
+    if (length < 4) {
+      for (int i = 1; i < length; i++) {
+        String userNameLevel = userName.substring(0, i);
+        buffer.append("/");
+        buffer.append(userNameLevel);
+        buffer.append("___");
+      }
+    } else {
+      for (int i = 1; i < 4; i++) {
+        String userNameLevel = userName.substring(0, i);
+        buffer.append("/");
+        buffer.append(userNameLevel);
+        buffer.append("___");
+      }
+    }
+
+    buffer.append("/");
+    buffer.append(userName);
+
+    try {
+      WebdavMethod copy = new WebdavMethod("HEAD", buffer.toString());
+      int status = ExoConnectionUtils.httpClient.execute(copy).getStatusLine().getStatusCode();
+
+      if (status >= 200 && status < 300) {
+        DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
       } else {
-        for (int i = 1; i < 4; i++) {
-          String userNameLevel = userName.substring(0, i);
-          buffer.append("/");
-          buffer.append(userNameLevel);
-          buffer.append("___");
-        }
+        buffer = new StringBuffer(domain);
+        buffer.append(ExoConstants.DOCUMENT_PATH);
+        buffer.append("/");
+        buffer.append(userName);
+        DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
       }
 
-      buffer.append("/");
-      buffer.append(userName);
-
-      try {
-        WebdavMethod copy = new WebdavMethod("HEAD", buffer.toString());
-        int status = ExoConnectionUtils.httpClient.execute(copy).getStatusLine().getStatusCode();
-
-        if (status >= 200 && status < 300) {
-          DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
-        } else {
-          buffer = new StringBuffer(domain);
-          buffer.append(ExoConstants.DOCUMENT_PATH);
-          buffer.append("/");
-          buffer.append(userName);
-          DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
-        }
-
-      } catch (IOException e) {
-        DocumentHelper.getInstance().setRepositoryHomeUrl(null);
-      }
+    } catch (IOException e) {
+      DocumentHelper.getInstance().setRepositoryHomeUrl(null);
     }
 
   }

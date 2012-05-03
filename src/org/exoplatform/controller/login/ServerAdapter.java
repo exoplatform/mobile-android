@@ -6,8 +6,10 @@ import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.utils.ExoConstants;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -82,6 +84,14 @@ public class ServerAdapter extends BaseAdapter {
         _strDomain = serverObj._strServerUrl;
         AccountSetting.getInstance().setDomainIndex(String.valueOf(_intDomainIndex));
         AccountSetting.getInstance().setDomainName(_strDomain);
+
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE,
+                                                                        0)
+                                                  .edit();
+        editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
+        editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance()
+                                                                          .getDomainIndex());
+        editor.commit();
 
         rowView = getView(_intDomainIndex, null, _listViewServer);
         imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
