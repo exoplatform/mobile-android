@@ -1,5 +1,7 @@
 package org.exoplatform.utils;
 
+import greendroid.util.Config;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +28,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import android.os.Bundle;
+import android.util.Log;
 
 public class ExoDocumentUtils {
 
@@ -192,6 +195,8 @@ public class ExoDocumentUtils {
               Element itemElement = (Element) itemNode;
               ExoFile file = new ExoFile();
               file.name = itemElement.getAttribute("name");
+              if (Config.GD_INFO_LOGS_ENABLED)
+                Log.i(" Public file name", file.name);
               file.workspaceName = itemElement.getAttribute("workspaceName");
               file.driveName = file.name;
               file.currentFolder = itemElement.getAttribute("currentFolder");
@@ -498,15 +503,17 @@ public class ExoDocumentUtils {
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
       if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
-        return false;
+        return true;
       } else {
         WebdavMethod move = new WebdavMethod("MOVE", source, destination);
         response = ExoConnectionUtils.httpClient.execute(move);
         status = response.getStatusLine().getStatusCode();
         if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
           return true;
-        } else
+        } else {
           return false;
+        }
+
       }
     } catch (IOException e) {
       return false;
@@ -523,7 +530,7 @@ public class ExoDocumentUtils {
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
       if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
-        return false;
+        return true;
       } else {
         create = new WebdavMethod("MKCOL", destination);
         response = ExoConnectionUtils.httpClient.execute(create);

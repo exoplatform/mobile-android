@@ -23,12 +23,6 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
-  private static final int      RESULT_OK      = 1;
-
-  private static final int      RESULT_ERROR   = 0;
-
-  private static final int      RESULT_TIMEOUT = -1;
-
   // delete file or folder
   private static final int      ACTION_DELETE  = 1;
 
@@ -46,6 +40,17 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
   // create new folder
   private static final int      ACTION_CREATE  = 6;
+
+  /*
+   * Result status
+   */
+  private static final int      RESULT_OK      = 7;
+
+  private static final int      RESULT_ERROR   = 8;
+
+  private static final int      RESULT_TIMEOUT = 9;
+
+  private static final int      RESULT_FALSE   = 10;
 
   private DocumentWaitingDialog _progressDialog;
 
@@ -152,9 +157,10 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
        */
       if (result == true) {
         _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity._fileForCurrentActionBar);
-      }
+        return RESULT_OK;
+      } else
+        return RESULT_FALSE;
 
-      return RESULT_OK;
     } catch (IOException e) {
       return RESULT_ERROR;
     }
@@ -188,6 +194,8 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
       new WarningDialog(documentActivity, titleString, contentWarningString, okString).show();
     } else if (result == RESULT_TIMEOUT) {
       new ConnTimeOutDialog(documentActivity, titleString, okString).show();
+    } else if (result == RESULT_FALSE) {
+      new WarningDialog(documentActivity, titleString, contentWarningString, okString).show();
     }
 
     _progressDialog.dismiss();
