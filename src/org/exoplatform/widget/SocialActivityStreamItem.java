@@ -113,6 +113,8 @@ public class SocialActivityStreamItem extends LinearLayout {
                                                                 activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
+    System.out.println("Activity type " + activityInfo.getType());
+
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());
     SocialActivityUtil.setImageType(imageId, typeImageView);
     setViewByType(imageId);
@@ -220,7 +222,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       if (contentLink != null) {
 
         String contentType = activityInfo.templateParams.get("mimeType");
-        if (contentType != null && (contentType.equalsIgnoreCase(ExoConstants.IMAGE_TYPE))) {
+        if (contentType != null && (contentType.contains("image"))) {
           String contentName = activityInfo.templateParams.get("contentName");
           StringBuffer buffer = new StringBuffer();
           buffer.append(domain);
@@ -534,7 +536,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     /*
      * Use SocialImageLoader to get and display attached image.
      */
-    if(SocialDetailHelper.getInstance().socialImageLoader==null){
+    if (SocialDetailHelper.getInstance().socialImageLoader == null) {
       SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
     }
     SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage);

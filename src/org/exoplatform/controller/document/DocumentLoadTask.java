@@ -142,10 +142,20 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
       } else if (actionID == ACTION_RENAME) {
         contentWarningString = resource.getString(R.string.DocumentRenameError);
         result = ExoDocumentUtils.renameFolder(strSourceUrl, strDestinationUrl);
-        boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
-        strSourceUrl = strDestinationUrl;
-        if (!isFolder)
-          strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
+        if (result) {
+          boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
+          String type = documentActivity._documentAdapter._documentActionDialog.myFile.nodeType;
+          documentActivity._fileForCurrentActionBar.isFolder = isFolder;
+          documentActivity._fileForCurrentActionBar.nodeType = type;
+          strSourceUrl = strDestinationUrl;
+          if (!isFolder)
+            strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
+        } else {
+          DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = strSourceUrl;
+          int lastIndex = strSourceUrl.lastIndexOf("/");
+          String folderName = strSourceUrl.substring(lastIndex + 1, strSourceUrl.length());
+          DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
+        }
 
       } else if (actionID == ACTION_CREATE) {
         contentWarningString = resource.getString(R.string.DocumentCreateFolderError);
@@ -175,13 +185,6 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
   @Override
   public void onPostExecute(Integer result) {
     if (result == RESULT_OK) {
-
-      if (actionID == ACTION_RENAME) {
-        boolean isFolder = documentActivity._documentAdapter._documentActionDialog.myFile.isFolder;
-        String type = documentActivity._documentAdapter._documentActionDialog.myFile.nodeType;
-        documentActivity._fileForCurrentActionBar.isFolder = isFolder;
-        documentActivity._fileForCurrentActionBar.nodeType = type;
-      }
 
       documentActivity.setDocumentAdapter(_documentList);
       /*

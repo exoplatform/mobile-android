@@ -4,6 +4,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.URLAnalyzer;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -31,6 +32,8 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
   private String   cancelStr;
 
   private String   inputTextWarning;
+
+  private String   inputNameURLInvalid;
 
   private int      actionId;
 
@@ -98,20 +101,35 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
               currentFolder = ExoDocumentUtils.getParentUrl(currentFolder) + "/" + folderName;
               DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
             }
-            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, destinationUrl, 5);
+            if (URLAnalyzer.isUrlValid(destinationUrl)) {
+              DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
+                                                                destinationUrl,
+                                                                5);
+            } else {
+              Toast toast = Toast.makeText(mContext, inputNameURLInvalid, Toast.LENGTH_SHORT);
+              toast.setGravity(Gravity.CENTER, 0, 0);
+              toast.show();
+            }
+
           }
 
         } else {
           String desUrl = selectedFile.path + "/" + folderName;
-          DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, desUrl, 6);
+          if (URLAnalyzer.isUrlValid(desUrl)) {
+            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, desUrl, 6);
+          } else {
+            Toast toast = Toast.makeText(mContext, inputNameURLInvalid, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+          }
+
         }
         dismiss();
+      } else {
+        Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.show();
       }
-
-    } else {
-      Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_SHORT);
-      toast.setGravity(Gravity.CENTER, 0, 0);
-      toast.show();
     }
     if (view.equals(cancelButton)) {
       dismiss();
@@ -128,6 +146,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
     okStr = res.getString(R.string.OK);
     cancelStr = res.getString(R.string.Cancel);
     inputTextWarning = res.getString(R.string.DocumentFolderNameEmpty);
+    inputNameURLInvalid = res.getString(R.string.SpecialCharacters);
 
   }
 

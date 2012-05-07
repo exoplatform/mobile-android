@@ -34,8 +34,17 @@ public class URLAnalyzer {
 
   }
 
-  public boolean isValidUrl(String urlStr) {
+  public static boolean isValidUrl(String urlStr) {
     return URLUtil.isValidUrl(urlStr);
+  }
+
+  public static boolean isUrlValid(String str) {
+    try {
+      new URL(str);
+      return true;
+    } catch (MalformedURLException e) {
+      return false;
+    }
   }
 
   public String parserURL(String urlStr) {
@@ -119,7 +128,6 @@ public class URLAnalyzer {
 
   public static String encodeUrl(String urlString) {
 
-    String encodedUrl = "";
     try {
 
       URL url = new URL(urlString);
@@ -131,7 +139,7 @@ public class URLAnalyzer {
                         url.getQuery(),
                         url.getRef());
 
-      encodedUrl = uri.toASCIIString();
+      return uri.toASCIIString();
 
     } catch (MalformedURLException e) {
       return null;
@@ -139,6 +147,5 @@ public class URLAnalyzer {
       return null;
     }
 
-    return encodedUrl;
   }
 }
