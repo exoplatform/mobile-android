@@ -32,6 +32,8 @@
     <!-- Java version -->
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
+    <version.release.plugin>2.2.1</version.release.plugin>
+	<version.buildnumber.plugin>1.0</version.buildnumber.plugin>
   </properties>
   
    <!-- Profiles definition for Android build -->
