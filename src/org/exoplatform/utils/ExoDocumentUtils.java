@@ -458,6 +458,9 @@ public class ExoDocumentUtils {
 
     HttpResponse response;
     try {
+      if (source.equals(destination)) {
+        return false;
+      }
       source = URLAnalyzer.encodeUrl(source);
       destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod copy = new WebdavMethod("COPY", source, destination);
@@ -477,7 +480,9 @@ public class ExoDocumentUtils {
   public static boolean moveFile(String source, String destination) {
     HttpResponse response;
     try {
-
+      if (source.equals(destination)) {
+        return false;
+      }
       source = URLAnalyzer.encodeUrl(source);
       destination = URLAnalyzer.encodeUrl(destination);
       WebdavMethod move = new WebdavMethod("MOVE", source, destination);
