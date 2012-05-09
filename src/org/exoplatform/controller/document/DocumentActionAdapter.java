@@ -23,7 +23,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   public ExoFile                      _selectedFile;
 
-  private DocumentActivity                    _mContext;
+  private DocumentActivity            _mContext;
 
   private DocumentActionDialog        _delegate;
 
@@ -122,9 +122,9 @@ public class DocumentActionAdapter extends BaseAdapter {
               }
 
             }
+            DocumentHelper.getInstance().setFileMove(null);
+            DocumentHelper.getInstance().setFileCopy(null);
           }
-          DocumentHelper.getInstance().setFileMove(null);
-          DocumentHelper.getInstance().setFileCopy(null);
 
         } else if (pos == 5)// Rename file
         {

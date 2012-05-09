@@ -32,9 +32,9 @@ public class DocumentHelper implements Parcelable {
 
   private String                _urlrepositoryHome;
 
-  private ExoFile               _fileCopied    = new ExoFile();
+  private ExoFile               _fileCopied;
 
-  private ExoFile               _fileMoved     = new ExoFile();
+  private ExoFile               _fileMoved;
 
   /*
    * The dictionary for mapping between parent folder and its child files
