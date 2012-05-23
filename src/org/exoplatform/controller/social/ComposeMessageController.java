@@ -106,15 +106,14 @@ public class ComposeMessageController {
       RestComment comment = new RestComment();
       comment.setText(composeMessage);
       String selectedId = SocialDetailHelper.getInstance().getActivityId();
-      ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
-                                                                         .getActivityService();
+      ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
       RestActivity restActivity = (RestActivity) activityService.get(selectedId);
 
       activityService.createComment(restActivity, comment);
 
       ((Activity) mContext).finish();
 
-      SocialActivity.socialActivity.loadActivity();
+      SocialActivity.socialActivity.loadActivity(true);
 
     } catch (SocialClientLibException e) {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);

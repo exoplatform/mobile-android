@@ -145,14 +145,14 @@ public class SocialDetailController {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       try {
         RestActivity activity = SocialServiceHelper.getInstance()
-                                                   .getActivityService()
+                                                   .activityService
                                                    .get(activityId);
 
         if (liked == true) {
-          SocialServiceHelper.getInstance().getActivityService().unlike(activity);
+          SocialServiceHelper.getInstance().activityService.unlike(activity);
           SocialDetailHelper.getInstance().setLiked(false);
         } else {
-          SocialServiceHelper.getInstance().getActivityService().like(activity);
+          SocialServiceHelper.getInstance().activityService.like(activity);
         }
         onLoad(true);
       } catch (SocialClientLibException e) {

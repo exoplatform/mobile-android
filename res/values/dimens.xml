@@ -21,5 +21,6 @@
 
     <dimen name="thumbnail_size">50dp</dimen>
     <dimen name="thumbnail_radius">5dp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
     
 </resources>

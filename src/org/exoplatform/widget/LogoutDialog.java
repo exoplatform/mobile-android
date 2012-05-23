@@ -1,7 +1,7 @@
 package org.exoplatform.widget;
 
 import org.exoplatform.R;
-import org.exoplatform.controller.home.HomeController;
+import org.exoplatform.ui.HomeActivity;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -18,15 +18,15 @@ public class LogoutDialog extends Dialog implements OnClickListener {
 
   private Button         cancelButton;
 
-  private HomeController homeController;
+  private HomeActivity homeActivity;
 
   private Context        mContext;
 
-  public LogoutDialog(Context context, HomeController controller) {
+  public LogoutDialog(Context context, HomeActivity homeAct) {
     super(context);
     setContentView(R.layout.logout_dialog_layout);
     mContext = context;
-    homeController = controller;
+    homeActivity = homeAct;
     contentView = (TextView) findViewById(R.id.logout_content);
 
     okButton = (Button) findViewById(R.id.logout_ok_button);
@@ -40,7 +40,7 @@ public class LogoutDialog extends Dialog implements OnClickListener {
   // @Override
   public void onClick(View view) {
     if (view.equals(okButton)) {
-      homeController.onFinish();
+//      homeController.onFinish();
       dismiss();
     }
 

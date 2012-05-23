@@ -89,7 +89,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
         ExoConnectionUtils.onReLogin();
       }
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
-                                                                         .getActivityService();
+                                                                         .activityService;
 
       String activityId = SocialDetailHelper.getInstance().getActivityId();
       QueryParams queryParams = new QueryParamsImpl();
@@ -120,7 +120,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
         for (RestIdentity like : likeList) {
           SocialLikeInfo socialLike = new SocialLikeInfo();
           String identity = like.getId();
-          if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().getUserId())) {
+          if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().userIdentity)) {
             socialLike.setLikeName(youText);
             likeLinkedList.addFirst(socialLike);
             SocialDetailHelper.getInstance().setLiked(true);
@@ -166,7 +166,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       detailController.createCommentList(socialCommentList);
       detailController.setLikeInfo(likeLinkedList);
       if (isLikeAction) {
-        SocialActivity.socialActivity.loadActivity();
+        SocialActivity.socialActivity.loadActivity(true);
       }
     } else {
       dialog = new SocialDetailsWarningDialog(mContext,

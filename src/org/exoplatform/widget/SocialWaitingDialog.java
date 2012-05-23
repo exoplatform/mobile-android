@@ -1,24 +1,24 @@
 package org.exoplatform.widget;
 
-import org.exoplatform.controller.social.SocialController;
+import org.exoplatform.controller.home.HomeController;
 
 import android.content.Context;
 
 public class SocialWaitingDialog extends WaitingDialog {
-  private SocialController socialController;
+  private HomeController homeController;
 
   public SocialWaitingDialog(Context context,
-                             SocialController controller,
+                             HomeController controller,
                              String titleString,
                              String contentString) {
     super(context, titleString, contentString);
-    socialController = controller;
+    homeController = controller;
   }
 
   @Override
   public void onBackPressed() {
     super.onBackPressed();
-    socialController.finishService();
+    homeController.finishService();
   }
 
 }

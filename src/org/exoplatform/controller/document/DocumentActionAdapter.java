@@ -81,12 +81,12 @@ public class DocumentActionAdapter extends BaseAdapter {
 
         } else if (pos == 1)// Copy file
         {
-          DocumentHelper.getInstance().setFileCopy(_selectedFile);
-          DocumentHelper.getInstance().setFileMove(null);
+          DocumentHelper.getInstance()._fileCopied = _selectedFile;
+          DocumentHelper.getInstance()._fileMoved = null;
         } else if (pos == 2)// move file
         {
-          DocumentHelper.getInstance().setFileMove(_selectedFile);
-          DocumentHelper.getInstance().setFileCopy(null);
+          DocumentHelper.getInstance()._fileMoved = _selectedFile;
+          DocumentHelper.getInstance()._fileCopied = null;
         } else if (pos == 3 || pos == 4) {
 
           if (pos == 4)// Delete file, folder
@@ -102,7 +102,7 @@ public class DocumentActionAdapter extends BaseAdapter {
                                                               1);
           } else {
             // Copy file
-            ExoFile _fileCopied = DocumentHelper.getInstance().getFileCopy();
+            ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
             if (_fileCopied != null) {
               String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
               String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
@@ -110,7 +110,7 @@ public class DocumentActionAdapter extends BaseAdapter {
               DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path, destinationUrl, 2);
 
             }
-            ExoFile _fileMoved = DocumentHelper.getInstance().getFileMove();
+            ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
             if (_fileMoved != null) {
               if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
                 String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
@@ -122,8 +122,8 @@ public class DocumentActionAdapter extends BaseAdapter {
               }
 
             }
-            DocumentHelper.getInstance().setFileMove(null);
-            DocumentHelper.getInstance().setFileCopy(null);
+            DocumentHelper.getInstance()._fileCopied = null;
+            DocumentHelper.getInstance()._fileMoved = null;
           }
 
         } else if (pos == 5)// Rename file
@@ -152,11 +152,7 @@ public class DocumentActionAdapter extends BaseAdapter {
     icon.setImageResource(fileAction.imageID);
 
     if (_selectedFile.isFolder) {
-      if (fileAction.actionName.equalsIgnoreCase(strCopy)
-          || fileAction.actionName.equalsIgnoreCase(strMove)
-          || (fileAction.actionName.equalsIgnoreCase(strPaste) && (DocumentHelper.getInstance()
-                                                                                 .getFileCopy() == null && DocumentHelper.getInstance()
-                                                                                                                         .getFileMove() == null))) {
+      if ((fileAction.actionName.equalsIgnoreCase(strPaste) && (DocumentHelper.getInstance()._fileCopied == null && DocumentHelper.getInstance()._fileMoved == null))) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);

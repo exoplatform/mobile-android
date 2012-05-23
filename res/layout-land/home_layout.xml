@@ -9,38 +9,45 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical" >
+        android:background="#DCDCDCDC"
+        android:orientation="horizontal" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="160dp"
+            android:layout_height="fill_parent"
             android:background="@drawable/home_profile_bg"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="0dp" >
+            android:orientation="vertical" >
 
-            <FrameLayout
-                android:layout_width="43dp"
-                android:layout_height="43dp"
-                android:layout_marginLeft="7dp"
-                android:background="@drawable/bottom_background_shape" >
-
-                <org.exoplatform.widget.RoundedImageView
-                    android:id="@+id/home_user_avatar"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:scaleType="fitXY" />
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/home_textview_name"
-                style="@style/textview_home"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:gravity="center_vertical"
-                android:padding="2dp"
-                android:textStyle="bold" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <FrameLayout
+                    android:layout_width="43dp"
+                    android:layout_height="43dp"
+                    android:layout_marginLeft="7dp"
+                    android:background="@drawable/bottom_background_shape" >
+
+                    <org.exoplatform.widget.RoundedImageView
+                        android:id="@+id/home_user_avatar"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:scaleType="fitXY" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/home_textview_name"
+                    style="@style/textview_home"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
 
         <org.exoplatform.widget.HomeLinearLayout
@@ -66,7 +73,7 @@
                     <Button
                         android:id="@+id/home_btn_activity"
                         style="@style/HomeButton"
-                        android:drawableTop="@drawable/home_btn_activity"
+                        android:drawableTop="@drawable/homeactivitystreamsiconiphone"
                         android:text="@string/ActivityStream" />
                 </LinearLayout>
 
@@ -79,7 +86,7 @@
                     <Button
                         android:id="@+id/home_btn_document"
                         style="@style/HomeButton"
-                        android:drawableTop="@drawable/home_btn_document"
+                        android:drawableTop="@drawable/homedocumentsiconiphone"
                         android:text="@string/Documents" />
                 </LinearLayout>
             </LinearLayout>
@@ -101,7 +108,7 @@
                     <Button
                         android:id="@+id/home_btn_apps"
                         style="@style/HomeButton"
-                        android:drawableTop="@drawable/home_btn_document"
+                        android:drawableTop="@drawable/homedashboardiconiphone"
                         android:text="@string/Dashboard" />
                 </LinearLayout>
 
@@ -126,8 +133,9 @@
         <ViewFlipper
             android:id="@+id/home_social_flipper"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:flipInterval="6000"
+            android:gravity="center_vertical"
             android:padding="2dp" >
         </ViewFlipper>
     </LinearLayout>

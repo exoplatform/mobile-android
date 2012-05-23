@@ -1,4 +1,4 @@
-package org.exoplatform.controller.social;
+package org.exoplatform.controller.home;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -9,37 +9,41 @@ import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.api.model.RestIdentity;
+import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.VersionService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
+import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.SocialWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 
 import com.cyrilmottier.android.greendroid.R;
 
-public class SocialServiceLoadTask extends AsyncTask<Void, Void, Boolean> {
-  private SocialActivity   mContext;
+public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
+  private Context        mContext;
 
-  private String           loadingData;
+  private String         loadingData;
 
-  private String           okString;
+  private String         okString;
 
-  private String           titleString;
+  private String         titleString;
 
-  private String           contentString;
+  private String         contentString;
 
-  private SocialController socialController;
+  private HomeController homeController;
 
-  public SocialServiceLoadTask(SocialActivity context, SocialController controller) {
+  public SocialServiceLoadTask(Context context, HomeController controller) {
     mContext = context;
-    socialController = controller;
+    homeController = controller;
     changeLanguage();
   }
 
@@ -54,19 +58,19 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, Boolean> {
 
   @Override
   public void onPreExecute() {
-    if (socialController._progressDialog == null) {
-      socialController._progressDialog = new SocialWaitingDialog(mContext,
-                                                                 socialController,
-                                                                 null,
-                                                                 loadingData);
-      socialController._progressDialog.show();
+    if (homeController._progressDialog == null) {
+      homeController._progressDialog = new SocialWaitingDialog(mContext,
+                                                               homeController,
+                                                               null,
+                                                               loadingData);
+      homeController._progressDialog.show();
     }
 
   }
 
   @SuppressWarnings("deprecation")
   @Override
-  public Boolean doInBackground(Void... params) {
+  public RestProfile doInBackground(Void... params) {
     try {
       String userName = AccountSetting.getInstance().getUsername();
       String password = AccountSetting.getInstance().getPassword();
@@ -86,31 +90,39 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, Boolean> {
 
       @SuppressWarnings("unchecked")
       ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
-      IdentityService<?> identityService = clientServiceFactory.createIdentityService();
-      String userIdentity;
-      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
-      SocialServiceHelper.getInstance().setUserId(userIdentity);
+      IdentityService<RestIdentity> identityService = clientServiceFactory.createIdentityService();
+      String userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION,
+                                                          userName);
+      SocialServiceHelper.getInstance().userIdentity = userIdentity;
 
-      SocialServiceHelper.getInstance().setActivityService(activityService);
-      SocialServiceHelper.getInstance().setIdentityService(identityService);
+      SocialServiceHelper.getInstance().activityService = activityService;
+      SocialServiceHelper.getInstance().identityService = identityService;
+      RestIdentity restIdent = identityService.getIdentity(ExoConstants.ACTIVITY_ORGANIZATION,
+                                                           userName);
 
-      return true;
+      return restIdent.getProfile();
     } catch (SocialClientLibException e) {
-      return false;
+      return null;
     } catch (RuntimeException e) {
-      return false;
+      return null;
     } catch (MalformedURLException e) {
-      return false;
+      return null;
     }
   }
 
   @Override
-  public void onPostExecute(Boolean result) {
-    if (result) {
-      socialController.onLoad(mContext.number_of_activity);
+  public void onPostExecute(RestProfile result) {
+    if (result != null) {
+      SocialServiceHelper.getInstance().userProfile = result;
+      if (HomeActivity.homeActivity != null) {
+        HomeActivity.homeActivity.setProfileInfo(result);
+      }
+
+      homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY);
+
     } else {
-      socialController._progressDialog.dismiss();
-      socialController._progressDialog = null;
+      homeController._progressDialog.dismiss();
+      homeController._progressDialog = null;
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }

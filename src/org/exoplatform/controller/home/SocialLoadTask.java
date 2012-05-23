@@ -1,4 +1,4 @@
-package org.exoplatform.controller.social;
+package org.exoplatform.controller.home;
 
 import java.util.ArrayList;
 
@@ -13,6 +13,7 @@ import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
+import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.SocialWaitingDialog;
@@ -21,26 +22,25 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.view.View;
 
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialActivityInfo>> {
-  private Context          mContext;
+  private Context        mContext;
 
-  private String           loadingData;
+  private String         loadingData;
 
-  private String           okString;
+  private String         okString;
 
-  private String           titleString;
+  private String         titleString;
 
-  private String           contentString;
+  private String         contentString;
 
-  private SocialController socialController;
+  private HomeController homeController;
 
-  public SocialLoadTask(Context context, SocialController controller) {
+  public SocialLoadTask(Context context, HomeController controller) {
     mContext = context;
-    socialController = controller;
+    homeController = controller;
     changeLanguage();
   }
 
@@ -55,12 +55,12 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
 
   @Override
   public void onPreExecute() {
-    if (socialController._progressDialog == null) {
-      socialController._progressDialog = new SocialWaitingDialog(mContext,
-                                                                 socialController,
-                                                                 null,
-                                                                 loadingData);
-      socialController._progressDialog.show();
+    if (homeController._progressDialog == null) {
+      homeController._progressDialog = new SocialWaitingDialog(mContext,
+                                                               homeController,
+                                                               null,
+                                                               loadingData);
+      homeController._progressDialog.show();
     }
 
   }
@@ -71,11 +71,10 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
     try {
       ArrayList<SocialActivityInfo> listActivity = new ArrayList<SocialActivityInfo>();
       int loadSize = params[0];
-      ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
-                                                                         .getActivityService();
-      IdentityService<?> identityService = SocialServiceHelper.getInstance().getIdentityService();
+      ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
+      IdentityService<?> identityService = SocialServiceHelper.getInstance().identityService;
       RestIdentity identity;
-      identity = (RestIdentity) identityService.get(SocialServiceHelper.getInstance().getUserId());
+      identity = (RestIdentity) identityService.get(SocialServiceHelper.getInstance().userIdentity);
       QueryParams queryParams = new QueryParamsImpl();
       queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(ExoConstants.NUMBER_OF_LIKES_PARAM));
       queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(ExoConstants.NUMBER_OF_COMMENTS_PARAM));
@@ -114,18 +113,21 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
   @Override
   public void onPostExecute(ArrayList<SocialActivityInfo> result) {
     if (result != null) {
-      if (result.size() == 0) {
-        SocialActivity.socialActivity.setEmptyView(View.VISIBLE);
-      } else {
-        SocialActivity.socialActivity.setEmptyView(View.GONE);
+      SocialServiceHelper.getInstance().socialInfoList = result;
+      if (HomeActivity.homeActivity != null) {
+        HomeActivity.homeActivity.setSocialInfo(result);
       }
-      socialController.setActivityList(result);
+
+      if (SocialActivity.socialActivity != null) {
+        SocialActivity.socialActivity.setActivityList(result);
+      }
+
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
-    socialController._progressDialog.dismiss();
-    socialController._progressDialog = null;
+    homeController._progressDialog.dismiss();
+    homeController._progressDialog = null;
 
   }
 
