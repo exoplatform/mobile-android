@@ -1,5 +1,7 @@
 package org.exoplatform.controller.home;
 
+import greendroid.widget.LoaderActionBarItem;
+
 import java.util.ArrayList;
 
 import org.exoplatform.model.SocialActivityInfo;
@@ -37,10 +39,12 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
   private String         contentString;
 
   private HomeController homeController;
+  private LoaderActionBarItem loaderItem;
 
-  public SocialLoadTask(Context context, HomeController controller) {
+  public SocialLoadTask(Context context, HomeController controller,LoaderActionBarItem loader) {
     mContext = context;
     homeController = controller;
+    loaderItem = loader;
     changeLanguage();
   }
 
@@ -55,13 +59,14 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
 
   @Override
   public void onPreExecute() {
-    if (homeController._progressDialog == null) {
-      homeController._progressDialog = new SocialWaitingDialog(mContext,
-                                                               homeController,
-                                                               null,
-                                                               loadingData);
-      homeController._progressDialog.show();
-    }
+//    if (homeController._progressDialog == null) {
+//      homeController._progressDialog = new SocialWaitingDialog(mContext,
+//                                                               homeController,
+//                                                               null,
+//                                                               loadingData);
+//      homeController._progressDialog.show();
+//    }
+    loaderItem.setLoading(true);
 
   }
 
@@ -126,9 +131,9 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
-    homeController._progressDialog.dismiss();
-    homeController._progressDialog = null;
-
+//    homeController._progressDialog.dismiss();
+//    homeController._progressDialog = null;
+    loaderItem.setLoading(false);
   }
 
 }

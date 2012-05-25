@@ -34,15 +34,17 @@ import android.widget.TextView;
  */
 public class HomeSocialItem extends LinearLayout {
 
-  private TextView           textViewName;
+  private static final String FONT_COLOR = "#FFFFFF";
 
-  private TextView           textViewMessage;
+  private TextView            textViewName;
 
-  private String             userName;
+  private TextView            textViewMessage;
 
-  private Resources          resource;
+  private String              userName;
 
-  private SocialActivityInfo activityInfo;
+  private Resources           resource;
+
+  private SocialActivityInfo  activityInfo;
 
   public HomeSocialItem(Context context, SocialActivityInfo info) {
     super(context);
@@ -58,7 +60,7 @@ public class HomeSocialItem extends LinearLayout {
     activtyAvatar.setUrl(info.getImageUrl());
 
     textViewName.setText(Html.fromHtml(userName));
-    textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()), TextView.BufferType.SPANNABLE);
+    textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
     int imageId = SocialActivityUtil.getActivityTypeId(info.getType());
     setViewByType(imageId);
 
@@ -69,22 +71,30 @@ public class HomeSocialItem extends LinearLayout {
     case 1:
       // ks-forum:spaces
 
-      String forumBuffer = SocialActivityUtil.getActivityTypeForum(userName, activityInfo, resource);
+      String forumBuffer = SocialActivityUtil.getActivityTypeForum(userName,
+                                                                   activityInfo,
+                                                                   resource,
+                                                                   FONT_COLOR,
+                                                                   true);
 
-      textViewName.setText(Html.fromHtml(forumBuffer), TextView.BufferType.SPANNABLE);
+      textViewName.setText(Html.fromHtml(forumBuffer));
       String forumBody = activityInfo.getBody();
 
-      textViewMessage.setText(Html.fromHtml(forumBody), TextView.BufferType.SPANNABLE);
+      textViewMessage.setText(Html.fromHtml(forumBody));
       break;
     case 2:
       // ks-wiki:spaces
-      String wikiBuffer = SocialActivityUtil.getActivityTypeWiki(userName, activityInfo, resource);
-      textViewName.setText(Html.fromHtml(wikiBuffer), TextView.BufferType.SPANNABLE);
+      String wikiBuffer = SocialActivityUtil.getActivityTypeWiki(userName,
+                                                                 activityInfo,
+                                                                 resource,
+                                                                 FONT_COLOR,
+                                                                 true);
+      textViewName.setText(Html.fromHtml(wikiBuffer));
       String wikiBody = activityInfo.getBody();
       if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
         textViewMessage.setVisibility(View.GONE);
       } else {
-        textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
+        textViewMessage.setText(Html.fromHtml(wikiBody));
       }
       break;
     case 3:
@@ -98,9 +108,10 @@ public class HomeSocialItem extends LinearLayout {
 
       String docBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
                                                                     activityInfo,
-                                                                    resource);
+                                                                    resource,
+                                                                    FONT_COLOR,true);
       if (docBuffer != null) {
-        textViewName.setText(Html.fromHtml(docBuffer), TextView.BufferType.SPANNABLE);
+        textViewName.setText(Html.fromHtml(docBuffer));
       }
 
       String tempMessage = activityInfo.templateParams.get("MESSAGE");
@@ -118,10 +129,10 @@ public class HomeSocialItem extends LinearLayout {
       String description = activityInfo.templateParams.get("description").trim();
 
       if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
-        textViewMessage.setText(Html.fromHtml(templateComment), TextView.BufferType.SPANNABLE);
+        textViewMessage.setText(Html.fromHtml(templateComment));
       }
       if (description != null) {
-        textViewMessage.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
+        textViewMessage.setText(Html.fromHtml(description));
       }
 
       break;
@@ -140,9 +151,10 @@ public class HomeSocialItem extends LinearLayout {
 
       String spaceBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
                                                                       activityInfo,
-                                                                      resource);
+                                                                      resource,
+                                                                      FONT_COLOR,true);
       if (spaceBuffer != null) {
-        textViewName.setText(Html.fromHtml(spaceBuffer), TextView.BufferType.SPANNABLE);
+        textViewName.setText(Html.fromHtml(spaceBuffer));
       }
 
       break;
@@ -150,13 +162,15 @@ public class HomeSocialItem extends LinearLayout {
       // ks-answer
       String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName,
                                                                      activityInfo,
-                                                                     resource);
+                                                                     resource,
+                                                                     FONT_COLOR,
+                                                                     true);
 
-      textViewName.setText(Html.fromHtml(answerBuffer), TextView.BufferType.SPANNABLE);
+      textViewName.setText(Html.fromHtml(answerBuffer));
 
       String answerBody = activityInfo.getBody();
       if (answerBody != null) {
-        textViewMessage.setText(Html.fromHtml(answerBody), TextView.BufferType.SPANNABLE);
+        textViewMessage.setText(Html.fromHtml(answerBody));
       }
       break;
 
@@ -164,9 +178,11 @@ public class HomeSocialItem extends LinearLayout {
       // calendar
       String calendarBuffer = SocialActivityUtil.getActivityTypeCalendar(userName,
                                                                          activityInfo,
-                                                                         resource);
+                                                                         resource,
+                                                                         FONT_COLOR,
+                                                                         true);
 
-      textViewName.setText(Html.fromHtml(calendarBuffer), TextView.BufferType.SPANNABLE);
+      textViewName.setText(Html.fromHtml(calendarBuffer));
       SocialActivityUtil.setCaledarContent(textViewMessage, activityInfo, resource);
       break;
     default:

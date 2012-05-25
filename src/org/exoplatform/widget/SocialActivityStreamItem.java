@@ -26,42 +26,43 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SocialActivityStreamItem extends LinearLayout {
+  private static final String FONT_COLOR = "#696969";
 
-  public LinearLayout        contentLayoutWrap;
+  public LinearLayout         contentLayoutWrap;
 
-  private View               view;
+  private View                view;
 
-  private RoundedImageView   imageViewAvatar;
+  private RoundedImageView    imageViewAvatar;
 
-  public TextView            textViewName;
+  public TextView             textViewName;
 
-  public TextView            textViewMessage;
+  public TextView             textViewMessage;
 
-  public TextView            textViewTempMessage;
+  public TextView             textViewTempMessage;
 
-  private TextView           textViewCommnet;
+  private TextView            textViewCommnet;
 
-  private Button             buttonComment;
+  private Button              buttonComment;
 
-  private Button             buttonLike;
+  private Button              buttonLike;
 
-  private ImageView          typeImageView;
+  private ImageView           typeImageView;
 
-  private TextView           textViewTime;
+  private TextView            textViewTime;
 
-  private View               attachStubView;
+  private View                attachStubView;
 
-  private String             domain;
+  private String              domain;
 
-  private String             userName;
+  private String              userName;
 
-  private Context            mContext;
+  private Context             mContext;
 
-  private SocialActivityInfo activityInfo;
+  private SocialActivityInfo  activityInfo;
 
-  private boolean            isDetail;
+  private boolean             isDetail;
 
-  private Resources          resource;
+  private Resources           resource;
 
   public SocialActivityStreamItem(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -165,7 +166,9 @@ public class SocialActivityStreamItem extends LinearLayout {
 
       String docBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
                                                                     activityInfo,
-                                                                    resource);
+                                                                    resource,
+                                                                    FONT_COLOR,
+                                                                    true);
       if (docBuffer != null) {
         textViewName.setText(Html.fromHtml(docBuffer), TextView.BufferType.SPANNABLE);
       }
@@ -207,7 +210,9 @@ public class SocialActivityStreamItem extends LinearLayout {
 
       String spaceBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
                                                                       activityInfo,
-                                                                      resource);
+                                                                      resource,
+                                                                      FONT_COLOR,
+                                                                      true);
       if (spaceBuffer != null) {
         textViewName.setText(Html.fromHtml(spaceBuffer), TextView.BufferType.SPANNABLE);
       }
@@ -242,7 +247,11 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void setActivityTypeForum() {
-    String forumBuffer = SocialActivityUtil.getActivityTypeForum(userName, activityInfo, resource);
+    String forumBuffer = SocialActivityUtil.getActivityTypeForum(userName,
+                                                                 activityInfo,
+                                                                 resource,
+                                                                 FONT_COLOR,
+                                                                 false);
 
     textViewName.setText(Html.fromHtml(forumBuffer), TextView.BufferType.SPANNABLE);
     String forumBody = activityInfo.getBody();
@@ -252,7 +261,11 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void setActivityTypeWiki() {
-    String wikiBuffer = SocialActivityUtil.getActivityTypeWiki(userName, activityInfo, resource);
+    String wikiBuffer = SocialActivityUtil.getActivityTypeWiki(userName,
+                                                               activityInfo,
+                                                               resource,
+                                                               FONT_COLOR,
+                                                               false);
     textViewName.setText(Html.fromHtml(wikiBuffer), TextView.BufferType.SPANNABLE);
     String wikiBody = activityInfo.getBody();
     if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
@@ -264,7 +277,11 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private void setActivityTypeAnswer() {
 
-    String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName, activityInfo, resource);
+    String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName,
+                                                                   activityInfo,
+                                                                   resource,
+                                                                   FONT_COLOR,
+                                                                   false);
 
     textViewName.setText(Html.fromHtml(answerBuffer), TextView.BufferType.SPANNABLE);
 
@@ -277,7 +294,9 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void setActivityTypeCalendar() {
     String calendarBuffer = SocialActivityUtil.getActivityTypeCalendar(userName,
                                                                        activityInfo,
-                                                                       resource);
+                                                                       resource,
+                                                                       FONT_COLOR,
+                                                                       false);
 
     textViewName.setText(Html.fromHtml(calendarBuffer), TextView.BufferType.SPANNABLE);
     SocialActivityUtil.setCaledarContent(textViewMessage, activityInfo, resource);
@@ -296,7 +315,10 @@ public class SocialActivityStreamItem extends LinearLayout {
       textViewCommnet.setVisibility(View.VISIBLE);
     }
 
-    String linkBuffer = SocialActivityUtil.getActivityTypeLink(description, activityInfo);
+    String linkBuffer = SocialActivityUtil.getActivityTypeLink(description,
+                                                               activityInfo,
+                                                               FONT_COLOR,
+                                                               false);
 
     String imageParams = activityInfo.templateParams.get("image");
     if ((imageParams != null) && (imageParams.contains("http"))) {

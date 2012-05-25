@@ -26,10 +26,10 @@
                 android:padding="2dp" >
 
                 <FrameLayout
-                    android:layout_width="43dp"
-                    android:layout_height="43dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:layout_marginLeft="7dp"
-                    android:background="@drawable/bottom_background_shape" >
+                    android:background="@drawable/home_avatar_background_shape" >
 
                     <org.exoplatform.widget.RoundedImageView
                         android:id="@+id/home_user_avatar"
@@ -51,6 +51,7 @@
         </LinearLayout>
 
         <org.exoplatform.widget.HomeLinearLayout
+            android:id="@+id/home_linearlayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="#1e1e1e"
@@ -73,7 +74,7 @@
                     <Button
                         android:id="@+id/home_btn_activity"
                         style="@style/HomeButton"
-                        android:drawableTop="@drawable/homeactivitystreamsiconiphone"
+                        android:drawableTop="@drawable/home_news_icon_landscape"
                         android:text="@string/ActivityStream" />
                 </LinearLayout>
 
@@ -86,7 +87,7 @@
                     <Button
                         android:id="@+id/home_btn_document"
                         style="@style/HomeButton"
-                        android:drawableTop="@drawable/homedocumentsiconiphone"
+                        android:drawableTop="@drawable/home_document_icon_landscape"
                         android:text="@string/Documents" />
                 </LinearLayout>
             </LinearLayout>
@@ -108,7 +109,7 @@
                     <Button
                         android:id="@+id/home_btn_apps"
                         style="@style/HomeButton"
-                        android:drawableTop="@drawable/homedashboardiconiphone"
+                        android:drawableTop="@drawable/home_app_icon_landscape"
                         android:text="@string/Dashboard" />
                 </LinearLayout>
 
@@ -125,8 +126,8 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/home_activity_ticker_bg"
+        android:layout_height="60dp"
+        android:background="@drawable/home_activity_ticker_streachable"
         android:gravity="center"
         android:padding="2dp" >
 

@@ -17,11 +17,14 @@
 package org.exoplatform.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
+import android.graphics.Paint.Style;
+import android.graphics.RadialGradient;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
@@ -45,6 +48,9 @@ public class HomeLinearLayout extends LinearLayout {
     super.onDraw(canvas);
     int scaledWidth = getMeasuredWidth();
     int scaledHeight = getMeasuredHeight();
+    paint.setStyle(Style.STROKE);
+    Bitmap bm = makeRadGrad(getWidth(), getHeight());
+    canvas.drawBitmap(bm, 0, 0, paint);
     paint.setDither(true);
     paint.setAntiAlias(true);
 
@@ -59,4 +65,21 @@ public class HomeLinearLayout extends LinearLayout {
 
   }
 
+  private Bitmap makeRadGrad(int width, int heigh) {
+    RadialGradient gradient = new RadialGradient(width / 2,
+                                                 heigh / 2,
+                                                 heigh / 2,
+                                                 0x8F8F8F8F,
+                                                 0x1C1C1C1C,
+                                                 android.graphics.Shader.TileMode.CLAMP);
+    Paint p = new Paint();
+    p.setDither(true);
+    p.setShader(gradient);
+
+    Bitmap bitmap = Bitmap.createBitmap(width, heigh, Config.ARGB_8888);
+    Canvas c = new Canvas(bitmap);
+    c.drawOval(new RectF(0, 0, width, heigh), p);
+
+    return bitmap;
+  }
 }

@@ -297,12 +297,27 @@ public class SocialActivityUtil {
     return null;
   }
 
-  private static String addSpaceInfo(SocialActivityInfo info, Resources resource) {
+  private static String appendFontColor(String fontColor) {
+    StringBuffer buffer = new StringBuffer("<font style=\"font-style:normal\" color=\"");
+    buffer.append(fontColor);
+    buffer.append("\">");
+    return buffer.toString();
+  }
+
+  private static String appendLinkStyleColor() {
+    return "style=\"color: #FFFFFF";
+  }
+
+  private static String addSpaceInfo(SocialActivityInfo info,
+                                     Resources resource,
+                                     String fontColor,
+                                     boolean isHomeStyle) {
     RestActivityStream actStream = info.restActivityStream;
     String spaceType = actStream.getType();
     StringBuffer spaceBuffer = new StringBuffer();
     if (spaceType.equalsIgnoreCase(ExoConstants.SOCIAL_SPACE)) {
-      spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+      // spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+      spaceBuffer.append(appendFontColor(fontColor));
       spaceBuffer.append(resource.getString(R.string.In));
       spaceBuffer.append("</font>");
       spaceBuffer.append(" ");
@@ -310,11 +325,15 @@ public class SocialActivityUtil {
       String spaceLink = actStream.getPermaLink();
       spaceBuffer.append("<a href=");
       spaceBuffer.append(spaceLink);
+      if (isHomeStyle) {
+        spaceBuffer.append(appendLinkStyleColor());
+      }
       spaceBuffer.append(">");
       spaceBuffer.append(nameSpace);
       spaceBuffer.append("</a>");
       spaceBuffer.append(" ");
-      spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+      // spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+      spaceBuffer.append(appendFontColor(fontColor));
       spaceBuffer.append(resource.getString(R.string.Space));
       spaceBuffer.append("</font>");
       return spaceBuffer.toString();
@@ -325,13 +344,15 @@ public class SocialActivityUtil {
 
   public static String getActivityTypeForum(String userName,
                                             SocialActivityInfo activityInfo,
-                                            Resources resource) {
+                                            Resources resource,
+                                            String fontColor,
+                                            boolean isHomeStyle) {
     String forumLink = null;
     StringBuffer forumBuffer = new StringBuffer();
     forumBuffer.append("<html><body>");
     forumBuffer.append(userName);
     forumBuffer.append(" ");
-    String spaceInfo = addSpaceInfo(activityInfo, resource);
+    String spaceInfo = addSpaceInfo(activityInfo, resource, fontColor, isHomeStyle);
     if (spaceInfo != null) {
       forumBuffer.append(spaceInfo);
     }
@@ -339,7 +360,8 @@ public class SocialActivityUtil {
     String actType = activityInfo.templateParams.get("ActivityType");
     String actTypeDesc = null;
     String forumName = null;
-    forumBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+    // forumBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
+    forumBuffer.append(appendFontColor(fontColor));
     if (actType.equalsIgnoreCase("AddPost")) {
       forumLink = activityInfo.templateParams.get("PostLink");
       actTypeDesc = resource.getString(R.string.HasAddANewPost);
@@ -362,6 +384,9 @@ public class SocialActivityUtil {
     forumBuffer.append("<br>");
     forumBuffer.append("<a href=");
     forumBuffer.append(forumLink);
+    if (isHomeStyle) {
+      forumBuffer.append(appendLinkStyleColor());
+    }
     forumBuffer.append(">");
     forumBuffer.append(forumName);
     forumBuffer.append("</a>");
@@ -371,19 +396,22 @@ public class SocialActivityUtil {
 
   public static String getActivityTypeWiki(String userName,
                                            SocialActivityInfo activityInfo,
-                                           Resources resource) {
+                                           Resources resource,
+                                           String fontColor,
+                                           boolean isHomeStyle) {
     String wiki_url = null;
     StringBuffer buffer = new StringBuffer();
     buffer.append("<html><body>");
     buffer.append("<a>");
     buffer.append(userName);
     buffer.append("</a> ");
-    String spaceInfo = addSpaceInfo(activityInfo, resource);
+    String spaceInfo = addSpaceInfo(activityInfo, resource, fontColor, isHomeStyle);
     if (spaceInfo != null) {
       buffer.append(spaceInfo);
     }
     buffer.append(" ");
-    buffer.append("<font color=\"#696969\">");
+    // buffer.append("<font color=\"#696969\">");
+    buffer.append(appendFontColor(fontColor));
     String act_key = activityInfo.templateParams.get("act_key");
     String act_key_des = null;
     if (act_key != null) {
@@ -401,6 +429,9 @@ public class SocialActivityUtil {
     String page_name = activityInfo.templateParams.get("page_name");
     buffer.append("<a href=");
     buffer.append(wiki_url);
+    if (isHomeStyle) {
+      buffer.append(appendLinkStyleColor());
+    }
     buffer.append(">");
     buffer.append(page_name);
     buffer.append("</a>");
@@ -410,19 +441,22 @@ public class SocialActivityUtil {
 
   public static String getActivityTypeAnswer(String userName,
                                              SocialActivityInfo activityInfo,
-                                             Resources resource) {
+                                             Resources resource,
+                                             String fontColor,
+                                             boolean isHomeStyle) {
     String answer_link = null;
     StringBuffer answerBuffer = new StringBuffer();
     answerBuffer.append("<html><body>");
     answerBuffer.append("<a>");
     answerBuffer.append(userName);
     answerBuffer.append("</a> ");
-    String spaceInfo = addSpaceInfo(activityInfo, resource);
+    String spaceInfo = addSpaceInfo(activityInfo, resource, fontColor, isHomeStyle);
     if (spaceInfo != null) {
       answerBuffer.append(spaceInfo);
     }
     answerBuffer.append(" ");
-    answerBuffer.append("<font color=\"#696969\">");
+    // answerBuffer.append("<font color=\"#696969\">");
+    answerBuffer.append(appendFontColor(fontColor));
     String act_key = activityInfo.templateParams.get("ActivityType");
     String act_key_des = null;
     if (act_key.equalsIgnoreCase("QuestionUpdate")) {
@@ -439,6 +473,9 @@ public class SocialActivityUtil {
     String page_name = activityInfo.templateParams.get("Name");
     answerBuffer.append("<a href=");
     answerBuffer.append(answer_link);
+    if (isHomeStyle) {
+      answerBuffer.append(appendLinkStyleColor());
+    }
     answerBuffer.append(">");
     answerBuffer.append(page_name);
     answerBuffer.append("</a>");
@@ -449,13 +486,15 @@ public class SocialActivityUtil {
 
   public static String getActivityTypeCalendar(String userName,
                                                SocialActivityInfo activityInfo,
-                                               Resources resource) {
+                                               Resources resource,
+                                               String fontColor,
+                                               boolean isHomeStyle) {
     StringBuffer forumBuffer = new StringBuffer();
     forumBuffer.append("<html><body>");
     forumBuffer.append("<a>");
     forumBuffer.append(userName);
     forumBuffer.append("</a> ");
-    String spaceInfo = addSpaceInfo(activityInfo, resource);
+    String spaceInfo = addSpaceInfo(activityInfo, resource, fontColor, isHomeStyle);
     if (spaceInfo != null) {
       forumBuffer.append(spaceInfo);
     }
@@ -463,7 +502,8 @@ public class SocialActivityUtil {
     String actType = activityInfo.templateParams.get("EventType");
     String actTypeDesc = null;
     String forumName = null;
-    forumBuffer.append("<font color=\"#696969\">");
+    // forumBuffer.append("<font color=\"#696969\">");
+    forumBuffer.append(appendFontColor(fontColor));
     if (actType.equalsIgnoreCase("EventAdded")) {
       actTypeDesc = resource.getString(R.string.AddedAnEvent);
     } else if (actType.equalsIgnoreCase("EventUpdated")) {
@@ -478,7 +518,10 @@ public class SocialActivityUtil {
     forumBuffer.append("<br>");
     forumBuffer.append("<a>");
     forumName = activityInfo.templateParams.get("EventSummary");
-    forumBuffer.append("<font color=\"#000000\">");
+    if (isHomeStyle) {
+      forumBuffer.append("<font color=\"#FFFFFF\">");
+    } else
+      forumBuffer.append("<font color=\"#000000\">");
     forumBuffer.append(forumName);
     forumBuffer.append("</font>");
     forumBuffer.append("</a>");
@@ -486,7 +529,10 @@ public class SocialActivityUtil {
     return forumBuffer.toString();
   }
 
-  public static String getActivityTypeLink(String userName, SocialActivityInfo activityInfo) {
+  public static String getActivityTypeLink(String userName,
+                                           SocialActivityInfo activityInfo,
+                                           String fontColor,
+                                           boolean isHomeStyle) {
     StringBuffer linkBuffer = new StringBuffer();
     String linkTitle = activityInfo.templateParams.get("title").trim();
     String linkUrl = activityInfo.templateParams.get("link");
@@ -494,6 +540,9 @@ public class SocialActivityUtil {
 
     linkBuffer.append("<a href=");
     linkBuffer.append(linkUrl);
+    if (isHomeStyle) {
+      linkBuffer.append(appendLinkStyleColor());
+    }
     linkBuffer.append(">");
     linkBuffer.append(linkTitle);
     linkBuffer.append("</a>");
@@ -503,8 +552,9 @@ public class SocialActivityUtil {
 
   public static String getActivityTypeDocument(String userName,
                                                SocialActivityInfo activityInfo,
-                                               Resources resource) {
-    String space = addSpaceInfo(activityInfo, resource);
+                                               Resources resource,
+                                               String fontColor,boolean isHomeStyle) {
+    String space = addSpaceInfo(activityInfo, resource, fontColor, isHomeStyle);
 
     if (space != null) {
       StringBuffer docBuffer = new StringBuffer();

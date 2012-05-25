@@ -1,5 +1,7 @@
 package org.exoplatform.controller.home;
 
+import greendroid.widget.LoaderActionBarItem;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -29,21 +31,26 @@ import android.os.AsyncTask;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
-  private Context        mContext;
+  private Context             mContext;
 
-  private String         loadingData;
+  private String              loadingData;
 
-  private String         okString;
+  private String              okString;
 
-  private String         titleString;
+  private String              titleString;
 
-  private String         contentString;
+  private String              contentString;
 
-  private HomeController homeController;
+  private HomeController      homeController;
 
-  public SocialServiceLoadTask(Context context, HomeController controller) {
+  private LoaderActionBarItem loaderItem;
+
+  public SocialServiceLoadTask(Context context,
+                               HomeController controller,
+                               LoaderActionBarItem loader) {
     mContext = context;
     homeController = controller;
+    loaderItem = loader;
     changeLanguage();
   }
 
@@ -58,13 +65,7 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
 
   @Override
   public void onPreExecute() {
-    if (homeController._progressDialog == null) {
-      homeController._progressDialog = new SocialWaitingDialog(mContext,
-                                                               homeController,
-                                                               null,
-                                                               loadingData);
-      homeController._progressDialog.show();
-    }
+    loaderItem.setLoading(true);
 
   }
 
@@ -118,13 +119,15 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
         HomeActivity.homeActivity.setProfileInfo(result);
       }
 
-      homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY);
+      homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY, loaderItem);
 
     } else {
-      homeController._progressDialog.dismiss();
-      homeController._progressDialog = null;
+      loaderItem.setLoading(false);
+      // homeController._progressDialog.dismiss();
+      // homeController._progressDialog = null;
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
+    //
   }
 }

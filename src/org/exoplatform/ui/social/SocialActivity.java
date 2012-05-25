@@ -1,6 +1,8 @@
 package org.exoplatform.ui.social;
 
 import greendroid.widget.ActionBarItem;
+import greendroid.widget.LoaderActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,14 +92,14 @@ public class SocialActivity extends MyActionBar {
   private HomeController                homeController;
 
   private ArrayList<SocialActivityInfo> socialList;
-  
+  private LoaderActionBarItem loaderItem;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    addActionBarItem();
+    addActionBarItem(Type.Refresh);
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     addActionBarItem();
     getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
@@ -123,6 +125,8 @@ public class SocialActivity extends MyActionBar {
       number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
       number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
     }
+    
+    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
 
     loadActivity(false);
   }
@@ -157,12 +161,12 @@ public class SocialActivity extends MyActionBar {
 
     if (socialList == null) {
       if (SocialServiceHelper.getInstance().activityService == null) {
-        homeController.launchNewsService();
+        homeController.launchNewsService(loaderItem);
       } else
-        homeController.onLoad(number_of_activity);
+        homeController.onLoad(number_of_activity,loaderItem);
     } else {
       if (isRefresh) {
-        homeController.onLoad(number_of_activity);
+        homeController.onLoad(number_of_activity,loaderItem);
       } else
         setActivityList(socialList);
     }
@@ -222,7 +226,7 @@ public class SocialActivity extends MyActionBar {
               else
                 SocialServiceHelper.getInstance().activityService.like(activity);
 
-              homeController.onLoad(number_of_activity);
+              homeController.onLoad(number_of_activity,loaderItem);
             } catch (SocialClientLibException e) {
               WarningDialog dialog = new WarningDialog(SocialActivity.this,
                                                        titleString,
@@ -273,7 +277,7 @@ public class SocialActivity extends MyActionBar {
 
         public void onClick(View v) {
           number_of_activity += number_of_more_activity;
-          homeController.onLoad(number_of_activity);
+          homeController.onLoad(number_of_activity,loaderItem);
 
         }
       });
@@ -313,6 +317,7 @@ public class SocialActivity extends MyActionBar {
       finish();
       break;
     case 0:
+      loaderItem = (LoaderActionBarItem) item;
       loadActivity(true);
       break;
     case 1:

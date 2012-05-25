@@ -1,6 +1,8 @@
 package org.exoplatform.ui;
 
 import greendroid.widget.ActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
@@ -23,14 +25,17 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -63,6 +68,8 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
 
   private ViewFlipper         viewFlipper;
 
+  private LinearLayout        homeLayout;
+
   public static HomeActivity  homeActivity;
 
   @Override
@@ -72,8 +79,10 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     setActionBarContentView(R.layout.home_layout);
 
     super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
+    addActionBarItem(Type.Refresh);
+    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     addActionBarItem();
-    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_logout_button);
+    getActionBar().getItem(1).setDrawable(R.drawable.action_bar_logout_button);
     homeActivity = this;
     if (bundle != null) {
       AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
@@ -147,6 +156,9 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     homeUserAvatar = (RoundedImageView) findViewById(R.id.home_user_avatar);
     homeUserAvatar.setDefaultImageResource(dafault_avatar);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
+    homeLayout = (LinearLayout) findViewById(R.id.home_linearlayout);
+    // Drawable mCurrentDrawable = resource.getDrawable(R.drawable.gradient);
+    // homeLayout.setBackgroundDrawable(mCurrentDrawable);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
     viewFlipper.setOnClickListener(this);
     if (SocialServiceHelper.getInstance().userProfile != null) {
@@ -157,13 +169,14 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
       setSocialInfo(SocialServiceHelper.getInstance().socialInfoList);
     }
 
-    startSocialService();
+    LoaderActionBarItem loader = (LoaderActionBarItem) getActionBar().getItem(0);
+    startSocialService(loader);
   }
 
-  private void startSocialService() {
+  private void startSocialService(LoaderActionBarItem loader) {
     homeController = new HomeController(this);
     if (SocialServiceHelper.getInstance().activityService == null) {
-      homeController.launchNewsService();
+      homeController.launchNewsService(loader);
     }
   }
 
@@ -178,9 +191,10 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
   public void setSocialInfo(ArrayList<SocialActivityInfo> list) {
     HomeSocialItem socialItem = null;
     viewFlipper.removeAllViews();
+    LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
     for (int i = 0; i < 10; i++) {
       socialItem = new HomeSocialItem(this, list.get(i));
-      viewFlipper.addView(socialItem);
+      viewFlipper.addView(socialItem, params);
 
     }
     viewFlipper.startFlipping();
@@ -195,10 +209,12 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     case -1:
       break;
     case 0:
-      // new LogoutDialog(HomeActivity.this, homeController).show();
-      onFinish();
+      final LoaderActionBarItem loader = (LoaderActionBarItem) item;
+      homeController.launchNewsService(loader);
       break;
     case 1:
+      // new LogoutDialog(HomeActivity.this, homeController).show();
+      onFinish();
       break;
     }
     return true;

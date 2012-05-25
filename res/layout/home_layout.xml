@@ -20,10 +20,10 @@
             android:padding="0dp" >
 
             <FrameLayout
-                android:layout_width="43dp"
-                android:layout_height="43dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:layout_marginLeft="7dp"
-                android:background="@drawable/bottom_background_shape" >
+                android:background="@drawable/home_avatar_background_shape" >
 
                 <org.exoplatform.widget.RoundedImageView
                     android:id="@+id/home_user_avatar"
@@ -44,6 +44,7 @@
         </LinearLayout>
 
         <org.exoplatform.widget.HomeLinearLayout
+            android:id="@+id/home_linearlayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="#1e1e1e"
@@ -101,7 +102,7 @@
                     <Button
                         android:id="@+id/home_btn_apps"
                         style="@style/HomeButton"
-                        android:drawableTop="@drawable/home_btn_document"
+                        android:drawableTop="@drawable/home_btn_apps"
                         android:text="@string/Dashboard" />
                 </LinearLayout>
 
@@ -118,16 +119,17 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/home_activity_ticker_bg"
+        android:layout_height="60dp"
+        android:background="@drawable/home_activity_ticker_streachable"
         android:gravity="center"
         android:padding="2dp" >
 
         <ViewFlipper
             android:id="@+id/home_social_flipper"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:flipInterval="6000"
+            android:gravity="center_vertical"
             android:padding="2dp" >
         </ViewFlipper>
     </LinearLayout>

@@ -43,28 +43,4 @@ public class SocialServiceHelper {
     userProfile = null;
   }
 
-  // public void setActivityService(ActivityService<RestActivity> actService) {
-  // activityService = actService;
-  // }
-  //
-  // public ActivityService<RestActivity> getActivityService() {
-  // return activityService;
-  // }
-  //
-  // public void setIdentityService(IdentityService<?> idService) {
-  // identityService = idService;
-  // }
-  //
-  // public IdentityService<?> getIdentityService() {
-  // return identityService;
-  // }
-  //
-  // public void setUserId(String id) {
-  // userIdentity = id;
-  // }
-  //
-  // public String getUserId() {
-  // return userIdentity;
-  // }
-
 }

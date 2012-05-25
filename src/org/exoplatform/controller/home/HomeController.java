@@ -16,6 +16,8 @@
  */
 package org.exoplatform.controller.home;
 
+import greendroid.widget.LoaderActionBarItem;
+
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SocialWaitingDialog;
@@ -45,12 +47,12 @@ public class HomeController {
     onCancelLoad();
   }
 
-  public void launchNewsService() {
+  public void launchNewsService(LoaderActionBarItem loader) {
 
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mServiceLoadTask == null
           || mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.FINISHED) {
-        mServiceLoadTask = (SocialServiceLoadTask) new SocialServiceLoadTask(mContext, this).execute();
+        mServiceLoadTask = (SocialServiceLoadTask) new SocialServiceLoadTask(mContext, this,loader).execute();
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -66,10 +68,10 @@ public class HomeController {
     }
   }
 
-  public void onLoad(int number) {
+  public void onLoad(int number,LoaderActionBarItem loader) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this).execute(number);
+        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this,loader).execute(number);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
