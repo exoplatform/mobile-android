@@ -92,7 +92,8 @@ public class SocialActivity extends MyActionBar {
   private HomeController                homeController;
 
   private ArrayList<SocialActivityInfo> socialList;
-  private LoaderActionBarItem loaderItem;
+
+  private LoaderActionBarItem           loaderItem;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -125,7 +126,7 @@ public class SocialActivity extends MyActionBar {
       number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
       number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
     }
-    
+
     loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
 
     loadActivity(false);
@@ -163,24 +164,14 @@ public class SocialActivity extends MyActionBar {
       if (SocialServiceHelper.getInstance().activityService == null) {
         homeController.launchNewsService(loaderItem);
       } else
-        homeController.onLoad(number_of_activity,loaderItem);
+        homeController.onLoad(number_of_activity, loaderItem);
     } else {
       if (isRefresh) {
-        homeController.onLoad(number_of_activity,loaderItem);
+        homeController.onLoad(number_of_activity, loaderItem);
       } else
         setActivityList(socialList);
     }
   }
-  
-
-  Runnable setListRunable = new Runnable() {
-
-                            @Override
-                            public void run() {
-                              // TODO Auto-generated method stub
-                              setActivityList(socialList);
-                            }
-                          };
 
   public void setActivityList(ArrayList<SocialActivityInfo> result) {
     if (result.size() == 0) {
@@ -226,7 +217,7 @@ public class SocialActivity extends MyActionBar {
               else
                 SocialServiceHelper.getInstance().activityService.like(activity);
 
-              homeController.onLoad(number_of_activity,loaderItem);
+              homeController.onLoad(number_of_activity, loaderItem);
             } catch (SocialClientLibException e) {
               WarningDialog dialog = new WarningDialog(SocialActivity.this,
                                                        titleString,
@@ -277,7 +268,7 @@ public class SocialActivity extends MyActionBar {
 
         public void onClick(View v) {
           number_of_activity += number_of_more_activity;
-          homeController.onLoad(number_of_activity,loaderItem);
+          homeController.onLoad(number_of_activity, loaderItem);
 
         }
       });

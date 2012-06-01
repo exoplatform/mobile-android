@@ -6,6 +6,8 @@ public class SocialLikeInfo {
 
   private String likeName;
 
+  public String  likedImageUrl = null;
+
   public SocialLikeInfo() {
 
   }

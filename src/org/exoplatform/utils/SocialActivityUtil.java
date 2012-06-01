@@ -24,6 +24,30 @@ import android.widget.TextView;
 
 public class SocialActivityUtil {
 
+  public static String getComment(Context context, LinkedList<SocialLikeInfo> socialLikeList) {
+    Resources resource = context.getResources();
+    String nolike = resource.getString(R.string.NoLike);
+    String likedThis = resource.getString(R.string.LikedThis);
+    String and = resource.getString(R.string.And);
+    String peoplesLiked = resource.getString(R.string.PeoplesLikedThis);
+    String peopleLiked = resource.getString(R.string.PeopleLikedThis);
+    StringBuffer buffer = new StringBuffer();
+    int count = socialLikeList.size();
+    if (count == 0) {
+      buffer.append(nolike);
+    } else if (count == 1) {
+      buffer.append(count);
+      buffer.append(" ");
+      buffer.append(peopleLiked);
+
+    } else {
+      buffer.append(count);
+      buffer.append(" ");
+      buffer.append(peoplesLiked);
+    }
+    return buffer.toString();
+  }
+
   public static String getCommentString(Context context, LinkedList<SocialLikeInfo> socialLikeList) {
     Resources resource = context.getResources();
     String nolike = resource.getString(R.string.NoLike);
@@ -553,7 +577,8 @@ public class SocialActivityUtil {
   public static String getActivityTypeDocument(String userName,
                                                SocialActivityInfo activityInfo,
                                                Resources resource,
-                                               String fontColor,boolean isHomeStyle) {
+                                               String fontColor,
+                                               boolean isHomeStyle) {
     String space = addSpaceInfo(activityInfo, resource, fontColor, isHomeStyle);
 
     if (space != null) {

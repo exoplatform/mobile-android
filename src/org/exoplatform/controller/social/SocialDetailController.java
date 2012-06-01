@@ -1,5 +1,8 @@
 package org.exoplatform.controller.social;
 
+import greendroid.widget.AsyncImageView;
+import greendroid.widget.LoaderActionBarItem;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -16,6 +19,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
+import org.exoplatform.widget.RoundedImageView;
 import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.SocialDetailWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -25,6 +29,7 @@ import android.content.res.Resources;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -32,52 +37,55 @@ import android.widget.TextView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialDetailController {
-  private SocialDetailWaitingDialog _progressDialog;
 
-  private Context                   mContext;
+  private Context              mContext;
 
-  private LinearLayout              commentLayoutWrap;
+  private LinearLayout         commentLayoutWrap;
 
-  private Button                    likeButton;
+  private Button               likeButton;
 
-  private LinearLayout              contentDetailLayout;
+  private LinearLayout         contentDetailLayout;
 
-  private TextView                  textView_Like_Count;
+  private LinearLayout         likedLayoutWrap;
 
-  private int                       likeDrawable    = R.drawable.activity_like_button_background_shape;
+  private TextView             textView_Like_Count;
 
-  private int                       disLikeDrawable = R.drawable.activity_dislike_button_background_shape;
+  private int                  likeDrawable    = R.drawable.activity_like_button_background_shape;
 
-  private SocialDetailLoadTask      mLoadTask;
+  private int                  disLikeDrawable = R.drawable.activity_dislike_button_background_shape;
 
-  private String                    activityId;
+  private SocialDetailLoadTask mLoadTask;
 
-  private String                    okString;
+  private String               activityId;
 
-  private String                    titleString;
+  private String               okString;
 
-  private String                    likeErrorString;
+  private String               titleString;
+
+  private String               likeErrorString;
+
+  private int                  likedAvatarSize;
 
   public SocialDetailController(Context context,
                                 LinearLayout layoutWrap,
+                                LinearLayout likedWrap,
                                 Button likeButton,
                                 LinearLayout detailLayout,
-                                TextView textView_Like_Count,
-                                SocialDetailWaitingDialog dialog) {
+                                TextView textView_Like_Count) {
     mContext = context;
     commentLayoutWrap = layoutWrap;
+    likedLayoutWrap = likedWrap;
     this.likeButton = likeButton;
     this.textView_Like_Count = textView_Like_Count;
     contentDetailLayout = detailLayout;
     activityId = SocialDetailHelper.getInstance().getActivityId();
-    _progressDialog = dialog;
     changeLanguage();
   }
 
-  public void onLoad(boolean isLikeAction) {
+  public void onLoad(LoaderActionBarItem loader, boolean isLikeAction) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialDetailLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this, _progressDialog).execute(isLikeAction);
+        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this, loader).execute(isLikeAction);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -137,16 +145,44 @@ public class SocialDetailController {
   }
 
   public void setLikeInfo(LinkedList<SocialLikeInfo> likeLinkedList) {
-    textView_Like_Count.setText(SocialActivityUtil.getCommentString(mContext, likeLinkedList));
+    textView_Like_Count.setText(SocialActivityUtil.getComment(mContext, likeLinkedList));
   }
 
-  public void onLikePress() {
+  public void setLikedInfo(LinkedList<SocialLikeInfo> likeLinkedList) {
+    int size = likeLinkedList.size();
+    int maxChild = 0;
+    if (size > 4) {
+      maxChild = 4;
+    } else
+      maxChild = size;
+    likedLayoutWrap.removeAllViews();
+    likedAvatarSize = mContext.getResources()
+                              .getDimensionPixelSize(org.exoplatform.R.dimen.social_liked_avatar_size);
+    LayoutParams params = new LayoutParams(likedAvatarSize, likedAvatarSize);
+    params.setMargins(5, 0, 0, 0);
+    RoundedImageView likedAvatar;
+    for (int i = 0; i < maxChild; i++) {
+      likedAvatar = new RoundedImageView(mContext);
+      likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
+      likedAvatar.setScaleType(ScaleType.FIT_XY);
+      likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);
+
+      likedLayoutWrap.addView(likedAvatar, params);
+    }
+    // if (size > 4) {
+    // likedAvatar = new RoundedImageView(mContext);
+    // likedAvatar.setScaleType(ScaleType.FIT_XY);
+    // likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
+    // likedLayoutWrap.addView(likedAvatar, params);
+    // }
+
+  }
+
+  public void onLikePress(LoaderActionBarItem loader) {
     boolean liked = SocialDetailHelper.getInstance().getLiked();
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       try {
-        RestActivity activity = SocialServiceHelper.getInstance()
-                                                   .activityService
-                                                   .get(activityId);
+        RestActivity activity = SocialServiceHelper.getInstance().activityService.get(activityId);
 
         if (liked == true) {
           SocialServiceHelper.getInstance().activityService.unlike(activity);
@@ -154,7 +190,7 @@ public class SocialDetailController {
         } else {
           SocialServiceHelper.getInstance().activityService.like(activity);
         }
-        onLoad(true);
+        onLoad(loader, true);
       } catch (SocialClientLibException e) {
 
         WarningDialog dialog = new WarningDialog(mContext, titleString, likeErrorString, okString);
