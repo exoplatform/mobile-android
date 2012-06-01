@@ -157,8 +157,6 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     homeUserAvatar.setDefaultImageResource(dafault_avatar);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
     homeLayout = (LinearLayout) findViewById(R.id.home_linearlayout);
-    // Drawable mCurrentDrawable = resource.getDrawable(R.drawable.gradient);
-    // homeLayout.setBackgroundDrawable(mCurrentDrawable);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
     viewFlipper.setOnClickListener(this);
     if (SocialServiceHelper.getInstance().userProfile != null) {
@@ -199,6 +197,7 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     }
     viewFlipper.startFlipping();
     viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_right_to_left));
+    viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_left_out));
 
   }
 

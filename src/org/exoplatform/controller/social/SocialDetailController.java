@@ -1,6 +1,5 @@
 package org.exoplatform.controller.social;
 
-import greendroid.widget.AsyncImageView;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.RoundedImageView;
 import org.exoplatform.widget.SocialActivityStreamItem;
-import org.exoplatform.widget.SocialDetailWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
@@ -169,12 +167,12 @@ public class SocialDetailController {
 
       likedLayoutWrap.addView(likedAvatar, params);
     }
-    // if (size > 4) {
-    // likedAvatar = new RoundedImageView(mContext);
-    // likedAvatar.setScaleType(ScaleType.FIT_XY);
-    // likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
-    // likedLayoutWrap.addView(likedAvatar, params);
-    // }
+//    if (size > 4) {
+//      likedAvatar = new RoundedImageView(mContext);
+//      likedAvatar.setScaleType(ScaleType.FIT_XY);
+//      likedAvatar.setDefaultImageResource(R.drawable.next_icon);
+//      likedLayoutWrap.addView(likedAvatar, params);
+//    }
 
   }
 
