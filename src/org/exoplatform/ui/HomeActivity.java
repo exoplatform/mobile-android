@@ -25,7 +25,6 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +34,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -56,6 +54,12 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
 
   private String              contentString;
 
+  private String              newsTitle;
+
+  private String              documentTitle;
+
+  private String              appsTitle;
+
   private Resources           resource;
 
   private HomeController      homeController;
@@ -67,8 +71,6 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
   private int                 dafault_avatar        = R.drawable.default_avatar;
 
   private ViewFlipper         viewFlipper;
-
-  private LinearLayout        homeLayout;
 
   public static HomeActivity  homeActivity;
 
@@ -148,15 +150,17 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     resource = getResources();
     changeLanguage();
     activityButton = (Button) findViewById(R.id.home_btn_activity);
+    activityButton.setText(newsTitle);
     activityButton.setOnClickListener(this);
     documentButton = (Button) findViewById(R.id.home_btn_document);
+    documentButton.setText(documentTitle);
     documentButton.setOnClickListener(this);
     appsButton = (Button) findViewById(R.id.home_btn_apps);
+    appsButton.setText(appsTitle);
     appsButton.setOnClickListener(this);
     homeUserAvatar = (RoundedImageView) findViewById(R.id.home_user_avatar);
     homeUserAvatar.setDefaultImageResource(dafault_avatar);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
-    homeLayout = (LinearLayout) findViewById(R.id.home_linearlayout);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
     viewFlipper.setOnClickListener(this);
     if (SocialServiceHelper.getInstance().userProfile != null) {
@@ -233,6 +237,7 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
      * Clear all social service data
      */
     SocialServiceHelper.getInstance().clearData();
+    homeController.finishService();
     finish();
   }
 
@@ -274,6 +279,9 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
     contentString = resource.getString(R.string.ConnectionError);
+    newsTitle = resource.getString(R.string.ActivityStream);
+    documentTitle = resource.getString(R.string.Documents);
+    appsTitle = resource.getString(R.string.Dashboard);
 
   }
 

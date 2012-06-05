@@ -7,7 +7,6 @@ import greendroid.widget.LoaderActionBarItem;
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.SocialDetailWaitingDialog;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -20,13 +19,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialDetailActivity extends MyActionBar implements OnClickListener {
-  private SocialDetailWaitingDialog  _progressDialog;
-
   public LinearLayout                startScreen;
 
   private View                       emptyCommentStubView;
@@ -38,6 +36,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   private LinearLayout               contentDetailLayout;
 
   private LinearLayout               likedLayoutWrap;
+
+  private RelativeLayout             likedFrame;
 
   private TextView                   textView_Like_Count;
 
@@ -85,8 +85,11 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     editTextComment.setOnClickListener(this);
     likeButton = (Button) findViewById(R.id.like_button);
     likeButton.setOnClickListener(this);
+    likedFrame = (RelativeLayout) findViewById(R.id.detail_likers_layout_warpper);
+    likedFrame.setOnClickListener(this);
     detailController = new SocialDetailController(this,
-                                                  commentLayoutWrap,likedLayoutWrap,
+                                                  commentLayoutWrap,
+                                                  likedLayoutWrap,
                                                   likeButton,
                                                   contentDetailLayout,
                                                   textView_Like_Count);
@@ -109,15 +112,11 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     if (detailController != null) {
       detailController.onCancelLoad();
     }
-    if (_progressDialog != null) {
-      _progressDialog.dismiss();
-    }
     super.finish();
   }
 
   @Override
   public void onBackPressed() {
-    detailController.onCancelLoad();
     finish();
   }
 
@@ -139,7 +138,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     return true;
   }
 
-  // @Override
+  @Override
   public void onClick(View view) {
     if (view.equals(editTextComment)) {
       Intent intent = new Intent(this, ComposeMessageActivity.class);
@@ -149,6 +148,10 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     }
     if (view.equals(likeButton)) {
       detailController.onLikePress(loaderItem);
+    }
+
+    if (view.equals(likedFrame)) {
+      detailController.onClickLikedFrame();
     }
   }
 

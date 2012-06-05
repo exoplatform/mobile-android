@@ -22,53 +22,79 @@
                 android:orientation="vertical" >
 
                 <LinearLayout
-                    android:id="@+id/social_detail_wrap_layout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/social_activity_detail_message_bg"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="5dp"
-                    android:paddingTop="5dp" >
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/relativeLayout_Like"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-3dip"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="5dp" >
-
-                    <TextView
-                        android:id="@+id/textView_Like_Count"
-                        style="@style/textview_like"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="5dip"
-                        android:layout_marginTop="5dip" />
+                    android:orientation="vertical" >
 
                     <LinearLayout
-                        android:id="@+id/social_detail_like_wrap"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/social_detail_wrap_layout"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/textView_Like_Count"
-                        android:orientation="horizontal" >
+                        android:background="#F8F8F8F8"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="0dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="5dp" >
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/like_button"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/detail_likers_layout_warpper"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignRight="@id/social_detail_wrap_layout"
-                        android:layout_below="@id/textView_Like_Count"
-                        android:layout_marginRight="3dp"
-                        android:background="@null" />
-                </RelativeLayout>
+                        android:layout_marginTop="-16dip"
+                        android:background="@drawable/detail_likers_background_selector"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:paddingTop="5dp" >
 
+                        <TextView
+                            android:id="@+id/textView_Like_Count"
+                            style="@style/textview_like"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="5dip"
+                            android:layout_marginTop="5dp"
+                            android:padding="3dp" />
+
+                        <LinearLayout
+                            android:id="@+id/social_detail_like_wrap"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/textView_Like_Count"
+                            android:layout_marginLeft="3dp"
+                            android:orientation="horizontal" >
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignRight="@id/social_detail_wrap_layout"
+                            android:layout_below="@id/textView_Like_Count"
+                            android:layout_marginRight="5dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal" >
+
+                            <Button
+                                android:id="@+id/like_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="3dp"
+                                android:background="@null" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/activity_detail_like_row" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <!--
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="0.5dp"
@@ -77,6 +103,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/activity_detail_like_comment_separator" >
                 </LinearLayout>
+                -->
 
                 <ViewStub
                     android:id="@+id/comment_details_empty_stub"

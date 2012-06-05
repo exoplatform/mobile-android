@@ -14,7 +14,7 @@
 ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
-*/
+*/
 -->
 
 <resources>
@@ -23,5 +23,7 @@
     <dimen name="thumbnail_radius">5dp</dimen>
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="social_liked_avatar_size">32dp</dimen>
-    
+    <dimen name="social_liked_list_item_width">85dp</dimen>
+    <dimen name="social_liked_list_item_height">85dp</dimen>
+
 </resources>

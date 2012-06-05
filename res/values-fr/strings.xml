@@ -157,5 +157,7 @@
     <string name="Personal"> Personnel</string>
     <string name="Group"> Groupe</string>
     <string name="NetworkTimeout"> La connexion réseau a expirée. Essayez à nouveau !</string>
+    <string name="Liker"> Liker</string>
+    <string name="Likers"> Likers</string>
 
 </resources>

@@ -1,8 +1,8 @@
 package org.exoplatform.ui.social;
 
 import greendroid.widget.ActionBarItem;
-import greendroid.widget.LoaderActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,6 @@ import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.SocialHeaderLayout;
 import org.exoplatform.widget.SocialShowMoreItem;
-import org.exoplatform.widget.SocialWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Intent;
@@ -50,8 +49,6 @@ public class SocialActivity extends MyActionBar {
   private static final String           ACCOUNT_SETTING         = "account_setting";
 
   private static final String           DOCUMENT_HELPER         = "document_helper";
-
-  private SocialWaitingDialog           _progressDialog;
 
   private LinearLayout                  activityStreamWrap;
 
@@ -168,8 +165,10 @@ public class SocialActivity extends MyActionBar {
     } else {
       if (isRefresh) {
         homeController.onLoad(number_of_activity, loaderItem);
-      } else
+      } else {
         setActivityList(socialList);
+      }
+
     }
   }
 
@@ -240,7 +239,7 @@ public class SocialActivity extends MyActionBar {
           SocialDetailHelper.getInstance().setActivityId(activityInfo.getActivityId());
 
           Intent intent = new Intent(SocialActivity.this, ComposeMessageActivity.class);
-          intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
           intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_COMMENT_TYPE);
           startActivity(intent);
 
@@ -254,7 +253,7 @@ public class SocialActivity extends MyActionBar {
           SocialDetailHelper.getInstance().setActivityId(activityId);
           SocialDetailHelper.getInstance().setAttachedImageUrl(activityInfo.getAttachedImageUrl());
           Intent intent = new Intent(SocialActivity.this, SocialDetailActivity.class);
-          intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
           startActivity(intent);
         }
       });
@@ -262,14 +261,15 @@ public class SocialActivity extends MyActionBar {
 
     }
     if (result.size() > number_of_activity || result.size() == number_of_activity) {
-      SocialShowMoreItem showmore = new SocialShowMoreItem(this);
+      final SocialShowMoreItem showmore = new SocialShowMoreItem(this);
       showmore.showMoreBtn.setText(showMoreText);
       showmore.showMoreBtn.setOnClickListener(new OnClickListener() {
 
         public void onClick(View v) {
+          showmore.showMoreBtn.setClickable(false);
           number_of_activity += number_of_more_activity;
           homeController.onLoad(number_of_activity, loaderItem);
-
+          showmore.showMoreBtn.setClickable(true);
         }
       });
       activityStreamWrap.addView(showmore, params);
@@ -293,10 +293,7 @@ public class SocialActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-    if (_progressDialog != null) {
-      _progressDialog.dismiss();
-      _progressDialog = null;
-    }
+    homeController.finishService();
     finish();
   }
 
@@ -313,7 +310,7 @@ public class SocialActivity extends MyActionBar {
       break;
     case 1:
       Intent intent = new Intent(this, ComposeMessageActivity.class);
-      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
       intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_POST_TYPE);
       startActivity(intent);
       break;

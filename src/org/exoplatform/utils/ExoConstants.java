@@ -76,6 +76,8 @@ public class ExoConstants {
 
   public static final String SOCIAL_LINKFY_EXTRA           = "SOCIAL_LINKFY_EXTRA";
 
+  public static final String SOCIAL_LIKED_LIST_EXTRA       = "SOCIAL_LIKED_LIST_EXTRA";
+
   public static final String SOCIAL_SPACE                  = "space";
 
   public static final String EXO_PREFERENCE                = "exo_preference";

@@ -12,6 +12,7 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.ui.social.LikeListActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -23,46 +24,53 @@ import org.exoplatform.widget.SocialActivityStreamItem;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialDetailController {
 
-  private Context              mContext;
+  private Context                   mContext;
 
-  private LinearLayout         commentLayoutWrap;
+  private LinearLayout              commentLayoutWrap;
 
-  private Button               likeButton;
+  private Button                    likeButton;
 
-  private LinearLayout         contentDetailLayout;
+  private LinearLayout              contentDetailLayout;
 
-  private LinearLayout         likedLayoutWrap;
+  private LinearLayout              likedLayoutWrap;
 
-  private TextView             textView_Like_Count;
+  private TextView                  textView_Like_Count;
 
-  private int                  likeDrawable    = R.drawable.activity_like_button_background_shape;
+  private int                       likeDrawable    = R.drawable.activity_like_button_background_shape;
 
-  private int                  disLikeDrawable = R.drawable.activity_dislike_button_background_shape;
+  private int                       disLikeDrawable = R.drawable.activity_dislike_button_background_shape;
 
-  private SocialDetailLoadTask mLoadTask;
+  private SocialDetailLoadTask      mLoadTask;
 
-  private String               activityId;
+  private String                    activityId;
 
-  private String               okString;
+  private String                    okString;
 
-  private String               titleString;
+  private String                    titleString;
 
-  private String               likeErrorString;
+  private String                    likeErrorString;
 
-  private int                  likedAvatarSize;
+  private int                       likedAvatarSize;
+
+  private ArrayList<SocialLikeInfo> likeList;
 
   public SocialDetailController(Context context,
                                 LinearLayout layoutWrap,
@@ -148,6 +156,10 @@ public class SocialDetailController {
 
   public void setLikedInfo(LinkedList<SocialLikeInfo> likeLinkedList) {
     int size = likeLinkedList.size();
+    likeList = new ArrayList<SocialLikeInfo>();
+    for (SocialLikeInfo item : likeLinkedList) {
+      likeList.add(item);
+    }
     int maxChild = 0;
     if (size > 4) {
       maxChild = 4;
@@ -158,22 +170,25 @@ public class SocialDetailController {
                               .getDimensionPixelSize(org.exoplatform.R.dimen.social_liked_avatar_size);
     LayoutParams params = new LayoutParams(likedAvatarSize, likedAvatarSize);
     params.setMargins(5, 0, 0, 0);
-    RoundedImageView likedAvatar;
+    LikedAvatarItem likedAvatar;
     for (int i = 0; i < maxChild; i++) {
-      likedAvatar = new RoundedImageView(mContext);
-      likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
-      likedAvatar.setScaleType(ScaleType.FIT_XY);
-      likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);
-
+      likedAvatar = new LikedAvatarItem(mContext);
+      likedAvatar.avatarImage.setUrl(likeLinkedList.get(i).likedImageUrl);
       likedLayoutWrap.addView(likedAvatar, params);
     }
-//    if (size > 4) {
-//      likedAvatar = new RoundedImageView(mContext);
-//      likedAvatar.setScaleType(ScaleType.FIT_XY);
-//      likedAvatar.setDefaultImageResource(R.drawable.next_icon);
-//      likedLayoutWrap.addView(likedAvatar, params);
-//    }
+    if (size > 4) {
+      likedAvatar = new LikedAvatarItem(mContext);
+//      likedAvatar.avatarImage.setBackgroundResource(R.drawable.activity_detail_more_likers);
+      likedAvatar.avatarImage.setDefaultImageResource(R.drawable.activity_detail_more_likers);
+      likedLayoutWrap.addView(likedAvatar, params);
+    }
 
+  }
+
+  public void onClickLikedFrame() {
+    Intent intent = new Intent(mContext, LikeListActivity.class);
+    intent.putParcelableArrayListExtra(ExoConstants.SOCIAL_LIKED_LIST_EXTRA, likeList);
+    mContext.startActivity(intent);
   }
 
   public void onLikePress(LoaderActionBarItem loader) {
@@ -204,5 +219,18 @@ public class SocialDetailController {
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
     likeErrorString = resource.getString(R.string.ErrorOnLike);
+  }
+
+  private class LikedAvatarItem extends RelativeLayout {
+    public RoundedImageView avatarImage;
+
+    public LikedAvatarItem(Context context) {
+      super(context);
+      LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      View view = inflate.inflate(R.layout.detail_liked_item, this);
+      avatarImage = (RoundedImageView) view.findViewById(R.id.detail_liked_image);
+      avatarImage.setDefaultImageResource(R.drawable.default_avatar);
+    }
+
   }
 }

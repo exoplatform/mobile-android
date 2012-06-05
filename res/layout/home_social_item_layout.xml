@@ -35,7 +35,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
             android:maxLines="2"
-            android:text="Android is the best OS in the world, many people using it"
             android:textStyle="bold" />
 
         <TextView
@@ -45,8 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
             android:layout_marginTop="3dip"
-            android:singleLine="true"
-            android:text="Android is the best OS in the world, many people using it" />
+            android:singleLine="true" />
     </LinearLayout>
 
 </LinearLayout>
