@@ -43,6 +43,11 @@ import android.widget.TextView;
  */
 public class LikeListActivity extends MyActionBar {
 
+  /*
+   * This class for displaying the liker list information include avatar and liker's
+   * name
+   */
+
   private ArrayList<SocialLikeInfo> likeList;
 
   private GridView                  likedGridView;
@@ -53,12 +58,19 @@ public class LikeListActivity extends MyActionBar {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setActionBarContentView(R.layout.like_list_activity_layout);
+    /*
+     * Get liker list from intent extra
+     */
     likeList = getIntent().getParcelableArrayListExtra(ExoConstants.SOCIAL_LIKED_LIST_EXTRA);
     int size = 0;
     if (likeList != null) {
       size = likeList.size();
       initUI();
     }
+
+    /*
+     * Set title for activity
+     */
 
     String liker;
     if (size == 0 || size == 1) {
@@ -108,6 +120,10 @@ public class LikeListActivity extends MyActionBar {
     return true;
   }
 
+  /*
+   * The adapter for liker grid
+   */
+
   private class LikedItemAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
@@ -135,6 +151,9 @@ public class LikeListActivity extends MyActionBar {
     public View getView(int position, View convertView, ViewGroup parent) {
       ViewHolder viewHolder;
       if (convertView == null) {
+        /*
+         * Inflate layout from layout resource
+         */
         convertView = mInflater.inflate(R.layout.liked_grid_item, null);
         viewHolder = new ViewHolder();
         viewHolder.imageView = (RoundedImageView) convertView.findViewById(R.id.liked_avatar);

@@ -29,10 +29,9 @@ import android.content.Context;
  * 17, 2012
  */
 public class HomeController {
-  public SocialWaitingDialog   _progressDialog;
+  public SocialWaitingDialog    _progressDialog;
 
   private Context               mContext;
-
 
   private SocialServiceLoadTask mServiceLoadTask;
 
@@ -52,7 +51,7 @@ public class HomeController {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mServiceLoadTask == null
           || mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.FINISHED) {
-        mServiceLoadTask = (SocialServiceLoadTask) new SocialServiceLoadTask(mContext, this,loader).execute();
+        mServiceLoadTask = (SocialServiceLoadTask) new SocialServiceLoadTask(mContext, this, loader).execute();
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -68,10 +67,10 @@ public class HomeController {
     }
   }
 
-  public void onLoad(int number,LoaderActionBarItem loader) {
+  public void onLoad(int number, LoaderActionBarItem loader) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, this,loader).execute(number);
+        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, loader).execute(number);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();

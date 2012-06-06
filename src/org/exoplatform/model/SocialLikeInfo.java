@@ -4,6 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SocialLikeInfo implements Parcelable {
+  /*
+   * Class for liker information, implements Parcelable object to make it can
+   * transport between activities by put/get intent extra
+   */
 
   private String likeId;
 

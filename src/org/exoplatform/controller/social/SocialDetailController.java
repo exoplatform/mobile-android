@@ -9,9 +9,6 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.client.api.SocialClientLibException;
-import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.ui.social.LikeListActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
@@ -21,20 +18,15 @@ import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.RoundedImageView;
 import org.exoplatform.widget.SocialActivityStreamItem;
-import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -60,13 +52,9 @@ public class SocialDetailController {
 
   private SocialDetailLoadTask      mLoadTask;
 
+  private LikeLoadTask              mLikeLoadTask;
+
   private String                    activityId;
-
-  private String                    okString;
-
-  private String                    titleString;
-
-  private String                    likeErrorString;
 
   private int                       likedAvatarSize;
 
@@ -85,7 +73,6 @@ public class SocialDetailController {
     this.textView_Like_Count = textView_Like_Count;
     contentDetailLayout = detailLayout;
     activityId = SocialDetailHelper.getInstance().getActivityId();
-    changeLanguage();
   }
 
   public void onLoad(LoaderActionBarItem loader, boolean isLikeAction) {
@@ -99,9 +86,27 @@ public class SocialDetailController {
   }
 
   public void onCancelLoad() {
+    onCancelLikeLoad();
     if (mLoadTask != null && mLoadTask.getStatus() == SocialDetailLoadTask.Status.RUNNING) {
       mLoadTask.cancel(true);
       mLoadTask = null;
+    }
+  }
+
+  public void onLikeLoad(String id) {
+    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+      if (mLikeLoadTask == null || mLikeLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
+        mLikeLoadTask = (LikeLoadTask) new LikeLoadTask(mContext, this).execute(id);
+      }
+    } else {
+      new ConnectionErrorDialog(mContext).show();
+    }
+  }
+
+  public void onCancelLikeLoad() {
+    if (mLikeLoadTask != null && mLikeLoadTask.getStatus() == LikeLoadTask.Status.RUNNING) {
+      mLikeLoadTask.cancel(true);
+      mLikeLoadTask = null;
     }
   }
 
@@ -135,12 +140,16 @@ public class SocialDetailController {
 
   }
 
-  public void setComponentInfo(SocialActivityInfo streamInfo) {
+  public void setLikedState() {
     boolean liked = SocialDetailHelper.getInstance().getLiked();
     if (liked) {
       likeButton.setBackgroundResource(disLikeDrawable);
     } else
       likeButton.setBackgroundResource(likeDrawable);
+  }
+
+  public void setComponentInfo(SocialActivityInfo streamInfo) {
+    setLikedState();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     contentDetailLayout.removeAllViews();
     SocialActivityStreamItem item = new SocialActivityStreamItem(mContext, streamInfo, true);
@@ -150,9 +159,16 @@ public class SocialDetailController {
     contentDetailLayout.addView(item, params);
   }
 
-  public void setLikeInfo(LinkedList<SocialLikeInfo> likeLinkedList) {
+  /*
+   * The liker information text view
+   */
+  public void setLikeInfoText(LinkedList<SocialLikeInfo> likeLinkedList) {
     textView_Like_Count.setText(SocialActivityUtil.getComment(mContext, likeLinkedList));
   }
+
+  /*
+   * The liker information image view
+   */
 
   public void setLikedInfo(LinkedList<SocialLikeInfo> likeLinkedList) {
     int size = likeLinkedList.size();
@@ -160,11 +176,17 @@ public class SocialDetailController {
     for (SocialLikeInfo item : likeLinkedList) {
       likeList.add(item);
     }
+    /*
+     * We only display maximum 4 likers at the detail screen
+     */
     int maxChild = 0;
     if (size > 4) {
       maxChild = 4;
     } else
       maxChild = size;
+    /*
+     * Set list of likers
+     */
     likedLayoutWrap.removeAllViews();
     likedAvatarSize = mContext.getResources()
                               .getDimensionPixelSize(org.exoplatform.R.dimen.social_liked_avatar_size);
@@ -176,51 +198,39 @@ public class SocialDetailController {
       likedAvatar.avatarImage.setUrl(likeLinkedList.get(i).likedImageUrl);
       likedLayoutWrap.addView(likedAvatar, params);
     }
+    /*
+     * If have more than 4 likers, we put a "more_likers" image icon at the last
+     */
     if (size > 4) {
       likedAvatar = new LikedAvatarItem(mContext);
-//      likedAvatar.avatarImage.setBackgroundResource(R.drawable.activity_detail_more_likers);
       likedAvatar.avatarImage.setDefaultImageResource(R.drawable.activity_detail_more_likers);
       likedLayoutWrap.addView(likedAvatar, params);
     }
 
   }
 
+  /*
+   * Call this method when click on the liked frame
+   */
   public void onClickLikedFrame() {
     Intent intent = new Intent(mContext, LikeListActivity.class);
+    /*
+     * put liked list intent extra to LikeListActivity
+     */
     intent.putParcelableArrayListExtra(ExoConstants.SOCIAL_LIKED_LIST_EXTRA, likeList);
     mContext.startActivity(intent);
   }
 
+  /*
+   * When user click on like button, only update the liker part UI
+   */
   public void onLikePress(LoaderActionBarItem loader) {
-    boolean liked = SocialDetailHelper.getInstance().getLiked();
-    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
-      try {
-        RestActivity activity = SocialServiceHelper.getInstance().activityService.get(activityId);
-
-        if (liked == true) {
-          SocialServiceHelper.getInstance().activityService.unlike(activity);
-          SocialDetailHelper.getInstance().setLiked(false);
-        } else {
-          SocialServiceHelper.getInstance().activityService.like(activity);
-        }
-        onLoad(loader, true);
-      } catch (SocialClientLibException e) {
-
-        WarningDialog dialog = new WarningDialog(mContext, titleString, likeErrorString, okString);
-        dialog.show();
-      }
-    } else {
-      new ConnectionErrorDialog(mContext).show();
-    }
+    onLikeLoad(activityId);
   }
 
-  private void changeLanguage() {
-    Resources resource = mContext.getResources();
-    okString = resource.getString(R.string.OK);
-    titleString = resource.getString(R.string.Warning);
-    likeErrorString = resource.getString(R.string.ErrorOnLike);
-  }
-
+  /*
+   * The Layout class for displaying the liker avatar and liker name
+   */
   private class LikedAvatarItem extends RelativeLayout {
     public RoundedImageView avatarImage;
 

@@ -18,7 +18,6 @@ import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.SocialWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
@@ -28,29 +27,24 @@ import android.os.AsyncTask;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialActivityInfo>> {
-  private Context        mContext;
+  private Context             mContext;
 
-  private String         loadingData;
+  private String              okString;
 
-  private String         okString;
+  private String              titleString;
 
-  private String         titleString;
+  private String              contentString;
 
-  private String         contentString;
-
-  private HomeController homeController;
   private LoaderActionBarItem loaderItem;
 
-  public SocialLoadTask(Context context, HomeController controller,LoaderActionBarItem loader) {
+  public SocialLoadTask(Context context, LoaderActionBarItem loader) {
     mContext = context;
-    homeController = controller;
     loaderItem = loader;
     changeLanguage();
   }
 
   private void changeLanguage() {
     Resources resource = mContext.getResources();
-    loadingData = resource.getString(R.string.LoadingData);
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
     contentString = resource.getString(R.string.LoadingDataError);
@@ -59,13 +53,13 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
 
   @Override
   public void onPreExecute() {
-//    if (homeController._progressDialog == null) {
-//      homeController._progressDialog = new SocialWaitingDialog(mContext,
-//                                                               homeController,
-//                                                               null,
-//                                                               loadingData);
-//      homeController._progressDialog.show();
-//    }
+    // if (homeController._progressDialog == null) {
+    // homeController._progressDialog = new SocialWaitingDialog(mContext,
+    // homeController,
+    // null,
+    // loadingData);
+    // homeController._progressDialog.show();
+    // }
     loaderItem.setLoading(true);
 
   }
@@ -131,8 +125,6 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
-//    homeController._progressDialog.dismiss();
-//    homeController._progressDialog = null;
     loaderItem.setLoading(false);
   }
 

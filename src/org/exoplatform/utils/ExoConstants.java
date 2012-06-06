@@ -44,6 +44,8 @@ public class ExoConstants {
 
   public static final int    NUMBER_OF_MORE_COMMENTS_PARAM = 5;
 
+  public static final int    AVATAR_DEFAULT_SIZE           = 130;
+
   public static final int    TAKE_PICTURE_WITH_CAMERA      = 7;
 
   public static final int    REQUEST_ADD_PHOTO             = 8;

@@ -18,10 +18,8 @@ import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.VersionService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
 import org.exoplatform.ui.HomeActivity;
-import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
-import org.exoplatform.widget.SocialWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
@@ -32,8 +30,6 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
   private Context             mContext;
-
-  private String              loadingData;
 
   private String              okString;
 
@@ -56,7 +52,6 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
 
   private void changeLanguage() {
     Resources resource = mContext.getResources();
-    loadingData = resource.getString(R.string.LoadingData);
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
     contentString = resource.getString(R.string.LoadingDataError);
@@ -123,11 +118,8 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
 
     } else {
       loaderItem.setLoading(false);
-      // homeController._progressDialog.dismiss();
-      // homeController._progressDialog = null;
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
-    //
   }
 }

@@ -85,6 +85,10 @@
         <activity
             android:configChanges="keyboardHidden|orientation"
             android:name=".ui.social.SocialAttachedImageActivity" />
+        
+        <activity
+            android:configChanges="keyboardHidden|orientation"
+            android:name=".ui.social.LikeListActivity" />
     </application>
 
 </manifest>
