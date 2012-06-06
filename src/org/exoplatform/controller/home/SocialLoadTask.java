@@ -53,13 +53,6 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
 
   @Override
   public void onPreExecute() {
-    // if (homeController._progressDialog == null) {
-    // homeController._progressDialog = new SocialWaitingDialog(mContext,
-    // homeController,
-    // null,
-    // loadingData);
-    // homeController._progressDialog.show();
-    // }
     loaderItem.setLoading(true);
 
   }

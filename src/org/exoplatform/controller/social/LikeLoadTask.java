@@ -114,9 +114,7 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
     if (result != null) {
       detailController.setLikedState();
       detailController.setLikeInfoText(result);
-      if (result.size() > 0) {
-        detailController.setLikedInfo(result);
-      }
+      detailController.setLikedInfo(result);
     } else {
       SocialDetailsWarningDialog dialog = new SocialDetailsWarningDialog(mContext,
                                                                          titleString,

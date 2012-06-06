@@ -164,9 +164,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       detailController.setComponentInfo(streamInfo);
       detailController.createCommentList(socialCommentList);
       detailController.setLikeInfoText(likeLinkedList);
-      if (likeLinkedList.size() > 0) {
-        detailController.setLikedInfo(likeLinkedList);
-      }
+      detailController.setLikedInfo(likeLinkedList);
       if (isLikeAction) {
         SocialActivity.socialActivity.loadActivity(true);
       }
