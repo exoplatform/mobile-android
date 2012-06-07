@@ -16,6 +16,8 @@
  */
 package org.exoplatform.controller.social;
 
+import greendroid.widget.LoaderActionBarItem;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,11 +57,18 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
   private String                 detailsErrorStr;
 
   private SocialDetailController detailController;
+  
+  private LoaderActionBarItem          loaderItem;
 
-  public LikeLoadTask(Context context, SocialDetailController controller) {
+  public LikeLoadTask(Context context, SocialDetailController controller,LoaderActionBarItem loader) {
     mContext = context;
     detailController = controller;
+    loaderItem = loader;
     changeLanguage();
+  }
+  @Override
+  protected void onPreExecute() {
+    loaderItem.setLoading(true);
   }
 
   @Override
@@ -108,6 +117,10 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
       return null;
     }
   }
+  @Override
+  protected void onCancelled() {
+    loaderItem.setLoading(false);
+  }
 
   @Override
   protected void onPostExecute(LinkedList<SocialLikeInfo> result) {
@@ -123,6 +136,7 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
                                                                          false);
       dialog.show();
     }
+    loaderItem.setLoading(false);
   }
 
   private void changeLanguage() {

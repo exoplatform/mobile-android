@@ -24,11 +24,33 @@ import android.widget.TextView;
 
 public class SocialActivityUtil {
 
+  public static final int DEFAULT_TYPE            = 0;
+
+  public static final int KS_FORUM_SPACE          = 1;
+
+  public static final int KS_WIKI_SPACE           = 2;
+
+  public static final int EXO_SOCIAL_SPACE        = 3;
+
+  public static final int DOC_ACTIVITY            = 4;
+
+  public static final int DEFAULT_ACTIVITY        = 5;
+
+  public static final int LINK_ACTIVITY           = 6;
+
+  public static final int EXO_SOCIAL_RELATIONSHIP = 7;
+
+  public static final int EXO_SOCIAL_PEOPLE       = 8;
+
+  public static final int CONTENT_SPACE           = 9;
+
+  public static final int KS_ANSWER               = 10;
+
+  public static final int CS_CALENDAR_SPACES      = 11;
+
   public static String getComment(Context context, LinkedList<SocialLikeInfo> socialLikeList) {
     Resources resource = context.getResources();
     String nolike = resource.getString(R.string.NoLike);
-    String likedThis = resource.getString(R.string.LikedThis);
-    String and = resource.getString(R.string.And);
     String peoplesLiked = resource.getString(R.string.PeoplesLikedThis);
     String peopleLiked = resource.getString(R.string.PeopleLikedThis);
     StringBuffer buffer = new StringBuffer();
@@ -217,70 +239,70 @@ public class SocialActivityUtil {
   public static int getActivityTypeId(String type) {
     if (type != null) {
       if (type.contains("ks-forum:spaces")) {
-        return 1;
+        return KS_FORUM_SPACE;
       } else if (type.contains("ks-wiki:spaces")) {
-        return 2;
+        return KS_WIKI_SPACE;
       } else if (type.contains("exosocial:spaces")) {
-        return 3;
+        return EXO_SOCIAL_SPACE;
       } else if (type.contains("DOC_ACTIVITY")) {
-        return 4;
+        return DOC_ACTIVITY;
       } else if (type.contains("DEFAULT_ACTIVITY")) {
-        return 5;
+        return DEFAULT_ACTIVITY;
       } else if (type.contains("LINK_ACTIVITY")) {
-        return 6;
+        return LINK_ACTIVITY;
       } else if (type.contains("exosocial:relationship")) {
-        return 7;
+        return EXO_SOCIAL_RELATIONSHIP;
       } else if (type.contains("exosocial:people")) {
-        return 8;
+        return EXO_SOCIAL_PEOPLE;
       } else if (type.contains("contents:spaces")) {
-        return 9;
+        return CONTENT_SPACE;
       } else if (type.contains("ks-answer")) {
-        return 10;
+        return KS_ANSWER;
       } else if (type.contains("cs-calendar:spaces")) {
-        return 11;
+        return CS_CALENDAR_SPACES;
       } else
-        return 0;
+        return DEFAULT_TYPE;
     } else
-      return 0;
+      return DEFAULT_TYPE;
   }
 
   public static void setImageType(int type, ImageView imageView) {
     int returnType = 0;
     switch (type) {
-    case 0:
+    case DEFAULT_TYPE:
       returnType = R.drawable.activity_type_normal;
       break;
-    case 1:
+    case KS_FORUM_SPACE:
       returnType = R.drawable.activity_type_forum;
       break;
-    case 2:
+    case KS_WIKI_SPACE:
       returnType = R.drawable.activity_type_wiki;
       break;
-    case 3:
+    case EXO_SOCIAL_SPACE:
       returnType = R.drawable.activity_type_normal;
       break;
-    case 4:
+    case DOC_ACTIVITY:
       returnType = R.drawable.activity_type_document;
       break;
-    case 5:
+    case DEFAULT_ACTIVITY:
       returnType = R.drawable.activity_type_normal;
       break;
-    case 6:
+    case LINK_ACTIVITY:
       returnType = R.drawable.activity_type_link;
       break;
-    case 7:
+    case EXO_SOCIAL_RELATIONSHIP:
       returnType = R.drawable.activity_type_connection;
       break;
-    case 8:
+    case EXO_SOCIAL_PEOPLE:
       returnType = R.drawable.activity_type_normal;
       break;
-    case 9:
+    case CONTENT_SPACE:
       returnType = R.drawable.activity_type_normal;
       break;
-    case 10:
+    case KS_ANSWER:
       returnType = R.drawable.activity_type_answer;
       break;
-    case 11:
+    case CS_CALENDAR_SPACES:
       returnType = R.drawable.activity_type_calendar;
 
     }

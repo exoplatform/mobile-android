@@ -122,8 +122,12 @@ public class DocumentHelper implements Parcelable {
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(_urlrepositoryHome);
-    dest.writeParcelable(_fileCopied, flags);
-    dest.writeParcelable(_fileMoved, flags);
+    if(_fileCopied!=null){
+      dest.writeParcelable(_fileCopied, flags);
+    }
+    if(_fileMoved!=null){
+      dest.writeParcelable(_fileMoved, flags);
+    }
     dest.writeBundle(currentFileMap);
     dest.writeBundle(childFilesMap);
   }

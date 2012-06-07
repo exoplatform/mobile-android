@@ -3,10 +3,7 @@ package org.exoplatform.widget;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.social.client.api.model.RestActivityStream;
 import org.exoplatform.ui.social.SocialAttachedImageActivity;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.SocialImageLoader;
 
@@ -139,13 +136,11 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void setViewByType(int typeId) {
 
     switch (typeId) {
-    case 1:
-      // ks-forum:spaces
+    case SocialActivityUtil.KS_FORUM_SPACE:
 
       setActivityTypeForum();
       break;
-    case 2:
-      // ks-wiki:spaces
+    case SocialActivityUtil.KS_WIKI_SPACE:
       // Map<String, String> templateMap = activityInfo.templateParams;
       // Set<String> set = templateMap.keySet();
       // for (String param : set) {
@@ -155,11 +150,9 @@ public class SocialActivityStreamItem extends LinearLayout {
       // }
       setActivityTypeWiki();
       break;
-    case 3:
-      // exosocial:spaces
+    case SocialActivityUtil.EXO_SOCIAL_SPACE:
       break;
-    case 4:
-      // DOC_ACTIVITY
+    case SocialActivityUtil.DOC_ACTIVITY:
       /*
        * add space information
        */
@@ -188,22 +181,17 @@ public class SocialActivityStreamItem extends LinearLayout {
       }
 
       break;
-    case 5:
-      // DEFAULT_ACTIVITY
+    case SocialActivityUtil.DEFAULT_ACTIVITY:
       break;
-    case 6:
-      // LINK_ACTIVITY
+    case SocialActivityUtil.LINK_ACTIVITY:
       setActivityTypeLink();
       break;
-    case 7:
-      // exosocial:relationship
+    case SocialActivityUtil.EXO_SOCIAL_RELATIONSHIP:
 
       break;
-    case 8:
-      // exosocial:people
+    case SocialActivityUtil.EXO_SOCIAL_PEOPLE:
       break;
-    case 9:
-      // contents:spaces
+    case SocialActivityUtil.CONTENT_SPACE:
       /*
        * add space information
        */
@@ -232,13 +220,11 @@ public class SocialActivityStreamItem extends LinearLayout {
 
       }
       break;
-    case 10:
-      // ks-answer
+    case SocialActivityUtil.KS_ANSWER:
       setActivityTypeAnswer();
       break;
 
-    case 11:
-      // calendar
+    case SocialActivityUtil.CS_CALENDAR_SPACES:
       setActivityTypeCalendar();
       break;
     default:

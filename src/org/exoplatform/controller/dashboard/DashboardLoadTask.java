@@ -1,6 +1,7 @@
 package org.exoplatform.controller.dashboard;
 
 import greendroid.util.Config;
+import greendroid.widget.LoaderActionBarItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.ConnTimeOutDialog;
-import org.exoplatform.widget.DashboardWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.res.Resources;
@@ -35,29 +35,26 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
 
   private DashboardActivity        dashboardActivity;
 
-  private String                   loadingData;
-
   private String                   okString;
 
   private String                   titleString;
 
   private String                   contentString;
 
-  private DashboardWaitingDialog   _progressDialog;
+  private LoaderActionBarItem      loaderItem;
 
   private ArrayList<DashboardItem> dashboarList;
 
-  public DashboardLoadTask(DashboardActivity context, DashboardWaitingDialog dialog) {
+  public DashboardLoadTask(DashboardActivity context, LoaderActionBarItem loader) {
     dashboardActivity = context;
     dashboardController = new DashboardController();
-    _progressDialog = dialog;
+    loaderItem = loader;
     changeLanguage();
   }
 
   @Override
   public void onPreExecute() {
-    _progressDialog = new DashboardWaitingDialog(dashboardActivity, null, loadingData);
-    _progressDialog.show();
+    loaderItem.setLoading(true);
   }
 
   @Override
@@ -82,6 +79,11 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
       return RESULT_ERROR;
     }
 
+  }
+
+  @Override
+  protected void onCancelled() {
+    loaderItem.setLoading(false);
   }
 
   @Override
@@ -126,7 +128,7 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
     } else if (result == RESULT_TIMEOUT) {
       new ConnTimeOutDialog(dashboardActivity, titleString, okString).show();
     }
-    _progressDialog.dismiss();
+    loaderItem.setLoading(false);
 
     String strGadgetsErrorList = dashboardController.getGadgetsErrorList();
     if (strGadgetsErrorList.length() > 0) {
@@ -146,7 +148,6 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
 
   private void changeLanguage() {
     Resources resource = dashboardActivity.getResources();
-    loadingData = resource.getString(R.string.LoadingData);
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
     contentString = resource.getString(R.string.GadgetsCannotBeRetrieved);

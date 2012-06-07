@@ -68,8 +68,7 @@ public class HomeSocialItem extends LinearLayout {
 
   private void setViewByType(int typeId) {
     switch (typeId) {
-    case 1:
-      // ks-forum:spaces
+    case SocialActivityUtil.KS_FORUM_SPACE:
 
       String forumBuffer = SocialActivityUtil.getActivityTypeForum(userName,
                                                                    activityInfo,
@@ -82,8 +81,7 @@ public class HomeSocialItem extends LinearLayout {
 
       textViewMessage.setText(Html.fromHtml(forumBody));
       break;
-    case 2:
-      // ks-wiki:spaces
+    case SocialActivityUtil.KS_WIKI_SPACE:
       String wikiBuffer = SocialActivityUtil.getActivityTypeWiki(userName,
                                                                  activityInfo,
                                                                  resource,
@@ -97,11 +95,9 @@ public class HomeSocialItem extends LinearLayout {
         textViewMessage.setText(Html.fromHtml(wikiBody));
       }
       break;
-    case 3:
-      // exosocial:spaces
+    case SocialActivityUtil.EXO_SOCIAL_SPACE:
       break;
-    case 4:
-      // DOC_ACTIVITY
+    case SocialActivityUtil.DOC_ACTIVITY:
       /*
        * add space information
        */
@@ -109,7 +105,8 @@ public class HomeSocialItem extends LinearLayout {
       String docBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
                                                                     activityInfo,
                                                                     resource,
-                                                                    FONT_COLOR,true);
+                                                                    FONT_COLOR,
+                                                                    true);
       if (docBuffer != null) {
         textViewName.setText(Html.fromHtml(docBuffer));
       }
@@ -120,11 +117,9 @@ public class HomeSocialItem extends LinearLayout {
       }
 
       break;
-    case 5:
-      // DEFAULT_ACTIVITY
+    case SocialActivityUtil.DEFAULT_ACTIVITY:
       break;
-    case 6:
-      // LINK_ACTIVITY
+    case SocialActivityUtil.LINK_ACTIVITY:
       String templateComment = activityInfo.templateParams.get("comment");
       String description = activityInfo.templateParams.get("description").trim();
 
@@ -136,15 +131,12 @@ public class HomeSocialItem extends LinearLayout {
       }
 
       break;
-    case 7:
-      // exosocial:relationship
+    case SocialActivityUtil.EXO_SOCIAL_RELATIONSHIP:
 
       break;
-    case 8:
-      // exosocial:people
+    case SocialActivityUtil.EXO_SOCIAL_PEOPLE:
       break;
-    case 9:
-      // contents:spaces
+    case SocialActivityUtil.CONTENT_SPACE:
       /*
        * add space information
        */
@@ -152,14 +144,14 @@ public class HomeSocialItem extends LinearLayout {
       String spaceBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
                                                                       activityInfo,
                                                                       resource,
-                                                                      FONT_COLOR,true);
+                                                                      FONT_COLOR,
+                                                                      true);
       if (spaceBuffer != null) {
         textViewName.setText(Html.fromHtml(spaceBuffer));
       }
 
       break;
-    case 10:
-      // ks-answer
+    case SocialActivityUtil.KS_ANSWER:
       String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName,
                                                                      activityInfo,
                                                                      resource,
@@ -174,8 +166,7 @@ public class HomeSocialItem extends LinearLayout {
       }
       break;
 
-    case 11:
-      // calendar
+    case SocialActivityUtil.CS_CALENDAR_SPACES:
       String calendarBuffer = SocialActivityUtil.getActivityTypeCalendar(userName,
                                                                          activityInfo,
                                                                          resource,

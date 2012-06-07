@@ -13,7 +13,7 @@
 
 	<style name="Theme.eXo" parent="@style/Theme.GreenDroid.NoTitleBar">
 		<item name="gdActionBarTitleColor">#ffffffff</item>
-		<item name="gdActionBarBackground">@drawable/action_bar_background_repeate</item>
+		<item name="gdActionBarBackground">@drawable/action_bar_background</item>
 		<item name="gdActionBarItemBackground">@drawable/action_bar_item_background</item>
 		<item name="gdActionBarDividerDrawable">@drawable/action_bar_separator_complete</item>
 		<item name="gdActionBarDividerWidth">2px</item>

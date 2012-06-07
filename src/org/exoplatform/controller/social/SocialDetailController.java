@@ -93,10 +93,10 @@ public class SocialDetailController {
     }
   }
 
-  public void onLikeLoad(String id) {
+  public void onLikeLoad(LoaderActionBarItem loader, String id) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLikeLoadTask == null || mLikeLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
-        mLikeLoadTask = (LikeLoadTask) new LikeLoadTask(mContext, this).execute(id);
+        mLikeLoadTask = (LikeLoadTask) new LikeLoadTask(mContext, this, loader).execute(id);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -202,9 +202,9 @@ public class SocialDetailController {
      * If have more than 4 likers, we put a "more_likers" image icon at the last
      */
     if (size > 4) {
-      likedAvatar = new LikedAvatarItem(mContext);
-      likedAvatar.avatarImage.setDefaultImageResource(R.drawable.activity_detail_more_likers);
-      likedLayoutWrap.addView(likedAvatar, params);
+      RoundedImageView image = new RoundedImageView(mContext);
+      image.setDefaultImageResource(R.drawable.activity_detail_more_likers);
+      likedLayoutWrap.addView(image, params);
     }
 
   }
@@ -225,7 +225,7 @@ public class SocialDetailController {
    * When user click on like button, only update the liker part UI
    */
   public void onLikePress(LoaderActionBarItem loader) {
-    onLikeLoad(activityId);
+    onLikeLoad(loader, activityId);
   }
 
   /*
