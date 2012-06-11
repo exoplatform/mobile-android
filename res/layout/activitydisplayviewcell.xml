@@ -1,35 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:padding="4dp" android:layout_width="fill_parent"
-	android:layout_height="wrap_content">
-	<FrameLayout android:layout_marginLeft="5dp"
-		android:id="@+id/imageView_Avatar_wrap"
-		android:layout_alignParentLeft="true" android:background="@drawable/bottom_background_shape"
-		android:layout_height="43dp" android:layout_width="43dp">
-		<org.exoplatform.widget.RoundedImageView
-			android:scaleType="centerCrop" android:id="@+id/imageView_Avatar"
-			android:layout_height="fill_parent" android:layout_width="fill_parent" />
-	</FrameLayout>
-	<RelativeLayout android:id="@+id/relativeLayout_Content"
-		android:padding="3dp" android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:layout_toRightOf="@id/imageView_Avatar_wrap"
-		android:background="@drawable/news_browser_background_shape">
-		<TextView android:id="@+id/textView_Name" style="@style/textview_name"
-			android:layout_height="wrap_content" android:text="Name"
-			android:padding="2dp" android:layout_marginLeft="10dip"
-			android:layout_width="fill_parent" android:gravity="center_vertical"
-			android:textStyle="bold" />
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp" >
 
-		<TextView android:id="@+id/textView_Message" android:padding="2dp"
-			style="@style/textview_content" android:layout_height="wrap_content"
-			android:text="Test message" android:layout_marginLeft="10dip"
-			android:layout_marginRight="3dip" android:layout_marginTop="1dip"
-			android:layout_below="@id/textView_Name" android:layout_width="fill_parent" />
+    <org.exoplatform.widget.ShaderImageView
+        android:id="@+id/imageView_Avatar"
+        android:layout_width="@dimen/social_avatar_size"
+        android:layout_height="@dimen/social_avatar_size"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
+        android:scaleType="fitXY" />
 
-		<TextView android:id="@+id/textView_Time" style="@style/textview_time"
-			android:padding="3dp" android:layout_height="wrap_content"
-			android:text="20 Minutes Ago" android:layout_below="@id/textView_Message"
-			android:layout_marginLeft="10dip" android:layout_marginTop="5dip"
-			android:layout_width="fill_parent" />
-	</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/relativeLayout_Content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/imageView_Avatar"
+        android:background="@drawable/news_browser_background_shape"
+        android:padding="3dp" >
+
+        <TextView
+            android:id="@+id/textView_Name"
+            style="@style/textview_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:gravity="center_vertical"
+            android:padding="2dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView_Message"
+            style="@style/textview_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView_Name"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="3dip"
+            android:layout_marginTop="1dip"
+            android:padding="2dp" />
+
+        <TextView
+            android:id="@+id/textView_Time"
+            style="@style/textview_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView_Message"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="5dip"
+            android:padding="3dp" />
+    </RelativeLayout>
+
 </RelativeLayout>

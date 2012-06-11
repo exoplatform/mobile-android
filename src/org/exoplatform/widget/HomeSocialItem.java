@@ -40,6 +40,8 @@ public class HomeSocialItem extends LinearLayout {
 
   private TextView            textViewMessage;
 
+  private ShaderImageView     activtyAvatar;
+
   private String              userName;
 
   private Resources           resource;
@@ -53,7 +55,7 @@ public class HomeSocialItem extends LinearLayout {
     activityInfo = info;
     LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View view = inflate.inflate(R.layout.home_social_item_layout, this);
-    RoundedImageView activtyAvatar = (RoundedImageView) view.findViewById(R.id.home_activity_avatar);
+    activtyAvatar = (ShaderImageView) view.findViewById(R.id.home_activity_avatar);
     activtyAvatar.setDefaultImageResource(R.drawable.default_avatar);
     textViewName = (TextView) view.findViewById(R.id.home_activity_name_txt);
     textViewMessage = (TextView) view.findViewById(R.id.home_activity_message_txt);

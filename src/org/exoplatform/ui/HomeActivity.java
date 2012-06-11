@@ -19,7 +19,7 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.HomeSocialItem;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.RoundedImageView;
+import org.exoplatform.widget.ShaderImageView;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Intent;
@@ -64,7 +64,7 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
 
   private HomeController      homeController;
 
-  private RoundedImageView    homeUserAvatar;
+  private ShaderImageView     homeUserAvatar;
 
   private TextView            homeUserName;
 
@@ -158,7 +158,7 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     appsButton = (Button) findViewById(R.id.home_btn_apps);
     appsButton.setText(appsTitle);
     appsButton.setOnClickListener(this);
-    homeUserAvatar = (RoundedImageView) findViewById(R.id.home_user_avatar);
+    homeUserAvatar = (ShaderImageView) findViewById(R.id.home_user_avatar);
     homeUserAvatar.setDefaultImageResource(dafault_avatar);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
@@ -194,10 +194,15 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     HomeSocialItem socialItem = null;
     viewFlipper.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-    for (int i = 0; i < 10; i++) {
+    /*
+     * Display maximum 10 activities
+     */
+    int listSize = list.size();
+    int maxChild = (listSize > ExoConstants.HOME_SOCIAL_MAX_NUMBER) ? ExoConstants.HOME_SOCIAL_MAX_NUMBER
+                                                                     : listSize;
+    for (int i = 0; i < maxChild; i++) {
       socialItem = new HomeSocialItem(this, list.get(i));
       viewFlipper.addView(socialItem, params);
-
     }
     viewFlipper.startFlipping();
     viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_right_to_left));

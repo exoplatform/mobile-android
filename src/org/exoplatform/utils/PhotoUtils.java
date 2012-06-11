@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -352,5 +353,26 @@ public class PhotoUtils {
     while ((count = is.read(bytes, 0, buffer_size)) != -1) {
       os.write(bytes, 0, count);
     }
+  }
+
+  /*
+   * Make radial gradient bitmap
+   */
+  public static Bitmap makeRadGrad(int width, int heigh) {
+    RadialGradient gradient = new RadialGradient(width / 2,
+                                                 heigh / 2,
+                                                 width / 2,
+                                                 0x8F8F8F8F,
+                                                 0x1C1C1C1C,
+                                                 android.graphics.Shader.TileMode.CLAMP);
+    Paint p = new Paint();
+    p.setDither(true);
+    p.setShader(gradient);
+
+    Bitmap bitmap = Bitmap.createBitmap(width, heigh, Config.ARGB_8888);
+    Canvas c = new Canvas(bitmap);
+    c.drawOval(new RectF(0, 0, width, heigh), p);
+
+    return bitmap;
   }
 }

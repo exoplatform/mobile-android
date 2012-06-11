@@ -16,6 +16,8 @@
  */
 package org.exoplatform.widget;
 
+import org.exoplatform.R;
+
 import greendroid.widget.AsyncImageView;
 import android.content.Context;
 import android.graphics.BitmapShader;
@@ -24,6 +26,8 @@ import android.graphics.BlurMaskFilter.Blur;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Cap;
+import android.graphics.Paint.Join;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
@@ -36,13 +40,13 @@ import android.util.AttributeSet;
  */
 public class ShaderImageView extends AsyncImageView {
 
-  private int   boderColor  = 0xFFFFFFFF;
+  private int     boderColor  = 0xFFFFFFFF;
 
-  private int   layerColor  = 0x66666666;
+  private int     layerColor  = 0x66000000;
 
-  private int   shadowColor = 0x99999999;
+  private int     shadowColor = 0x22000000;
 
-  private Paint mPaint;
+  private Paint   mPaint;
 
   public ShaderImageView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
@@ -83,31 +87,58 @@ public class ShaderImageView extends AsyncImageView {
     /*
      * Draw bimap
      */
-    int radius = 4;
+
+    int radius = getContext().getResources().getDimensionPixelSize(R.dimen.image_radius);
     int padding = 2;
     int bleed = 2;
+    /*
+     * Draw the border background
+     */
     RectF frame = new RectF(padding, padding, getWidth() - padding, getHeight() - padding);
     mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     mPaint.setColor(boderColor);
     canvas.drawRoundRect(frame, radius, radius, mPaint);
 
+    /*
+     * Draw the border frame
+     */
     padding = 3;
     frame = new RectF(padding, padding, getWidth() - padding, getHeight() - padding);
     mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     mPaint.setColor(layerColor);
     canvas.drawRoundRect(frame, radius, radius, mPaint);
 
+    /*
+     * Draw the image bitmap with bitmap shader
+     */
     frame = new RectF(padding + 1, padding + 1, getWidth() - padding, getHeight() - padding);
-    mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    mPaint.setColor(shadowColor);
-    canvas.drawRoundRect(frame, radius, radius, mPaint);
-
     Shader bitmapShader = new BitmapShader(mBitmap, TileMode.CLAMP, TileMode.CLAMP);
     mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    mPaint.setColor(0xFF000000);
+    mPaint.setColor(boderColor);
     mPaint.setMaskFilter(new BlurMaskFilter(bleed, Blur.INNER));
     mPaint.setShader(bitmapShader);
     canvas.drawRoundRect(frame, radius, radius, mPaint);
+    /*
+     * Draw shadow for left and top edge
+     */
+    mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    mPaint.setColor(shadowColor);
+    mPaint.setStyle(Paint.Style.STROKE);
+    mPaint.setStrokeJoin(Join.ROUND);
+    mPaint.setStrokeCap(Cap.ROUND);
+    canvas.drawLine(padding + 1, padding + 1, getWidth() - padding, padding + 1, mPaint);
+    canvas.drawLine(getWidth() - padding,
+                    padding + 1,
+                    getWidth() - padding,
+                    padding + radius,
+                    mPaint);
+    canvas.drawLine(padding + 1, padding + 1, padding + 1, getHeight() - padding, mPaint);
+    canvas.drawLine(padding + 1,
+                    getHeight() - padding,
+                    padding + radius,
+                    getHeight() - padding,
+                    mPaint);
+
   }
 
   public void setBorderColor(int color) {

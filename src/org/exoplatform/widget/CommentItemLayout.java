@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class CommentItemLayout extends RelativeLayout {
-  public RoundedImageView comAvatarImage;
+  public ShaderImageView comAvatarImage;
 
   public TextView      comTextViewName;
 
@@ -22,7 +22,7 @@ public class CommentItemLayout extends RelativeLayout {
 
     LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View view = inflate.inflate(R.layout.activitydisplayviewcell, this);
-    comAvatarImage = (RoundedImageView) view.findViewById(R.id.imageView_Avatar);
+    comAvatarImage = (ShaderImageView) view.findViewById(R.id.imageView_Avatar);
     comAvatarImage.setDefaultImageResource(R.drawable.default_avatar);
     comTextViewName = (TextView) view.findViewById(R.id.textView_Name);
     comTextViewMessage = (TextView) view.findViewById(R.id.textView_Message);

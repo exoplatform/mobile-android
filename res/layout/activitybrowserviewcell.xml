@@ -6,23 +6,16 @@
     android:orientation="horizontal"
     android:paddingTop="5dp" >
 
-    <FrameLayout
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        android:layout_alignParentLeft="true"
+    <org.exoplatform.widget.ShaderImageView
+        android:id="@+id/imageView_Avatar"
+        android:layout_width="@dimen/social_avatar_size"
+        android:layout_height="@dimen/social_avatar_size"
         android:layout_marginLeft="5dp"
-        android:background="@drawable/bottom_background_shape" >
-
-        <org.exoplatform.widget.RoundedImageView
-            android:id="@+id/imageView_Avatar"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:scaleType="fitXY" />
-    </FrameLayout>
+        android:scaleType="fitXY" />
 
     <LinearLayout
         android:id="@+id/relativeLayout_Content"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dip"
         android:layout_marginRight="5dp"
@@ -43,7 +36,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
                 android:maxLines="5"
-                android:text="Name"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -54,8 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
             android:layout_marginTop="3dip"
-            android:maxLines="5"
-            android:text="Test message" />
+            android:maxLines="5" />
 
         <TextView
             android:id="@+id/textview_temp_message"
@@ -65,7 +56,6 @@
             android:layout_marginLeft="10dip"
             android:layout_marginTop="3dip"
             android:maxLines="5"
-            android:text="Template Message"
             android:visibility="gone" />
 
         <ViewStub
@@ -87,7 +77,6 @@
             android:layout_marginLeft="10dip"
             android:layout_marginTop="3dip"
             android:maxLines="5"
-            android:text="activity_comment_view"
             android:visibility="gone" />
 
         <LinearLayout
@@ -110,12 +99,11 @@
             <TextView
                 android:id="@+id/textView_Time"
                 style="@style/textview_time"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dip"
                 android:layout_marginRight="3dp"
-                android:layout_weight="1"
-                android:text="about 15 hours ago" />
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/button_Like"
@@ -124,8 +112,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/social_activity_browser_like_button_shape"
                 android:gravity="center_vertical"
-                android:padding="2dp"
-                android:text="100" />
+                android:padding="2dp" />
 
             <Button
                 android:id="@+id/button_Comment"
@@ -134,8 +121,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/social_activity_browser_comment_button_shape"
                 android:gravity="center_vertical"
-                android:padding="2dp"
-                android:text="1000" />
+                android:padding="2dp" />
         </LinearLayout>
     </LinearLayout>
 

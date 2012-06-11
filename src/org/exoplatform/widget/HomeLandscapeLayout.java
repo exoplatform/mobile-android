@@ -20,28 +20,30 @@ import org.exoplatform.utils.PhotoUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
+import android.graphics.Bitmap.Config;
+import android.graphics.Paint.Style;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.MeasureSpec;
 import android.widget.LinearLayout;
 
 /**
- * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com May
- * 23, 2012
+ * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
+ * 8, 2012
  */
-public class HomeLinearLayout extends LinearLayout {
+public class HomeLandscapeLayout extends LinearLayout {
   private Paint paint = new Paint();
 
-  public HomeLinearLayout(Context context) {
+  public HomeLandscapeLayout(Context context) {
     super(context, null);
   }
 
-  public HomeLinearLayout(Context context, AttributeSet attrs) {
+  public HomeLandscapeLayout(Context context, AttributeSet attrs) {
     super(context, attrs);
   }
 
@@ -50,20 +52,29 @@ public class HomeLinearLayout extends LinearLayout {
     super.onDraw(canvas);
     int scaledWidth = getMeasuredWidth();
     int scaledHeight = getMeasuredHeight();
+    int itemWidth = scaledWidth / 3;
     paint.setStyle(Style.STROKE);
-    Bitmap bm = PhotoUtils.makeRadGrad(getWidth(), getHeight());
-    canvas.drawBitmap(bm, 0, 0, paint);
+    /*
+     * Make radius gradient bitmap with double height
+     */
+    Bitmap bm = PhotoUtils.makeRadGrad(scaledWidth, scaledHeight * 2);
+    /*
+     * Draw the bitmap at left = -4  and top = -1/2 of scaleHeight
+     */
+    canvas.drawBitmap(bm, -4, -scaledHeight / 2, paint);
+
     paint.setDither(true);
     paint.setAntiAlias(true);
 
     paint.setColor(Color.BLACK);
-    canvas.drawLine(scaledWidth / 2, 0, scaledWidth / 2, scaledHeight, paint);
+    canvas.drawLine(itemWidth, 0, itemWidth, scaledHeight, paint);
     paint.setColor(Color.rgb(60, 60, 60));
-    canvas.drawLine(scaledWidth / 2 + 1, 0, scaledWidth / 2 + 1, scaledHeight, paint);
+    canvas.drawLine(itemWidth + 1, 0, itemWidth + 1, scaledHeight, paint);
     paint.setColor(Color.rgb(00, 00, 00));
-    canvas.drawLine(0, scaledHeight / 2, scaledWidth, scaledHeight / 2, paint);
-    paint.setColor(Color.rgb(51, 51, 51));
-    canvas.drawLine(0, scaledHeight / 2 + 1, scaledWidth, scaledHeight / 2 + 1, paint);
+    itemWidth = itemWidth * 2;
+    canvas.drawLine(itemWidth, 0, itemWidth, scaledHeight, paint);
+    paint.setColor(Color.rgb(60, 60, 60));
+    canvas.drawLine(itemWidth + 1, 0, itemWidth + 1, scaledHeight, paint);
 
   }
 

@@ -10,9 +10,11 @@
         android:layout_height="fill_parent"
         android:layout_marginTop="10dp"
         android:columnWidth="90dp"
+        android:fadingEdge="none"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
+        android:scrollbars="none"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />
 
