@@ -20,13 +20,10 @@ import org.exoplatform.utils.PhotoUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.RadialGradient;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
@@ -35,7 +32,11 @@ import android.widget.LinearLayout;
  * 23, 2012
  */
 public class HomeLinearLayout extends LinearLayout {
-  private Paint paint = new Paint();
+  private static final int DARK_LINE_COLOR = 0x3D0000;
+
+  private static final int GRAY_LINE_COLOR = 0x330000;
+
+  private Paint            paint           = new Paint();
 
   public HomeLinearLayout(Context context) {
     super(context, null);
@@ -51,18 +52,29 @@ public class HomeLinearLayout extends LinearLayout {
     int scaledWidth = getMeasuredWidth();
     int scaledHeight = getMeasuredHeight();
     paint.setStyle(Style.STROKE);
+    /*
+     * Make radius gradient bitmap with double height
+     */
     Bitmap bm = PhotoUtils.makeRadGrad(getWidth(), getHeight());
+    /*
+     * Draw the gradient bitmap
+     */
     canvas.drawBitmap(bm, 0, 0, paint);
     paint.setDither(true);
     paint.setAntiAlias(true);
-
+    /*
+     * Draw the horizontal line separator
+     */
     paint.setColor(Color.BLACK);
     canvas.drawLine(scaledWidth / 2, 0, scaledWidth / 2, scaledHeight, paint);
-    paint.setColor(Color.rgb(60, 60, 60));
+    paint.setColor(DARK_LINE_COLOR);
     canvas.drawLine(scaledWidth / 2 + 1, 0, scaledWidth / 2 + 1, scaledHeight, paint);
-    paint.setColor(Color.rgb(00, 00, 00));
+    /*
+     * Draw the vertical line separator
+     */
+    paint.setColor(Color.BLACK);
     canvas.drawLine(0, scaledHeight / 2, scaledWidth, scaledHeight / 2, paint);
-    paint.setColor(Color.rgb(51, 51, 51));
+    paint.setColor(GRAY_LINE_COLOR);
     canvas.drawLine(0, scaledHeight / 2 + 1, scaledWidth, scaledHeight / 2 + 1, paint);
 
   }

@@ -37,7 +37,9 @@ import android.widget.LinearLayout;
  * 8, 2012
  */
 public class HomeLandscapeLayout extends LinearLayout {
-  private Paint paint = new Paint();
+  private Paint            paint           = new Paint();
+
+  private static final int DARK_LINE_COLOR = 0x3D0000;
 
   public HomeLandscapeLayout(Context context) {
     super(context, null);
@@ -59,21 +61,27 @@ public class HomeLandscapeLayout extends LinearLayout {
      */
     Bitmap bm = PhotoUtils.makeRadGrad(scaledWidth, scaledHeight * 2);
     /*
-     * Draw the bitmap at left = -4  and top = -1/2 of scaleHeight
+     * Draw the bitmap at left = -4 and top = -1/2 of scaleHeight
      */
     canvas.drawBitmap(bm, -4, -scaledHeight / 2, paint);
 
     paint.setDither(true);
     paint.setAntiAlias(true);
 
+    /*
+     * Draw the first line separator
+     */
     paint.setColor(Color.BLACK);
     canvas.drawLine(itemWidth, 0, itemWidth, scaledHeight, paint);
-    paint.setColor(Color.rgb(60, 60, 60));
+    paint.setColor(DARK_LINE_COLOR);
     canvas.drawLine(itemWidth + 1, 0, itemWidth + 1, scaledHeight, paint);
-    paint.setColor(Color.rgb(00, 00, 00));
+    /*
+     * Draw the second line separator
+     */
+    paint.setColor(Color.BLACK);
     itemWidth = itemWidth * 2;
     canvas.drawLine(itemWidth, 0, itemWidth, scaledHeight, paint);
-    paint.setColor(Color.rgb(60, 60, 60));
+    paint.setColor(DARK_LINE_COLOR);
     canvas.drawLine(itemWidth + 1, 0, itemWidth + 1, scaledHeight, paint);
 
   }

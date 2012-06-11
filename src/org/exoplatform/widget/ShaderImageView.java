@@ -40,13 +40,13 @@ import android.util.AttributeSet;
  */
 public class ShaderImageView extends AsyncImageView {
 
-  private int     boderColor  = 0xFFFFFFFF;
+  private int              boderColor   = 0xFFFFFFFF;
 
-  private int     layerColor  = 0x66000000;
+  private static final int LAYER_COLOR  = 0x66000000;
 
-  private int     shadowColor = 0x22000000;
+  private static final int SHADOW_COLOR = 0x22000000;
 
-  private Paint   mPaint;
+  private Paint            mPaint;
 
   public ShaderImageView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
@@ -62,6 +62,10 @@ public class ShaderImageView extends AsyncImageView {
 
   @Override
   protected void onDraw(Canvas canvas) {
+
+    /*
+     * Get bitmap
+     */
     BitmapDrawable drawable = (BitmapDrawable) getDrawable();
 
     if (drawable == null) {
@@ -84,10 +88,6 @@ public class ShaderImageView extends AsyncImageView {
       mBitmap = Bitmap.createScaledBitmap(fullSizeBitmap, scaledWidth, scaledHeight, true /* filter */);
     }
 
-    /*
-     * Draw bimap
-     */
-
     int radius = getContext().getResources().getDimensionPixelSize(R.dimen.image_radius);
     int padding = 2;
     int bleed = 2;
@@ -105,7 +105,7 @@ public class ShaderImageView extends AsyncImageView {
     padding = 3;
     frame = new RectF(padding, padding, getWidth() - padding, getHeight() - padding);
     mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    mPaint.setColor(layerColor);
+    mPaint.setColor(LAYER_COLOR);
     canvas.drawRoundRect(frame, radius, radius, mPaint);
 
     /*
@@ -122,7 +122,7 @@ public class ShaderImageView extends AsyncImageView {
      * Draw shadow for left and top edge
      */
     mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    mPaint.setColor(shadowColor);
+    mPaint.setColor(SHADOW_COLOR);
     mPaint.setStyle(Paint.Style.STROKE);
     mPaint.setStrokeJoin(Join.ROUND);
     mPaint.setStrokeCap(Cap.ROUND);
