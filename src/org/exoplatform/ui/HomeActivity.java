@@ -13,14 +13,13 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ChatServiceHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.HomeSocialItem;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.ShaderImageView;
-import org.exoplatform.widget.WarningDialog;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -48,12 +47,6 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
 
   private Button              appsButton;
 
-  private String              okString;
-
-  private String              titleString;
-
-  private String              contentString;
-
   private String              newsTitle;
 
   private String              documentTitle;
@@ -71,6 +64,8 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
   private int                 dafault_avatar        = R.drawable.default_avatar;
 
   private ViewFlipper         viewFlipper;
+
+  private LoaderActionBarItem loaderItem;
 
   public static HomeActivity  homeActivity;
 
@@ -94,7 +89,6 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
       ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
-    init();
   }
 
   @Override
@@ -171,8 +165,8 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
       setSocialInfo(SocialServiceHelper.getInstance().socialInfoList);
     }
 
-    LoaderActionBarItem loader = (LoaderActionBarItem) getActionBar().getItem(0);
-    startSocialService(loader);
+    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+    startSocialService(loaderItem);
   }
 
   private void startSocialService(LoaderActionBarItem loader) {
@@ -182,9 +176,9 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     }
   }
 
-  public void setProfileInfo(RestProfile profile) {
-    homeUserAvatar.setUrl(profile.getAvatarUrl());
-    homeUserName.setText(profile.getFullName());
+  public void setProfileInfo(String[] profile) {
+    homeUserAvatar.setUrl(profile[0]);
+    homeUserName.setText(profile[1]);
   }
 
   /*
@@ -199,7 +193,7 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
      */
     int listSize = list.size();
     int maxChild = (listSize > ExoConstants.HOME_SOCIAL_MAX_NUMBER) ? ExoConstants.HOME_SOCIAL_MAX_NUMBER
-                                                                     : listSize;
+                                                                   : listSize;
     for (int i = 0; i < maxChild; i++) {
       socialItem = new HomeSocialItem(this, list.get(i));
       viewFlipper.addView(socialItem, params);
@@ -217,8 +211,12 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     case -1:
       break;
     case 0:
-      final LoaderActionBarItem loader = (LoaderActionBarItem) item;
-      homeController.launchNewsService(loader);
+      loaderItem = (LoaderActionBarItem) item;
+      if (SocialServiceHelper.getInstance().activityService == null) {
+        homeController.launchNewsService(loaderItem);
+      } else {
+        homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY, loaderItem);
+      }
       break;
     case 1:
       // new LogoutDialog(HomeActivity.this, homeController).show();
@@ -243,6 +241,7 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
      */
     SocialServiceHelper.getInstance().clearData();
     homeController.finishService();
+    homeActivity = null;
     finish();
   }
 
@@ -259,7 +258,7 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
         launchDashboardApp();
       }
     } else {
-      new WarningDialog(this, titleString, contentString, okString).show();
+      new ConnectionErrorDialog(this).show();
     }
 
   }
@@ -281,9 +280,6 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
   }
 
   private void changeLanguage() {
-    okString = resource.getString(R.string.OK);
-    titleString = resource.getString(R.string.Warning);
-    contentString = resource.getString(R.string.ConnectionError);
     newsTitle = resource.getString(R.string.ActivityStream);
     documentTitle = resource.getString(R.string.Documents);
     appsTitle = resource.getString(R.string.Dashboard);

@@ -23,7 +23,7 @@ public class SocialServiceHelper {
 
   public ArrayList<SocialActivityInfo> socialInfoList;
 
-  public RestProfile                   userProfile;
+  public String[]                      userProfile;
 
   private static SocialServiceHelper   serviceHelper = new SocialServiceHelper();
 

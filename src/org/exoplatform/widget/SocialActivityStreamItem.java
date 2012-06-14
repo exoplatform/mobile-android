@@ -23,13 +23,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SocialActivityStreamItem extends LinearLayout {
-  private static final String FONT_COLOR = "#696969";
+  private static final String FONT_COLOR          = "#696969";
+
+  private static final int    AVATAR_BORDER_COLOR = 0x22000000;
 
   public LinearLayout         contentLayoutWrap;
 
   private View                view;
 
-  private ShaderImageView    imageViewAvatar;
+  private ShaderImageView     imageViewAvatar;
 
   public TextView             textViewName;
 
@@ -119,6 +121,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private void setDetailView() {
     if (isDetail) {
+      imageViewAvatar.setBorderColor(AVATAR_BORDER_COLOR);
       contentLayoutWrap.setBackgroundDrawable(null);
       contentLayoutWrap.setPadding(5, -2, 5, 5);
       buttonComment.setVisibility(View.GONE);

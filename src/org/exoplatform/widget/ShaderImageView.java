@@ -114,7 +114,7 @@ public class ShaderImageView extends AsyncImageView {
     frame = new RectF(padding + 1, padding + 1, getWidth() - padding, getHeight() - padding);
     Shader bitmapShader = new BitmapShader(mBitmap, TileMode.CLAMP, TileMode.CLAMP);
     mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    mPaint.setColor(boderColor);
+//    mPaint.setColor(0xFFFFFFFF);
     mPaint.setMaskFilter(new BlurMaskFilter(bleed, Blur.INNER));
     mPaint.setShader(bitmapShader);
     canvas.drawRoundRect(frame, radius, radius, mPaint);
