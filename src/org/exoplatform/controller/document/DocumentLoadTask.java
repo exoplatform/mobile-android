@@ -24,22 +24,22 @@ import com.cyrilmottier.android.greendroid.R;
 public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
   // delete file or folder
-  private static final int      ACTION_DELETE  = 1;
+  protected static final int      ACTION_DELETE  = 1;
 
   // copy file
-  private static final int      ACTION_COPY    = 2;
+  protected static final int      ACTION_COPY    = 2;
 
   // move file
-  private static final int      ACTION_MOVE    = 3;
+  protected static final int      ACTION_MOVE    = 3;
 
   // upload file
-  private static final int      ACTION_UPLOAD  = 4;
+  protected static final int      ACTION_UPLOAD  = 4;
 
   // rename folder
-  private static final int      ACTION_RENAME  = 5;
+  protected static final int      ACTION_RENAME  = 5;
 
   // create new folder
-  private static final int      ACTION_CREATE  = 6;
+  protected static final int      ACTION_CREATE  = 6;
 
   /*
    * Result status
