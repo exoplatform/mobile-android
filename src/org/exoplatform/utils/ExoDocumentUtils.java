@@ -186,8 +186,7 @@ public class ExoDocumentUtils {
 
         NodeList obj_nod_list = null;
         if (null != obj_doc) {
-          org.w3c.dom.Element feed = obj_doc.getDocumentElement();
-          obj_nod_list = feed.getElementsByTagName("Folder");
+          obj_nod_list = obj_doc.getElementsByTagName("Folder");
 
           for (int i = 0; i < obj_nod_list.getLength(); i++) {
             Node itemNode = obj_nod_list.item(i);
@@ -256,10 +255,9 @@ public class ExoDocumentUtils {
         obj_doc = doc_builder.parse(is);
 
         if (null != obj_doc) {
-          org.w3c.dom.Element feed = obj_doc.getDocumentElement();
 
           // Get folders
-          NodeList obj_nod_list = feed.getElementsByTagName("Folder");
+          NodeList obj_nod_list = obj_doc.getElementsByTagName("Folder");
           Node rootNode = obj_nod_list.item(0);
           if (rootNode.getNodeType() == Node.ELEMENT_NODE) {
             Element itemElement = (Element) rootNode;
@@ -294,10 +292,9 @@ public class ExoDocumentUtils {
 
         NodeList obj_nod_list = null;
         if (null != obj_doc) {
-          org.w3c.dom.Element feed = obj_doc.getDocumentElement();
 
           // Get folders
-          obj_nod_list = feed.getElementsByTagName("Folder");
+          obj_nod_list = obj_doc.getElementsByTagName("Folder");
 
           for (int i = 0; i < obj_nod_list.getLength(); i++) {
             Node itemNode = obj_nod_list.item(i);
@@ -321,7 +318,7 @@ public class ExoDocumentUtils {
           }
 
           // Get files
-          obj_nod_list = feed.getElementsByTagName("File");
+          obj_nod_list = obj_doc.getElementsByTagName("File");
 
           for (int i = 0; i < obj_nod_list.getLength(); i++) {
             Node itemNode = obj_nod_list.item(i);

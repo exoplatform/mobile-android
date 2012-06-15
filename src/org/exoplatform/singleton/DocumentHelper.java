@@ -32,9 +32,9 @@ public class DocumentHelper implements Parcelable {
 
   private String                _urlrepositoryHome;
 
-  private ExoFile               _fileCopied;
+  public ExoFile                _fileCopied    = null;                 ;
 
-  private ExoFile               _fileMoved;
+  public ExoFile                _fileMoved     = null;
 
   /*
    * The dictionary for mapping between parent folder and its child files
@@ -67,21 +67,21 @@ public class DocumentHelper implements Parcelable {
     return _urlrepositoryHome;
   }
 
-  public void setFileCopy(ExoFile cFile) {
-    _fileCopied = cFile;
-  }
-
-  public ExoFile getFileCopy() {
-    return _fileCopied;
-  }
-
-  public void setFileMove(ExoFile mFile) {
-    _fileMoved = mFile;
-  }
-
-  public ExoFile getFileMove() {
-    return _fileMoved;
-  }
+  // public void setFileCopy(ExoFile cFile) {
+  // _fileCopied = cFile;
+  // }
+  //
+  // public ExoFile getFileCopy() {
+  // return _fileCopied;
+  // }
+  //
+  // public void setFileMove(ExoFile mFile) {
+  // _fileMoved = mFile;
+  // }
+  //
+  // public ExoFile getFileMove() {
+  // return _fileMoved;
+  // }
 
   private DocumentHelper(Parcel in) {
     readFromParcel(in);
@@ -122,8 +122,12 @@ public class DocumentHelper implements Parcelable {
   @Override
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(_urlrepositoryHome);
-    dest.writeParcelable(_fileCopied, flags);
-    dest.writeParcelable(_fileMoved, flags);
+    if(_fileCopied!=null){
+      dest.writeParcelable(_fileCopied, flags);
+    }
+    if(_fileMoved!=null){
+      dest.writeParcelable(_fileMoved, flags);
+    }
     dest.writeBundle(currentFileMap);
     dest.writeBundle(childFilesMap);
   }

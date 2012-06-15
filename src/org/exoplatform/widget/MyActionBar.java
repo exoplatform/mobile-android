@@ -14,6 +14,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -206,6 +208,12 @@ public class MyActionBar extends Activity implements ActionBarActivity {
 
   public void setActionBarContentView(int resID) {
     LayoutInflater.from(this).inflate(resID, getContentView());
+    Drawable bg = getActionBar().getBackground();
+    if(bg!=null &&(bg instanceof BitmapDrawable)){
+      BitmapDrawable bmDrawable = (BitmapDrawable) bg;
+      bmDrawable.setTileModeX(TileMode.REPEAT);
+      getActionBar().setBackgroundDrawable(bmDrawable);
+    }
   }
 
   public void setActionBarContentView(View view, LayoutParams params) {

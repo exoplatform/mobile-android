@@ -1,11 +1,12 @@
 package org.exoplatform.ui.social;
 
 import greendroid.widget.ActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.LoaderActionBarItem;
 
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.SocialDetailWaitingDialog;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -18,13 +19,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialDetailActivity extends MyActionBar implements OnClickListener {
-  private SocialDetailWaitingDialog  _progressDialog;
-
   public LinearLayout                startScreen;
 
   private View                       emptyCommentStubView;
@@ -34,6 +34,10 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   private EditText                   editTextComment;
 
   private LinearLayout               contentDetailLayout;
+
+  private LinearLayout               likedLayoutWrap;
+
+  private RelativeLayout             likedFrame;
 
   private TextView                   textView_Like_Count;
 
@@ -47,6 +51,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
 
   public static SocialDetailActivity socialDetailActivity;
 
+  private LoaderActionBarItem        loaderItem;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -55,7 +61,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     setActionBarContentView(R.layout.activity_display_view);
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    addActionBarItem();
+    addActionBarItem(Type.Refresh);
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     socialDetailActivity = this;
     changeLanguage();
@@ -72,26 +78,30 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     commentLayoutWrap = (LinearLayout) findViewById(R.id.activity_display_comment_wrap);
 
     contentDetailLayout = (LinearLayout) findViewById(R.id.social_detail_wrap_layout);
+    likedLayoutWrap = (LinearLayout) findViewById(R.id.social_detail_like_wrap);
     textView_Like_Count = (TextView) findViewById(R.id.textView_Like_Count);
     editTextComment = (EditText) findViewById(R.id.editText_Comment);
     editTextComment.setHint(yourCommentText);
     editTextComment.setOnClickListener(this);
     likeButton = (Button) findViewById(R.id.like_button);
     likeButton.setOnClickListener(this);
+    likedFrame = (RelativeLayout) findViewById(R.id.detail_likers_layout_warpper);
+    likedFrame.setOnClickListener(this);
     detailController = new SocialDetailController(this,
                                                   commentLayoutWrap,
+                                                  likedLayoutWrap,
                                                   likeButton,
                                                   contentDetailLayout,
-                                                  textView_Like_Count,
-                                                  _progressDialog);
-    detailController.onLoad(false);
+                                                  textView_Like_Count);
+    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+    detailController.onLoad(loaderItem, false);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     if (detailController != null) {
-      detailController.onLoad(false);
+      detailController.onLoad(loaderItem, false);
     } else
       finish();
 
@@ -102,15 +112,11 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     if (detailController != null) {
       detailController.onCancelLoad();
     }
-    if (_progressDialog != null) {
-      _progressDialog.dismiss();
-    }
     super.finish();
   }
 
   @Override
   public void onBackPressed() {
-    detailController.onCancelLoad();
     finish();
   }
 
@@ -123,7 +129,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
       finish();
       break;
     case 0:
-      detailController.onLoad(false);
+      final LoaderActionBarItem loader = (LoaderActionBarItem) item;
+      detailController.onLoad(loader, false);
       break;
 
     }
@@ -131,7 +138,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     return true;
   }
 
-  // @Override
+  @Override
   public void onClick(View view) {
     if (view.equals(editTextComment)) {
       Intent intent = new Intent(this, ComposeMessageActivity.class);
@@ -140,7 +147,11 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
       startActivity(intent);
     }
     if (view.equals(likeButton)) {
-      detailController.onLikePress();
+      detailController.onLikePress(loaderItem);
+    }
+
+    if (view.equals(likedFrame)) {
+      detailController.onClickLikedFrame();
     }
   }
 

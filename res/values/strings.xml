@@ -175,5 +175,7 @@
     <string name="Personal"> Personal</string>
     <string name="Group"> Group</string>
     <string name="NetworkTimeout"> Network connection timeout. Please try again!</string>
+    <string name="Liker"> Liker</string>
+    <string name="Likers"> Likers</string>
 
 </resources>

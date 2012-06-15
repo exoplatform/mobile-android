@@ -41,9 +41,19 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 public class PhotoUtils {
-  private static final String[] suffix  = { ".jpeg", ".jpg", ".png", ".bmp", ".gif" };
+  private static final String[] suffix         = { ".jpeg", ".jpg", ".png", ".bmp", ".gif" };
 
-  private static final String   dotSign = ".";
+  private static final String   dotSign        = ".";
+
+  private static final int      IMAGE_WIDTH    = 1024;
+
+  private static final int      IMAGE_HEIGH    = 860;
+
+  private static final int      IMAGE_QUALITY  = 100;
+
+  private static final String   TEMP_FILE_NAME = "temfile.png";
+
+  private static final String   MOBILE_IMAGE   = "MobileImage_";
 
   public static boolean isImages(File file) {
 
@@ -97,7 +107,7 @@ public class PhotoUtils {
 
   public static String getImageFileName() {
     StringBuffer buffer = new StringBuffer();
-    buffer.append("MobileImage_");
+    buffer.append(MOBILE_IMAGE);
     buffer.append(getDateFormat());
     buffer.append(".png");
     return buffer.toString();
@@ -156,10 +166,10 @@ public class PhotoUtils {
   public static File reziseFileImage(File file) {
     try {
       String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-      Bitmap bitmap = shrinkBitmap(file.getPath(), 1024, 860);
+      Bitmap bitmap = shrinkBitmap(file.getPath(), IMAGE_WIDTH, IMAGE_HEIGH);
       ByteArrayOutputStream output = new ByteArrayOutputStream();
-      bitmap.compress(CompressFormat.PNG, 100, output);
-      File tempFile = new File(parentPath + "temfile.png");
+      bitmap.compress(CompressFormat.PNG, IMAGE_QUALITY, output);
+      File tempFile = new File(parentPath + TEMP_FILE_NAME);
       FileOutputStream out = new FileOutputStream(tempFile);
       output.writeTo(out);
       return tempFile;
@@ -172,16 +182,9 @@ public class PhotoUtils {
   public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
     try {
 
-      bitmap = resizeImage(bitmap, 100);
+      bitmap = resizeImage(bitmap, ExoConstants.AVATAR_DEFAULT_SIZE);
       int width = bitmap.getWidth();
-      if (width > 100) {
-        width = 100;
-      }
       int heigth = bitmap.getHeight();
-      if (heigth > 100) {
-        heigth = 100;
-      }
-
       Bitmap output = Bitmap.createBitmap(width, heigth, Config.ARGB_8888);
       Canvas canvas = new Canvas(output);
 
@@ -209,19 +212,6 @@ public class PhotoUtils {
    */
   public static String getFileFromUri(Uri uri, Activity activity) {
     String filePath = null;
-    // if (uri.getPath().contains("http")) {
-    // String url = uri.getPath();
-    // String name = uri.getLastPathSegment();
-    // filePath = downloadFile(url, name);
-    // } else {
-    // String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
-    // Cursor c = activity.managedQuery(uri, projection, null, null, null);
-    // if (c != null && c.moveToFirst()) {
-    // int columnIndex = c.getColumnIndex(MediaColumns.DATA);
-    // filePath = c.getString(columnIndex);
-    // }
-    // }
-
     String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
     Cursor c = activity.managedQuery(uri, projection, null, null, null);
     if (c != null && c.moveToFirst()) {
@@ -281,7 +271,6 @@ public class PhotoUtils {
     if (cursor != null && cursor.moveToFirst()) {
       int columnIndex = cursor.getColumnIndex(MediaColumns.DATA);
       if (columnIndex != -1) {
-        // String dataUri = cursor.getString(columnIndex);
 
         // regular processing for gallery files
         filePath = cursor.getString(columnIndex);

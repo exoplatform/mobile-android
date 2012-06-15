@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/social_liked_avatar_size"
+    android:layout_height="@dimen/social_liked_avatar_size"
+    android:background="@drawable/liked_avatar_background_shape" >
+
+    <org.exoplatform.widget.RoundedImageView
+        android:id="@+id/detail_liked_image"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY" />
+
+</RelativeLayout>

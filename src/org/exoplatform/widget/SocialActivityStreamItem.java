@@ -3,10 +3,7 @@ package org.exoplatform.widget;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.social.client.api.model.RestActivityStream;
 import org.exoplatform.ui.social.SocialAttachedImageActivity;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.SocialImageLoader;
 
@@ -26,42 +23,43 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SocialActivityStreamItem extends LinearLayout {
+  private static final String FONT_COLOR = "#696969";
 
-  public LinearLayout        contentLayoutWrap;
+  public LinearLayout         contentLayoutWrap;
 
-  private View               view;
+  private View                view;
 
-  private RoundedImageView   imageViewAvatar;
+  private RoundedImageView    imageViewAvatar;
 
-  public TextView            textViewName;
+  public TextView             textViewName;
 
-  public TextView            textViewMessage;
+  public TextView             textViewMessage;
 
-  public TextView            textViewTempMessage;
+  public TextView             textViewTempMessage;
 
-  private TextView           textViewCommnet;
+  private TextView            textViewCommnet;
 
-  private Button             buttonComment;
+  private Button              buttonComment;
 
-  private Button             buttonLike;
+  private Button              buttonLike;
 
-  private ImageView          typeImageView;
+  private ImageView           typeImageView;
 
-  private TextView           textViewTime;
+  private TextView            textViewTime;
 
-  private View               attachStubView;
+  private View                attachStubView;
 
-  private String             domain;
+  private String              domain;
 
-  private String             userName;
+  private String              userName;
 
-  private Context            mContext;
+  private Context             mContext;
 
-  private SocialActivityInfo activityInfo;
+  private SocialActivityInfo  activityInfo;
 
-  private boolean            isDetail;
+  private boolean             isDetail;
 
-  private Resources          resource;
+  private Resources           resource;
 
   public SocialActivityStreamItem(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -113,8 +111,6 @@ public class SocialActivityStreamItem extends LinearLayout {
                                                                 activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
-    System.out.println("Activity type " + activityInfo.getType());
-
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());
     SocialActivityUtil.setImageType(imageId, typeImageView);
     setViewByType(imageId);
@@ -140,13 +136,11 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void setViewByType(int typeId) {
 
     switch (typeId) {
-    case 1:
-      // ks-forum:spaces
+    case SocialActivityUtil.KS_FORUM_SPACE:
 
       setActivityTypeForum();
       break;
-    case 2:
-      // ks-wiki:spaces
+    case SocialActivityUtil.KS_WIKI_SPACE:
       // Map<String, String> templateMap = activityInfo.templateParams;
       // Set<String> set = templateMap.keySet();
       // for (String param : set) {
@@ -156,22 +150,20 @@ public class SocialActivityStreamItem extends LinearLayout {
       // }
       setActivityTypeWiki();
       break;
-    case 3:
-      // exosocial:spaces
+    case SocialActivityUtil.EXO_SOCIAL_SPACE:
       break;
-    case 4:
-      // DOC_ACTIVITY
+    case SocialActivityUtil.DOC_ACTIVITY:
       /*
        * add space information
        */
-      String space = addSpaceInfo();
-      if (space != null) {
-        StringBuffer docBuffer = new StringBuffer();
-        docBuffer.append("<html><body>");
-        docBuffer.append(userName);
-        docBuffer.append(" ");
-        docBuffer.append(space);
-        textViewName.setText(Html.fromHtml(docBuffer.toString()), TextView.BufferType.SPANNABLE);
+
+      String docBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
+                                                                    activityInfo,
+                                                                    resource,
+                                                                    FONT_COLOR,
+                                                                    true);
+      if (docBuffer != null) {
+        textViewName.setText(Html.fromHtml(docBuffer), TextView.BufferType.SPANNABLE);
       }
 
       String tempMessage = activityInfo.templateParams.get("MESSAGE");
@@ -189,33 +181,28 @@ public class SocialActivityStreamItem extends LinearLayout {
       }
 
       break;
-    case 5:
-      // DEFAULT_ACTIVITY
+    case SocialActivityUtil.DEFAULT_ACTIVITY:
       break;
-    case 6:
-      // LINK_ACTIVITY
+    case SocialActivityUtil.LINK_ACTIVITY:
       setActivityTypeLink();
       break;
-    case 7:
-      // exosocial:relationship
+    case SocialActivityUtil.EXO_SOCIAL_RELATIONSHIP:
 
       break;
-    case 8:
-      // exosocial:people
+    case SocialActivityUtil.EXO_SOCIAL_PEOPLE:
       break;
-    case 9:
-      // contents:spaces
+    case SocialActivityUtil.CONTENT_SPACE:
       /*
        * add space information
        */
-      String contentSpace = addSpaceInfo();
-      if (contentSpace != null) {
-        StringBuffer docBuffer = new StringBuffer();
-        docBuffer.append("<html><body>");
-        docBuffer.append(userName);
-        docBuffer.append(" ");
-        docBuffer.append(contentSpace);
-        textViewName.setText(Html.fromHtml(docBuffer.toString()), TextView.BufferType.SPANNABLE);
+
+      String spaceBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
+                                                                      activityInfo,
+                                                                      resource,
+                                                                      FONT_COLOR,
+                                                                      true);
+      if (spaceBuffer != null) {
+        textViewName.setText(Html.fromHtml(spaceBuffer), TextView.BufferType.SPANNABLE);
       }
 
       String contentLink = activityInfo.templateParams.get("contenLink");
@@ -233,13 +220,11 @@ public class SocialActivityStreamItem extends LinearLayout {
 
       }
       break;
-    case 10:
-      // ks-answer
+    case SocialActivityUtil.KS_ANSWER:
       setActivityTypeAnswer();
       break;
 
-    case 11:
-      // calendar
+    case SocialActivityUtil.CS_CALENDAR_SPACES:
       setActivityTypeCalendar();
       break;
     default:
@@ -247,75 +232,14 @@ public class SocialActivityStreamItem extends LinearLayout {
     }
   }
 
-  private String addSpaceInfo() {
-    RestActivityStream actStream = activityInfo.restActivityStream;
-    String spaceType = actStream.getType();
-    StringBuffer spaceBuffer = new StringBuffer();
-    if (spaceType.equalsIgnoreCase(ExoConstants.SOCIAL_SPACE)) {
-      spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-      spaceBuffer.append(resource.getString(R.string.In));
-      spaceBuffer.append("</font>");
-      spaceBuffer.append(" ");
-      String nameSpace = actStream.getFullName();
-      String spaceLink = actStream.getPermaLink();
-      spaceBuffer.append("<a href=");
-      spaceBuffer.append(spaceLink);
-      spaceBuffer.append(">");
-      spaceBuffer.append(nameSpace);
-      spaceBuffer.append("</a>");
-      spaceBuffer.append(" ");
-      spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-      spaceBuffer.append(resource.getString(R.string.Space));
-      spaceBuffer.append("</font>");
-      return spaceBuffer.toString();
-    } else
-      return null;
-
-  }
-
   private void setActivityTypeForum() {
-    String forumLink = null;
-    StringBuffer forumBuffer = new StringBuffer();
-    forumBuffer.append("<html><body>");
-    forumBuffer.append(userName);
-    forumBuffer.append(" ");
-    String spaceInfo = addSpaceInfo();
-    if (spaceInfo != null) {
-      forumBuffer.append(spaceInfo);
-    }
-    forumBuffer.append(" ");
-    String actType = activityInfo.templateParams.get("ActivityType");
-    String actTypeDesc = null;
-    String forumName = null;
-    forumBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-    if (actType.equalsIgnoreCase("AddPost")) {
-      forumLink = activityInfo.templateParams.get("PostLink");
-      actTypeDesc = resource.getString(R.string.HasAddANewPost);
-      forumName = activityInfo.templateParams.get("PostName");
-    } else if (actType.equalsIgnoreCase("UpdatePost")) {
-      forumLink = activityInfo.templateParams.get("PostLink");
-      actTypeDesc = resource.getString(R.string.HasUpdateANewPost);
-      forumName = activityInfo.templateParams.get("PostName");
-    } else if (actType.equalsIgnoreCase("AddTopic")) {
-      forumLink = activityInfo.templateParams.get("TopicLink");
-      actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
-      forumName = activityInfo.templateParams.get("TopicName");
-    } else if (actType.equalsIgnoreCase("UpdateTopic")) {
-      forumLink = activityInfo.templateParams.get("TopicLink");
-      actTypeDesc = resource.getString(R.string.HasUpdateAnewTopic);
-      forumName = activityInfo.templateParams.get("TopicName");
-    }
-    forumBuffer.append(actTypeDesc);
-    forumBuffer.append("</font>");
-    forumBuffer.append("<br>");
-    forumBuffer.append("<a href=");
-    forumBuffer.append(forumLink);
-    forumBuffer.append(">");
-    forumBuffer.append(forumName);
-    forumBuffer.append("</a>");
-    forumBuffer.append("</body></html>");
+    String forumBuffer = SocialActivityUtil.getActivityTypeForum(userName,
+                                                                 activityInfo,
+                                                                 resource,
+                                                                 FONT_COLOR,
+                                                                 false);
 
-    textViewName.setText(Html.fromHtml(forumBuffer.toString()), TextView.BufferType.SPANNABLE);
+    textViewName.setText(Html.fromHtml(forumBuffer), TextView.BufferType.SPANNABLE);
     String forumBody = activityInfo.getBody();
 
     textViewMessage.setText(Html.fromHtml(forumBody), TextView.BufferType.SPANNABLE);
@@ -323,40 +247,12 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void setActivityTypeWiki() {
-    String wiki_url = null;
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("<html><body>");
-    buffer.append("<a>");
-    buffer.append(userName);
-    buffer.append("</a> ");
-    String spaceInfo = addSpaceInfo();
-    if (spaceInfo != null) {
-      buffer.append(spaceInfo);
-    }
-    buffer.append(" ");
-    buffer.append("<font color=\"#696969\">");
-    String act_key = activityInfo.templateParams.get("act_key");
-    String act_key_des = null;
-    if (act_key != null) {
-      if (act_key.equalsIgnoreCase("update_page")) {
-        wiki_url = activityInfo.templateParams.get("view_change_url");
-        act_key_des = resource.getString(R.string.HasEditWikiPage);
-      } else if (act_key.equalsIgnoreCase("add_page")) {
-        wiki_url = activityInfo.templateParams.get("page_url");
-        act_key_des = resource.getString(R.string.HasCreatWikiPage);
-      }
-    }
-    buffer.append(act_key_des);
-    buffer.append("</font>");
-    buffer.append("<br>");
-    String page_name = activityInfo.templateParams.get("page_name");
-    buffer.append("<a href=");
-    buffer.append(wiki_url);
-    buffer.append(">");
-    buffer.append(page_name);
-    buffer.append("</a>");
-    buffer.append("</body></html>");
-    textViewName.setText(Html.fromHtml(buffer.toString()), TextView.BufferType.SPANNABLE);
+    String wikiBuffer = SocialActivityUtil.getActivityTypeWiki(userName,
+                                                               activityInfo,
+                                                               resource,
+                                                               FONT_COLOR,
+                                                               false);
+    textViewName.setText(Html.fromHtml(wikiBuffer), TextView.BufferType.SPANNABLE);
     String wikiBody = activityInfo.getBody();
     if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
       textViewMessage.setVisibility(View.GONE);
@@ -366,40 +262,14 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void setActivityTypeAnswer() {
-    String answer_link = null;
-    StringBuffer answerBuffer = new StringBuffer();
-    answerBuffer.append("<html><body>");
-    answerBuffer.append("<a>");
-    answerBuffer.append(userName);
-    answerBuffer.append("</a> ");
-    String spaceInfo = addSpaceInfo();
-    if (spaceInfo != null) {
-      answerBuffer.append(spaceInfo);
-    }
-    answerBuffer.append(" ");
-    answerBuffer.append("<font color=\"#696969\">");
-    String act_key = activityInfo.templateParams.get("ActivityType");
-    String act_key_des = null;
-    if (act_key.equalsIgnoreCase("QuestionUpdate")) {
-      act_key_des = resource.getString(R.string.HasUpdatedQuestion);
-    } else if (act_key.equalsIgnoreCase("QuestionAdd")) {
-      act_key_des = resource.getString(R.string.HasAskAnswer);
-    } else if (act_key.equalsIgnoreCase("AnswerAdd")) {
-      act_key_des = resource.getString(R.string.HasAnswerQuestion);
-    }
-    answerBuffer.append(act_key_des);
-    answerBuffer.append("</font>");
-    answerBuffer.append("<br>");
-    answer_link = activityInfo.templateParams.get("Link");
-    String page_name = activityInfo.templateParams.get("Name");
-    answerBuffer.append("<a href=");
-    answerBuffer.append(answer_link);
-    answerBuffer.append(">");
-    answerBuffer.append(page_name);
-    answerBuffer.append("</a>");
-    answerBuffer.append("</body></html>");
 
-    textViewName.setText(Html.fromHtml(answerBuffer.toString()), TextView.BufferType.SPANNABLE);
+    String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName,
+                                                                   activityInfo,
+                                                                   resource,
+                                                                   FONT_COLOR,
+                                                                   false);
+
+    textViewName.setText(Html.fromHtml(answerBuffer), TextView.BufferType.SPANNABLE);
 
     String answerBody = activityInfo.getBody();
     if (answerBody != null) {
@@ -408,84 +278,20 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   private void setActivityTypeCalendar() {
-    StringBuffer forumBuffer = new StringBuffer();
-    forumBuffer.append("<html><body>");
-    forumBuffer.append("<a>");
-    forumBuffer.append(userName);
-    forumBuffer.append("</a> ");
-    String spaceInfo = addSpaceInfo();
-    if (spaceInfo != null) {
-      forumBuffer.append(spaceInfo);
-    }
-    forumBuffer.append(" ");
-    String actType = activityInfo.templateParams.get("EventType");
-    String actTypeDesc = null;
-    String forumName = null;
-    forumBuffer.append("<font color=\"#696969\">");
-    if (actType.equalsIgnoreCase("EventAdded")) {
-      actTypeDesc = resource.getString(R.string.AddedAnEvent);
-    } else if (actType.equalsIgnoreCase("EventUpdated")) {
-      actTypeDesc = resource.getString(R.string.UpdatedAnEvent);
-    } else if (actType.equalsIgnoreCase("TaskAdded")) {
-      actTypeDesc = resource.getString(R.string.AddedATask);
-    } else if (actType.equalsIgnoreCase("TaskUpdated")) {
-      actTypeDesc = resource.getString(R.string.UpdatedATask);
-    }
-    forumBuffer.append(actTypeDesc);
-    forumBuffer.append("</font>");
-    forumBuffer.append("<br>");
-    forumBuffer.append("<a>");
-    forumName = activityInfo.templateParams.get("EventSummary");
-    forumBuffer.append("<font color=\"#000000\">");
-    forumBuffer.append(forumName);
-    forumBuffer.append("</font>");
-    forumBuffer.append("</a>");
-    forumBuffer.append("</body></html>");
+    String calendarBuffer = SocialActivityUtil.getActivityTypeCalendar(userName,
+                                                                       activityInfo,
+                                                                       resource,
+                                                                       FONT_COLOR,
+                                                                       false);
 
-    textViewName.setText(Html.fromHtml(forumBuffer.toString()), TextView.BufferType.SPANNABLE);
-    setCaledarContent(textViewMessage);
+    textViewName.setText(Html.fromHtml(calendarBuffer), TextView.BufferType.SPANNABLE);
+    SocialActivityUtil.setCaledarContent(textViewMessage, activityInfo, resource);
 
-  }
-
-  private void setCaledarContent(TextView textView) {
-    StringBuffer caledarBuffer = new StringBuffer();
-    caledarBuffer.append("<html><body>");
-    caledarBuffer.append(resource.getString(R.string.CalendarDescription));
-    caledarBuffer.append("\n");
-    String description = activityInfo.templateParams.get("EventDescription");
-    if (description != null) {
-      caledarBuffer.append(description);
-    }
-    caledarBuffer.append("<br>");
-    caledarBuffer.append(resource.getString(R.string.CalendarLocation));
-    caledarBuffer.append(" ");
-    String location = activityInfo.templateParams.get("EventLocale");
-    if (location != null) {
-      caledarBuffer.append(location);
-    }
-    caledarBuffer.append("<br>");
-    caledarBuffer.append(resource.getString(R.string.CalendarStart));
-    caledarBuffer.append(" ");
-    String startTime = activityInfo.templateParams.get("EventStartTime");
-    startTime = PhotoUtils.getDateFromString(startTime);
-    caledarBuffer.append(startTime);
-    caledarBuffer.append("<br>");
-    caledarBuffer.append(resource.getString(R.string.CalendarEnd));
-    caledarBuffer.append(" ");
-    String endTime = activityInfo.templateParams.get("EventEndTime");
-    endTime = PhotoUtils.getDateFromString(endTime);
-    caledarBuffer.append(endTime);
-    caledarBuffer.append("</body></html>");
-    textView.setText(Html.fromHtml(caledarBuffer.toString()));
   }
 
   private void setActivityTypeLink() {
-    StringBuffer linkBuffer = new StringBuffer();
-    String linkTitle = activityInfo.templateParams.get("title").trim();
-    String linkUrl = activityInfo.templateParams.get("link");
     String templateComment = activityInfo.templateParams.get("comment");
     String description = activityInfo.templateParams.get("description").trim();
-    linkBuffer.append("<html><body>");
 
     if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
       textViewMessage.setText(Html.fromHtml(templateComment), TextView.BufferType.SPANNABLE);
@@ -494,19 +300,17 @@ public class SocialActivityStreamItem extends LinearLayout {
       textViewCommnet.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
       textViewCommnet.setVisibility(View.VISIBLE);
     }
-    linkBuffer.append("<a href=");
-    linkBuffer.append(linkUrl);
-    linkBuffer.append(">");
-    linkBuffer.append(linkTitle);
-    linkBuffer.append("</a>");
-    linkBuffer.append("</body></html>");
+
+    String linkBuffer = SocialActivityUtil.getActivityTypeLink(description,
+                                                               activityInfo,
+                                                               FONT_COLOR,
+                                                               false);
 
     String imageParams = activityInfo.templateParams.get("image");
     if ((imageParams != null) && (imageParams.contains("http"))) {
-      displayAttachImage(imageParams, "", linkBuffer.toString());
+      displayAttachImage(imageParams, "", linkBuffer);
     } else {
-      textViewTempMessage.setText(Html.fromHtml(linkBuffer.toString()),
-                                  TextView.BufferType.SPANNABLE);
+      textViewTempMessage.setText(Html.fromHtml(linkBuffer), TextView.BufferType.SPANNABLE);
       textViewTempMessage.setVisibility(View.VISIBLE);
     }
   }

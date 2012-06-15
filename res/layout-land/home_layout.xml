@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/MainLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#DCDCDCDC"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="160dp"
+            android:layout_height="fill_parent"
+            android:background="@drawable/home_profile_bg"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <FrameLayout
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="7dp"
+                    android:background="@drawable/home_avatar_background_shape" >
+
+                    <org.exoplatform.widget.RoundedImageView
+                        android:id="@+id/home_user_avatar"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:scaleType="fitXY" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/home_textview_name"
+                    style="@style/textview_home"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <org.exoplatform.widget.HomeLinearLayout
+            android:id="@+id/home_linearlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#1e1e1e"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/one"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center" >
+
+                    <Button
+                        android:id="@+id/home_btn_activity"
+                        style="@style/HomeButton"
+                        android:background="@drawable/home_item_background_shape"
+                        android:drawableTop="@drawable/home_news_icon_landscape"
+                        android:text="@string/ActivityStream" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center" >
+
+                    <Button
+                        android:id="@+id/home_btn_document"
+                        style="@style/HomeButton"
+                        android:background="@drawable/home_item_background_shape"
+                        android:drawableTop="@drawable/home_document_icon_landscape"
+                        android:text="@string/Documents" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/two"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center" >
+
+                    <Button
+                        android:id="@+id/home_btn_apps"
+                        style="@style/HomeButton"
+                        android:background="@drawable/home_item_background_shape"
+                        android:drawableTop="@drawable/home_app_icon_landscape"
+                        android:text="@string/Dashboard" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/addition_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center" >
+                </LinearLayout>
+            </LinearLayout>
+        </org.exoplatform.widget.HomeLinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:gravity="center" >
+
+        <ViewFlipper
+            android:id="@+id/home_social_flipper"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:flipInterval="5000"
+            android:gravity="center_vertical" >
+        </ViewFlipper>
+    </LinearLayout>
+
+</LinearLayout>

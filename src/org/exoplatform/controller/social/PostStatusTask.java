@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.exoplatform.R;
-import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
@@ -103,7 +102,7 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
 
       }
       activityImlp.setTitle(composeMessage);
-      SocialServiceHelper.getInstance().getActivityService().create(activityImlp);
+      SocialServiceHelper.getInstance().activityService.create(activityImlp);
       return 1;
     } catch (SocialClientLibException e) {
       return 0;
@@ -117,7 +116,7 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
   public void onPostExecute(Integer result) {
     if (result == 1) {
       ((Activity) mContext).finish();
-      SocialActivity.socialActivity.loadActivity();
+      SocialActivity.socialActivity.loadActivity(true);
     } else {
       new WarningDialog(mContext, warningTitle, errorString, okString).show();
     }

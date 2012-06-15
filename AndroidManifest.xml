@@ -1,90 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.exoplatform"
-    android:versionCode="1"
-    android:versionName="2.1-SNAPSHOT" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="2.2-SNAPSHOT" package="org.exoplatform">
 
     <!-- Application Permissions -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_OWNER_DATA"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE">
     </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE">
     </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION">
     </uses-permission>
 
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <!-- Application Uses SDK -->
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk android:minSdkVersion="7"/>
 
     <!-- Application Informations -->
-    <application
-        android:debuggable="true"
-        android:icon="@drawable/application_icon"
-        android:label="eXo Mobile"
-        android:name=".ExoApplication"
-        android:theme="@style/Theme.eXo" >
+    <application android:debuggable="true" android:icon="@drawable/application_icon" android:label="eXo Mobile" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
 
         <!-- First Activity of the Application -->
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.LoginActivity"
-            android:windowSoftInputMode="stateUnchanged|adjustResize" >
-            <intent-filter >
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.LoginActivity" android:windowSoftInputMode="stateUnchanged|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.HomeActivity" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.SettingActivity" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.SettingServerListEditionActivity" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.ChatListActivity" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.DocumentActivity" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.DocumentActionDialog" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.DashboardActivity" />
-        <activity
-            android:configChanges="orientation"
-            android:name=".ui.WebViewActivity" >
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.HomeActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SettingActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SettingServerListEditionActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.ChatListActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DocumentActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DocumentActionDialog"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DashboardActivity"/>
+        <activity android:configChanges="orientation" android:name=".ui.WebViewActivity">
         </activity>
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.ChatDetailActivity" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.social.SocialActivity" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.social.SocialDetailActivity" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.social.ComposeMessageActivity" />
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.social.SelectedImageActivity" >
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.ChatDetailActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialDetailActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.ComposeMessageActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SelectedImageActivity">
         </activity>
-        <activity
-            android:configChanges="keyboardHidden|orientation"
-            android:name=".ui.social.SocialAttachedImageActivity" />
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialAttachedImageActivity"/>
+        
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.LikeListActivity"/>
     </application>
 
 </manifest>

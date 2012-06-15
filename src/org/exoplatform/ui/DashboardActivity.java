@@ -1,6 +1,8 @@
 package org.exoplatform.ui;
 
 import greendroid.widget.ActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
@@ -11,7 +13,6 @@ import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.DashboardWaitingDialog;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.res.Resources;
@@ -27,8 +28,6 @@ import android.widget.TextView;
 public class DashboardActivity extends MyActionBar {
   private static final String     ACCOUNT_SETTING = "account_setting";
 
-  private DashboardWaitingDialog  _progressDialog;
-
   private ListView                listView;
 
   private View                    empty_stub;
@@ -41,6 +40,8 @@ public class DashboardActivity extends MyActionBar {
 
   private DashboardLoadTask       mLoadTask;
 
+  private LoaderActionBarItem     loaderItem;
+
   @Override
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);
@@ -50,7 +51,7 @@ public class DashboardActivity extends MyActionBar {
     dashboardActivity = this;
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    addActionBarItem();
+    addActionBarItem(Type.Refresh);
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
 
     listView = (ListView) findViewById(R.id.dashboard_listview);
@@ -65,8 +66,9 @@ public class DashboardActivity extends MyActionBar {
       ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
+    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
 
-    onLoad();
+    onLoad(loaderItem);
   }
 
   @Override
@@ -75,10 +77,10 @@ public class DashboardActivity extends MyActionBar {
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
   }
 
-  public void onLoad() {
+  public void onLoad(LoaderActionBarItem loader) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (mLoadTask == null || mLoadTask.getStatus() == DashboardLoadTask.Status.FINISHED) {
-        mLoadTask = (DashboardLoadTask) new DashboardLoadTask(this, _progressDialog).execute();
+        mLoadTask = (DashboardLoadTask) new DashboardLoadTask(this, loader).execute();
       }
     } else {
       new ConnectionErrorDialog(this).show();
@@ -119,9 +121,10 @@ public class DashboardActivity extends MyActionBar {
     case -1:
       finish();
       break;
-    case 0: {
-      onLoad();
-    }
+    case 0:
+      loaderItem = (LoaderActionBarItem) item;
+      onLoad(loaderItem);
+
       break;
 
     default:
@@ -133,9 +136,6 @@ public class DashboardActivity extends MyActionBar {
 
   @Override
   public void finish() {
-    if (_progressDialog != null) {
-      _progressDialog.dismiss();
-    }
     super.finish();
   }
 

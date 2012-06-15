@@ -170,6 +170,7 @@ public class DocumentActivity extends MyActionBar {
   public void onBackPressed() {
     if (_documentAdapter == null) {
       _documentActivityInstance = null;
+      onCancelLoad();
       finish();
     } else {
       /*

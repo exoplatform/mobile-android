@@ -1,5 +1,7 @@
 package org.exoplatform.controller.social;
 
+import greendroid.widget.LoaderActionBarItem;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,7 +25,6 @@ import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.SocialDetailWaitingDialog;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
 
 import android.content.Context;
@@ -40,11 +41,9 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   private ArrayList<SocialCommentInfo> socialCommentList = new ArrayList<SocialCommentInfo>();
 
-  private SocialDetailWaitingDialog    _progressDialog;
+  private LoaderActionBarItem          loaderItem;
 
   private Context                      mContext;
-
-  private String                       loadingData;
 
   private String                       youText;
 
@@ -66,18 +65,17 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   public SocialDetailLoadTask(Context context,
                               SocialDetailController controller,
-                              SocialDetailWaitingDialog progressDialog) {
+                              LoaderActionBarItem loader) {
     mContext = context;
     detailController = controller;
-    _progressDialog = progressDialog;
+    loaderItem = loader;
     changeLanguage();
 
   }
 
   @Override
   public void onPreExecute() {
-    _progressDialog = new SocialDetailWaitingDialog(mContext, detailController, null, loadingData);
-    _progressDialog.show();
+    loaderItem.setLoading(true);
   }
 
   @Override
@@ -88,8 +86,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       if (ExoConnectionUtils.getResponseCode(AccountSetting.getInstance().getDomainName()) == 0) {
         ExoConnectionUtils.onReLogin();
       }
-      ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance()
-                                                                         .getActivityService();
+      ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
 
       String activityId = SocialDetailHelper.getInstance().getActivityId();
       QueryParams queryParams = new QueryParamsImpl();
@@ -118,9 +115,11 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();
       if (likeList != null) {
         for (RestIdentity like : likeList) {
+          RestProfile likeProfile = like.getProfile();
           SocialLikeInfo socialLike = new SocialLikeInfo();
+          socialLike.likedImageUrl = likeProfile.getAvatarUrl();
           String identity = like.getId();
-          if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().getUserId())) {
+          if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().userIdentity)) {
             socialLike.setLikeName(youText);
             likeLinkedList.addFirst(socialLike);
             SocialDetailHelper.getInstance().setLiked(true);
@@ -164,9 +163,10 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       hasContent = true;
       detailController.setComponentInfo(streamInfo);
       detailController.createCommentList(socialCommentList);
-      detailController.setLikeInfo(likeLinkedList);
+      detailController.setLikeInfoText(likeLinkedList);
+      detailController.setLikedInfo(likeLinkedList);
       if (isLikeAction) {
-        SocialActivity.socialActivity.loadActivity();
+        SocialActivity.socialActivity.loadActivity(true);
       }
     } else {
       dialog = new SocialDetailsWarningDialog(mContext,
@@ -176,14 +176,13 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
                                               hasContent);
       dialog.show();
     }
+    loaderItem.setLoading(false);
     SocialDetailActivity.socialDetailActivity.startScreen.setVisibility(View.GONE);
-    _progressDialog.dismiss();
 
   }
 
   private void changeLanguage() {
     Resources resource = mContext.getResources();
-    loadingData = resource.getString(R.string.LoadingData);
     youText = resource.getString(R.string.You);
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
