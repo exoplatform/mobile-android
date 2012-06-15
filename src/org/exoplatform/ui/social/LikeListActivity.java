@@ -24,7 +24,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.RoundedImageView;
+import org.exoplatform.widget.ShaderImageView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -156,7 +156,7 @@ public class LikeListActivity extends MyActionBar {
          */
         convertView = mInflater.inflate(R.layout.liked_grid_item, null);
         viewHolder = new ViewHolder();
-        viewHolder.imageView = (RoundedImageView) convertView.findViewById(R.id.liked_avatar);
+        viewHolder.imageView = (ShaderImageView) convertView.findViewById(R.id.liked_avatar);
         viewHolder.textView = (TextView) convertView.findViewById(R.id.liked_name);
         convertView.setTag(viewHolder);
       } else {
@@ -172,7 +172,7 @@ public class LikeListActivity extends MyActionBar {
   }
 
   private class ViewHolder {
-    public RoundedImageView imageView;
+    public ShaderImageView imageView;
 
     public TextView         textView;
   }
