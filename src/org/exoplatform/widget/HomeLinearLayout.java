@@ -32,11 +32,7 @@ import android.widget.LinearLayout;
  * 23, 2012
  */
 public class HomeLinearLayout extends LinearLayout {
-  private static final int DARK_LINE_COLOR = 0x3D0000;
-
-  private static final int GRAY_LINE_COLOR = 0x330000;
-
-  private Paint            paint           = new Paint();
+  private Paint paint = new Paint();
 
   public HomeLinearLayout(Context context) {
     super(context, null);
@@ -53,7 +49,7 @@ public class HomeLinearLayout extends LinearLayout {
     int scaledHeight = getMeasuredHeight();
     paint.setStyle(Style.STROKE);
     /*
-     * Make radius gradient bitmap with double height
+     * Make radius gradient bitmap with height
      */
     Bitmap bm = PhotoUtils.makeRadGrad(getWidth(), getHeight());
     /*
@@ -67,14 +63,14 @@ public class HomeLinearLayout extends LinearLayout {
      */
     paint.setColor(Color.BLACK);
     canvas.drawLine(scaledWidth / 2, 0, scaledWidth / 2, scaledHeight, paint);
-    paint.setColor(DARK_LINE_COLOR);
+    paint.setColor(Color.rgb(60, 60, 60));
     canvas.drawLine(scaledWidth / 2 + 1, 0, scaledWidth / 2 + 1, scaledHeight, paint);
     /*
      * Draw the vertical line separator
      */
     paint.setColor(Color.BLACK);
     canvas.drawLine(0, scaledHeight / 2, scaledWidth, scaledHeight / 2, paint);
-    paint.setColor(GRAY_LINE_COLOR);
+    paint.setColor(Color.rgb(51, 51, 51));
     canvas.drawLine(0, scaledHeight / 2 + 1, scaledWidth, scaledHeight / 2 + 1, paint);
 
   }

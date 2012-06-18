@@ -89,6 +89,7 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
       ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
+    init();
   }
 
   @Override
@@ -110,7 +111,9 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
   @Override
   protected void onResume() {
     super.onResume();
-    init();
+    setInfo();
+    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+    startSocialService(loaderItem);
   }
 
   @Override
@@ -141,22 +144,26 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
   }
 
   private void init() {
-    resource = getResources();
-    changeLanguage();
     activityButton = (Button) findViewById(R.id.home_btn_activity);
-    activityButton.setText(newsTitle);
     activityButton.setOnClickListener(this);
     documentButton = (Button) findViewById(R.id.home_btn_document);
-    documentButton.setText(documentTitle);
     documentButton.setOnClickListener(this);
     appsButton = (Button) findViewById(R.id.home_btn_apps);
-    appsButton.setText(appsTitle);
     appsButton.setOnClickListener(this);
     homeUserAvatar = (ShaderImageView) findViewById(R.id.home_user_avatar);
     homeUserAvatar.setDefaultImageResource(dafault_avatar);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
     viewFlipper.setOnClickListener(this);
+    setInfo();
+  }
+
+  private void setInfo() {
+    resource = getResources();
+    changeLanguage();
+    activityButton.setText(newsTitle);
+    documentButton.setText(documentTitle);
+    appsButton.setText(appsTitle);
     if (SocialServiceHelper.getInstance().userProfile != null) {
       setProfileInfo(SocialServiceHelper.getInstance().userProfile);
     }
@@ -164,9 +171,6 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     if (SocialServiceHelper.getInstance().socialInfoList != null) {
       setSocialInfo(SocialServiceHelper.getInstance().socialInfoList);
     }
-
-    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-    startSocialService(loaderItem);
   }
 
   private void startSocialService(LoaderActionBarItem loader) {

@@ -23,13 +23,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RadialGradient;
-import android.graphics.RectF;
-import android.graphics.Bitmap.Config;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.View.MeasureSpec;
 import android.widget.LinearLayout;
 
 /**
@@ -38,8 +33,6 @@ import android.widget.LinearLayout;
  */
 public class HomeLandscapeLayout extends LinearLayout {
   private Paint            paint           = new Paint();
-
-  private static final int DARK_LINE_COLOR = 0x3D0000;
 
   public HomeLandscapeLayout(Context context) {
     super(context, null);
@@ -56,6 +49,8 @@ public class HomeLandscapeLayout extends LinearLayout {
     int scaledHeight = getMeasuredHeight();
     int itemWidth = scaledWidth / 3;
     paint.setStyle(Style.STROKE);
+    paint.setDither(true);
+    paint.setAntiAlias(true);
     /*
      * Make radius gradient bitmap with double height
      */
@@ -65,15 +60,12 @@ public class HomeLandscapeLayout extends LinearLayout {
      */
     canvas.drawBitmap(bm, -4, -scaledHeight / 2, paint);
 
-    paint.setDither(true);
-    paint.setAntiAlias(true);
-
     /*
      * Draw the first line separator
      */
     paint.setColor(Color.BLACK);
     canvas.drawLine(itemWidth, 0, itemWidth, scaledHeight, paint);
-    paint.setColor(DARK_LINE_COLOR);
+    paint.setColor(Color.rgb(51, 51, 51));
     canvas.drawLine(itemWidth + 1, 0, itemWidth + 1, scaledHeight, paint);
     /*
      * Draw the second line separator
@@ -81,7 +73,7 @@ public class HomeLandscapeLayout extends LinearLayout {
     paint.setColor(Color.BLACK);
     itemWidth = itemWidth * 2;
     canvas.drawLine(itemWidth, 0, itemWidth, scaledHeight, paint);
-    paint.setColor(DARK_LINE_COLOR);
+    paint.setColor(Color.rgb(51, 51, 51));
     canvas.drawLine(itemWidth + 1, 0, itemWidth + 1, scaledHeight, paint);
 
   }
