@@ -7,13 +7,9 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
-import org.exoplatform.ui.WebViewActivity;
-import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.widget.UnreadableFileDialog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,8 +102,7 @@ public class DocumentAdapter extends BaseAdapter {
     if (!myFile.isFolder) {
       btnAction.setVisibility(View.VISIBLE);
 
-      String iconFileName = ExoDocumentUtils.getFileFolderIconName(myFile.nodeType);
-      icon.setImageResource(ExoDocumentUtils.getPicIDFromName(iconFileName));
+      icon.setImageResource(ExoDocumentUtils.getIconFromType(myFile.nodeType));
 
     } else {
       icon.setImageResource(R.drawable.documenticonforfolder);
@@ -118,22 +113,9 @@ public class DocumentAdapter extends BaseAdapter {
       public void onClick(View v) {
 
         if (!myFile.isFolder) {
-          // Action for display file
-          if (myFile.nodeType != null
-              && (myFile.nodeType.contains("image") || myFile.nodeType.contains("text") || myFile.nodeType.contains("pdf"))) {
-            String url = null;
-            if (myFile.nodeType.contains("pdf")) {
-              url = "http://docs.google.com/gview?embedded=true&url=" + myFile.path;
-            } else {
-              url = myFile.path;
-            }
-            Intent intent = new Intent(_mContext, WebViewActivity.class);
-            intent.putExtra(ExoConstants.WEB_VIEW_URL, url);
-            intent.putExtra(ExoConstants.WEB_VIEW_TITLE, myFile.name);
-            _mContext.startActivity(intent);
-          } else {
-            new UnreadableFileDialog(_mContext).show();
-          }
+          System.out.println("------------"+myFile.nodeType);
+
+          ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
 
         } else {
           DocumentActivity._documentActivityInstance._fileForCurrentActionBar = myFile;

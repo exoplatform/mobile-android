@@ -21,16 +21,77 @@ import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
+import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.widget.UnreadableFileDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 public class ExoDocumentUtils {
+
+  public static final String ALL_VIDEO_TYPE       = "video/*";
+
+  public static final String ALL_AUDIO_TYPE       = "audio/*";
+
+  public static final String IMAGE_TYPE           = "image";
+
+  public static final String TEXT_TYPE            = "text";
+
+  public static final String VIDEO_TYPE           = "video";
+
+  public static final String AUDIO_TYPE           = "audio";
+
+  public static final String MSWORD_TYPE          = "application/msword";
+
+  public static final String OPEN_MSWORD_TYPE     = "application/vnd.oasis.opendocument.text";
+
+  public static final String PDF_TYPE             = "application/pdf";
+
+  public static final String XLS_TYPE             = "application/xls";
+
+  public static final String OPEN_XLS_TYPE        = "application/vnd.oasis.opendocument.spreadsheet";
+
+  public static final String POWERPOINT_TYPE      = "application/vnd.ms-powerpoint";
+
+  public static final String OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
+
+  /*
+   * If content type is image or text, open it in WebView else open in other
+   * installed application
+   */
+
+  public static void fileOpen(Context context, String fileType, String filePath, String fileName) {
+    if (fileType != null && (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE))) {
+      Intent intent = new Intent(context, WebViewActivity.class);
+      intent.putExtra(ExoConstants.WEB_VIEW_URL, filePath);
+      intent.putExtra(ExoConstants.WEB_VIEW_TITLE, fileName);
+      context.startActivity(intent);
+    } else {
+      new UnreadableFileDialog(context, fileType, filePath, fileName).show();
+    }
+
+  }
+
+  /*
+   * Check if file can readable or not
+   */
+  public static boolean isFileReadable(String type) {
+    if (type.equals(PDF_TYPE) || type.equals(MSWORD_TYPE) || type.equals(XLS_TYPE)
+        || type.equals(POWERPOINT_TYPE) || type.equals(OPEN_MSWORD_TYPE)
+        || type.equals(OPEN_XLS_TYPE) || type.equals(OPEN_POWERPOINT_TYPE)
+        || type.startsWith(AUDIO_TYPE) || type.startsWith(VIDEO_TYPE)) {
+      return true;
+    }
+
+    return false;
+  }
 
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
     try {
@@ -351,58 +412,33 @@ public class ExoDocumentUtils {
 
   }
 
-  // Get file/folder icon file name form content type
-  static public String getFileFolderIconName(String contentType) {
-    String strIconFileName = "documenticonforunknown";
+  /*
+   * Get document icon from content type
+   */
+
+  public static int getIconFromType(String contentType) {
+    int id = R.drawable.documenticonforunknown;
     if (contentType != null) {
-      if (contentType.indexOf("image") >= 0)
-        strIconFileName = "documenticonforimage";
-      else if (contentType.indexOf("video") >= 0)
-        strIconFileName = "documenticonforvideo";
-      else if (contentType.indexOf("audio") >= 0)
-        strIconFileName = "documenticonformusic";
-      else if (contentType.indexOf("application/msword") >= 0)
-        strIconFileName = "documenticonforword";
-      else if (contentType.indexOf("application/pdf") >= 0)
-        strIconFileName = "documenticonforpdf";
-      else if (contentType.indexOf("application/xls") >= 0)
-        strIconFileName = "documenticonforxls";
-      else if (contentType.indexOf("application/vnd.ms-powerpoint") >= 0)
-        strIconFileName = "documenticonforppt";
-      else if (contentType.indexOf("text") >= 0)
-        strIconFileName = "documenticonfortxt";
-    } else
-      strIconFileName = "documenticonforunknown";
-
-    return strIconFileName;
-  }
-
-  public static int getPicIDFromName(String name) {
-    int id = 0;
-    if (name != null) {
-      if (name.equalsIgnoreCase("documenticonforimage"))
+      if (contentType.indexOf(IMAGE_TYPE) >= 0)
         id = R.drawable.documenticonforimage;
-      else if (name.equalsIgnoreCase("documenticonforvideo"))
+      else if (contentType.indexOf(VIDEO_TYPE) >= 0)
         id = R.drawable.documenticonforvideo;
-      else if (name.equalsIgnoreCase("documenticonformusic"))
+      else if (contentType.indexOf(AUDIO_TYPE) >= 0)
         id = R.drawable.documenticonformusic;
-      else if (name.equalsIgnoreCase("documenticonforword"))
+      else if (contentType.indexOf(MSWORD_TYPE) >= 0 || contentType.indexOf(OPEN_MSWORD_TYPE) >= 0)
         id = R.drawable.documenticonforword;
-      else if (name.equalsIgnoreCase("documenticonforpdf"))
+      else if (contentType.indexOf(PDF_TYPE) >= 0)
         id = R.drawable.documenticonforpdf;
-      else if (name.equalsIgnoreCase("documenticonforxls"))
+      else if (contentType.indexOf(XLS_TYPE) >= 0 || contentType.indexOf(OPEN_XLS_TYPE) >= 0)
         id = R.drawable.documenticonforxls;
-      else if (name.equalsIgnoreCase("documenticonforppt"))
+      else if (contentType.indexOf(POWERPOINT_TYPE) >= 0
+          || contentType.indexOf(OPEN_POWERPOINT_TYPE) >= 0)
         id = R.drawable.documenticonforppt;
-      else if (name.equalsIgnoreCase("documenticonfortxt"))
+      else if (contentType.indexOf(TEXT_TYPE) >= 0)
         id = R.drawable.documenticonfortxt;
-      else
-        id = R.drawable.documenticonforunknown;
-    } else
-      id = R.drawable.documenticonforunknown;
+    }
 
     return id;
-
   }
 
   public static String getParentUrl(String url) {

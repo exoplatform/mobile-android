@@ -4,9 +4,9 @@
     <string name="SignInButton">Connexion</string>
     <string name="SignInInformation">Signe de l\'information</string>
     <string name="PleaseWait">Patientez s\'il vous plaît</string>
-    <string name="SigningIn">Ouverture de session...</string>
+    <string name="SigningIn">Ouverture de session &#8230;</string>
     <string name="CannotLogin"> Impossible de se connecter</string>
-    <string name="LoadingDataFromServer">Chargement des données du serveur...</string>
+    <string name="LoadingDataFromServer">Chargement des données du serveur &#8230;</string>
     <string name="FileProcessing">Les données étant traitées</string>
     <string name="ConnectionTimedOut">Connection expirée</string>
     <string name="NoServerSelected"> S\'il vous plaît sélectionner un serveur</string>
@@ -66,10 +66,10 @@
     <string name="Me">Moi</string>
     <string name="MessageFrom"> Message de</string>
     <string name="ShowMore"> Montrer Plus</string>
-    <string name="LoadingData"> Chargement des données ...</string>
-    <string name="LoadingImage"> Chargement de l\'image ...</string>
-    <string name="SendingData">  Envoi de données ...</string>
-    <string name="YourComment"> Votre commentaire ....</string>
+    <string name="LoadingData"> Chargement des données &#8230;</string>
+    <string name="LoadingImage"> Chargement de l\'image &#8230;</string>
+    <string name="SendingData">  Envoi de données &#8230;</string>
+    <string name="YourComment"> Votre commentaire &#8230;</string>
     <string name="Comment"> Commentaire</string>
     <string name="StatusUpdate"> Ecrire</string>
     <string name="NoLike"> Personne n\'aime pour le moment</string>
@@ -159,5 +159,10 @@
     <string name="NetworkTimeout"> La connexion réseau a expirée. Essayez à nouveau !</string>
     <string name="Liker"> Liker</string>
     <string name="Likers"> Likers</string>
+    <string name="DownloadingData"> Téléchargement des données &#8230;</string>
+    <string name="NoAppFound">Aucune demande n\'a été trouvée.</string>
+    <string name="CannotOpenFile"> Impossible d\'ouvrir ce fichier.</string>
+    <string name="FileNotFound"> Fichier non trouvé.</string>
+    <string name="FileNotSupported">Le fichier a été pas en charge d\'ouvrir!</string>
 
 </resources>
