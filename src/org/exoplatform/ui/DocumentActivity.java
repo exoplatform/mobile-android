@@ -37,11 +37,11 @@ import android.widget.TextView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class DocumentActivity extends MyActionBar {
-  private static final String    DOCUMENT_HELPER = "document_helper";
+  private static final String    DOCUMENT_HELPER          = "document_helper";
 
-  private static final String    ACCOUNT_SETTING = "account_setting";
+  private static final String    ACCOUNT_SETTING          = "account_setting";
 
-  private static final String    CURRENT_FILE    = "current_file";
+  private static final String    CURRENT_FILE             = "current_file";
 
   public static DocumentActivity _documentActivityInstance;
 
@@ -59,7 +59,7 @@ public class DocumentActivity extends MyActionBar {
 
   private View                   empty_stub;
 
-  public ExoFile                 _fileForCurrentActionBar;
+  public ExoFile                 _fileForCurrentActionBar = new ExoFile();
 
   @Override
   public void onCreate(Bundle bundle) {
@@ -153,9 +153,9 @@ public class DocumentActivity extends MyActionBar {
     if (_fileForCurrentActionBar == null) {
       getActionBar().removeItem(0);
     } else {
-      if (_fileForCurrentActionBar.path == null) {
+      if (_fileForCurrentActionBar.name == null) {
         getActionBar().removeItem(0);
-      } else if (_fileForCurrentActionBar.path.equals("")) {
+      } else if (_fileForCurrentActionBar.name.equals("")) {
         getActionBar().removeItem(0);
       } else {
         if (getActionBar().getItem(0) == null) {
@@ -181,7 +181,7 @@ public class DocumentActivity extends MyActionBar {
        * @param: documentList The parents list file
        */
 
-      if (_fileForCurrentActionBar == null) {
+      if (_fileForCurrentActionBar.name == "") {
         _documentActivityInstance = null;
         finish();
       } else {
@@ -206,16 +206,16 @@ public class DocumentActivity extends MyActionBar {
     ArrayList<ExoFile> documentList = null;
 
     if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
-      _fileForCurrentActionBar = null;
-      parent = DocumentHelper.getInstance().currentFileMap.getParcelable(null);
+      _fileForCurrentActionBar = new ExoFile();
+      parent = DocumentHelper.getInstance().currentFileMap.getParcelable("");
       documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_PATH);
 
     } else {
       parent = DocumentHelper.getInstance().currentFileMap.getParcelable(_fileForCurrentActionBar.path);
       DocumentHelper.getInstance().currentFileMap.remove(_fileForCurrentActionBar.path);
       _fileForCurrentActionBar = parent;
-      if (parent == null) {
-        documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(null);
+      if (parent.name == "") {
+        documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList("");
       } else {
         documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(parent.path);
       }
@@ -259,7 +259,7 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void setDocumentAdapter(ArrayList<ExoFile> documentList) {
-    if (_fileForCurrentActionBar == null) {
+    if (_fileForCurrentActionBar.path == "") {
       setListViewPadding(5, 0, 5, 0);
       setTitle(getResources().getString(R.string.Documents));
     } else {

@@ -113,8 +113,9 @@ public class DocumentAdapter extends BaseAdapter {
       public void onClick(View v) {
 
         if (!myFile.isFolder) {
-          System.out.println("------------"+myFile.nodeType);
-
+          /*
+           * Open file with compatible application
+           */
           ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
 
         } else {

@@ -1,18 +1,13 @@
 package org.exoplatform.widget;
 
-import java.util.Map;
-import java.util.Set;
-
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.ui.social.SocialAttachedImageActivity;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.SocialImageLoader;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -164,12 +159,13 @@ public class SocialActivityStreamItem extends LinearLayout {
        * add space information
        */
 
-//      Map<String, String> templateMap = activityInfo.templateParams;
-//      Set<String> set = templateMap.keySet();
-//      for (String param : set) {
-//        System.out.println("type: " + activityInfo.getType() + "--template key: " + param + "-- "
-//            + templateMap.get(param));
-//      }
+      // Map<String, String> templateMap = activityInfo.templateParams;
+      // Set<String> set = templateMap.keySet();
+      // for (String param : set) {
+      // System.out.println("type: " + activityInfo.getType() +
+      // "--template key: " + param + "-- "
+      // + templateMap.get(param));
+      // }
 
       String docBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
                                                                     activityInfo,
@@ -367,14 +363,13 @@ public class SocialActivityStreamItem extends LinearLayout {
       attachImage.setImageResource(ExoDocumentUtils.getIconFromType(fileType));
     }
     if (isDetail) {
+      /*
+       * Open file with compatible application
+       */
       attachImage.setOnClickListener(new OnClickListener() {
 
-        // @Override
+        @Override
         public void onClick(View v) {
-          // SocialDetailHelper.getInstance().setAttachedImageUrl(url);
-          // Intent intent = new Intent(mContext,
-          // SocialAttachedImageActivity.class);
-          // mContext.startActivity(intent);
           ExoDocumentUtils.fileOpen(mContext, fileType, url, fileName);
         }
       });

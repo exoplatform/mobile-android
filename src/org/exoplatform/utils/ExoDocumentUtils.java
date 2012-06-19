@@ -174,7 +174,7 @@ public class ExoDocumentUtils {
       DocumentHelper.getInstance().childFilesMap = new Bundle();
     }
 
-    if (file == null) {
+    if (file.name == "") {
       // personal
       StringBuffer buffer = new StringBuffer();
       arrFilesTmp.add(new ExoFile());
@@ -207,7 +207,7 @@ public class ExoDocumentUtils {
       urlStr = URLAnalyzer.encodeUrl(urlStr);
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       arrFilesTmp.addAll(getContentOfFolder(response, file));
-      if (file.path == null) {
+      if (file.path == "") {
         DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
       } else if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
         DocumentHelper.getInstance().childFilesMap.remove(file.path);
