@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -186,7 +187,11 @@ public class SocialActivityStreamItem extends LinearLayout {
       if (docLink != null) {
         String docName = activityInfo.templateParams.get("DOCNAME");
         String url = domain + docLink;
-        displayAttachImage(url, docName, null, "image");
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+          String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+          displayAttachImage(url, docName, null, mimeType);
+        }
 
       }
 
@@ -370,6 +375,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
         @Override
         public void onClick(View v) {
+
           ExoDocumentUtils.fileOpen(mContext, fileType, url, fileName);
         }
       });

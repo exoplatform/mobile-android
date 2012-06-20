@@ -71,7 +71,7 @@ public class UnreadableFileDialog extends Dialog implements android.view.View.On
     TextView titleView = (TextView) findViewById(R.id.dialog_title_view);
     titleView.setText(context.getResources().getString(R.string.UnreachableFileTitle));
     TextView contentView = (TextView) findViewById(R.id.warning_content);
-    contentView.setText(context.getResources().getString(R.string.UnreachableFile));
+    contentView.setText(context.getResources().getString(R.string.UnreadableFileSuggest));
     okButton = (Button) findViewById(R.id.warning_ok_button);
     okButton.setOnClickListener(this);
     cancelButton = (Button) findViewById(R.id.warning_cancel_button);
