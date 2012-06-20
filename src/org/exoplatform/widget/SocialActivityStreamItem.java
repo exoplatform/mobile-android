@@ -160,14 +160,6 @@ public class SocialActivityStreamItem extends LinearLayout {
        * add space information
        */
 
-      // Map<String, String> templateMap = activityInfo.templateParams;
-      // Set<String> set = templateMap.keySet();
-      // for (String param : set) {
-      // System.out.println("type: " + activityInfo.getType() +
-      // "--template key: " + param + "-- "
-      // + templateMap.get(param));
-      // }
-
       String docBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
                                                                     activityInfo,
                                                                     resource,
@@ -188,11 +180,11 @@ public class SocialActivityStreamItem extends LinearLayout {
         String docName = activityInfo.templateParams.get("DOCNAME");
         String url = domain + docLink;
         String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        String mimeType = null;
         if (extension != null) {
-          String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-          displayAttachImage(url, docName, null, mimeType);
+          mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
-
+        displayAttachImage(url, docName, null, mimeType);
       }
 
       break;
