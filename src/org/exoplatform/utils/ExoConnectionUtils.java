@@ -16,9 +16,15 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -116,7 +122,16 @@ public class ExoConnectionUtils {
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setSoTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-    httpClient = new DefaultHttpClient(httpParameters);
+    /*
+     * Manage a pool of connection, avoid crash apps when we reuse the default
+     * http client
+     */
+    SchemeRegistry registry = new SchemeRegistry();
+    registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+    registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+    ClientConnectionManager connman = new ThreadSafeClientConnManager(httpParameters, registry);
+
+    httpClient = new DefaultHttpClient(connman, httpParameters);
   }
 
   /*

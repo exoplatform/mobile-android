@@ -40,6 +40,10 @@ public class ExoDocumentUtils {
 
   public static final String ALL_AUDIO_TYPE       = "audio/*";
 
+  public static final String ALL_IMAGE_TYPE       = "image/*";
+
+  public static final String ALL_TEXT_TYPE        = "text/*";
+
   public static final String IMAGE_TYPE           = "image";
 
   public static final String TEXT_TYPE            = "text";
@@ -72,6 +76,7 @@ public class ExoDocumentUtils {
       Intent intent = new Intent(context, WebViewActivity.class);
       intent.putExtra(ExoConstants.WEB_VIEW_URL, filePath);
       intent.putExtra(ExoConstants.WEB_VIEW_TITLE, fileName);
+      intent.putExtra(ExoConstants.WEB_VIEW_MIME_TYPE, fileType);
       context.startActivity(intent);
     } else {
       new UnreadableFileDialog(context, fileType, filePath, fileName).show();
@@ -83,10 +88,15 @@ public class ExoDocumentUtils {
    * Check if file can readable or not
    */
   public static boolean isFileReadable(String type) {
-    if (type.equals(PDF_TYPE) || type.equals(MSWORD_TYPE) || type.equals(XLS_TYPE)
-        || type.equals(POWERPOINT_TYPE) || type.equals(OPEN_MSWORD_TYPE)
-        || type.equals(OPEN_XLS_TYPE) || type.equals(OPEN_POWERPOINT_TYPE)
-        || type.startsWith(AUDIO_TYPE) || type.startsWith(VIDEO_TYPE)) {
+    if (type == null) {
+      return false;
+    }
+
+    if (type.startsWith(TEXT_TYPE) || type.startsWith(IMAGE_TYPE) || type.equals(PDF_TYPE)
+        || type.equals(MSWORD_TYPE) || type.equals(XLS_TYPE) || type.equals(POWERPOINT_TYPE)
+        || type.equals(OPEN_MSWORD_TYPE) || type.equals(OPEN_XLS_TYPE)
+        || type.equals(OPEN_POWERPOINT_TYPE) || type.startsWith(AUDIO_TYPE)
+        || type.startsWith(VIDEO_TYPE)) {
       return true;
     }
 

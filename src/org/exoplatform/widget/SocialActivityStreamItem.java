@@ -351,7 +351,7 @@ public class SocialActivityStreamItem extends LinearLayout {
      * Use SocialImageLoader to get and display attached image.
      */
 
-    if (fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
+    if (fileType != null && fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
       if (SocialDetailHelper.getInstance().socialImageLoader == null) {
         SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
       }

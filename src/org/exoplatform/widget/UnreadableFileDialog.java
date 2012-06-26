@@ -180,6 +180,10 @@ public class UnreadableFileDialog extends Dialog implements android.view.View.On
           docFileType = ExoDocumentUtils.ALL_AUDIO_TYPE;
         } else if (fileType.startsWith(ExoDocumentUtils.VIDEO_TYPE)) {
           docFileType = ExoDocumentUtils.ALL_VIDEO_TYPE;
+        } else if (fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
+          docFileType = ExoDocumentUtils.ALL_IMAGE_TYPE;
+        } else if (fileType.startsWith(ExoDocumentUtils.TEXT_TYPE)) {
+          docFileType = ExoDocumentUtils.ALL_TEXT_TYPE;
         }
 
         if (docFileType != null) {
