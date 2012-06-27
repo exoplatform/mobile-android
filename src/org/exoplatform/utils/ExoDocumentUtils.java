@@ -106,6 +106,12 @@ public class ExoDocumentUtils {
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
     try {
       url = url.replaceAll(" ", "%20");
+      if (ExoConnectionUtils.getResponseCode(url) != 1) {
+        if (!ExoConnectionUtils.onReLogin()) {
+          return false;
+        }
+      }
+
       HttpPut put = new HttpPut(url);
       FileEntity fileEntity = new FileEntity(fileManager, fileType);
       put.setEntity(fileEntity);

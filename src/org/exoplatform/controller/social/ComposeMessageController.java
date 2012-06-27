@@ -10,6 +10,7 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.ui.social.SocialActivity;
+import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
@@ -22,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Gravity;
@@ -36,6 +38,8 @@ public class ComposeMessageController {
   private Context           mContext;
 
   private PostStatusTask    mPostTask;
+
+  private CommentTask       mCommetnTask;
 
   private String            sdcard_temp_dir = null;
 
@@ -102,22 +106,8 @@ public class ComposeMessageController {
   }
 
   private void onCommentTask(String composeMessage) {
-    try {
-      RestComment comment = new RestComment();
-      comment.setText(composeMessage);
-      String selectedId = SocialDetailHelper.getInstance().getActivityId();
-      ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
-      RestActivity restActivity = (RestActivity) activityService.get(selectedId);
-
-      activityService.createComment(restActivity, comment);
-
-      ((Activity) mContext).finish();
-
-      SocialActivity.socialActivity.loadActivity(true);
-
-    } catch (SocialClientLibException e) {
-      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
-      dialog.show();
+    if (mCommetnTask == null || mCommetnTask.getStatus() == CommentTask.Status.FINISHED) {
+      mCommetnTask = (CommentTask) new CommentTask().execute(composeMessage);
     }
   }
 
@@ -131,6 +121,43 @@ public class ComposeMessageController {
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
     contentString = resource.getString(R.string.ErrorOnComment);
+  }
+
+  private class CommentTask extends AsyncTask<String, Void, Boolean> {
+
+    @Override
+    protected Boolean doInBackground(String... params) {
+      try {
+        String composeMessage = params[0];
+        RestComment comment = new RestComment();
+        comment.setText(composeMessage);
+        String selectedId = SocialDetailHelper.getInstance().getActivityId();
+        ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
+        RestActivity restActivity = (RestActivity) activityService.get(selectedId);
+
+        activityService.createComment(restActivity, comment);
+        return true;
+      } catch (SocialClientLibException e) {
+        return false;
+      }
+
+    }
+
+    @Override
+    protected void onPostExecute(Boolean result) {
+      if (result) {
+        ((Activity) mContext).finish();
+        if (SocialDetailActivity.socialDetailActivity != null) {
+          SocialDetailActivity.socialDetailActivity.onLoad();
+        }
+
+        SocialActivity.socialActivity.loadActivity(true);
+      } else {
+        WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+        dialog.show();
+      }
+    }
+
   }
 
 }

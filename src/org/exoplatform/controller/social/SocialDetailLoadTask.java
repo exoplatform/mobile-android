@@ -2,7 +2,6 @@ package org.exoplatform.controller.social;
 
 import greendroid.widget.LoaderActionBarItem;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.List;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
 import org.exoplatform.model.SocialLikeInfo;
-import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
@@ -23,7 +21,6 @@ import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
 
@@ -83,9 +80,6 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
     isLikeAction = params[0];
 
     try {
-      if (ExoConnectionUtils.getResponseCode(AccountSetting.getInstance().getDomainName()) == 0) {
-        ExoConnectionUtils.onReLogin();
-      }
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
 
       String activityId = SocialDetailHelper.getInstance().getActivityId();
@@ -151,8 +145,6 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       return 1;
     } catch (SocialClientLibException e) {
       return 0;
-    } catch (IOException e) {
-      return -1;
     }
   }
 

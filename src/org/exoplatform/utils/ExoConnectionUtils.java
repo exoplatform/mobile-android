@@ -16,15 +16,9 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -113,22 +107,14 @@ public class ExoConnectionUtils {
       return false;
   }
 
-  /*
-   * Init DefaultHttpClient
-   */
 
   public static void initHttpClient() {
-    httpClient = new DefaultHttpClient();
-    ClientConnectionManager mgr = httpClient.getConnectionManager();
-    HttpParams httpParameters = httpClient.getParams();
+    HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setSoTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
-    httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager(httpParameters,
-                                                                       mgr.getSchemeRegistry()),
-                                       httpParameters);
-
+    httpClient = new DefaultHttpClient(httpParameters);
   }
 
   /*
