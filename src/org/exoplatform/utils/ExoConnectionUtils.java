@@ -118,20 +118,17 @@ public class ExoConnectionUtils {
    */
 
   public static void initHttpClient() {
-    HttpParams httpParameters = new BasicHttpParams();
+    httpClient = new DefaultHttpClient();
+    ClientConnectionManager mgr = httpClient.getConnectionManager();
+    HttpParams httpParameters = httpClient.getParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setSoTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-    /*
-     * Manage a pool of connection, avoid crash apps when we reuse the default
-     * http client
-     */
-    SchemeRegistry registry = new SchemeRegistry();
-    registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-    registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
-    ClientConnectionManager connman = new ThreadSafeClientConnManager(httpParameters, registry);
 
-    httpClient = new DefaultHttpClient(connman, httpParameters);
+    httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager(httpParameters,
+                                                                       mgr.getSchemeRegistry()),
+                                       httpParameters);
+
   }
 
   /*
