@@ -217,14 +217,12 @@ public class ExoDocumentUtils {
       urlStr = URLAnalyzer.encodeUrl(urlStr);
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       arrFilesTmp.addAll(getContentOfFolder(response, file));
-      if (file.path == "") {
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
-      } else if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
+      if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
         DocumentHelper.getInstance().childFilesMap.remove(file.path);
         DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
-      } else {
+      } else
         DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
-      }
+
     }
 
     return arrFilesTmp;

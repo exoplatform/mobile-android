@@ -59,7 +59,7 @@ public class DocumentActivity extends MyActionBar {
 
   private View                   empty_stub;
 
-  public ExoFile                 _fileForCurrentActionBar = new ExoFile();
+  public ExoFile                 _fileForCurrentActionBar;
 
   @Override
   public void onCreate(Bundle bundle) {
@@ -89,6 +89,7 @@ public class DocumentActivity extends MyActionBar {
        */
       DocumentHelper.getInstance().childFilesMap = new Bundle();
       DocumentHelper.getInstance().currentFileMap = new Bundle();
+      _fileForCurrentActionBar = new ExoFile();
       setTitle(getResources().getString(R.string.Documents));
     }
     onLoad(DocumentHelper.getInstance().getRepositoryHomeUrl(), null, 0);

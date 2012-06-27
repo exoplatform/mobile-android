@@ -97,9 +97,7 @@ public class DocumentActionAdapter extends BaseAdapter {
               DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
             }
 
-            DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
-                                                              _selectedFile.path,
-                                                              1);
+            DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path, _selectedFile.path, 1);
           } else {
             // Copy file
             ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
@@ -116,9 +114,7 @@ public class DocumentActionAdapter extends BaseAdapter {
                 String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
                 String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-                DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
-                                                                  destinationUrl,
-                                                                  3);
+                DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path, destinationUrl, 3);
               }
 
             }
