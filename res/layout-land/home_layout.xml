@@ -49,12 +49,13 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:gravity="center" >
+                android:background="@drawable/home_item_background_shape"
+                android:gravity="center"
+                android:onClick="onNewsClick" >
 
-                <Button 
+                <TextView
                     android:id="@+id/home_btn_activity"
-                    style="@style/HomeButton"
-                    android:background="@drawable/home_item_background_shape"
+                    style="@style/HomeButtonStyle"
                     android:drawableTop="@drawable/home_btn_activity"
                     android:text="@string/ActivityStream" />
             </LinearLayout>
@@ -63,12 +64,13 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:gravity="center" >
+                android:background="@drawable/home_item_background_shape"
+                android:gravity="center"
+                android:onClick="onDocumentClick" >
 
-                <Button
+                <TextView
                     android:id="@+id/home_btn_document"
-                    style="@style/HomeButton"
-                    android:background="@drawable/home_item_background_shape"
+                    style="@style/HomeButtonStyle"
                     android:drawableTop="@drawable/home_btn_document"
                     android:text="@string/Documents" />
             </LinearLayout>
@@ -77,12 +79,13 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:gravity="center" >
+                android:background="@drawable/home_item_background_shape"
+                android:gravity="center"
+                android:onClick="onDashboardClick" >
 
-                <Button
+                <TextView
                     android:id="@+id/home_btn_apps"
-                    style="@style/HomeButton"
-                    android:background="@drawable/home_item_background_shape"
+                    style="@style/HomeButtonStyle"
                     android:drawableTop="@drawable/home_btn_apps"
                     android:text="@string/Dashboard" />
             </LinearLayout>
@@ -99,7 +102,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:flipInterval="5000"
-            android:gravity="center_vertical" >
+            android:gravity="center_vertical"
+            android:onClick="onNewsClick" >
         </ViewFlipper>
     </LinearLayout>
 

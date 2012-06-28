@@ -22,7 +22,7 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.WebViewActivity;
-import org.exoplatform.widget.UnreadableFileDialog;
+import org.exoplatform.widget.CompatibleFileOpenDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -79,7 +79,7 @@ public class ExoDocumentUtils {
       intent.putExtra(ExoConstants.WEB_VIEW_MIME_TYPE, fileType);
       context.startActivity(intent);
     } else {
-      new UnreadableFileDialog(context, fileType, filePath, fileName).show();
+      new CompatibleFileOpenDialog(context, fileType, filePath, fileName).show();
     }
 
   }

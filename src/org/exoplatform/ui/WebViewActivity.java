@@ -19,7 +19,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.UnreadableFileDialog;
+import org.exoplatform.widget.CompatibleFileOpenDialog;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -148,7 +148,7 @@ public class WebViewActivity extends MyActionBar {
       if (item instanceof LoaderActionBarItem) {
 
       } else {
-        new UnreadableFileDialog(this, contentType, _url, _titlebar).show();
+        new CompatibleFileOpenDialog(this, contentType, _url, _titlebar).show();
       }
       break;
 

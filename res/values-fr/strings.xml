@@ -164,6 +164,6 @@
     <string name="CannotOpenFile"> Impossible d\'ouvrir ce fichier.</string>
     <string name="FileNotFound"> Fichier non trouvé.</string>
     <string name="FileNotSupported">Le fichier a été pas en charge d\'ouvrir!</string>
-    <string name="UnreadableFileSuggest">Impossible d\'afficher ce fichier, vous aimez ouvert en application installée?</string>
+    <string name="CompatibleFileSuggest">Vous aimez ouvert en application installée?</string>
 
 </resources>
