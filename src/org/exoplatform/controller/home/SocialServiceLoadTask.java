@@ -28,18 +28,24 @@ import android.os.AsyncTask;
 
 import com.cyrilmottier.android.greendroid.R;
 
-public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
-  private Context             mContext;
+public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
+  private Context                       mContext;
 
-  private String              okString;
+  private String                        okString;
 
-  private String              titleString;
+  private String                        titleString;
 
-  private String              contentString;
+  private String                        contentString;
 
-  private HomeController      homeController;
+  private HomeController                homeController;
 
-  private LoaderActionBarItem loaderItem;
+  private ActivityService<RestActivity> activityService;
+
+  private IdentityService<RestIdentity> identityService;
+
+  private String                        userIdentity;
+
+  private LoaderActionBarItem           loaderItem;
 
   public SocialServiceLoadTask(Context context,
                                HomeController controller,
@@ -64,9 +70,9 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
 
   }
 
-  @SuppressWarnings("deprecation")
+  @SuppressWarnings({ "deprecation", "unchecked" })
   @Override
-  public RestProfile doInBackground(Void... params) {
+  public String[] doInBackground(Void... params) {
     try {
       String userName = AccountSetting.getInstance().getUsername();
       String password = AccountSetting.getInstance().getPassword();
@@ -84,19 +90,17 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
       SocialClientContext.setRestVersion(versionService.getLatest());
       clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
 
-      @SuppressWarnings("unchecked")
-      ActivityService<RestActivity> activityService = clientServiceFactory.createActivityService();
-      IdentityService<RestIdentity> identityService = clientServiceFactory.createIdentityService();
-      String userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION,
-                                                          userName);
-      SocialServiceHelper.getInstance().userIdentity = userIdentity;
-
-      SocialServiceHelper.getInstance().activityService = activityService;
-      SocialServiceHelper.getInstance().identityService = identityService;
+      activityService = clientServiceFactory.createActivityService();
+      identityService = clientServiceFactory.createIdentityService();
+      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
       RestIdentity restIdent = identityService.getIdentity(ExoConstants.ACTIVITY_ORGANIZATION,
                                                            userName);
+      RestProfile profile = restIdent.getProfile();
+      String[] profileArray = new String[2];
+      profileArray[0] = profile.getAvatarUrl();
+      profileArray[1] = profile.getFullName();
 
-      return restIdent.getProfile();
+      return profileArray;
     } catch (SocialClientLibException e) {
       return null;
     } catch (RuntimeException e) {
@@ -107,8 +111,12 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, RestProfile> {
   }
 
   @Override
-  public void onPostExecute(RestProfile result) {
+  public void onPostExecute(String[] result) {
+
     if (result != null) {
+      SocialServiceHelper.getInstance().userIdentity = userIdentity;
+      SocialServiceHelper.getInstance().activityService = activityService;
+      SocialServiceHelper.getInstance().identityService = identityService;
       SocialServiceHelper.getInstance().userProfile = result;
       if (HomeActivity.homeActivity != null) {
         HomeActivity.homeActivity.setProfileInfo(result);

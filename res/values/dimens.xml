@@ -20,10 +20,13 @@
 <resources>
 
     <dimen name="thumbnail_size">50dp</dimen>
-    <dimen name="thumbnail_radius">5dp</dimen>
+    <dimen name="thumbnail_radius">6dp</dimen>
     <dimen name="text_size_small">14sp</dimen>
+    <dimen name="image_radius">4dp</dimen>
+    <dimen name="home_profile_avatar_size">38dp</dimen>
     <dimen name="social_liked_avatar_size">29dp</dimen>
     <dimen name="social_liked_list_item_width">85dp</dimen>
     <dimen name="social_liked_list_item_height">85dp</dimen>
+    <dimen name="social_avatar_size">43dp</dimen>
 
 </resources>

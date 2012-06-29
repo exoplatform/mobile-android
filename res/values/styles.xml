@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
 
     <style name="background_color">
@@ -57,16 +56,18 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">#155EAD</item>
     </style>
-    
+
     <style name="textview_home">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">#ffffff</item>
     </style>
-     <style name="textview_activity_name_home">
+
+    <style name="textview_activity_name_home">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">#ffffff</item>
     </style>
-     <style name="textview_activity_title_home">
+
+    <style name="textview_activity_title_home">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">#828282</item>
     </style>
@@ -77,7 +78,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:drawablePadding">2dp</item>
-        <item name="android:padding">5dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/accent_1</item>

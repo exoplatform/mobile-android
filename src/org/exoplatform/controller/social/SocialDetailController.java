@@ -16,18 +16,16 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.RoundedImageView;
+import org.exoplatform.widget.ShaderImageView;
 import org.exoplatform.widget.SocialActivityStreamItem;
 
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
@@ -192,19 +190,19 @@ public class SocialDetailController {
                               .getDimensionPixelSize(org.exoplatform.R.dimen.social_liked_avatar_size);
     LayoutParams params = new LayoutParams(likedAvatarSize, likedAvatarSize);
     params.setMargins(5, 0, 0, 0);
-    LikedAvatarItem likedAvatar;
+    ShaderImageView likedAvatar;
     for (int i = 0; i < maxChild; i++) {
-      likedAvatar = new LikedAvatarItem(mContext);
-      likedAvatar.avatarImage.setUrl(likeLinkedList.get(i).likedImageUrl);
+      likedAvatar = new ShaderImageView(mContext);
+      likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);
       likedLayoutWrap.addView(likedAvatar, params);
     }
     /*
      * If have more than 4 likers, we put a "more_likers" image icon at the last
      */
     if (size > 4) {
-      RoundedImageView image = new RoundedImageView(mContext);
-      image.setDefaultImageResource(R.drawable.activity_detail_more_likers);
-      likedLayoutWrap.addView(image, params);
+      likedAvatar = new ShaderImageView(mContext);
+      likedAvatar.setDefaultImageResource(R.drawable.activity_detail_more_likers);
+      likedLayoutWrap.addView(likedAvatar, params);
     }
 
   }
@@ -228,19 +226,4 @@ public class SocialDetailController {
     onLikeLoad(loader, activityId);
   }
 
-  /*
-   * The Layout class for displaying the liker avatar and liker name
-   */
-  private class LikedAvatarItem extends RelativeLayout {
-    public RoundedImageView avatarImage;
-
-    public LikedAvatarItem(Context context) {
-      super(context);
-      LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      View view = inflate.inflate(R.layout.detail_liked_item, this);
-      avatarImage = (RoundedImageView) view.findViewById(R.id.detail_liked_image);
-      avatarImage.setDefaultImageResource(R.drawable.default_avatar);
-    }
-
-  }
 }

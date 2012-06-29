@@ -28,17 +28,17 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 /**
- * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com May
- * 23, 2012
+ * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
+ * 8, 2012
  */
-public class HomeLinearLayout extends LinearLayout {
-  private Paint paint = new Paint();
+public class HomeLandscapeLayout extends LinearLayout {
+  private Paint            paint           = new Paint();
 
-  public HomeLinearLayout(Context context) {
+  public HomeLandscapeLayout(Context context) {
     super(context, null);
   }
 
-  public HomeLinearLayout(Context context, AttributeSet attrs) {
+  public HomeLandscapeLayout(Context context, AttributeSet attrs) {
     super(context, attrs);
   }
 
@@ -47,31 +47,34 @@ public class HomeLinearLayout extends LinearLayout {
     super.onDraw(canvas);
     int scaledWidth = getMeasuredWidth();
     int scaledHeight = getMeasuredHeight();
+    int itemWidth = scaledWidth / 3;
     paint.setStyle(Style.STROKE);
-    /*
-     * Make radius gradient bitmap with height
-     */
-    Bitmap bm = PhotoUtils.makeRadGrad(getWidth(), getHeight());
-    /*
-     * Draw the gradient bitmap
-     */
-    canvas.drawBitmap(bm, 0, 0, paint);
     paint.setDither(true);
     paint.setAntiAlias(true);
     /*
-     * Draw the horizontal line separator
+     * Make radius gradient bitmap with double height
      */
-    paint.setColor(Color.BLACK);
-    canvas.drawLine(scaledWidth / 2, 0, scaledWidth / 2, scaledHeight, paint);
-    paint.setColor(Color.rgb(60, 60, 60));
-    canvas.drawLine(scaledWidth / 2 + 1, 0, scaledWidth / 2 + 1, scaledHeight, paint);
+    Bitmap bm = PhotoUtils.makeRadGrad(scaledWidth, scaledHeight * 2);
     /*
-     * Draw the vertical line separator
+     * Draw the bitmap at left = -4 and top = -1/2 of scaleHeight
+     */
+    canvas.drawBitmap(bm, -4, -scaledHeight / 2, paint);
+
+    /*
+     * Draw the first line separator
      */
     paint.setColor(Color.BLACK);
-    canvas.drawLine(0, scaledHeight / 2, scaledWidth, scaledHeight / 2, paint);
+    canvas.drawLine(itemWidth, 0, itemWidth, scaledHeight, paint);
     paint.setColor(Color.rgb(51, 51, 51));
-    canvas.drawLine(0, scaledHeight / 2 + 1, scaledWidth, scaledHeight / 2 + 1, paint);
+    canvas.drawLine(itemWidth + 1, 0, itemWidth + 1, scaledHeight, paint);
+    /*
+     * Draw the second line separator
+     */
+    paint.setColor(Color.BLACK);
+    itemWidth = itemWidth * 2;
+    canvas.drawLine(itemWidth, 0, itemWidth, scaledHeight, paint);
+    paint.setColor(Color.rgb(51, 51, 51));
+    canvas.drawLine(itemWidth + 1, 0, itemWidth + 1, scaledHeight, paint);
 
   }
 
