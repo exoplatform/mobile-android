@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="40dip"
-        android:background="#DCDCDCDC"
+        android:background="#4E4E4E4E"
         android:gravity="center" >
 
         <TextView
@@ -40,8 +40,8 @@
 
             <ImageView
                 android:id="@+id/warning_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/unreadable_file_size"
+                android:layout_height="@dimen/unreadable_file_size"
                 android:background="@drawable/icon_for_unreadable_file" />
 
             <TextView

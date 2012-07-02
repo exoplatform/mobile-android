@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +24,7 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.widget.CompatibleFileOpenDialog;
+import org.exoplatform.widget.UnreadableFileDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,8 +33,12 @@ import org.xml.sax.SAXException;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 public class ExoDocumentUtils {
 
@@ -72,6 +78,11 @@ public class ExoDocumentUtils {
    */
 
   public static void fileOpen(Context context, String fileType, String filePath, String fileName) {
+    if (fileType == null) {
+      new UnreadableFileDialog(context).show();
+      return;
+    }
+
     if (fileType != null && (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE))) {
       Intent intent = new Intent(context, WebViewActivity.class);
       intent.putExtra(ExoConstants.WEB_VIEW_URL, filePath);
@@ -80,8 +91,23 @@ public class ExoDocumentUtils {
       context.startActivity(intent);
     } else {
       new CompatibleFileOpenDialog(context, fileType, filePath, fileName).show();
+
     }
 
+  }
+
+  public static boolean isCallable(Context context, String url) {
+    String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+    String mimeType = null;
+    if (extension != null) {
+      mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+    }
+    Intent intent = new Intent(Intent.ACTION_VIEW);
+    intent.setDataAndType(Uri.parse(url), mimeType);
+    List<ResolveInfo> list = context.getPackageManager()
+                                    .queryIntentActivities(intent,
+                                                           PackageManager.MATCH_DEFAULT_ONLY);
+    return list.size() > 0;
   }
 
   /*

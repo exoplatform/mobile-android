@@ -24,7 +24,7 @@ public class DocumentActionDialog extends Dialog {
   public DocumentActionAdapter _documentActionAdapter;
 
   // Constructor
-  public DocumentActionDialog(DocumentActivity context, ExoFile file) {
+  public DocumentActionDialog(DocumentActivity context, ExoFile file, boolean isActBar) {
 
     super(context);
 
@@ -35,7 +35,7 @@ public class DocumentActionDialog extends Dialog {
 
     myFile = file;
 
-    _documentActionAdapter = new DocumentActionAdapter(context, this, myFile);
+    _documentActionAdapter = new DocumentActionAdapter(context, this, myFile, isActBar);
 
     init();
 

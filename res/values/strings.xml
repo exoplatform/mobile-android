@@ -183,5 +183,6 @@
     <string name="FileNotFound"> File not found.</string>
     <string name="FileNotSupported"> File was not support to open!</string>
     <string name="CompatibleFileSuggest">Do you like open in installed app?</string>
+    <string name="OpenIn">Open in &#8230;</string>
 
 </resources>

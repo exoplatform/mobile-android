@@ -38,6 +38,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
 
 import android.app.Activity;
@@ -76,7 +77,7 @@ public class SocialImageLoader {
   private final int              REQUIRED_SIZE = 100;
 
   public SocialImageLoader(Context context) {
-    fileCache = new FileCache(context);
+    fileCache = new FileCache(context, ExoConstants.SOCIAL_FILE_CACHE);
     executorService = Executors.newFixedThreadPool(5);
 
   }

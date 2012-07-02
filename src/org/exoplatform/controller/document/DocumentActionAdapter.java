@@ -1,5 +1,7 @@
 package org.exoplatform.controller.document;
 
+import java.util.ArrayList;
+
 import org.exoplatform.R;
 import org.exoplatform.model.DocumentActionDescription;
 import org.exoplatform.model.ExoFile;
@@ -21,38 +23,44 @@ import android.widget.TextView;
 
 public class DocumentActionAdapter extends BaseAdapter {
 
-  public ExoFile                      _selectedFile;
+  public ExoFile                               _selectedFile;
 
-  private DocumentActivity            _mContext;
+  private DocumentActivity                     _mContext;
 
-  private DocumentActionDialog        _delegate;
+  private DocumentActionDialog                 _delegate;
 
   // Localization string
 
-  private String                      strAddAPhoto   = "";
+  private String                               strAddAPhoto = "";
 
-  private String                      strCopy        = "";
+  private String                               strCopy      = "";
 
-  private String                      strMove        = "";
+  private String                               strMove      = "";
 
-  private String                      strDelete      = "";
+  private String                               strDelete    = "";
 
-  private String                      strRename      = "";
+  private String                               strRename    = "";
 
-  private String                      strPaste       = "";
+  private String                               strPaste     = "";
 
-  private String                      strCreateFolder;
+  private String                               strOpenIn    = "";
 
-  private DocumentActionDescription[] fileActionList = null;
+  private String                               strCreateFolder;
 
-  private DocumentExtendDialog        extendDialog;
+  private DocumentActionDescription[]          fileActions  = null;
 
-  public DocumentActionAdapter(DocumentActivity context, DocumentActionDialog parent, ExoFile file) {
+  private ArrayList<DocumentActionDescription> fileActionList;
+
+  private DocumentExtendDialog                 extendDialog;
+
+  public DocumentActionAdapter(DocumentActivity context,
+                               DocumentActionDialog parent,
+                               ExoFile file,
+                               boolean isActionBar) {
     _mContext = context;
     _delegate = parent;
     _selectedFile = file;
-
-    changeLanguage();
+    changeLanguage(isActionBar);
 
   }
 
@@ -97,7 +105,9 @@ public class DocumentActionAdapter extends BaseAdapter {
               DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
             }
 
-            DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path, _selectedFile.path, 1);
+            DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
+                                                              _selectedFile.path,
+                                                              1);
           } else {
             // Copy file
             ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
@@ -114,7 +124,9 @@ public class DocumentActionAdapter extends BaseAdapter {
                 String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
                 String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-                DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path, destinationUrl, 3);
+                DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
+                                                                  destinationUrl,
+                                                                  3);
               }
 
             }
@@ -130,13 +142,18 @@ public class DocumentActionAdapter extends BaseAdapter {
         } else if (pos == 6) { // Create folder
           extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, 6);
           extendDialog.show();
+        } else if (pos == 7) { // Open file in
+          ExoDocumentUtils.fileOpen(_mContext,
+                                    _selectedFile.nodeType,
+                                    _selectedFile.path,
+                                    _selectedFile.name);
         }
 
       }
 
     });
 
-    bindView(rowView, fileActionList[position]);
+    bindView(rowView, fileActionList.get(position));
     return (rowView);
 
   }
@@ -148,7 +165,8 @@ public class DocumentActionAdapter extends BaseAdapter {
     icon.setImageResource(fileAction.imageID);
 
     if (_selectedFile.isFolder) {
-      if ((fileAction.actionName.equalsIgnoreCase(strPaste) && (DocumentHelper.getInstance()._fileCopied.path == "" && DocumentHelper.getInstance()._fileMoved.path == ""))) {
+      if (fileAction.actionName.equalsIgnoreCase(strOpenIn)
+          || (fileAction.actionName.equalsIgnoreCase(strPaste) && (DocumentHelper.getInstance()._fileCopied.path == "" && DocumentHelper.getInstance()._fileMoved.path == ""))) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
@@ -179,11 +197,11 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   public int getCount() {
 
-    return fileActionList.length;
+    return fileActionList.size();
   }
 
   // Set language
-  public void changeLanguage() {
+  public void changeLanguage(boolean isAct) {
     Resources resource = _mContext.getResources();
 
     strAddAPhoto = resource.getString(R.string.AddAPhoto);
@@ -193,16 +211,31 @@ public class DocumentActionAdapter extends BaseAdapter {
     strRename = resource.getString(R.string.Rename);
     strPaste = resource.getString(R.string.Paste);
     strCreateFolder = resource.getString(R.string.CreateFolder);
+    strOpenIn = resource.getString(R.string.OpenIn);
 
-    fileActionList = new DocumentActionDescription[] {
+    fileActions = new DocumentActionDescription[] {
         new DocumentActionDescription(strAddAPhoto, R.drawable.documentactionpopupphotoicon),
         new DocumentActionDescription(strCopy, R.drawable.documentactionpopupcopyicon),
         new DocumentActionDescription(strMove, R.drawable.documentactionpopupcuticon),
         new DocumentActionDescription(strPaste, R.drawable.documentactionpopuppasteicon),
         new DocumentActionDescription(strDelete, R.drawable.documentactionpopupdeleteicon),
         new DocumentActionDescription(strRename, R.drawable.documentactionpopuprenameicon),
-        new DocumentActionDescription(strCreateFolder, R.drawable.documentactionpopupaddfoldericon) };
+        new DocumentActionDescription(strCreateFolder, R.drawable.documentactionpopupaddfoldericon),
+        new DocumentActionDescription(strOpenIn, R.drawable.documenticonforfolder) };
+    int size = fileActions.length;
+    int maxChildren = 0;
+    if (isAct) {
+      maxChildren = size - 1;
+    } else {
+      if (_selectedFile.isFolder) {
+        maxChildren = size - 1;
+      } else
+        maxChildren = size;
+    }
+    fileActionList = new ArrayList<DocumentActionDescription>();
+    for (int i = 0; i < maxChildren; i++) {
+      fileActionList.add(fileActions[i]);
+    }
 
   }
-
 }

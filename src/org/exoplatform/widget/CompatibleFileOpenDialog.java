@@ -15,8 +15,10 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.image.FileCache;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -63,12 +65,15 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
 
   private Resources        resource;
 
+  private FileCache        fileCache;
+
   public CompatibleFileOpenDialog(Context context, String fType, String fPath, String fName) {
     super(context);
     mContext = context;
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.compatible_open_file_dialog_layout);
     changeLanguage();
+    fileCache = new FileCache(context, ExoConstants.DOCUMENT_FILE_CACHE);
     TextView titleView = (TextView) findViewById(R.id.com_dialog_title_view);
     titleView.setText(fName);
     TextView contentView = (TextView) findViewById(R.id.com_warning_content);
@@ -137,8 +142,13 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
       DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
       httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
       try {
-        String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-        File file = new File(parentPath, fileName);
+        File file = fileCache.getFileFromName(fileName);
+        /*
+         * If file exists return file else download from url
+         */
+        if (file.exists()) {
+          return file;
+        }
         HttpGet getRequest = new HttpGet(url);
         HttpResponse response = httpClient.execute(getRequest);
         HttpEntity entity = response.getEntity();
@@ -191,11 +201,11 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
 
         if (docFileType != null) {
           Uri path = Uri.fromFile(result);
-          Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
-          pdfIntent.setDataAndType(path, docFileType);
-          pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+          Intent intent = new Intent(Intent.ACTION_VIEW);
+          intent.setDataAndType(path, docFileType);
+          intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
           try {
-            mContext.startActivity(pdfIntent);
+            mContext.startActivity(intent);
           } catch (ActivityNotFoundException e) {
             Toast.makeText(mContext, noAppFound, Toast.LENGTH_SHORT).show();
           }

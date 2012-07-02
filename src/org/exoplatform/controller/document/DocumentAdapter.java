@@ -8,6 +8,7 @@ import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.widget.UnreadableFileDialog;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -116,7 +117,12 @@ public class DocumentAdapter extends BaseAdapter {
           /*
            * Open file with compatible application
            */
-          ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
+          
+          if (ExoDocumentUtils.isFileReadable(myFile.nodeType)) {
+            ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
+          } else {
+            new UnreadableFileDialog(_mContext).show();
+          }
 
         } else {
           DocumentActivity._documentActivityInstance._fileForCurrentActionBar = myFile;
@@ -140,8 +146,7 @@ public class DocumentAdapter extends BaseAdapter {
         // DocumentActivity._documentActivityInstance._fileForCurrnentCell =
         // file;
 
-        if (_documentActionDialog == null)
-          _documentActionDialog = new DocumentActionDialog(_mContext, file);
+        _documentActionDialog = new DocumentActionDialog(_mContext, file, false);
         _documentActionDialog.myFile = file;
         _documentActionDialog._documentActionAdapter.setSelectedFile(file);
         _documentActionDialog._documentActionAdapter.notifyDataSetChanged();

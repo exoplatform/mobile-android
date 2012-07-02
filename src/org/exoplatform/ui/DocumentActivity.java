@@ -37,11 +37,11 @@ import android.widget.TextView;
 import com.cyrilmottier.android.greendroid.R;
 
 public class DocumentActivity extends MyActionBar {
-  private static final String    DOCUMENT_HELPER          = "document_helper";
+  private static final String    DOCUMENT_HELPER = "document_helper";
 
-  private static final String    ACCOUNT_SETTING          = "account_setting";
+  private static final String    ACCOUNT_SETTING = "account_setting";
 
-  private static final String    CURRENT_FILE             = "current_file";
+  private static final String    CURRENT_FILE    = "current_file";
 
   public static DocumentActivity _documentActivityInstance;
 
@@ -128,9 +128,9 @@ public class DocumentActivity extends MyActionBar {
       break;
     case 0:
 
-      if (_documentAdapter._documentActionDialog == null)
-        _documentAdapter._documentActionDialog = new DocumentActionDialog(this,
-                                                                          _fileForCurrentActionBar);
+      _documentAdapter._documentActionDialog = new DocumentActionDialog(this,
+                                                                        _fileForCurrentActionBar,
+                                                                        true);
       _documentAdapter._documentActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrentActionBar);
       _documentAdapter._documentActionDialog._documentActionAdapter.notifyDataSetChanged();
       _documentAdapter._documentActionDialog.setTileForDialog(_fileForCurrentActionBar.name);

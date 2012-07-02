@@ -28,5 +28,6 @@
     <dimen name="social_liked_list_item_width">85dp</dimen>
     <dimen name="social_liked_list_item_height">85dp</dimen>
     <dimen name="social_avatar_size">43dp</dimen>
+    <dimen name="unreadable_file_size">75dp</dimen>
 
 </resources>

@@ -129,5 +129,9 @@ public class ExoConstants {
   public static final int    HOME_AVATAR_BORDER_COLOR      = 0x44444444;
 
   public static final int    HOME_SOCIAL_MAX_NUMBER        = 10;
+  
+  public static final String SOCIAL_FILE_CACHE = "SocialCache";
+  
+  public static final String DOCUMENT_FILE_CACHE = "DocumentCache";
 
 }
