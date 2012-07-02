@@ -168,8 +168,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
       String tempMessage = activityInfo.templateParams.get("MESSAGE");
       if (tempMessage != null) {
-        textViewTempMessage.setText(tempMessage.trim());
-        textViewTempMessage.setVisibility(View.VISIBLE);
+        textViewMessage.setText(tempMessage.trim());
       }
 
       String docLink = activityInfo.templateParams.get("DOCLINK");
