@@ -90,7 +90,7 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
             docBuffer.append(imageDir.substring(indexOfDocLink));
             String docPath = imageDir.substring(indexOfDocLink + pathExtension.length());
             templateParams.put("DOCPATH", docPath);
-            templateParams.put("MESSAGE", "");
+            templateParams.put("MESSAGE", composeMessage);
             templateParams.put("DOCLINK", docBuffer.toString());
             templateParams.put("WORKSPACE", "collaboration");
             templateParams.put("REPOSITORY", "repository");
@@ -99,7 +99,6 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
 
           }
         }
-
       }
       activityImlp.setTitle(composeMessage);
       SocialServiceHelper.getInstance().activityService.create(activityImlp);
