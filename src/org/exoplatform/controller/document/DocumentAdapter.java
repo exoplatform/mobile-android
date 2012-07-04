@@ -7,6 +7,7 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.UnreadableFileDialog;
 
@@ -57,14 +58,15 @@ public class DocumentAdapter extends BaseAdapter {
 
     final ExoFile myFile = _documentList.get(pos);
 
-    if (myFile.name.equals("")) {
+    if (myFile.name.equals("") && myFile.path.equals("")) {
       convertView = inflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
-      if (pos == 0)
+      if (myFile.driveName.equals(ExoConstants.DOCUMENT_PERSONAL_DRIVER))
         textViewTabTitle.setText(_mContext.getResources().getString(R.string.Personal));
-      else
+      else if (myFile.driveName.equals(ExoConstants.DOCUMENT_GROUP_DRIVER))
         textViewTabTitle.setText(_mContext.getResources().getString(R.string.Group));
-
+      else if (myFile.driveName.equals(ExoConstants.DOCUMENT_GENERAL_DRIVER))
+        textViewTabTitle.setText(_mContext.getResources().getString(R.string.General));
       return (convertView);
     }
 
@@ -117,7 +119,7 @@ public class DocumentAdapter extends BaseAdapter {
           /*
            * Open file with compatible application
            */
-          
+
           if (ExoDocumentUtils.isFileReadable(myFile.nodeType)) {
             ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
           } else {

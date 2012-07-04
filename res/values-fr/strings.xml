@@ -154,8 +154,9 @@
     <string name="SpecialCharacters"> Les caractères spéciaux ne sont pas autorisés</string>
     <string name="In"> dans les</string>
     <string name="Space"> l\'espace</string>
-    <string name="Personal"> Personnel</string>
-    <string name="Group"> Groupe</string>
+    <string name="Personal">Personnel</string>
+    <string name="Group">Groupe</string>
+    <string name="General">Général</string>
     <string name="NetworkTimeout"> La connexion réseau a expirée. Essayez à nouveau !</string>
     <string name="Liker"> Liker</string>
     <string name="Likers"> Likers</string>

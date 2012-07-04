@@ -216,25 +216,35 @@ public class ExoDocumentUtils {
       DocumentHelper.getInstance().childFilesMap = new Bundle();
     }
 
-    if (file.name == "") {
-      // personal
+    if (file.name.equals("") && file.path.equals("")) {
+      // personal driver
       StringBuffer buffer = new StringBuffer();
-      arrFilesTmp.add(new ExoFile());
+      arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_PERSONAL_DRIVER));
       buffer.append(domain);
       buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
-      buffer.append("personal");
+      buffer.append(ExoConstants.DOCUMENT_PERSONAL_DRIVER);
       urlStr = buffer.toString();
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       arrFilesTmp.addAll(getDrives(response));
-      // group
-      arrFilesTmp.add(new ExoFile());
+      // group driver
+      arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GROUP_DRIVER));
       buffer = new StringBuffer();
       buffer.append(domain);
       buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
-      buffer.append("group");
+      buffer.append(ExoConstants.DOCUMENT_GROUP_DRIVER);
       urlStr = buffer.toString();
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       arrFilesTmp.addAll(getDrives(response));
+      // general driver
+      arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GENERAL_DRIVER));
+      buffer = new StringBuffer();
+      buffer.append(domain);
+      buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
+      buffer.append(ExoConstants.DOCUMENT_GENERAL_DRIVER);
+      urlStr = buffer.toString();
+      response = ExoConnectionUtils.getRequestResponse(urlStr);
+      arrFilesTmp.addAll(getDrives(response));
+      // push information to map
       if (DocumentHelper.getInstance().childFilesMap.containsKey(ExoConstants.DOCUMENT_PATH)) {
         DocumentHelper.getInstance().childFilesMap.remove(ExoConstants.DOCUMENT_PATH);
         DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_PATH,
