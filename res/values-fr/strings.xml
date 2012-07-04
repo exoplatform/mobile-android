@@ -166,5 +166,5 @@
     <string name="FileNotSupported">Le fichier a été pas en charge d\'ouvrir!</string>
     <string name="CompatibleFileSuggest">Vous aimez ouvert en application installée?</string>
     <string name="OpenIn">Ouvert dans &#8230;</string>
-
+<string name="DownloadingFile">Téléchargement du fichier &#8230;</string>
 </resources>

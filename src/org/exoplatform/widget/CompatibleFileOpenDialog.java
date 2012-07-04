@@ -17,17 +17,16 @@ import org.exoplatform.R;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.image.FileCache;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -49,11 +48,13 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
 
   private String           fileName;
 
-  private WaitingDialog    _progressDialog;
+  private ProgressDialog   mProgressDialog;
+
+  public static final int  DIALOG_DOWNLOAD_PROGRESS = 0;
 
   private FileDownloadTask mLoadTask;
 
-  private String           downLoadingData;
+  private String           downLoadingFile;
 
   private String           noAppFound;
 
@@ -114,25 +115,43 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
     }
   }
 
+  private void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == FileDownloadTask.Status.RUNNING) {
+      mLoadTask.cancel(true);
+      mLoadTask = null;
+    }
+  }
+
   private void changeLanguage() {
     resource = mContext.getResources();
-    downLoadingData = resource.getString(R.string.DownloadingData);
+    downLoadingFile = resource.getString(R.string.DownloadingFile);
     noAppFound = resource.getString(R.string.NoAppFound);
     cannotOpenFile = resource.getString(R.string.CannotOpenFile);
     fileNotFound = resource.getString(R.string.FileNotFound);
     fileNotSupport = resource.getString(R.string.FileNotSupported);
   }
 
-  private class FileDownloadTask extends AsyncTask<String, Void, File> {
+  private class FileDownloadTask extends AsyncTask<String, String, File> {
+
+    private File file;
 
     @Override
     protected void onPreExecute() {
-      _progressDialog = new WaitingDialog(mContext, null, downLoadingData);
-      _progressDialog.show();
+      mProgressDialog = (ProgressDialog) onCreateDialog(DIALOG_DOWNLOAD_PROGRESS);
+      mProgressDialog.show();
+
     }
 
     @Override
     protected File doInBackground(String... params) {
+
+      /*
+       * If file exists return file else download from url
+       */
+      file = fileCache.getFileFromName(fileName);
+      if (file.exists()) {
+        return file;
+      }
 
       String url = params[0].replaceAll(" ", "%20");
       HttpParams httpParameters = new BasicHttpParams();
@@ -141,30 +160,59 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
       HttpConnectionParams.setTcpNoDelay(httpParameters, true);
       DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
       httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
+
       try {
-        File file = fileCache.getFileFromName(fileName);
-        /*
-         * If file exists return file else download from url
-         */
-        if (file.exists()) {
-          return file;
-        }
+
         HttpGet getRequest = new HttpGet(url);
         HttpResponse response = httpClient.execute(getRequest);
         HttpEntity entity = response.getEntity();
         if (entity != null) {
+
+          // lenghtOfFile is used for calculating download progress
+          long lenghtOfFile = entity.getContentLength();
           InputStream is = entity.getContent();
           OutputStream os = new FileOutputStream(file);
-          PhotoUtils.copyStream(is, os);
+
+          // here's the downloading progress
+          byte[] buffer = new byte[1024];
+          int len = 0;
+          long total = 0;
+
+          while ((len = is.read(buffer)) > 0) {
+            total += len; // total = total + len
+            publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+            os.write(buffer, 0, len);
+          }
+
           os.close();
         }
         return file;
       } catch (IOException e) {
+        if (file != null) {
+          file.delete();
+        }
         return null;
       } finally {
         httpClient.getConnectionManager().shutdown();
       }
 
+    }
+
+    /*
+     * If cancelled, delete the downloading file
+     */
+    @Override
+    protected void onCancelled() {
+      if (file.exists()) {
+        file.delete();
+      }
+      mProgressDialog.dismiss();
+      super.onCancelled();
+    }
+
+    @Override
+    protected void onProgressUpdate(String... values) {
+      mProgressDialog.setProgress(Integer.parseInt(values[0]));
     }
 
     @Override
@@ -209,6 +257,7 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
           } catch (ActivityNotFoundException e) {
             Toast.makeText(mContext, noAppFound, Toast.LENGTH_SHORT).show();
           }
+
         } else {
           Toast.makeText(mContext, cannotOpenFile, Toast.LENGTH_SHORT).show();
         }
@@ -216,9 +265,32 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
       } else {
         Toast.makeText(mContext, fileNotFound, Toast.LENGTH_SHORT).show();
       }
-      _progressDialog.dismiss();
+      mProgressDialog.dismiss();
     }
 
+  }
+
+  private Dialog onCreateDialog(int id) {
+    switch (id) {
+    case DIALOG_DOWNLOAD_PROGRESS: // we set this to 0
+      mProgressDialog = new ProgressDialog(mContext);
+      mProgressDialog.setMessage(downLoadingFile);
+      mProgressDialog.setIndeterminate(false);
+      mProgressDialog.setMax(100);
+      mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+      mProgressDialog.setCancelable(true);
+      mProgressDialog.show();
+      return mProgressDialog;
+    default:
+      return null;
+    }
+  }
+
+  @Override
+  public void onBackPressed() {
+    onCancelLoad();
+    dismiss();
+    super.onBackPressed();
   }
 
 }
