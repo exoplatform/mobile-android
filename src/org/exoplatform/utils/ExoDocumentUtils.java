@@ -216,7 +216,7 @@ public class ExoDocumentUtils {
       DocumentHelper.getInstance().childFilesMap = new Bundle();
     }
 
-    if (file.name.equals("") && file.path.equals("")) {
+    if ("".equals(file.name) && "".equals(file.path)) {
       // personal driver
       ArrayList<ExoFile> fileList = new ArrayList<ExoFile>();
       StringBuffer buffer = new StringBuffer();
