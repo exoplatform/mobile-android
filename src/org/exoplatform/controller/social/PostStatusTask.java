@@ -99,7 +99,6 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
 
           }
         }
-
       }
       activityImlp.setTitle(composeMessage);
       SocialServiceHelper.getInstance().activityService.create(activityImlp);

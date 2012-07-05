@@ -16,8 +16,10 @@ import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.CompatibleFileOpenDialog;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -45,6 +47,8 @@ public class WebViewActivity extends MyActionBar {
 
   private String              _titlebar;
 
+  private String              contentType;
+
   private LoaderActionBarItem loaderItem;
 
   public void onCreate(Bundle icicle) {
@@ -60,6 +64,7 @@ public class WebViewActivity extends MyActionBar {
     if (icicle != null) {
       _url = icicle.getString(ExoConstants.WEB_VIEW_URL);
       _titlebar = icicle.getString(ExoConstants.WEB_VIEW_TITLE);
+      contentType = icicle.getString(ExoConstants.WEB_VIEW_MIME_TYPE);
       AccountSetting accountSetting = icicle.getParcelable(ACCOUNT_SETTING);
       AccountSetting.getInstance().setInstance(accountSetting);
       ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
@@ -68,6 +73,7 @@ public class WebViewActivity extends MyActionBar {
       _url = getIntent().getStringExtra(ExoConstants.WEB_VIEW_URL);
       _url = _url.replaceAll(" ", "%20");
       _titlebar = getIntent().getStringExtra(ExoConstants.WEB_VIEW_TITLE);
+      contentType = getIntent().getStringExtra(ExoConstants.WEB_VIEW_MIME_TYPE);
     }
 
     setupCookies(_url);
@@ -93,6 +99,11 @@ public class WebViewActivity extends MyActionBar {
         if (progress == 100) {
           setTitle(_titlebar);
           getActionBar().removeItem(0);
+          if (contentType != null) {
+            addActionBarItem();
+            getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
+          }
+
         }
 
       }
@@ -108,24 +119,43 @@ public class WebViewActivity extends MyActionBar {
     super.onSaveInstanceState(outState);
     outState.putString(ExoConstants.WEB_VIEW_URL, _url);
     outState.putString(ExoConstants.WEB_VIEW_TITLE, _titlebar);
+    outState.putString(ExoConstants.WEB_VIEW_MIME_TYPE, contentType);
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    if (DashboardActivity.dashboardActivity != null) {
-      DashboardActivity.dashboardActivity.finish();
-    }
-    if (DocumentActivity._documentActivityInstance != null) {
-      DocumentActivity._documentActivityInstance.finish();
-    }
-    if (SocialDetailActivity.socialDetailActivity != null) {
-      SocialDetailActivity.socialDetailActivity.finish();
-      if (SocialActivity.socialActivity != null) {
-        SocialActivity.socialActivity.finish();
+
+    switch (position) {
+    case -1:
+      if (DashboardActivity.dashboardActivity != null) {
+        DashboardActivity.dashboardActivity.finish();
       }
+      if (DocumentActivity._documentActivityInstance != null) {
+        DocumentActivity._documentActivityInstance.finish();
+      }
+      if (SocialDetailActivity.socialDetailActivity != null) {
+        SocialDetailActivity.socialDetailActivity.finish();
+        if (SocialActivity.socialActivity != null) {
+          SocialActivity.socialActivity.finish();
+        }
+      }
+      cleaCache();
+      finish();
+
+      break;
+
+    case 0:
+      if (item instanceof LoaderActionBarItem) {
+
+      } else {
+        new CompatibleFileOpenDialog(this, contentType, _url, _titlebar).show();
+      }
+      break;
+
+    default:
+      break;
     }
-    cleaCache();
-    finish();
+
     return true;
   }
 

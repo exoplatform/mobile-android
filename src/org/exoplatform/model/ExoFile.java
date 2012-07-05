@@ -30,14 +30,24 @@ public class ExoFile implements Parcelable {
     nodeType = "";
   }
 
+  public ExoFile(String driverName) {
+    path = "";
+    isFolder = true;
+    name = "";
+    currentFolder = "";
+    this.driveName = driverName;
+    workspaceName = "";
+    nodeType = "";
+  }
+
   private ExoFile(Parcel in) {
     readFromParcel(in);
   }
 
   private void readFromParcel(Parcel in) {
     path = in.readString();
-    isFolder =(Boolean) in.readValue(null);
-//    in.readBooleanArray(new boolean[] { isFolder });
+    isFolder = (Boolean) in.readValue(null);
+    // in.readBooleanArray(new boolean[] { isFolder });
     name = in.readString();
     currentFolder = in.readString();
     driveName = in.readString();
@@ -73,7 +83,7 @@ public class ExoFile implements Parcelable {
   public void writeToParcel(Parcel par, int flags) {
     par.writeString(path);
     par.writeValue(isFolder);
-//    par.writeBooleanArray(new boolean[] { isFolder });
+    // par.writeBooleanArray(new boolean[] { isFolder });
     par.writeString(name);
     par.writeString(currentFolder);
     par.writeString(driveName);

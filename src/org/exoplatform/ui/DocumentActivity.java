@@ -89,6 +89,7 @@ public class DocumentActivity extends MyActionBar {
        */
       DocumentHelper.getInstance().childFilesMap = new Bundle();
       DocumentHelper.getInstance().currentFileMap = new Bundle();
+      _fileForCurrentActionBar = new ExoFile();
       setTitle(getResources().getString(R.string.Documents));
     }
     onLoad(DocumentHelper.getInstance().getRepositoryHomeUrl(), null, 0);
@@ -127,9 +128,9 @@ public class DocumentActivity extends MyActionBar {
       break;
     case 0:
 
-      if (_documentAdapter._documentActionDialog == null)
-        _documentAdapter._documentActionDialog = new DocumentActionDialog(this,
-                                                                          _fileForCurrentActionBar);
+      _documentAdapter._documentActionDialog = new DocumentActionDialog(this,
+                                                                        _fileForCurrentActionBar,
+                                                                        true);
       _documentAdapter._documentActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrentActionBar);
       _documentAdapter._documentActionDialog._documentActionAdapter.notifyDataSetChanged();
       _documentAdapter._documentActionDialog.setTileForDialog(_fileForCurrentActionBar.name);
@@ -153,9 +154,9 @@ public class DocumentActivity extends MyActionBar {
     if (_fileForCurrentActionBar == null) {
       getActionBar().removeItem(0);
     } else {
-      if (_fileForCurrentActionBar.path == null) {
+      if (_fileForCurrentActionBar.name == null) {
         getActionBar().removeItem(0);
-      } else if (_fileForCurrentActionBar.path.equals("")) {
+      } else if (_fileForCurrentActionBar.name.equals("")) {
         getActionBar().removeItem(0);
       } else {
         if (getActionBar().getItem(0) == null) {
@@ -181,7 +182,7 @@ public class DocumentActivity extends MyActionBar {
        * @param: documentList The parents list file
        */
 
-      if (_fileForCurrentActionBar == null) {
+      if (_fileForCurrentActionBar.name == "") {
         _documentActivityInstance = null;
         finish();
       } else {
@@ -206,16 +207,16 @@ public class DocumentActivity extends MyActionBar {
     ArrayList<ExoFile> documentList = null;
 
     if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
-      _fileForCurrentActionBar = null;
-      parent = DocumentHelper.getInstance().currentFileMap.getParcelable(null);
+      _fileForCurrentActionBar = new ExoFile();
+      parent = DocumentHelper.getInstance().currentFileMap.getParcelable("");
       documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_PATH);
 
     } else {
       parent = DocumentHelper.getInstance().currentFileMap.getParcelable(_fileForCurrentActionBar.path);
       DocumentHelper.getInstance().currentFileMap.remove(_fileForCurrentActionBar.path);
       _fileForCurrentActionBar = parent;
-      if (parent == null) {
-        documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(null);
+      if (parent.name == "") {
+        documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList("");
       } else {
         documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(parent.path);
       }
@@ -259,7 +260,7 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void setDocumentAdapter(ArrayList<ExoFile> documentList) {
-    if (_fileForCurrentActionBar == null) {
+    if (_fileForCurrentActionBar.path == "") {
       setListViewPadding(5, 0, 5, 0);
       setTitle(getResources().getString(R.string.Documents));
     } else {

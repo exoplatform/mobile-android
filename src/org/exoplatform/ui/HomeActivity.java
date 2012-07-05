@@ -36,16 +36,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-public class HomeActivity extends MyActionBar implements OnClickListener {
+public class HomeActivity extends MyActionBar {
   private static final String SERVER_SETTING_HELPER = "SERVER_SETTING_HELPER";
 
   private static final String ACCOUNT_SETTING       = "ACCOUNT_SETTING";
 
-  private Button              activityButton;
+  private TextView              activityButton;
 
-  private Button              documentButton;
+  private TextView              documentButton;
 
-  private Button              appsButton;
+  private TextView              appsButton;
 
   private String              newsTitle;
 
@@ -144,17 +144,17 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
   }
 
   private void init() {
-    activityButton = (Button) findViewById(R.id.home_btn_activity);
-    activityButton.setOnClickListener(this);
-    documentButton = (Button) findViewById(R.id.home_btn_document);
-    documentButton.setOnClickListener(this);
-    appsButton = (Button) findViewById(R.id.home_btn_apps);
-    appsButton.setOnClickListener(this);
+    activityButton = (TextView) findViewById(R.id.home_btn_activity);
+    // activityButton.setOnClickListener(this);
+    documentButton = (TextView) findViewById(R.id.home_btn_document);
+    // documentButton.setOnClickListener(this);
+    appsButton = (TextView) findViewById(R.id.home_btn_apps);
+    // appsButton.setOnClickListener(this);
     homeUserAvatar = (ShaderImageView) findViewById(R.id.home_user_avatar);
     homeUserAvatar.setDefaultImageResource(dafault_avatar);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
-    viewFlipper.setOnClickListener(this);
+    // viewFlipper.setOnClickListener(this);
     setInfo();
   }
 
@@ -249,23 +249,49 @@ public class HomeActivity extends MyActionBar implements OnClickListener {
     finish();
   }
 
-  @Override
-  public void onClick(View view) {
+  public void onNewsClick(View view) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
-      if (view.equals(activityButton) || view.equals(viewFlipper)) {
-        launchNewsService();
-      }
-      if (view.equals(documentButton)) {
-        launchDocumentApp();
-      }
-      if (view.equals(appsButton)) {
-        launchDashboardApp();
-      }
+      launchNewsService();
     } else {
       new ConnectionErrorDialog(this).show();
     }
-
   }
+
+  public void onDocumentClick(View view) {
+
+    if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
+      launchDocumentApp();
+    } else {
+      new ConnectionErrorDialog(this).show();
+    }
+  }
+
+  public void onDashboardClick(View view) {
+
+    if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
+      launchDashboardApp();
+    } else {
+      new ConnectionErrorDialog(this).show();
+    }
+  }
+
+  // @Override
+  // public void onClick(View view) {
+  // if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
+  // if (view.equals(activityButton) || view.equals(viewFlipper)) {
+  // launchNewsService();
+  // }
+  // if (view.equals(documentButton)) {
+  // launchDocumentApp();
+  // }
+  // if (view.equals(appsButton)) {
+  // launchDashboardApp();
+  // }
+  // } else {
+  // new ConnectionErrorDialog(this).show();
+  // }
+  //
+  // }
 
   private void launchNewsService() {
     Intent next = new Intent(this, SocialActivity.class);

@@ -28,6 +28,8 @@ public class ExoConstants {
 
   public static final String WEB_VIEW_TITLE                = "WEB_VIEW_TITLE";
 
+  public static final String WEB_VIEW_MIME_TYPE            = "WEB_VIEW_MIME_TYPE";
+
   public static final String ACTIVITY_DETAIL_EXTRA         = "ACTIVITY_DETAIL_EXTRA";
 
   public static final int    COMPOSE_POST_TYPE             = 0;
@@ -127,5 +129,15 @@ public class ExoConstants {
   public static final int    HOME_AVATAR_BORDER_COLOR      = 0x44444444;
 
   public static final int    HOME_SOCIAL_MAX_NUMBER        = 10;
+
+  public static final String SOCIAL_FILE_CACHE             = "SocialCache";
+
+  public static final String DOCUMENT_FILE_CACHE           = "DocumentCache";
+
+  public static final String DOCUMENT_PERSONAL_DRIVER      = "personal";
+
+  public static final String DOCUMENT_GROUP_DRIVER         = "group";
+
+  public static final String DOCUMENT_GENERAL_DRIVER       = "general";
 
 }

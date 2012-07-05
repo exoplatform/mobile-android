@@ -7,13 +7,11 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
-import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.UnreadableFileDialog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,14 +58,15 @@ public class DocumentAdapter extends BaseAdapter {
 
     final ExoFile myFile = _documentList.get(pos);
 
-    if (myFile.name.equals("")) {
+    if (myFile.name.equals("") && myFile.path.equals("")) {
       convertView = inflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
-      if (pos == 0)
+      if (myFile.driveName.equals(ExoConstants.DOCUMENT_PERSONAL_DRIVER))
         textViewTabTitle.setText(_mContext.getResources().getString(R.string.Personal));
-      else
+      else if (myFile.driveName.equals(ExoConstants.DOCUMENT_GROUP_DRIVER))
         textViewTabTitle.setText(_mContext.getResources().getString(R.string.Group));
-
+      else if (myFile.driveName.equals(ExoConstants.DOCUMENT_GENERAL_DRIVER))
+        textViewTabTitle.setText(_mContext.getResources().getString(R.string.General));
       return (convertView);
     }
 
@@ -106,8 +105,7 @@ public class DocumentAdapter extends BaseAdapter {
     if (!myFile.isFolder) {
       btnAction.setVisibility(View.VISIBLE);
 
-      String iconFileName = ExoDocumentUtils.getFileFolderIconName(myFile.nodeType);
-      icon.setImageResource(ExoDocumentUtils.getPicIDFromName(iconFileName));
+      icon.setImageResource(ExoDocumentUtils.getIconFromType(myFile.nodeType));
 
     } else {
       icon.setImageResource(R.drawable.documenticonforfolder);
@@ -118,19 +116,12 @@ public class DocumentAdapter extends BaseAdapter {
       public void onClick(View v) {
 
         if (!myFile.isFolder) {
-          // Action for display file
-          if (myFile.nodeType != null
-              && (myFile.nodeType.contains("image") || myFile.nodeType.contains("text") || myFile.nodeType.contains("pdf"))) {
-            String url = null;
-            if (myFile.nodeType.contains("pdf")) {
-              url = "http://docs.google.com/gview?embedded=true&url=" + myFile.path;
-            } else {
-              url = myFile.path;
-            }
-            Intent intent = new Intent(_mContext, WebViewActivity.class);
-            intent.putExtra(ExoConstants.WEB_VIEW_URL, url);
-            intent.putExtra(ExoConstants.WEB_VIEW_TITLE, myFile.name);
-            _mContext.startActivity(intent);
+          /*
+           * Open file with compatible application
+           */
+
+          if (ExoDocumentUtils.isFileReadable(myFile.nodeType)) {
+            ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
           } else {
             new UnreadableFileDialog(_mContext).show();
           }
@@ -157,8 +148,7 @@ public class DocumentAdapter extends BaseAdapter {
         // DocumentActivity._documentActivityInstance._fileForCurrnentCell =
         // file;
 
-        if (_documentActionDialog == null)
-          _documentActionDialog = new DocumentActionDialog(_mContext, file);
+        _documentActionDialog = new DocumentActionDialog(_mContext, file, false);
         _documentActionDialog.myFile = file;
         _documentActionDialog._documentActionAdapter.setSelectedFile(file);
         _documentActionDialog._documentActionAdapter.notifyDataSetChanged();

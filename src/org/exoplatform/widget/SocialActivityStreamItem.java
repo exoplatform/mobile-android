@@ -3,12 +3,11 @@ package org.exoplatform.widget;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.ui.social.SocialAttachedImageActivity;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.SocialImageLoader;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -17,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -178,8 +178,12 @@ public class SocialActivityStreamItem extends LinearLayout {
       if (docLink != null) {
         String docName = activityInfo.templateParams.get("DOCNAME");
         String url = domain + docLink;
-        displayAttachImage(url, docName, null);
-
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        String mimeType = null;
+        if (extension != null) {
+          mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        displayAttachImage(url, docName, null, mimeType);
       }
 
       break;
@@ -211,13 +215,13 @@ public class SocialActivityStreamItem extends LinearLayout {
       if (contentLink != null) {
 
         String contentType = activityInfo.templateParams.get("mimeType");
-        if (contentType != null && (contentType.contains("image"))) {
+        if (contentType != null) {
           String contentName = activityInfo.templateParams.get("contentName");
           StringBuffer buffer = new StringBuffer();
           buffer.append(domain);
           buffer.append("/portal/rest/jcr/");
           buffer.append(contentLink);
-          displayAttachImage(buffer.toString(), contentName, null);
+          displayAttachImage(buffer.toString(), contentName, null, contentType);
         }
 
       }
@@ -310,21 +314,24 @@ public class SocialActivityStreamItem extends LinearLayout {
 
     String imageParams = activityInfo.templateParams.get("image");
     if ((imageParams != null) && (imageParams.contains("http"))) {
-      displayAttachImage(imageParams, "", linkBuffer);
+      displayAttachImage(imageParams, "", linkBuffer, "image");
     } else {
       textViewTempMessage.setText(Html.fromHtml(linkBuffer), TextView.BufferType.SPANNABLE);
       textViewTempMessage.setVisibility(View.VISIBLE);
     }
   }
 
-  private void displayAttachImage(String url, String name, String description) {
+  private void displayAttachImage(String url, String name, String description, String fileType) {
     if (attachStubView == null) {
-      initAttachStubView(url, name, description);
+      initAttachStubView(url, name, description, fileType);
     }
     attachStubView.setVisibility(View.VISIBLE);
   }
 
-  private void initAttachStubView(final String url, String fileName, String description) {
+  private void initAttachStubView(final String url,
+                                  final String fileName,
+                                  String description,
+                                  final String fileType) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
     TextView txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
@@ -342,19 +349,25 @@ public class SocialActivityStreamItem extends LinearLayout {
     /*
      * Use SocialImageLoader to get and display attached image.
      */
-    if (SocialDetailHelper.getInstance().socialImageLoader == null) {
-      SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
-    }
-    SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage);
 
+    if (fileType != null && fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
+      if (SocialDetailHelper.getInstance().socialImageLoader == null) {
+        SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
+      }
+      SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage);
+    } else {
+      attachImage.setImageResource(ExoDocumentUtils.getIconFromType(fileType));
+    }
     if (isDetail) {
+      /*
+       * Open file with compatible application
+       */
       attachImage.setOnClickListener(new OnClickListener() {
 
-        // @Override
+        @Override
         public void onClick(View v) {
-          SocialDetailHelper.getInstance().setAttachedImageUrl(url);
-          Intent intent = new Intent(mContext, SocialAttachedImageActivity.class);
-          mContext.startActivity(intent);
+
+          ExoDocumentUtils.fileOpen(mContext, fileType, url, fileName);
         }
       });
     }

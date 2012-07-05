@@ -23,9 +23,9 @@
     <string name="SignInButton">Login</string>
     <string name="SignInInformation">Login information</string>
     <string name="PleaseWait">Please wait!</string>
-    <string name="SigningIn">Logging in...</string>
+    <string name="SigningIn">Logging in …</string>
     <string name="CannotLogin"> Can not login</string>
-    <string name="LoadingDataFromServer">Loading data from server...</string>
+    <string name="LoadingDataFromServer">Loading data from server …</string>
     <string name="FileProcessing">Data being processed</string>
     <string name="ConnectionTimedOut">Connection timed out!</string>
     <string name="NoServerSelected"> Please select a server</string>
@@ -84,10 +84,10 @@
     <string name="Me"> Me</string>
     <string name="MessageFrom"> Message from</string>
     <string name="ShowMore"> Show More</string>
-    <string name="LoadingData"> Loading data ...</string>
-    <string name="LoadingImage"> Loading image ...</string>
-    <string name="SendingData">  Sending data ...</string>
-    <string name="YourComment"> Your comment ....</string>
+    <string name="LoadingData"> Loading data …</string>
+    <string name="LoadingImage"> Loading image …</string>
+    <string name="SendingData">  Sending data …</string>
+    <string name="YourComment"> Your comment …</string>
     <string name="Comment"> Comment</string>
     <string name="StatusUpdate"> Post</string>
     <string name="NoLike"> No like for the moment</string>
@@ -172,10 +172,19 @@
     <string name="SpecialCharacters"> Special characters are not allowed.</string>
     <string name="In"> in</string>
     <string name="Space"> space</string>
-    <string name="Personal"> Personal</string>
-    <string name="Group"> Group</string>
+    <string name="Personal">Personal</string>
+    <string name="Group">Group</string>
+    <string name="General">General</string>
     <string name="NetworkTimeout"> Network connection timeout. Please try again!</string>
     <string name="Liker"> Liker</string>
     <string name="Likers"> Likers</string>
+    <string name="DownloadingData"> Downloading data …</string>
+    <string name="NoAppFound"> No application was found.</string>
+    <string name="CannotOpenFile"> Can not open this file.</string>
+    <string name="FileNotFound"> File not found.</string>
+    <string name="FileNotSupported"> File was not support to open!</string>
+    <string name="CompatibleFileSuggest">Do you like open in installed app?</string>
+    <string name="OpenIn">Open in &#8230;</string>
+    <string name="DownloadingFile">Downloading file &#8230;</string>
 
 </resources>

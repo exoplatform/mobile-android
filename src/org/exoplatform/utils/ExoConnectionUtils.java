@@ -107,15 +107,13 @@ public class ExoConnectionUtils {
       return false;
   }
 
-  /*
-   * Init DefaultHttpClient
-   */
 
   public static void initHttpClient() {
     HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setSoTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+
     httpClient = new DefaultHttpClient(httpParameters);
   }
 

@@ -87,12 +87,11 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     likeButton.setOnClickListener(this);
     likedFrame = (RelativeLayout) findViewById(R.id.detail_likers_layout_warpper);
     likedFrame.setOnClickListener(this);
+    onLoad();
 
   }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
+  public void onLoad() {
     detailController = new SocialDetailController(this,
                                                   commentLayoutWrap,
                                                   likedLayoutWrap,
@@ -101,8 +100,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
                                                   textView_Like_Count);
     loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
     detailController.onLoad(loaderItem, false);
-
   }
+
 
   @Override
   public void finish() {
