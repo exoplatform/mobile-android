@@ -83,66 +83,69 @@ public class DocumentActionAdapter extends BaseAdapter {
       public void onClick(View v) {
 
         _delegate.dismiss();
-        if (pos == 0)// Add Photo
+        if (pos == DocumentActivity.ACTION_ADD_PHOTO)// Add Photo
         {
           new AddPhotoDialog(_mContext, _delegate).show();
 
-        } else if (pos == 1)// Copy file
+        } else if (pos == DocumentActivity.ACTION_COPY)// Copy file
         {
           DocumentHelper.getInstance()._fileCopied = _selectedFile;
           DocumentHelper.getInstance()._fileMoved = new ExoFile();
-        } else if (pos == 2)// move file
+        } else if (pos == DocumentActivity.ACTION_MOVE)// move file
         {
           DocumentHelper.getInstance()._fileMoved = _selectedFile;
           DocumentHelper.getInstance()._fileCopied = new ExoFile();
-        } else if (pos == 3 || pos == 4) {
+        } else if (pos == DocumentActivity.ACTION_PASTE) {
+          // Paste file
+          ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
+          if (!_fileCopied.path.equals("")) {
+            String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
+            String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-          if (pos == 4)// Delete file, folder
-          {
-            String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+            DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path,
+                                                              destinationUrl,
+                                                              DocumentActivity.ACTION_COPY);
 
-            if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
-              DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
-            }
-
-            DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
-                                                              _selectedFile.path,
-                                                              1);
-          } else {
-            // Copy file
-            ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
-            if (_fileCopied.path != "") {
-              String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
+          }
+          ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
+          if (!_fileMoved.path.equals("")) {
+            if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
+              String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
               String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-              DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path, destinationUrl, 2);
-
+              DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
+                                                                destinationUrl,
+                                                                DocumentActivity.ACTION_MOVE);
             }
-            ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
-            if (_fileMoved.path != "") {
-              if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
-                String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
-                String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-                DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
-                                                                  destinationUrl,
-                                                                  3);
-              }
+          }
+          DocumentHelper.getInstance()._fileCopied = new ExoFile();
+          DocumentHelper.getInstance()._fileMoved = new ExoFile();
 
-            }
-            DocumentHelper.getInstance()._fileCopied = new ExoFile();
-            DocumentHelper.getInstance()._fileMoved = new ExoFile();
+        } else if (pos == DocumentActivity.ACTION_DELETE)// Delete file, folder
+        {
+          String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+
+          if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
+            DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
           }
 
-        } else if (pos == 5)// Rename file
+          DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
+                                                            _selectedFile.path,
+                                                            DocumentActivity.ACTION_DELETE);
+        } else if (pos == DocumentActivity.ACTION_RENAME)// Rename file
         {
-          extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, 5);
+          extendDialog = new DocumentExtendDialog(_mContext,
+                                                  _selectedFile,
+                                                  DocumentActivity.ACTION_RENAME);
           extendDialog.show();
 
-        } else if (pos == 6) { // Create folder
-          extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, 6);
+        } else if (pos == DocumentActivity.ACTION_CREATE) { // Create folder
+          extendDialog = new DocumentExtendDialog(_mContext,
+                                                  _selectedFile,
+                                                  DocumentActivity.ACTION_CREATE);
           extendDialog.show();
-        } else if (pos == 7) { // Open file in
+        } else if (pos == DocumentActivity.ACTION_OPEN_IN) { // Open file in
           ExoDocumentUtils.fileOpen(_mContext,
                                     _selectedFile.nodeType,
                                     _selectedFile.path,

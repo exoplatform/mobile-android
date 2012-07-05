@@ -216,7 +216,7 @@ public class ExoDocumentUtils {
       DocumentHelper.getInstance().childFilesMap = new Bundle();
     }
 
-    if (file.name == "") {
+    if (file.name.equals("")) {
       // personal
       StringBuffer buffer = new StringBuffer();
       arrFilesTmp.add(new ExoFile());
