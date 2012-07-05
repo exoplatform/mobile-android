@@ -24,38 +24,43 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class LoginActivity extends Activity implements OnClickListener {
-  private SharedPreferences sharedPreference;
+  private SharedPreferences                        sharedPreference;
 
-  private ImageView         _imageAccount;
+  private ImageView                                _imageAccount;
 
-  private ImageView         _imageServer;
+  private ImageView                                _imageServer;
 
-  private Button            _btnAccount;
+  private Button                                   _btnAccount;
 
-  private Button            _btnServer;
+  private Button                                   _btnServer;
 
-  private Button            _btnLogIn;
+  private Button                                   _btnLogIn;
 
-  private EditText          _edtxUserName;
+  private EditText                                 _edtxUserName;
 
-  private EditText          _edtxPassword;
+  private EditText                                 _edtxPassword;
 
-  private ListView          _listViewServer;
+  private ListView                                 _listViewServer;
 
-  private String            strSignIn;
+  private String                                   strSignIn;
 
-  private String            settingText;
+  private String                                   settingText;
 
-  private String            userNameHint;
+  private String                                   userNameHint;
 
-  private String            passWordHint;
+  private String                                   passWordHint;
 
-  private String            username;
+  private String                                   username;
 
-  private String            password;
+  private String                                   password;
+
+  private LinearLayout                             listviewPanel;
+
+  private LinearLayout                             userpassPanel;
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -90,6 +95,8 @@ public class LoginActivity extends Activity implements OnClickListener {
     _btnServer.setOnClickListener(this);
     _btnLogIn = (Button) findViewById(R.id.Button_Login);
     _btnLogIn.setOnClickListener(this);
+    listviewPanel = (LinearLayout) findViewById(R.id.login_listview_panel);
+    userpassPanel = (LinearLayout) findViewById(R.id.login_userpass_panel);
     _listViewServer = (ListView) findViewById(R.id.ListView_Servers);
     _listViewServer.setVisibility(View.INVISIBLE);
     _listViewServer.setCacheColorHint(Color.TRANSPARENT);
@@ -168,7 +175,9 @@ public class LoginActivity extends Activity implements OnClickListener {
       _edtxUserName.setVisibility(View.INVISIBLE);
       _edtxPassword.setVisibility(View.INVISIBLE);
       _btnLogIn.setVisibility(View.INVISIBLE);
+      userpassPanel.setVisibility(View.INVISIBLE);
       _listViewServer.setVisibility(View.VISIBLE);
+      listviewPanel.setVisibility(View.VISIBLE);
       InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
       mgr.showSoftInput(_edtxUserName, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
@@ -181,7 +190,9 @@ public class LoginActivity extends Activity implements OnClickListener {
       _edtxPassword.setVisibility(View.VISIBLE);
       _btnLogIn.setVisibility(View.VISIBLE);
       _listViewServer.setVisibility(View.INVISIBLE);
+      userpassPanel.setVisibility(View.VISIBLE);
+      listviewPanel.setVisibility(View.INVISIBLE);
+
     }
   }
-
 }
