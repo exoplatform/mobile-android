@@ -51,14 +51,6 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   private ArrayList<DocumentActionDescription> fileActionList;
 
- 
-  private final static int ADD_PHOTO = 0;
-  private final static int COPY_FILE = 1;
-  private final static int MOVE_FILE = 2;
-  private final static int PASTE = 3;
-  private final static int DELETE = 4;
-  private final static int RENAME = 5;
-  private final static int CREATE_FOLDER = 6;
   
 
   private DocumentExtendDialog                 extendDialog;
@@ -94,66 +86,72 @@ public class DocumentActionAdapter extends BaseAdapter {
       public void onClick(View v) {
 
         _delegate.dismiss();
-        if (pos == ADD_PHOTO)// Add Photo
+
+        if (pos == DocumentActivity.ACTION_ADD_PHOTO)// Add Photo
         {
           new AddPhotoDialog(_mContext, _delegate).show();
 
-        } else if (pos == COPY_FILE)// Copy file
+        } else if (pos == DocumentActivity.ACTION_COPY)// Copy file
         {
-          DocumentHelper.getInstance()._fileCopied = _selectedFile;         
-          DocumentHelper.getInstance()._fileMoved = null;
-        } else if (pos == MOVE_FILE)// move file
+          DocumentHelper.getInstance()._fileCopied = _selectedFile;
+          DocumentHelper.getInstance()._fileMoved = new ExoFile();
+        } else if (pos == DocumentActivity.ACTION_MOVE)// move file
         {
           DocumentHelper.getInstance()._fileMoved = _selectedFile;
-          DocumentHelper.getInstance()._fileCopied = null;
-        } else if (pos == PASTE || pos == DELETE) {
+          DocumentHelper.getInstance()._fileCopied = new ExoFile();
+        } else if (pos == DocumentActivity.ACTION_PASTE) {
+          // Paste file
+          ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
+          if (!_fileCopied.path.equals("")) {
+            String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
+            String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-          if (pos == DELETE)// Delete file, folder
-          {
-            String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+            DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path,
+                                                              destinationUrl,
+                                                              DocumentActivity.ACTION_COPY);
 
-            if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
-              DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
-            }
-
-            DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
-                                                              _selectedFile.path,
-                                                              DocumentLoadTask.ACTION_DELETE);
-          } else {
-            // Paste file
-            ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
-            if (_fileCopied.path != "") {
-              String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
+          }
+          ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
+          if (!_fileMoved.path.equals("")) {
+            if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
+              String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
               String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-              DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path, destinationUrl, DocumentLoadTask.ACTION_COPY);
-
-            }
-            ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
-            if (_fileMoved.path != "") {
-              if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
-                String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
-                String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
                 DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
                                                                   destinationUrl,
                                                                   DocumentLoadTask.ACTION_MOVE);
               }
+          }
+          DocumentHelper.getInstance()._fileCopied = new ExoFile();
+          DocumentHelper.getInstance()._fileMoved = new ExoFile();
 
-            }
-            DocumentHelper.getInstance()._fileCopied = new ExoFile();
-            DocumentHelper.getInstance()._fileMoved = new ExoFile();
+        } else if (pos == DocumentActivity.ACTION_DELETE)// Delete file, folder
+        {
+          String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+
+          if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
+            DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
           }
 
-        } else if (pos == RENAME)// Rename file
+
+          DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
+                                                            _selectedFile.path,
+                                                            DocumentActivity.ACTION_DELETE);
+        } else if (pos == DocumentActivity.ACTION_RENAME)// Rename file
         {
-          extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, RENAME);
+          extendDialog = new DocumentExtendDialog(_mContext,
+                                                  _selectedFile,
+                                                  DocumentActivity.ACTION_RENAME);
           extendDialog.show();
 
-        } else if (pos == CREATE_FOLDER) { // Create folder
-          extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, CREATE_FOLDER);
+        } else if (pos == DocumentActivity.ACTION_CREATE) { // Create folder
+          extendDialog = new DocumentExtendDialog(_mContext,
+                                                  _selectedFile,
+                                                  DocumentActivity.ACTION_CREATE);
+
           extendDialog.show();
-        } else if (pos == 7) { // Open file in
+        } else if (pos == DocumentActivity.ACTION_OPEN_IN) { // Open file in
           ExoDocumentUtils.fileOpen(_mContext,
                                     _selectedFile.nodeType,
                                     _selectedFile.path,

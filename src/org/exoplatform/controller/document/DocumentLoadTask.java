@@ -44,13 +44,13 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
   /*
    * Result status
    */
-  private static final int      RESULT_OK      = 7;
+  private static final int      RESULT_OK      = 1;
 
-  private static final int      RESULT_ERROR   = 8;
+  private static final int      RESULT_ERROR   = 2;
 
-  private static final int      RESULT_TIMEOUT = 9;
+  private static final int      RESULT_TIMEOUT = 3;
 
-  private static final int      RESULT_FALSE   = 10;
+  private static final int      RESULT_FALSE   = 4;
 
   private DocumentWaitingDialog _progressDialog;
 
@@ -114,22 +114,22 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
           return RESULT_TIMEOUT;
         }
       }
-      if (actionID == ACTION_DELETE) {
+      if (actionID == DocumentActivity.ACTION_DELETE) {
         contentWarningString = resource.getString(R.string.DocumentCannotDelete);
         result = ExoDocumentUtils.deleteFile(strSourceUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
 
-      } else if (actionID == ACTION_COPY) {
+      } else if (actionID == DocumentActivity.ACTION_COPY) {
         contentWarningString = resource.getString(R.string.DocumentCopyPasteError);
         result = ExoDocumentUtils.copyFile(strSourceUrl, strDestinationUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
 
-      } else if (actionID == ACTION_MOVE) {
+      } else if (actionID == DocumentActivity.ACTION_MOVE) {
         contentWarningString = resource.getString(R.string.DocumentCopyPasteError);
         result = ExoDocumentUtils.moveFile(strSourceUrl, strDestinationUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
 
-      } else if (actionID == ACTION_UPLOAD) {
+      } else if (actionID == DocumentActivity.ACTION_ADD_PHOTO) {
         File file = new File(documentActivity._sdcard_temp_dir);
         contentWarningString = resource.getString(R.string.DocumentUploadError);
         File tempFile = PhotoUtils.reziseFileImage(file);
@@ -139,7 +139,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
                                                              ExoConstants.IMAGE_TYPE);
         }
 
-      } else if (actionID == ACTION_RENAME) {
+      } else if (actionID == DocumentActivity.ACTION_RENAME) {
         contentWarningString = resource.getString(R.string.DocumentRenameError);
         result = ExoDocumentUtils.renameFolder(strSourceUrl, strDestinationUrl);
         if (result) {
@@ -157,7 +157,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
           DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
         }
 
-      } else if (actionID == ACTION_CREATE) {
+      } else if (actionID == DocumentActivity.ACTION_CREATE) {
         contentWarningString = resource.getString(R.string.DocumentCreateFolderError);
         result = ExoDocumentUtils.createFolder(strDestinationUrl);
 
@@ -165,7 +165,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
       /*
        * Get folder content
        */
-      
+
       if (result == true) {
         _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity._fileForCurrentActionBar);
         return RESULT_OK;

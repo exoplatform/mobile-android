@@ -74,10 +74,10 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
   }
 
   private void initInfomation() {
-    if (actionId == 5) {
+    if (actionId == DocumentActivity.ACTION_RENAME) {
       titleTextView.setText(renameTitleStr);
       actionTitleView.setText(renameActionTitle);
-    } else if (actionId == 6) {
+    } else if (actionId == DocumentActivity.ACTION_CREATE) {
       titleTextView.setText(createTitleStr);
       actionTitleView.setText(createActionTitle);
     }
@@ -91,7 +91,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
 
       if ((folderName != null) && (folderName.length() > 0)) {
 
-        if (actionId == 5) {
+        if (actionId == DocumentActivity.ACTION_RENAME) {
           if (DocumentActivity._documentActivityInstance._fileForCurrentActionBar != null) {
             String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
             String destinationUrl = ExoDocumentUtils.getParentUrl(selectedFile.path) + "/"
@@ -104,7 +104,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
             if (URLAnalyzer.isUrlValid(destinationUrl)) {
               DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
                                                                 destinationUrl,
-                                                                5);
+                                                                DocumentActivity.ACTION_RENAME);
             } else {
               Toast toast = Toast.makeText(mContext, inputNameURLInvalid, Toast.LENGTH_SHORT);
               toast.setGravity(Gravity.CENTER, 0, 0);
@@ -116,7 +116,9 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
         } else {
           String desUrl = selectedFile.path + "/" + folderName;
           if (URLAnalyzer.isUrlValid(desUrl)) {
-            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path, desUrl, 6);
+            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
+                                                              desUrl,
+                                                              DocumentActivity.ACTION_CREATE);
           } else {
             Toast toast = Toast.makeText(mContext, inputNameURLInvalid, Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);

@@ -134,7 +134,7 @@ public class DocumentAdapter extends BaseAdapter {
           // if
           // (!DocumentHelper.getInstance().fileStructureMap.containsKey(myFile))
           DocumentHelper.getInstance().currentFileMap.putParcelable(myFile.path, file);
-          DocumentActivity._documentActivityInstance.onLoad(myFile.path, null, 0);
+          DocumentActivity._documentActivityInstance.onLoad(myFile.path, null, DocumentActivity.ACTION_DEFAULT);
         }
 
       }
