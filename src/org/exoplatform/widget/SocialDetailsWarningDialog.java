@@ -8,6 +8,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SocialDetailsWarningDialog extends Dialog implements android.view.View.OnClickListener {
@@ -30,6 +31,8 @@ public class SocialDetailsWarningDialog extends Dialog implements android.view.V
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.warning_dialog_layout);
     mContext = context;
+    ImageView imageView = (ImageView) findViewById(R.id.warning_image);
+    imageView.setImageResource(R.drawable.warning_icon);
     titleView = (TextView) findViewById(R.id.warning_dialog_title_view);
     titleView.setText(titleString);
     contentView = (TextView) findViewById(R.id.warning_content);
