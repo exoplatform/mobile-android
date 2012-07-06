@@ -123,7 +123,7 @@ public class DocumentAdapter extends BaseAdapter {
           if (ExoDocumentUtils.isFileReadable(myFile.nodeType)) {
             ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
           } else {
-            new UnreadableFileDialog(_mContext).show();
+            new UnreadableFileDialog(_mContext, null).show();
           }
 
         } else {
@@ -134,7 +134,9 @@ public class DocumentAdapter extends BaseAdapter {
           // if
           // (!DocumentHelper.getInstance().fileStructureMap.containsKey(myFile))
           DocumentHelper.getInstance().currentFileMap.putParcelable(myFile.path, file);
-          DocumentActivity._documentActivityInstance.onLoad(myFile.path, null, DocumentActivity.ACTION_DEFAULT);
+          DocumentActivity._documentActivityInstance.onLoad(myFile.path,
+                                                            null,
+                                                            DocumentActivity.ACTION_DEFAULT);
         }
 
       }

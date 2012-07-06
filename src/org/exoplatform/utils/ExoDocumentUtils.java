@@ -79,7 +79,7 @@ public class ExoDocumentUtils {
 
   public static void fileOpen(Context context, String fileType, String filePath, String fileName) {
     if (fileType == null) {
-      new UnreadableFileDialog(context).show();
+      new UnreadableFileDialog(context, null).show();
       return;
     }
 
@@ -90,7 +90,7 @@ public class ExoDocumentUtils {
       intent.putExtra(ExoConstants.WEB_VIEW_MIME_TYPE, fileType);
       context.startActivity(intent);
     } else {
-      new CompatibleFileOpenDialog(context, fileType, filePath, fileName).show();
+      new CompatibleFileOpen(context, fileType, filePath, fileName);
 
     }
 
@@ -127,6 +127,34 @@ public class ExoDocumentUtils {
     }
 
     return false;
+  }
+
+  public static String getFullFileType(String fileType) {
+    String docFileType = null;
+    if (fileType.equals(ExoDocumentUtils.PDF_TYPE)) {
+      docFileType = ExoDocumentUtils.PDF_TYPE;
+    } else if (fileType.equals(ExoDocumentUtils.MSWORD_TYPE)) {
+      docFileType = ExoDocumentUtils.MSWORD_TYPE;
+    } else if (fileType.equals(ExoDocumentUtils.XLS_TYPE)) {
+      docFileType = ExoDocumentUtils.XLS_TYPE;
+    } else if (fileType.equals(ExoDocumentUtils.POWERPOINT_TYPE)) {
+      docFileType = ExoDocumentUtils.POWERPOINT_TYPE;
+    } else if (fileType.equals(ExoDocumentUtils.OPEN_MSWORD_TYPE)) {
+      docFileType = ExoDocumentUtils.OPEN_MSWORD_TYPE;
+    } else if (fileType.equals(ExoDocumentUtils.OPEN_XLS_TYPE)) {
+      docFileType = ExoDocumentUtils.OPEN_XLS_TYPE;
+    } else if (fileType.equals(ExoDocumentUtils.OPEN_POWERPOINT_TYPE)) {
+      docFileType = ExoDocumentUtils.OPEN_POWERPOINT_TYPE;
+    } else if (fileType.startsWith(ExoDocumentUtils.AUDIO_TYPE)) {
+      docFileType = ExoDocumentUtils.ALL_AUDIO_TYPE;
+    } else if (fileType.startsWith(ExoDocumentUtils.VIDEO_TYPE)) {
+      docFileType = ExoDocumentUtils.ALL_VIDEO_TYPE;
+    } else if (fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
+      docFileType = ExoDocumentUtils.ALL_IMAGE_TYPE;
+    } else if (fileType.startsWith(ExoDocumentUtils.TEXT_TYPE)) {
+      docFileType = ExoDocumentUtils.ALL_TEXT_TYPE;
+    }
+    return docFileType;
   }
 
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
@@ -230,6 +258,18 @@ public class ExoDocumentUtils {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_PERSONAL_DRIVER));
         arrFilesTmp.addAll(fileList);
       }
+      // general driver
+      buffer = new StringBuffer();
+      buffer.append(domain);
+      buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
+      buffer.append(ExoConstants.DOCUMENT_GENERAL_DRIVER);
+      urlStr = buffer.toString();
+      response = ExoConnectionUtils.getRequestResponse(urlStr);
+      fileList = getDrives(response);
+      if (fileList.size() > 0) {
+        arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GENERAL_DRIVER));
+        arrFilesTmp.addAll(fileList);
+      }
 
       // group driver
       buffer = new StringBuffer();
@@ -241,19 +281,6 @@ public class ExoDocumentUtils {
       fileList = getDrives(response);
       if (fileList.size() > 0) {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GROUP_DRIVER));
-        arrFilesTmp.addAll(fileList);
-      }
-
-      // general driver
-      buffer = new StringBuffer();
-      buffer.append(domain);
-      buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
-      buffer.append(ExoConstants.DOCUMENT_GENERAL_DRIVER);
-      urlStr = buffer.toString();
-      response = ExoConnectionUtils.getRequestResponse(urlStr);
-      fileList = getDrives(response);
-      if (fileList.size() > 0) {
-        arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GENERAL_DRIVER));
         arrFilesTmp.addAll(fileList);
       }
 

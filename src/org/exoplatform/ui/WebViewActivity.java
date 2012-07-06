@@ -92,7 +92,10 @@ public class WebViewActivity extends MyActionBar {
       public void onProgressChanged(WebView view, int progress) {
         setTitle(getResources().getString(R.string.LoadingData));
         activity.setProgress(progress * 100);
-        loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+        ActionBarItem item = getActionBar().getItem(0);
+        if(item instanceof LoaderActionBarItem){
+          loaderItem = (LoaderActionBarItem) item;
+        }
         if (loaderItem != null) {
           loaderItem.setLoading(true);
         }
