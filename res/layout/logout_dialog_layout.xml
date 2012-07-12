@@ -1,40 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="wrap_content"
-	android:minWidth="280dip" android:layout_height="wrap_content"
-	android:background="@drawable/serveraddingbackgroundtextfieldspanel">
-	<ScrollView android:layout_marginTop="10dp"
-		android:layout_marginBottom="10dp" android:fadingEdge="none" android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:layout_weight="1">
-		<LinearLayout android:gravity="center"
-			android:orientation="vertical" android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<ImageView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:background="@drawable/warning_icon" />
-			<TextView android:id="@+id/logout_content" android:textSize="16sp"
-				android:text="Ce fichier ne peut pas être ouvert depuis l'application"
-				android:paddingRight="8dip" android:paddingLeft="8dip"
-				android:paddingBottom="3dip" android:paddingTop="3dip"
-				android:textColor="#FFFFFF" android:layout_marginTop="5dp"
-				android:gravity="center_horizontal" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" />
-		</LinearLayout>
-	</ScrollView>
-	<LinearLayout android:orientation="horizontal"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:layout_marginBottom="2dip" android:padding="3dip">
-		<Button android:layout_width="0dip" android:layout_weight="1"
-			android:layout_marginTop="15dp" android:id="@+id/logout_ok_button"
-			android:text="Ok" android:textColor="#FFFFFF" android:textStyle="bold"
-			android:background="@drawable/send_button_background_shape"
-			android:layout_height="40dp" />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="280dip"
+    android:orientation="vertical" >
 
-		<Button android:layout_width="0dip" android:layout_weight="1"
-			android:layout_marginTop="15dp" android:id="@+id/logout_cancel_button"
-			android:text="Cancel" android:textColor="#FFFFFF" android:textStyle="bold"
-			android:layout_marginLeft="3dp" android:background="@drawable/cancel_button_background_shape"
-			android:layout_height="40dp" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:fadingEdge="none" >
 
-	</LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/warning_icon"
+                android:contentDescription="@string/LogoutContent" />
+
+            <TextView
+                android:id="@+id/logout_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal"
+                android:paddingBottom="3dip"
+                android:paddingLeft="8dip"
+                android:paddingRight="8dip"
+                android:paddingTop="3dip"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dip"
+        android:orientation="horizontal"
+        android:padding="3dip" >
+
+        <Button
+            android:id="@+id/logout_ok_button"
+            android:layout_width="0dip"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/send_button_background_shape"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/logout_cancel_button"
+            android:layout_width="0dip"
+            android:layout_height="40dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/cancel_button_background_shape"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>

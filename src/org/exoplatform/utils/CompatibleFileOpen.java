@@ -243,7 +243,6 @@ public class CompatibleFileOpen {
       mProgressDialog = new ProgressDialog(mContext);
       mProgressDialog.setMessage(downLoadingFile);
       mProgressDialog.setIndeterminate(false);
-//      mProgressDialog.setMax(100);
       mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
       mProgressDialog.setCancelable(true);
       mProgressDialog.show();

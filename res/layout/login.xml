@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center" >
 
@@ -16,6 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_marginBottom="5dp"
+            android:contentDescription="@string/LoadingData"
             android:padding="5dp"
             android:src="@drawable/exo_logo_large" />
     </LinearLayout>
@@ -72,7 +73,7 @@
                     android:ellipsize="start"
                     android:gravity="center|center_horizontal"
                     android:hint="@string/PasswordCellTitle"
-                    android:password="true"
+                    android:inputType="textPassword"
                     android:singleLine="true"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#AAAAAAAA"
@@ -112,7 +113,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/authenticate_credentials_icon_on" />
+                android:background="@drawable/authenticate_credentials_icon_on"
+                android:contentDescription="@string/LoadingData" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -136,19 +138,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/authenticateserversiconiphoneoff" />
+                android:background="@drawable/authenticateserversiconiphoneoff"
+                android:contentDescription="@string/LoadingData" />
         </RelativeLayout>
     </RelativeLayout>
 
     <Button
         android:id="@+id/Button_Login"
-        android:text="@string/SignInButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="19dp"
         android:layout_marginRight="19dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/login_button_background_shape"
+        android:text="@string/SignInButton"
         android:textColor="#000000"
         android:textSize="16dip"
         android:textStyle="bold" />

@@ -20,7 +20,7 @@
 		<item name="gdActionBarApplicationDrawable">@drawable/exo_application_logo</item>
 		<item name="gdActionBarHomeDrawable">@drawable/action_bar_icon_home</item>
 		<item name="gdActionBarTitleStyle">@style/TitleTextAppearance</item>
-
+		
 	</style>
 
 	<style name="Theme.eXo_signout" parent="@style/Theme.eXo">

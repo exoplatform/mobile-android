@@ -46,7 +46,8 @@
                 android:id="@+id/com_warning_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/icon_for_unreadable_file" />
+                android:background="@drawable/icon_for_unreadable_file"
+                android:contentDescription="@string/CompatibleFileSuggest" />
 
             <TextView
                 android:id="@+id/com_warning_content"

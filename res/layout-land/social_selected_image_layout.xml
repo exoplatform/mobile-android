@@ -7,7 +7,7 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:fadingEdge="none"
         android:fillViewport="true" >
@@ -15,7 +15,8 @@
         <ImageView
             android:id="@+id/social_selected_image"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/ActivityDetail"
             android:scaleType="centerCrop" />
     </ScrollView>
 
@@ -36,7 +37,6 @@
             android:shadowDy="2.0"
             android:shadowRadius="1.0"
             android:singleLine="true"
-            android:text="Remove"
             android:textColor="#FFFFFF" />
 
         <Button
@@ -51,7 +51,6 @@
             android:shadowDy="2.0"
             android:shadowRadius="1.0"
             android:singleLine="true"
-            android:text="OK"
             android:textColor="#000000" />
     </LinearLayout>
 

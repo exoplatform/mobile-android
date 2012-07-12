@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#DCDCDCDC" >
+    android:layout_height="fill_parent" >
 
     <ViewStub
         android:id="@+id/social_empty_stub"
@@ -16,21 +15,24 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="#DCDCDCDC"
         android:fadingEdge="none" >
 
         <LinearLayout
             android:id="@+id/activity_stream_wrap"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
         </LinearLayout>
     </ScrollView>
 
-    <!-- <ListView android:background="@null"
+    <!--
+    <ListView android:background="@null"
         android:id="@+id/social_listview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fadingEdge="none" >
-    </ListView> -->
+    </ListView>
+    -->
 
 </RelativeLayout>

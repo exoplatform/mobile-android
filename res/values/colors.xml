@@ -20,7 +20,6 @@
 <resources>
 
 	<color name="action_bar_tint">#C0C0C0</color>
-	<color name="action_bar_divider_tint">#7fff</color>
 	<color name="accent_1">#b1b1b1b1</color>
     
 </resources>

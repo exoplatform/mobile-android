@@ -187,7 +187,7 @@ public class SocialDetailController {
      */
     likedLayoutWrap.removeAllViews();
     likedAvatarSize = mContext.getResources()
-                              .getDimensionPixelSize(org.exoplatform.R.dimen.social_liked_avatar_size);
+                              .getDimensionPixelSize(R.dimen.social_liked_avatar_size);
     LayoutParams params = new LayoutParams(likedAvatarSize, likedAvatarSize);
     params.setMargins(5, 0, 0, 0);
     ShaderImageView likedAvatar;

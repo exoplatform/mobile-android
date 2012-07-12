@@ -1,21 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal" android:layout_width="fill_parent"
-	android:gravity="center" android:layout_height="wrap_content"
-	android:padding="5dp" android:background="@drawable/file_item_background_shape">
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_weight="1"
-		android:padding="3dp" android:orientation="vertical">
-		<TextView android:id="@+id/TextView_ServerName" android:text="Server Name"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:layout_marginLeft="5dp" android:textStyle="bold"
-			android:textColor="#000000" />
-		<TextView android:id="@+id/TextView_URL" android:text="Server url"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:layout_marginLeft="5dp" android:textSize="13dip"
-			android:textColor="#000000" />
-	</LinearLayout>
-	<ImageView android:id="@+id/ImageView_Checked"
-		android:gravity="center" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:background="@drawable/authenticate_checkmark_on" />
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/file_item_background_shape"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="3dp" >
+
+        <TextView
+            android:id="@+id/TextView_ServerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/TextView_URL"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="#000000"
+            android:textSize="13dip" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ImageView_Checked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/authenticate_checkmark_on"
+        android:contentDescription="@string/ServerDetail"
+        android:gravity="center" />
+
 </LinearLayout>

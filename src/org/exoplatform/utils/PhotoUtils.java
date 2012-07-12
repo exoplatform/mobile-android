@@ -39,6 +39,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
+import android.util.FloatMath;
 import android.util.Log;
 
 public class PhotoUtils {
@@ -120,8 +121,8 @@ public class PhotoUtils {
     bmpFactoryOptions.inJustDecodeBounds = true;
     Bitmap bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
 
-    int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float) height);
-    int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth / (float) width);
+    int heightRatio = (int) FloatMath.ceil(bmpFactoryOptions.outHeight / (float) height);
+    int widthRatio = (int) FloatMath.ceil(bmpFactoryOptions.outWidth / (float) width);
 
     if (heightRatio > 1 || widthRatio > 1) {
       if (heightRatio > widthRatio) {

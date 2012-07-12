@@ -1,45 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="wrap_content"
-	android:minWidth="280dip" android:layout_height="wrap_content"
-	android:background="#DCDCDCDC">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="280dip"
+    android:orientation="vertical" >
 
-	<LinearLayout android:layout_width="fill_parent"
-		android:gravity="center" android:layout_height="40dip"
-		android:background="#4E4E4E">
-		<TextView android:id="@+id/add_photo_dialog_title_view"
-		    android:text="@string/AddAPhoto"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:shadowColor="#000000" android:shadowDx="1.0"
-			android:shadowDy="2.0" android:shadowRadius="1.0" android:textSize="18dip"
-			android:textColor="#FFFFFFFF" android:gravity="center" />
-	</LinearLayout>
-	<ScrollView android:fadingEdge="none" android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:layout_weight="1">
-		<LinearLayout android:orientation="vertical"
-			android:padding="5dp" android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<Button android:layout_marginTop="25dp" android:id="@+id/add_photo_take_button"
-				android:text="@string/TakeAPhoto" android:textColor="#000000"
-				android:shadowColor="#888888" android:shadowDx="1.0"
-				android:shadowDy="2.0" android:shadowRadius="1.0"
-				android:background="@drawable/send_button_background_shape"
-				android:layout_width="fill_parent" android:layout_height="44dp" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dip"
+        android:background="#4E4E4E"
+        android:gravity="center" >
 
-			<Button android:layout_marginTop="15dp"
-				android:id="@+id/add_photo_library_button" android:text="@string/PhotoLibrary"
-				android:textColor="#000000" android:shadowColor="#888888"
-				android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
-				android:background="@drawable/send_button_background_shape"
-				android:layout_width="fill_parent" android:layout_height="44dp" />
+        <TextView
+            android:id="@+id/add_photo_dialog_title_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:text="@string/AddAPhoto"
+            android:textColor="#FFFFFFFF"
+            android:textSize="18dip" />
+    </LinearLayout>
 
-			<Button android:layout_marginTop="15dp"
-				android:id="@+id/add_photo_cancel_button" android:text="@string/Cancel"
-				android:textColor="#FFFFFF" android:shadowColor="#000000"
-				android:shadowDx="1.0" android:shadowDy="2.0" android:shadowRadius="1.0"
-				android:background="@drawable/cancel_button_background_shape"
-				android:layout_width="fill_parent" android:layout_height="42dp" />
-		</LinearLayout>
-	</ScrollView>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#DCDCDCDC"
+        android:fadingEdge="none" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp" >
+
+            <Button
+                android:id="@+id/add_photo_take_button"
+                android:layout_width="fill_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/send_button_background_shape"
+                android:shadowColor="#888888"
+                android:shadowDx="1.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:text="@string/TakeAPhoto"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/add_photo_library_button"
+                android:layout_width="fill_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/send_button_background_shape"
+                android:shadowColor="#888888"
+                android:shadowDx="1.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:text="@string/PhotoLibrary"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/add_photo_cancel_button"
+                android:layout_width="fill_parent"
+                android:layout_height="42dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/cancel_button_background_shape"
+                android:shadowColor="#000000"
+                android:shadowDx="1.0"
+                android:shadowDy="1.0"
+                android:shadowRadius="1.0"
+                android:text="@string/Cancel"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

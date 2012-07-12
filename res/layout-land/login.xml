@@ -47,6 +47,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/authenticate_textfied_background"
                 android:gravity="center"
+                android:inputType="text"
                 android:singleLine="true"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
@@ -63,7 +64,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/authenticate_textfied_background"
                 android:gravity="center"
-                android:password="true"
+                android:inputType="textPassword"
                 android:singleLine="true"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#FFFFFF"
@@ -125,7 +126,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/authenticateserversiconiphoneoff" />
+                android:background="@drawable/authenticateserversiconiphoneoff"
+                android:contentDescription="@string/SigningIn" />
         </RelativeLayout>
 
         <Button

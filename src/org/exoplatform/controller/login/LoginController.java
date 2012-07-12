@@ -127,6 +127,7 @@ public class LoginController {
       try {
         HttpResponse response = ExoConnectionUtils.onPrepareLogin(_strDomain, userName, password);
         String resultStr = ExoConnectionUtils.sendAuthentication(response);
+//        String resultStr = ExoConnectionUtils.login(response);
         return resultStr;
 
       } catch (IOException e) {
