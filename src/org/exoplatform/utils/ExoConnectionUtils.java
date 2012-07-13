@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+//import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -22,13 +23,14 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.jivesoftware.smack.util.Base64;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Base64;
+//import android.util.Base64;
 
 //interact with server
 public class ExoConnectionUtils {
@@ -115,9 +117,8 @@ public class ExoConnectionUtils {
     StringBuilder buffer = new StringBuilder(username);
     buffer.append(":");
     buffer.append(password);
-    httpGet.setHeader("Authorization",
-                      "Basic "
-                          + Base64.encodeToString(buffer.toString().getBytes(), Base64.NO_WRAP));
+    // Base64.encodeBytes(source)
+    httpGet.setHeader("Authorization", "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
     if (httpClient == null) {
       initHttpClient();
     }
@@ -156,9 +157,7 @@ public class ExoConnectionUtils {
     buffer.append(":");
     buffer.append(password);
     HttpGet httpGet = new HttpGet(strUrlRequest);
-    httpGet.setHeader("Authorization",
-                      "Basic "
-                          + Base64.encodeToString(buffer.toString().getBytes(), Base64.NO_WRAP));
+    httpGet.setHeader("Authorization", "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
     HttpResponse response = httpClient.execute(httpGet);
     cookiesStore = httpClient.getCookieStore();
     AccountSetting.getInstance().cookiesList = getCookieList(cookiesStore);
