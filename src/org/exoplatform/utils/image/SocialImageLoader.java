@@ -37,6 +37,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
@@ -45,6 +46,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.widget.ImageView;
 
 /**
@@ -76,7 +78,13 @@ public class SocialImageLoader {
 
   private final int              REQUIRED_SIZE = 100;
 
+  private String                 username;
+
+  private String                 password;
+
   public SocialImageLoader(Context context) {
+    username = AccountSetting.getInstance().getUsername();
+    password = AccountSetting.getInstance().getPassword();
     fileCache = new FileCache(context, ExoConstants.SOCIAL_FILE_CACHE);
     executorService = Executors.newFixedThreadPool(5);
 
@@ -110,7 +118,7 @@ public class SocialImageLoader {
     HttpConnectionParams.setSoTimeout(httpParameters, 10000);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
     DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-    httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
+    // httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
     try {
       File f = fileCache.getFile(url);
 
@@ -122,6 +130,13 @@ public class SocialImageLoader {
         // from web
         Bitmap bitmap = null;
         HttpGet getRequest = new HttpGet(url);
+        StringBuilder buffer = new StringBuilder(username);
+        buffer.append(":");
+        buffer.append(password);
+        getRequest.setHeader("Authorization",
+                             "Basic "
+                                 + Base64.encodeToString(buffer.toString().getBytes(),
+                                                         Base64.NO_WRAP));
         HttpResponse response = httpClient.execute(getRequest);
         HttpEntity entity = response.getEntity();
         if (entity != null) {

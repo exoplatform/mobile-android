@@ -109,11 +109,11 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
        * Checking the session status each time we retrieve files/folders. If
        * time out, re logging in. If relogging in error, pop up a error dialog
        */
-      if (ExoConnectionUtils.getResponseCode(DocumentHelper.getInstance().getRepositoryHomeUrl()) != 1) {
-        if (!ExoConnectionUtils.onReLogin()) {
-          return RESULT_TIMEOUT;
-        }
-      }
+//      if (ExoConnectionUtils.getResponseCode(DocumentHelper.getInstance().getRepositoryHomeUrl()) != 1) {
+//        if (!ExoConnectionUtils.onReLogin()) {
+//          return RESULT_TIMEOUT;
+//        }
+//      }
       if (actionID == DocumentActivity.ACTION_DELETE) {
         contentWarningString = resource.getString(R.string.DocumentCannotDelete);
         result = ExoDocumentUtils.deleteFile(strSourceUrl);
