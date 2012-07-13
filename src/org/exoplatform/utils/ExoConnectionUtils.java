@@ -32,9 +32,21 @@ import org.json.simple.JSONValue;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Base64;
 
 //interact with server
 public class ExoConnectionUtils {
+
+  public static final int         LOGIN_WRONG              = 0;
+
+  public static final int         LOGIN_SUSCESS            = 1;
+
+  public static final int         LOGIN_UNAUTHORIZED       = 2;
+
+  public static final int         LOGIN_INVALID            = 3;
+
+  public static final int         LOGIN_FAILED             = 4;
+
   // Default connection and socket timeout of 60 seconds. Tweak to taste.
   private static final int        SOCKET_OPERATION_TIMEOUT = 30 * 1000;
 
@@ -91,23 +103,6 @@ public class ExoConnectionUtils {
     return sb.toString();
   }
 
-  /*
-   * Call onPrepareLogin() method to login system again
-   */
-
-  public static boolean onReLogin() throws IOException {
-    String domain = AccountSetting.getInstance().getDomainName();
-    String username = AccountSetting.getInstance().getUsername();
-    String password = AccountSetting.getInstance().getPassword();
-    HttpResponse response = onPrepareLogin(domain, username, password);
-    int statusCode = response.getStatusLine().getStatusCode();
-    if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
-      return true;
-    } else
-      return false;
-  }
-
-
   public static void initHttpClient() {
     HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
@@ -117,99 +112,20 @@ public class ExoConnectionUtils {
     httpClient = new DefaultHttpClient(httpParameters);
   }
 
-  /*
-   * This method to get the login response and refresh cookies session
-   */
-
-  public static HttpResponse onPrepareLogin(String domain, String username, String password) throws IOException {
-    HttpResponse response;
-    String strCookie = "";
-    StringBuffer domainBuffer = new StringBuffer(domain);
-    domainBuffer.append(ExoConstants.DOMAIN_SUFFIX);
-
-    String redirectStr = domainBuffer.toString();
-    if (httpClient == null) {
-      initHttpClient();
-    }
-    HttpGet httpGet = new HttpGet(redirectStr);
-    response = httpClient.execute(httpGet);
-    cookiesStore = httpClient.getCookieStore();
-    List<Cookie> cookies = cookiesStore.getCookies();
-    if (!cookies.isEmpty()) {
-      for (int i = 0; i < cookies.size(); i++) {
-        strCookie = cookies.get(i).getName().toString() + "="
-            + cookies.get(i).getValue().toString();
-      }
-    }
-    AccountSetting.getInstance().cookiesList = getCookieList(cookiesStore);
-    int indexOfPrivate = redirectStr.indexOf("/classic");
-
-    // Request to login
-    if (indexOfPrivate > 0) {
-      domainBuffer = new StringBuffer();
-      domainBuffer.append(redirectStr.substring(0, indexOfPrivate));
-    } else {
-      domainBuffer = new StringBuffer();
-      domainBuffer.append(redirectStr);
-    }
-    domainBuffer.append("/j_security_check");
-    HttpPost httpPost = new HttpPost(domainBuffer.toString());
-    List<NameValuePair> nvps = new ArrayList<NameValuePair>(2);
-    nvps.add(new BasicNameValuePair("j_username", username));
-    nvps.add(new BasicNameValuePair("j_password", password));
-    httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-    httpPost.setHeader("Cookie", strCookie);
-    response = httpClient.execute(httpPost);
-    return response;
-  }
-
-  /*
-   * Checking the login response content
-   */
-  public static String sendAuthentication(HttpResponse httpResponse) {
-    try {
-      HttpEntity entity;
-      entity = httpResponse.getEntity();
-      if (entity != null) {
-        InputStream instream = entity.getContent();
-        _strFirstLoginContent = convertStreamToString(instream);
-        if (_strFirstLoginContent == null) {
-          return null;
-        } else {
-          if (_strFirstLoginContent.contains("Sign in failed. Wrong username or password.")) {
-            return ExoConstants.LOGIN_NO;
-          } else if (_strFirstLoginContent.contains("error', '/main?url")) {
-            _strFirstLoginContent = null;
-            return ExoConstants.LOGIN_ERROR;
-          } else if (_strFirstLoginContent.contains("eXo.env.portal")) {
-            return ExoConstants.LOGIN_YES;
-          } else {
-            return ExoConstants.LOGIN_INVALID;
-          }
-        }
-
-      } else {
-        return null;
-      }
-    } catch (IOException e) {
-      String error = e.getMessage();
-      if (error != null && (error.contains("No route"))) {
-        return ExoConstants.LOGIN_UNREACHABLE;
-      } else
-        return null;
-    }
-
-  }
-
-  public static HttpResponse getRequestResponse(String strUrlRequest) throws IOException {
+  public static HttpResponse getRequestResponse(String username,
+                                                String password,
+                                                String strUrlRequest) throws IOException {
     HttpGet httpGet = new HttpGet(strUrlRequest);
+    StringBuilder buffer = new StringBuilder(username);
+    buffer.append(":");
+    buffer.append(password);
+    httpGet.setHeader("Authorization",
+                      "Basic "
+                          + Base64.encodeToString(buffer.toString().getBytes(), Base64.NO_WRAP));
     if (httpClient == null) {
       initHttpClient();
-      if (cookiesStore == null) {
-        setCookieStore(cookiesStore, AccountSetting.getInstance().cookiesList);
-      }
-      httpClient.setCookieStore(cookiesStore);
     }
+
     HttpResponse response = httpClient.execute(httpGet);
     return response;
   }
@@ -258,18 +174,37 @@ public class ExoConnectionUtils {
 
   }
 
-  public static HttpResponse getPlatformResponse(String strUrlRequest) {
-    try {
-      if (httpClient == null) {
-        initHttpClient();
-      }
-      HttpGet httpGet = new HttpGet(strUrlRequest);
-      HttpResponse response = httpClient.execute(httpGet);
-      return response;
-
-    } catch (IOException e) {
-      return null;
+  public static HttpResponse getPlatformResponse(String username,
+                                                 String password,
+                                                 String strUrlRequest) throws IOException {
+    if (httpClient == null) {
+      initHttpClient();
     }
+    StringBuilder buffer = new StringBuilder(username);
+    buffer.append(":");
+    buffer.append(password);
+    HttpGet httpGet = new HttpGet(strUrlRequest);
+    httpGet.setHeader("Authorization",
+                      "Basic "
+                          + Base64.encodeToString(buffer.toString().getBytes(), Base64.NO_WRAP));
+    HttpResponse response = httpClient.execute(httpGet);
+    cookiesStore = httpClient.getCookieStore();
+    AccountSetting.getInstance().cookiesList = getCookieList(cookiesStore);
+
+    return response;
+
+  }
+
+  public static int checkPlatformRespose(HttpResponse response) {
+    int statusCode = response.getStatusLine().getStatusCode();
+    if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
+      return LOGIN_SUSCESS;
+    } else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+      return LOGIN_UNAUTHORIZED;
+    } else if (statusCode == HttpStatus.SC_NOT_FOUND) {
+      return LOGIN_INVALID;
+    } else
+      return LOGIN_FAILED;
 
   }
 

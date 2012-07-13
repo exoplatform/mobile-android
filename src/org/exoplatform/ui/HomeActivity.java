@@ -41,11 +41,11 @@ public class HomeActivity extends MyActionBar {
 
   private static final String ACCOUNT_SETTING       = "ACCOUNT_SETTING";
 
-  private TextView              activityButton;
+  private TextView            activityButton;
 
-  private TextView              documentButton;
+  private TextView            documentButton;
 
-  private TextView              appsButton;
+  private TextView            appsButton;
 
   private String              newsTitle;
 
@@ -236,10 +236,8 @@ public class HomeActivity extends MyActionBar {
       ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
       ExoConnectionUtils.httpClient = null;
     }
-    if (ChatServiceHelper.getInstance().getXMPPConnection() != null) {
-      ChatServiceHelper.getInstance().getXMPPConnection().disconnect();
-      ChatServiceHelper.getInstance().setXMPPConnection(null);
-    }
+
+    AccountSetting.getInstance().cookiesList = null;
     /*
      * Clear all social service data
      */

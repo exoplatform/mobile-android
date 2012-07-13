@@ -23,7 +23,6 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.WebViewActivity;
-import org.exoplatform.widget.CompatibleFileOpenDialog;
 import org.exoplatform.widget.UnreadableFileDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -160,11 +159,11 @@ public class ExoDocumentUtils {
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
     try {
       url = url.replaceAll(" ", "%20");
-      if (ExoConnectionUtils.getResponseCode(url) != 1) {
-        if (!ExoConnectionUtils.onReLogin()) {
-          return false;
-        }
-      }
+      // if (ExoConnectionUtils.getResponseCode(url) != 1) {
+      // if (!ExoConnectionUtils.onReLogin()) {
+      // return false;
+      // }
+      // }
 
       HttpPut put = new HttpPut(url);
       FileEntity fileEntity = new FileEntity(fileManager, fileType);
@@ -235,6 +234,8 @@ public class ExoDocumentUtils {
   public static ArrayList<ExoFile> getPersonalDriveContent(ExoFile file) throws IOException {
     ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
     String domain = AccountSetting.getInstance().getDomainName();
+    String username = AccountSetting.getInstance().getUsername();
+    String password = AccountSetting.getInstance().getPassword();
     HttpResponse response = null;
     String urlStr = null;
     /*
@@ -252,7 +253,7 @@ public class ExoDocumentUtils {
       buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
       buffer.append(ExoConstants.DOCUMENT_PERSONAL_DRIVER);
       urlStr = buffer.toString();
-      response = ExoConnectionUtils.getRequestResponse(urlStr);
+      response = ExoConnectionUtils.getRequestResponse(username, password, urlStr);
       fileList = getDrives(response);
       if (fileList.size() > 0) {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_PERSONAL_DRIVER));
@@ -264,7 +265,7 @@ public class ExoDocumentUtils {
       buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
       buffer.append(ExoConstants.DOCUMENT_GENERAL_DRIVER);
       urlStr = buffer.toString();
-      response = ExoConnectionUtils.getRequestResponse(urlStr);
+      response = ExoConnectionUtils.getRequestResponse(username, password, urlStr);
       fileList = getDrives(response);
       if (fileList.size() > 0) {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GENERAL_DRIVER));
@@ -277,7 +278,7 @@ public class ExoDocumentUtils {
       buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
       buffer.append(ExoConstants.DOCUMENT_GROUP_DRIVER);
       urlStr = buffer.toString();
-      response = ExoConnectionUtils.getRequestResponse(urlStr);
+      response = ExoConnectionUtils.getRequestResponse(username, password, urlStr);
       fileList = getDrives(response);
       if (fileList.size() > 0) {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GROUP_DRIVER));
@@ -297,7 +298,7 @@ public class ExoDocumentUtils {
     } else {
       urlStr = getDriverUrl(file);
       urlStr = URLAnalyzer.encodeUrl(urlStr);
-      response = ExoConnectionUtils.getRequestResponse(urlStr);
+      response = ExoConnectionUtils.getRequestResponse(username, password, urlStr);
       arrFilesTmp.addAll(getContentOfFolder(response, file));
       if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
         DocumentHelper.getInstance().childFilesMap.remove(file.path);
@@ -392,13 +393,15 @@ public class ExoDocumentUtils {
   // get path for driver folder (ex. Public/Private)
   private static String getRootDriverPath(ExoFile file) {
     String path = null;
+    String username = AccountSetting.getInstance().getUsername();
+    String password = AccountSetting.getInstance().getPassword();
     String urlStr = getDriverUrl(file);
     urlStr = URLAnalyzer.encodeUrl(urlStr);
     Document obj_doc = null;
     DocumentBuilderFactory doc_build_fact = null;
     DocumentBuilder doc_builder = null;
     try {
-      HttpResponse response = ExoConnectionUtils.getRequestResponse(urlStr);
+      HttpResponse response = ExoConnectionUtils.getRequestResponse(username, password, urlStr);
       doc_build_fact = DocumentBuilderFactory.newInstance();
       doc_builder = doc_build_fact.newDocumentBuilder();
       InputStream is = ExoConnectionUtils.sendRequest(response);
