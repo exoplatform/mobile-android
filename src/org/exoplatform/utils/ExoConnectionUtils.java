@@ -10,17 +10,13 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -148,30 +144,6 @@ public class ExoConnectionUtils {
       return null;
     }
     return null;
-  }
-
-  // Checking the http status
-  public static int getResponseCode(String url) throws IOException {
-    if (url != null) {
-      url = url.replaceAll(" ", "%20");
-      HttpGet httpGet = new HttpGet(url);
-      if (httpClient == null) {
-        initHttpClient();
-        if (cookiesStore == null) {
-          setCookieStore(cookiesStore, AccountSetting.getInstance().cookiesList);
-        }
-        httpClient.setCookieStore(cookiesStore);
-      }
-      HttpResponse response = httpClient.execute(httpGet);
-      int statusCode = response.getStatusLine().getStatusCode();
-      if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
-        return 1;
-      } else {
-        return 0;
-      }
-    } else
-      return -1;
-
   }
 
   public static HttpResponse getPlatformResponse(String username,

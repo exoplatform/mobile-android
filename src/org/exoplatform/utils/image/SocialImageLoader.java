@@ -118,7 +118,6 @@ public class SocialImageLoader {
     HttpConnectionParams.setSoTimeout(httpParameters, 10000);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
     DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-    // httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
     try {
       File f = fileCache.getFile(url);
 
@@ -129,6 +128,10 @@ public class SocialImageLoader {
       else {
         // from web
         Bitmap bitmap = null;
+        /*
+         * Send authentication each time we execute HttpGet to avoid the step
+         * checking session time out.
+         */
         HttpGet getRequest = new HttpGet(url);
         StringBuilder buffer = new StringBuilder(username);
         buffer.append(":");
