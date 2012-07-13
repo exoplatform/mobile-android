@@ -38,15 +38,14 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
+import org.jivesoftware.smack.util.Base64;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.widget.ImageView;
 
 /**
@@ -137,9 +136,7 @@ public class SocialImageLoader {
         buffer.append(":");
         buffer.append(password);
         getRequest.setHeader("Authorization",
-                             "Basic "
-                                 + Base64.encodeToString(buffer.toString().getBytes(),
-                                                         Base64.NO_WRAP));
+                             "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
         HttpResponse response = httpClient.execute(getRequest);
         HttpEntity entity = response.getEntity();
         if (entity != null) {
