@@ -169,7 +169,6 @@ public class CompatibleFileOpen {
 
           while ((len = is.read(buffer)) > 0) {
             total += len; // total = total + len
-//            publishProgress("" + (int) ((total * 100) / lenghtOfFile));
             publishProgress("" + total);
             os.write(buffer, 0, len);
           }
@@ -243,7 +242,6 @@ public class CompatibleFileOpen {
       mProgressDialog = new ProgressDialog(mContext);
       mProgressDialog.setMessage(downLoadingFile);
       mProgressDialog.setIndeterminate(false);
-//      mProgressDialog.setMax(100);
       mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
       mProgressDialog.setCancelable(true);
       mProgressDialog.show();

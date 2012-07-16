@@ -170,6 +170,7 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
 
           // lenghtOfFile is used for calculating download progress
           long lenghtOfFile = entity.getContentLength();
+          mProgressDialog.setMax((int) lenghtOfFile);
           InputStream is = entity.getContent();
           OutputStream os = new FileOutputStream(file);
 
@@ -180,7 +181,8 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
 
           while ((len = is.read(buffer)) > 0) {
             total += len; // total = total + len
-            publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+//            publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+            publishProgress("" + total);
             os.write(buffer, 0, len);
           }
 
@@ -276,7 +278,6 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
       mProgressDialog = new ProgressDialog(mContext);
       mProgressDialog.setMessage(downLoadingFile);
       mProgressDialog.setIndeterminate(false);
-      mProgressDialog.setMax(100);
       mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
       mProgressDialog.setCancelable(true);
       mProgressDialog.show();
