@@ -45,16 +45,10 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
 
   private ArrayList<DashboardItem> dashboarList;
 
-  private String                   username;
-
-  private String                   password;
-
   public DashboardLoadTask(DashboardActivity context, LoaderActionBarItem loader) {
     dashboardActivity = context;
     dashboardController = new DashboardController();
     loaderItem = loader;
-    username = AccountSetting.getInstance().getUsername();
-    password = AccountSetting.getInstance().getPassword();
     changeLanguage();
   }
 
@@ -73,12 +67,12 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
        * Checking the session status each time we retrieve dashboard item list.
        * If time out, re logging in
        */
-      // if (ExoConnectionUtils.getResponseCode(urlForDahboards) != 1) {
-      // if (!ExoConnectionUtils.onReLogin())
-      // return RESULT_TIMEOUT;
-      // }
+      if (ExoConnectionUtils.isSessionTimeout(urlForDahboards)) {
+        if (ExoConnectionUtils.reLogin() != ExoConnectionUtils.LOGIN_SUSCESS)
+          return RESULT_TIMEOUT;
+      }
 
-      response = ExoConnectionUtils.getRequestResponse(username, password, urlForDahboards);
+      response = ExoConnectionUtils.getRequestResponse(urlForDahboards);
       dashboarList = dashboardController.getDashboards(response);
       return RESULT_OK;
     } catch (IOException e) {
@@ -103,9 +97,7 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
         for (int i = 0; i < dashboarList.size(); i++) {
           DashboardItem gadgetTab = dashboarList.get(i);
           try {
-            HttpResponse response = ExoConnectionUtils.getRequestResponse(username,
-                                                                          password,
-                                                                          gadgetTab.link);
+            HttpResponse response = ExoConnectionUtils.getRequestResponse(gadgetTab.link);
             List<GadgetInfo> gadgets = dashboardController.getGadgetInTab(response,
                                                                           gadgetTab.label,
                                                                           gadgetTab.link);

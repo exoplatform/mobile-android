@@ -98,6 +98,22 @@ public class ExoConnectionUtils {
     return sb.toString();
   }
 
+  public static boolean isSessionTimeout(String url) {
+    HttpGet httpGet = new HttpGet(url);
+    try {
+      HttpResponse response = httpClient.execute(httpGet);
+      int statusCode = checkPlatformRespose(response);
+      if (statusCode == LOGIN_SUSCESS) {
+        return false;
+      }
+
+    } catch (IOException e) {
+      return true;
+    }
+
+    return true;
+  }
+
   public static void initHttpClient() {
     HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
@@ -107,14 +123,48 @@ public class ExoConnectionUtils {
     httpClient = new DefaultHttpClient(httpParameters);
   }
 
-  public static HttpResponse getRequestResponse(String username,
-                                                String password,
-                                                String strUrlRequest) throws IOException {
+  public static int reLogin() {
+    try {
+      String username = AccountSetting.getInstance().getUsername();
+      String password = AccountSetting.getInstance().getPassword();
+      String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
+      if (httpClient == null) {
+        initHttpClient();
+      }
+      HttpGet httpGet = new HttpGet(versionUrl);
+      StringBuilder buffer = new StringBuilder(username);
+      buffer.append(":");
+      buffer.append(password);
+      httpGet.setHeader("Authorization",
+                        "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
+      HttpResponse response = httpClient.execute(httpGet);
+      cookiesStore = httpClient.getCookieStore();
+      AccountSetting.getInstance().cookiesList = getCookieList(cookiesStore);
+      return checkPlatformRespose(response);
+    } catch (IOException e) {
+      return LOGIN_WRONG;
+    }
+  }
+
+  // public static HttpResponse getRequestResponse(String username,
+  // String password,
+  // String strUrlRequest) throws IOException {
+  // HttpGet httpGet = new HttpGet(strUrlRequest);
+  // StringBuilder buffer = new StringBuilder(username);
+  // buffer.append(":");
+  // buffer.append(password);
+  // httpGet.setHeader("Authorization", "Basic " +
+  // Base64.encodeBytes(buffer.toString().getBytes()));
+  // if (httpClient == null) {
+  // initHttpClient();
+  // }
+  //
+  // HttpResponse response = httpClient.execute(httpGet);
+  // return response;
+  // }
+
+  public static HttpResponse getRequestResponse(String strUrlRequest) throws IOException {
     HttpGet httpGet = new HttpGet(strUrlRequest);
-    StringBuilder buffer = new StringBuilder(username);
-    buffer.append(":");
-    buffer.append(password);
-    httpGet.setHeader("Authorization", "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
     if (httpClient == null) {
       initHttpClient();
     }
