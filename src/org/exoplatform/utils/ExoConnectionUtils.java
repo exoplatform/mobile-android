@@ -52,9 +52,6 @@ public class ExoConnectionUtils {
 
   public static CookieStore       cookiesStore;
 
-  // String login data
-  private static String           _strFirstLoginContent;
-
   /*
    * Check mobile network and wireless status
    */
@@ -117,7 +114,6 @@ public class ExoConnectionUtils {
     StringBuilder buffer = new StringBuilder(username);
     buffer.append(":");
     buffer.append(password);
-    // Base64.encodeBytes(source)
     httpGet.setHeader("Authorization", "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
     if (httpClient == null) {
       initHttpClient();
@@ -147,6 +143,10 @@ public class ExoConnectionUtils {
     return null;
   }
 
+  /*
+   * Get response from platform url
+   */
+
   public static HttpResponse getPlatformResponse(String username,
                                                  String password,
                                                  String strUrlRequest) throws IOException {
@@ -165,6 +165,10 @@ public class ExoConnectionUtils {
     return response;
 
   }
+
+  /*
+   * Checking the response status code
+   */
 
   public static int checkPlatformRespose(HttpResponse response) {
     int statusCode = response.getStatusLine().getStatusCode();
