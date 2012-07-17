@@ -31,7 +31,7 @@ public class SettingController {
   public void initLocation() {
     String locallize = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
                                .getString(ExoConstants.EXO_PRF_LOCALIZE,
-                                          ExoConstants.EXO_PRF_LOCALIZE);
+                                          ExoConstants.ENGLISH_LOCALIZATION);
     ;
     if (locallize != null) {
       if (locallize.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) {
@@ -46,10 +46,6 @@ public class SettingController {
   }
 
   public boolean updateLocallize(String localize) {
-    SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
-                                              .edit();
-    editor.putString(ExoConstants.EXO_PRF_LOCALIZE, localize);
-    editor.commit();
     Configuration config = new Configuration();
     SettingUtils.setLocalization(mContext, config, localize);
     return true;
