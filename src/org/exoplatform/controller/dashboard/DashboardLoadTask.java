@@ -67,10 +67,8 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
        * Checking the session status each time we retrieve dashboard item list.
        * If time out, re logging in
        */
-      if (ExoConnectionUtils.isSessionTimeout(urlForDahboards)) {
-        if (ExoConnectionUtils.reLogin() != ExoConnectionUtils.LOGIN_SUSCESS)
-          return RESULT_TIMEOUT;
-      }
+      if (ExoConnectionUtils.checkTimeout(urlForDahboards) != ExoConnectionUtils.LOGIN_SUSCESS)
+        return RESULT_TIMEOUT;
 
       response = ExoConnectionUtils.getRequestResponse(urlForDahboards);
       dashboarList = dashboardController.getDashboards(response);
