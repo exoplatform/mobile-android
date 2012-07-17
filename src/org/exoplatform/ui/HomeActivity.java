@@ -28,11 +28,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -152,6 +151,7 @@ public class HomeActivity extends MyActionBar {
     // appsButton.setOnClickListener(this);
     homeUserAvatar = (ShaderImageView) findViewById(R.id.home_user_avatar);
     homeUserAvatar.setDefaultImageResource(dafault_avatar);
+    homeUserAvatar.setVisibility(View.GONE);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
     // viewFlipper.setOnClickListener(this);
@@ -181,8 +181,11 @@ public class HomeActivity extends MyActionBar {
   }
 
   public void setProfileInfo(String[] profile) {
+    homeUserAvatar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_right_to_left));
     homeUserAvatar.setUrl(profile[0]);
     homeUserName.setText(profile[1]);
+    homeUserName.setAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_right_to_left));
+    homeUserAvatar.setVisibility(View.VISIBLE);
   }
 
   /*
