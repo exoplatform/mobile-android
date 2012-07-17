@@ -19,6 +19,7 @@ package org.exoplatform.utils;
 import java.util.Locale;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 
 /**
@@ -31,14 +32,14 @@ public class SettingUtils {
    */
 
   public static void setLocalization(Context mContext, Configuration config, String localize) {
-    String realLocale = "";
-    if (localize.equals(ExoConstants.FRENCH_LOCALIZATION)) {
-      realLocale = "fr";
-    }
-    Locale locale = new Locale(realLocale);
+    Locale locale = new Locale(localize);
     config.locale = locale;
     mContext.getResources()
             .updateConfiguration(config, mContext.getResources().getDisplayMetrics());
+    SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
+                                              .edit();
+    editor.putString(ExoConstants.EXO_PRF_LOCALIZE, localize);
+    editor.commit();
   }
 
 }

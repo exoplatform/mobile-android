@@ -97,6 +97,9 @@ public class ExoConnectionUtils {
     }
     return sb.toString();
   }
+  /*
+   * check session timeout
+   */
 
   public static boolean isSessionTimeout(String url) {
     HttpGet httpGet = new HttpGet(url);
