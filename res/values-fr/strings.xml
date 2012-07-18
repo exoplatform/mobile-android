@@ -168,6 +168,6 @@
     <string name="CompatibleFileSuggest">Souhaitez-vous ouvrir ce fichier avec une application installée sur votre terminal ?</string>
     <string name="OpenIn">Ouvrir avec ...</string>
     <string name="DownloadingFile">Téléchargement du fichier...</string>
-    <string name="MemoryWarning">The SDCARD is not available or not enough free space.</string>
+    <string name="MemoryWarning">Mémoire indisponible ou insuffisante.</string>
 
 </resources>
