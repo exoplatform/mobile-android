@@ -3,6 +3,7 @@ package org.exoplatform.controller.login;
 import greendroid.util.Config;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -47,19 +48,25 @@ public class LaunchController {
   }
 
   private void getLaunchInfo() {
+    String strLocalize = null;
     if (sharedPreference == null) {
       sharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
-    }
-    // LocalizationHelper.getInstance().setSharePrefs(sharedPreference);
-    String strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE,
-                                                    ExoConstants.EXO_PRF_LOCALIZE);
-    /*
-     * check if localize file name is null or not assigned then default locale
-     * is English
-     */
+      strLocalize = Locale.getDefault().getLanguage();
+      /*
+       * check if locale language is not French then assigned the default locale
+       * is English
+       */
+      if (!strLocalize.equals(ExoConstants.FRENCH_LOCALIZATION)) {
+        strLocalize = ExoConstants.ENGLISH_LOCALIZATION;
+      }
 
-    if (strLocalize == null || strLocalize.equalsIgnoreCase(ExoConstants.EXO_PRF_LOCALIZE))
-      strLocalize = ExoConstants.ENGLISH_LOCALIZATION;
+    } else
+      strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE,
+                                               ExoConstants.ENGLISH_LOCALIZATION);
+
+    /*
+     * Set the Locale which affect to our application
+     */
     Configuration config = new Configuration();
     SettingUtils.setLocalization(context, config, strLocalize);
 

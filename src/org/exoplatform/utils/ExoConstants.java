@@ -98,9 +98,9 @@ public class ExoConstants {
 
   public static final String EXO_PRF_LOCALIZE              = "exo_prf_localize";
 
-  public static final String ENGLISH_LOCALIZATION          = "LocalizeEN";
+  public static final String ENGLISH_LOCALIZATION          = "en";
 
-  public static final String FRENCH_LOCALIZATION           = "LocalizeFR";
+  public static final String FRENCH_LOCALIZATION           = "fr";
 
   public static final String DOCUMENT_PATH                 = "/rest/private/jcr/repository/collaboration/Users";
 

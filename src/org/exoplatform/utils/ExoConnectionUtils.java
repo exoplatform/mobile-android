@@ -90,6 +90,9 @@ public class ExoConnectionUtils {
     }
     return sb.toString();
   }
+  /*
+   * check session timeout
+   */
 
   /*
    * Call onPrepareLogin() method to login system again
