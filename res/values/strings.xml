@@ -186,6 +186,6 @@
     <string name="CompatibleFileSuggest">Do you like open in installed app?</string>
     <string name="OpenIn">Open in …</string>
     <string name="DownloadingFile">Downloading file …</string>
-    <string name="MemoryWarning">The sdcard memory is not available or not enough free space.</string>
+    <string name="MemoryWarning">Memory is unavailable or doesn't have enough free space.</string>
 
 </resources>
