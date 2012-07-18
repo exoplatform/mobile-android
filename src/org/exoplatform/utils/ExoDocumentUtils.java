@@ -36,6 +36,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -71,6 +73,27 @@ public class ExoDocumentUtils {
 
   public static final String OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
 
+  public static boolean isEnoughMemory(int fileSize) {
+    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+      int freeSpace = getFreeMemory(Environment.getExternalStorageDirectory().getAbsolutePath());
+      if (freeSpace > fileSize) {
+        return true;
+      } else
+        return false;
+
+    } else
+      return false;
+  }
+
+  /*
+   * Get free memory from path
+   */
+  public static int getFreeMemory(String path) {
+    StatFs statFs = new StatFs(path);
+    int free = (statFs.getAvailableBlocks() * statFs.getBlockSize());
+    return free;
+  }
+
   /*
    * If content type is image or text, open it in WebView else open in other
    * installed application
@@ -94,6 +117,10 @@ public class ExoDocumentUtils {
     }
 
   }
+
+  /*
+   * Check if device have application to open this type of file or not
+   */
 
   public static boolean isCallable(Context context, String url) {
     String extension = MimeTypeMap.getFileExtensionFromUrl(url);
