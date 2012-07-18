@@ -205,10 +205,9 @@ public class HomeActivity extends MyActionBar {
       socialItem = new HomeSocialItem(this, list.get(i));
       viewFlipper.addView(socialItem, params);
     }
-    viewFlipper.startFlipping();
     viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_right_to_left));
     viewFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_left_out));
-
+    viewFlipper.startFlipping();
   }
 
   @Override
