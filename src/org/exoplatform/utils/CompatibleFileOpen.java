@@ -48,41 +48,41 @@ import android.os.AsyncTask;
  * 6, 2012
  */
 public class CompatibleFileOpen {
-  private static final int RESULT_OK                = 0;
+  private static final int       RESULT_OK                = 0;
 
-  private static final int RESULT_ERROR             = 1;
+  private static final int       RESULT_ERROR             = 1;
 
-  private static final int RESULT_CANCEL            = 2;
+  private static final int       RESULT_CANCEL            = 2;
 
-  private Context          mContext;
+  private Context                mContext;
 
-  private String           fileType;
+  private String                 fileType;
 
-  private String           filePath;
+  private String                 filePath;
 
-  private String           fileName;
+  private String                 fileName;
 
-  private ProgressDialog   mProgressDialog;
+  private DownloadProgressDialog mProgressDialog;
 
-  public static final int  DIALOG_DOWNLOAD_PROGRESS = 0;
+  public static final int        DIALOG_DOWNLOAD_PROGRESS = 0;
 
-  private FileDownloadTask mLoadTask;
+  private FileDownloadTask       mLoadTask;
 
-  private String           downLoadingFile;
+  private String                 downLoadingFile;
 
-  private String           noAppFound;
+  private String                 noAppFound;
 
-  private String           fileNotSupport;
+  private String                 fileNotSupport;
 
-  private String           cannotOpenFile;
+  private String                 cannotOpenFile;
 
-  private String           fileNotFound;
+  private String                 fileNotFound;
 
-  private String           memoryWarning;
+  private String                 memoryWarning;
 
-  private Resources        resource;
+  private Resources              resource;
 
-  private FileCache        fileCache;
+  private FileCache              fileCache;
 
   public CompatibleFileOpen(Context context, String fType, String fPath, String fName) {
     mContext = context;
@@ -109,7 +109,7 @@ public class CompatibleFileOpen {
     }
   }
 
-  public void onCancelLoad() {
+  private void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == FileDownloadTask.Status.RUNNING) {
       mLoadTask.cancel(true);
       mLoadTask = null;
@@ -132,7 +132,7 @@ public class CompatibleFileOpen {
 
     @Override
     protected void onPreExecute() {
-      mProgressDialog = (ProgressDialog) onCreateDialog(DIALOG_DOWNLOAD_PROGRESS);
+      mProgressDialog = (DownloadProgressDialog) onCreateDialog(DIALOG_DOWNLOAD_PROGRESS);
       mProgressDialog.show();
 
     }
@@ -254,7 +254,7 @@ public class CompatibleFileOpen {
   private Dialog onCreateDialog(int id) {
     switch (id) {
     case DIALOG_DOWNLOAD_PROGRESS: // we set this to 0
-      mProgressDialog = new ProgressDialog(mContext);
+      mProgressDialog = new DownloadProgressDialog(mContext);
       mProgressDialog.setMessage(downLoadingFile);
       mProgressDialog.setIndeterminate(false);
       mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -263,6 +263,24 @@ public class CompatibleFileOpen {
       return mProgressDialog;
     default:
       return null;
+    }
+  }
+
+  private class DownloadProgressDialog extends ProgressDialog {
+
+    public DownloadProgressDialog(Context context) {
+      super(context);
+    }
+
+    /*
+     * Override onBackPressed() method to call onCancelLoad() to cancel
+     * downloading file task and delete the downloading file
+     */
+
+    @Override
+    public void onBackPressed() {
+      onCancelLoad();
+      super.onBackPressed();
     }
   }
 
