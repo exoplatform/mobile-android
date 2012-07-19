@@ -1,5 +1,8 @@
 package org.exoplatform.widget;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
@@ -183,7 +186,7 @@ public class SocialActivityStreamItem extends LinearLayout {
         if (extension != null) {
           mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
-        displayAttachImage(url, docName, null, mimeType);
+        displayAttachImage(url, docName, null, mimeType, false);
       }
 
       break;
@@ -221,7 +224,7 @@ public class SocialActivityStreamItem extends LinearLayout {
           buffer.append(domain);
           buffer.append("/portal/rest/jcr/");
           buffer.append(contentLink);
-          displayAttachImage(buffer.toString(), contentName, null, contentType);
+          displayAttachImage(buffer.toString(), contentName, null, contentType, true);
         }
 
       }
@@ -314,16 +317,20 @@ public class SocialActivityStreamItem extends LinearLayout {
 
     String imageParams = activityInfo.templateParams.get("image");
     if ((imageParams != null) && (imageParams.contains("http"))) {
-      displayAttachImage(imageParams, "", linkBuffer, "image");
+      displayAttachImage(imageParams, "", linkBuffer, "image", true);
     } else {
       textViewTempMessage.setText(Html.fromHtml(linkBuffer), TextView.BufferType.SPANNABLE);
       textViewTempMessage.setVisibility(View.VISIBLE);
     }
   }
 
-  private void displayAttachImage(String url, String name, String description, String fileType) {
+  private void displayAttachImage(String url,
+                                  String name,
+                                  String description,
+                                  String fileType,
+                                  boolean isLinkType) {
     if (attachStubView == null) {
-      initAttachStubView(url, name, description, fileType);
+      initAttachStubView(url, name, description, fileType, isLinkType);
     }
     attachStubView.setVisibility(View.VISIBLE);
   }
@@ -331,7 +338,8 @@ public class SocialActivityStreamItem extends LinearLayout {
   private void initAttachStubView(final String url,
                                   final String fileName,
                                   String description,
-                                  final String fileType) {
+                                  final String fileType,
+                                  boolean isLinkType) {
     attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
     TextView txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
@@ -354,7 +362,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       if (SocialDetailHelper.getInstance().socialImageLoader == null) {
         SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
       }
-      SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage);
+      SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage, isLinkType);
     } else {
       attachImage.setImageResource(ExoDocumentUtils.getIconFromType(fileType));
     }
