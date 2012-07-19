@@ -38,8 +38,6 @@ public class ConnTimeOutDialog extends Dialog implements android.view.View.OnCli
 
   private Button   okButton;
 
-  private Context  mContext;
-
   public ConnTimeOutDialog(Context context, String titleString, String okString) {
     super(context);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -49,7 +47,7 @@ public class ConnTimeOutDialog extends Dialog implements android.view.View.OnCli
     ImageView imageView = (ImageView) findViewById(R.id.warning_image);
     imageView.setImageResource(R.drawable.warning_icon);
     contentView = (TextView) findViewById(R.id.warning_content);
-    contentView.setText(mContext.getResources().getString(R.string.NetworkTimeout));
+    contentView.setText(context.getString(R.string.NetworkTimeout));
     okButton = (Button) findViewById(R.id.warning_ok_button);
     okButton.setText(okString);
     okButton.setOnClickListener(this);
