@@ -45,6 +45,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.test.IsolatedContext;
 import android.widget.ImageView;
 
 /**
@@ -53,14 +54,14 @@ import android.widget.ImageView;
  */
 public class SocialImageLoader {
 
-  private MemoryCache            memoryCache   = new MemoryCache();
+  private MemoryCache            memoryCache             = new MemoryCache();
 
   private FileCache              fileCache;
 
   /*
    * The mapping between image view and image's url
    */
-  private Map<ImageView, String> imageViews    = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
+  private Map<ImageView, String> imageViews              = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
 
   /*
    * Provides methods to manage termination and methods that can produce a
@@ -69,12 +70,15 @@ public class SocialImageLoader {
   private ExecutorService        executorService;
 
   // The image drawable for progress downloading
-  private final int              STUB_ID       = R.drawable.loading;
+  private final int              DOWNLOAD_PROGRESS_IMAGE = R.drawable.loading;
 
-  // If the image bitmap is error or null, it will display this drawable
-  private final int              FINAL_STUB_ID = R.drawable.documenticonforunknown;
+  // The image drawable for link type
+  private final int              UNREADABLE_LINK         = R.drawable.icon_for_unreadable_link;
 
-  private final int              REQUIRED_SIZE = 100;
+  // The image drawable for image type
+  private final int              PLACEHOLDER_IMAGE       = R.drawable.icon_for_placeholder_image;
+
+  private final int              REQUIRED_SIZE           = 100;
 
   public SocialImageLoader(Context context) {
     fileCache = new FileCache(context, ExoConstants.SOCIAL_FILE_CACHE);
@@ -82,20 +86,20 @@ public class SocialImageLoader {
 
   }
 
-  public void displayImage(String url, ImageView imageView) {
+  public void displayImage(String url, ImageView imageView, boolean isLink) {
     url = url.replaceAll(" ", "%20");
     imageViews.put(imageView, url);
     Bitmap bitmap = memoryCache.get(url);
     if (bitmap != null)
       imageView.setImageBitmap(bitmap);
     else {
-      queuePhoto(url, imageView);
-      imageView.setImageResource(STUB_ID);
+      queuePhoto(url, imageView, isLink);
+      imageView.setImageResource(DOWNLOAD_PROGRESS_IMAGE);
     }
   }
 
-  private void queuePhoto(String url, ImageView imageView) {
-    PhotoToLoad p = new PhotoToLoad(url, imageView);
+  private void queuePhoto(String url, ImageView imageView, boolean isLink) {
+    PhotoToLoad p = new PhotoToLoad(url, imageView, isLink);
     executorService.submit(new PhotosLoader(p));
 
   }
@@ -176,9 +180,12 @@ public class SocialImageLoader {
 
     public ImageView imageView;
 
-    public PhotoToLoad(String u, ImageView i) {
+    public boolean   isLinkType;
+
+    public PhotoToLoad(String u, ImageView i, boolean isLink) {
       url = u;
       imageView = i;
+      isLinkType = isLink;
     }
   }
 
@@ -226,8 +233,16 @@ public class SocialImageLoader {
         return;
       if (bitmap != null) {
         photoToLoad.imageView.setImageBitmap(bitmap);
-      } else
-        photoToLoad.imageView.setImageResource(FINAL_STUB_ID);
+      } else {
+        /*
+         * if can not get image bitmap from web link, we will display this instead
+         */
+        if (photoToLoad.isLinkType) {
+          photoToLoad.imageView.setImageResource(UNREADABLE_LINK);
+        } else
+          photoToLoad.imageView.setImageResource(PLACEHOLDER_IMAGE);
+
+      }
 
     }
   }
