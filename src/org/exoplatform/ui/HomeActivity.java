@@ -238,10 +238,8 @@ public class HomeActivity extends MyActionBar {
       ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
       ExoConnectionUtils.httpClient = null;
     }
-    if (ChatServiceHelper.getInstance().getXMPPConnection() != null) {
-      ChatServiceHelper.getInstance().getXMPPConnection().disconnect();
-      ChatServiceHelper.getInstance().setXMPPConnection(null);
-    }
+
+    AccountSetting.getInstance().cookiesList = null;
     /*
      * Clear all social service data
      */

@@ -114,7 +114,10 @@ public class LoginController {
 
   }
 
-  public class LoginTask extends AsyncTask<Void, Void, String> {
+  public class LoginTask extends AsyncTask<Void, Void, Integer> {
+
+    private HttpResponse response;
+
     @Override
     public void onPreExecute() {
       _progressDialog = new LoginWaitingDialog(mContext, null, strSigning);
@@ -122,25 +125,26 @@ public class LoginController {
     }
 
     @Override
-    public String doInBackground(Void... params) {
+    public Integer doInBackground(Void... params) {
 
       try {
-        HttpResponse response = ExoConnectionUtils.onPrepareLogin(_strDomain, userName, password);
-        String resultStr = ExoConnectionUtils.sendAuthentication(response);
-        return resultStr;
+        String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
+        response = ExoConnectionUtils.getPlatformResponse(userName, password, versionUrl);
+
+        return ExoConnectionUtils.checkPlatformRespose(response);
 
       } catch (IOException e) {
-        return null;
+        return ExoConnectionUtils.LOGIN_WRONG;
       }
 
     }
 
     @Override
-    public void onPostExecute(String result) {
-      if (result == null) {
+    public void onPostExecute(Integer result) {
+      if (result == ExoConnectionUtils.LOGIN_WRONG) {
         dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
         dialog.show();
-      } else if (result.equalsIgnoreCase(ExoConstants.LOGIN_YES)) {
+      } else if (result == ExoConnectionUtils.LOGIN_SUSCESS) {
         AccountSetting accountSetting = AccountSetting.getInstance();
         // SharedPreferences.Editor editor =
         // LocalizationHelper.getInstance().getSharePrefs().edit();
@@ -158,8 +162,6 @@ public class LoginController {
         /*
          * Checking platform version
          */
-        String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_SUFFIX_VERSION;
-        HttpResponse response = ExoConnectionUtils.getPlatformResponse(versionUrl);
         boolean isCompliant = ExoConnectionUtils.checkPLFVersion(response);
         if (isCompliant == true) {
           Intent next = new Intent(mContext, HomeActivity.class);
@@ -170,13 +172,13 @@ public class LoginController {
           dialog.show();
         }
 
-      } else if (result.equalsIgnoreCase(ExoConstants.LOGIN_NO)) {
+      } else if (result == ExoConnectionUtils.LOGIN_UNAUTHORIZED) {
         dialog = new WarningDialog(mContext, titleString, strUserNamePasswordFailed, okString);
         dialog.show();
-      } else if (result.contains(ExoConstants.LOGIN_INVALID)) {
+      } else if (result == ExoConnectionUtils.LOGIN_INVALID) {
         dialog = new WarningDialog(mContext, titleString, strServerInvalid, okString);
         dialog.show();
-      } else if (result.contains(ExoConstants.LOGIN_UNREACHABLE)) {
+      } else if (result == ExoConnectionUtils.LOGIN_FAILED) {
         dialog = new WarningDialog(mContext, titleString, strServerUnreachable, okString);
         dialog.show();
       } else {

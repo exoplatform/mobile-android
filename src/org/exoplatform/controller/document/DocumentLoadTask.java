@@ -24,22 +24,22 @@ import com.cyrilmottier.android.greendroid.R;
 public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
   // delete file or folder
-  protected static final int      ACTION_DELETE  = 1;
+  protected static final int    ACTION_DELETE  = 1;
 
   // copy file
-  protected static final int      ACTION_COPY    = 2;
+  protected static final int    ACTION_COPY    = 2;
 
   // move file
-  protected static final int      ACTION_MOVE    = 3;
+  protected static final int    ACTION_MOVE    = 3;
 
   // upload file
-  protected static final int      ACTION_UPLOAD  = 4;
+  protected static final int    ACTION_UPLOAD  = 4;
 
   // rename folder
-  protected static final int      ACTION_RENAME  = 5;
+  protected static final int    ACTION_RENAME  = 5;
 
   // create new folder
-  protected static final int      ACTION_CREATE  = 6;
+  protected static final int    ACTION_CREATE  = 6;
 
   /*
    * Result status
@@ -109,11 +109,8 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
        * Checking the session status each time we retrieve files/folders. If
        * time out, re logging in. If relogging in error, pop up a error dialog
        */
-      if (ExoConnectionUtils.getResponseCode(DocumentHelper.getInstance().getRepositoryHomeUrl()) != 1) {
-        if (!ExoConnectionUtils.onReLogin()) {
-          return RESULT_TIMEOUT;
-        }
-      }
+      if (ExoConnectionUtils.checkTimeout(DocumentHelper.getInstance().getRepositoryHomeUrl()) != ExoConnectionUtils.LOGIN_SUSCESS)
+        return RESULT_TIMEOUT;
       if (actionID == DocumentActivity.ACTION_DELETE) {
         contentWarningString = resource.getString(R.string.DocumentCannotDelete);
         result = ExoDocumentUtils.deleteFile(strSourceUrl);

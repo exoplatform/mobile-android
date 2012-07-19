@@ -37,9 +37,10 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
-import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
+import org.jivesoftware.smack.util.Base64;
 
 import android.app.Activity;
 import android.content.Context;
@@ -76,7 +77,13 @@ public class SocialImageLoader {
 
   private final int              REQUIRED_SIZE = 100;
 
+  private String                 username;
+
+  private String                 password;
+
   public SocialImageLoader(Context context) {
+    username = AccountSetting.getInstance().getUsername();
+    password = AccountSetting.getInstance().getPassword();
     fileCache = new FileCache(context, ExoConstants.SOCIAL_FILE_CACHE);
     executorService = Executors.newFixedThreadPool(5);
 
@@ -110,7 +117,6 @@ public class SocialImageLoader {
     HttpConnectionParams.setSoTimeout(httpParameters, 10000);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
     DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-    httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
     try {
       File f = fileCache.getFile(url);
 
@@ -121,7 +127,16 @@ public class SocialImageLoader {
       else {
         // from web
         Bitmap bitmap = null;
+        /*
+         * Send authentication each time we execute HttpGet to avoid the step
+         * checking session time out.
+         */
         HttpGet getRequest = new HttpGet(url);
+        StringBuilder buffer = new StringBuilder(username);
+        buffer.append(":");
+        buffer.append(password);
+        getRequest.setHeader("Authorization",
+                             "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
         HttpResponse response = httpClient.execute(getRequest);
         HttpEntity entity = response.getEntity();
         if (entity != null) {

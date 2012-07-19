@@ -247,16 +247,18 @@ public class WebViewActivity extends MyActionBar {
       /*
        * Checking the response code and re logging in if session timeout
        */
-      try {
-        int code = ExoConnectionUtils.getResponseCode(_url);
-        if (code != 1) {
-          ExoConnectionUtils.onReLogin();
-        }
-        setupCookies(_url);
-        return true;
-      } catch (IOException e) {
-        return false;
-      }
+//      try {
+//        int code = ExoConnectionUtils.getResponseCode(_url);
+//        if (code != 1) {
+//          ExoConnectionUtils.onReLogin();
+//        }
+//        setupCookies(_url);
+//        return true;
+//      } catch (IOException e) {
+//        return false;
+//      }
+      setupCookies(_url);
+      return true;
 
     }
 

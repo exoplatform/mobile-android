@@ -51,9 +51,7 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
       dismiss();
     }
     if (view.equals(okButton)) {
-
       new CompatibleFileOpen(mContext, fileType, filePath, fileName);
-
       dismiss();
     }
   }
