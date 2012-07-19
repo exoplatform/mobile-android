@@ -11,6 +11,7 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.DocumentWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -109,7 +110,8 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
        * Checking the session status each time we retrieve files/folders. If
        * time out, re logging in. If relogging in error, pop up a error dialog
        */
-      if (ExoConnectionUtils.checkTimeout(DocumentHelper.getInstance().getRepositoryHomeUrl()) != ExoConnectionUtils.LOGIN_SUSCESS)
+      String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
+      if (ExoConnectionUtils.checkTimeout(versionUrl) != ExoConnectionUtils.LOGIN_SUSCESS)
         return RESULT_TIMEOUT;
       if (actionID == DocumentActivity.ACTION_DELETE) {
         contentWarningString = resource.getString(R.string.DocumentCannotDelete);
