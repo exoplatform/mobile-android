@@ -42,40 +42,47 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
  * 6, 2012
  */
 public class CompatibleFileOpen {
-  private Context          mContext;
+  private static final int       RESULT_OK                = 0;
 
-  private String           fileType;
+  private static final int       RESULT_ERROR             = 1;
 
-  private String           filePath;
+  private static final int       RESULT_CANCEL            = 2;
 
-  private String           fileName;
+  private Context                mContext;
 
-  private ProgressDialog   mProgressDialog;
+  private String                 fileType;
 
-  public static final int  DIALOG_DOWNLOAD_PROGRESS = 0;
+  private String                 filePath;
 
-  private FileDownloadTask mLoadTask;
+  private String                 fileName;
 
-  private String           downLoadingFile;
+  private DownloadProgressDialog mProgressDialog;
 
-  private String           noAppFound;
+  public static final int        DIALOG_DOWNLOAD_PROGRESS = 0;
 
-  private String           fileNotSupport;
+  private FileDownloadTask       mLoadTask;
 
-  private String           cannotOpenFile;
+  private String                 downLoadingFile;
 
-  private String           fileNotFound;
+  private String                 noAppFound;
 
-  private Resources        resource;
+  private String                 fileNotSupport;
 
-  private FileCache        fileCache;
+  private String                 cannotOpenFile;
+
+  private String                 fileNotFound;
+
+  private String                 memoryWarning;
+
+  private Resources              resource;
+
+  private FileCache              fileCache;
 
   public CompatibleFileOpen(Context context, String fType, String fPath, String fName) {
     mContext = context;
@@ -88,7 +95,6 @@ public class CompatibleFileOpen {
       onLoad(filePath);
     } else {
       new UnreadableFileDialog(mContext, fileNotSupport).show();
-      // Toast.makeText(mContext, fileNotSupport, Toast.LENGTH_SHORT).show();
     }
 
   }
@@ -103,7 +109,7 @@ public class CompatibleFileOpen {
     }
   }
 
-  public void onCancelLoad() {
+  private void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == FileDownloadTask.Status.RUNNING) {
       mLoadTask.cancel(true);
       mLoadTask = null;
@@ -117,28 +123,29 @@ public class CompatibleFileOpen {
     cannotOpenFile = resource.getString(R.string.CannotOpenFile);
     fileNotFound = resource.getString(R.string.FileNotFound);
     fileNotSupport = resource.getString(R.string.FileNotSupported);
+    memoryWarning = resource.getString(R.string.FileNotSupported);
   }
 
-  private class FileDownloadTask extends AsyncTask<String, String, File> {
+  private class FileDownloadTask extends AsyncTask<String, String, Integer> {
 
     private File file;
 
     @Override
     protected void onPreExecute() {
-      mProgressDialog = (ProgressDialog) onCreateDialog(DIALOG_DOWNLOAD_PROGRESS);
+      mProgressDialog = (DownloadProgressDialog) onCreateDialog(DIALOG_DOWNLOAD_PROGRESS);
       mProgressDialog.show();
 
     }
 
     @Override
-    protected File doInBackground(String... params) {
+    protected Integer doInBackground(String... params) {
 
       /*
        * If file exists return file else download from url
        */
       file = fileCache.getFileFromName(fileName);
       if (file.exists()) {
-        return file;
+        return RESULT_OK;
       }
 
       String url = params[0].replaceAll(" ", "%20");
@@ -158,6 +165,12 @@ public class CompatibleFileOpen {
 
           // lenghtOfFile is used for calculating download progress
           long lenghtOfFile = entity.getContentLength();
+          /*
+           * Compare the file size and free sdcard memory
+           */
+          if (!ExoDocumentUtils.isEnoughMemory((int) lenghtOfFile)) {
+            return RESULT_CANCEL;
+          }
           mProgressDialog.setMax((int) lenghtOfFile);
           InputStream is = entity.getContent();
           OutputStream os = new FileOutputStream(file);
@@ -169,19 +182,18 @@ public class CompatibleFileOpen {
 
           while ((len = is.read(buffer)) > 0) {
             total += len; // total = total + len
-//            publishProgress("" + (int) ((total * 100) / lenghtOfFile));
             publishProgress("" + total);
             os.write(buffer, 0, len);
           }
 
           os.close();
         }
-        return file;
+        return RESULT_OK;
       } catch (IOException e) {
         if (file != null) {
           file.delete();
         }
-        return null;
+        return RESULT_ERROR;
       } finally {
         httpClient.getConnectionManager().shutdown();
       }
@@ -206,8 +218,8 @@ public class CompatibleFileOpen {
     }
 
     @Override
-    protected void onPostExecute(File result) {
-      if (result != null) {
+    protected void onPostExecute(Integer result) {
+      if (result == RESULT_OK) {
         /*
          * get exactly document type from content type and open it with
          * compatible intent
@@ -215,7 +227,7 @@ public class CompatibleFileOpen {
         String docFileType = ExoDocumentUtils.getFullFileType(fileType);
 
         if (docFileType != null) {
-          Uri path = Uri.fromFile(result);
+          Uri path = Uri.fromFile(file);
           Intent intent = new Intent(Intent.ACTION_VIEW);
           intent.setDataAndType(path, docFileType);
           intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -229,8 +241,10 @@ public class CompatibleFileOpen {
           new UnreadableFileDialog(mContext, cannotOpenFile).show();
         }
 
-      } else {
+      } else if (result == RESULT_ERROR) {
         new UnreadableFileDialog(mContext, fileNotFound).show();
+      } else if (result == RESULT_CANCEL) {
+        new UnreadableFileDialog(mContext, memoryWarning).show();
       }
       mProgressDialog.dismiss();
     }
@@ -240,16 +254,33 @@ public class CompatibleFileOpen {
   private Dialog onCreateDialog(int id) {
     switch (id) {
     case DIALOG_DOWNLOAD_PROGRESS: // we set this to 0
-      mProgressDialog = new ProgressDialog(mContext);
+      mProgressDialog = new DownloadProgressDialog(mContext);
       mProgressDialog.setMessage(downLoadingFile);
       mProgressDialog.setIndeterminate(false);
-//      mProgressDialog.setMax(100);
       mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
       mProgressDialog.setCancelable(true);
       mProgressDialog.show();
       return mProgressDialog;
     default:
       return null;
+    }
+  }
+
+  private class DownloadProgressDialog extends ProgressDialog {
+
+    public DownloadProgressDialog(Context context) {
+      super(context);
+    }
+
+    /*
+     * Override onBackPressed() method to call onCancelLoad() to cancel
+     * downloading file task and delete the downloading file
+     */
+
+    @Override
+    public void onBackPressed() {
+      onCancelLoad();
+      super.onBackPressed();
     }
   }
 

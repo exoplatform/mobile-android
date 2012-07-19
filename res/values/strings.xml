@@ -184,7 +184,8 @@
     <string name="FileNotFound"> File not found.</string>
     <string name="FileNotSupported"> File was not support to open!</string>
     <string name="CompatibleFileSuggest">Do you like open in installed app?</string>
-    <string name="OpenIn">Open in &#8230;</string>
-    <string name="DownloadingFile">Downloading file &#8230;</string>
+    <string name="OpenIn">Open in …</string>
+    <string name="DownloadingFile">Downloading file …</string>
+    <string name="MemoryWarning">Memory is unavailable or doesn\'t have enough free space.</string>
 
 </resources>
