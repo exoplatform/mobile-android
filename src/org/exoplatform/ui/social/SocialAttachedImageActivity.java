@@ -38,7 +38,7 @@ public class SocialAttachedImageActivity extends MyActionBar {
     if (SocialDetailHelper.getInstance().socialImageLoader == null) {
       SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(this);
     }
-    SocialDetailHelper.getInstance().socialImageLoader.displayImage(imageUrl, imageView);
+    SocialDetailHelper.getInstance().socialImageLoader.displayImage(imageUrl, imageView, false);
   }
 
   private String getImageName(String url) {
