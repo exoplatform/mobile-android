@@ -224,7 +224,7 @@ public class SocialActivityStreamItem extends LinearLayout {
           buffer.append(domain);
           buffer.append("/portal/rest/jcr/");
           buffer.append(contentLink);
-          displayAttachImage(buffer.toString(), contentName, null, contentType, true);
+          displayAttachImage(buffer.toString(), contentName, null, contentType, false);
         }
 
       }

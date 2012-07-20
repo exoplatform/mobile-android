@@ -84,10 +84,6 @@ public class SocialImageLoader {
 
   private String                 password;
 
-  private String                 username;
-
-  private String                 password;
-
   public SocialImageLoader(Context context) {
     username = AccountSetting.getInstance().getUsername();
     password = AccountSetting.getInstance().getPassword();

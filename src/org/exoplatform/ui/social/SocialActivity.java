@@ -204,7 +204,8 @@ public class SocialActivity extends MyActionBar {
 
       SocialActivityStreamItem item = new SocialActivityStreamItem(this, activityInfo, false);
 
-      Button likeButton = item.likeButton();
+      final Button likeButton = item.likeButton();
+
       likeButton.setOnClickListener(new View.OnClickListener() {
 
         public void onClick(View v) {
@@ -217,6 +218,10 @@ public class SocialActivity extends MyActionBar {
                 SocialServiceHelper.getInstance().activityService.like(activity);
 
               homeController.onLoad(number_of_activity, loaderItem);
+              if (homeController.isLoadingTak()) {
+                likeButton.setClickable(false);
+              } else
+                likeButton.setClickable(true);
             } catch (SocialClientLibException e) {
               WarningDialog dialog = new WarningDialog(SocialActivity.this,
                                                        titleString,
