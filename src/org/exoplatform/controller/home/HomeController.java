@@ -77,6 +77,19 @@ public class HomeController {
     }
   }
 
+  public boolean isLoadingTak() {
+    if (mServiceLoadTask != null
+        && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING) {
+      return true;
+    }
+    if (mLoadTask != null && mLoadTask.getStatus() == SocialLoadTask.Status.RUNNING) {
+      return true;
+    }
+
+    return false;
+
+  }
+
   private void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == SocialLoadTask.Status.RUNNING) {
       mLoadTask.cancel(true);
