@@ -11,11 +11,12 @@
         android:layout_weight="1"
         android:gravity="center" >
 
-        <ImageView android:contentDescription="@string/SignInInformation"
+        <ImageView 
             android:id="@+id/authenticate_logo_imageview"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_marginBottom="5dp"
+            android:contentDescription="@string/SigningIn"
             android:padding="5dp"
             android:src="@drawable/exo_logo_large" />
     </LinearLayout>
@@ -71,7 +72,7 @@
                     android:ellipsize="start"
                     android:gravity="center|center_horizontal"
                     android:hint="@string/PasswordCellTitle"
-                    android:password="true"
+                    android:inputType="textPassword"
                     android:singleLine="true"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#AAAAAAAA"
@@ -137,8 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/authenticate_credentials_icon_on"
-                android:contentDescription="@string/SignInInformation" />
+                android:background="@drawable/authenticate_credentials_icon_on"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -162,9 +162,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/authenticateserversiconiphoneoff"
-                android:contentDescription="@string/SignInInformation" />
+                android:background="@drawable/authenticateserversiconiphoneoff"/>
         </RelativeLayout>
     </RelativeLayout>
-
 </LinearLayout>

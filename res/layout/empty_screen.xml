@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:gravity="center"
-	android:layout_width="wrap_content" android:layout_height="wrap_content">
-	<ImageView android:id="@+id/empty_image" android:background="@drawable/application_icon"
-		android:layout_width="wrap_content" android:layout_height="wrap_content" />
-	<TextView android:layout_marginLeft="5dp" android:id="@+id/empty_status"
-		android:text="No content in this folder, Non comment ta le vous"
-		android:textColor="#FFFFFF" android:gravity="center_horizontal"
-		android:textSize="16sp" android:padding="7dp" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" />
-</LinearLayout>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical" >
 
+    <ImageView
+        android:id="@+id/empty_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/application_icon" />
+
+    <TextView
+        android:id="@+id/empty_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_horizontal"
+        android:padding="7dp"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
+</LinearLayout>

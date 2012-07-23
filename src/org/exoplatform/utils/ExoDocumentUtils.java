@@ -5,6 +5,7 @@ import greendroid.util.Config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -92,6 +93,41 @@ public class ExoDocumentUtils {
     StatFs statFs = new StatFs(path);
     int free = (statFs.getAvailableBlocks() * statFs.getBlockSize());
     return free;
+  }
+
+  /*
+   * Display file size by string decimal format
+   */
+  public static String getFileSize(long fileSize) {
+    int freeUnit;
+    for (freeUnit = 0; fileSize >= 100; freeUnit++) {
+      fileSize /= 1024;
+    }
+    DecimalFormat decFormat = new DecimalFormat("0.0");
+    String doubleString = decFormat.format(fileSize);
+    StringBuffer buffer = new StringBuffer();
+    buffer.append(doubleString);
+    switch (freeUnit) {
+    case 0:
+      buffer.append("B");
+      break;
+    case 1:
+      buffer.append("KB");
+      break;
+    case 2:
+      buffer.append("MB");
+      break;
+    case 3:
+      buffer.append("GB");
+      break;
+    case 4:
+      buffer.append("TB");
+      break;
+    default:
+      buffer.append("err");
+      break;
+    }
+    return buffer.toString();
   }
 
   /*

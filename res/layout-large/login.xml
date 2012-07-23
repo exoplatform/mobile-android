@@ -11,7 +11,7 @@
         android:layout_weight="1"
         android:gravity="center" >
 
-        <ImageView android:contentDescription="@string/SignInInformation"
+        <ImageView 
             android:id="@+id/authenticate_logo_imageview"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -137,8 +137,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/authenticate_credentials_icon_on"
-                android:contentDescription="@string/SignInInformation" />
+                android:background="@drawable/authenticate_credentials_icon_on"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -162,9 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/authenticateserversiconiphoneoff"
-                android:contentDescription="@string/SignInInformation" />
+                android:background="@drawable/authenticateserversiconiphoneoff"/>
         </RelativeLayout>
     </RelativeLayout>
-
 </LinearLayout>

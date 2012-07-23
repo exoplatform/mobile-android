@@ -33,6 +33,7 @@
         <activity
             android:name=".ui.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
+
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

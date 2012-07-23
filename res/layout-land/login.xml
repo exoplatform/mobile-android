@@ -18,7 +18,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:contentDescription="@string/SignInInformation"
             android:src="@drawable/authenticate_logo" />
     </LinearLayout>
 
@@ -44,7 +43,6 @@
                 android:background="@drawable/authenticate_panel_bg"
                 android:orientation="vertical"
                 android:padding="10dp" >
-
                 <EditText
                     android:id="@+id/EditText_UserName"
                     android:layout_width="fill_parent"
@@ -137,8 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/authenticate_credentials_icon_on"
-                android:contentDescription="@string/SignInInformation" />
+                android:background="@drawable/authenticate_credentials_icon_on"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -162,8 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/authenticateserversiconiphoneoff"
-                android:contentDescription="@string/SignInInformation" />
+                android:background="@drawable/authenticateserversiconiphoneoff"/>
         </RelativeLayout>
     </RelativeLayout>
 

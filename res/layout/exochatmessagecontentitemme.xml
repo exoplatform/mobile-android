@@ -9,7 +9,6 @@
 			android:paddingRight="8dip" android:paddingBottom="8dip"
 			android:typeface="serif" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:textColor="#000000"
-			android:text="Message content Message content Message content" 
 			android:background="@drawable/chatdiscussionusermessagebg"/>
 
 </RelativeLayout>

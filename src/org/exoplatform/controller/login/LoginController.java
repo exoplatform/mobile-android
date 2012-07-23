@@ -130,9 +130,7 @@ public class LoginController {
       try {
         String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
         response = ExoConnectionUtils.getPlatformResponse(userName, password, versionUrl);
-
         return ExoConnectionUtils.checkPlatformRespose(response);
-
       } catch (IOException e) {
         return ExoConnectionUtils.LOGIN_WRONG;
       }
