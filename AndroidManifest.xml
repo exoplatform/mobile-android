@@ -88,6 +88,10 @@
         <activity
             android:name=".ui.social.LikeListActivity"
             android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".ui.social.SocialTabsActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.PageIndicatorDefaults" />
     </application>
 
 </manifest>
