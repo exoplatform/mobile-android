@@ -28,7 +28,7 @@ public class SocialActivityInfo {
   private int                nbComments;
 
   private String             type;
-
+  
   private String             attachImageUrl;
 
   public Map<String, String> templateParams;
@@ -146,5 +146,6 @@ public class SocialActivityInfo {
   public String getAttachedImageUrl() {
     return attachImageUrl;
   }
+  
 
 }

@@ -17,6 +17,7 @@ import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.social.SocialActivity;
+import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.WarningDialog;
 
@@ -110,9 +111,11 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
         HomeActivity.homeActivity.setSocialInfo(result);
       }
 
-      if (SocialActivity.socialActivity != null) {
-        SocialActivity.socialActivity.setActivityList(result);
-      }
+      // if (SocialActivity.socialActivity != null) {
+      // SocialActivity.socialActivity.setActivityList(result);
+      // }
+      if (SocialTabsActivity.instance != null)
+        SocialTabsActivity.instance.setActivityList(result);
 
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);

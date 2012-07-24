@@ -89,8 +89,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/activity_detail_like_row"
-                                android:contentDescription="@string/ActivityDetail" />
+                                android:background="@drawable/activity_detail_like_row" />
                         </LinearLayout>
                     </RelativeLayout>
                 </LinearLayout>

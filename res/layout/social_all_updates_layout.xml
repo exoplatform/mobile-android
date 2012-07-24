@@ -4,26 +4,24 @@
     android:layout_height="fill_parent" >
 
     <ViewStub
-        android:id="@+id/social_empty_stub"
+        android:id="@+id/social_all_updates_empty_stub"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:inflatedId="@+id/social_empty_stub_inflted"
+        android:inflatedId="@+id/social_all_updates_empty_stub_inflted"
         android:layout="@layout/empty_screen"
         android:visibility="gone" />
 
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/listView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#DCDCDCDC"
-        android:fadingEdge="none" >
+        android:layout_height="fill_parent" >
 
-        <LinearLayout
-            android:id="@+id/activity_stream_wrap"
+        <org.exoplatform.widget.SectionListView
+            android:id="@+id/all_updates_listview"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-        </LinearLayout>
-    </ScrollView>
+            android:layout_height="fill_parent" >
+        </org.exoplatform.widget.SectionListView>
+    </FrameLayout>
 
 </RelativeLayout>

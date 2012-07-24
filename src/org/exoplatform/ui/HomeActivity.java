@@ -10,10 +10,9 @@ import org.exoplatform.R;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.ChatServiceHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.ui.social.SocialActivity;
+import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.ConnectionErrorDialog;
@@ -31,7 +30,6 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -294,7 +292,8 @@ public class HomeActivity extends MyActionBar {
   // }
 
   private void launchNewsService() {
-    Intent next = new Intent(this, SocialActivity.class);
+    // Intent next = new Intent(this, SocialActivity.class);
+    Intent next = new Intent(this, SocialTabsActivity.class);
     startActivity(next);
   }
 

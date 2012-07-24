@@ -48,6 +48,23 @@ public class SocialActivityUtil {
 
   public static final int CS_CALENDAR_SPACES      = 11;
 
+  public String getActivityStreamHeader(Context context, long postedTime) {
+
+    String strSection = SocialActivityUtil.getPostedTimeString(context, postedTime);
+    // Check activities of today
+    if (strSection.contains(context.getString(R.string.Minute))
+        || strSection.contains(context.getString(R.string.Minutes))
+        || strSection.contains(context.getString(R.string.Hour))
+        || strSection.contains(context.getString(R.string.Hours))) {
+
+      // Search the current array of activities for today
+      return context.getString(R.string.Today);
+    } else {
+      return strSection;
+    }
+
+  }
+
   public static String getComment(Context context, LinkedList<SocialLikeInfo> socialLikeList) {
     Resources resource = context.getResources();
     String nolike = resource.getString(R.string.NoLike);
