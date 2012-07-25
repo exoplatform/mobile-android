@@ -104,6 +104,7 @@ public class SocialItem {
                                                                 activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
+    textViewCommnet.setVisibility(View.GONE);
     attachStubView.setVisibility(View.GONE);
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());
     SocialActivityUtil.setImageType(imageId, typeImageView);
@@ -318,9 +319,7 @@ public class SocialItem {
                                   String description,
                                   String fileType,
                                   boolean isLinkType) {
-    // if (attachStubView == null) {
     initAttachStubView(url, name, description, fileType, isLinkType);
-    // }
     attachStubView.setVisibility(View.VISIBLE);
   }
 
@@ -370,11 +369,4 @@ public class SocialItem {
 
   }
 
-  public Button likeButton() {
-    return buttonLike;
-  }
-
-  public Button commentButton() {
-    return buttonComment;
-  }
 }

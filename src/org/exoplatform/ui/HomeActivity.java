@@ -172,9 +172,9 @@ public class HomeActivity extends MyActionBar {
   }
 
   private void startSocialService(LoaderActionBarItem loader) {
-    homeController = new HomeController(this);
+    homeController = new HomeController(this, loader);
     if (SocialServiceHelper.getInstance().activityService == null) {
-      homeController.launchNewsService(loader);
+      homeController.launchNewsService();
     }
   }
 
@@ -216,10 +216,11 @@ public class HomeActivity extends MyActionBar {
       break;
     case 0:
       loaderItem = (LoaderActionBarItem) item;
+//      homeController = new HomeController(this, loaderItem);
       if (SocialServiceHelper.getInstance().activityService == null) {
-        homeController.launchNewsService(loaderItem);
+        homeController.launchNewsService();
       } else {
-        homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY, loaderItem);
+        homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY, SocialTabsActivity.ALL_UPDATES);
       }
       break;
     case 1:

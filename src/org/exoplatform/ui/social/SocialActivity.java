@@ -154,17 +154,17 @@ public class SocialActivity extends MyActionBar {
   }
 
   public void loadActivity(boolean isRefresh) {
-    homeController = new HomeController(this);
+    homeController = new HomeController(this, loaderItem);
     socialList = SocialServiceHelper.getInstance().socialInfoList;
 
     if (socialList == null) {
       if (SocialServiceHelper.getInstance().activityService == null) {
-        homeController.launchNewsService(loaderItem);
+        homeController.launchNewsService();
       } else
-        homeController.onLoad(number_of_activity, loaderItem);
+        homeController.onLoad(number_of_activity, SocialTabsActivity.ALL_UPDATES);
     } else {
       if (isRefresh) {
-        homeController.onLoad(number_of_activity, loaderItem);
+        homeController.onLoad(number_of_activity, SocialTabsActivity.ALL_UPDATES);
       } else {
         setActivityList(socialList);
       }
@@ -217,7 +217,7 @@ public class SocialActivity extends MyActionBar {
               else
                 SocialServiceHelper.getInstance().activityService.like(activity);
 
-              homeController.onLoad(number_of_activity, loaderItem);
+              homeController.onLoad(number_of_activity, SocialTabsActivity.ALL_UPDATES);
               if (homeController.isLoadingTak()) {
                 likeButton.setClickable(false);
               } else
@@ -273,7 +273,7 @@ public class SocialActivity extends MyActionBar {
         public void onClick(View v) {
           showmore.showMoreBtn.setClickable(false);
           number_of_activity += number_of_more_activity;
-          homeController.onLoad(number_of_activity, loaderItem);
+          homeController.onLoad(number_of_activity, SocialTabsActivity.ALL_UPDATES);
           showmore.showMoreBtn.setClickable(true);
         }
       });

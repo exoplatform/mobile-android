@@ -34,6 +34,7 @@
     <maven.compiler.source>1.6</maven.compiler.source>
     <version.release.plugin>2.2.1</version.release.plugin>
 	<version.buildnumber.plugin>1.0</version.buildnumber.plugin>
+	<android.support.version>r6</android.support.version>
   </properties>
   
    <!-- Profiles definition for Android build -->
@@ -95,6 +96,12 @@
       <version>67aa3ed</version>
       <type>apklib</type>
     </dependency>
+    <dependency>
+  	<groupId>com.google.android</groupId>
+  	<artifactId>support-v4</artifactId>
+  	<version>${android.support.version}</version>
+</dependency>
+    
   </dependencies>
   
   

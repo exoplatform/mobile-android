@@ -27,7 +27,6 @@ import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
-import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
@@ -53,7 +52,7 @@ public class SocialTabsActivity extends MyActionBar {
 
   public static final int              MY_STATUS               = 3;
 
-  private ViewPager                    mPager;
+  public ViewPager                     mPager;
 
   private PageIndicator                mIndicator;
 
@@ -78,8 +77,6 @@ public class SocialTabsActivity extends MyActionBar {
   public int                           number_of_activity;
 
   public int                           number_of_more_activity;
-
-  private CommonFragment               commonFragment;
 
   public static SocialTabsActivity     instance;
 
@@ -113,45 +110,22 @@ public class SocialTabsActivity extends MyActionBar {
     loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
 
     TAB_NAMES = getResources().getStringArray(R.array.SocialTabs);
-
-    setActivityList(socialList);
-
-    homeController = new HomeController(this);
-    commonFragment = new CommonFragment(this,
-                                        homeController,
-                                        loaderItem,
-                                        number_of_activity,
-                                        number_of_more_activity);
-
-    loadActivity(false);
-  }
-
-  public void loadActivity(boolean isRefresh) {
-
-    socialList = SocialServiceHelper.getInstance().socialInfoList;
-
-    if (socialList == null) {
-      if (SocialServiceHelper.getInstance().activityService == null) {
-        homeController.launchNewsService(loaderItem);
-      } else
-        homeController.onLoad(number_of_activity, loaderItem);
-    } else {
-      if (isRefresh) {
-        homeController.onLoad(number_of_activity, loaderItem);
-      } else {
-        setActivityList(socialList);
-      }
-
-    }
-  }
-
-  public void setActivityList(ArrayList<SocialActivityInfo> list) {
-    socialList = list;
     mPager = (ViewPager) findViewById(R.id.pager);
     mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
     mAdapter = new SocialTabsAdapter(getSupportFragmentManager());
     mPager.setAdapter(mAdapter);
     mIndicator.setViewPager(mPager);
+
+    homeController = new HomeController(this, loaderItem);
+  }
+
+  public void setActivityList(ArrayList<SocialActivityInfo> list) {
+    socialList = list;
+    // mAdapter = new SocialTabsAdapter(getSupportFragmentManager());
+    // mPager.setAdapter(mAdapter);
+    // mIndicator.setViewPager(mPager);
+    mAdapter.notifyDataSetChanged();
+
   }
 
   @Override
@@ -168,6 +142,7 @@ public class SocialTabsActivity extends MyActionBar {
     super.onBackPressed();
     instance = null;
   }
+
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
@@ -176,8 +151,30 @@ public class SocialTabsActivity extends MyActionBar {
       finish();
       break;
     case 0:
-      loaderItem = (LoaderActionBarItem) item;
-      loadActivity(true);
+      // loaderItem = (LoaderActionBarItem) item;
+      // homeController = new HomeController(this, loaderItem);
+      // int tabId = mPager.getCurrentItem();
+      // Fragment fragment = mAdapter.getItem(tabId);
+      // switch (tabId) {
+      // case ALL_UPDATES:
+      // AllUpdatesFragment allUpdateFragment = (AllUpdatesFragment) fragment;
+      // allUpdateFragment.onPrepareLoad(true);
+      // break;
+      //
+      // case MY_CONNECTIONS:
+      // MyConnectionsFragment myConnectionsFragment = (MyConnectionsFragment)
+      // fragment;
+      // myConnectionsFragment.onPrepareLoad(true);
+      // break;
+      // case MY_SPACES:
+      // MySpacesFragment mySpacesFragment = (MySpacesFragment) fragment;
+      // mySpacesFragment.onPrepareLoad(true);
+      // break;
+      // case MY_STATUS:
+      // MyStatusFragment myStatusFragment = (MyStatusFragment) fragment;
+      // myStatusFragment.onPrepareLoad(true);
+      // break;
+      // }
       break;
     case 1:
       Intent intent = new Intent(this, ComposeMessageActivity.class);
@@ -191,6 +188,18 @@ public class SocialTabsActivity extends MyActionBar {
 
   }
 
+  public void onUpdate(int tabId) {
+
+    switch (tabId) {
+    case ALL_UPDATES:
+
+      break;
+
+    default:
+      break;
+    }
+  }
+
   private class SocialTabsAdapter extends FragmentPagerAdapter {
 
     public SocialTabsAdapter(FragmentManager fm) {
@@ -202,16 +211,16 @@ public class SocialTabsActivity extends MyActionBar {
       Fragment fragment = null;
       switch (position) {
       case ALL_UPDATES:
-        fragment = AllUpdatesFragment.getInstance(commonFragment, socialList);
+        fragment = AllUpdatesFragment.getInstance(homeController);
         break;
       case MY_CONNECTIONS:
-        fragment = MyConnectionsFragment.getInstance(commonFragment, socialList);
+        fragment = MyConnectionsFragment.getInstance(homeController);
         break;
       case MY_SPACES:
-        fragment = MySpacesFragment.getInstance(commonFragment, socialList);
+        fragment = MySpacesFragment.getInstance(homeController);
         break;
       case MY_STATUS:
-        fragment = MyStatusFragment.getInstance(commonFragment, socialList);
+        fragment = MyStatusFragment.getInstance(homeController);
         break;
       }
       return fragment;

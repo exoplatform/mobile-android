@@ -32,8 +32,8 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   private LayoutInflater                      mInflater;
 
-  public StandardArrayAdapter(Context context, int layoutId, ArrayList<SocialActivityInfo> items) {
-    super(context, layoutId, items);
+  public StandardArrayAdapter(Context context, ArrayList<SocialActivityInfo> items) {
+    super(context, R.layout.activitybrowserviewcell, items);
     mContext = context;
     this.items = items;
     mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

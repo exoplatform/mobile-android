@@ -16,10 +16,18 @@
  */
 package org.exoplatform.ui.social;
 
+import greendroid.widget.LoaderActionBarItem;
+
 import java.util.ArrayList;
 
 import org.exoplatform.R;
+import org.exoplatform.controller.home.HomeController;
+import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.ui.HomeActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SectionListAdapter;
 import org.exoplatform.widget.SectionListView;
 import org.exoplatform.widget.StandardArrayAdapter;
@@ -32,7 +40,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,9 +51,7 @@ public class AllUpdatesFragment extends Fragment {
 
   private ArrayList<SocialActivityInfo> socialList;
 
-  private CommonFragment                common;
-
-  // private LinearLayout activityStreamWrap;
+  private HomeController                homeController;
 
   private SectionListView               listview;
 
@@ -56,13 +61,14 @@ public class AllUpdatesFragment extends Fragment {
 
   private SectionListAdapter            sectionAdapter;
 
+  private AllUpdateLoadTask             mLoadTask;
+
   public static AllUpdatesFragment      instance;
 
-  public static AllUpdatesFragment getInstance(CommonFragment common,
-                                               ArrayList<SocialActivityInfo> list) {
+  public static AllUpdatesFragment getInstance(HomeController homeController) {
     AllUpdatesFragment fragment = new AllUpdatesFragment();
-    fragment.socialList = list;
-    fragment.common = common;
+    fragment.socialList = SocialServiceHelper.getInstance().socialInfoList;
+    fragment.homeController = homeController;
     return fragment;
   }
 
@@ -70,6 +76,7 @@ public class AllUpdatesFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
+    onPrepareLoad(false);
   }
 
   @Override
@@ -90,6 +97,51 @@ public class AllUpdatesFragment extends Fragment {
     return view;
   }
 
+  public void onPrepareLoad(boolean isRefresh) {
+    // if (socialList == null) {
+    // if (SocialServiceHelper.getInstance().activityService == null) {
+    // homeController.launchNewsService();
+    // } else
+    // onLoad();
+    // } else {
+    // if (isRefresh) {
+    // onLoad();
+    // }
+    // }
+    if (isRefresh) {
+      onLoad();
+      return;
+    }
+
+    if (socialList == null || socialList.size() == 0) {
+      onLoad();
+      return;
+    }
+
+    // if (socialList == null) {
+    // if (SocialServiceHelper.getInstance().activityService == null) {
+    // homeController.launchNewsService();
+    // } else
+    // homeController.onLoad(50, SocialTabsActivity.ALL_UPDATES);
+    // } else {
+    // if (isRefresh) {
+    // homeController.onLoad(50, SocialTabsActivity.ALL_UPDATES);
+    // }
+    //
+    // }
+  }
+
+  private void onLoad() {
+    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
+      if (mLoadTask == null || mLoadTask.getStatus() == AllUpdateLoadTask.Status.FINISHED) {
+        mLoadTask = (AllUpdateLoadTask) new AllUpdateLoadTask(getActivity(), homeController.loader).execute(50,
+                                                                                                            SocialTabsActivity.ALL_UPDATES);
+      }
+    } else {
+      new ConnectionErrorDialog(getActivity()).show();
+    }
+  }
+
   public void setListAdapter(ArrayList<SocialActivityInfo> list) {
 
     if (list == null || list.size() == 0) {
@@ -98,7 +150,7 @@ public class AllUpdatesFragment extends Fragment {
     }
     emptyStubView.setVisibility(View.GONE);
 
-    arrayAdapter = new StandardArrayAdapter(getActivity(), R.layout.social_all_updates_layout, list);
+    arrayAdapter = new StandardArrayAdapter(getActivity(), list);
     sectionAdapter = new SectionListAdapter(getActivity(),
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
@@ -107,5 +159,23 @@ public class AllUpdatesFragment extends Fragment {
     sectionAdapter.notifyDataSetChanged();
   }
 
+  private class AllUpdateLoadTask extends SocialLoadTask {
+
+    public AllUpdateLoadTask(Context context, LoaderActionBarItem loader) {
+      super(context, loader);
+    }
+
+    @Override
+    public void setResult(ArrayList<SocialActivityInfo> result) {
+      super.setResult(result);
+      socialList = result;
+      SocialServiceHelper.getInstance().socialInfoList = result;
+      if (HomeActivity.homeActivity != null) {
+        HomeActivity.homeActivity.setSocialInfo(result);
+      }
+      setListAdapter(result);
+    }
+
+  }
 
 }

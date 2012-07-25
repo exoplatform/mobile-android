@@ -21,6 +21,17 @@ public class SocialServiceHelper {
 
   public String                        userIdentity;
 
+  /*
+   * Social List
+   */
+  // public ArrayList<SocialActivityInfo> allUpdatesList;
+
+  public ArrayList<SocialActivityInfo> myConnectionsList;
+
+  public ArrayList<SocialActivityInfo> mySpacesList;
+
+  public ArrayList<SocialActivityInfo> myStatusList;
+
   public ArrayList<SocialActivityInfo> socialInfoList;
 
   public String[]                      userProfile;

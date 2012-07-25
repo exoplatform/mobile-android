@@ -16,14 +16,22 @@
  */
 package org.exoplatform.ui.social;
 
+import greendroid.widget.LoaderActionBarItem;
+
 import java.util.ArrayList;
 
 import org.exoplatform.R;
+import org.exoplatform.controller.home.HomeController;
+import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SectionListAdapter;
 import org.exoplatform.widget.SectionListView;
 import org.exoplatform.widget.StandardArrayAdapter;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -42,7 +50,7 @@ public class MySpacesFragment extends Fragment {
 
   private ArrayList<SocialActivityInfo> socialList;
 
-  private CommonFragment                common;
+  private HomeController                homeController;
 
   private SectionListView               listview;
 
@@ -50,13 +58,14 @@ public class MySpacesFragment extends Fragment {
 
   private View                          emptyStubView;
 
+  private MySpacesLoadTask              mLoadTask;
+
   public static MySpacesFragment        instance;
 
-  public static MySpacesFragment getInstance(CommonFragment common,
-                                             ArrayList<SocialActivityInfo> list) {
+  public static MySpacesFragment getInstance(HomeController homeController) {
     MySpacesFragment fragment = new MySpacesFragment();
-    fragment.socialList = common.getMySpaces(list);
-    fragment.common = common;
+    fragment.socialList = SocialServiceHelper.getInstance().mySpacesList;
+    fragment.homeController = homeController;
     return fragment;
   }
 
@@ -64,6 +73,7 @@ public class MySpacesFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
+    onPrepareLoad(false);
   }
 
   @Override
@@ -83,22 +93,57 @@ public class MySpacesFragment extends Fragment {
     return view;
   }
 
+  public void onPrepareLoad(boolean isRefresh) {
+    if (isRefresh) {
+      onLoad();
+      return;
+    }
+
+    if (socialList == null || socialList.size() == 0) {
+      onLoad();
+      return;
+    }
+  }
+
+  private void onLoad() {
+    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
+      if (mLoadTask == null || mLoadTask.getStatus() == MySpacesLoadTask.Status.FINISHED) {
+        mLoadTask = (MySpacesLoadTask) new MySpacesLoadTask(getActivity(), homeController.loader).execute(50,
+                                                                                                          SocialTabsActivity.MY_SPACES);
+      }
+    } else {
+      new ConnectionErrorDialog(getActivity()).show();
+    }
+  }
+
   public void setListAdapter(ArrayList<SocialActivityInfo> list) {
-    list = common.getMySpaces(list);
     if (list == null || list.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);
       return;
     }
     emptyStubView.setVisibility(View.GONE);
 
-    // common.setActivityList(list, activityStreamWrap, emptyStubView);
-    StandardArrayAdapter arrayAdapter = new StandardArrayAdapter(getActivity(),
-                                                                 R.layout.social_my_spaces_layout,
-                                                                 list);
+    StandardArrayAdapter arrayAdapter = new StandardArrayAdapter(getActivity(), list);
     sectionAdapter = new SectionListAdapter(getActivity(),
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
     listview.setAdapter(sectionAdapter);
+  }
+
+  private class MySpacesLoadTask extends SocialLoadTask {
+
+    public MySpacesLoadTask(Context context, LoaderActionBarItem loader) {
+      super(context, loader);
+    }
+
+    @Override
+    public void setResult(ArrayList<SocialActivityInfo> result) {
+      super.setResult(result);
+      socialList = result;
+      SocialServiceHelper.getInstance().mySpacesList = result;
+      setListAdapter(result);
+    }
+
   }
 
 }

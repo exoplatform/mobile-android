@@ -16,14 +16,22 @@
  */
 package org.exoplatform.ui.social;
 
+import greendroid.widget.LoaderActionBarItem;
+
 import java.util.ArrayList;
 
 import org.exoplatform.R;
+import org.exoplatform.controller.home.HomeController;
+import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SectionListAdapter;
 import org.exoplatform.widget.SectionListView;
 import org.exoplatform.widget.StandardArrayAdapter;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,7 +49,7 @@ import android.widget.TextView;
 public class MyConnectionsFragment extends Fragment {
   private ArrayList<SocialActivityInfo> socialList;
 
-  private CommonFragment                common;
+  private HomeController                homeController;
 
   private SectionListView               listview;
 
@@ -49,17 +57,15 @@ public class MyConnectionsFragment extends Fragment {
 
   private SectionListAdapter            sectionAdapter;
 
-  private int                           number_of_activity;
-
-  private int                           number_of_more_activity;
+  private MyConnectionLoadTask          mLoadTask;
 
   public static MyConnectionsFragment   instance;
 
-  public static MyConnectionsFragment getInstance(CommonFragment common,
-                                                  ArrayList<SocialActivityInfo> list) {
+  public static MyConnectionsFragment getInstance(HomeController homeController) {
     MyConnectionsFragment fragment = new MyConnectionsFragment();
-    fragment.socialList = list;
-    fragment.common = common;
+    // fragment.socialList = list;
+    fragment.socialList = SocialServiceHelper.getInstance().myConnectionsList;
+    fragment.homeController = homeController;
     return fragment;
   }
 
@@ -67,6 +73,7 @@ public class MyConnectionsFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
+    onPrepareLoad(false);
   }
 
   @Override
@@ -83,23 +90,66 @@ public class MyConnectionsFragment extends Fragment {
     TextView emptyStatus = (TextView) emptyStubView.findViewById(R.id.empty_status);
     emptyStatus.setText(getActivity().getString(R.string.EmptyActivity));
     setListAdapter(socialList);
+
     return view;
   }
 
+  public void onPrepareLoad(boolean isRefresh) {
+    if (isRefresh) {
+      onLoad();
+      return;
+    }
+
+    if (socialList == null || socialList.size() == 0) {
+      onLoad();
+      return;
+    }
+
+  }
+
+  private void onLoad() {
+    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
+      if (mLoadTask == null || mLoadTask.getStatus() == MyConnectionLoadTask.Status.FINISHED) {
+        mLoadTask = (MyConnectionLoadTask) new MyConnectionLoadTask(getActivity(),
+                                                                    homeController.loader).execute(50,
+                                                                                                   SocialTabsActivity.MY_CONNECTIONS);
+      }
+    } else {
+      new ConnectionErrorDialog(getActivity()).show();
+    }
+  }
+
   public void setListAdapter(ArrayList<SocialActivityInfo> list) {
-    list = common.getMyConnections(list);
     if (list == null || list.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);
       return;
     }
     emptyStubView.setVisibility(View.GONE);
 
-    StandardArrayAdapter arrayAdapter = new StandardArrayAdapter(getActivity(),
-                                                                 R.layout.social_my_connections_layout,
-                                                                 list);
+    StandardArrayAdapter arrayAdapter = new StandardArrayAdapter(getActivity(), list);
     sectionAdapter = new SectionListAdapter(getActivity(),
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
     listview.setAdapter(sectionAdapter);
+    // sectionAdapter.notifyDataSetChanged();
+    // sectionAdapter.notifyDataSetInvalidated();
+
   }
+
+  private class MyConnectionLoadTask extends SocialLoadTask {
+
+    public MyConnectionLoadTask(Context context, LoaderActionBarItem loader) {
+      super(context, loader);
+    }
+
+    @Override
+    public void setResult(ArrayList<SocialActivityInfo> result) {
+      super.setResult(result);
+      socialList = result;
+      SocialServiceHelper.getInstance().myConnectionsList = result;
+      setListAdapter(result);
+    }
+
+  }
+
 }

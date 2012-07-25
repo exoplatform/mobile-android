@@ -13,6 +13,7 @@ import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.ui.social.SocialActivity;
+import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
@@ -115,7 +116,8 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
   public void onPostExecute(Integer result) {
     if (result == 1) {
       ((Activity) mContext).finish();
-      SocialActivity.socialActivity.loadActivity(true);
+      // SocialTabsActivity.instance.loadActivity(SocialTabsActivity.instance.mPager.getCurrentItem(),
+      // true);
     } else {
       new WarningDialog(mContext, warningTitle, errorString, okString).show();
     }
