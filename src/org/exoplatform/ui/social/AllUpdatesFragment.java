@@ -118,17 +118,6 @@ public class AllUpdatesFragment extends Fragment {
       return;
     }
 
-    // if (socialList == null) {
-    // if (SocialServiceHelper.getInstance().activityService == null) {
-    // homeController.launchNewsService();
-    // } else
-    // homeController.onLoad(50, SocialTabsActivity.ALL_UPDATES);
-    // } else {
-    // if (isRefresh) {
-    // homeController.onLoad(50, SocialTabsActivity.ALL_UPDATES);
-    // }
-    //
-    // }
   }
 
   private void onLoad() {
