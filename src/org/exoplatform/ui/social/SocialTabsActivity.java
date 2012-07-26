@@ -119,15 +119,6 @@ public class SocialTabsActivity extends MyActionBar {
     homeController = new HomeController(this, loaderItem);
   }
 
-  public void setActivityList(ArrayList<SocialActivityInfo> list) {
-    socialList = list;
-    // mAdapter = new SocialTabsAdapter(getSupportFragmentManager());
-    // mPager.setAdapter(mAdapter);
-    // mIndicator.setViewPager(mPager);
-    mAdapter.notifyDataSetChanged();
-
-  }
-
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
@@ -151,30 +142,23 @@ public class SocialTabsActivity extends MyActionBar {
       finish();
       break;
     case 0:
-      // loaderItem = (LoaderActionBarItem) item;
-      // homeController = new HomeController(this, loaderItem);
-      // int tabId = mPager.getCurrentItem();
-      // Fragment fragment = mAdapter.getItem(tabId);
-      // switch (tabId) {
-      // case ALL_UPDATES:
-      // AllUpdatesFragment allUpdateFragment = (AllUpdatesFragment) fragment;
-      // allUpdateFragment.onPrepareLoad(true);
-      // break;
-      //
-      // case MY_CONNECTIONS:
-      // MyConnectionsFragment myConnectionsFragment = (MyConnectionsFragment)
-      // fragment;
-      // myConnectionsFragment.onPrepareLoad(true);
-      // break;
-      // case MY_SPACES:
-      // MySpacesFragment mySpacesFragment = (MySpacesFragment) fragment;
-      // mySpacesFragment.onPrepareLoad(true);
-      // break;
-      // case MY_STATUS:
-      // MyStatusFragment myStatusFragment = (MyStatusFragment) fragment;
-      // myStatusFragment.onPrepareLoad(true);
-      // break;
-      // }
+      loaderItem = (LoaderActionBarItem) item;
+      homeController = new HomeController(this, loaderItem);
+      int tabId = mPager.getCurrentItem();
+      switch (tabId) {
+      case ALL_UPDATES:
+        AllUpdatesFragment.instance.onPrepareLoad(true);
+        break;
+      case MY_CONNECTIONS:
+        MyConnectionsFragment.instance.onPrepareLoad(true);
+        break;
+      case MY_SPACES:
+        MySpacesFragment.instance.onPrepareLoad(true);
+        break;
+      case MY_STATUS:
+        MyStatusFragment.instance.onPrepareLoad(true);
+        break;
+      }
       break;
     case 1:
       Intent intent = new Intent(this, ComposeMessageActivity.class);
@@ -186,18 +170,6 @@ public class SocialTabsActivity extends MyActionBar {
     }
     return true;
 
-  }
-
-  public void onUpdate(int tabId) {
-
-    switch (tabId) {
-    case ALL_UPDATES:
-
-      break;
-
-    default:
-      break;
-    }
   }
 
   private class SocialTabsAdapter extends FragmentPagerAdapter {

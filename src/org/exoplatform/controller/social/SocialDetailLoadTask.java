@@ -19,8 +19,13 @@ import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
+import org.exoplatform.ui.social.AllUpdatesFragment;
+import org.exoplatform.ui.social.MyConnectionsFragment;
+import org.exoplatform.ui.social.MySpacesFragment;
+import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
+import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
 
@@ -158,7 +163,23 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       detailController.setLikeInfoText(likeLinkedList);
       detailController.setLikedInfo(likeLinkedList);
       if (isLikeAction) {
-        SocialActivity.socialActivity.loadActivity(true);
+        if (SocialTabsActivity.instance != null) {
+          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+          switch (tabId) {
+          case SocialTabsActivity.ALL_UPDATES:
+            AllUpdatesFragment.instance.onPrepareLoad(true);
+            break;
+          case SocialTabsActivity.MY_CONNECTIONS:
+            MyConnectionsFragment.instance.onPrepareLoad(true);
+            break;
+          case SocialTabsActivity.MY_SPACES:
+            MySpacesFragment.instance.onPrepareLoad(true);
+            break;
+          case SocialTabsActivity.MY_STATUS:
+            MyStatusFragment.instance.onPrepareLoad(true);
+            break;
+          }
+        }
       }
     } else {
       dialog = new SocialDetailsWarningDialog(mContext,

@@ -116,6 +116,8 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
       return listActivity;
     } catch (SocialClientLibException e) {
       return null;
+    } catch (RuntimeException e) {
+      return null;
     }
   }
 

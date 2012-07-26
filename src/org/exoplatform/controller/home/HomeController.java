@@ -20,7 +20,6 @@ import greendroid.widget.LoaderActionBarItem;
 
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.SocialWaitingDialog;
 
 import android.content.Context;
 
@@ -78,14 +77,15 @@ public class HomeController {
     }
   }
 
-  public boolean isLoadingTak() {
+  public boolean isLoadingTask() {
     if (mServiceLoadTask != null
         && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING) {
       return true;
     }
-    if (mLoadTask != null && mLoadTask.getStatus() == SocialLoadTask.Status.RUNNING) {
-      return true;
-    }
+    // if (mLoadTask != null && mLoadTask.getStatus() ==
+    // SocialLoadTask.Status.RUNNING) {
+    // return true;
+    // }
 
     return false;
 

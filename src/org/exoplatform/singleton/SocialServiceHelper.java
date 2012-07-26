@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
-import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 
@@ -52,6 +51,9 @@ public class SocialServiceHelper {
     identityService = null;
     socialInfoList = null;
     userProfile = null;
+    myConnectionsList = null;
+    mySpacesList = null;
+    myStatusList = null;
   }
 
 }

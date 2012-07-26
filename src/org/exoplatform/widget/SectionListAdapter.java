@@ -86,7 +86,7 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
     String section = null;
     for (int i = 0; i < count; i++) {
       final SocialActivityInfo item = (SocialActivityInfo) linkedAdapter.getItem(i);
-      section = SocialActivityUtil.getHeader(mContext, item.getPostedTime());
+      section = SocialActivityUtil.getActivityStreamHeader(mContext, item.getPostedTime());
       if (!isTheSame(currentSection, section)) {
         sectionPositions.put(currentPosition, section);
         currentSection = section;

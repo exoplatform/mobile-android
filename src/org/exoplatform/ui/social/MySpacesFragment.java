@@ -54,6 +54,8 @@ public class MySpacesFragment extends Fragment {
 
   private SectionListView               listview;
 
+  private StandardArrayAdapter          arrayAdapter;
+
   private SectionListAdapter            sectionAdapter;
 
   private View                          emptyStubView;
@@ -89,8 +91,21 @@ public class MySpacesFragment extends Fragment {
     emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
     TextView emptyStatus = (TextView) emptyStubView.findViewById(R.id.empty_status);
     emptyStatus.setText(getActivity().getString(R.string.EmptyActivity));
-    setListAdapter(socialList);
+
     return view;
+  }
+
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    setListAdapter(socialList);
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    onCancelLoad();
+    instance = null;
   }
 
   public void onPrepareLoad(boolean isRefresh) {
@@ -116,6 +131,21 @@ public class MySpacesFragment extends Fragment {
     }
   }
 
+  private void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == MySpacesLoadTask.Status.RUNNING) {
+      mLoadTask.cancel(true);
+      mLoadTask = null;
+    }
+  }
+
+  public boolean isLoading() {
+    if (mLoadTask != null && mLoadTask.getStatus() == MySpacesLoadTask.Status.RUNNING) {
+      return true;
+    }
+
+    return false;
+  }
+
   public void setListAdapter(ArrayList<SocialActivityInfo> list) {
     if (list == null || list.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);
@@ -123,7 +153,7 @@ public class MySpacesFragment extends Fragment {
     }
     emptyStubView.setVisibility(View.GONE);
 
-    StandardArrayAdapter arrayAdapter = new StandardArrayAdapter(getActivity(), list);
+    arrayAdapter = new StandardArrayAdapter(getActivity(), list);
     sectionAdapter = new SectionListAdapter(getActivity(),
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);

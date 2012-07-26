@@ -218,7 +218,7 @@ public class SocialActivity extends MyActionBar {
                 SocialServiceHelper.getInstance().activityService.like(activity);
 
               homeController.onLoad(number_of_activity, SocialTabsActivity.ALL_UPDATES);
-              if (homeController.isLoadingTak()) {
+              if (homeController.isLoadingTask()) {
                 likeButton.setClickable(false);
               } else
                 likeButton.setClickable(true);

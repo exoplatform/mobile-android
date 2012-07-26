@@ -9,8 +9,12 @@ import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.service.ActivityService;
-import org.exoplatform.ui.social.SocialActivity;
+import org.exoplatform.ui.social.AllUpdatesFragment;
+import org.exoplatform.ui.social.MyConnectionsFragment;
+import org.exoplatform.ui.social.MySpacesFragment;
+import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.ui.social.SocialDetailActivity;
+import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
@@ -151,7 +155,23 @@ public class ComposeMessageController {
           SocialDetailActivity.socialDetailActivity.onLoad();
         }
 
-        SocialActivity.socialActivity.loadActivity(true);
+        if (SocialTabsActivity.instance != null) {
+          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+          switch (tabId) {
+          case SocialTabsActivity.ALL_UPDATES:
+            AllUpdatesFragment.instance.onPrepareLoad(true);
+            break;
+          case SocialTabsActivity.MY_CONNECTIONS:
+            MyConnectionsFragment.instance.onPrepareLoad(true);
+            break;
+          case SocialTabsActivity.MY_SPACES:
+            MySpacesFragment.instance.onPrepareLoad(true);
+            break;
+          case SocialTabsActivity.MY_STATUS:
+            MyStatusFragment.instance.onPrepareLoad(true);
+            break;
+          }
+        }
       } else {
         WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
         dialog.show();

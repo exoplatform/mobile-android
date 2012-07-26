@@ -48,7 +48,7 @@ public class SocialActivityUtil {
 
   public static final int CS_CALENDAR_SPACES      = 11;
 
-  public String getActivityStreamHeader(Context context, long postedTime) {
+  public static String getActivityStreamHeader(Context context, long postedTime) {
 
     String strSection = SocialActivityUtil.getPostedTimeString(context, postedTime);
     // Check activities of today

@@ -104,6 +104,7 @@ public class SocialItem {
                                                                 activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
+    textViewTempMessage.setVisibility(View.GONE);
     textViewCommnet.setVisibility(View.GONE);
     attachStubView.setVisibility(View.GONE);
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());

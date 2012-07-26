@@ -89,9 +89,21 @@ public class MyConnectionsFragment extends Fragment {
     emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
     TextView emptyStatus = (TextView) emptyStubView.findViewById(R.id.empty_status);
     emptyStatus.setText(getActivity().getString(R.string.EmptyActivity));
-    setListAdapter(socialList);
 
     return view;
+  }
+
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    setListAdapter(socialList);
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    onCancelLoad();
+    instance = null;
   }
 
   public void onPrepareLoad(boolean isRefresh) {
@@ -119,6 +131,21 @@ public class MyConnectionsFragment extends Fragment {
     }
   }
 
+  private void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == MyConnectionLoadTask.Status.RUNNING) {
+      mLoadTask.cancel(true);
+      mLoadTask = null;
+    }
+  }
+
+  public boolean isLoading() {
+    if (mLoadTask != null && mLoadTask.getStatus() == MyConnectionLoadTask.Status.RUNNING) {
+      return true;
+    }
+
+    return false;
+  }
+
   public void setListAdapter(ArrayList<SocialActivityInfo> list) {
     if (list == null || list.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);
@@ -131,8 +158,6 @@ public class MyConnectionsFragment extends Fragment {
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
     listview.setAdapter(sectionAdapter);
-    // sectionAdapter.notifyDataSetChanged();
-    // sectionAdapter.notifyDataSetInvalidated();
 
   }
 

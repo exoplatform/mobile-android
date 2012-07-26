@@ -92,22 +92,24 @@ public class AllUpdatesFragment extends Fragment {
     emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
     TextView emptyStatus = (TextView) emptyStubView.findViewById(R.id.empty_status);
     emptyStatus.setText(getActivity().getString(R.string.EmptyActivity));
-    setListAdapter(socialList);
 
     return view;
   }
 
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    setListAdapter(socialList);
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    onCancelLoad();
+    instance = null;
+  }
+
   public void onPrepareLoad(boolean isRefresh) {
-    // if (socialList == null) {
-    // if (SocialServiceHelper.getInstance().activityService == null) {
-    // homeController.launchNewsService();
-    // } else
-    // onLoad();
-    // } else {
-    // if (isRefresh) {
-    // onLoad();
-    // }
-    // }
     if (isRefresh) {
       onLoad();
       return;
@@ -129,6 +131,21 @@ public class AllUpdatesFragment extends Fragment {
     } else {
       new ConnectionErrorDialog(getActivity()).show();
     }
+  }
+
+  private void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == AllUpdateLoadTask.Status.RUNNING) {
+      mLoadTask.cancel(true);
+      mLoadTask = null;
+    }
+  }
+
+  public boolean isLoading() {
+    if (mLoadTask != null && mLoadTask.getStatus() == AllUpdateLoadTask.Status.RUNNING) {
+      return true;
+    }
+
+    return false;
   }
 
   public void setListAdapter(ArrayList<SocialActivityInfo> list) {
