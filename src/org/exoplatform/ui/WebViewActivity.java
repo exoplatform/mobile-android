@@ -6,20 +6,16 @@ import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.http.cookie.Cookie;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.widget.CompatibleFileOpenDialog;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.CompatibleFileOpenDialog;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -93,7 +89,7 @@ public class WebViewActivity extends MyActionBar {
         setTitle(getResources().getString(R.string.LoadingData));
         activity.setProgress(progress * 100);
         ActionBarItem item = getActionBar().getItem(0);
-        if(item instanceof LoaderActionBarItem){
+        if (item instanceof LoaderActionBarItem) {
           loaderItem = (LoaderActionBarItem) item;
         }
         if (loaderItem != null) {
@@ -164,15 +160,9 @@ public class WebViewActivity extends MyActionBar {
 
   private void setupCookies(String url) {
     CookieSyncManager.createInstance(this);
-    List<Cookie> cookies = ExoConnectionUtils.cookiesStore.getCookies();
-    String strCookie = "";
-    if (!cookies.isEmpty()) {
-      for (int i = 0; i < cookies.size(); i++) {
-        strCookie = cookies.get(i).getName().toString() + "="
-            + cookies.get(i).getValue().toString();
-        CookieManager.getInstance().setCookie(url, strCookie);
-      }
-
+    ArrayList<String> cookies = AccountSetting.getInstance().cookiesList;
+    for (String strCookie : cookies) {
+      CookieManager.getInstance().setCookie(url, strCookie);
     }
     CookieSyncManager.getInstance().sync();
 
@@ -247,16 +237,16 @@ public class WebViewActivity extends MyActionBar {
       /*
        * Checking the response code and re logging in if session timeout
        */
-//      try {
-//        int code = ExoConnectionUtils.getResponseCode(_url);
-//        if (code != 1) {
-//          ExoConnectionUtils.onReLogin();
-//        }
-//        setupCookies(_url);
-//        return true;
-//      } catch (IOException e) {
-//        return false;
-//      }
+      // try {
+      // int code = ExoConnectionUtils.getResponseCode(_url);
+      // if (code != 1) {
+      // ExoConnectionUtils.onReLogin();
+      // }
+      // setupCookies(_url);
+      // return true;
+      // } catch (IOException e) {
+      // return false;
+      // }
       setupCookies(_url);
       return true;
 

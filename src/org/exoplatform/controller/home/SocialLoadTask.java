@@ -16,7 +16,7 @@ import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.HomeActivity;
-import org.exoplatform.ui.social.SocialActivity;
+import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.WarningDialog;
 
@@ -27,6 +27,7 @@ import android.os.AsyncTask;
 import com.cyrilmottier.android.greendroid.R;
 
 public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialActivityInfo>> {
+
   private Context             mContext;
 
   private String              okString;
@@ -36,6 +37,8 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
   private String              contentString;
 
   private LoaderActionBarItem loaderItem;
+
+  private int                 feedType = 0;
 
   public SocialLoadTask(Context context, LoaderActionBarItem loader) {
     mContext = context;
@@ -65,14 +68,28 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
       int loadSize = params[0];
       ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
       IdentityService<?> identityService = SocialServiceHelper.getInstance().identityService;
-      RestIdentity identity;
-      identity = (RestIdentity) identityService.get(SocialServiceHelper.getInstance().userIdentity);
+      RestIdentity identity = (RestIdentity) identityService.get(SocialServiceHelper.getInstance().userIdentity);
       QueryParams queryParams = new QueryParamsImpl();
       queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(ExoConstants.NUMBER_OF_LIKES_PARAM));
       queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(ExoConstants.NUMBER_OF_COMMENTS_PARAM));
       queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
-      RealtimeListAccess<RestActivity> list = activityService.getFeedActivityStream(identity,
-                                                                                    queryParams);
+      feedType = params[1];
+      RealtimeListAccess<RestActivity> list = null;
+      switch (feedType) {
+      case SocialTabsActivity.ALL_UPDATES:
+        list = activityService.getFeedActivityStream(identity, queryParams);
+        break;
+      case SocialTabsActivity.MY_CONNECTIONS:
+        list = activityService.getConnectionsActivityStream(identity, queryParams);
+        break;
+      case SocialTabsActivity.MY_SPACES:
+        list = activityService.getSpacesActivityStream(identity, queryParams);
+        break;
+      case SocialTabsActivity.MY_STATUS:
+        list = activityService.getActivityStream(identity, queryParams);
+        break;
+      }
+
       ArrayList<RestActivity> activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);
 
       if (activityList.size() > 0) {
@@ -99,26 +116,47 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
       return listActivity;
     } catch (SocialClientLibException e) {
       return null;
+    } catch (RuntimeException e) {
+      return null;
     }
   }
 
   @Override
   public void onPostExecute(ArrayList<SocialActivityInfo> result) {
     if (result != null) {
-      SocialServiceHelper.getInstance().socialInfoList = result;
-      if (HomeActivity.homeActivity != null) {
-        HomeActivity.homeActivity.setSocialInfo(result);
-      }
 
-      if (SocialActivity.socialActivity != null) {
-        SocialActivity.socialActivity.setActivityList(result);
-      }
+      setResult(result);
 
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
     loaderItem.setLoading(false);
+  }
+
+  public void setResult(ArrayList<SocialActivityInfo> result) {
+    // if (SocialTabsActivity.instance != null)
+    // SocialTabsActivity.instance.setActivityList(result);
+
+    switch (feedType) {
+    case SocialTabsActivity.ALL_UPDATES:
+      SocialServiceHelper.getInstance().socialInfoList = result;
+      if (HomeActivity.homeActivity != null) {
+        HomeActivity.homeActivity.setSocialInfo(result);
+      }
+      // if (SocialTabsActivity.instance != null)
+      // SocialTabsActivity.instance.setActivityList(result);
+      break;
+    case SocialTabsActivity.MY_CONNECTIONS:
+      SocialServiceHelper.getInstance().myConnectionsList = result;
+      break;
+    case SocialTabsActivity.MY_SPACES:
+      SocialServiceHelper.getInstance().mySpacesList = result;
+      break;
+    case SocialTabsActivity.MY_STATUS:
+      SocialServiceHelper.getInstance().myStatusList = result;
+      break;
+    }
   }
 
 }

@@ -10,10 +10,9 @@ import org.exoplatform.R;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.ChatServiceHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.ui.social.SocialActivity;
+import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.ConnectionErrorDialog;
@@ -31,7 +30,6 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -88,6 +86,8 @@ public class HomeActivity extends MyActionBar {
       ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
+    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+    homeController = new HomeController(this, loaderItem);
     init();
   }
 
@@ -111,8 +111,14 @@ public class HomeActivity extends MyActionBar {
   protected void onResume() {
     super.onResume();
     setInfo();
-    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
     startSocialService(loaderItem);
+    // if (homeController.isLoadingTask()) {
+    // activityButton.setClickable(false);
+    // viewFlipper.setClickable(false);
+    // } else {
+    // activityButton.setClickable(true);
+    // viewFlipper.setClickable(true);
+    // }
   }
 
   @Override
@@ -144,17 +150,14 @@ public class HomeActivity extends MyActionBar {
 
   private void init() {
     activityButton = (TextView) findViewById(R.id.home_btn_activity);
-    // activityButton.setOnClickListener(this);
     documentButton = (TextView) findViewById(R.id.home_btn_document);
-    // documentButton.setOnClickListener(this);
     appsButton = (TextView) findViewById(R.id.home_btn_apps);
-    // appsButton.setOnClickListener(this);
     homeUserAvatar = (ShaderImageView) findViewById(R.id.home_user_avatar);
     homeUserAvatar.setDefaultImageResource(dafault_avatar);
     homeUserAvatar.setVisibility(View.GONE);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
-    // viewFlipper.setOnClickListener(this);
+
     setInfo();
   }
 
@@ -174,9 +177,8 @@ public class HomeActivity extends MyActionBar {
   }
 
   private void startSocialService(LoaderActionBarItem loader) {
-    homeController = new HomeController(this);
     if (SocialServiceHelper.getInstance().activityService == null) {
-      homeController.launchNewsService(loader);
+      homeController.launchNewsService();
     }
   }
 
@@ -219,9 +221,9 @@ public class HomeActivity extends MyActionBar {
     case 0:
       loaderItem = (LoaderActionBarItem) item;
       if (SocialServiceHelper.getInstance().activityService == null) {
-        homeController.launchNewsService(loaderItem);
+        homeController.launchNewsService();
       } else {
-        homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY, loaderItem);
+        homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY, SocialTabsActivity.ALL_UPDATES);
       }
       break;
     case 1:
@@ -251,7 +253,8 @@ public class HomeActivity extends MyActionBar {
 
   public void onNewsClick(View view) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
-      launchNewsService();
+      if (!homeController.isLoadingTask())
+        launchNewsService();
     } else {
       new ConnectionErrorDialog(this).show();
     }
@@ -275,26 +278,8 @@ public class HomeActivity extends MyActionBar {
     }
   }
 
-  // @Override
-  // public void onClick(View view) {
-  // if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
-  // if (view.equals(activityButton) || view.equals(viewFlipper)) {
-  // launchNewsService();
-  // }
-  // if (view.equals(documentButton)) {
-  // launchDocumentApp();
-  // }
-  // if (view.equals(appsButton)) {
-  // launchDashboardApp();
-  // }
-  // } else {
-  // new ConnectionErrorDialog(this).show();
-  // }
-  //
-  // }
-
   private void launchNewsService() {
-    Intent next = new Intent(this, SocialActivity.class);
+    Intent next = new Intent(this, SocialTabsActivity.class);
     startActivity(next);
   }
 

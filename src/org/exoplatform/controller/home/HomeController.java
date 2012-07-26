@@ -20,7 +20,6 @@ import greendroid.widget.LoaderActionBarItem;
 
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.SocialWaitingDialog;
 
 import android.content.Context;
 
@@ -29,16 +28,17 @@ import android.content.Context;
  * 17, 2012
  */
 public class HomeController {
-  public SocialWaitingDialog    _progressDialog;
-
   private Context               mContext;
 
-  private SocialServiceLoadTask mServiceLoadTask;
+  public SocialServiceLoadTask mServiceLoadTask;
 
   private SocialLoadTask        mLoadTask;
 
-  public HomeController(Context context) {
+  public LoaderActionBarItem    loader;
+
+  public HomeController(Context context, LoaderActionBarItem loaderItem) {
     mContext = context;
+    loader = loaderItem;
   }
 
   public void finishService() {
@@ -46,7 +46,7 @@ public class HomeController {
     onCancelLoad();
   }
 
-  public void launchNewsService(LoaderActionBarItem loader) {
+  public void launchNewsService() {
 
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mServiceLoadTask == null
@@ -67,24 +67,25 @@ public class HomeController {
     }
   }
 
-  public void onLoad(int number, LoaderActionBarItem loader) {
+  public void onLoad(int number, int type) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, loader).execute(number);
+        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, loader).execute(number, type);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
     }
   }
 
-  public boolean isLoadingTak() {
+  public boolean isLoadingTask() {
     if (mServiceLoadTask != null
         && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING) {
       return true;
     }
-    if (mLoadTask != null && mLoadTask.getStatus() == SocialLoadTask.Status.RUNNING) {
-      return true;
-    }
+    // if (mLoadTask != null && mLoadTask.getStatus() ==
+    // SocialLoadTask.Status.RUNNING) {
+    // return true;
+    // }
 
     return false;
 

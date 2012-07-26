@@ -10,7 +10,6 @@ import greendroid.widget.ActionBar.Type;
 import greendroid.widget.ActionBarHost;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.NormalActionBarItem;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -18,6 +17,7 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +26,7 @@ import android.widget.FrameLayout;
 
 import com.cyrilmottier.android.greendroid.R;
 
-public class MyActionBar extends Activity implements ActionBarActivity {
+public class MyActionBar extends FragmentActivity implements ActionBarActivity {
 
   private boolean       mDefaultConstructorUsed = false;
 

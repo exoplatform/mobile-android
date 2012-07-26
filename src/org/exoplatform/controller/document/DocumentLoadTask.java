@@ -14,6 +14,7 @@ import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.DocumentWaitingDialog;
+import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.res.Resources;
@@ -25,59 +26,59 @@ import com.cyrilmottier.android.greendroid.R;
 public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
   // delete file or folder
-  protected static final int    ACTION_DELETE  = 1;
+  protected static final int ACTION_DELETE  = 1;
 
   // copy file
-  protected static final int    ACTION_COPY    = 2;
+  protected static final int ACTION_COPY    = 2;
 
   // move file
-  protected static final int    ACTION_MOVE    = 3;
+  protected static final int ACTION_MOVE    = 3;
 
   // upload file
-  protected static final int    ACTION_UPLOAD  = 4;
+  protected static final int ACTION_UPLOAD  = 4;
 
   // rename folder
-  protected static final int    ACTION_RENAME  = 5;
+  protected static final int ACTION_RENAME  = 5;
 
   // create new folder
-  protected static final int    ACTION_CREATE  = 6;
+  protected static final int ACTION_CREATE  = 6;
 
   /*
    * Result status
    */
-  private static final int      RESULT_OK      = 1;
+  private static final int   RESULT_OK      = 1;
 
-  private static final int      RESULT_ERROR   = 2;
+  private static final int   RESULT_ERROR   = 2;
 
-  private static final int      RESULT_TIMEOUT = 3;
+  private static final int   RESULT_TIMEOUT = 3;
 
-  private static final int      RESULT_FALSE   = 4;
+  private static final int   RESULT_FALSE   = 4;
 
-  private DocumentWaitingDialog _progressDialog;
+  private WaitingDialog      _progressDialog;
 
-  private String                loadingData;
+  private String             loadingData;
 
-  private String                okString;
+  private String             okString;
 
-  private String                titleString;
+  private String             titleString;
 
   /*
    * This @contentWarningString is for display the error/warning message when
    * retrieving document
    */
-  private String                contentWarningString;
+  private String             contentWarningString;
 
-  private int                   actionID;
+  private int                actionID;
 
-  private String                strSourceUrl;
+  private String             strSourceUrl;
 
-  private String                strDestinationUrl;
+  private String             strDestinationUrl;
 
-  private DocumentActivity      documentActivity;
+  private DocumentActivity   documentActivity;
 
-  private ArrayList<ExoFile>    _documentList;
+  private ArrayList<ExoFile> _documentList;
 
-  private Resources             resource;
+  private Resources          resource;
 
   public DocumentLoadTask(DocumentActivity activity, String source, String destination, int action) {
     resource = activity.getResources();
@@ -97,7 +98,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
   @Override
   public void onPreExecute() {
-    _progressDialog = new DocumentWaitingDialog(documentActivity, null, loadingData);
+    _progressDialog = new WaitingDialog(documentActivity, null, loadingData);
     _progressDialog.show();
   }
 

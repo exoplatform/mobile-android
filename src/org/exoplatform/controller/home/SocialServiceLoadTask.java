@@ -18,6 +18,7 @@ import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.VersionService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
 import org.exoplatform.ui.HomeActivity;
+import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
@@ -122,7 +123,7 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
         HomeActivity.homeActivity.setProfileInfo(result);
       }
 
-      homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY, loaderItem);
+      homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY, SocialTabsActivity.ALL_UPDATES);
 
     } else {
       loaderItem.setLoading(false);

@@ -9,6 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="44dp"
         android:background="@drawable/send_button_background_shape"
+        android:text="@string/ShowMore"
         android:textStyle="bold" />
 
 </LinearLayout>

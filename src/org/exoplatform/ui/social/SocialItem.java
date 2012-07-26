@@ -1,4 +1,4 @@
-package org.exoplatform.widget;
+package org.exoplatform.ui.social;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -6,30 +6,28 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.SocialImageLoader;
+import org.exoplatform.widget.ShaderImageView;
+import org.exoplatform.widget.StandardArrayAdapter;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.text.Html;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewStub;
+import android.view.View.OnClickListener;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class SocialActivityStreamItem extends LinearLayout {
+public class SocialItem {
   private static final String FONT_COLOR          = "#696969";
 
   private static final int    AVATAR_BORDER_COLOR = 0x22000000;
 
   public LinearLayout         contentLayoutWrap;
-
-  private View                view;
 
   private ShaderImageView     imageViewAvatar;
 
@@ -41,7 +39,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private TextView            textViewCommnet;
 
-  public Button               buttonComment;
+  private Button              buttonComment;
 
   private Button              buttonLike;
 
@@ -63,34 +61,28 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private Resources           resource;
 
-  public SocialActivityStreamItem(Context context, AttributeSet attrs) {
-    super(context, attrs);
-
-  }
-
-  public SocialActivityStreamItem(Context context, SocialActivityInfo info, boolean is) {
-    super(context);
+  public SocialItem(Context context,
+                    StandardArrayAdapter.ViewHolder holder,
+                    SocialActivityInfo info,
+                    boolean is) {
     mContext = context;
     resource = mContext.getResources();
     activityInfo = info;
     isDetail = is;
-    LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     domain = SocialActivityUtil.getDomain();
-    view = inflate.inflate(R.layout.activitybrowserviewcell, this);
-    imageViewAvatar = (ShaderImageView) view.findViewById(R.id.imageView_Avatar);
+    imageViewAvatar = holder.imageViewAvatar;
     imageViewAvatar.setDefaultImageResource(R.drawable.default_avatar);
-    contentLayoutWrap = (LinearLayout) view.findViewById(R.id.relativeLayout_Content);
-    textViewName = (TextView) view.findViewById(R.id.textView_Name);
+    contentLayoutWrap = holder.contentLayoutWrap;
+    textViewName = holder.textViewName;
     textViewName.setLinkTextColor(Color.rgb(21, 94, 173));
-    textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
-    textViewTempMessage = (TextView) view.findViewById(R.id.textview_temp_message);
-    textViewCommnet = (TextView) view.findViewById(R.id.activity_comment_view);
-    buttonComment = (Button) view.findViewById(R.id.button_Comment);
-    buttonLike = (Button) view.findViewById(R.id.button_Like);
-    typeImageView = (ImageView) view.findViewById(R.id.activity_image_type);
-    textViewTime = (TextView) view.findViewById(R.id.textView_Time);
-
-    initCommonInfo();
+    textViewMessage = holder.textViewMessage;
+    textViewTempMessage = holder.textViewTempMessage;
+    textViewCommnet = holder.textViewCommnet;
+    buttonComment = holder.buttonComment;
+    buttonLike = holder.buttonLike;
+    typeImageView = holder.typeImageView;
+    textViewTime = holder.textViewTime;
+    attachStubView = holder.attachStubView;
 
   }
 
@@ -107,11 +99,14 @@ public class SocialActivityStreamItem extends LinearLayout {
     userName = activityInfo.getUserName();
     textViewName.setText(Html.fromHtml(userName));
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()), TextView.BufferType.SPANNABLE);
-
+    textViewMessage.setVisibility(View.VISIBLE);
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
                                                                 activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
+    textViewTempMessage.setVisibility(View.GONE);
+    textViewCommnet.setVisibility(View.GONE);
+    attachStubView.setVisibility(View.GONE);
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());
     SocialActivityUtil.setImageType(imageId, typeImageView);
     setViewByType(imageId);
@@ -220,7 +215,7 @@ public class SocialActivityStreamItem extends LinearLayout {
           buffer.append(domain);
           buffer.append("/portal/rest/jcr/");
           buffer.append(contentLink);
-          displayAttachImage(buffer.toString(), contentName, null, contentType, false);
+          displayAttachImage(buffer.toString(), contentName, null, contentType, true);
         }
 
       }
@@ -325,9 +320,7 @@ public class SocialActivityStreamItem extends LinearLayout {
                                   String description,
                                   String fileType,
                                   boolean isLinkType) {
-    if (attachStubView == null) {
-      initAttachStubView(url, name, description, fileType, isLinkType);
-    }
+    initAttachStubView(url, name, description, fileType, isLinkType);
     attachStubView.setVisibility(View.VISIBLE);
   }
 
@@ -336,7 +329,6 @@ public class SocialActivityStreamItem extends LinearLayout {
                                   String description,
                                   final String fileType,
                                   boolean isLinkType) {
-    attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
     TextView txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
     if (description == null)
@@ -378,11 +370,4 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   }
 
-  public Button likeButton() {
-    return buttonLike;
-  }
-
-  public Button commentButton() {
-    return buttonComment;
-  }
 }

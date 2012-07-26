@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="SignInButton">Login</string>
     <string name="SigningIn">Logging in …</string>
     <string name="NoServerSelected"> Please select a server</string>
@@ -142,4 +143,12 @@
     <string name="OpenIn">Open in …</string>
     <string name="DownloadingFile">Downloading file …</string>
     <string name="MemoryWarning">Memory is unavailable or doesn\'t have enough free space.</string>
+
+    <string-array name="SocialTabs">
+        <item>All Updates</item>
+        <item>My Connections</item>
+        <item>My Spaces</item>
+        <item>My Status</item>
+    </string-array>
+
 </resources>

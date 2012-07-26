@@ -13,8 +13,7 @@
         <ImageView
             android:id="@+id/attached_image_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/LoadingImage" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <TextView
