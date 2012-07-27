@@ -138,19 +138,20 @@
             android:textSize="18dip"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/social_store_setting_content_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/social_store_setting_title"
+            android:background="@drawable/serversectionseparator"
+            android:contentDescription="@string/Settings" />
+
         <RelativeLayout
             android:id="@+id/social_store_setting_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/social_store_setting_title"
+            android:layout_below="@id/social_store_setting_content_header"
             android:background="@drawable/file_item_background_shape" >
-
-            <ImageView
-                android:id="@+id/social_store_setting_content_header"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/serversectionseparator"
-                android:contentDescription="@string/Settings" />
 
             <TextView
                 android:id="@+id/social_store_setting_content"
