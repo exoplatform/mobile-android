@@ -41,7 +41,7 @@
                 android:id="@+id/View_English"
                 android:layout_width="fill_parent"
                 android:layout_height="40dip"
-                android:background="@drawable/settingcellstreachablebackground" />
+                android:background="@drawable/file_item_background_shape" />
 
             <ImageView
                 android:id="@+id/ImageView_English"
@@ -79,7 +79,7 @@
                 android:layout_height="40dip"
                 android:layout_below="@id/View_English"
                 android:layout_marginTop="-1dp"
-                android:background="@drawable/settingcellstreachablebackground" />
+                android:background="@drawable/file_item_background_shape" />
 
             <ImageView
                 android:id="@+id/ImageView_French"

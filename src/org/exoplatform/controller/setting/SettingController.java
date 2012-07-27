@@ -61,14 +61,16 @@ public class SettingController {
   public void setSocialFilter(ImageView socialChecked) {
     boolean isSocialFilter = prefs.getBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
     boolean isChange = isSocialFilter;
+    Editor editor = prefs.edit();
     if (isSocialFilter) {
       socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
+      editor.putInt(ExoConstants.SETTING_SOCIAL_FILTER_INDEX, 0);
       isChange = false;
     } else {
       socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
       isChange = true;
     }
-    Editor editor = prefs.edit();
+
     editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, isChange);
     editor.commit();
 
