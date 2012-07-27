@@ -26,6 +26,7 @@ import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SectionListAdapter;
 import org.exoplatform.widget.SectionListView;
@@ -64,6 +65,8 @@ public class MyStatusFragment extends Fragment {
 
   public static MyStatusFragment        instance;
 
+  public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
+
   public static MyStatusFragment getInstance(HomeController homeController) {
     MyStatusFragment fragment = new MyStatusFragment();
     fragment.socialList = SocialServiceHelper.getInstance().myStatusList;
@@ -75,7 +78,7 @@ public class MyStatusFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    onPrepareLoad(false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
   }
 
   @Override
@@ -108,22 +111,22 @@ public class MyStatusFragment extends Fragment {
     instance = null;
   }
 
-  public void onPrepareLoad(boolean isRefresh) {
+  public void onPrepareLoad(int actNumber, boolean isRefresh) {
     if (isRefresh) {
-      onLoad();
+      onLoad(actNumber);
       return;
     }
 
     if (socialList == null || socialList.size() == 0) {
-      onLoad();
+      onLoad(actNumber);
       return;
     }
   }
 
-  private void onLoad() {
+  private void onLoad(int actNumber) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == MyStausLoadTask.Status.FINISHED) {
-        mLoadTask = (MyStausLoadTask) new MyStausLoadTask(getActivity(), homeController.loader).execute(50,
+        mLoadTask = (MyStausLoadTask) new MyStausLoadTask(getActivity(), homeController.loader).execute(actNumber,
                                                                                                         SocialTabsActivity.MY_STATUS);
       }
     } else {

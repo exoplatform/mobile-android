@@ -170,6 +170,8 @@
     <string name="OpenIn">Ouvrir avec ...</string>
     <string name="DownloadingFile">Téléchargement du fichier...</string>
     <string name="MemoryWarning">Mémoire indisponible ou insuffisante.</string>
+    <string name="SocialSettingTitle">SOCIAL</string>
+    <string name="SocialSettingContent">Remember my filter</string>
 
     <string-array name="SocialTabs">
         <item>All Updates</item>

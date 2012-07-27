@@ -26,6 +26,7 @@ import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SectionListAdapter;
 import org.exoplatform.widget.SectionListView;
@@ -61,6 +62,8 @@ public class MyConnectionsFragment extends Fragment {
 
   public static MyConnectionsFragment   instance;
 
+  public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
+
   public static MyConnectionsFragment getInstance(HomeController homeController) {
     MyConnectionsFragment fragment = new MyConnectionsFragment();
     // fragment.socialList = list;
@@ -73,7 +76,7 @@ public class MyConnectionsFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    onPrepareLoad(false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
   }
 
   @Override
@@ -106,24 +109,24 @@ public class MyConnectionsFragment extends Fragment {
     instance = null;
   }
 
-  public void onPrepareLoad(boolean isRefresh) {
+  public void onPrepareLoad(int actNum, boolean isRefresh) {
     if (isRefresh) {
-      onLoad();
+      onLoad(actNum);
       return;
     }
 
     if (socialList == null || socialList.size() == 0) {
-      onLoad();
+      onLoad(actNum);
       return;
     }
 
   }
 
-  private void onLoad() {
+  private void onLoad(int actNum) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == MyConnectionLoadTask.Status.FINISHED) {
         mLoadTask = (MyConnectionLoadTask) new MyConnectionLoadTask(getActivity(),
-                                                                    homeController.loader).execute(50,
+                                                                    homeController.loader).execute(actNum,
                                                                                                    SocialTabsActivity.MY_CONNECTIONS);
       }
     } else {

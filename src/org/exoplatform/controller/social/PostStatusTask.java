@@ -117,9 +117,9 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
     if (result == 1) {
       ((Activity) mContext).finish();
       if (AllUpdatesFragment.instance != null)
-        AllUpdatesFragment.instance.onPrepareLoad(true);
+        AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
       if (MyStatusFragment.instance != null)
-        MyStatusFragment.instance.onPrepareLoad(true);
+        MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
 
     } else {
       new WarningDialog(mContext, warningTitle, errorString, okString).show();

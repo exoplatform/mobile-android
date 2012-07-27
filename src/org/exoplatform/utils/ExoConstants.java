@@ -36,7 +36,7 @@ public class ExoConstants {
 
   public static final int    COMPOSE_COMMENT_TYPE          = 1;
 
-  public static final int    NUMBER_OF_ACTIVITY            = 50;
+  public static final int    NUMBER_OF_ACTIVITY            = 100;
 
   public static final int    NUMBER_OF_MORE_ACTIVITY       = 20;
 
@@ -102,6 +102,10 @@ public class ExoConstants {
 
   public static final String FRENCH_LOCALIZATION           = "fr";
 
+  public static final String SETTING_SOCIAL_FILTER         = "SETTING_SOCIAL_FILTER";
+
+  public static final String SETTING_SOCIAL_FILTER_INDEX   = "SETTING_SOCIAL_FILTER_INDEX";
+
   public static final String DOCUMENT_PATH                 = "/rest/private/jcr/repository/collaboration/Users";
 
   public static final String DOCUMENT_JCR_PATH_REST        = "/rest/private/jcr/repository/collaboration";
@@ -121,7 +125,7 @@ public class ExoConstants {
   public static final String DOMAIN_PLATFORM_VERSION       = "/rest/private/platform/info";
 
   public static final String DOMAIN_SUFFIX_VERSION         = "/portal/rest/platform/info";
-  
+
   public static final String IMAGE_TYPE                    = "image/png";
 
   public static final String SPECIAL_CHAR_NAME_SET         = "[\\[\\]\\/\\&\\~\\?\\*\\|\\<\\>\\\"\\;\\:\\+\\\\]";
