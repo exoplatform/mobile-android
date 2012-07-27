@@ -2,6 +2,7 @@ package org.exoplatform.controller.setting;
 
 import java.util.List;
 
+import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -11,6 +12,7 @@ import org.exoplatform.widget.ServerItemLayout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,20 +20,22 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
 public class SettingController {
-  private Context mContext;
+  private Context           mContext;
 
-  private ImageView imgViewECheckMark, imgViewFCheckMark;
+  private ImageView         imgViewECheckMark, imgViewFCheckMark;
+
+  private SharedPreferences prefs;
 
   public SettingController(Context context, ImageView imgViewE, ImageView imgViewF) {
     mContext = context;
+    prefs = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     imgViewECheckMark = imgViewE;
     imgViewFCheckMark = imgViewF;
   }
 
   public void initLocation() {
-    String locallize = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
-                               .getString(ExoConstants.EXO_PRF_LOCALIZE,
-                                          ExoConstants.ENGLISH_LOCALIZATION);
+    String locallize = prefs.getString(ExoConstants.EXO_PRF_LOCALIZE,
+                                       ExoConstants.ENGLISH_LOCALIZATION);
     ;
     if (locallize != null) {
       if (locallize.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) {
@@ -42,6 +46,31 @@ public class SettingController {
     } else {
       setEnglishLocation();
     }
+
+  }
+
+  public void initSocialFilter(ImageView socialChecked) {
+    boolean isSocialFilter = prefs.getBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
+    if (isSocialFilter) {
+      socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
+    } else
+      socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
+
+  }
+
+  public void setSocialFilter(ImageView socialChecked) {
+    boolean isSocialFilter = prefs.getBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
+    boolean isChange = isSocialFilter;
+    if (isSocialFilter) {
+      socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
+      isChange = false;
+    } else {
+      socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
+      isChange = true;
+    }
+    Editor editor = prefs.edit();
+    editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, isChange);
+    editor.commit();
 
   }
 

@@ -143,6 +143,8 @@
     <string name="OpenIn">Open in …</string>
     <string name="DownloadingFile">Downloading file …</string>
     <string name="MemoryWarning">Memory is unavailable or doesn\'t have enough free space.</string>
+    <string name="SocialSettingTitle">Social</string>
+    <string name="SocialSettingContent">Remember my filter</string>
 
     <string-array name="SocialTabs">
         <item>All Updates</item>

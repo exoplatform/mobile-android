@@ -10,6 +10,7 @@ import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +20,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cyrilmottier.android.greendroid.R;
@@ -39,6 +41,20 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
   private TextView              txtvServer;                                     // Server
                                                                                  // label
+
+  /*
+   * Social setting
+   */
+
+  private TextView              socialTitleView, socialContentView;
+
+  private RelativeLayout        socialLayout;
+
+  private ImageView             socialCheckedView;
+
+  /*
+   * Server list setting
+   */
 
   private LinearLayout          listServerWrap;
 
@@ -102,12 +118,19 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     txtvFrench = (TextView) findViewById(R.id.TextView_French);
     imgViewFCheckMark = (ImageView) findViewById(R.id.ImageView_CheckMark_FR);
 
+    socialTitleView = (TextView) findViewById(R.id.social_store_setting_title);
+    socialContentView = (TextView) findViewById(R.id.social_store_setting_content);
+    socialCheckedView = (ImageView) findViewById(R.id.social_store_setting_checked);
+    socialLayout = (RelativeLayout) findViewById(R.id.social_store_setting_layout);
+    socialLayout.setOnClickListener(this);
+
     listServerWrap = (LinearLayout) findViewById(R.id.listview_server_wrap);
     modifyServerBtn = (Button) findViewById(R.id.modify_server_btn);
     modifyServerBtn.setOnClickListener(this);
 
     setttingController = new SettingController(this, imgViewECheckMark, imgViewFCheckMark);
     setttingController.initLocation();
+    setttingController.initSocialFilter(socialCheckedView);
 
     settingAppInfoTitle = (TextView) findViewById(R.id.setting_application_info_title);
     serverInfoText = (TextView) findViewById(R.id.setting_server_info_title_text);
@@ -142,6 +165,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     String strServerTittle = resource.getString(R.string.Server);
     String strEnglish = resource.getString(R.string.English);
     String strFrench = resource.getString(R.string.French);
+    String socialTitle = resource.getString(R.string.SocialSettingTitle);
+    String socialContent = resource.getString(R.string.SocialSettingContent);
     String applicationInfos = resource.getString(R.string.ApplicationInformation);
     String serverVersion = resource.getString(R.string.ServerVersion);
     String serverEdition = resource.getString(R.string.ServerEdition);
@@ -154,6 +179,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     txtvFrench.setText(strFrench);
     txtvServer.setText(strServerTittle);
     txtvLanguage.setText(strLanguageTittle);
+    socialTitleView.setText(socialTitle);
+    socialContentView.setText(socialContent);
     settingAppInfoTitle.setText(applicationInfos);
     applicationInfoText.setText(appVersion);
     serverInfoText.setText(serverVersion);
@@ -183,6 +210,9 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     if (view.equals(vFrench)) {
       setttingController.setFrenchLocation();
       updateLocation(ExoConstants.FRENCH_LOCALIZATION);
+    }
+    if (view.equals(socialLayout)) {
+      setttingController.setSocialFilter(socialCheckedView);
     }
     if (view.equals(modifyServerBtn)) {
       if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {

@@ -27,6 +27,7 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SectionListAdapter;
 import org.exoplatform.widget.SectionListView;
@@ -65,6 +66,8 @@ public class AllUpdatesFragment extends Fragment {
 
   public static AllUpdatesFragment      instance;
 
+  public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
+
   public static AllUpdatesFragment getInstance(HomeController homeController) {
     AllUpdatesFragment fragment = new AllUpdatesFragment();
     fragment.socialList = SocialServiceHelper.getInstance().socialInfoList;
@@ -76,7 +79,7 @@ public class AllUpdatesFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    onPrepareLoad(false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
   }
 
   @Override
@@ -109,23 +112,23 @@ public class AllUpdatesFragment extends Fragment {
     instance = null;
   }
 
-  public void onPrepareLoad(boolean isRefresh) {
+  public void onPrepareLoad(int actNums, boolean isRefresh) {
     if (isRefresh) {
-      onLoad();
+      onLoad(actNums);
       return;
     }
 
     if (socialList == null || socialList.size() == 0) {
-      onLoad();
+      onLoad(actNums);
       return;
     }
 
   }
 
-  private void onLoad() {
+  private void onLoad(int actNums) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == AllUpdateLoadTask.Status.FINISHED) {
-        mLoadTask = (AllUpdateLoadTask) new AllUpdateLoadTask(getActivity(), homeController.loader).execute(50,
+        mLoadTask = (AllUpdateLoadTask) new AllUpdateLoadTask(getActivity(), homeController.loader).execute(actNums,
                                                                                                             SocialTabsActivity.ALL_UPDATES);
       }
     } else {

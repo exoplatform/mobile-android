@@ -119,28 +119,28 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
               int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
               switch (tabId) {
               case SocialTabsActivity.ALL_UPDATES:
-                AllUpdatesFragment.instance.onPrepareLoad(true);
+                AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
                 if (AllUpdatesFragment.instance.isLoading())
                   holder.buttonLike.setClickable(false);
                 else
                   holder.buttonLike.setClickable(true);
                 break;
               case SocialTabsActivity.MY_CONNECTIONS:
-                MyConnectionsFragment.instance.onPrepareLoad(true);
+                MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
                 if (MyConnectionsFragment.instance.isLoading())
                   holder.buttonLike.setClickable(false);
                 else
                   holder.buttonLike.setClickable(true);
                 break;
               case SocialTabsActivity.MY_SPACES:
-                MySpacesFragment.instance.onPrepareLoad(true);
+                MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
                 if (MySpacesFragment.instance.isLoading())
                   holder.buttonLike.setClickable(false);
                 else
                   holder.buttonLike.setClickable(true);
                 break;
               case SocialTabsActivity.MY_STATUS:
-                MyStatusFragment.instance.onPrepareLoad(true);
+                MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
                 if (MyStatusFragment.instance.isLoading())
                   holder.buttonLike.setClickable(false);
                 else

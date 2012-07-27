@@ -32,6 +32,8 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -78,6 +80,10 @@ public class SocialTabsActivity extends MyActionBar {
 
   public int                           number_of_more_activity;
 
+  private SharedPreferences            prefs;
+
+  private boolean                      isSocialFilterEnable    = false;
+
   public static SocialTabsActivity     instance;
 
   @Override
@@ -116,6 +122,12 @@ public class SocialTabsActivity extends MyActionBar {
     mPager.setAdapter(mAdapter);
     mIndicator.setViewPager(mPager);
 
+    prefs = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
+    isSocialFilterEnable = prefs.getBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
+    if (isSocialFilterEnable) {
+      int savedIndex = prefs.getInt(ExoConstants.SETTING_SOCIAL_FILTER_INDEX, ALL_UPDATES);
+      mPager.setCurrentItem(savedIndex);
+    }
     homeController = new HomeController(this, loaderItem);
   }
 
@@ -131,6 +143,23 @@ public class SocialTabsActivity extends MyActionBar {
   @Override
   public void onBackPressed() {
     super.onBackPressed();
+    finishFragment();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    finishFragment();
+
+  }
+
+  private void finishFragment() {
+    if (isSocialFilterEnable) {
+      int tabId = mPager.getCurrentItem();
+      Editor editor = prefs.edit();
+      editor.putInt(ExoConstants.SETTING_SOCIAL_FILTER_INDEX, tabId);
+      editor.commit();
+    }
     instance = null;
   }
 
@@ -139,6 +168,7 @@ public class SocialTabsActivity extends MyActionBar {
     switch (position) {
 
     case -1:
+      finishFragment();
       finish();
       break;
     case 0:
@@ -147,16 +177,16 @@ public class SocialTabsActivity extends MyActionBar {
       int tabId = mPager.getCurrentItem();
       switch (tabId) {
       case ALL_UPDATES:
-        AllUpdatesFragment.instance.onPrepareLoad(true);
+        AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
         break;
       case MY_CONNECTIONS:
-        MyConnectionsFragment.instance.onPrepareLoad(true);
+        MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
         break;
       case MY_SPACES:
-        MySpacesFragment.instance.onPrepareLoad(true);
+        MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
         break;
       case MY_STATUS:
-        MyStatusFragment.instance.onPrepareLoad(true);
+        MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
         break;
       }
       break;
