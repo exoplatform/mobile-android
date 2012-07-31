@@ -40,6 +40,7 @@ import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.SocialActivityUtil;
 import org.jivesoftware.smack.util.Base64;
 
 import android.app.Activity;
@@ -93,7 +94,7 @@ public class SocialImageLoader {
   }
 
   public void displayImage(String url, ImageView imageView, boolean isLink) {
-    url = url.replaceAll(" ", "%20");
+    url = SocialActivityUtil.convertToThumbnail(url);
     imageViews.put(imageView, url);
     Bitmap bitmap = memoryCache.get(url);
     if (bitmap != null)
@@ -249,7 +250,8 @@ public class SocialImageLoader {
         photoToLoad.imageView.setImageBitmap(bitmap);
       } else {
         /*
-         * if can not get image bitmap from web link, we will display this instead
+         * if can not get image bitmap from web link, we will display this
+         * instead
          */
         if (photoToLoad.isLinkType) {
           photoToLoad.imageView.setImageResource(UNREADABLE_LINK);
