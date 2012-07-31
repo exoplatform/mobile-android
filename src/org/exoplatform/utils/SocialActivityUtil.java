@@ -24,29 +24,42 @@ import android.widget.TextView;
 
 public class SocialActivityUtil {
 
-  public static final int DEFAULT_TYPE            = 0;
+  public static final int     DEFAULT_TYPE               = 0;
 
-  public static final int KS_FORUM_SPACE          = 1;
+  public static final int     KS_FORUM_SPACE             = 1;
 
-  public static final int KS_WIKI_SPACE           = 2;
+  public static final int     KS_WIKI_SPACE              = 2;
 
-  public static final int EXO_SOCIAL_SPACE        = 3;
+  public static final int     EXO_SOCIAL_SPACE           = 3;
 
-  public static final int DOC_ACTIVITY            = 4;
+  public static final int     DOC_ACTIVITY               = 4;
 
-  public static final int DEFAULT_ACTIVITY        = 5;
+  public static final int     DEFAULT_ACTIVITY           = 5;
 
-  public static final int LINK_ACTIVITY           = 6;
+  public static final int     LINK_ACTIVITY              = 6;
 
-  public static final int EXO_SOCIAL_RELATIONSHIP = 7;
+  public static final int     EXO_SOCIAL_RELATIONSHIP    = 7;
 
-  public static final int EXO_SOCIAL_PEOPLE       = 8;
+  public static final int     EXO_SOCIAL_PEOPLE          = 8;
 
-  public static final int CONTENT_SPACE           = 9;
+  public static final int     CONTENT_SPACE              = 9;
 
-  public static final int KS_ANSWER               = 10;
+  public static final int     KS_ANSWER                  = 10;
 
-  public static final int CS_CALENDAR_SPACES      = 11;
+  public static final int     CS_CALENDAR_SPACES         = 11;
+
+  private static final String LARGER_THUMBNAIL_IMAGE_URL = "thumbnailImage/large";
+
+  /*
+   * using thumbnail rest service here
+   */
+  public static String convertToThumbnail(String url) {
+    url = url.replaceAll(" ", "%20");
+    if (url.contains("jcr")) {
+      url = url.replace("jcr", LARGER_THUMBNAIL_IMAGE_URL);
+    }
+    return url;
+  }
 
   public static String getActivityStreamHeader(Context context, long postedTime) {
 

@@ -40,6 +40,7 @@ import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.SocialActivityUtil;
 import org.jivesoftware.smack.util.Base64;
 
 import android.app.Activity;
@@ -54,16 +55,14 @@ import android.widget.ImageView;
  */
 public class SocialImageLoader {
 
-  private static final String    LARGER_THUMBNAIL_IMAGE_URL = "thumbnailImage/large";
-
-  private MemoryCache            memoryCache                = new MemoryCache();
+  private MemoryCache            memoryCache             = new MemoryCache();
 
   private FileCache              fileCache;
 
   /*
    * The mapping between image view and image's url
    */
-  private Map<ImageView, String> imageViews                 = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
+  private Map<ImageView, String> imageViews              = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
 
   /*
    * Provides methods to manage termination and methods that can produce a
@@ -72,15 +71,15 @@ public class SocialImageLoader {
   private ExecutorService        executorService;
 
   // The image drawable for progress downloading
-  private final int              DOWNLOAD_PROGRESS_IMAGE    = R.drawable.loading;
+  private final int              DOWNLOAD_PROGRESS_IMAGE = R.drawable.loading;
 
   // The image drawable for link type
-  private final int              UNREADABLE_LINK            = R.drawable.icon_for_unreadable_link;
+  private final int              UNREADABLE_LINK         = R.drawable.icon_for_unreadable_link;
 
   // The image drawable for image type
-  private final int              PLACEHOLDER_IMAGE          = R.drawable.icon_for_placeholder_image;
+  private final int              PLACEHOLDER_IMAGE       = R.drawable.icon_for_placeholder_image;
 
-  private final int              REQUIRED_SIZE              = 100;
+  private final int              REQUIRED_SIZE           = 100;
 
   private String                 username;
 
@@ -95,9 +94,7 @@ public class SocialImageLoader {
   }
 
   public void displayImage(String url, ImageView imageView, boolean isLink) {
-    url = url.replaceAll(" ", "%20");
-    url = convertToThumbnail(url);
-    System.out.println("----" + url);
+    url = SocialActivityUtil.convertToThumbnail(url);
     imageViews.put(imageView, url);
     Bitmap bitmap = memoryCache.get(url);
     if (bitmap != null)
@@ -106,16 +103,6 @@ public class SocialImageLoader {
       queuePhoto(url, imageView, isLink);
       imageView.setImageResource(DOWNLOAD_PROGRESS_IMAGE);
     }
-  }
-
-  /*
-   * using thumbnail rest service here
-   */
-  private String convertToThumbnail(String url) {
-    if (url.contains("jcr")) {
-      url = url.replace("jcr", LARGER_THUMBNAIL_IMAGE_URL);
-    }
-    return url;
   }
 
   private void queuePhoto(String url, ImageView imageView, boolean isLink) {
