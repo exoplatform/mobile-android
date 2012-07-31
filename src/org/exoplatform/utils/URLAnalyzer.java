@@ -40,9 +40,12 @@ public class URLAnalyzer {
 
   public static boolean isUrlValid(String str) {
     try {
-      new URL(str);
+      URL url = new URL(str);
+      url.toURI();
       return true;
     } catch (MalformedURLException e) {
+      return false;
+    } catch (URISyntaxException e) {
       return false;
     }
   }
