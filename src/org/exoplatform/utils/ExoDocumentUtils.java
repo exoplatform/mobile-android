@@ -5,6 +5,7 @@ import greendroid.util.Config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
+import android.util.FloatMath;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -92,7 +94,7 @@ public class ExoDocumentUtils {
   public static int getFreeMemory(String path) {
     StatFs statFs = new StatFs(path);
     int free = (statFs.getAvailableBlocks() * statFs.getBlockSize());
-    return free;
+    return Math.abs(free);
   }
 
   /*
@@ -159,13 +161,10 @@ public class ExoDocumentUtils {
    */
 
   public static boolean isCallable(Context context, String url) {
-    String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-    String mimeType = null;
-    if (extension != null) {
-      mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-    }
+    String mimeTypeExtension = URLConnection.guessContentTypeFromName(url);
+
     Intent intent = new Intent(Intent.ACTION_VIEW);
-    intent.setDataAndType(Uri.parse(url), mimeType);
+    intent.setDataAndType(Uri.parse(url), mimeTypeExtension);
     List<ResolveInfo> list = context.getPackageManager()
                                     .queryIntentActivities(intent,
                                                            PackageManager.MATCH_DEFAULT_ONLY);

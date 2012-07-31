@@ -1,5 +1,7 @@
 package org.exoplatform.ui.social;
 
+import java.net.URLConnection;
+
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
@@ -172,12 +174,11 @@ public class SocialItem {
       if (docLink != null) {
         String docName = activityInfo.templateParams.get("DOCNAME");
         String url = domain + docLink;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        String mimeType = null;
-        if (extension != null) {
-          mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        }
-        displayAttachImage(url, docName, null, mimeType, false);
+        /*
+         * get mimetype from url
+         */
+        String mimeTypeExtension = URLConnection.guessContentTypeFromName(url);
+        displayAttachImage(url, docName, null, mimeTypeExtension, false);
       }
 
       break;

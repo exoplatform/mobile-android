@@ -1,5 +1,7 @@
 package org.exoplatform.widget;
 
+import java.net.URLConnection;
+
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
@@ -177,12 +179,8 @@ public class SocialActivityStreamItem extends LinearLayout {
       if (docLink != null) {
         String docName = activityInfo.templateParams.get("DOCNAME");
         String url = domain + docLink;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        String mimeType = null;
-        if (extension != null) {
-          mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        }
-        displayAttachImage(url, docName, null, mimeType, false);
+        String mimeTypeExtension = URLConnection.guessContentTypeFromName(url);
+        displayAttachImage(url, docName, null, mimeTypeExtension, false);
       }
 
       break;
