@@ -77,8 +77,7 @@ public class SettingController {
   }
 
   public boolean updateLocallize(String localize) {
-    Configuration config = new Configuration();
-    SettingUtils.setLocalization(mContext, config, localize);
+    SettingUtils.setLocale(mContext, localize);
     return true;
 
   }

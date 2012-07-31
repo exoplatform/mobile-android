@@ -21,6 +21,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Mar
@@ -31,15 +32,34 @@ public class SettingUtils {
    * Set and update resource locale configuration
    */
 
-  public static void setLocalization(Context mContext, Configuration config, String localize) {
-    Locale locale = new Locale(localize);
+  public static void setLocale(Context mContext, String localize) {
+    final Locale locale = new Locale(localize);
+    Locale.setDefault(locale);
+
+    final Resources res = mContext.getResources();
+    Configuration config = res.getConfiguration();
     config.locale = locale;
-    mContext.getResources()
-            .updateConfiguration(config, mContext.getResources().getDisplayMetrics());
+    res.updateConfiguration(config, res.getDisplayMetrics());
     SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
                                               .edit();
     editor.putString(ExoConstants.EXO_PRF_LOCALIZE, localize);
     editor.commit();
+  }
+
+  public static String getLanguage(Context context) {
+    return Locale.getDefault().getLanguage();
+  }
+
+  public static String getPrefsLanguage(Context context) {
+    SharedPreferences prefs = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
+    return prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, "");
+  }
+
+  public static void setDefaultLanguage(Context context) {
+    String languageCode = SettingUtils.getPrefsLanguage(context);
+    if (!SettingUtils.getLanguage(context).equals(languageCode)) {
+      SettingUtils.setLocale(context, languageCode);
+    }
   }
 
 }

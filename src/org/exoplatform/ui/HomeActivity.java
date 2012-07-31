@@ -15,6 +15,7 @@ import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.HomeSocialItem;
 import org.exoplatform.widget.MyActionBar;
@@ -104,6 +105,7 @@ public class HomeActivity extends MyActionBar {
     super.onConfigurationChanged(newConfig);
     getContentView().removeAllViews();
     setActionBarContentView(R.layout.home_layout);
+    SettingUtils.setDefaultLanguage(this);
     init();
   }
 

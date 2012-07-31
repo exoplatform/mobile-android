@@ -48,9 +48,10 @@ public class LaunchController {
   }
 
   private void getLaunchInfo() {
-    String strLocalize = null;
-    if (sharedPreference == null) {
-      sharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
+    sharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
+    String strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE, "");
+    if (strLocalize.equals("")) {
+
       strLocalize = Locale.getDefault().getLanguage();
       /*
        * check if locale language is not French then assigned the default locale
@@ -60,15 +61,12 @@ public class LaunchController {
         strLocalize = ExoConstants.ENGLISH_LOCALIZATION;
       }
 
-    } else
-      strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE,
-                                               ExoConstants.ENGLISH_LOCALIZATION);
+    }
 
     /*
      * Set the Locale which affect to our application
      */
-    Configuration config = new Configuration();
-    SettingUtils.setLocalization(context, config, strLocalize);
+    SettingUtils.setLocale(context, strLocalize);
 
     AccountSetting.getInstance()
                   .setUsername(sharedPreference.getString(ExoConstants.EXO_PRF_USERNAME, ""));

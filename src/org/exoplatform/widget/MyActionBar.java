@@ -10,9 +10,13 @@ import greendroid.widget.ActionBar.Type;
 import greendroid.widget.ActionBarHost;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.NormalActionBarItem;
+
+import org.exoplatform.utils.SettingUtils;
+
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -78,6 +82,12 @@ public class MyActionBar extends FragmentActivity implements ActionBarActivity {
   protected void onPostCreate(Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
     ensureLayout();
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    SettingUtils.setDefaultLanguage(this);
   }
 
   public ActionBar.Type getActionBarType() {
@@ -209,7 +219,7 @@ public class MyActionBar extends FragmentActivity implements ActionBarActivity {
   public void setActionBarContentView(int resID) {
     LayoutInflater.from(this).inflate(resID, getContentView());
     Drawable bg = getActionBar().getBackground();
-    if(bg!=null &&(bg instanceof BitmapDrawable)){
+    if (bg != null && (bg instanceof BitmapDrawable)) {
       BitmapDrawable bmDrawable = (BitmapDrawable) bg;
       bmDrawable.setTileModeX(TileMode.REPEAT);
       getActionBar().setBackgroundDrawable(bmDrawable);
