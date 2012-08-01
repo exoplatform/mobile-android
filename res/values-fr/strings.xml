@@ -101,15 +101,16 @@
     <string name="SelectedPhoto">Image sélectionnée</string>
     <string name="AttachedPhoto">Photo attachée</string>
     <string name="Warning">Attention</string>
-    <string name="PostSuccess">Envoi de l\'activité terminé !</string>
+    <string name="PostSuccess">Envoi de l\'activité terminé.</string>
     <string name="PostError">Erreur lors de l\'envoi de l\'activité !</string>
     <string name="ConnectionError">Aucune connexion. Vérifier votre réseau !</string>
     <string name="LoadingDataError">Erreur de chargement des données!</string>
     <string name="DoNotHavePermision">Cette action ne peut être effectuée car l\'accès à la carte SD est impossible !</string>
     <string name="WarningServerNameIsEmpty">Le nom du serveur ou son URL ne peuvent être vide. Veuillez les renseigner !</string>
-    <string name="WarningServerIsExist">Ce server existe déjà dans votre liste.</string>
+    <string name="WarningServerNameIsExist">Ce nom de serveur existe déjà dans votre liste</string>
+    <string name="WarningServerUrlIsExist">Cette URL du serveur existe déjà dans votre liste </string>
     <string name="DetailsNotAvaiable">Les détails de cette activité ne sont pas disponibles</string>
-    <string name="ErrorOnLike">Action sur cette activité impossible !</string>
+    <string name="ErrorOnLike">Action sur cette activité impossible.</string>
     <string name="ErrorOnComment">Cette activité ne peut être commentée !</string>
     <string name="LogoutTitle">Déconnection</string>
     <string name="LogoutContent">Souhaitez-vous quitter l\'application ?</string>
@@ -171,13 +172,13 @@
     <string name="DownloadingFile">Téléchargement du fichier...</string>
     <string name="MemoryWarning">Mémoire indisponible ou insuffisante.</string>
     <string name="SocialSettingTitle">SOCIAL</string>
-    <string name="SocialSettingContent">Remember my filter</string>
+    <string name="SocialSettingContent">N\'oubliez pas mon filtre</string>
 
     <string-array name="SocialTabs">
-        <item>All Updates</item>
-        <item>My Connections</item>
-        <item>My Spaces</item>
-        <item>My Status</item>
+        <item>Toutes les mises à jour</item>
+        <item>Mes Connections</item>
+        <item>Mes Espaces</item>
+        <item>Mon Status</item>
     </string-array>
 
 </resources>

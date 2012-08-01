@@ -102,15 +102,18 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
       SettingServerEditionController editController = new SettingServerEditionController(mContext);
       if (view.equals(btnOK)) {
-        editController.onAccept(myServerObj);
+        if (editController.onAccept(myServerObj)) {
+          dismiss();
+          editController.onResetAdapter(listViewServer);
+        }
       }
 
       if (view.equals(btnDeleteCancel)) {
         editController.onDelete();
+        dismiss();
+        editController.onResetAdapter(listViewServer);
       }
 
-      dismiss();
-      editController.onResetAdapter(listViewServer);
     } else {
       if (view.equals(btnDeleteCancel)) {
         dismiss();

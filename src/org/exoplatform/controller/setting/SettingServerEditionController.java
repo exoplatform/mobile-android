@@ -32,7 +32,9 @@ public class SettingServerEditionController {
 
   private String                   serverIsEmpty;
 
-  private String                   serverisExisted;
+  private String                   serverNameIsExisted;
+
+  private String                   serverUrlIsExisted;
 
   private String                   serverNameURLInvalid;
 
@@ -49,12 +51,12 @@ public class SettingServerEditionController {
     changeLanguage();
   }
 
-  public void onAccept(ServerObjInfo myServerObj) {
+  public boolean onAccept(ServerObjInfo myServerObj) {
 
     if (myServerObj._strServerName.length() == 0 || myServerObj._strServerUrl.length() == 0) {
 
       Toast.makeText(mContext, serverIsEmpty, Toast.LENGTH_SHORT).show();
-      return;
+      return false;
     }
     URLAnalyzer urlAnanyzer = new URLAnalyzer();
     myServerObj._strServerUrl = urlAnanyzer.parserURL(myServerObj._strServerUrl);
@@ -65,7 +67,7 @@ public class SettingServerEditionController {
                                                  ExoConstants.SPECIAL_CHAR_URL_SET)) {
 
       Toast.makeText(mContext, serverNameURLInvalid, Toast.LENGTH_SHORT).show();
-      return;
+      return false;
 
     }
 
@@ -75,10 +77,16 @@ public class SettingServerEditionController {
         ServerObjInfo tmp = serverInfoList.get(i);
         if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
           isExisted = true;
-          Toast.makeText(mContext, serverisExisted, Toast.LENGTH_SHORT).show();
+          Toast.makeText(mContext, serverNameIsExisted, Toast.LENGTH_SHORT).show();
           break;
-          // New server is the same with the old one
         }
+
+        if (myServerObj._strServerUrl.equalsIgnoreCase(tmp._strServerUrl)) {
+          isExisted = true;
+          Toast.makeText(mContext, serverUrlIsExisted, Toast.LENGTH_SHORT).show();
+          break;
+        }
+
       }
       if (!isExisted) {
         // Create new server
@@ -87,7 +95,8 @@ public class SettingServerEditionController {
         ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
                                                              "DefaultServerList.xml",
                                                              "");
-      }
+      } else
+        return false;
     } else // Update server
     {
       boolean isExisted = true;
@@ -100,9 +109,14 @@ public class SettingServerEditionController {
 
         if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
           isExisted = false;
-          Toast.makeText(mContext, serverisExisted, Toast.LENGTH_SHORT).show();
+          Toast.makeText(mContext, serverNameIsExisted, Toast.LENGTH_SHORT).show();
           break;
-          // updated server is the same with the old one
+        }
+
+        if (myServerObj._strServerUrl.equalsIgnoreCase(tmp._strServerUrl)) {
+          isExisted = false;
+          Toast.makeText(mContext, serverUrlIsExisted, Toast.LENGTH_SHORT).show();
+          break;
         }
       }
       if (isExisted) {
@@ -114,9 +128,11 @@ public class SettingServerEditionController {
         ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
                                                              "DefaultServerList.xml",
                                                              "");
-      }
+      } else
+        return false;
     }
     onSave();
+    return true;
   }
 
   public void onDelete() {
@@ -157,7 +173,8 @@ public class SettingServerEditionController {
   private void changeLanguage() {
     Resources resource = mContext.getResources();
     serverIsEmpty = resource.getString(R.string.WarningServerNameIsEmpty);
-    serverisExisted = resource.getString(R.string.WarningServerIsExist);
+    serverNameIsExisted = resource.getString(R.string.WarningServerNameIsExist);
+    serverUrlIsExisted = resource.getString(R.string.WarningServerUrlIsExist);
     serverNameURLInvalid = resource.getString(R.string.SpecialCharacters);
 
   }
