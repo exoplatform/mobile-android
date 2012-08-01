@@ -247,10 +247,10 @@ public class ExoDocumentUtils {
   }
 
   public static void setRepositoryHomeUrl(String userName, String domain) {
-
-    StringBuffer buffer = new StringBuffer();
+    String documentPath = getDocumenPath();
+    StringBuilder buffer = new StringBuilder();
     buffer.append(domain);
-    buffer.append(ExoConstants.DOCUMENT_PATH);
+    buffer.append(documentPath);
 
     int length = userName.length();
     if (length < 4) {
@@ -279,8 +279,8 @@ public class ExoDocumentUtils {
       if (status >= 200 && status < 300) {
         DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
       } else {
-        buffer = new StringBuffer(domain);
-        buffer.append(ExoConstants.DOCUMENT_PATH);
+        buffer = new StringBuilder(domain);
+        buffer.append(documentPath);
         buffer.append("/");
         buffer.append(userName);
         DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
@@ -346,12 +346,12 @@ public class ExoDocumentUtils {
       }
 
       // push information to map
-      if (DocumentHelper.getInstance().childFilesMap.containsKey(ExoConstants.DOCUMENT_PATH)) {
-        DocumentHelper.getInstance().childFilesMap.remove(ExoConstants.DOCUMENT_PATH);
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_PATH,
+      if (DocumentHelper.getInstance().childFilesMap.containsKey(ExoConstants.DOCUMENT_JCR_PATH)) {
+        DocumentHelper.getInstance().childFilesMap.remove(ExoConstants.DOCUMENT_JCR_PATH);
+        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH,
                                                                           arrFilesTmp);
       } else {
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_PATH,
+        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH,
                                                                           arrFilesTmp);
       }
 
@@ -375,10 +375,26 @@ public class ExoDocumentUtils {
   public static String fullURLofFile(String url) {
     String domain = AccountSetting.getInstance().getDomainName();
     StringBuffer buffer = new StringBuffer(domain);
-    buffer.append(ExoConstants.DOCUMENT_JCR_PATH_REST);
+    buffer.append(ExoConstants.DOCUMENT_JCR_PATH);
+    buffer.append("/");
+    buffer.append(DocumentHelper.getInstance().repository);
+    buffer.append("/");
+    buffer.append(ExoConstants.DOCUMENT_COLLABORATION);
     buffer.append(url);
     return buffer.toString();
 
+  }
+
+  private static String getDocumenPath() {
+    StringBuilder documentPath = new StringBuilder();
+    documentPath.append(ExoConstants.DOCUMENT_JCR_PATH);
+    documentPath.append("/");
+    documentPath.append(DocumentHelper.getInstance().repository);
+    documentPath.append("/");
+    documentPath.append(ExoConstants.DOCUMENT_COLLABORATION);
+    documentPath.append("/");
+    documentPath.append(ExoConstants.DOCUMENT_USERS);
+    return documentPath.toString();
   }
 
   public static ArrayList<ExoFile> getDrives(HttpResponse response) {

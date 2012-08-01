@@ -236,7 +236,7 @@ public class DocumentActivity extends MyActionBar {
     if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
       _fileForCurrentActionBar = new ExoFile();
       parent = DocumentHelper.getInstance().currentFileMap.getParcelable("");
-      documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_PATH);
+      documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH);
 
     } else {
       parent = DocumentHelper.getInstance().currentFileMap.getParcelable(_fileForCurrentActionBar.path);

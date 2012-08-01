@@ -17,6 +17,7 @@
 package org.exoplatform.singleton;
 
 import org.exoplatform.model.ExoFile;
+import org.exoplatform.utils.ExoConstants;
 
 import android.os.Bundle;
 import android.os.Parcel;
@@ -32,9 +33,11 @@ public class DocumentHelper implements Parcelable {
 
   private String                _urlrepositoryHome;
 
-  public ExoFile                _fileCopied    = new ExoFile();        ;
+  public ExoFile                _fileCopied    = new ExoFile();                    ;
 
   public ExoFile                _fileMoved     = new ExoFile();
+
+  public String                 repository     = null;
 
   /*
    * The dictionary for mapping between parent folder and its child files
@@ -85,6 +88,7 @@ public class DocumentHelper implements Parcelable {
     _urlrepositoryHome = in.readString();
     _fileCopied = in.readParcelable(_fileCopied.getClass().getClassLoader());
     _fileMoved = in.readParcelable(_fileMoved.getClass().getClassLoader());
+    repository = in.readString();
     currentFileMap = in.readBundle();
     childFilesMap = in.readBundle();
   }
@@ -108,6 +112,7 @@ public class DocumentHelper implements Parcelable {
     dest.writeString(_urlrepositoryHome);
     dest.writeParcelable(_fileCopied, flags);
     dest.writeParcelable(_fileMoved, flags);
+    dest.writeString(repository);
     dest.writeBundle(currentFileMap);
     dest.writeBundle(childFilesMap);
   }

@@ -10,6 +10,8 @@ public class ExoConstants {
 
   public static final String IS_MOBILE_COMPLIANT           = "isMobileCompliant";
 
+  public static final String PLATFORM_CURRENT_REPO_NAME    = "currentRepName";
+
   public static final String LOGIN_YES                     = "YES";
 
   public static final String LOGIN_NO                      = "NO";
@@ -106,9 +108,13 @@ public class ExoConstants {
 
   public static final String SETTING_SOCIAL_FILTER_INDEX   = "SETTING_SOCIAL_FILTER_INDEX";
 
-  public static final String DOCUMENT_PATH                 = "/rest/private/jcr/repository/collaboration/Users";
+  public static final String DOCUMENT_REPOSITORY           = "repository";
 
-  public static final String DOCUMENT_JCR_PATH_REST        = "/rest/private/jcr/repository/collaboration";
+  public static final String DOCUMENT_COLLABORATION        = "collaboration";
+
+  public static final String DOCUMENT_JCR_PATH             = "/rest/private/jcr";
+
+  public static final String DOCUMENT_USERS                = "Users";
 
   public static final String DOCUMENT_DRIVE_PATH_REST      = "/portal/rest/managedocument/getDrives?driveType=";
 
@@ -123,8 +129,6 @@ public class ExoConstants {
   public static final String DOMAIN_SUFFIX                 = "/portal/private/intranet";
 
   public static final String DOMAIN_PLATFORM_VERSION       = "/rest/private/platform/info";
-
-  public static final String DOMAIN_SUFFIX_VERSION         = "/portal/rest/platform/info";
 
   public static final String IMAGE_TYPE                    = "image/png";
 

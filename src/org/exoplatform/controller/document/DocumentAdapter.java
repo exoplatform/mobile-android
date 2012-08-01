@@ -119,6 +119,7 @@ public class DocumentAdapter extends BaseAdapter {
           /*
            * Open file with compatible application
            */
+          System.out.println("---------" + myFile.path);
 
           if (ExoDocumentUtils.isFileReadable(myFile.nodeType)) {
             ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
