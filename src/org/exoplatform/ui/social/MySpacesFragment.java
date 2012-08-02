@@ -21,7 +21,6 @@ import greendroid.widget.LoaderActionBarItem;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
@@ -51,8 +50,6 @@ public class MySpacesFragment extends Fragment {
 
   private ArrayList<SocialActivityInfo> socialList;
 
-  private HomeController                homeController;
-
   private SectionListView               listview;
 
   private StandardArrayAdapter          arrayAdapter;
@@ -65,12 +62,14 @@ public class MySpacesFragment extends Fragment {
 
   public static MySpacesFragment        instance;
 
+  private LoaderActionBarItem           loaderItem;
+
   public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
 
-  public static MySpacesFragment getInstance(HomeController homeController) {
+  public static MySpacesFragment getInstance(LoaderActionBarItem loader) {
     MySpacesFragment fragment = new MySpacesFragment();
     fragment.socialList = SocialServiceHelper.getInstance().mySpacesList;
-    fragment.homeController = homeController;
+    fragment.loaderItem = loader;
     return fragment;
   }
 
@@ -78,7 +77,10 @@ public class MySpacesFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    if (loaderItem == null)
+      getActivity().finish();
+    else
+      onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
   }
 
   @Override
@@ -126,8 +128,8 @@ public class MySpacesFragment extends Fragment {
   private void onLoad(int actNumber) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == MySpacesLoadTask.Status.FINISHED) {
-        mLoadTask = (MySpacesLoadTask) new MySpacesLoadTask(getActivity(), homeController.loader).execute(actNumber,
-                                                                                                          SocialTabsActivity.MY_SPACES);
+        mLoadTask = (MySpacesLoadTask) new MySpacesLoadTask(getActivity(), loaderItem).execute(actNumber,
+                                                                                               SocialTabsActivity.MY_SPACES);
       }
     } else {
       new ConnectionErrorDialog(getActivity()).show();

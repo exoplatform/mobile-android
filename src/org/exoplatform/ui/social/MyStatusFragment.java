@@ -21,7 +21,6 @@ import greendroid.widget.LoaderActionBarItem;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
@@ -51,7 +50,7 @@ public class MyStatusFragment extends Fragment {
 
   private ArrayList<SocialActivityInfo> socialList;
 
-  private HomeController                homeController;
+  private LoaderActionBarItem           loaderItem;
 
   private SectionListView               listview;
 
@@ -67,10 +66,10 @@ public class MyStatusFragment extends Fragment {
 
   public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
 
-  public static MyStatusFragment getInstance(HomeController homeController) {
+  public static MyStatusFragment getInstance(LoaderActionBarItem loader) {
     MyStatusFragment fragment = new MyStatusFragment();
     fragment.socialList = SocialServiceHelper.getInstance().myStatusList;
-    fragment.homeController = homeController;
+    fragment.loaderItem = loader;
     return fragment;
   }
 
@@ -78,7 +77,10 @@ public class MyStatusFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    if (loaderItem == null)
+      getActivity().finish();
+    else
+      onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
   }
 
   @Override
@@ -126,8 +128,8 @@ public class MyStatusFragment extends Fragment {
   private void onLoad(int actNumber) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == MyStausLoadTask.Status.FINISHED) {
-        mLoadTask = (MyStausLoadTask) new MyStausLoadTask(getActivity(), homeController.loader).execute(actNumber,
-                                                                                                        SocialTabsActivity.MY_STATUS);
+        mLoadTask = (MyStausLoadTask) new MyStausLoadTask(getActivity(), loaderItem).execute(actNumber,
+                                                                                             SocialTabsActivity.MY_STATUS);
       }
     } else {
       new ConnectionErrorDialog(getActivity()).show();

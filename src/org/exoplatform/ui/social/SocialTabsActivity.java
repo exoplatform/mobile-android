@@ -213,16 +213,16 @@ public class SocialTabsActivity extends MyActionBar {
       Fragment fragment = null;
       switch (position) {
       case ALL_UPDATES:
-        fragment = AllUpdatesFragment.getInstance(homeController);
+        fragment = AllUpdatesFragment.getInstance(loaderItem);
         break;
       case MY_CONNECTIONS:
-        fragment = MyConnectionsFragment.getInstance(homeController);
+        fragment = MyConnectionsFragment.getInstance(loaderItem);
         break;
       case MY_SPACES:
-        fragment = MySpacesFragment.getInstance(homeController);
+        fragment = MySpacesFragment.getInstance(loaderItem);
         break;
       case MY_STATUS:
-        fragment = MyStatusFragment.getInstance(homeController);
+        fragment = MyStatusFragment.getInstance(loaderItem);
         break;
       }
       return fragment;

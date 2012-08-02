@@ -21,7 +21,6 @@ import greendroid.widget.LoaderActionBarItem;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
@@ -52,8 +51,6 @@ public class AllUpdatesFragment extends Fragment {
 
   private ArrayList<SocialActivityInfo> socialList;
 
-  private HomeController                homeController;
-
   private SectionListView               listview;
 
   private View                          emptyStubView;
@@ -62,16 +59,18 @@ public class AllUpdatesFragment extends Fragment {
 
   private SectionListAdapter            sectionAdapter;
 
+  private LoaderActionBarItem           loaderItem;
+
   private AllUpdateLoadTask             mLoadTask;
 
   public static AllUpdatesFragment      instance;
 
   public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
 
-  public static AllUpdatesFragment getInstance(HomeController homeController) {
+  public static AllUpdatesFragment getInstance(LoaderActionBarItem loader) {
     AllUpdatesFragment fragment = new AllUpdatesFragment();
     fragment.socialList = SocialServiceHelper.getInstance().socialInfoList;
-    fragment.homeController = homeController;
+    fragment.loaderItem = loader;
     return fragment;
   }
 
@@ -79,7 +78,10 @@ public class AllUpdatesFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    if (loaderItem == null)
+      getActivity().finish();
+    else
+      onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
   }
 
   @Override
@@ -128,8 +130,8 @@ public class AllUpdatesFragment extends Fragment {
   private void onLoad(int actNums) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == AllUpdateLoadTask.Status.FINISHED) {
-        mLoadTask = (AllUpdateLoadTask) new AllUpdateLoadTask(getActivity(), homeController.loader).execute(actNums,
-                                                                                                            SocialTabsActivity.ALL_UPDATES);
+        mLoadTask = (AllUpdateLoadTask) new AllUpdateLoadTask(getActivity(), loaderItem).execute(actNums,
+                                                                                                 SocialTabsActivity.ALL_UPDATES);
       }
     } else {
       new ConnectionErrorDialog(getActivity()).show();
