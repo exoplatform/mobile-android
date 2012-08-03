@@ -156,12 +156,12 @@ public class LoginController {
         editor.commit();
         accountSetting.setUsername(userName);
         accountSetting.setPassword(password);
-        ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
         /*
          * Checking platform version
          */
         boolean isCompliant = ExoConnectionUtils.checkPLFVersion(response);
         if (isCompliant == true) {
+          ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
           Intent next = new Intent(mContext, HomeActivity.class);
           next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           mContext.startActivity(next);
