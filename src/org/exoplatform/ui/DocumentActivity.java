@@ -183,7 +183,8 @@ public class DocumentActivity extends MyActionBar {
     } else {
       if (_fileForCurrentActionBar.name == null) {
         getActionBar().removeItem(0);
-      } else if (_fileForCurrentActionBar.name.equals("")) {
+      } else if ("".equals(_fileForCurrentActionBar.name)
+          || "".equals(_fileForCurrentActionBar.path)) {
         getActionBar().removeItem(0);
       } else {
         if (getActionBar().getItem(0) == null) {
@@ -196,9 +197,9 @@ public class DocumentActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
+    onCancelLoad();
     if (_documentAdapter == null) {
       _documentActivityInstance = null;
-      onCancelLoad();
       finish();
     } else {
       /*
