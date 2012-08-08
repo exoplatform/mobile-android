@@ -55,7 +55,7 @@ public class URLAnalyzer {
     if (urlStr == null || urlStr.length() == 0)
       return "";
 
-    String url = urlStr;
+    String url = urlStr.toLowerCase();
 
     boolean isHTTPSUrl = false;
 

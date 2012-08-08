@@ -97,6 +97,7 @@ public class ExoConnectionUtils {
     }
     return sb.toString();
   }
+
   /*
    * check session timeout
    */
@@ -105,7 +106,7 @@ public class ExoConnectionUtils {
     HttpGet httpGet = new HttpGet(url);
     try {
       if (httpClient == null) {
-        initHttpClient();
+        httpClient = initHttpClient();
       }
       HttpResponse response = httpClient.execute(httpGet);
       int statusCode = checkPlatformRespose(response);
@@ -131,19 +132,19 @@ public class ExoConnectionUtils {
 
   }
 
-  public static void initHttpClient() {
+  public static DefaultHttpClient initHttpClient() {
     HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setSoTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
-    httpClient = new DefaultHttpClient(httpParameters);
+    return new DefaultHttpClient(httpParameters);
   }
 
   public static HttpResponse getRequestResponse(String strUrlRequest) throws IOException {
     HttpGet httpGet = new HttpGet(strUrlRequest);
     if (httpClient == null) {
-      initHttpClient();
+      httpClient = initHttpClient();
     }
 
     HttpResponse response = httpClient.execute(httpGet);
@@ -178,7 +179,7 @@ public class ExoConnectionUtils {
                                                  String password,
                                                  String strUrlRequest) throws IOException {
     if (httpClient == null) {
-      initHttpClient();
+      httpClient = initHttpClient();
     }
     StringBuilder buffer = new StringBuilder(username);
     buffer.append(":");

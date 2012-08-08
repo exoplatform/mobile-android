@@ -51,15 +51,13 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   private ArrayList<DocumentActionDescription> fileActionList;
 
-  
-
   private DocumentExtendDialog                 extendDialog;
 
   public DocumentActionAdapter(DocumentActivity context,
                                DocumentActionDialog parent,
                                ExoFile file,
                                boolean isActionBar) {
- 
+
     _mContext = context;
     _delegate = parent;
     _selectedFile = file;
@@ -87,20 +85,21 @@ public class DocumentActionAdapter extends BaseAdapter {
 
         _delegate.dismiss();
 
-        if (pos == DocumentActivity.ACTION_ADD_PHOTO)// Add Photo
-        {
+        switch (pos) {
+        case DocumentActivity.ACTION_ADD_PHOTO:
           new AddPhotoDialog(_mContext, _delegate).show();
-
-        } else if (pos == DocumentActivity.ACTION_COPY)// Copy file
-        {
+          break;
+        case DocumentActivity.ACTION_COPY:
           DocumentHelper.getInstance()._fileCopied = _selectedFile;
           DocumentHelper.getInstance()._fileMoved = new ExoFile();
-        } else if (pos == DocumentActivity.ACTION_MOVE)// move file
-        {
+          break;
+
+        case DocumentActivity.ACTION_MOVE:
           DocumentHelper.getInstance()._fileMoved = _selectedFile;
           DocumentHelper.getInstance()._fileCopied = new ExoFile();
-        } else if (pos == DocumentActivity.ACTION_PASTE) {
-          // Paste file
+          break;
+
+        case DocumentActivity.ACTION_PASTE:
           ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
           if (!_fileCopied.path.equals("")) {
             String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
@@ -113,51 +112,49 @@ public class DocumentActionAdapter extends BaseAdapter {
           }
           ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
           if (!_fileMoved.path.equals("")) {
-            if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
-              String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
-              String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
+            // if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
+            String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
+            String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-
-                DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
-                                                                  destinationUrl,
-                                                                  DocumentLoadTask.ACTION_MOVE);
-              }
+            DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
+                                                              destinationUrl,
+                                                              DocumentActivity.ACTION_MOVE);
           }
-          DocumentHelper.getInstance()._fileCopied = new ExoFile();
-          DocumentHelper.getInstance()._fileMoved = new ExoFile();
 
-        } else if (pos == DocumentActivity.ACTION_DELETE)// Delete file, folder
-        {
+          break;
+        case DocumentActivity.ACTION_DELETE:
           String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
 
           if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
             DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
           }
 
-
           DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
                                                             _selectedFile.path,
                                                             DocumentActivity.ACTION_DELETE);
-        } else if (pos == DocumentActivity.ACTION_RENAME)// Rename file
-        {
+
+          break;
+        case DocumentActivity.ACTION_RENAME:
           extendDialog = new DocumentExtendDialog(_mContext,
                                                   _selectedFile,
                                                   DocumentActivity.ACTION_RENAME);
           extendDialog.show();
 
-        } else if (pos == DocumentActivity.ACTION_CREATE) { // Create folder
+          break;
+        case DocumentActivity.ACTION_CREATE:
           extendDialog = new DocumentExtendDialog(_mContext,
                                                   _selectedFile,
                                                   DocumentActivity.ACTION_CREATE);
 
           extendDialog.show();
-        } else if (pos == DocumentActivity.ACTION_OPEN_IN) { // Open file in
+          break;
+        case DocumentActivity.ACTION_OPEN_IN:
           ExoDocumentUtils.fileOpen(_mContext,
                                     _selectedFile.nodeType,
                                     _selectedFile.path,
                                     _selectedFile.name);
-          
-          
+          break;
+
         }
 
       }

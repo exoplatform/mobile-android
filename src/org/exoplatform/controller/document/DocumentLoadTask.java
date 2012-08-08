@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -13,7 +12,6 @@ import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.ConnTimeOutDialog;
-import org.exoplatform.widget.DocumentWaitingDialog;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
@@ -26,22 +24,22 @@ import com.cyrilmottier.android.greendroid.R;
 public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
   // delete file or folder
-  protected static final int ACTION_DELETE  = 1;
-
-  // copy file
-  protected static final int ACTION_COPY    = 2;
-
-  // move file
-  protected static final int ACTION_MOVE    = 3;
-
-  // upload file
-  protected static final int ACTION_UPLOAD  = 4;
-
-  // rename folder
-  protected static final int ACTION_RENAME  = 5;
-
-  // create new folder
-  protected static final int ACTION_CREATE  = 6;
+  // protected static final int ACTION_DELETE = 1;
+  //
+  // // copy file
+  // protected static final int ACTION_COPY = 2;
+  //
+  // // move file
+  // protected static final int ACTION_MOVE = 3;
+  //
+  // // upload file
+  // protected static final int ACTION_UPLOAD = 4;
+  //
+  // // rename folder
+  // protected static final int ACTION_RENAME = 5;
+  //
+  // // create new folder
+  // protected static final int ACTION_CREATE = 6;
 
   /*
    * Result status
@@ -114,22 +112,26 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
       String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
       if (ExoConnectionUtils.checkTimeout(versionUrl) != ExoConnectionUtils.LOGIN_SUSCESS)
         return RESULT_TIMEOUT;
-      if (actionID == DocumentActivity.ACTION_DELETE) {
+
+      switch (actionID) {
+      case DocumentActivity.ACTION_DELETE:
         contentWarningString = resource.getString(R.string.DocumentCannotDelete);
         result = ExoDocumentUtils.deleteFile(strSourceUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
 
-      } else if (actionID == DocumentActivity.ACTION_COPY) {
+        break;
+      case DocumentActivity.ACTION_COPY:
         contentWarningString = resource.getString(R.string.DocumentCopyPasteError);
         result = ExoDocumentUtils.copyFile(strSourceUrl, strDestinationUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
-
-      } else if (actionID == DocumentActivity.ACTION_MOVE) {
+        break;
+      case DocumentActivity.ACTION_MOVE:
         contentWarningString = resource.getString(R.string.DocumentCopyPasteError);
         result = ExoDocumentUtils.moveFile(strSourceUrl, strDestinationUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
 
-      } else if (actionID == DocumentActivity.ACTION_ADD_PHOTO) {
+        break;
+      case DocumentActivity.ACTION_ADD_PHOTO:
         File file = new File(documentActivity._sdcard_temp_dir);
         contentWarningString = resource.getString(R.string.DocumentUploadError);
         File tempFile = PhotoUtils.reziseFileImage(file);
@@ -138,8 +140,8 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
                                                              tempFile,
                                                              ExoConstants.IMAGE_TYPE);
         }
-
-      } else if (actionID == DocumentActivity.ACTION_RENAME) {
+        break;
+      case DocumentActivity.ACTION_RENAME:
         contentWarningString = resource.getString(R.string.DocumentRenameError);
         result = ExoDocumentUtils.renameFolder(strSourceUrl, strDestinationUrl);
         if (result) {
@@ -156,10 +158,11 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
           String folderName = strSourceUrl.substring(lastIndex + 1, strSourceUrl.length());
           DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
         }
-
-      } else if (actionID == DocumentActivity.ACTION_CREATE) {
+        break;
+      case DocumentActivity.ACTION_CREATE:
         contentWarningString = resource.getString(R.string.DocumentCreateFolderError);
         result = ExoDocumentUtils.createFolder(strDestinationUrl);
+        break;
 
       }
       /*
