@@ -85,16 +85,21 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
             }
             Map<String, String> templateParams = new HashMap<String, String>();
             activityImlp.setType("DOC_ACTIVITY");
-            String pathExtension = "jcr/repository/collaboration";
-            int indexOfDocLink = imageDir.indexOf(pathExtension);
+            StringBuilder pathExtension = new StringBuilder("jcr");
+            pathExtension.append("/");
+            pathExtension.append(DocumentHelper.getInstance().repository);
+            pathExtension.append("/");
+            pathExtension.append(ExoConstants.DOCUMENT_COLLABORATION);
+            // String pathExtension = "jcr/repository/collaboration";
+            int indexOfDocLink = imageDir.indexOf(pathExtension.toString());
             StringBuffer docBuffer = new StringBuffer("/portal/rest/");
             docBuffer.append(imageDir.substring(indexOfDocLink));
-            String docPath = imageDir.substring(indexOfDocLink + pathExtension.length());
+            String docPath = imageDir.substring(indexOfDocLink + pathExtension.toString().length());
             templateParams.put("DOCPATH", docPath);
             templateParams.put("MESSAGE", composeMessage);
             templateParams.put("DOCLINK", docBuffer.toString());
-            templateParams.put("WORKSPACE", "collaboration");
-            templateParams.put("REPOSITORY", "repository");
+            templateParams.put("WORKSPACE", ExoConstants.DOCUMENT_COLLABORATION);
+            templateParams.put("REPOSITORY", DocumentHelper.getInstance().repository);
             templateParams.put("DOCNAME", file.getName());
             activityImlp.setTemplateParams(templateParams);
 
