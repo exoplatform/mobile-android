@@ -10,7 +10,7 @@ public class ExoConstants {
 
   public static final String IS_MOBILE_COMPLIANT           = "isMobileCompliant";
 
-  public static final String PLATFORM_CURRENT_REPO_NAME    = "currentRepName";
+  public static final String PLATFORM_CURRENT_REPO_NAME    = "currentRepoName";
 
   public static final String LOGIN_YES                     = "YES";
 
