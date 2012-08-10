@@ -372,14 +372,14 @@ public class ExoDocumentUtils {
 
   }
 
-  public static String fullURLofFile(String url) {
+  public static String fullURLofFile(String workSpaceName, String url) {
     String domain = AccountSetting.getInstance().getDomainName();
     StringBuffer buffer = new StringBuffer(domain);
     buffer.append(ExoConstants.DOCUMENT_JCR_PATH);
     buffer.append("/");
     buffer.append(DocumentHelper.getInstance().repository);
     buffer.append("/");
-    buffer.append(ExoConstants.DOCUMENT_COLLABORATION);
+    buffer.append(workSpaceName);
     buffer.append(url);
     return buffer.toString();
 
@@ -489,7 +489,8 @@ public class ExoDocumentUtils {
           Node rootNode = obj_nod_list.item(0);
           if (rootNode.getNodeType() == Node.ELEMENT_NODE) {
             Element itemElement = (Element) rootNode;
-            path = fullURLofFile(itemElement.getAttribute("path"));
+            path = fullURLofFile(ExoConstants.DOCUMENT_COLLABORATION,
+                                 itemElement.getAttribute("path"));
           }
         }
       }
@@ -531,8 +532,9 @@ public class ExoDocumentUtils {
               if (i > 0) {
                 ExoFile newFile = new ExoFile();
                 newFile.name = itemElement.getAttribute("name");
-                newFile.path = fullURLofFile(itemElement.getAttribute("path"));
                 newFile.workspaceName = itemElement.getAttribute("workspaceName");
+                newFile.path = fullURLofFile(newFile.workspaceName,
+                                             itemElement.getAttribute("path"));
                 newFile.driveName = itemElement.getAttribute("driveName");
                 newFile.currentFolder = itemElement.getAttribute("currentFolder");
                 if (newFile.currentFolder == null)
@@ -554,9 +556,9 @@ public class ExoDocumentUtils {
               Element itemElement = (Element) itemNode;
 
               ExoFile newFile = new ExoFile();
-              newFile.path = fullURLofFile(itemElement.getAttribute("path"));
               newFile.name = itemElement.getAttribute("name");
               newFile.workspaceName = itemElement.getAttribute("workspaceName");
+              newFile.path = fullURLofFile(newFile.workspaceName, itemElement.getAttribute("path"));
               newFile.driveName = file.name;
               newFile.currentFolder = itemElement.getAttribute("currentFolder");
               newFile.nodeType = itemElement.getAttribute("nodeType");
