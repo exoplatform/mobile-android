@@ -171,10 +171,22 @@ public class DocumentActionAdapter extends BaseAdapter {
     label.setText(fileAction.actionName);
     ImageView icon = (ImageView) view.findViewById(R.id.icon);
     icon.setImageResource(fileAction.imageID);
+    /*
+     * Disable action view if it can not be removed 
+     */
+    if (!_selectedFile.canRemove
+        && (fileAction.actionName.equalsIgnoreCase(strPaste)
+            || fileAction.actionName.equalsIgnoreCase(strCopy)
+            || fileAction.actionName.equalsIgnoreCase(strMove)
+            || fileAction.actionName.equalsIgnoreCase(strDelete) || fileAction.actionName.equalsIgnoreCase(strRename))) {
+      label.setTextColor(android.graphics.Color.GRAY);
+      view.setEnabled(false);
+      return;
+    }
 
     if (_selectedFile.isFolder) {
       if (fileAction.actionName.equalsIgnoreCase(strOpenIn)
-          || (fileAction.actionName.equalsIgnoreCase(strPaste) && (DocumentHelper.getInstance()._fileCopied.path == "" && DocumentHelper.getInstance()._fileMoved.path == ""))) {
+          || (fileAction.actionName.equalsIgnoreCase(strPaste) && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path)))) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);

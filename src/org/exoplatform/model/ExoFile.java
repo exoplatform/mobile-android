@@ -9,6 +9,8 @@ public class ExoFile implements Parcelable {
 
   public boolean isFolder;     // Is folder
 
+  public boolean canRemove;
+
   public String  name;         // name of the file/folder
 
   public String  currentFolder; // the path of file
@@ -23,6 +25,7 @@ public class ExoFile implements Parcelable {
   public ExoFile() {
     path = "";
     isFolder = true;
+    canRemove = false;
     name = "";
     currentFolder = "";
     driveName = "";
@@ -33,6 +36,7 @@ public class ExoFile implements Parcelable {
   public ExoFile(String driverName) {
     path = "";
     isFolder = true;
+    canRemove = false;
     name = "";
     currentFolder = "";
     this.driveName = driverName;
@@ -47,7 +51,7 @@ public class ExoFile implements Parcelable {
   private void readFromParcel(Parcel in) {
     path = in.readString();
     isFolder = (Boolean) in.readValue(null);
-    // in.readBooleanArray(new boolean[] { isFolder });
+    canRemove = (Boolean) in.readValue(null);
     name = in.readString();
     currentFolder = in.readString();
     driveName = in.readString();
@@ -83,7 +87,7 @@ public class ExoFile implements Parcelable {
   public void writeToParcel(Parcel par, int flags) {
     par.writeString(path);
     par.writeValue(isFolder);
-    // par.writeBooleanArray(new boolean[] { isFolder });
+    par.writeValue(canRemove);
     par.writeString(name);
     par.writeString(currentFolder);
     par.writeString(driveName);

@@ -130,8 +130,6 @@ public class DocumentAdapter extends BaseAdapter {
           /*
            * Put the selected file and its parent to mapping dictionary
            */
-          // if
-          // (!DocumentHelper.getInstance().fileStructureMap.containsKey(myFile))
           DocumentHelper.getInstance().currentFileMap.putParcelable(myFile.path, file);
           DocumentActivity._documentActivityInstance.onLoad(myFile.path,
                                                             null,
@@ -146,9 +144,6 @@ public class DocumentAdapter extends BaseAdapter {
       public void onClick(View v) {
 
         ExoFile file = _documentList.get(pos);
-        // DocumentActivity._documentActivityInstance._fileForCurrnentCell =
-        // file;
-
         _documentActionDialog = new DocumentActionDialog(_mContext, file, false);
         _documentActionDialog.myFile = file;
         _documentActionDialog._documentActionAdapter.setSelectedFile(file);

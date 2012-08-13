@@ -436,6 +436,7 @@ public class ExoDocumentUtils {
               if (file.name.equals("Public")) {
                 file.path = getRootDriverPath(file);
               }
+
               folderArray.add(file);
             }
           }
@@ -541,6 +542,8 @@ public class ExoDocumentUtils {
                   newFile.currentFolder = "";
                 newFile.isFolder = true;
 
+                String canRemove = itemElement.getAttribute("canRemove");
+                newFile.canRemove = Boolean.parseBoolean(canRemove.trim());
                 folderArray.add(newFile);
               }
 
@@ -563,7 +566,8 @@ public class ExoDocumentUtils {
               newFile.currentFolder = itemElement.getAttribute("currentFolder");
               newFile.nodeType = itemElement.getAttribute("nodeType");
               newFile.isFolder = false;
-
+              String canRemove = itemElement.getAttribute("canRemove");
+              newFile.canRemove = Boolean.parseBoolean(canRemove.trim());
               folderArray.add(newFile);
             }
           }
