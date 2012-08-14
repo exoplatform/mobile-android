@@ -118,6 +118,8 @@ public class LoginController {
 
     private HttpResponse response;
 
+    private boolean      isCompliant;
+
     @Override
     public void onPreExecute() {
       _progressDialog = new LoginWaitingDialog(mContext, null, strSigning);
@@ -130,6 +132,7 @@ public class LoginController {
       try {
         String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
         response = ExoConnectionUtils.getPlatformResponse(userName, password, versionUrl);
+        isCompliant = ExoConnectionUtils.checkPLFVersion(response);
         return ExoConnectionUtils.checkPlatformRespose(response);
       } catch (IOException e) {
         return ExoConnectionUtils.LOGIN_WRONG;
@@ -144,8 +147,6 @@ public class LoginController {
         dialog.show();
       } else if (result == ExoConnectionUtils.LOGIN_SUSCESS) {
         AccountSetting accountSetting = AccountSetting.getInstance();
-        // SharedPreferences.Editor editor =
-        // LocalizationHelper.getInstance().getSharePrefs().edit();
         SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE,
                                                                         0)
                                                   .edit();
@@ -159,7 +160,6 @@ public class LoginController {
         /*
          * Checking platform version
          */
-        boolean isCompliant = ExoConnectionUtils.checkPLFVersion(response);
         if (isCompliant == true) {
           ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
           Intent next = new Intent(mContext, HomeActivity.class);
