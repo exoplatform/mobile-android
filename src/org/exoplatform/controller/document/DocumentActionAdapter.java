@@ -101,6 +101,8 @@ public class DocumentActionAdapter extends BaseAdapter {
                                                               destinationUrl,
                                                               DocumentActivity.ACTION_MOVE);
           }
+          DocumentHelper.getInstance()._fileCopied = new ExoFile();
+          DocumentHelper.getInstance()._fileMoved = new ExoFile();
 
           break;
         case DocumentActivity.ACTION_DELETE:
