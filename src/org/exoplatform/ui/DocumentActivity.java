@@ -234,7 +234,7 @@ public class DocumentActivity extends MyActionBar {
     ExoFile parent = null;
     ArrayList<ExoFile> documentList = null;
 
-    if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
+    if ("".equals(_fileForCurrentActionBar.currentFolder)) {
       _fileForCurrentActionBar = new ExoFile();
       parent = DocumentHelper.getInstance().currentFileMap.getParcelable("");
       documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH);
@@ -243,7 +243,7 @@ public class DocumentActivity extends MyActionBar {
       parent = DocumentHelper.getInstance().currentFileMap.getParcelable(_fileForCurrentActionBar.path);
       DocumentHelper.getInstance().currentFileMap.remove(_fileForCurrentActionBar.path);
       _fileForCurrentActionBar = parent;
-      if (parent.name.equals("")) {
+      if ("".equals(parent.name)) {
         documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList("");
       } else {
         documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(parent.path);
@@ -288,7 +288,7 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void setDocumentAdapter(ArrayList<ExoFile> documentList) {
-    if (_fileForCurrentActionBar.path.equals("")) {
+    if ("".equals(_fileForCurrentActionBar.name)) {
       setListViewPadding(5, 0, 5, 0);
       setTitle(getResources().getString(R.string.Documents));
     } else {

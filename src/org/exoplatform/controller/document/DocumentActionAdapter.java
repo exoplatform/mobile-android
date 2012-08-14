@@ -29,25 +29,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   private DocumentActionDialog                 _delegate;
 
-  // Localization string
-
-  private String                               strAddAPhoto = "";
-
-  private String                               strCopy      = "";
-
-  private String                               strMove      = "";
-
-  private String                               strDelete    = "";
-
-  private String                               strRename    = "";
-
-  private String                               strPaste     = "";
-
-  private String                               strOpenIn    = "";
-
-  private String                               strCreateFolder;
-
-  private DocumentActionDescription[]          fileActions  = null;
+  private DocumentActionDescription[]          fileActions = null;
 
   private ArrayList<DocumentActionDescription> fileActionList;
 
@@ -101,7 +83,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
         case DocumentActivity.ACTION_PASTE:
           ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
-          if (!_fileCopied.path.equals("")) {
+          if (!"".equals(_fileCopied.path)) {
             String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
             String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
@@ -111,8 +93,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
           }
           ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
-          if (!_fileMoved.path.equals("")) {
-            // if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
+          if (!"".equals(_fileMoved.path)) {
             String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
             String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
@@ -161,41 +142,40 @@ public class DocumentActionAdapter extends BaseAdapter {
 
     });
 
-    bindView(rowView, fileActionList.get(position));
+    bindView(rowView, fileActionList.get(position), position);
     return (rowView);
 
   }
 
-  private void bindView(View view, DocumentActionDescription fileAction) {
+  private void bindView(View view, DocumentActionDescription fileAction, int position) {
     TextView label = (TextView) view.findViewById(R.id.label);
     label.setText(fileAction.actionName);
     ImageView icon = (ImageView) view.findViewById(R.id.icon);
     icon.setImageResource(fileAction.imageID);
     /*
-     * Disable action view if it can not be removed 
+     * Disable action view if it can not be removed || position ==
+     * DocumentActivity.ACTION_COPY
      */
     if (!_selectedFile.canRemove
-        && (fileAction.actionName.equalsIgnoreCase(strPaste)
-            || fileAction.actionName.equalsIgnoreCase(strCopy)
-            || fileAction.actionName.equalsIgnoreCase(strMove)
-            || fileAction.actionName.equalsIgnoreCase(strDelete) || fileAction.actionName.equalsIgnoreCase(strRename))) {
+        && (position == DocumentActivity.ACTION_MOVE || position == DocumentActivity.ACTION_DELETE
+            || position == DocumentActivity.ACTION_RENAME || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path))))) {
       label.setTextColor(android.graphics.Color.GRAY);
       view.setEnabled(false);
       return;
     }
 
     if (_selectedFile.isFolder) {
-      if (fileAction.actionName.equalsIgnoreCase(strOpenIn)
-          || (fileAction.actionName.equalsIgnoreCase(strPaste) && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path)))) {
+      if (position == DocumentActivity.ACTION_OPEN_IN
+          || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path)))) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
       }
     } else {
-      if (fileAction.actionName.equalsIgnoreCase(strAddAPhoto)
-          || fileAction.actionName.equalsIgnoreCase(strPaste)
-          || fileAction.actionName.equalsIgnoreCase(strRename)
-          || fileAction.actionName.equalsIgnoreCase(strCreateFolder)) {
+      if (position == DocumentActivity.ACTION_ADD_PHOTO
+          || position == DocumentActivity.ACTION_PASTE
+          || position == DocumentActivity.ACTION_RENAME
+          || position == DocumentActivity.ACTION_CREATE) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
@@ -224,14 +204,14 @@ public class DocumentActionAdapter extends BaseAdapter {
   public void changeLanguage(boolean isAct) {
     Resources resource = _mContext.getResources();
 
-    strAddAPhoto = resource.getString(R.string.AddAPhoto);
-    strCopy = resource.getString(R.string.Copy);
-    strMove = resource.getString(R.string.Move);
-    strDelete = resource.getString(R.string.Delete);
-    strRename = resource.getString(R.string.Rename);
-    strPaste = resource.getString(R.string.Paste);
-    strCreateFolder = resource.getString(R.string.CreateFolder);
-    strOpenIn = resource.getString(R.string.OpenIn);
+    String strAddAPhoto = resource.getString(R.string.AddAPhoto);
+    String strCopy = resource.getString(R.string.Copy);
+    String strMove = resource.getString(R.string.Move);
+    String strDelete = resource.getString(R.string.Delete);
+    String strRename = resource.getString(R.string.Rename);
+    String strPaste = resource.getString(R.string.Paste);
+    String strCreateFolder = resource.getString(R.string.CreateFolder);
+    String strOpenIn = resource.getString(R.string.OpenIn);
 
     fileActions = new DocumentActionDescription[] {
         new DocumentActionDescription(strAddAPhoto, R.drawable.documentactionpopupphotoicon),
