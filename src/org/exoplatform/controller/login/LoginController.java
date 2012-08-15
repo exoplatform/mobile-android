@@ -84,6 +84,15 @@ public class LoginController {
     return false;
   }
 
+  private boolean isSaveAccount(String usernam, String password) {
+    if (!userName.equals(AccountSetting.getInstance().getUsername())
+        && !password.equals(AccountSetting.getInstance().getPassword())) {
+      return false;
+    }
+
+    return true;
+  }
+
   private void onLoad() {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == LoginTask.Status.FINISHED) {
@@ -150,6 +159,12 @@ public class LoginController {
         SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE,
                                                                         0)
                                                   .edit();
+        /*
+         * disable saving social filter when login with difference account
+         */
+        if (!isSaveAccount(userName, password)) {
+          editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
+        }
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());
         editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);
