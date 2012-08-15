@@ -84,13 +84,12 @@ public class LoginController {
     return false;
   }
 
-  private boolean isSaveAccount(String usernam, String password) {
-    if (!userName.equals(AccountSetting.getInstance().getUsername())
-        && !password.equals(AccountSetting.getInstance().getPassword())) {
-      return false;
+  private boolean isLastAccount(String username) {
+    if (username.equals(AccountSetting.getInstance().getUsername())) {
+      return true;
     }
 
-    return true;
+    return false;
   }
 
   private void onLoad() {
@@ -162,7 +161,7 @@ public class LoginController {
         /*
          * disable saving social filter when login with difference account
          */
-        if (!isSaveAccount(userName, password)) {
+        if (!isLastAccount(userName)) {
           editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
         }
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
