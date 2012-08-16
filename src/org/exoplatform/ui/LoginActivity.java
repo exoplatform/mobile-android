@@ -73,6 +73,8 @@ public class LoginActivity extends Activity implements OnClickListener {
   @Override
   protected void onResume() {
     super.onResume();
+    username = _edtxUserName.getText().toString();
+    password = _edtxPassword.getText().toString();
     setInfomation();
   }
 
