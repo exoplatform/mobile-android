@@ -74,6 +74,10 @@ public class WebViewActivity extends MyActionBar {
 
     setupCookies(_url);
     _wvGadget = (WebView) findViewById(R.id.WebView);
+    /*
+     * Ensure we can clear Webview cache
+     */
+    _wvGadget.clearCache(true);
     _wvGadget.getSettings().setSupportZoom(true);
     _wvGadget.getSettings().setJavaScriptEnabled(true);
     _wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
@@ -186,23 +190,8 @@ public class WebViewActivity extends MyActionBar {
   }
 
   private void cleaCache() {
-    File dir = getCacheDir();
-    if (dir != null && dir.isDirectory()) {
-      try {
-        File[] children = dir.listFiles();
-        if (children.length > 0) {
-          for (int i = 0; i < children.length; i++) {
-            File[] temp = children[i].listFiles();
-            for (int x = 0; x < temp.length; x++) {
-              temp[x].delete();
-            }
-          }
-        }
-      } catch (Exception e) {
-        if (Config.GD_ERROR_LOGS_ENABLED)
-          Log.e("Exception", "Cannot clear  file cache!");
-      }
-    }
+    this.deleteDatabase("webview.db");
+    this.deleteDatabase("webviewCache.db");
 
   }
 
