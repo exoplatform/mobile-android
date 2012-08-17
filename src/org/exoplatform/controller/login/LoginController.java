@@ -10,6 +10,7 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.image.FileCache;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -92,6 +93,11 @@ public class LoginController {
     return false;
   }
 
+  private void clearDownloadRepository() {
+    FileCache filecache = new FileCache(mContext, ExoConstants.DOCUMENT_FILE_CACHE);
+    filecache.clear();
+  }
+
   private void onLoad() {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == LoginTask.Status.FINISHED) {
@@ -159,10 +165,12 @@ public class LoginController {
                                                                         0)
                                                   .edit();
         /*
-         * disable saving social filter when login with difference account
+         * disable saving social filter when login with difference account and
+         * clear the download repository
          */
         if (!isLastAccount(userName)) {
           editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
+          clearDownloadRepository();
         }
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());
