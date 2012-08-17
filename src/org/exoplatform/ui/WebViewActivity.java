@@ -1,11 +1,9 @@
 package org.exoplatform.ui;
 
-import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.exoplatform.singleton.AccountSetting;
@@ -20,18 +18,18 @@ import org.exoplatform.widget.MyActionBar;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.cyrilmottier.android.greendroid.R;
 
-//Display gadget
 public class WebViewActivity extends MyActionBar {
   private static final String ACCOUNT_SETTING = "account_setting";
 
@@ -75,9 +73,10 @@ public class WebViewActivity extends MyActionBar {
     setupCookies(_url);
     _wvGadget = (WebView) findViewById(R.id.WebView);
     /*
-     * Ensure we can clear Webview cache
+     * Ensure we can clear Webview cache and set no cache when loading data.
      */
     _wvGadget.clearCache(true);
+    _wvGadget.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     _wvGadget.getSettings().setSupportZoom(true);
     _wvGadget.getSettings().setJavaScriptEnabled(true);
     _wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
@@ -85,6 +84,12 @@ public class WebViewActivity extends MyActionBar {
     _wvGadget.getSettings().setLoadsImagesAutomatically(true);
     _wvGadget.addJavascriptInterface(this, "MainScreen");
     _wvGadget.getSettings().setBuiltInZoomControls(true);
+    /*
+     * the method for controlling the layout of html. SINGLE_COLUMN moves all
+     * content into one column that is the width of the view.
+     */
+    _wvGadget.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+    _wvGadget.getSettings().setUseWideViewPort(false);
 
     final Activity activity = this;
 
@@ -142,7 +147,6 @@ public class WebViewActivity extends MyActionBar {
           SocialActivity.socialActivity.finish();
         }
       }
-      cleaCache();
       finish();
 
       break;
@@ -174,7 +178,6 @@ public class WebViewActivity extends MyActionBar {
 
   @Override
   protected void onDestroy() {
-    cleaCache();
     super.onDestroy();
 
   }
@@ -183,16 +186,9 @@ public class WebViewActivity extends MyActionBar {
   public void onBackPressed() {
     onCancelLoad();
     if (_wvGadget.canGoBack()) {
-      cleaCache();
       _wvGadget.goBack();
     } else
       finish();
-  }
-
-  private void cleaCache() {
-    this.deleteDatabase("webview.db");
-    this.deleteDatabase("webviewCache.db");
-
   }
 
   private void onLoad() {
@@ -223,19 +219,6 @@ public class WebViewActivity extends MyActionBar {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-      /*
-       * Checking the response code and re logging in if session timeout
-       */
-      // try {
-      // int code = ExoConnectionUtils.getResponseCode(_url);
-      // if (code != 1) {
-      // ExoConnectionUtils.onReLogin();
-      // }
-      // setupCookies(_url);
-      // return true;
-      // } catch (IOException e) {
-      // return false;
-      // }
       setupCookies(_url);
       return true;
 
