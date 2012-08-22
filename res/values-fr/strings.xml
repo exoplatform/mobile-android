@@ -173,6 +173,8 @@
     <string name="MemoryWarning">Mémoire indisponible ou insuffisante.</string>
     <string name="SocialSettingTitle">SOCIAL</string>
     <string name="SocialSettingContent">N\'oubliez pas mon filtre</string>
+    <string name="DocumentSettingTitle">DOCUMENTS</string>
+    <string name="DocumentShowHiddenFile">Afficher le lecteur privé</string>
 
     <string-array name="SocialTabs">
         <item>Toutes les mises à jour</item>

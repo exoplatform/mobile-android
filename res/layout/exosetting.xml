@@ -9,6 +9,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
+        <!-- Language Settings -->
+
         <TextView
             android:id="@+id/TextView_Language"
             android:layout_width="fill_parent"
@@ -115,6 +117,8 @@
                 android:contentDescription="@string/Settings" />
         </RelativeLayout>
 
+        <!-- Social Settings -->
+
         <ImageView
             android:id="@+id/social_store_setting_title_header"
             android:layout_width="fill_parent"
@@ -173,12 +177,75 @@
                 android:background="@drawable/authenticate_checkmark_on"
                 android:contentDescription="@string/Settings" />
         </RelativeLayout>
+        
+        <!-- Document Settings -->
+
+        <ImageView
+            android:id="@+id/document_setting_title_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/social_store_setting_layout"
+            android:background="@drawable/serversectionseparator"
+            android:contentDescription="@string/Settings" />
+
+        <TextView
+            android:id="@+id/document_setting_title"
+            android:layout_width="fill_parent"
+            android:layout_height="40dip"
+            android:layout_below="@id/document_setting_title_header"
+            android:gravity="center_vertical"
+            android:padding="3dp"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="2.0"
+            android:shadowRadius="1.0"
+            android:textColor="#ffffff"
+            android:textSize="18dip"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/document_setting_content_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/document_setting_title"
+            android:background="@drawable/serversectionseparator"
+            android:contentDescription="@string/Settings" />
+
+        <RelativeLayout
+            android:id="@+id/document_store_setting_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/document_setting_content_header"
+            android:background="@drawable/file_item_background_shape" >
+
+            <TextView
+                android:id="@+id/document_store_setting_content"
+                android:layout_width="fill_parent"
+                android:layout_height="40dip"
+                android:layout_marginLeft="10dip"
+                android:gravity="center_vertical"
+                android:textColor="#000000"
+                android:textSize="18dip"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/document_store_setting_checked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="5dip"
+                android:background="@drawable/authenticate_checkmark_on"
+                android:contentDescription="@string/Settings" />
+        </RelativeLayout>
+
+        <!-- Server List Settings -->
 
         <RelativeLayout
             android:id="@+id/Server_List_Section"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/social_store_setting_layout" >
+            android:layout_below="@id/document_store_setting_layout" >
 
             <ImageView
                 android:id="@+id/ImageView_Server_List_Section_Header"
@@ -267,6 +334,7 @@
                 android:background="@drawable/serversectionseparator"
                 android:contentDescription="@string/Settings" />
         </RelativeLayout>
+        <!-- Server Edition Info -->
 
         <LinearLayout
             android:id="@+id/setting_server_edition"
@@ -297,6 +365,8 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <!-- Server Version Info -->
+
         <LinearLayout
             android:id="@+id/setting_server_version"
             android:layout_width="fill_parent"
@@ -326,6 +396,8 @@
                 android:textSize="16dip"
                 android:textStyle="bold" />
         </LinearLayout>
+        
+        <!-- Application Version Info -->
 
         <LinearLayout
             android:layout_width="fill_parent"

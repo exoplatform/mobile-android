@@ -13,7 +13,6 @@ import org.exoplatform.widget.ServerItemLayout;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,7 +37,7 @@ public class SettingController {
                                        ExoConstants.ENGLISH_LOCALIZATION);
     ;
     if (locallize != null) {
-      if (locallize.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) {
+      if (locallize.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) { 
         setFrenchLocation();
       } else {
         setEnglishLocation();
@@ -73,6 +72,31 @@ public class SettingController {
 
     editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, isChange);
     editor.commit();
+
+  }
+
+  public void setDocumentHiddenFile(ImageView documentChecked) {
+    boolean isShowHidden = prefs.getBoolean(ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE, true);
+    boolean isChange = isShowHidden;
+    Editor editor = prefs.edit();
+    if (isShowHidden) {
+      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
+      isChange = false;
+    } else {
+      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
+      isChange = true;
+    }
+
+    editor.putBoolean(ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE, isChange);
+    editor.commit();
+  }
+
+  public void initDocumentHiddenFile(ImageView documentChecked) {
+    boolean isShowHidden = prefs.getBoolean(ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE, true);
+    if (isShowHidden) {
+      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
+    } else
+      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
 
   }
 

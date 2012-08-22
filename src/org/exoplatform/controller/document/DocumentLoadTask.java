@@ -151,7 +151,8 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
        */
 
       if (result == true) {
-        _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity._fileForCurrentActionBar);
+        _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity,
+                                                                 documentActivity._fileForCurrentActionBar);
         return RESULT_OK;
       } else
         return RESULT_FALSE;

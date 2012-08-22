@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -293,7 +294,9 @@ public class ExoDocumentUtils {
   }
 
   // Get file array from URL
-  public static ArrayList<ExoFile> getPersonalDriveContent(ExoFile file) throws IOException {
+  public static ArrayList<ExoFile> getPersonalDriveContent(Context context, ExoFile file) throws IOException {
+    SharedPreferences prefs = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
+    boolean isShowHidden = prefs.getBoolean(ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE, true);
     ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
     String domain = AccountSetting.getInstance().getDomainName();
     HttpResponse response = null;
@@ -312,6 +315,8 @@ public class ExoDocumentUtils {
       buffer.append(domain);
       buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
       buffer.append(ExoConstants.DOCUMENT_PERSONAL_DRIVER);
+      buffer.append(ExoConstants.DOCUMENT_PERSONAL_DRIVER_SHOW_PRIVATE);
+      buffer.append(isShowHidden);
       urlStr = buffer.toString();
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       fileList = getDrives(response);
