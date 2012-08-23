@@ -110,17 +110,16 @@ public class HomeActivity extends MyActionBar {
   }
 
   @Override
+  protected void onRestart() {
+    super.onRestart();
+    SettingUtils.setDefaultLanguage(this);
+  }
+
+  @Override
   protected void onResume() {
     super.onResume();
     setInfo();
     startSocialService(loaderItem);
-    // if (homeController.isLoadingTask()) {
-    // activityButton.setClickable(false);
-    // viewFlipper.setClickable(false);
-    // } else {
-    // activityButton.setClickable(true);
-    // viewFlipper.setClickable(true);
-    // }
   }
 
   @Override

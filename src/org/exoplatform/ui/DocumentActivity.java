@@ -15,6 +15,7 @@ import org.exoplatform.ui.social.SelectedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
 
@@ -338,6 +339,10 @@ public class DocumentActivity extends MyActionBar {
         break;
       }
     }
+    /*
+     * Set default language to our application setting language
+     */
+    SettingUtils.setDefaultLanguage(this);
   }
 
   private void setEmptyView(int status) {

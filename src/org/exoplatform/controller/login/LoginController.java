@@ -9,6 +9,7 @@ import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
@@ -57,6 +58,7 @@ public class LoginController {
   private Resources          resource;
 
   public LoginController(Context context, String user, String pass) {
+    SettingUtils.setDefaultLanguage(context);
     mContext = context;
     resource = mContext.getResources();
     userName = user;
