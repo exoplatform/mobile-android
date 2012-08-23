@@ -84,14 +84,6 @@ public class LoginController {
     return false;
   }
 
-  private boolean isLastAccount(String username) {
-    if (username.equals(AccountSetting.getInstance().getUsername())) {
-      return true;
-    }
-
-    return false;
-  }
-
   private void onLoad() {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == LoginTask.Status.FINISHED) {
@@ -155,15 +147,22 @@ public class LoginController {
         dialog.show();
       } else if (result == ExoConnectionUtils.LOGIN_SUSCESS) {
         AccountSetting accountSetting = AccountSetting.getInstance();
+        /*
+         * Set social and document settings
+         */
+        StringBuilder buidler = new StringBuilder(accountSetting.getDomainName());
+        buidler.append("_");
+        buidler.append(userName);
+        buidler.append("_");
+        accountSetting.socialKey = buidler.toString() + ExoConstants.SETTING_SOCIAL_FILTER;
+        accountSetting.socialKeyIndex = buidler.toString()
+            + ExoConstants.SETTING_SOCIAL_FILTER_INDEX;
+        accountSetting.documentKey = buidler.toString()
+            + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
+
         SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE,
                                                                         0)
                                                   .edit();
-        /*
-         * disable saving social filter when login with difference account
-         */
-        if (!isLastAccount(userName)) {
-          editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
-        }
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());
         editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);

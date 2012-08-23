@@ -27,6 +27,12 @@ public class AccountSetting implements Parcelable {
    */
   private String                domainIndex;
 
+  public String                 socialKey;
+
+  public String                 socialKeyIndex;
+
+  public String                 documentKey;
+
   public ArrayList<String>      cookiesList;
 
   private AccountSetting() {
