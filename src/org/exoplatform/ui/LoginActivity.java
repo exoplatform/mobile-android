@@ -72,14 +72,9 @@ public class LoginActivity extends Activity implements OnClickListener {
   }
 
   @Override
-  protected void onRestart() {
-    super.onRestart();
-    SettingUtils.setDefaultLanguage(this);
-  }
-
-  @Override
   protected void onResume() {
     super.onResume();
+    SettingUtils.setDefaultLanguage(this);
     username = _edtxUserName.getText().toString();
     password = _edtxPassword.getText().toString();
     setInfomation();

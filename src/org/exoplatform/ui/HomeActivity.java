@@ -110,14 +110,9 @@ public class HomeActivity extends MyActionBar {
   }
 
   @Override
-  protected void onRestart() {
-    super.onRestart();
-    SettingUtils.setDefaultLanguage(this);
-  }
-
-  @Override
   protected void onResume() {
     super.onResume();
+    SettingUtils.setDefaultLanguage(this);
     setInfo();
     startSocialService(loaderItem);
   }
