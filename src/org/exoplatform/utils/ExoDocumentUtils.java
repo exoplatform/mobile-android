@@ -296,7 +296,7 @@ public class ExoDocumentUtils {
   // Get file array from URL
   public static ArrayList<ExoFile> getPersonalDriveContent(Context context, ExoFile file) throws IOException {
     SharedPreferences prefs = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
-    boolean isShowHidden = prefs.getBoolean(ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE, true);
+    boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
     ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
     String domain = AccountSetting.getInstance().getDomainName();
     HttpResponse response = null;
