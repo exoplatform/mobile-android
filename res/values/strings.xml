@@ -20,7 +20,7 @@
     <string name="NewServer">New Server</string>
     <string name="NameOfTheServer">Name of the server</string>
     <string name="URLOfTheSerVer">URL of the server</string>
-    <string name="CannotEditServer"> The server cannot modify/delete. It is currently in use. </string>
+    <string name="CannotEditServer"> The server cannot be edited or deleted. It is currently in use. </string>
     <string name="English">English</string>
     <string name="French">French</string>
     <string name="CompliantMessage"> Mobile is not compliant with this platform version</string>
@@ -147,7 +147,7 @@
     <string name="SocialSettingTitle">SOCIAL</string>
     <string name="SocialSettingContent">Remember my filter</string>
     <string name="DocumentSettingTitle">DOCUMENTS</string>
-    <string name="DocumentShowHiddenFile">Show private drive</string>
+    <string name="DocumentShowPrivateDrive">Show private drive</string>
 
     <string-array name="SocialTabs">
         <item>All Updates</item>

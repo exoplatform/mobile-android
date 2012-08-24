@@ -198,7 +198,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     String socialTitle = resource.getString(R.string.SocialSettingTitle);
     String socialContent = resource.getString(R.string.SocialSettingContent);
     String documentTitle = resource.getString(R.string.DocumentSettingTitle);
-    String documentContent = resource.getString(R.string.DocumentShowHiddenFile);
+    String documentContent = resource.getString(R.string.DocumentShowPrivateDrive);
     String applicationInfos = resource.getString(R.string.ApplicationInformation);
     String serverVersion = resource.getString(R.string.ServerVersion);
     String serverEdition = resource.getString(R.string.ServerEdition);
@@ -250,7 +250,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     }
 
     if (view.equals(documentLayout)) {
-      setttingController.setDocumentHiddenFile(documentCheckedView);
+      setttingController.setDocumentShowPrivateDrive(documentCheckedView);
     }
     if (view.equals(modifyServerBtn)) {
       if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {

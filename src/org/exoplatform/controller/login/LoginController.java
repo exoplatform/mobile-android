@@ -146,30 +146,31 @@ public class LoginController {
         dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
         dialog.show();
       } else if (result == ExoConnectionUtils.LOGIN_SUSCESS) {
-        AccountSetting accountSetting = AccountSetting.getInstance();
         /*
          * Set social and document settings
          */
-        StringBuilder buidler = new StringBuilder(accountSetting.getDomainName());
-        buidler.append("_");
-        buidler.append(userName);
-        buidler.append("_");
-        accountSetting.socialKey = buidler.toString() + ExoConstants.SETTING_SOCIAL_FILTER;
-        accountSetting.socialKeyIndex = buidler.toString()
+        StringBuilder builder = new StringBuilder(AccountSetting.getInstance().getDomainName());
+        builder.append("_");
+        builder.append(userName);
+        builder.append("_");
+        AccountSetting.getInstance().socialKey = builder.toString()
+            + ExoConstants.SETTING_SOCIAL_FILTER;
+        AccountSetting.getInstance().socialKeyIndex = builder.toString()
             + ExoConstants.SETTING_SOCIAL_FILTER_INDEX;
-        accountSetting.documentKey = buidler.toString()
+        AccountSetting.getInstance().documentKey = builder.toString()
             + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
 
         SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE,
                                                                         0)
                                                   .edit();
-        editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
-        editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());
+        editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
+        editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance()
+                                                                          .getDomainIndex());
         editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);
         editor.putString(ExoConstants.EXO_PRF_PASSWORD, password);
         editor.commit();
-        accountSetting.setUsername(userName);
-        accountSetting.setPassword(password);
+        AccountSetting.getInstance().setUsername(userName);
+        AccountSetting.getInstance().setPassword(password);
         /*
          * Checking platform version
          */

@@ -59,35 +59,29 @@ public class SettingController {
 
   public void setSocialFilter(ImageView socialChecked) {
     boolean isSocialFilter = prefs.getBoolean(AccountSetting.getInstance().socialKey, false);
-    boolean isChange = isSocialFilter;
     Editor editor = prefs.edit();
     if (isSocialFilter) {
       socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
       editor.putInt(AccountSetting.getInstance().socialKeyIndex, 0);
-      isChange = false;
     } else {
       socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-      isChange = true;
     }
 
-    editor.putBoolean(AccountSetting.getInstance().socialKey, isChange);
+    editor.putBoolean(AccountSetting.getInstance().socialKey, !isSocialFilter);
     editor.commit();
 
   }
 
-  public void setDocumentHiddenFile(ImageView documentChecked) {
+  public void setDocumentShowPrivateDrive(ImageView documentChecked) {
     boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
-    boolean isChange = isShowHidden;
     Editor editor = prefs.edit();
     if (isShowHidden) {
       documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
-      isChange = false;
     } else {
       documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-      isChange = true;
     }
 
-    editor.putBoolean(AccountSetting.getInstance().documentKey, isChange);
+    editor.putBoolean(AccountSetting.getInstance().documentKey, !isShowHidden);
     editor.commit();
   }
 
