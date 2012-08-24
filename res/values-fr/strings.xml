@@ -31,7 +31,7 @@
     <string name="NewServer">Nouveau serveur</string>
     <string name="NameOfTheServer">Nom du serveur</string>
     <string name="URLOfTheSerVer">URL du serveur</string>
-    <string name="CannotEditServer">Ce server est actuellement utilisé, il ne peut pas être édité ou supprimé.</string>
+    <string name="CannotEditServer">Ce serveur ne peut pas être édité ou supprimé. Il est actuellement utilisé</string>
     <string name="English">Anglais</string>
     <string name="French">Français</string>
     <string name="CompliantMessage">Cette version de PLF ne supporte pas les applications mobiles</string>
