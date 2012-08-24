@@ -29,29 +29,9 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   private DocumentActionDialog                 _delegate;
 
-  // Localization string
-
-  private String                               strAddAPhoto = "";
-
-  private String                               strCopy      = "";
-
-  private String                               strMove      = "";
-
-  private String                               strDelete    = "";
-
-  private String                               strRename    = "";
-
-  private String                               strPaste     = "";
-
-  private String                               strOpenIn    = "";
-
-  private String                               strCreateFolder;
-
-  private DocumentActionDescription[]          fileActions  = null;
+  private DocumentActionDescription[]          fileActions = null;
 
   private ArrayList<DocumentActionDescription> fileActionList;
-
-  
 
   private DocumentExtendDialog                 extendDialog;
 
@@ -59,7 +39,7 @@ public class DocumentActionAdapter extends BaseAdapter {
                                DocumentActionDialog parent,
                                ExoFile file,
                                boolean isActionBar) {
- 
+
     _mContext = context;
     _delegate = parent;
     _selectedFile = file;
@@ -87,22 +67,23 @@ public class DocumentActionAdapter extends BaseAdapter {
 
         _delegate.dismiss();
 
-        if (pos == DocumentActivity.ACTION_ADD_PHOTO)// Add Photo
-        {
+        switch (pos) {
+        case DocumentActivity.ACTION_ADD_PHOTO:
           new AddPhotoDialog(_mContext, _delegate).show();
-
-        } else if (pos == DocumentActivity.ACTION_COPY)// Copy file
-        {
+          break;
+        case DocumentActivity.ACTION_COPY:
           DocumentHelper.getInstance()._fileCopied = _selectedFile;
           DocumentHelper.getInstance()._fileMoved = new ExoFile();
-        } else if (pos == DocumentActivity.ACTION_MOVE)// move file
-        {
+          break;
+
+        case DocumentActivity.ACTION_MOVE:
           DocumentHelper.getInstance()._fileMoved = _selectedFile;
           DocumentHelper.getInstance()._fileCopied = new ExoFile();
-        } else if (pos == DocumentActivity.ACTION_PASTE) {
-          // Paste file
+          break;
+
+        case DocumentActivity.ACTION_PASTE:
           ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
-          if (!_fileCopied.path.equals("")) {
+          if (!"".equals(_fileCopied.path)) {
             String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
             String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
@@ -112,81 +93,91 @@ public class DocumentActionAdapter extends BaseAdapter {
 
           }
           ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
-          if (!_fileMoved.path.equals("")) {
-            if (!_fileMoved.path.equalsIgnoreCase(_selectedFile.path)) {
-              String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
-              String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
+          if (!"".equals(_fileMoved.path)) {
+            String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
+            String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-
-                DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
-                                                                  destinationUrl,
-                                                                  DocumentLoadTask.ACTION_MOVE);
-              }
+            DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
+                                                              destinationUrl,
+                                                              DocumentActivity.ACTION_MOVE);
           }
           DocumentHelper.getInstance()._fileCopied = new ExoFile();
           DocumentHelper.getInstance()._fileMoved = new ExoFile();
 
-        } else if (pos == DocumentActivity.ACTION_DELETE)// Delete file, folder
-        {
+          break;
+        case DocumentActivity.ACTION_DELETE:
           String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
 
           if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
             DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
           }
 
-
           DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
                                                             _selectedFile.path,
                                                             DocumentActivity.ACTION_DELETE);
-        } else if (pos == DocumentActivity.ACTION_RENAME)// Rename file
-        {
+
+          break;
+        case DocumentActivity.ACTION_RENAME:
           extendDialog = new DocumentExtendDialog(_mContext,
                                                   _selectedFile,
                                                   DocumentActivity.ACTION_RENAME);
           extendDialog.show();
 
-        } else if (pos == DocumentActivity.ACTION_CREATE) { // Create folder
+          break;
+        case DocumentActivity.ACTION_CREATE:
           extendDialog = new DocumentExtendDialog(_mContext,
                                                   _selectedFile,
                                                   DocumentActivity.ACTION_CREATE);
 
           extendDialog.show();
-        } else if (pos == DocumentActivity.ACTION_OPEN_IN) { // Open file in
+          break;
+        case DocumentActivity.ACTION_OPEN_IN:
           ExoDocumentUtils.fileOpen(_mContext,
                                     _selectedFile.nodeType,
                                     _selectedFile.path,
                                     _selectedFile.name);
-          
-          
+          break;
+
         }
 
       }
 
     });
 
-    bindView(rowView, fileActionList.get(position));
+    bindView(rowView, fileActionList.get(position), position);
     return (rowView);
 
   }
 
-  private void bindView(View view, DocumentActionDescription fileAction) {
+  private void bindView(View view, DocumentActionDescription fileAction, int position) {
     TextView label = (TextView) view.findViewById(R.id.label);
     label.setText(fileAction.actionName);
     ImageView icon = (ImageView) view.findViewById(R.id.icon);
     icon.setImageResource(fileAction.imageID);
+    /*
+     * Disable action view if it can not be removed || position ==
+     * DocumentActivity.ACTION_COPY
+     */
+    if (!_selectedFile.canRemove
+        && (position == DocumentActivity.ACTION_MOVE || position == DocumentActivity.ACTION_DELETE
+            || position == DocumentActivity.ACTION_RENAME || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path))))) {
+      label.setTextColor(android.graphics.Color.GRAY);
+      view.setEnabled(false);
+      return;
+    }
 
     if (_selectedFile.isFolder) {
-      if (fileAction.actionName.equalsIgnoreCase(strOpenIn)
-          || (fileAction.actionName.equalsIgnoreCase(strPaste) && (DocumentHelper.getInstance()._fileCopied.path == "" && DocumentHelper.getInstance()._fileMoved.path == ""))) {
+      if (position == DocumentActivity.ACTION_OPEN_IN
+          || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path)))) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
       }
     } else {
-      if (fileAction.actionName.equalsIgnoreCase(strAddAPhoto)
-          || fileAction.actionName.equalsIgnoreCase(strPaste)
-          || fileAction.actionName.equalsIgnoreCase(strRename)
-          || fileAction.actionName.equalsIgnoreCase(strCreateFolder)) {
+      if (position == DocumentActivity.ACTION_ADD_PHOTO
+          || position == DocumentActivity.ACTION_PASTE
+          || position == DocumentActivity.ACTION_RENAME
+          || position == DocumentActivity.ACTION_CREATE) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
@@ -215,14 +206,14 @@ public class DocumentActionAdapter extends BaseAdapter {
   public void changeLanguage(boolean isAct) {
     Resources resource = _mContext.getResources();
 
-    strAddAPhoto = resource.getString(R.string.AddAPhoto);
-    strCopy = resource.getString(R.string.Copy);
-    strMove = resource.getString(R.string.Move);
-    strDelete = resource.getString(R.string.Delete);
-    strRename = resource.getString(R.string.Rename);
-    strPaste = resource.getString(R.string.Paste);
-    strCreateFolder = resource.getString(R.string.CreateFolder);
-    strOpenIn = resource.getString(R.string.OpenIn);
+    String strAddAPhoto = resource.getString(R.string.AddAPhoto);
+    String strCopy = resource.getString(R.string.Copy);
+    String strMove = resource.getString(R.string.Move);
+    String strDelete = resource.getString(R.string.Delete);
+    String strRename = resource.getString(R.string.Rename);
+    String strPaste = resource.getString(R.string.Paste);
+    String strCreateFolder = resource.getString(R.string.CreateFolder);
+    String strOpenIn = resource.getString(R.string.OpenIn);
 
     fileActions = new DocumentActionDescription[] {
         new DocumentActionDescription(strAddAPhoto, R.drawable.documentactionpopupphotoicon),

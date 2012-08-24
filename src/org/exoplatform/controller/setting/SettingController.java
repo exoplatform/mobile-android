@@ -13,7 +13,6 @@ import org.exoplatform.widget.ServerItemLayout;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,7 +49,7 @@ public class SettingController {
   }
 
   public void initSocialFilter(ImageView socialChecked) {
-    boolean isSocialFilter = prefs.getBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
+    boolean isSocialFilter = prefs.getBoolean(AccountSetting.getInstance().socialKey, false);
     if (isSocialFilter) {
       socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
     } else
@@ -59,20 +58,39 @@ public class SettingController {
   }
 
   public void setSocialFilter(ImageView socialChecked) {
-    boolean isSocialFilter = prefs.getBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
-    boolean isChange = isSocialFilter;
+    boolean isSocialFilter = prefs.getBoolean(AccountSetting.getInstance().socialKey, false);
     Editor editor = prefs.edit();
     if (isSocialFilter) {
       socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
-      editor.putInt(ExoConstants.SETTING_SOCIAL_FILTER_INDEX, 0);
-      isChange = false;
+      editor.putInt(AccountSetting.getInstance().socialKeyIndex, 0);
     } else {
       socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-      isChange = true;
     }
 
-    editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, isChange);
+    editor.putBoolean(AccountSetting.getInstance().socialKey, !isSocialFilter);
     editor.commit();
+
+  }
+
+  public void setDocumentShowPrivateDrive(ImageView documentChecked) {
+    boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
+    Editor editor = prefs.edit();
+    if (isShowHidden) {
+      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
+    } else {
+      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
+    }
+
+    editor.putBoolean(AccountSetting.getInstance().documentKey, !isShowHidden);
+    editor.commit();
+  }
+
+  public void initDocumentHiddenFile(ImageView documentChecked) {
+    boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
+    if (isShowHidden) {
+      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
+    } else
+      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
 
   }
 

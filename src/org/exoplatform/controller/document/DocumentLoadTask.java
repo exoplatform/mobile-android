@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -14,9 +13,7 @@ import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.DocumentWaitingDialog;
-import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
-
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.view.animation.AnimationUtils;
@@ -25,60 +22,42 @@ import com.cyrilmottier.android.greendroid.R;
 
 public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
-  // delete file or folder
-  protected static final int ACTION_DELETE  = 1;
-
-  // copy file
-  protected static final int ACTION_COPY    = 2;
-
-  // move file
-  protected static final int ACTION_MOVE    = 3;
-
-  // upload file
-  protected static final int ACTION_UPLOAD  = 4;
-
-  // rename folder
-  protected static final int ACTION_RENAME  = 5;
-
-  // create new folder
-  protected static final int ACTION_CREATE  = 6;
-
   /*
    * Result status
    */
-  private static final int   RESULT_OK      = 1;
+  private static final int      RESULT_OK      = 1;
 
-  private static final int   RESULT_ERROR   = 2;
+  private static final int      RESULT_ERROR   = 2;
 
-  private static final int   RESULT_TIMEOUT = 3;
+  private static final int      RESULT_TIMEOUT = 3;
 
-  private static final int   RESULT_FALSE   = 4;
+  private static final int      RESULT_FALSE   = 4;
 
-  private WaitingDialog      _progressDialog;
+  private DocumentWaitingDialog _progressDialog;
 
-  private String             loadingData;
+  private String                loadingData;
 
-  private String             okString;
+  private String                okString;
 
-  private String             titleString;
+  private String                titleString;
 
   /*
    * This @contentWarningString is for display the error/warning message when
    * retrieving document
    */
-  private String             contentWarningString;
+  private String                contentWarningString;
 
-  private int                actionID;
+  private int                   actionID;
 
-  private String             strSourceUrl;
+  private String                strSourceUrl;
 
-  private String             strDestinationUrl;
+  private String                strDestinationUrl;
 
-  private DocumentActivity   documentActivity;
+  private DocumentActivity      documentActivity;
 
-  private ArrayList<ExoFile> _documentList;
+  private ArrayList<ExoFile>    _documentList;
 
-  private Resources          resource;
+  private Resources             resource;
 
   public DocumentLoadTask(DocumentActivity activity, String source, String destination, int action) {
     resource = activity.getResources();
@@ -98,7 +77,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
   @Override
   public void onPreExecute() {
-    _progressDialog = new WaitingDialog(documentActivity, null, loadingData);
+    _progressDialog = new DocumentWaitingDialog(documentActivity, null, loadingData);
     _progressDialog.show();
   }
 
@@ -114,22 +93,26 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
       String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
       if (ExoConnectionUtils.checkTimeout(versionUrl) != ExoConnectionUtils.LOGIN_SUSCESS)
         return RESULT_TIMEOUT;
-      if (actionID == DocumentActivity.ACTION_DELETE) {
+
+      switch (actionID) {
+      case DocumentActivity.ACTION_DELETE:
         contentWarningString = resource.getString(R.string.DocumentCannotDelete);
         result = ExoDocumentUtils.deleteFile(strSourceUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
 
-      } else if (actionID == DocumentActivity.ACTION_COPY) {
+        break;
+      case DocumentActivity.ACTION_COPY:
         contentWarningString = resource.getString(R.string.DocumentCopyPasteError);
         result = ExoDocumentUtils.copyFile(strSourceUrl, strDestinationUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
-
-      } else if (actionID == DocumentActivity.ACTION_MOVE) {
+        break;
+      case DocumentActivity.ACTION_MOVE:
         contentWarningString = resource.getString(R.string.DocumentCopyPasteError);
         result = ExoDocumentUtils.moveFile(strSourceUrl, strDestinationUrl);
         strSourceUrl = ExoDocumentUtils.getParentUrl(strDestinationUrl);
 
-      } else if (actionID == DocumentActivity.ACTION_ADD_PHOTO) {
+        break;
+      case DocumentActivity.ACTION_ADD_PHOTO:
         File file = new File(documentActivity._sdcard_temp_dir);
         contentWarningString = resource.getString(R.string.DocumentUploadError);
         File tempFile = PhotoUtils.reziseFileImage(file);
@@ -138,8 +121,8 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
                                                              tempFile,
                                                              ExoConstants.IMAGE_TYPE);
         }
-
-      } else if (actionID == DocumentActivity.ACTION_RENAME) {
+        break;
+      case DocumentActivity.ACTION_RENAME:
         contentWarningString = resource.getString(R.string.DocumentRenameError);
         result = ExoDocumentUtils.renameFolder(strSourceUrl, strDestinationUrl);
         if (result) {
@@ -156,10 +139,11 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
           String folderName = strSourceUrl.substring(lastIndex + 1, strSourceUrl.length());
           DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
         }
-
-      } else if (actionID == DocumentActivity.ACTION_CREATE) {
+        break;
+      case DocumentActivity.ACTION_CREATE:
         contentWarningString = resource.getString(R.string.DocumentCreateFolderError);
         result = ExoDocumentUtils.createFolder(strDestinationUrl);
+        break;
 
       }
       /*
@@ -167,7 +151,8 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
        */
 
       if (result == true) {
-        _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity._fileForCurrentActionBar);
+        _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity,
+                                                                 documentActivity._fileForCurrentActionBar);
         return RESULT_OK;
       } else
         return RESULT_FALSE;

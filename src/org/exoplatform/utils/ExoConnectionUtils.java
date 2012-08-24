@@ -22,6 +22,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.jivesoftware.smack.util.Base64;
 import org.json.simple.JSONObject;
@@ -97,6 +98,7 @@ public class ExoConnectionUtils {
     }
     return sb.toString();
   }
+
   /*
    * check session timeout
    */
@@ -105,7 +107,7 @@ public class ExoConnectionUtils {
     HttpGet httpGet = new HttpGet(url);
     try {
       if (httpClient == null) {
-        initHttpClient();
+        httpClient = initHttpClient();
       }
       HttpResponse response = httpClient.execute(httpGet);
       int statusCode = checkPlatformRespose(response);
@@ -131,19 +133,19 @@ public class ExoConnectionUtils {
 
   }
 
-  public static void initHttpClient() {
+  public static DefaultHttpClient initHttpClient() {
     HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setSoTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
 
-    httpClient = new DefaultHttpClient(httpParameters);
+    return new DefaultHttpClient(httpParameters);
   }
 
   public static HttpResponse getRequestResponse(String strUrlRequest) throws IOException {
     HttpGet httpGet = new HttpGet(strUrlRequest);
     if (httpClient == null) {
-      initHttpClient();
+      httpClient = initHttpClient();
     }
 
     HttpResponse response = httpClient.execute(httpGet);
@@ -178,7 +180,7 @@ public class ExoConnectionUtils {
                                                  String password,
                                                  String strUrlRequest) throws IOException {
     if (httpClient == null) {
-      initHttpClient();
+      httpClient = initHttpClient();
     }
     StringBuilder buffer = new StringBuilder(username);
     buffer.append(":");
@@ -242,14 +244,29 @@ public class ExoConnectionUtils {
    */
   public static boolean checkPLFVersion(HttpResponse response) {
     try {
+      
+      
       String result = getPLFStream(response);
       JSONObject json = (JSONObject) JSONValue.parse(result);
+
       String isComplicant = json.get(ExoConstants.IS_MOBILE_COMPLIANT).toString();
-      if (isComplicant.equalsIgnoreCase("true")) {
+      if ("true".equalsIgnoreCase(isComplicant)) {
         String editionObject = json.get(ExoConstants.PLATFORM_EDITION).toString();
         ServerSettingHelper.getInstance().setServerEdition(editionObject);
         String verObject = json.get(ExoConstants.PLATFORM_VERSION).toString();
         ServerSettingHelper.getInstance().setServerVersion(verObject);
+        
+        /*
+         * Get repository name
+         */
+        String repository = ExoConstants.DOCUMENT_REPOSITORY;
+        if (json.containsKey(ExoConstants.PLATFORM_CURRENT_REPO_NAME)) {
+          repository = json.get(ExoConstants.PLATFORM_CURRENT_REPO_NAME).toString();
+          if (repository == null || repository.isEmpty()) {
+            repository = ExoConstants.DOCUMENT_REPOSITORY;
+          }
+        }
+        DocumentHelper.getInstance().repository = repository;
         return true;
       } else
         return false;

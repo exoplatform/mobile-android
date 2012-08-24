@@ -6,6 +6,7 @@ import org.exoplatform.controller.login.LoginController;
 import org.exoplatform.controller.login.ServerAdapter;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SettingUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,39 +29,39 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class LoginActivity extends Activity implements OnClickListener {
-  private SharedPreferences                        sharedPreference;
+  private SharedPreferences sharedPreference;
 
-  private ImageView                                _imageAccount;
+  private ImageView         _imageAccount;
 
-  private ImageView                                _imageServer;
+  private ImageView         _imageServer;
 
-  private Button                                   _btnAccount;
+  private Button            _btnAccount;
 
-  private Button                                   _btnServer;
+  private Button            _btnServer;
 
-  private Button                                   _btnLogIn;
+  private Button            _btnLogIn;
 
-  private EditText                                 _edtxUserName;
+  private EditText          _edtxUserName;
 
-  private EditText                                 _edtxPassword;
+  private EditText          _edtxPassword;
 
-  private ListView                                 _listViewServer;
+  private ListView          _listViewServer;
 
-  private String                                   strSignIn;
+  private String            strSignIn;
 
-  private String                                   settingText;
+  private String            settingText;
 
-  private String                                   userNameHint;
+  private String            userNameHint;
 
-  private String                                   passWordHint;
+  private String            passWordHint;
 
-  private String                                   username;
+  private String            username;
 
-  private String                                   password;
+  private String            password;
 
-  private LinearLayout                             listviewPanel;
+  private LinearLayout      listviewPanel;
 
-  private LinearLayout                             userpassPanel;
+  private LinearLayout      userpassPanel;
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -73,6 +74,9 @@ public class LoginActivity extends Activity implements OnClickListener {
   @Override
   protected void onResume() {
     super.onResume();
+    SettingUtils.setDefaultLanguage(this);
+    username = _edtxUserName.getText().toString();
+    password = _edtxPassword.getText().toString();
     setInfomation();
   }
 
@@ -80,6 +84,8 @@ public class LoginActivity extends Activity implements OnClickListener {
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     this.setContentView(R.layout.login);
+    username = _edtxUserName.getText().toString();
+    password = _edtxPassword.getText().toString();
     init();
   }
 
@@ -109,14 +115,16 @@ public class LoginActivity extends Activity implements OnClickListener {
   private void setInfomation() {
     changeLanguage();
     _edtxUserName.setHint(userNameHint);
-    String strUserName = AccountSetting.getInstance().getUsername();
-    if (strUserName != null && !strUserName.equals("")) {
-      _edtxUserName.setText(strUserName);
+    if (username == null)
+      username = AccountSetting.getInstance().getUsername();
+    if (username != null && !"".equals(username)) {
+      _edtxUserName.setText(username);
     }
     _edtxPassword.setHint(passWordHint);
-    String strPassword = AccountSetting.getInstance().getPassword();
-    if (strPassword != null && !strPassword.equals("")) {
-      _edtxPassword.setText(strPassword);
+    if (password == null)
+      password = AccountSetting.getInstance().getPassword();
+    if (password != null && !"".equals(password)) {
+      _edtxPassword.setText(password);
     }
     _btnLogIn.setText(strSignIn);
     setServerAdapter();
@@ -155,13 +163,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     if (selectedItemIndex == 1) {
       Intent next = new Intent(LoginActivity.this, SettingActivity.class);
-      next.putExtra(ExoConstants.SETTING_TYPE, 0);
+      next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.GLOBAL_TYPE);
       startActivity(next);
     }
     return false;
   }
 
-  // @Override
+  @Override
   public void onClick(View view) {
     if (view.equals(_btnLogIn)) {
       onLogin();

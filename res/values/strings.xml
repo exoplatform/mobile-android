@@ -20,7 +20,7 @@
     <string name="NewServer">New Server</string>
     <string name="NameOfTheServer">Name of the server</string>
     <string name="URLOfTheSerVer">URL of the server</string>
-    <string name="CannotEditServer"> The server can not modify/delete. It is current in use. </string>
+    <string name="CannotEditServer"> The server cannot be edited or deleted. It is currently in use. </string>
     <string name="English">English</string>
     <string name="French">French</string>
     <string name="CompliantMessage"> Mobile is not compliant with this platform version</string>
@@ -34,19 +34,19 @@
     <string name="Cancel">Cancel</string>
     <string name="OK">OK</string>
     <string name="Remove"> Remove</string>
-    <string name="Documents"> Documents</string>
-    <string name="Dashboard"> Apps</string>
-    <string name="Settings"> Settings</string>
+    <string name="Documents">Documents</string>
+    <string name="Dashboard">Apps</string>
+    <string name="Settings">Settings</string>
     <string name="GadgetsCannotBeRetrieved">Gadgets Cannot Be Retrieved.</string>
     <string name="ChatApplication">Chat</string>
-    <string name="ActivityStream"> News</string>
-    <string name="ActivityDetail"> Details</string>
-    <string name="You"> You</string>
-    <string name="Me"> Me</string>
-    <string name="MessageFrom"> Message from</string>
-    <string name="ShowMore"> Show More</string>
-    <string name="LoadingData"> Loading data …</string>
-    <string name="LoadingImage"> Loading image …</string>
+    <string name="ActivityStream">News</string>
+    <string name="ActivityDetail">Details</string>
+    <string name="You">You</string>
+    <string name="Me">Me</string>
+    <string name="MessageFrom">Message from</string>
+    <string name="ShowMore">Show More</string>
+    <string name="LoadingData">Loading data …</string>
+    <string name="LoadingImage">Loading image …</string>
     <string name="SendingData">  Sending data …</string>
     <string name="YourComment"> Your comment …</string>
     <string name="Comment"> Comment</string>
@@ -54,10 +54,10 @@
     <string name="NoLike"> No like for the moment</string>
     <string name="LikedThis"> liked this</string>
     <string name="And"> and</string>
-    <string name="PeoplesLikedThis"> peoples liked this</string>
-    <string name="PeopleLikedThis"> people liked this</string>
-    <string name="LessThanAMinute"> less than a minute</string>
-    <string name="AboutAMinuteAgo"> about a minute ago</string>
+    <string name="PeoplesLikedThis">people liked this</string>
+    <string name="PeopleLikedThis">person liked this</string>
+    <string name="LessThanAMinute">less than a minute</string>
+    <string name="AboutAMinuteAgo">about a minute ago</string>
     <string name="About"> about</string>
     <string name="MinutesAgo"> minutes ago</string>
     <string name="AboutAnHourAgo"> about an hour ago</string>
@@ -146,6 +146,8 @@
     <string name="MemoryWarning">Memory is unavailable or doesn\'t have enough free space.</string>
     <string name="SocialSettingTitle">SOCIAL</string>
     <string name="SocialSettingContent">Remember my filter</string>
+    <string name="DocumentSettingTitle">DOCUMENTS</string>
+    <string name="DocumentShowPrivateDrive">Show private drive</string>
 
     <string-array name="SocialTabs">
         <item>All Updates</item>

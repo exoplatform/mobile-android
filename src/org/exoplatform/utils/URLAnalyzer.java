@@ -40,7 +40,7 @@ public class URLAnalyzer {
 
   public static boolean isUrlValid(String str) {
     try {
-      URL url = new URL(str);
+      URL url = new URL(str.replaceAll(" ", "%20"));
       url.toURI();
       return true;
     } catch (MalformedURLException e) {
@@ -55,7 +55,7 @@ public class URLAnalyzer {
     if (urlStr == null || urlStr.length() == 0)
       return "";
 
-    String url = urlStr;
+    String url = urlStr.toLowerCase();
 
     boolean isHTTPSUrl = false;
 

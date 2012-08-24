@@ -31,7 +31,7 @@
             android:textSize="13dip" />
     </LinearLayout>
 
-    <ImageView
+    <ImageView android:layout_marginRight="5dp"
         android:id="@+id/ImageView_Checked"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

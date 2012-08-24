@@ -15,6 +15,7 @@ import org.exoplatform.ui.social.SelectedImageActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
 
@@ -183,7 +184,8 @@ public class DocumentActivity extends MyActionBar {
     } else {
       if (_fileForCurrentActionBar.name == null) {
         getActionBar().removeItem(0);
-      } else if (_fileForCurrentActionBar.name.equals("")) {
+      } else if ("".equals(_fileForCurrentActionBar.name)
+          || "".equals(_fileForCurrentActionBar.path)) {
         getActionBar().removeItem(0);
       } else {
         if (getActionBar().getItem(0) == null) {
@@ -196,9 +198,9 @@ public class DocumentActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
+    onCancelLoad();
     if (_documentAdapter == null) {
       _documentActivityInstance = null;
-      onCancelLoad();
       finish();
     } else {
       /*
@@ -233,16 +235,16 @@ public class DocumentActivity extends MyActionBar {
     ExoFile parent = null;
     ArrayList<ExoFile> documentList = null;
 
-    if (_fileForCurrentActionBar.currentFolder.equalsIgnoreCase("")) {
+    if ("".equals(_fileForCurrentActionBar.currentFolder)) {
       _fileForCurrentActionBar = new ExoFile();
       parent = DocumentHelper.getInstance().currentFileMap.getParcelable("");
-      documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_PATH);
+      documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH);
 
     } else {
       parent = DocumentHelper.getInstance().currentFileMap.getParcelable(_fileForCurrentActionBar.path);
       DocumentHelper.getInstance().currentFileMap.remove(_fileForCurrentActionBar.path);
       _fileForCurrentActionBar = parent;
-      if (parent.name.equals("")) {
+      if ("".equals(parent.name)) {
         documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList("");
       } else {
         documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(parent.path);
@@ -287,7 +289,7 @@ public class DocumentActivity extends MyActionBar {
   }
 
   public void setDocumentAdapter(ArrayList<ExoFile> documentList) {
-    if (_fileForCurrentActionBar.path.equals("")) {
+    if ("".equals(_fileForCurrentActionBar.name)) {
       setListViewPadding(5, 0, 5, 0);
       setTitle(getResources().getString(R.string.Documents));
     } else {
@@ -337,6 +339,10 @@ public class DocumentActivity extends MyActionBar {
         break;
       }
     }
+    /*
+     * Set default language to our application setting language
+     */
+    SettingUtils.setDefaultLanguage(this);
   }
 
   private void setEmptyView(int status) {

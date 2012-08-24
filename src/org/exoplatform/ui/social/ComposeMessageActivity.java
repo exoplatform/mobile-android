@@ -10,6 +10,7 @@ import java.io.IOException;
 import org.exoplatform.controller.social.ComposeMessageController;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.PostWaitingDialog;
@@ -123,11 +124,11 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
-     
+
       if (SocialDetailActivity.socialDetailActivity != null) {
         SocialDetailActivity.socialDetailActivity.finish();
       }
-      
+
       if (SocialTabsActivity.instance != null) {
         SocialTabsActivity.instance.finish();
       }
@@ -168,7 +169,10 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
         break;
       }
     }
-
+    /*
+     * Set default language to our application setting language
+     */
+    SettingUtils.setDefaultLanguage(this);
   }
 
   public static void addImageToMessage(File file) {

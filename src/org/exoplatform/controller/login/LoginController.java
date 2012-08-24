@@ -9,6 +9,7 @@ import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
@@ -57,6 +58,7 @@ public class LoginController {
   private Resources          resource;
 
   public LoginController(Context context, String user, String pass) {
+    SettingUtils.setDefaultLanguage(context);
     mContext = context;
     resource = mContext.getResources();
     userName = user;
@@ -118,6 +120,8 @@ public class LoginController {
 
     private HttpResponse response;
 
+    private boolean      isCompliant;
+
     @Override
     public void onPreExecute() {
       _progressDialog = new LoginWaitingDialog(mContext, null, strSigning);
@@ -130,6 +134,7 @@ public class LoginController {
       try {
         String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
         response = ExoConnectionUtils.getPlatformResponse(userName, password, versionUrl);
+        isCompliant = ExoConnectionUtils.checkPLFVersion(response);
         return ExoConnectionUtils.checkPlatformRespose(response);
       } catch (IOException e) {
         return ExoConnectionUtils.LOGIN_WRONG;
@@ -143,25 +148,36 @@ public class LoginController {
         dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
         dialog.show();
       } else if (result == ExoConnectionUtils.LOGIN_SUSCESS) {
-        AccountSetting accountSetting = AccountSetting.getInstance();
-        // SharedPreferences.Editor editor =
-        // LocalizationHelper.getInstance().getSharePrefs().edit();
+        /*
+         * Set social and document settings
+         */
+        StringBuilder builder = new StringBuilder(AccountSetting.getInstance().getDomainName());
+        builder.append("_");
+        builder.append(userName);
+        builder.append("_");
+        AccountSetting.getInstance().socialKey = builder.toString()
+            + ExoConstants.SETTING_SOCIAL_FILTER;
+        AccountSetting.getInstance().socialKeyIndex = builder.toString()
+            + ExoConstants.SETTING_SOCIAL_FILTER_INDEX;
+        AccountSetting.getInstance().documentKey = builder.toString()
+            + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
+
         SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE,
                                                                         0)
                                                   .edit();
-        editor.putString(ExoConstants.EXO_PRF_DOMAIN, accountSetting.getDomainName());
-        editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, accountSetting.getDomainIndex());
+        editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
+        editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance()
+                                                                          .getDomainIndex());
         editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);
         editor.putString(ExoConstants.EXO_PRF_PASSWORD, password);
         editor.commit();
-        accountSetting.setUsername(userName);
-        accountSetting.setPassword(password);
-        ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
+        AccountSetting.getInstance().setUsername(userName);
+        AccountSetting.getInstance().setPassword(password);
         /*
          * Checking platform version
          */
-        boolean isCompliant = ExoConnectionUtils.checkPLFVersion(response);
         if (isCompliant == true) {
+          ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
           Intent next = new Intent(mContext, HomeActivity.class);
           next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           mContext.startActivity(next);

@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -247,10 +248,10 @@ public class ExoDocumentUtils {
   }
 
   public static void setRepositoryHomeUrl(String userName, String domain) {
-
-    StringBuffer buffer = new StringBuffer();
+    String documentPath = getDocumenPath();
+    StringBuilder buffer = new StringBuilder();
     buffer.append(domain);
-    buffer.append(ExoConstants.DOCUMENT_PATH);
+    buffer.append(documentPath);
 
     int length = userName.length();
     if (length < 4) {
@@ -279,8 +280,8 @@ public class ExoDocumentUtils {
       if (status >= 200 && status < 300) {
         DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
       } else {
-        buffer = new StringBuffer(domain);
-        buffer.append(ExoConstants.DOCUMENT_PATH);
+        buffer = new StringBuilder(domain);
+        buffer.append(documentPath);
         buffer.append("/");
         buffer.append(userName);
         DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
@@ -293,7 +294,9 @@ public class ExoDocumentUtils {
   }
 
   // Get file array from URL
-  public static ArrayList<ExoFile> getPersonalDriveContent(ExoFile file) throws IOException {
+  public static ArrayList<ExoFile> getPersonalDriveContent(Context context, ExoFile file) throws IOException {
+    SharedPreferences prefs = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
+    boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
     ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
     String domain = AccountSetting.getInstance().getDomainName();
     HttpResponse response = null;
@@ -312,6 +315,8 @@ public class ExoDocumentUtils {
       buffer.append(domain);
       buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
       buffer.append(ExoConstants.DOCUMENT_PERSONAL_DRIVER);
+      buffer.append(ExoConstants.DOCUMENT_PERSONAL_DRIVER_SHOW_PRIVATE);
+      buffer.append(isShowHidden);
       urlStr = buffer.toString();
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       fileList = getDrives(response);
@@ -346,12 +351,12 @@ public class ExoDocumentUtils {
       }
 
       // push information to map
-      if (DocumentHelper.getInstance().childFilesMap.containsKey(ExoConstants.DOCUMENT_PATH)) {
-        DocumentHelper.getInstance().childFilesMap.remove(ExoConstants.DOCUMENT_PATH);
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_PATH,
+      if (DocumentHelper.getInstance().childFilesMap.containsKey(ExoConstants.DOCUMENT_JCR_PATH)) {
+        DocumentHelper.getInstance().childFilesMap.remove(ExoConstants.DOCUMENT_JCR_PATH);
+        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH,
                                                                           arrFilesTmp);
       } else {
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_PATH,
+        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH,
                                                                           arrFilesTmp);
       }
 
@@ -372,13 +377,29 @@ public class ExoDocumentUtils {
 
   }
 
-  public static String fullURLofFile(String url) {
+  public static String fullURLofFile(String workSpaceName, String url) {
     String domain = AccountSetting.getInstance().getDomainName();
     StringBuffer buffer = new StringBuffer(domain);
-    buffer.append(ExoConstants.DOCUMENT_JCR_PATH_REST);
+    buffer.append(ExoConstants.DOCUMENT_JCR_PATH);
+    buffer.append("/");
+    buffer.append(DocumentHelper.getInstance().repository);
+    buffer.append("/");
+    buffer.append(workSpaceName);
     buffer.append(url);
     return buffer.toString();
 
+  }
+
+  private static String getDocumenPath() {
+    StringBuilder documentPath = new StringBuilder();
+    documentPath.append(ExoConstants.DOCUMENT_JCR_PATH);
+    documentPath.append("/");
+    documentPath.append(DocumentHelper.getInstance().repository);
+    documentPath.append("/");
+    documentPath.append(ExoConstants.DOCUMENT_COLLABORATION);
+    documentPath.append("/");
+    documentPath.append(ExoConstants.DOCUMENT_USERS);
+    return documentPath.toString();
   }
 
   public static ArrayList<ExoFile> getDrives(HttpResponse response) {
@@ -420,6 +441,7 @@ public class ExoDocumentUtils {
               if (file.name.equals("Public")) {
                 file.path = getRootDriverPath(file);
               }
+
               folderArray.add(file);
             }
           }
@@ -473,7 +495,8 @@ public class ExoDocumentUtils {
           Node rootNode = obj_nod_list.item(0);
           if (rootNode.getNodeType() == Node.ELEMENT_NODE) {
             Element itemElement = (Element) rootNode;
-            path = fullURLofFile(itemElement.getAttribute("path"));
+            path = fullURLofFile(ExoConstants.DOCUMENT_COLLABORATION,
+                                 itemElement.getAttribute("path"));
           }
         }
       }
@@ -515,14 +538,17 @@ public class ExoDocumentUtils {
               if (i > 0) {
                 ExoFile newFile = new ExoFile();
                 newFile.name = itemElement.getAttribute("name");
-                newFile.path = fullURLofFile(itemElement.getAttribute("path"));
                 newFile.workspaceName = itemElement.getAttribute("workspaceName");
+                newFile.path = fullURLofFile(newFile.workspaceName,
+                                             itemElement.getAttribute("path"));
                 newFile.driveName = itemElement.getAttribute("driveName");
                 newFile.currentFolder = itemElement.getAttribute("currentFolder");
                 if (newFile.currentFolder == null)
                   newFile.currentFolder = "";
                 newFile.isFolder = true;
 
+                String canRemove = itemElement.getAttribute("canRemove");
+                newFile.canRemove = Boolean.parseBoolean(canRemove.trim());
                 folderArray.add(newFile);
               }
 
@@ -538,14 +564,15 @@ public class ExoDocumentUtils {
               Element itemElement = (Element) itemNode;
 
               ExoFile newFile = new ExoFile();
-              newFile.path = fullURLofFile(itemElement.getAttribute("path"));
               newFile.name = itemElement.getAttribute("name");
               newFile.workspaceName = itemElement.getAttribute("workspaceName");
+              newFile.path = fullURLofFile(newFile.workspaceName, itemElement.getAttribute("path"));
               newFile.driveName = file.name;
               newFile.currentFolder = itemElement.getAttribute("currentFolder");
               newFile.nodeType = itemElement.getAttribute("nodeType");
               newFile.isFolder = false;
-
+              String canRemove = itemElement.getAttribute("canRemove");
+              newFile.canRemove = Boolean.parseBoolean(canRemove.trim());
               folderArray.add(newFile);
             }
           }

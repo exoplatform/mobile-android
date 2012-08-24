@@ -112,15 +112,9 @@ public class HomeActivity extends MyActionBar {
   @Override
   protected void onResume() {
     super.onResume();
+    SettingUtils.setDefaultLanguage(this);
     setInfo();
     startSocialService(loaderItem);
-    // if (homeController.isLoadingTask()) {
-    // activityButton.setClickable(false);
-    // viewFlipper.setClickable(false);
-    // } else {
-    // activityButton.setClickable(true);
-    // viewFlipper.setClickable(true);
-    // }
   }
 
   @Override
@@ -138,7 +132,7 @@ public class HomeActivity extends MyActionBar {
 
     if (selectedItemIndex == 1) {
       Intent next = new Intent(HomeActivity.this, SettingActivity.class);
-      next.putExtra(ExoConstants.SETTING_TYPE, 0);
+      next.putExtra(ExoConstants.SETTING_TYPE, 1);
       startActivity(next);
     }
     return false;

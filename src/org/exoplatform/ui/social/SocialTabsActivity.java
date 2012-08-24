@@ -23,7 +23,6 @@ import greendroid.widget.LoaderActionBarItem;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
@@ -69,8 +68,6 @@ public class SocialTabsActivity extends MyActionBar {
   private static final String          ACCOUNT_SETTING         = "account_setting";
 
   private static final String          DOCUMENT_HELPER         = "document_helper";
-
-  private HomeController               homeController;
 
   public ArrayList<SocialActivityInfo> socialList;
 
@@ -123,12 +120,11 @@ public class SocialTabsActivity extends MyActionBar {
     mIndicator.setViewPager(mPager);
 
     prefs = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
-    isSocialFilterEnable = prefs.getBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
+    isSocialFilterEnable = prefs.getBoolean(AccountSetting.getInstance().socialKey, false);
     if (isSocialFilterEnable) {
-      int savedIndex = prefs.getInt(ExoConstants.SETTING_SOCIAL_FILTER_INDEX, ALL_UPDATES);
+      int savedIndex = prefs.getInt(AccountSetting.getInstance().socialKeyIndex, ALL_UPDATES);
       mPager.setCurrentItem(savedIndex);
     }
-    homeController = new HomeController(this, loaderItem);
   }
 
   @Override
@@ -157,7 +153,7 @@ public class SocialTabsActivity extends MyActionBar {
     if (isSocialFilterEnable) {
       int tabId = mPager.getCurrentItem();
       Editor editor = prefs.edit();
-      editor.putInt(ExoConstants.SETTING_SOCIAL_FILTER_INDEX, tabId);
+      editor.putInt(AccountSetting.getInstance().socialKeyIndex, tabId);
       editor.commit();
     }
     instance = null;
@@ -173,7 +169,6 @@ public class SocialTabsActivity extends MyActionBar {
       break;
     case 0:
       loaderItem = (LoaderActionBarItem) item;
-      homeController = new HomeController(this, loaderItem);
       int tabId = mPager.getCurrentItem();
       switch (tabId) {
       case ALL_UPDATES:
