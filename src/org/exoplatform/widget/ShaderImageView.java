@@ -33,6 +33,7 @@ import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
+import android.view.animation.AnimationUtils;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
@@ -114,7 +115,7 @@ public class ShaderImageView extends AsyncImageView {
     frame = new RectF(padding + 1, padding + 1, getWidth() - padding, getHeight() - padding);
     Shader bitmapShader = new BitmapShader(mBitmap, TileMode.CLAMP, TileMode.CLAMP);
     mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//    mPaint.setColor(0xFFFFFFFF);
+    // mPaint.setColor(0xFFFFFFFF);
     mPaint.setMaskFilter(new BlurMaskFilter(bleed, Blur.INNER));
     mPaint.setShader(bitmapShader);
     canvas.drawRoundRect(frame, radius, radius, mPaint);
@@ -143,6 +144,14 @@ public class ShaderImageView extends AsyncImageView {
 
   public void setBorderColor(int color) {
     boderColor = color;
+  }
+
+  @Override
+  public void setImageBitmap(Bitmap bm) {
+    if (bm != null) {
+      this.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.gd_grow_from_bottom));
+    }
+    super.setImageBitmap(bm);
   }
 
 }
