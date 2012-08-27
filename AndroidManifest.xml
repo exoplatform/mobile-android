@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.exoplatform"
     android:versionCode="14"
+    android:installLocation="auto"
     android:versionName="2.2" >
 
     <!-- Application Permissions -->
@@ -20,7 +21,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <!-- Application Uses SDK -->
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10" android:maxSdkVersion="15"/>
 
     <!-- Application Informations -->
     <application
