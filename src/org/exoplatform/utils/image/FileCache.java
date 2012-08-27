@@ -40,6 +40,10 @@ public class FileCache {
       cacheDir.mkdirs();
   }
 
+  public String getCachePath() {
+    return cacheDir.getAbsolutePath();
+  }
+
   public File getFile(String url) {
     String filename = String.valueOf(url.hashCode());
     File f = new File(cacheDir, filename);

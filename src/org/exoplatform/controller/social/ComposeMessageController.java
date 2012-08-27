@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -62,10 +61,14 @@ public class ComposeMessageController {
     changeLanguage();
 
   }
+  
+  /*
+   * Take a photo and store it into /sdcard/eXo/DocumentCache
+   */
 
   public void initCamera() {
-    String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-    sdcard_temp_dir = parentPath + PhotoUtils.getImageFileName();
+    String parentPath =  PhotoUtils.getParentImagePath(mContext);
+    sdcard_temp_dir = parentPath +"/"+ PhotoUtils.getImageFileName();
 
     Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
