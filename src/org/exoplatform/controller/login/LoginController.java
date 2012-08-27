@@ -11,6 +11,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.image.FileCache;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -85,7 +86,18 @@ public class LoginController {
       return true;
     return false;
   }
+  private boolean isLastAccount(String username) {
+    if (username.equals(AccountSetting.getInstance().getUsername())) {
+      return true;
+    }
 
+    return false;
+  }
+
+  private void clearDownloadRepository() {
+    FileCache filecache = new FileCache(mContext, ExoConstants.DOCUMENT_FILE_CACHE);
+    filecache.clear();
+  }
   private void onLoad() {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == LoginTask.Status.FINISHED) {
@@ -165,9 +177,16 @@ public class LoginController {
         SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE,
                                                                         0)
                                                   .edit();
+        /*
+         * disable saving social filter when login with difference account and
+         * clear the download repository
+         */
+        if (!isLastAccount(userName)) {
+          editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
+          clearDownloadRepository();
+        }
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
-        editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance()
-                                                                          .getDomainIndex());
+        editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance().getDomainIndex());
         editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);
         editor.putString(ExoConstants.EXO_PRF_PASSWORD, password);
         editor.commit();
