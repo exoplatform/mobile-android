@@ -31,7 +31,6 @@ import android.view.ViewStub;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -135,16 +134,6 @@ public class DocumentActivity extends MyActionBar {
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
     outState.putParcelable(CURRENT_FILE, _fileForCurrentActionBar);
 
-  }
-
-  public void setListViewLayoutParam(LinearLayout.LayoutParams lastTxtParams) {
-    _listViewDocument.setLayoutParams(lastTxtParams);
-    _listViewDocument.invalidate();
-  }
-
-  public void setListViewPadding(int l, int t, int r, int b) {
-    _listViewDocument.setPadding(l, t, r, b);
-    _listViewDocument.invalidate();
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -290,10 +279,8 @@ public class DocumentActivity extends MyActionBar {
 
   public void setDocumentAdapter(ArrayList<ExoFile> documentList) {
     if ("".equals(_fileForCurrentActionBar.name)) {
-      setListViewPadding(5, 0, 5, 0);
       setTitle(getResources().getString(R.string.Documents));
     } else {
-      setListViewPadding(-2, 0, -2, 0);
       setTitle(_fileForCurrentActionBar.name);
     }
     if (documentList.size() == 0) {
