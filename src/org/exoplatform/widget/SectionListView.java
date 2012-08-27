@@ -75,7 +75,7 @@ public class SectionListView extends ListView implements OnScrollListener {
     final SectionListAdapter adapter = (SectionListAdapter) getAdapter();
     if (adapter != null) {
 
-      // adapter.makeSectionInvisibleIfFirstInList(firstVisibleItem);
+      adapter.makeSectionInvisibleIfFirstInList(firstVisibleItem);
       // if (loading) {
       // if (totalItemCount > previousTotal) {
       // loading = false;

@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -293,10 +292,13 @@ public class DocumentActivity extends MyActionBar {
     addOrRemoveFileActionButton();
   }
 
-  // Take a photo
+  /*
+   * Take a photo and store it into /sdcard/eXo/DocumentCache
+   */
+
   public void takePicture() {
-    String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-    _sdcard_temp_dir = parentPath + PhotoUtils.getImageFileName();
+    String parentPath = PhotoUtils.getParentImagePath(this);
+    _sdcard_temp_dir = parentPath + "/" + PhotoUtils.getImageFileName();
 
     Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
