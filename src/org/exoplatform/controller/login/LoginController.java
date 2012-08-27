@@ -137,15 +137,15 @@ public class LoginController {
         isCompliant = ExoConnectionUtils.checkPLFVersion(response);
         return ExoConnectionUtils.checkPlatformRespose(response);
       } catch (IOException e) {
-        return ExoConnectionUtils.LOGIN_WRONG;
+        return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
       }
 
     }
 
     @Override
     public void onPostExecute(Integer result) {
-      if (result == ExoConnectionUtils.LOGIN_WRONG) {
-        dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
+      if (result == ExoConnectionUtils.LOGIN_INCOMPATIBLE) {
+        dialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
         dialog.show();
       } else if (result == ExoConnectionUtils.LOGIN_SUSCESS) {
         /*
