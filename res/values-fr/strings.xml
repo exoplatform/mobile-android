@@ -34,7 +34,7 @@
     <string name="CannotEditServer">Ce serveur ne peut pas être édité ou supprimé. Il est actuellement utilisé</string>
     <string name="English">Anglais</string>
     <string name="French">Français</string>
-    <string name="CompliantMessage">Cette version de PLF ne supporte pas les applications mobiles</string>
+    <string name="CompliantMessage">L\'application n\'est pas compatible avec la version de Platform à cette URL. Veuillez contacter votre administrateur.</string>
     <string name="BackButton">Retour</string>
     <string name="CloseButton">Fermer</string>
     <string name="UserGuide">Guide utilisateur</string>

@@ -46,6 +46,8 @@ public class ExoConnectionUtils {
 
   public static final int         LOGIN_FAILED             = 4;
 
+  public static final int         LOGIN_INCOMPATIBLE       = 5;
+
   // Default connection and socket timeout of 60 seconds. Tweak to taste.
   private static final int        SOCKET_OPERATION_TIMEOUT = 30 * 1000;
 
@@ -244,8 +246,7 @@ public class ExoConnectionUtils {
    */
   public static boolean checkPLFVersion(HttpResponse response) {
     try {
-      
-      
+
       String result = getPLFStream(response);
       JSONObject json = (JSONObject) JSONValue.parse(result);
 
@@ -255,7 +256,7 @@ public class ExoConnectionUtils {
         ServerSettingHelper.getInstance().setServerEdition(editionObject);
         String verObject = json.get(ExoConstants.PLATFORM_VERSION).toString();
         ServerSettingHelper.getInstance().setServerVersion(verObject);
-        
+
         /*
          * Get repository name
          */
