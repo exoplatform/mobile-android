@@ -192,7 +192,8 @@ public class SocialDetailController {
     params.setMargins(5, 0, 0, 0);
     ShaderImageView likedAvatar;
     for (int i = 0; i < maxChild; i++) {
-      likedAvatar = new ShaderImageView(mContext);
+      likedAvatar = new ShaderImageView(mContext, true);
+      likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
       likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);
       likedLayoutWrap.addView(likedAvatar, params);
     }
@@ -200,8 +201,9 @@ public class SocialDetailController {
      * If have more than 4 likers, we put a "more_likers" image icon at the last
      */
     if (size > 4) {
-      likedAvatar = new ShaderImageView(mContext);
-      likedAvatar.setDefaultImageResource(R.drawable.activity_detail_more_likers);
+      likedAvatar = new ShaderImageView(mContext, true);
+      likedAvatar.setDefaultImageDrawable(mContext.getResources()
+                                                  .getDrawable(R.drawable.activity_detail_more_likers));
       likedLayoutWrap.addView(likedAvatar, params);
     }
 
