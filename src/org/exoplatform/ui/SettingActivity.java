@@ -7,9 +7,9 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.widget.ServerEditionDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
@@ -71,7 +71,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
   private LinearLayout          listServerWrap;
 
-  private Button                modifyServerBtn;
+  private Button                addServerBtn;
 
   private TextView              settingAppInfoTitle;
 
@@ -147,11 +147,11 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     documentLayout = (RelativeLayout) findViewById(R.id.document_store_setting_layout);
     documentLayout.setOnClickListener(this);
     listServerWrap = (LinearLayout) findViewById(R.id.listview_server_wrap);
-    modifyServerBtn = (Button) findViewById(R.id.modify_server_btn);
-    modifyServerBtn.setOnClickListener(this);
+    addServerBtn = (Button) findViewById(R.id.modify_server_btn);
+    addServerBtn.setOnClickListener(this);
 
-    setttingController = new SettingController(this, imgViewECheckMark, imgViewFCheckMark);
-    setttingController.initLocation();
+    setttingController = new SettingController(this, listServerWrap);
+    setttingController.initLocation(imgViewECheckMark, imgViewFCheckMark);
     if (settingType == GLOBAL_TYPE) {
       socialTitleLayout.setVisibility(View.GONE);
       socialLayout.setVisibility(View.GONE);
@@ -179,13 +179,13 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     appValueText.setText(appVersion);
     changeLanguage();
 
-    setttingController.setServerList(listServerWrap);
+    setttingController.setServerList();
   }
 
   private void updateLocation(String localize) {
     if (setttingController.updateLocallize(localize) == true) {
       changeLanguage();
-      setttingController.setServerList(listServerWrap);
+      setttingController.setServerList();
     }
   }
 
@@ -205,8 +205,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     String appVersion = resource.getString(R.string.ApplicationVersion);
     String settings = resource.getString(R.string.Settings);
     setTitle(settings);
-    String modifyListText = resource.getString(R.string.ModifyServerList);
-    modifyServerBtn.setText(modifyListText);
+    String addNewServer = resource.getString(R.string.AddAServer);
+    addServerBtn.setText(addNewServer);
     txtvEnglish.setText(strEnglish);
     txtvFrench.setText(strFrench);
     txtvServer.setText(strServerTittle);
@@ -235,14 +235,14 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     finish();
   }
 
-  // @Override
+  @Override
   public void onClick(View view) {
     if (view.equals(vEngLish)) {
-      setttingController.setEnglishLocation();
+      setttingController.setEnglishLocation(imgViewECheckMark, imgViewFCheckMark);
       updateLocation(ExoConstants.ENGLISH_LOCALIZATION);
     }
     if (view.equals(vFrench)) {
-      setttingController.setFrenchLocation();
+      setttingController.setFrenchLocation(imgViewECheckMark, imgViewFCheckMark);
       updateLocation(ExoConstants.FRENCH_LOCALIZATION);
     }
     if (view.equals(socialLayout)) {
@@ -252,7 +252,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     if (view.equals(documentLayout)) {
       setttingController.setDocumentShowPrivateDrive(documentCheckedView);
     }
-    if (view.equals(modifyServerBtn)) {
+    if (view.equals(addServerBtn)) {
       if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {
         WarningDialog dialog = new WarningDialog(SettingActivity.this,
                                                  titleString,
@@ -260,9 +260,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
                                                  okString);
         dialog.show();
       } else {
-        Intent next = new Intent(SettingActivity.this, SettingServerListEditionActivity.class);
-        startActivity(next);
-        finish();
+        new ServerEditionDialog(this, setttingController, null, 0).show();
       }
     }
 

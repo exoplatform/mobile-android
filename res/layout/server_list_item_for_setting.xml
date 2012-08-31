@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/server_list_item_wrap"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/file_item_background_shape"
@@ -31,10 +32,11 @@
             android:textSize="13dip" />
     </LinearLayout>
 
-    <ImageView android:layout_marginRight="5dp"
+    <ImageView
         android:id="@+id/ImageView_Checked"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
         android:background="@drawable/authenticate_checkmark_on"
         android:contentDescription="@string/ServerDetail"
         android:gravity="center" />

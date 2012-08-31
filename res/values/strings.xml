@@ -14,6 +14,8 @@
     <string name="Language">LANGUAGE</string>
     <string name="Server">SERVER</string>
     <string name="ServerList"> Server List</string>
+    <string name="Add">Add</string>
+    <string name="Edit">Edit</string>
     <string name="AddAServer"> Add a Server</string>
     <string name="ModifyServerList">Modify the List</string>
     <string name="ServerDetail">Server Configuration</string>
