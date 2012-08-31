@@ -11,6 +11,7 @@ import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.CompatibleFileOpenDialog;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
@@ -88,9 +89,10 @@ public class WebViewActivity extends MyActionBar {
      * the method for controlling the layout of html. SINGLE_COLUMN moves all
      * content into one column that is the width of the view.
      */
+    if (contentType != null && contentType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
     _wvGadget.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
     _wvGadget.getSettings().setUseWideViewPort(false);
-
+    }
     final Activity activity = this;
 
     _wvGadget.setWebChromeClient(new WebChromeClient() {
