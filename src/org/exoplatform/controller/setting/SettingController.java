@@ -229,7 +229,7 @@ public class SettingController {
       for (int i = 0; i < serverInfoList.size(); i++) {
         ServerObjInfo tmp = serverInfoList.get(i);
 
-        if (i == selectedServerIndex) {
+        if (i == serverIndex) {
           continue;
         }
 

@@ -26,8 +26,6 @@
     <string name="Server">SERVEURS</string>
     <string name="ServerList">Liste des serveurs</string>
     <string name="AddAServer">Ajouter un serveur</string>
-    <string name="Add">Ajouter</string>
-    <string name="Edit">Éditer</string>
     <string name="ModifyServerList">Modifier la liste</string>
     <string name="ServerDetail">Paramètres du serveur</string>
     <string name="NewServer">Nouveau serveur</string>

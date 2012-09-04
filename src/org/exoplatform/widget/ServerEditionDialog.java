@@ -164,19 +164,17 @@ public class ServerEditionDialog extends Dialog implements android.view.View.OnC
     String strServerName = "";
     String strServerUrl = "";
 
-    String strOKButton = "";
+    String strOKButton = resource.getString(R.string.OK);
     String strDeleteCancelButton = "";
 
     if (isNewServer) // New server
     {
       strTittle = resource.getString(R.string.NewServer);
       strDeleteCancelButton = resource.getString(R.string.Cancel);
-      strOKButton = resource.getString(R.string.Add);
     } else // Server detail
     {
       strTittle = resource.getString(R.string.ServerDetail);
       strDeleteCancelButton = resource.getString(R.string.Delete);
-      strOKButton = resource.getString(R.string.Edit);
 
     }
 
