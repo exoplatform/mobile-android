@@ -147,6 +147,7 @@ public class LoginController {
         String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
         response = ExoConnectionUtils.getPlatformResponse(userName, password, versionUrl);
         isCompliant = ExoConnectionUtils.checkPLFVersion(response);
+        ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
         return ExoConnectionUtils.checkPlatformRespose(response);
       } catch (IOException e) {
         return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
@@ -196,7 +197,6 @@ public class LoginController {
          * Checking platform version
          */
         if (isCompliant == true) {
-          ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
           Intent next = new Intent(mContext, HomeActivity.class);
           next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           mContext.startActivity(next);
