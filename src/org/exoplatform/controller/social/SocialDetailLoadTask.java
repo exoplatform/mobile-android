@@ -150,6 +150,8 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       return 1;
     } catch (SocialClientLibException e) {
       return 0;
+    } catch (RuntimeException re) {
+      return -1;
     }
   }
 
