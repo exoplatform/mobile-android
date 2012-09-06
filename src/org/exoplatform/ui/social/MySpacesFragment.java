@@ -62,14 +62,11 @@ public class MySpacesFragment extends Fragment {
 
   public static MySpacesFragment        instance;
 
-  private LoaderActionBarItem           loaderItem;
-
   public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
 
-  public static MySpacesFragment getInstance(LoaderActionBarItem loader) {
+  public static MySpacesFragment getInstance() {
     MySpacesFragment fragment = new MySpacesFragment();
     fragment.socialList = SocialServiceHelper.getInstance().mySpacesList;
-    fragment.loaderItem = loader;
     return fragment;
   }
 
@@ -77,10 +74,7 @@ public class MySpacesFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    if (loaderItem == null)
-      getActivity().finish();
-    else
-      onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
   }
 
   @Override
@@ -128,8 +122,9 @@ public class MySpacesFragment extends Fragment {
   private void onLoad(int actNumber) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == MySpacesLoadTask.Status.FINISHED) {
-        mLoadTask = (MySpacesLoadTask) new MySpacesLoadTask(getActivity(), loaderItem).execute(actNumber,
-                                                                                               SocialTabsActivity.MY_SPACES);
+        mLoadTask = (MySpacesLoadTask) new MySpacesLoadTask(getActivity(),
+                                                            SocialTabsActivity.instance.loaderItem).execute(actNumber,
+                                                                                                            SocialTabsActivity.MY_SPACES);
       }
     } else {
       new ConnectionErrorDialog(getActivity()).show();

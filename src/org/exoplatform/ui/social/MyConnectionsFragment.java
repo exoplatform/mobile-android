@@ -57,17 +57,13 @@ public class MyConnectionsFragment extends Fragment {
 
   private MyConnectionLoadTask          mLoadTask;
 
-  private LoaderActionBarItem           loaderItem;
-
   public static MyConnectionsFragment   instance;
 
   public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
 
-  public static MyConnectionsFragment getInstance(LoaderActionBarItem loader) {
+  public static MyConnectionsFragment getInstance() {
     MyConnectionsFragment fragment = new MyConnectionsFragment();
-    // fragment.socialList = list;
     fragment.socialList = SocialServiceHelper.getInstance().myConnectionsList;
-    fragment.loaderItem = loader;
     return fragment;
   }
 
@@ -75,10 +71,7 @@ public class MyConnectionsFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    if (loaderItem == null)
-      getActivity().finish();
-    else
-      onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
   }
 
   @Override
@@ -127,8 +120,9 @@ public class MyConnectionsFragment extends Fragment {
   private void onLoad(int actNum) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == MyConnectionLoadTask.Status.FINISHED) {
-        mLoadTask = (MyConnectionLoadTask) new MyConnectionLoadTask(getActivity(), loaderItem).execute(actNum,
-                                                                                                       SocialTabsActivity.MY_CONNECTIONS);
+        mLoadTask = (MyConnectionLoadTask) new MyConnectionLoadTask(getActivity(),
+                                                                    SocialTabsActivity.instance.loaderItem).execute(actNum,
+                                                                                                                    SocialTabsActivity.MY_CONNECTIONS);
       }
     } else {
       new ConnectionErrorDialog(getActivity()).show();

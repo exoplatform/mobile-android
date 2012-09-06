@@ -50,8 +50,6 @@ public class MyStatusFragment extends Fragment {
 
   private ArrayList<SocialActivityInfo> socialList;
 
-  private LoaderActionBarItem           loaderItem;
-
   private SectionListView               listview;
 
   private StandardArrayAdapter          arrayAdapter;
@@ -66,10 +64,9 @@ public class MyStatusFragment extends Fragment {
 
   public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
 
-  public static MyStatusFragment getInstance(LoaderActionBarItem loader) {
+  public static MyStatusFragment getInstance() {
     MyStatusFragment fragment = new MyStatusFragment();
     fragment.socialList = SocialServiceHelper.getInstance().myStatusList;
-    fragment.loaderItem = loader;
     return fragment;
   }
 
@@ -77,9 +74,6 @@ public class MyStatusFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    if (loaderItem == null)
-      getActivity().finish();
-    else
       onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
   }
 
@@ -128,8 +122,9 @@ public class MyStatusFragment extends Fragment {
   private void onLoad(int actNumber) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == MyStausLoadTask.Status.FINISHED) {
-        mLoadTask = (MyStausLoadTask) new MyStausLoadTask(getActivity(), loaderItem).execute(actNumber,
-                                                                                             SocialTabsActivity.MY_STATUS);
+        mLoadTask = (MyStausLoadTask) new MyStausLoadTask(getActivity(),
+                                                          SocialTabsActivity.instance.loaderItem).execute(actNumber,
+                                                                                                          SocialTabsActivity.MY_STATUS);
       }
     } else {
       new ConnectionErrorDialog(getActivity()).show();

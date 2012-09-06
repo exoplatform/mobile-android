@@ -71,7 +71,7 @@ public class SocialTabsActivity extends MyActionBar {
 
   public ArrayList<SocialActivityInfo> socialList;
 
-  private LoaderActionBarItem          loaderItem;
+  public LoaderActionBarItem           loaderItem;
 
   public int                           number_of_activity;
 
@@ -208,16 +208,16 @@ public class SocialTabsActivity extends MyActionBar {
       Fragment fragment = null;
       switch (position) {
       case ALL_UPDATES:
-        fragment = AllUpdatesFragment.getInstance(loaderItem);
+        fragment = AllUpdatesFragment.getInstance();
         break;
       case MY_CONNECTIONS:
-        fragment = MyConnectionsFragment.getInstance(loaderItem);
+        fragment = MyConnectionsFragment.getInstance();
         break;
       case MY_SPACES:
-        fragment = MySpacesFragment.getInstance(loaderItem);
+        fragment = MySpacesFragment.getInstance();
         break;
       case MY_STATUS:
-        fragment = MyStatusFragment.getInstance(loaderItem);
+        fragment = MyStatusFragment.getInstance();
         break;
       }
       return fragment;

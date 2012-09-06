@@ -59,18 +59,15 @@ public class AllUpdatesFragment extends Fragment {
 
   private SectionListAdapter            sectionAdapter;
 
-  private LoaderActionBarItem           loaderItem;
-
   private AllUpdateLoadTask             mLoadTask;
 
   public static AllUpdatesFragment      instance;
 
   public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
 
-  public static AllUpdatesFragment getInstance(LoaderActionBarItem loader) {
+  public static AllUpdatesFragment getInstance() {
     AllUpdatesFragment fragment = new AllUpdatesFragment();
     fragment.socialList = SocialServiceHelper.getInstance().socialInfoList;
-    fragment.loaderItem = loader;
     return fragment;
   }
 
@@ -78,10 +75,7 @@ public class AllUpdatesFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    if (loaderItem == null)
-      getActivity().finish();
-    else
-      onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
   }
 
   @Override
@@ -130,8 +124,9 @@ public class AllUpdatesFragment extends Fragment {
   private void onLoad(int actNums) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == AllUpdateLoadTask.Status.FINISHED) {
-        mLoadTask = (AllUpdateLoadTask) new AllUpdateLoadTask(getActivity(), loaderItem).execute(actNums,
-                                                                                                 SocialTabsActivity.ALL_UPDATES);
+        mLoadTask = (AllUpdateLoadTask) new AllUpdateLoadTask(getActivity(),
+                                                              SocialTabsActivity.instance.loaderItem).execute(actNums,
+                                                                                                              SocialTabsActivity.ALL_UPDATES);
       }
     } else {
       new ConnectionErrorDialog(getActivity()).show();
