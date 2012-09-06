@@ -131,8 +131,8 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
       finish();
       if (ComposeMessageActivity.composeMessageActivity != null)
         ComposeMessageActivity.composeMessageActivity.finish();
-      if (SocialActivity.socialActivity != null)
-        SocialActivity.socialActivity.finish();
+      if (SocialTabsActivity.instance!= null)
+        SocialTabsActivity.instance.finish();
       if (DocumentActivity._documentActivityInstance != null) {
         DocumentActivity._documentActivityInstance.finish();
       }

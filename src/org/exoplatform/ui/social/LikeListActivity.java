@@ -44,8 +44,8 @@ import android.widget.TextView;
 public class LikeListActivity extends MyActionBar {
 
   /*
-   * This class for displaying the liker list information include avatar and liker's
-   * name
+   * This class for displaying the liker list information include avatar and
+   * liker's name
    */
 
   private ArrayList<SocialLikeInfo> likeList;
@@ -105,8 +105,8 @@ public class LikeListActivity extends MyActionBar {
       if (SocialDetailActivity.socialDetailActivity != null) {
         SocialDetailActivity.socialDetailActivity.finish();
       }
-      if (SocialActivity.socialActivity != null) {
-        SocialActivity.socialActivity.finish();
+      if (SocialTabsActivity.instance != null) {
+        SocialTabsActivity.instance.finish();
       }
 
       finish();
@@ -174,7 +174,7 @@ public class LikeListActivity extends MyActionBar {
   private class ViewHolder {
     public ShaderImageView imageView;
 
-    public TextView         textView;
+    public TextView        textView;
   }
 
 }

@@ -7,8 +7,8 @@ import greendroid.widget.LoaderActionBarItem;
 import java.util.ArrayList;
 
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
+import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.CompatibleFileOpenDialog;
@@ -143,8 +143,8 @@ public class WebViewActivity extends MyActionBar {
       }
       if (SocialDetailActivity.socialDetailActivity != null) {
         SocialDetailActivity.socialDetailActivity.finish();
-        if (SocialActivity.socialActivity != null) {
-          SocialActivity.socialActivity.finish();
+        if (SocialTabsActivity.instance != null) {
+          SocialTabsActivity.instance.finish();
         }
       }
       finish();

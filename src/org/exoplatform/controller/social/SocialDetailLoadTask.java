@@ -23,7 +23,6 @@ import org.exoplatform.ui.social.AllUpdatesFragment;
 import org.exoplatform.ui.social.MyConnectionsFragment;
 import org.exoplatform.ui.social.MySpacesFragment;
 import org.exoplatform.ui.social.MyStatusFragment;
-import org.exoplatform.ui.social.SocialActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;

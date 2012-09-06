@@ -102,7 +102,6 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     detailController.onLoad(loaderItem, false);
   }
 
-
   @Override
   public void finish() {
     if (detailController != null) {
@@ -119,8 +118,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
-      if (SocialActivity.socialActivity != null) {
-        SocialActivity.socialActivity.finish();
+      if (SocialTabsActivity.instance != null) {
+        SocialTabsActivity.instance.finish();
       }
       finish();
       break;

@@ -55,8 +55,8 @@ public class SocialAttachedImageActivity extends MyActionBar {
       if (SocialDetailActivity.socialDetailActivity != null) {
         SocialDetailActivity.socialDetailActivity.finish();
       }
-      if (SocialActivity.socialActivity != null)
-        SocialActivity.socialActivity.finish();
+      if (SocialTabsActivity.instance != null)
+        SocialTabsActivity.instance.finish();
       break;
 
     case 0:

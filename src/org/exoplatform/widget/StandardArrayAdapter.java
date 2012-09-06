@@ -22,6 +22,7 @@ import org.exoplatform.utils.ExoConstants;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,6 +43,8 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
   private LayoutInflater                      mInflater;
 
   private ViewHolder                          holder = null;
+
+  private LikeLoadTask                        mLoadTask;
 
   public StandardArrayAdapter(Context context, ArrayList<SocialActivityInfo> items) {
     super(context, R.layout.activitybrowserviewcell, items);
@@ -108,55 +111,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
       @Override
       public void onClick(View v) {
         if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
-          try {
-            RestActivity activity = SocialServiceHelper.getInstance().activityService.get(actInfo.getActivityId());
-            if (activity.isLiked())
-              SocialServiceHelper.getInstance().activityService.unlike(activity);
-            else
-              SocialServiceHelper.getInstance().activityService.like(activity);
-
-            if (SocialTabsActivity.instance != null) {
-              int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
-              switch (tabId) {
-              case SocialTabsActivity.ALL_UPDATES:
-                AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
-                if (AllUpdatesFragment.instance.isLoading())
-                  holder.buttonLike.setClickable(false);
-                else
-                  holder.buttonLike.setClickable(true);
-                break;
-              case SocialTabsActivity.MY_CONNECTIONS:
-                MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
-                if (MyConnectionsFragment.instance.isLoading())
-                  holder.buttonLike.setClickable(false);
-                else
-                  holder.buttonLike.setClickable(true);
-                break;
-              case SocialTabsActivity.MY_SPACES:
-                MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
-                if (MySpacesFragment.instance.isLoading())
-                  holder.buttonLike.setClickable(false);
-                else
-                  holder.buttonLike.setClickable(true);
-                break;
-              case SocialTabsActivity.MY_STATUS:
-                MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
-                if (MyStatusFragment.instance.isLoading())
-                  holder.buttonLike.setClickable(false);
-                else
-                  holder.buttonLike.setClickable(true);
-                break;
-              }
-
-            }
-
-          } catch (SocialClientLibException e) {
-            WarningDialog dialog = new WarningDialog(mContext,
-                                                     mContext.getString(R.string.Warning),
-                                                     e.getMessage(),
-                                                     mContext.getString(R.string.OK));
-            dialog.show();
-          }
+          onLikeLoad(actInfo);
         } else {
           new ConnectionErrorDialog(mContext).show();
         }
@@ -165,6 +120,12 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     });
 
     return convertView;
+  }
+
+  private void onLikeLoad(SocialActivityInfo info) {
+    if (mLoadTask == null || mLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
+      mLoadTask = (LikeLoadTask) new LikeLoadTask().execute(info);
+    }
   }
 
   public static class ViewHolder {
@@ -189,6 +150,75 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     public TextView        textViewTime;
 
     public View            attachStubView;
+  }
+
+  private class LikeLoadTask extends AsyncTask<SocialActivityInfo, Void, Boolean> {
+
+    @Override
+    protected Boolean doInBackground(SocialActivityInfo... params) {
+      SocialActivityInfo actInfo = params[0];
+      try {
+        RestActivity activity = SocialServiceHelper.getInstance().activityService.get(actInfo.getActivityId());
+        if (activity.isLiked())
+          SocialServiceHelper.getInstance().activityService.unlike(activity);
+        else
+          SocialServiceHelper.getInstance().activityService.like(activity);
+
+        return true;
+
+      } catch (SocialClientLibException e) {
+        return false;
+      } catch (RuntimeException e) {
+        return false;
+      }
+    }
+
+    @Override
+    protected void onPostExecute(Boolean result) {
+      if (result) {
+        if (SocialTabsActivity.instance != null) {
+          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+          switch (tabId) {
+          case SocialTabsActivity.ALL_UPDATES:
+            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            if (AllUpdatesFragment.instance.isLoading())
+              holder.buttonLike.setClickable(false);
+            else
+              holder.buttonLike.setClickable(true);
+            break;
+          case SocialTabsActivity.MY_CONNECTIONS:
+            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            if (MyConnectionsFragment.instance.isLoading())
+              holder.buttonLike.setClickable(false);
+            else
+              holder.buttonLike.setClickable(true);
+            break;
+          case SocialTabsActivity.MY_SPACES:
+            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            if (MySpacesFragment.instance.isLoading())
+              holder.buttonLike.setClickable(false);
+            else
+              holder.buttonLike.setClickable(true);
+            break;
+          case SocialTabsActivity.MY_STATUS:
+            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            if (MyStatusFragment.instance.isLoading())
+              holder.buttonLike.setClickable(false);
+            else
+              holder.buttonLike.setClickable(true);
+            break;
+          }
+
+        }
+      } else {
+        WarningDialog dialog = new WarningDialog(mContext,
+                                                 mContext.getString(R.string.Warning),
+                                                 mContext.getString(R.string.ErrorOnLike),
+                                                 mContext.getString(R.string.OK));
+        dialog.show();
+      }
+    }
+
   }
 
 }
