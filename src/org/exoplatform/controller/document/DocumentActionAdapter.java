@@ -108,7 +108,7 @@ public class DocumentActionAdapter extends BaseAdapter {
         case DocumentActivity.ACTION_DELETE:
           String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
 
-          if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder)) {
+          if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder) && _selectedFile.isFolder) {
             DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
           }
 
