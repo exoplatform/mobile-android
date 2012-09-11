@@ -34,6 +34,8 @@ public class ExoConstants {
 
   public static final String ACTIVITY_DETAIL_EXTRA                 = "ACTIVITY_DETAIL_EXTRA";
 
+  public static final String ACTIVITY_CURRENT_POSITION             = "ACTIVITY_CURRENT_POSITION";
+
   public static final int    COMPOSE_POST_TYPE                     = 0;
 
   public static final int    COMPOSE_COMMENT_TYPE                  = 1;

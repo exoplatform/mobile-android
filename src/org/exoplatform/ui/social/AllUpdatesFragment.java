@@ -49,25 +49,24 @@ import android.widget.TextView;
  */
 public class AllUpdatesFragment extends Fragment {
 
-  private ArrayList<SocialActivityInfo> socialList;
+  private SectionListView          listview;
 
-  private SectionListView               listview;
+  private View                     emptyStubView;
 
-  private View                          emptyStubView;
+  private StandardArrayAdapter     arrayAdapter;
 
-  private StandardArrayAdapter          arrayAdapter;
+  private SectionListAdapter       sectionAdapter;
 
-  private SectionListAdapter            sectionAdapter;
+  private AllUpdateLoadTask        mLoadTask;
 
-  private AllUpdateLoadTask             mLoadTask;
+  public static AllUpdatesFragment instance;
 
-  public static AllUpdatesFragment      instance;
+  private int                      currentPosition = 0;
 
-  public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
+  public int                       actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
 
   public static AllUpdatesFragment getInstance() {
     AllUpdatesFragment fragment = new AllUpdatesFragment();
-    fragment.socialList = SocialServiceHelper.getInstance().socialInfoList;
     return fragment;
   }
 
@@ -75,7 +74,7 @@ public class AllUpdatesFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false, 0);
   }
 
   @Override
@@ -98,7 +97,7 @@ public class AllUpdatesFragment extends Fragment {
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    setListAdapter(socialList);
+    setListAdapter();
   }
 
   @Override
@@ -108,13 +107,15 @@ public class AllUpdatesFragment extends Fragment {
     instance = null;
   }
 
-  public void onPrepareLoad(int actNums, boolean isRefresh) {
+  public void onPrepareLoad(int actNums, boolean isRefresh, int position) {
+    currentPosition = position;
     if (isRefresh) {
       onLoad(actNums);
       return;
     }
 
-    if (socialList == null || socialList.size() == 0) {
+    if (SocialServiceHelper.getInstance().socialInfoList == null
+        || SocialServiceHelper.getInstance().socialInfoList.size() == 0) {
       onLoad(actNums);
       return;
     }
@@ -148,21 +149,25 @@ public class AllUpdatesFragment extends Fragment {
     return false;
   }
 
-  public void setListAdapter(ArrayList<SocialActivityInfo> list) {
+  public void setListAdapter() {
 
-    if (list == null || list.size() == 0) {
+    if (SocialServiceHelper.getInstance().socialInfoList == null
+        || SocialServiceHelper.getInstance().socialInfoList.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);
       return;
     }
     emptyStubView.setVisibility(View.GONE);
 
-    arrayAdapter = new StandardArrayAdapter(getActivity(), list);
+    arrayAdapter = new StandardArrayAdapter(getActivity(),
+                                            SocialServiceHelper.getInstance().socialInfoList);
     sectionAdapter = new SectionListAdapter(getActivity(),
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
-    arrayAdapter.notifyDataSetChanged();
     listview.setAdapter(sectionAdapter);
-    sectionAdapter.notifyDataSetChanged();
+    /*
+     * Keep the current position when listview was refreshed
+     */
+    listview.setSelectionFromTop(currentPosition, 0);
   }
 
   private class AllUpdateLoadTask extends SocialLoadTask {
@@ -174,12 +179,11 @@ public class AllUpdatesFragment extends Fragment {
     @Override
     public void setResult(ArrayList<SocialActivityInfo> result) {
       super.setResult(result);
-      socialList = result;
       SocialServiceHelper.getInstance().socialInfoList = result;
       if (HomeActivity.homeActivity != null) {
         HomeActivity.homeActivity.setSocialInfo(result);
       }
-      setListAdapter(result);
+      setListAdapter();
     }
 
   }

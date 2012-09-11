@@ -47,23 +47,22 @@ import android.widget.TextView;
  * 23, 2012
  */
 public class MyConnectionsFragment extends Fragment {
-  private ArrayList<SocialActivityInfo> socialList;
+  private SectionListView             listview;
 
-  private SectionListView               listview;
+  private View                        emptyStubView;
 
-  private View                          emptyStubView;
+  private SectionListAdapter          sectionAdapter;
 
-  private SectionListAdapter            sectionAdapter;
+  private MyConnectionLoadTask        mLoadTask;
 
-  private MyConnectionLoadTask          mLoadTask;
+  public static MyConnectionsFragment instance;
 
-  public static MyConnectionsFragment   instance;
+  private int                         currentPosition = 0;
 
-  public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
+  public int                          actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
 
   public static MyConnectionsFragment getInstance() {
     MyConnectionsFragment fragment = new MyConnectionsFragment();
-    fragment.socialList = SocialServiceHelper.getInstance().myConnectionsList;
     return fragment;
   }
 
@@ -71,7 +70,7 @@ public class MyConnectionsFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false, 0);
   }
 
   @Override
@@ -94,7 +93,7 @@ public class MyConnectionsFragment extends Fragment {
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    setListAdapter(socialList);
+    setListAdapter(SocialServiceHelper.getInstance().myConnectionsList);
   }
 
   @Override
@@ -104,13 +103,15 @@ public class MyConnectionsFragment extends Fragment {
     instance = null;
   }
 
-  public void onPrepareLoad(int actNum, boolean isRefresh) {
+  public void onPrepareLoad(int actNum, boolean isRefresh, int pos) {
+    currentPosition = pos;
     if (isRefresh) {
       onLoad(actNum);
       return;
     }
 
-    if (socialList == null || socialList.size() == 0) {
+    if (SocialServiceHelper.getInstance().myConnectionsList == null
+        || SocialServiceHelper.getInstance().myConnectionsList.size() == 0) {
       onLoad(actNum);
       return;
     }
@@ -156,6 +157,10 @@ public class MyConnectionsFragment extends Fragment {
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
     listview.setAdapter(sectionAdapter);
+    /*
+     * Keep the current position when listview was refreshed
+     */
+    listview.setSelectionFromTop(currentPosition, 0);
 
   }
 
@@ -168,7 +173,6 @@ public class MyConnectionsFragment extends Fragment {
     @Override
     public void setResult(ArrayList<SocialActivityInfo> result) {
       super.setResult(result);
-      socialList = result;
       SocialServiceHelper.getInstance().myConnectionsList = result;
       setListAdapter(result);
     }

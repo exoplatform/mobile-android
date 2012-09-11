@@ -190,6 +190,9 @@ public class HomeActivity extends MyActionBar {
    * Set Social Information and start animation
    */
   public void setSocialInfo(ArrayList<SocialActivityInfo> list) {
+    if (list == null) {
+      return;
+    }
     HomeSocialItem socialItem = null;
     viewFlipper.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);

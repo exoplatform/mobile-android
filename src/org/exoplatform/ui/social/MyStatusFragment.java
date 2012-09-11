@@ -48,25 +48,24 @@ import android.widget.TextView;
  */
 public class MyStatusFragment extends Fragment {
 
-  private ArrayList<SocialActivityInfo> socialList;
+  private SectionListView        listview;
 
-  private SectionListView               listview;
+  private StandardArrayAdapter   arrayAdapter;
 
-  private StandardArrayAdapter          arrayAdapter;
+  private SectionListAdapter     sectionAdapter;
 
-  private SectionListAdapter            sectionAdapter;
+  private View                   emptyStubView;
 
-  private View                          emptyStubView;
+  private MyStausLoadTask        mLoadTask;
 
-  private MyStausLoadTask               mLoadTask;
+  public static MyStatusFragment instance;
 
-  public static MyStatusFragment        instance;
+  private int                    currentPosition = 0;
 
-  public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
+  public int                     actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
 
   public static MyStatusFragment getInstance() {
     MyStatusFragment fragment = new MyStatusFragment();
-    fragment.socialList = SocialServiceHelper.getInstance().myStatusList;
     return fragment;
   }
 
@@ -74,7 +73,7 @@ public class MyStatusFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-      onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false, 0);
   }
 
   @Override
@@ -97,7 +96,7 @@ public class MyStatusFragment extends Fragment {
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    setListAdapter(socialList);
+    setListAdapter(SocialServiceHelper.getInstance().myStatusList);
   }
 
   @Override
@@ -107,13 +106,15 @@ public class MyStatusFragment extends Fragment {
     instance = null;
   }
 
-  public void onPrepareLoad(int actNumber, boolean isRefresh) {
+  public void onPrepareLoad(int actNumber, boolean isRefresh, int pos) {
+    currentPosition = pos;
     if (isRefresh) {
       onLoad(actNumber);
       return;
     }
 
-    if (socialList == null || socialList.size() == 0) {
+    if (SocialServiceHelper.getInstance().myStatusList == null
+        || SocialServiceHelper.getInstance().myStatusList.size() == 0) {
       onLoad(actNumber);
       return;
     }
@@ -154,12 +155,11 @@ public class MyStatusFragment extends Fragment {
     emptyStubView.setVisibility(View.GONE);
 
     arrayAdapter = new StandardArrayAdapter(getActivity(), list);
-    arrayAdapter.notifyDataSetChanged();
     sectionAdapter = new SectionListAdapter(getActivity(),
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
-    sectionAdapter.notifyDataSetChanged();
     listview.setAdapter(sectionAdapter);
+    listview.setSelectionFromTop(currentPosition, 0);
   }
 
   private class MyStausLoadTask extends SocialLoadTask {
@@ -172,7 +172,6 @@ public class MyStatusFragment extends Fragment {
     public void setResult(ArrayList<SocialActivityInfo> result) {
       super.setResult(result);
       SocialServiceHelper.getInstance().myStatusList = result;
-      socialList = result;
       setListAdapter(result);
     }
 

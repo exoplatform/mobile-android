@@ -1,5 +1,7 @@
 package org.exoplatform.widget;
 
+import greendroid.widget.LoaderActionBarItem;
+
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -87,6 +89,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
         SocialDetailHelper.getInstance().setActivityId(activityId);
         SocialDetailHelper.getInstance().setAttachedImageUrl(actInfo.getAttachedImageUrl());
         Intent intent = new Intent(mContext, SocialDetailActivity.class);
+        intent.putExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, position);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         mContext.startActivity(intent);
       }
@@ -97,9 +100,9 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
       public void onClick(View v) {
 
         SocialDetailHelper.getInstance().setActivityId(actInfo.getActivityId());
-
         Intent intent = new Intent(mContext, ComposeMessageActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, position);
         intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_COMMENT_TYPE);
         mContext.startActivity(intent);
 
@@ -111,7 +114,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
       @Override
       public void onClick(View v) {
         if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
-          onLikeLoad(actInfo);
+          onLikeLoad(actInfo, position);
         } else {
           new ConnectionErrorDialog(mContext).show();
         }
@@ -122,9 +125,9 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     return convertView;
   }
 
-  private void onLikeLoad(SocialActivityInfo info) {
+  private void onLikeLoad(SocialActivityInfo info, int position) {
     if (mLoadTask == null || mLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
-      mLoadTask = (LikeLoadTask) new LikeLoadTask().execute(info);
+      mLoadTask = (LikeLoadTask) new LikeLoadTask(SocialTabsActivity.instance.loaderItem, position).execute(info);
     }
   }
 
@@ -154,6 +157,21 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   private class LikeLoadTask extends AsyncTask<SocialActivityInfo, Void, Boolean> {
 
+    private LoaderActionBarItem loaderItem;
+
+    private int                 currentPosition;
+
+    public LikeLoadTask(LoaderActionBarItem item, int pos) {
+      loaderItem = item;
+      currentPosition = pos;
+    }
+
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();
+      loaderItem.setLoading(true);
+    }
+
     @Override
     protected Boolean doInBackground(SocialActivityInfo... params) {
       SocialActivityInfo actInfo = params[0];
@@ -175,40 +193,49 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
     @Override
     protected void onPostExecute(Boolean result) {
+      loaderItem.setLoading(false);
       if (result) {
         if (SocialTabsActivity.instance != null) {
           int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
           switch (tabId) {
           case SocialTabsActivity.ALL_UPDATES:
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+
+            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                      true,
+                                                      currentPosition);
             if (AllUpdatesFragment.instance.isLoading())
               holder.buttonLike.setClickable(false);
             else
               holder.buttonLike.setClickable(true);
             break;
           case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                         true,
+                                                         currentPosition);
             if (MyConnectionsFragment.instance.isLoading())
               holder.buttonLike.setClickable(false);
             else
               holder.buttonLike.setClickable(true);
             break;
           case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                    true,
+                                                    currentPosition);
             if (MySpacesFragment.instance.isLoading())
               holder.buttonLike.setClickable(false);
             else
               holder.buttonLike.setClickable(true);
             break;
           case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                    true,
+                                                    currentPosition);
             if (MyStatusFragment.instance.isLoading())
               holder.buttonLike.setClickable(false);
             else
               holder.buttonLike.setClickable(true);
             break;
           }
-
         }
       } else {
         WarningDialog dialog = new WarningDialog(mContext,

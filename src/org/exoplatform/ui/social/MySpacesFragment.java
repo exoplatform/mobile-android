@@ -48,25 +48,24 @@ import android.widget.TextView;
  */
 public class MySpacesFragment extends Fragment {
 
-  private ArrayList<SocialActivityInfo> socialList;
+  private SectionListView        listview;
 
-  private SectionListView               listview;
+  private StandardArrayAdapter   arrayAdapter;
 
-  private StandardArrayAdapter          arrayAdapter;
+  private SectionListAdapter     sectionAdapter;
 
-  private SectionListAdapter            sectionAdapter;
+  private View                   emptyStubView;
 
-  private View                          emptyStubView;
+  private MySpacesLoadTask       mLoadTask;
 
-  private MySpacesLoadTask              mLoadTask;
+  public static MySpacesFragment instance;
 
-  public static MySpacesFragment        instance;
+  private int                    currentPosition = 0;
 
-  public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
+  public int                     actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
 
   public static MySpacesFragment getInstance() {
     MySpacesFragment fragment = new MySpacesFragment();
-    fragment.socialList = SocialServiceHelper.getInstance().mySpacesList;
     return fragment;
   }
 
@@ -74,7 +73,7 @@ public class MySpacesFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false, 0);
   }
 
   @Override
@@ -97,7 +96,7 @@ public class MySpacesFragment extends Fragment {
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    setListAdapter(socialList);
+    setListAdapter(SocialServiceHelper.getInstance().mySpacesList);
   }
 
   @Override
@@ -107,13 +106,15 @@ public class MySpacesFragment extends Fragment {
     instance = null;
   }
 
-  public void onPrepareLoad(int actNumber, boolean isRefresh) {
+  public void onPrepareLoad(int actNumber, boolean isRefresh, int pos) {
+    currentPosition = pos;
     if (isRefresh) {
       onLoad(actNumber);
       return;
     }
 
-    if (socialList == null || socialList.size() == 0) {
+    if (SocialServiceHelper.getInstance().mySpacesList == null
+        || SocialServiceHelper.getInstance().mySpacesList.size() == 0) {
       onLoad(actNumber);
       return;
     }
@@ -158,6 +159,7 @@ public class MySpacesFragment extends Fragment {
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
     listview.setAdapter(sectionAdapter);
+    listview.setSelectionFromTop(currentPosition, 0);
   }
 
   private class MySpacesLoadTask extends SocialLoadTask {
@@ -169,7 +171,6 @@ public class MySpacesFragment extends Fragment {
     @Override
     public void setResult(ArrayList<SocialActivityInfo> result) {
       super.setResult(result);
-      socialList = result;
       SocialServiceHelper.getInstance().mySpacesList = result;
       setListAdapter(result);
     }

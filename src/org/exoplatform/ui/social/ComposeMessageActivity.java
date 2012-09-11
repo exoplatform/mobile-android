@@ -71,6 +71,8 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   private String                       sdcard_temp_dir = null;
 
+  private int                          currentPosition;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -89,6 +91,8 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
         addActionBarItem();
         getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_photo);
       } else {
+        currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION,
+                                                  currentPosition);
         setTitle(comment);
       }
       initComponents();
@@ -240,7 +244,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
     if (view.equals(sendButton)) {
       composeMessage = composeEditText.getText().toString();
-      messageController.onSendMessage(composeMessage, sdcard_temp_dir);
+      messageController.onSendMessage(composeMessage, sdcard_temp_dir, currentPosition);
     }
     if (view.equals(cancelButton)) {
       finish();

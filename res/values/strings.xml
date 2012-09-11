@@ -86,6 +86,7 @@
     <string name="WarningServerNameIsExist"> This server name already exists in your list</string>
     <string name="WarningServerUrlIsExist"> This server url already exists in your list</string>
     <string name="DetailsNotAvaiable"> Details of the news are not available</string>
+    <string name="ErrorOnLike">Action on this activity impossible.</string>
     <string name="ErrorOnComment"> You can not comment this activity.</string>
     <string name="LogoutTitle"> Logout Dialog</string>
     <string name="LogoutContent"> Do you want to exit?</string>

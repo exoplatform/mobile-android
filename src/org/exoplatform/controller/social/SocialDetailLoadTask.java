@@ -64,12 +64,16 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   private boolean                      isLikeAction      = false;
 
+  private int                          currentPosition;
+
   public SocialDetailLoadTask(Context context,
                               SocialDetailController controller,
-                              LoaderActionBarItem loader) {
+                              LoaderActionBarItem loader,
+                              int pos) {
     mContext = context;
     detailController = controller;
     loaderItem = loader;
+    currentPosition = pos;
     changeLanguage();
 
   }
@@ -168,16 +172,24 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
           int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
           switch (tabId) {
           case SocialTabsActivity.ALL_UPDATES:
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                      true,
+                                                      currentPosition);
             break;
           case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                         true,
+                                                         currentPosition);
             break;
           case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                    true,
+                                                    currentPosition);
             break;
           case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                    true,
+                                                    currentPosition);
             break;
           }
         }
