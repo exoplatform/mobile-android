@@ -61,6 +61,8 @@ public class AllUpdatesFragment extends Fragment {
 
   public static AllUpdatesFragment instance;
 
+  private int                      firstIndex;
+
   private int                      currentPosition = 0;
 
   public int                       actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
@@ -165,9 +167,25 @@ public class AllUpdatesFragment extends Fragment {
                                             arrayAdapter);
     listview.setAdapter(sectionAdapter);
     /*
+     * Make section invisible at first in list
+     */
+    sectionAdapter.makeSectionInvisibleIfFirstInList(firstIndex);
+
+    /*
      * Keep the current position when listview was refreshed
      */
     listview.setSelectionFromTop(currentPosition, 0);
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    /*
+     * Store the current first visible position of listview
+     */
+    if (listview != null) {
+      firstIndex = listview.getFirstVisiblePosition();
+    }
   }
 
   private class AllUpdateLoadTask extends SocialLoadTask {

@@ -60,6 +60,8 @@ public class MyStatusFragment extends Fragment {
 
   public static MyStatusFragment instance;
 
+  private int                    firstIndex;
+
   private int                    currentPosition = 0;
 
   public int                     actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
@@ -159,7 +161,23 @@ public class MyStatusFragment extends Fragment {
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
     listview.setAdapter(sectionAdapter);
+    /*
+     * Make section invisible at first in list
+     */
+    sectionAdapter.makeSectionInvisibleIfFirstInList(firstIndex);
+
     listview.setSelectionFromTop(currentPosition, 0);
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    /*
+     * Store the current first visible position of listview
+     */
+    if (listview != null) {
+      firstIndex = listview.getFirstVisiblePosition();
+    }
   }
 
   private class MyStausLoadTask extends SocialLoadTask {

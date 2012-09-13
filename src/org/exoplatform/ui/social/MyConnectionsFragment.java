@@ -59,6 +59,8 @@ public class MyConnectionsFragment extends Fragment {
 
   private int                         currentPosition = 0;
 
+  private int                         firstIndex;
+
   public int                          actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
 
   public static MyConnectionsFragment getInstance() {
@@ -158,10 +160,26 @@ public class MyConnectionsFragment extends Fragment {
                                             arrayAdapter);
     listview.setAdapter(sectionAdapter);
     /*
+     * Make section invisible at first in list
+     */
+    sectionAdapter.makeSectionInvisibleIfFirstInList(firstIndex);
+
+    /*
      * Keep the current position when listview was refreshed
      */
     listview.setSelectionFromTop(currentPosition, 0);
 
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    /*
+     * Store the current first visible position of listview
+     */
+    if (listview != null) {
+      firstIndex = listview.getFirstVisiblePosition();
+    }
   }
 
   private class MyConnectionLoadTask extends SocialLoadTask {

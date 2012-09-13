@@ -15,13 +15,7 @@ import android.widget.ListView;
  */
 public class SectionListView extends ListView implements OnScrollListener {
 
-  private int     currentPage   = 0;
-
-  private int     previousTotal = 0;
-
-  private boolean loading       = true;
-
-  private View    transparentView;
+  private View transparentView;
 
   public SectionListView(final Context context, final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
@@ -65,6 +59,7 @@ public class SectionListView extends ListView implements OnScrollListener {
     if (adapter.isEmpty()) {
       transparentView.setVisibility(View.INVISIBLE);
     }
+
   }
 
   @Override
@@ -74,46 +69,7 @@ public class SectionListView extends ListView implements OnScrollListener {
                        final int totalItemCount) {
     final SectionListAdapter adapter = (SectionListAdapter) getAdapter();
     if (adapter != null) {
-
       adapter.makeSectionInvisibleIfFirstInList(firstVisibleItem);
-      // if (loading) {
-      // if (totalItemCount > previousTotal) {
-      // loading = false;
-      // previousTotal = totalItemCount;
-      // currentPage++;
-      // }
-      // }
-      // if (!loading
-      // && (totalItemCount - visibleItemCount) <= (firstVisibleItem +
-      // ExoConstants.NUMBER_OF_ACTIVITY)) {
-      // I load the next page of gigs using a background task,
-      // but you can call any function here.
-      // new LoadGigsTask().execute(currentPage + 1);
-      // int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
-      //
-      // switch (tabId) {
-      // case SocialTabsActivity.ALL_UPDATES:
-      // AllUpdatesFragment.instance.onPrepareLoad(currentPage +
-      // ExoConstants.NUMBER_OF_ACTIVITY,
-      // true);
-      // break;
-      // case SocialTabsActivity.MY_CONNECTIONS:
-      // MyConnectionsFragment.instance.onPrepareLoad(currentPage
-      // + ExoConstants.NUMBER_OF_ACTIVITY, true);
-      // break;
-      // case SocialTabsActivity.MY_SPACES:
-      // MySpacesFragment.instance.onPrepareLoad(currentPage +
-      // ExoConstants.NUMBER_OF_ACTIVITY,
-      // true);
-      // break;
-      // case SocialTabsActivity.MY_STATUS:
-      // MyStatusFragment.instance.onPrepareLoad(currentPage +
-      // ExoConstants.NUMBER_OF_ACTIVITY,
-      // true);
-      // break;
-      // }
-      // loading = true;
-      // }
     }
 
   }
