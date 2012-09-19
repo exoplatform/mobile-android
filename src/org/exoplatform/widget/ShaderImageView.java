@@ -16,14 +16,15 @@
  */
 package org.exoplatform.widget;
 
+import greendroid.widget.AsyncImageView;
+
 import org.exoplatform.R;
 
-import greendroid.widget.AsyncImageView;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.BlurMaskFilter;
 import android.graphics.BlurMaskFilter.Blur;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
@@ -32,7 +33,9 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.animation.AnimationUtils;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
@@ -48,6 +51,8 @@ public class ShaderImageView extends AsyncImageView {
 
   private Paint            mPaint;
 
+  private boolean          slideLeft    = false;
+
   public ShaderImageView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
   }
@@ -56,8 +61,9 @@ public class ShaderImageView extends AsyncImageView {
     super(context, attrs);
   }
 
-  public ShaderImageView(Context context) {
+  public ShaderImageView(Context context, boolean slideLeft) {
     super(context);
+    this.slideLeft = slideLeft;
   }
 
   @Override
@@ -114,7 +120,7 @@ public class ShaderImageView extends AsyncImageView {
     frame = new RectF(padding + 1, padding + 1, getWidth() - padding, getHeight() - padding);
     Shader bitmapShader = new BitmapShader(mBitmap, TileMode.CLAMP, TileMode.CLAMP);
     mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//    mPaint.setColor(0xFFFFFFFF);
+    // mPaint.setColor(0xFFFFFFFF);
     mPaint.setMaskFilter(new BlurMaskFilter(bleed, Blur.INNER));
     mPaint.setShader(bitmapShader);
     canvas.drawRoundRect(frame, radius, radius, mPaint);
@@ -143,6 +149,24 @@ public class ShaderImageView extends AsyncImageView {
 
   public void setBorderColor(int color) {
     boderColor = color;
+  }
+
+  @Override
+  public void setImageBitmap(Bitmap bm) {
+    if (bm != null) {
+      if (slideLeft)
+        this.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_left));
+      else
+        this.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.gd_grow_from_bottom));
+    }
+    super.setImageBitmap(bm);
+  }
+
+  @Override
+  public void setImageDrawable(Drawable drawable) {
+    super.setImageDrawable(drawable);
+    if (slideLeft)
+      this.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.slide_left));
   }
 
 }

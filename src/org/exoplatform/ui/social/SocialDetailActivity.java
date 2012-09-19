@@ -53,6 +53,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
 
   private LoaderActionBarItem        loaderItem;
 
+  private int                        currentPosition;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -64,6 +66,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     addActionBarItem(Type.Refresh);
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     socialDetailActivity = this;
+    currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION,
+                                              currentPosition);
     changeLanguage();
     if (savedInstanceState != null)
       finish();
@@ -99,9 +103,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
                                                   contentDetailLayout,
                                                   textView_Like_Count);
     loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-    detailController.onLoad(loaderItem, false);
+    detailController.onLoad(loaderItem, false, currentPosition);
   }
-
 
   @Override
   public void finish() {
@@ -119,14 +122,14 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
-      if (SocialActivity.socialActivity != null) {
-        SocialActivity.socialActivity.finish();
+      if (SocialTabsActivity.instance != null) {
+        SocialTabsActivity.instance.finish();
       }
       finish();
       break;
     case 0:
       loaderItem = (LoaderActionBarItem) item;
-      detailController.onLoad(loaderItem, false);
+      detailController.onLoad(loaderItem, false, currentPosition);
       break;
 
     }
@@ -140,10 +143,11 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
       Intent intent = new Intent(this, ComposeMessageActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_COMMENT_TYPE);
+      intent.putExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, currentPosition);
       startActivity(intent);
     }
     if (view.equals(likeButton)) {
-      detailController.onLikePress(loaderItem);
+      detailController.onLikePress(loaderItem, currentPosition);
     }
 
     if (view.equals(likedFrame)) {

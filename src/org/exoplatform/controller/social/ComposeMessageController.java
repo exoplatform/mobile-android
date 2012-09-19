@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -63,9 +62,13 @@ public class ComposeMessageController {
 
   }
 
+  /*
+   * Take a photo and store it into /sdcard/eXo/DocumentCache
+   */
+
   public void initCamera() {
-    String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-    sdcard_temp_dir = parentPath + PhotoUtils.getImageFileName();
+    String parentPath = PhotoUtils.getParentImagePath(mContext);
+    sdcard_temp_dir = parentPath + "/" + PhotoUtils.getImageFileName();
 
     Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
@@ -74,13 +77,13 @@ public class ComposeMessageController {
                                                  ExoConstants.TAKE_PICTURE_WITH_CAMERA);
   }
 
-  public void onSendMessage(String composeMessage, String sdcard) {
+  public void onSendMessage(String composeMessage, String sdcard, int position) {
     if ((composeMessage != null) && (composeMessage.length() > 0)) {
       if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
         if (composeType == 0) {
           onPostTask(composeMessage, sdcard);
         } else {
-          onCommentTask(composeMessage);
+          onCommentTask(composeMessage, position);
         }
       } else {
         new ConnectionErrorDialog(mContext).show();
@@ -109,9 +112,9 @@ public class ComposeMessageController {
     }
   }
 
-  private void onCommentTask(String composeMessage) {
+  private void onCommentTask(String composeMessage, int position) {
     if (mCommetnTask == null || mCommetnTask.getStatus() == CommentTask.Status.FINISHED) {
-      mCommetnTask = (CommentTask) new CommentTask().execute(composeMessage);
+      mCommetnTask = (CommentTask) new CommentTask(position).execute(composeMessage);
     }
   }
 
@@ -128,6 +131,12 @@ public class ComposeMessageController {
   }
 
   private class CommentTask extends AsyncTask<String, Void, Boolean> {
+
+    private int currentPosition;
+
+    public CommentTask(int position) {
+      currentPosition = position;
+    }
 
     @Override
     protected Boolean doInBackground(String... params) {
@@ -159,16 +168,24 @@ public class ComposeMessageController {
           int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
           switch (tabId) {
           case SocialTabsActivity.ALL_UPDATES:
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true);
+            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                      true,
+                                                      currentPosition);
             break;
           case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,true);
+            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                         true,
+                                                         currentPosition);
             break;
           case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,true);
+            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                    true,
+                                                    currentPosition);
             break;
           case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,true);
+            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                    true,
+                                                    currentPosition);
             break;
           }
         }

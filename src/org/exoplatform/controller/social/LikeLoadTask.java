@@ -31,6 +31,11 @@ import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
+import org.exoplatform.ui.social.AllUpdatesFragment;
+import org.exoplatform.ui.social.MyConnectionsFragment;
+import org.exoplatform.ui.social.MySpacesFragment;
+import org.exoplatform.ui.social.MyStatusFragment;
+import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
 
@@ -57,15 +62,22 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
   private String                 detailsErrorStr;
 
   private SocialDetailController detailController;
-  
-  private LoaderActionBarItem          loaderItem;
 
-  public LikeLoadTask(Context context, SocialDetailController controller,LoaderActionBarItem loader) {
+  private LoaderActionBarItem    loaderItem;
+
+  private int                    currentPosition;
+
+  public LikeLoadTask(Context context,
+                      SocialDetailController controller,
+                      LoaderActionBarItem loader,
+                      int pos) {
     mContext = context;
     detailController = controller;
     loaderItem = loader;
+    currentPosition = pos;
     changeLanguage();
   }
+
   @Override
   protected void onPreExecute() {
     loaderItem.setLoading(true);
@@ -117,6 +129,7 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
       return null;
     }
   }
+
   @Override
   protected void onCancelled() {
     loaderItem.setLoading(false);
@@ -128,6 +141,31 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
       detailController.setLikedState();
       detailController.setLikeInfoText(result);
       detailController.setLikedInfo(result);
+      if (SocialTabsActivity.instance != null) {
+        int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+        switch (tabId) {
+        case SocialTabsActivity.ALL_UPDATES:
+          AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                    true,
+                                                    currentPosition);
+          break;
+        case SocialTabsActivity.MY_CONNECTIONS:
+          MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                       true,
+                                                       currentPosition);
+          break;
+        case SocialTabsActivity.MY_SPACES:
+          MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                  true,
+                                                  currentPosition);
+          break;
+        case SocialTabsActivity.MY_STATUS:
+          MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                  true,
+                                                  currentPosition);
+          break;
+        }
+      }
     } else {
       SocialDetailsWarningDialog dialog = new SocialDetailsWarningDialog(mContext,
                                                                          titleString,

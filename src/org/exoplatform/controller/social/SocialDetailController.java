@@ -73,10 +73,10 @@ public class SocialDetailController {
     activityId = SocialDetailHelper.getInstance().getActivityId();
   }
 
-  public void onLoad(LoaderActionBarItem loader, boolean isLikeAction) {
+  public void onLoad(LoaderActionBarItem loader, boolean isLikeAction, int postion) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialDetailLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this, loader).execute(isLikeAction);
+        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this, loader, postion).execute(isLikeAction);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -91,10 +91,10 @@ public class SocialDetailController {
     }
   }
 
-  public void onLikeLoad(LoaderActionBarItem loader, String id) {
+  public void onLikeLoad(LoaderActionBarItem loader, String id, int position) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLikeLoadTask == null || mLikeLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
-        mLikeLoadTask = (LikeLoadTask) new LikeLoadTask(mContext, this, loader).execute(id);
+        mLikeLoadTask = (LikeLoadTask) new LikeLoadTask(mContext, this, loader, position).execute(id);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -192,7 +192,8 @@ public class SocialDetailController {
     params.setMargins(5, 0, 0, 0);
     ShaderImageView likedAvatar;
     for (int i = 0; i < maxChild; i++) {
-      likedAvatar = new ShaderImageView(mContext);
+      likedAvatar = new ShaderImageView(mContext, true);
+      likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
       likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);
       likedLayoutWrap.addView(likedAvatar, params);
     }
@@ -200,8 +201,9 @@ public class SocialDetailController {
      * If have more than 4 likers, we put a "more_likers" image icon at the last
      */
     if (size > 4) {
-      likedAvatar = new ShaderImageView(mContext);
-      likedAvatar.setDefaultImageResource(R.drawable.activity_detail_more_likers);
+      likedAvatar = new ShaderImageView(mContext, true);
+      likedAvatar.setDefaultImageDrawable(mContext.getResources()
+                                                  .getDrawable(R.drawable.activity_detail_more_likers));
       likedLayoutWrap.addView(likedAvatar, params);
     }
 
@@ -222,8 +224,8 @@ public class SocialDetailController {
   /*
    * When user click on like button, only update the liker part UI
    */
-  public void onLikePress(LoaderActionBarItem loader) {
-    onLikeLoad(loader, activityId);
+  public void onLikePress(LoaderActionBarItem loader, int pos) {
+    onLikeLoad(loader, activityId, pos);
   }
 
 }

@@ -31,6 +31,8 @@
         android:cacheColorHint="#00000000"
         android:dividerHeight="0dp"
         android:fadingEdge="none"
-        android:fadingEdgeLength="0dp" />
+        android:fadingEdgeLength="0dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" />
 
 </RelativeLayout>

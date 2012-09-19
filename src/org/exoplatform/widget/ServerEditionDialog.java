@@ -1,9 +1,24 @@
-package org.exoplatform.ui;
+/*
+ * Copyright (C) 2003-2012 eXo Platform SAS.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.exoplatform.widget;
 
 import org.exoplatform.R;
-import org.exoplatform.controller.setting.SettingServerEditionController;
+import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.model.ServerObjInfo;
-import org.exoplatform.singleton.ServerSettingHelper;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,44 +27,53 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SettingServerEditionDialog extends Dialog implements android.view.View.OnClickListener {
+/**
+ * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Aug
+ * 31, 2012
+ */
+public class ServerEditionDialog extends Dialog implements android.view.View.OnClickListener {
+  private Button            btnOK;
 
-  private Button        btnOK;
+  private Button            btnDeleteCancel;
 
-  private Button        btnDeleteCancel;
+  private TextView          txtvTittle;
 
-  private TextView      txtvTittle;
+  private TextView          txtvServerName;
 
-  private TextView      txtvServerName;
+  private TextView          txtvServerUrl;
 
-  private TextView      txtvServerUrl;
+  private EditText          editTextServerName;
 
-  private EditText      editTextServerName;
+  private EditText          editTextServerUrl;
 
-  private EditText      editTextServerUrl;
+  private String            serverNameURLInvalid;
 
-  private String        serverNameURLInvalid;
+  private ServerObjInfo     serverObj;
 
-  private ServerObjInfo serverObj;
+  private int               serverIndex;
 
-  private Context       mContext;
+  private Context           mContext;
 
-  private boolean       isNewServer;
+  private boolean           isNewServer = false;  ;
 
-  private ListView      listViewServer;
+  private SettingController settingController;
 
-  public SettingServerEditionDialog(Context context, ListView listView) {
+  public ServerEditionDialog(Context context,
+                             SettingController controller,
+                             ServerObjInfo info,
+                             int index) {
     super(context);
     /** 'Window.FEATURE_NO_TITLE' - Used to hide the title */
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     /** Design the dialog in main.xml file */
     setContentView(R.layout.exolanguagesetting);
     mContext = context;
-    listViewServer = listView;
+    this.settingController = controller;
+    serverObj = info;
+    serverIndex = index;
     init();
   }
 
@@ -68,18 +92,14 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
     editTextServerName = (EditText) findViewById(R.id.EditText_Server_Name);
     editTextServerUrl = (EditText) findViewById(R.id.EditText_Server_URL);
 
-    isNewServer = ServerSettingHelper.getInstance().getIsNewServer();
-    if (isNewServer) {
+    // isNewServer = ServerSettingHelper.getInstance().getIsNewServer();
+    if (serverObj == null) {
+      isNewServer = true;
       serverObj = new ServerObjInfo();
       serverObj._bSystemServer = false;
       serverObj._strServerName = "";
       serverObj._strServerUrl = "";
 
-    } else {
-      serverObj = ServerSettingHelper.getInstance()
-                                     .getServerInfoList()
-                                     .get(ServerSettingHelper.getInstance()
-                                                             .getSelectedServerIndex());
     }
 
     editTextServerName.setText(serverObj._strServerName);
@@ -89,7 +109,7 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
   }
 
-  // @Override
+  @Override
   public void onClick(View view) {
     ServerObjInfo myServerObj = new ServerObjInfo();
 
@@ -100,18 +120,32 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
       myServerObj._strServerName = myServerObj._strServerName.trim();
       myServerObj._strServerUrl = myServerObj._strServerUrl.trim();
 
-      SettingServerEditionController editController = new SettingServerEditionController(mContext);
       if (view.equals(btnOK)) {
-        if (editController.onAccept(myServerObj)) {
-          dismiss();
-          editController.onResetAdapter(listViewServer);
+        if (isNewServer) {
+          if (settingController.onAdd(myServerObj)) {
+            settingController.setServerList();
+            dismiss();
+          }
+        } else {
+          if (settingController.onUpdate(myServerObj, serverIndex)) {
+            settingController.setServerList();
+            dismiss();
+          }
         }
+
+        // if (settingController.onAccept(myServerObj)) {
+        // settingController.setServerList();
+        // dismiss();
+        // }
       }
 
       if (view.equals(btnDeleteCancel)) {
-        editController.onDelete();
+        if (!isNewServer) {
+          settingController.onDelete(serverIndex);
+          settingController.setServerList();
+        }
+
         dismiss();
-        editController.onResetAdapter(listViewServer);
       }
 
     } else {
@@ -123,14 +157,14 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
 
   }
 
-  public void changeLanguage() {
+  private void changeLanguage() {
 
     Resources resource = mContext.getResources();
     String strTittle = "";
     String strServerName = "";
     String strServerUrl = "";
 
-    String strOKButton = "";
+    String strOKButton = resource.getString(R.string.OK);
     String strDeleteCancelButton = "";
 
     if (isNewServer) // New server
@@ -147,7 +181,6 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
     strServerName = resource.getString(R.string.NameOfTheServer);
     strServerUrl = resource.getString(R.string.URLOfTheSerVer);
     serverNameURLInvalid = resource.getString(R.string.SpecialCharacters);
-    strOKButton = resource.getString(R.string.OK);
 
     txtvTittle.setText(strTittle);
 
@@ -158,5 +191,4 @@ public class SettingServerEditionDialog extends Dialog implements android.view.V
     btnDeleteCancel.setText(strDeleteCancelButton);
 
   }
-
 }

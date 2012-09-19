@@ -25,6 +25,7 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.utils.image.FileCache;
 import org.exoplatform.widget.UnreadableFileDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -76,6 +77,7 @@ public class ExoDocumentUtils {
   public static final String POWERPOINT_TYPE      = "application/vnd.ms-powerpoint";
 
   public static final String OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
+
 
   public static boolean isEnoughMemory(int fileSize) {
     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {

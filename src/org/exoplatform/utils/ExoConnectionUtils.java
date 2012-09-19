@@ -263,7 +263,7 @@ public class ExoConnectionUtils {
         String repository = ExoConstants.DOCUMENT_REPOSITORY;
         if (json.containsKey(ExoConstants.PLATFORM_CURRENT_REPO_NAME)) {
           repository = json.get(ExoConstants.PLATFORM_CURRENT_REPO_NAME).toString();
-          if (repository == null || repository.isEmpty()) {
+          if (repository == null || "".equals(repository.trim())) {
             repository = ExoConstants.DOCUMENT_REPOSITORY;
           }
         }

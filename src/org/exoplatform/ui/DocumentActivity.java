@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -31,7 +30,6 @@ import android.view.ViewStub;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -135,16 +133,6 @@ public class DocumentActivity extends MyActionBar {
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
     outState.putParcelable(CURRENT_FILE, _fileForCurrentActionBar);
 
-  }
-
-  public void setListViewLayoutParam(LinearLayout.LayoutParams lastTxtParams) {
-    _listViewDocument.setLayoutParams(lastTxtParams);
-    _listViewDocument.invalidate();
-  }
-
-  public void setListViewPadding(int l, int t, int r, int b) {
-    _listViewDocument.setPadding(l, t, r, b);
-    _listViewDocument.invalidate();
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -290,10 +278,8 @@ public class DocumentActivity extends MyActionBar {
 
   public void setDocumentAdapter(ArrayList<ExoFile> documentList) {
     if ("".equals(_fileForCurrentActionBar.name)) {
-      setListViewPadding(5, 0, 5, 0);
       setTitle(getResources().getString(R.string.Documents));
     } else {
-      setListViewPadding(-2, 0, -2, 0);
       setTitle(_fileForCurrentActionBar.name);
     }
     if (documentList.size() == 0) {
@@ -306,10 +292,13 @@ public class DocumentActivity extends MyActionBar {
     addOrRemoveFileActionButton();
   }
 
-  // Take a photo
+  /*
+   * Take a photo and store it into /sdcard/eXo/DocumentCache
+   */
+
   public void takePicture() {
-    String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
-    _sdcard_temp_dir = parentPath + PhotoUtils.getImageFileName();
+    String parentPath = PhotoUtils.getParentImagePath(this);
+    _sdcard_temp_dir = parentPath + "/" + PhotoUtils.getImageFileName();
 
     Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,

@@ -48,28 +48,26 @@ import android.widget.TextView;
  */
 public class MySpacesFragment extends Fragment {
 
-  private ArrayList<SocialActivityInfo> socialList;
+  private SectionListView        listview;
 
-  private SectionListView               listview;
+  private StandardArrayAdapter   arrayAdapter;
 
-  private StandardArrayAdapter          arrayAdapter;
+  private SectionListAdapter     sectionAdapter;
 
-  private SectionListAdapter            sectionAdapter;
+  private View                   emptyStubView;
 
-  private View                          emptyStubView;
+  private MySpacesLoadTask       mLoadTask;
 
-  private MySpacesLoadTask              mLoadTask;
+  public static MySpacesFragment instance;
+  
+  private int                      firstIndex;
 
-  public static MySpacesFragment        instance;
+  private int                    currentPosition = 0;
 
-  private LoaderActionBarItem           loaderItem;
+  public int                     actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
 
-  public int                            actNumbers = ExoConstants.NUMBER_OF_ACTIVITY;
-
-  public static MySpacesFragment getInstance(LoaderActionBarItem loader) {
+  public static MySpacesFragment getInstance() {
     MySpacesFragment fragment = new MySpacesFragment();
-    fragment.socialList = SocialServiceHelper.getInstance().mySpacesList;
-    fragment.loaderItem = loader;
     return fragment;
   }
 
@@ -77,10 +75,7 @@ public class MySpacesFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    if (loaderItem == null)
-      getActivity().finish();
-    else
-      onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false);
+    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false, 0);
   }
 
   @Override
@@ -103,7 +98,7 @@ public class MySpacesFragment extends Fragment {
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    setListAdapter(socialList);
+    setListAdapter(SocialServiceHelper.getInstance().mySpacesList);
   }
 
   @Override
@@ -113,13 +108,15 @@ public class MySpacesFragment extends Fragment {
     instance = null;
   }
 
-  public void onPrepareLoad(int actNumber, boolean isRefresh) {
+  public void onPrepareLoad(int actNumber, boolean isRefresh, int pos) {
+    currentPosition = pos;
     if (isRefresh) {
       onLoad(actNumber);
       return;
     }
 
-    if (socialList == null || socialList.size() == 0) {
+    if (SocialServiceHelper.getInstance().mySpacesList == null
+        || SocialServiceHelper.getInstance().mySpacesList.size() == 0) {
       onLoad(actNumber);
       return;
     }
@@ -128,8 +125,9 @@ public class MySpacesFragment extends Fragment {
   private void onLoad(int actNumber) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == MySpacesLoadTask.Status.FINISHED) {
-        mLoadTask = (MySpacesLoadTask) new MySpacesLoadTask(getActivity(), loaderItem).execute(actNumber,
-                                                                                               SocialTabsActivity.MY_SPACES);
+        mLoadTask = (MySpacesLoadTask) new MySpacesLoadTask(getActivity(),
+                                                            SocialTabsActivity.instance.loaderItem).execute(actNumber,
+                                                                                                            SocialTabsActivity.MY_SPACES);
       }
     } else {
       new ConnectionErrorDialog(getActivity()).show();
@@ -163,8 +161,25 @@ public class MySpacesFragment extends Fragment {
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
     listview.setAdapter(sectionAdapter);
+    /*
+     * Make section invisible at first in list
+     */
+    sectionAdapter.makeSectionInvisibleIfFirstInList(firstIndex);
+
+    listview.setSelectionFromTop(currentPosition, 0);
   }
 
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    /*
+     * Store the current first visible position of listview
+     */
+    if (listview != null) {
+      firstIndex = listview.getFirstVisiblePosition();
+    }
+  }
+  
   private class MySpacesLoadTask extends SocialLoadTask {
 
     public MySpacesLoadTask(Context context, LoaderActionBarItem loader) {
@@ -174,7 +189,6 @@ public class MySpacesFragment extends Fragment {
     @Override
     public void setResult(ArrayList<SocialActivityInfo> result) {
       super.setResult(result);
-      socialList = result;
       SocialServiceHelper.getInstance().mySpacesList = result;
       setListAdapter(result);
     }

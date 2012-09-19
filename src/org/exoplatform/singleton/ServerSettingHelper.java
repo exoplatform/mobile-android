@@ -14,12 +14,6 @@ import android.os.Parcelable;
 
 public class ServerSettingHelper implements Parcelable {
 
-  // The index of server url was selected in setting
-  private int                        selectedServerIndex;
-
-  // if this server url is new url
-  private boolean                    isNewServer;
-
   // The application version number
   private String                     applicationVersion;
 
@@ -43,22 +37,6 @@ public class ServerSettingHelper implements Parcelable {
 
   public void setInstance(ServerSettingHelper instance) {
     helper = instance;
-  }
-
-  public void setSelectedServerIndex(int index) {
-    selectedServerIndex = index;
-  }
-
-  public int getSelectedServerIndex() {
-    return selectedServerIndex;
-  }
-
-  public void setIsNewServer(boolean is) {
-    isNewServer = is;
-  }
-
-  public boolean getIsNewServer() {
-    return isNewServer;
   }
 
   public void setApplicationVersion(String version) {
@@ -108,8 +86,6 @@ public class ServerSettingHelper implements Parcelable {
                                                                       };
 
   private void readFromParcel(Parcel in) {
-    selectedServerIndex = in.readInt();
-    isNewServer = (Boolean) in.readValue(null);
     applicationVersion = in.readString();
     serverVersion = in.readString();
     serverEdition = in.readString();
@@ -124,8 +100,6 @@ public class ServerSettingHelper implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
-    dest.writeInt(selectedServerIndex);
-    dest.writeValue(isNewServer);
     dest.writeString(applicationVersion);
     dest.writeString(serverVersion);
     dest.writeString(serverEdition);

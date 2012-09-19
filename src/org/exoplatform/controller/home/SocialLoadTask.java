@@ -56,7 +56,8 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
 
   @Override
   public void onPreExecute() {
-    loaderItem.setLoading(true);
+    if (loaderItem != null)
+      loaderItem.setLoading(true);
 
   }
 
@@ -131,7 +132,8 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
-    loaderItem.setLoading(false);
+    if (loaderItem != null)
+      loaderItem.setLoading(false);
   }
 
   public void setResult(ArrayList<SocialActivityInfo> result) {
@@ -157,6 +159,11 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
       SocialServiceHelper.getInstance().myStatusList = result;
       break;
     }
+    notifyDataChange();
+  }
+
+  public void notifyDataChange() {
+
   }
 
 }

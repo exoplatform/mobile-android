@@ -17,6 +17,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.exoplatform.utils.image.FileCache;
 
 import android.app.Activity;
 import android.content.Context;
@@ -56,6 +57,11 @@ public class PhotoUtils {
   private static final String   TEMP_FILE_NAME = "temfile.png";
 
   private static final String   MOBILE_IMAGE   = "MobileImage_";
+
+  public static String getParentImagePath(Context context) {
+    FileCache cache = new FileCache(context, ExoConstants.DOCUMENT_FILE_CACHE);
+    return cache.getCachePath();
+  }
 
   public static boolean isImages(File file) {
 
