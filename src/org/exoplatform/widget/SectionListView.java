@@ -2,6 +2,7 @@ package org.exoplatform.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewParent;
 import android.widget.AbsListView;
@@ -71,12 +72,15 @@ public class SectionListView extends ListView implements OnScrollListener {
     if (adapter != null) {
       adapter.makeSectionInvisibleIfFirstInList(firstVisibleItem);
     }
+    
+    Log.i("EXO_MOB", "* 1st item:"+firstVisibleItem+"\n"+
+    		"* visible items:"+visibleItemCount+"\n"+
+    		"* total items:"+totalItemCount);
+    
+    if (firstVisibleItem+visibleItemCount==totalItemCount) {
+    	Log.i("EXO_MOB", "* Reached bottom.");
+    }
 
-  }
-
-  @Override
-  public void onScrollStateChanged(final AbsListView view, final int scrollState) {
-    // do nothing
   }
 
 }
