@@ -46,22 +46,22 @@ import android.widget.TextView;
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
  * 23, 2012
  */
-public class MyConnectionsFragment extends Fragment {
-  private SectionListView             listview;
+public class MyConnectionsFragment extends ActivityStreamFragment {
+//  private SectionListView             listview;
 
-  private View                        emptyStubView;
+//  private View                        emptyStubView;
 
-  private SectionListAdapter          sectionAdapter;
+//  private SectionListAdapter          sectionAdapter;
 
-  private MyConnectionLoadTask        mLoadTask;
+//  private MyConnectionLoadTask        mLoadTask;
 
   public static MyConnectionsFragment instance;
 
-  private int                         currentPosition = 0;
+//  private int                         currentPosition = 0;
 
-  private int                         firstIndex;
+//  private int                         firstIndex;
 
-  public int                          actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
+//  public int                          actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
 
   public static MyConnectionsFragment getInstance() {
     MyConnectionsFragment fragment = new MyConnectionsFragment();
@@ -83,6 +83,7 @@ public class MyConnectionsFragment extends Fragment {
     listview.setDividerHeight(0);
     listview.setFadingEdgeLength(0);
     listview.setCacheColorHint(Color.TRANSPARENT);
+    listview.setParentFragment(this);
     emptyStubView = ((ViewStub) view.findViewById(R.id.social_my_connections_empty_stub)).inflate();
     ImageView emptyImage = (ImageView) emptyStubView.findViewById(R.id.empty_image);
     emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
@@ -95,66 +96,72 @@ public class MyConnectionsFragment extends Fragment {
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    setListAdapter(SocialServiceHelper.getInstance().myConnectionsList);
+    setListAdapter();
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
-    onCancelLoad();
+//    onCancelLoad();
     instance = null;
   }
 
-  public void onPrepareLoad(int actNum, boolean isRefresh, int pos) {
-    currentPosition = pos;
-    if (isRefresh) {
-      onLoad(actNum);
-      return;
-    }
-
-    if (SocialServiceHelper.getInstance().myConnectionsList == null
-        || SocialServiceHelper.getInstance().myConnectionsList.size() == 0) {
-      onLoad(actNum);
-      return;
-    }
-
+//  public void onPrepareLoad(int actNum, boolean isRefresh, int pos) {
+//    currentPosition = pos;
+//    if (isRefresh) {
+//      onLoad(actNum);
+//      return;
+//    }
+//
+//    if (SocialServiceHelper.getInstance().myConnectionsList == null
+//        || SocialServiceHelper.getInstance().myConnectionsList.size() == 0) {
+//      onLoad(actNum);
+//      return;
+//    }
+//
+//  }
+  
+  public boolean isEmpty() {
+	  return (SocialServiceHelper.getInstance().myConnectionsList == null
+	        || SocialServiceHelper.getInstance().myConnectionsList.size() == 0);
   }
 
-  private void onLoad(int actNum) {
-    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
-      if (mLoadTask == null || mLoadTask.getStatus() == MyConnectionLoadTask.Status.FINISHED) {
-        mLoadTask = (MyConnectionLoadTask) new MyConnectionLoadTask(getActivity(),
-                                                                    SocialTabsActivity.instance.loaderItem).execute(actNum,
-                                                                                                                    SocialTabsActivity.MY_CONNECTIONS);
-      }
-    } else {
-      new ConnectionErrorDialog(getActivity()).show();
-    }
-  }
+//  private void onLoad(int actNum) {
+//    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
+//      if (mLoadTask == null || mLoadTask.getStatus() == MyConnectionLoadTask.Status.FINISHED) {
+//        mLoadTask = (MyConnectionLoadTask) new MyConnectionLoadTask(getActivity(),
+//                                                                    SocialTabsActivity.instance.loaderItem).execute(actNum,
+//                                                                                                                    SocialTabsActivity.MY_CONNECTIONS);
+//      }
+//    } else {
+//      new ConnectionErrorDialog(getActivity()).show();
+//    }
+//  }
 
-  private void onCancelLoad() {
-    if (mLoadTask != null && mLoadTask.getStatus() == MyConnectionLoadTask.Status.RUNNING) {
-      mLoadTask.cancel(true);
-      mLoadTask = null;
-    }
-  }
+//  private void onCancelLoad() {
+//    if (mLoadTask != null && mLoadTask.getStatus() == MyConnectionLoadTask.Status.RUNNING) {
+//      mLoadTask.cancel(true);
+//      mLoadTask = null;
+//    }
+//  }
 
-  public boolean isLoading() {
-    if (mLoadTask != null && mLoadTask.getStatus() == MyConnectionLoadTask.Status.RUNNING) {
-      return true;
-    }
+//  public boolean isLoading() {
+//    if (mLoadTask != null && mLoadTask.getStatus() == MyConnectionLoadTask.Status.RUNNING) {
+//      return true;
+//    }
+//
+//    return false;
+//  }
 
-    return false;
-  }
-
-  public void setListAdapter(ArrayList<SocialActivityInfo> list) {
+  public void setListAdapter() {
+	  ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().myConnectionsList;
     if (list == null || list.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);
       return;
     }
     emptyStubView.setVisibility(View.GONE);
 
-    StandardArrayAdapter arrayAdapter = new StandardArrayAdapter(getActivity(), list);
+    arrayAdapter = new StandardArrayAdapter(getActivity(), list);
     sectionAdapter = new SectionListAdapter(getActivity(),
                                             getActivity().getLayoutInflater(),
                                             arrayAdapter);
@@ -177,12 +184,12 @@ public class MyConnectionsFragment extends Fragment {
     /*
      * Store the current first visible position of listview
      */
-    if (listview != null) {
-      firstIndex = listview.getFirstVisiblePosition();
-    }
+//    if (listview != null) {
+//      firstIndex = listview.getFirstVisiblePosition();
+//    }
   }
 
-  private class MyConnectionLoadTask extends SocialLoadTask {
+  public class MyConnectionLoadTask extends SocialLoadTask {
 
     public MyConnectionLoadTask(Context context, LoaderActionBarItem loader) {
       super(context, loader);
@@ -191,8 +198,7 @@ public class MyConnectionsFragment extends Fragment {
     @Override
     public void setResult(ArrayList<SocialActivityInfo> result) {
       super.setResult(result);
-      SocialServiceHelper.getInstance().myConnectionsList = result;
-      setListAdapter(result);
+      setListAdapter();
     }
 
   }

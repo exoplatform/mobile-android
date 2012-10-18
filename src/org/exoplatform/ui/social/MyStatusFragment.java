@@ -46,25 +46,25 @@ import android.widget.TextView;
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
  * 23, 2012
  */
-public class MyStatusFragment extends Fragment {
+public class MyStatusFragment extends ActivityStreamFragment {
 
-  private SectionListView        listview;
+//  private SectionListView        listview;
 
-  private StandardArrayAdapter   arrayAdapter;
+//  private StandardArrayAdapter   arrayAdapter;
 
-  private SectionListAdapter     sectionAdapter;
+//  private SectionListAdapter     sectionAdapter;
 
-  private View                   emptyStubView;
+//  private View                   emptyStubView;
 
-  private MyStausLoadTask        mLoadTask;
+//  private MyStausLoadTask        mLoadTask;
 
   public static MyStatusFragment instance;
 
-  private int                    firstIndex;
+//  private int                    firstIndex;
 
-  private int                    currentPosition = 0;
+//  private int                    currentPosition = 0;
 
-  public int                     actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
+//  public int                     actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
 
   public static MyStatusFragment getInstance() {
     MyStatusFragment fragment = new MyStatusFragment();
@@ -86,6 +86,7 @@ public class MyStatusFragment extends Fragment {
     listview.setDividerHeight(0);
     listview.setFadingEdgeLength(0);
     listview.setCacheColorHint(Color.TRANSPARENT);
+    listview.setParentFragment(this);
     emptyStubView = ((ViewStub) view.findViewById(R.id.social_my_status_empty_stub)).inflate();
     ImageView emptyImage = (ImageView) emptyStubView.findViewById(R.id.empty_image);
     emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
@@ -98,58 +99,64 @@ public class MyStatusFragment extends Fragment {
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    setListAdapter(SocialServiceHelper.getInstance().myStatusList);
+    setListAdapter();
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
-    onCancelLoad();
+//    onCancelLoad();
     instance = null;
   }
 
-  public void onPrepareLoad(int actNumber, boolean isRefresh, int pos) {
-    currentPosition = pos;
-    if (isRefresh) {
-      onLoad(actNumber);
-      return;
-    }
-
-    if (SocialServiceHelper.getInstance().myStatusList == null
-        || SocialServiceHelper.getInstance().myStatusList.size() == 0) {
-      onLoad(actNumber);
-      return;
-    }
+//  public void onPrepareLoad(int actNumber, boolean isRefresh, int pos) {
+//    currentPosition = pos;
+//    if (isRefresh) {
+//      onLoad(actNumber);
+//      return;
+//    }
+//
+//    if (SocialServiceHelper.getInstance().myStatusList == null
+//        || SocialServiceHelper.getInstance().myStatusList.size() == 0) {
+//      onLoad(actNumber);
+//      return;
+//    }
+//  }
+  
+  public boolean isEmpty() {
+	  return (SocialServiceHelper.getInstance().myStatusList == null
+	        || SocialServiceHelper.getInstance().myStatusList.size() == 0);
   }
 
-  private void onLoad(int actNumber) {
-    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
-      if (mLoadTask == null || mLoadTask.getStatus() == MyStausLoadTask.Status.FINISHED) {
-        mLoadTask = (MyStausLoadTask) new MyStausLoadTask(getActivity(),
-                                                          SocialTabsActivity.instance.loaderItem).execute(actNumber,
-                                                                                                          SocialTabsActivity.MY_STATUS);
-      }
-    } else {
-      new ConnectionErrorDialog(getActivity()).show();
-    }
-  }
+//  private void onLoad(int actNumber) {
+//    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
+//      if (mLoadTask == null || mLoadTask.getStatus() == MyStausLoadTask.Status.FINISHED) {
+//        mLoadTask = (MyStausLoadTask) new MyStausLoadTask(getActivity(),
+//                                                          SocialTabsActivity.instance.loaderItem).execute(actNumber,
+//                                                                                                          SocialTabsActivity.MY_STATUS);
+//      }
+//    } else {
+//      new ConnectionErrorDialog(getActivity()).show();
+//    }
+//  }
 
-  private void onCancelLoad() {
-    if (mLoadTask != null && mLoadTask.getStatus() == MyStausLoadTask.Status.RUNNING) {
-      mLoadTask.cancel(true);
-      mLoadTask = null;
-    }
-  }
+//  private void onCancelLoad() {
+//    if (mLoadTask != null && mLoadTask.getStatus() == MyStausLoadTask.Status.RUNNING) {
+//      mLoadTask.cancel(true);
+//      mLoadTask = null;
+//    }
+//  }
 
-  public boolean isLoading() {
-    if (mLoadTask != null && mLoadTask.getStatus() == MyStausLoadTask.Status.RUNNING) {
-      return true;
-    }
+//  public boolean isLoading() {
+//    if (mLoadTask != null && mLoadTask.getStatus() == MyStausLoadTask.Status.RUNNING) {
+//      return true;
+//    }
+//
+//    return false;
+//  }
 
-    return false;
-  }
-
-  public void setListAdapter(ArrayList<SocialActivityInfo> list) {
+  public void setListAdapter() {
+	  ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().myStatusList;
     if (list == null || list.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);
       return;
@@ -175,22 +182,21 @@ public class MyStatusFragment extends Fragment {
     /*
      * Store the current first visible position of listview
      */
-    if (listview != null) {
-      firstIndex = listview.getFirstVisiblePosition();
-    }
+//    if (listview != null) {
+//      firstIndex = listview.getFirstVisiblePosition();
+//    }
   }
 
-  private class MyStausLoadTask extends SocialLoadTask {
+  public class MyStatusLoadTask extends SocialLoadTask {
 
-    public MyStausLoadTask(Context context, LoaderActionBarItem loader) {
+    public MyStatusLoadTask(Context context, LoaderActionBarItem loader) {
       super(context, loader);
     }
 
     @Override
     public void setResult(ArrayList<SocialActivityInfo> result) {
       super.setResult(result);
-      SocialServiceHelper.getInstance().myStatusList = result;
-      setListAdapter(result);
+      setListAdapter();
     }
 
   }

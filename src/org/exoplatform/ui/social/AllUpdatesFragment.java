@@ -36,6 +36,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,25 +48,27 @@ import android.widget.TextView;
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
  * 23, 2012
  */
-public class AllUpdatesFragment extends Fragment {
-
-  private SectionListView          listview;
-
-  private View                     emptyStubView;
-
-  private StandardArrayAdapter     arrayAdapter;
-
-  private SectionListAdapter       sectionAdapter;
-
-  private AllUpdateLoadTask        mLoadTask;
+public class AllUpdatesFragment extends ActivityStreamFragment {
+//
+//  private SectionListView          listview;
+//
+//  private View                     emptyStubView;
+//
+//  private StandardArrayAdapter     arrayAdapter;
+//
+//  private SectionListAdapter       sectionAdapter;
+//
+//  private AllUpdateLoadTask        mLoadTask;
 
   public static AllUpdatesFragment instance;
-
-  private int                      firstIndex;
-
-  private int                      currentPosition = 0;
-
-  public int                       actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
+//
+//  private int                      firstIndex;
+//
+//  private int                      currentPosition = 0;
+//
+//  public int                       actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
+  //
+//  private boolean				   isLoadingMoreActivities = false;
 
   public static AllUpdatesFragment getInstance() {
     AllUpdatesFragment fragment = new AllUpdatesFragment();
@@ -87,6 +90,7 @@ public class AllUpdatesFragment extends Fragment {
     listview.setDividerHeight(0);
     listview.setFadingEdgeLength(0);
     listview.setCacheColorHint(Color.TRANSPARENT);
+    listview.setParentFragment(this);
     emptyStubView = ((ViewStub) view.findViewById(R.id.social_all_updates_empty_stub)).inflate();
     ImageView emptyImage = (ImageView) emptyStubView.findViewById(R.id.empty_image);
     emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
@@ -105,51 +109,78 @@ public class AllUpdatesFragment extends Fragment {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    onCancelLoad();
+//    onCancelLoad();
     instance = null;
   }
 
-  public void onPrepareLoad(int actNums, boolean isRefresh, int position) {
-    currentPosition = position;
-    if (isRefresh) {
-      onLoad(actNums);
-      return;
-    }
-
-    if (SocialServiceHelper.getInstance().socialInfoList == null
-        || SocialServiceHelper.getInstance().socialInfoList.size() == 0) {
-      onLoad(actNums);
-      return;
-    }
-
+//  public void onPrepareLoad(int actNums, boolean isRefresh, int position) {
+//    currentPosition = position;
+//    if (isRefresh) {
+//      onLoad(actNums);
+//      return;
+//    }
+//
+//    if (SocialServiceHelper.getInstance().socialInfoList == null
+//        || SocialServiceHelper.getInstance().socialInfoList.size() == 0) {
+//      onLoad(actNums);
+//      return;
+//    }
+//
+//  }
+  
+  public boolean isEmpty() {
+	  return (SocialServiceHelper.getInstance().socialInfoList == null
+	        || SocialServiceHelper.getInstance().socialInfoList.size() == 0);
   }
 
-  private void onLoad(int actNums) {
-    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
-      if (mLoadTask == null || mLoadTask.getStatus() == AllUpdateLoadTask.Status.FINISHED) {
-        mLoadTask = (AllUpdateLoadTask) new AllUpdateLoadTask(getActivity(),
-                                                              SocialTabsActivity.instance.loaderItem).execute(actNums,
-                                                                                                              SocialTabsActivity.ALL_UPDATES);
-      }
-    } else {
-      new ConnectionErrorDialog(getActivity()).show();
-    }
-  }
+//  private void onLoad(int actNums) {
+//    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
+//      if (mLoadTask == null || mLoadTask.getStatus() == AllUpdateLoadTask.Status.FINISHED) {
+//        mLoadTask = (AllUpdateLoadTask) new AllUpdateLoadTask(getActivity(),
+//                                                              SocialTabsActivity.instance.loaderItem).execute(
+//                                                            		  actNums,
+//                                                                      SocialTabsActivity.ALL_UPDATES);
+//      }
+//    } else {
+//      new ConnectionErrorDialog(getActivity()).show();
+//    }
+//  }
+  
+//  public void onLoadMore(int numberOfActivities, int currentPos) {
+//	  if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
+//	      if (mLoadTask == null || mLoadTask.getStatus() == AllUpdateLoadTask.Status.FINISHED) {
+//	    	  isLoadingMoreActivities = true;
+//	    	  currentPosition = currentPos;
+//	          mLoadTask = (AllUpdateLoadTask) new AllUpdateLoadTask(getActivity(),
+//	                                                              SocialTabsActivity.instance.loaderItem).execute(
+//	                                                            		  numberOfActivities,
+//	                                                                      SocialTabsActivity.ALL_UPDATES,
+//	                                                                      SocialServiceHelper.getInstance().socialInfoList.size()-1);
+//	      }
+//	    } else {
+//	      new ConnectionErrorDialog(getActivity()).show();
+//	    }
+//  }
 
-  private void onCancelLoad() {
-    if (mLoadTask != null && mLoadTask.getStatus() == AllUpdateLoadTask.Status.RUNNING) {
-      mLoadTask.cancel(true);
-      mLoadTask = null;
-    }
-  }
+//  private void onCancelLoad() {
+//    if (mLoadTask != null && mLoadTask.getStatus() == AllUpdateLoadTask.Status.RUNNING) {
+//      mLoadTask.cancel(true);
+//      mLoadTask = null;
+//      isLoadingMoreActivities = false;
+//    }
+//  }
 
-  public boolean isLoading() {
-    if (mLoadTask != null && mLoadTask.getStatus() == AllUpdateLoadTask.Status.RUNNING) {
-      return true;
-    }
-
-    return false;
-  }
+//  public boolean isLoading() {
+//    if (mLoadTask != null && mLoadTask.getStatus() == AllUpdateLoadTask.Status.RUNNING) {
+//      return true;
+//    }
+//
+//    return false;
+//  }
+  
+//  public int getPosition() {
+//	  return currentPosition;
+//  }
 
   public void setListAdapter() {
 
@@ -183,12 +214,12 @@ public class AllUpdatesFragment extends Fragment {
     /*
      * Store the current first visible position of listview
      */
-    if (listview != null) {
-      firstIndex = listview.getFirstVisiblePosition();
-    }
+//    if (listview != null) {
+//      firstIndex = listview.getFirstVisiblePosition();
+//    }
   }
 
-  private class AllUpdateLoadTask extends SocialLoadTask {
+  public class AllUpdateLoadTask extends SocialLoadTask {
 
     public AllUpdateLoadTask(Context context, LoaderActionBarItem loader) {
       super(context, loader);
@@ -197,10 +228,6 @@ public class AllUpdatesFragment extends Fragment {
     @Override
     public void setResult(ArrayList<SocialActivityInfo> result) {
       super.setResult(result);
-      SocialServiceHelper.getInstance().socialInfoList = result;
-      if (HomeActivity.homeActivity != null) {
-        HomeActivity.homeActivity.setSocialInfo(result);
-      }
       setListAdapter();
     }
 
