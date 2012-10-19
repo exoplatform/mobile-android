@@ -25,7 +25,6 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.WebViewActivity;
-import org.exoplatform.utils.image.FileCache;
 import org.exoplatform.widget.UnreadableFileDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,9 +41,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
-import android.util.FloatMath;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 
 public class ExoDocumentUtils {
 

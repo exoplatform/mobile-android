@@ -3,7 +3,6 @@ package org.exoplatform.widget;
 import java.security.InvalidParameterException;
 
 import org.exoplatform.ui.social.ActivityStreamFragment;
-import org.exoplatform.ui.social.AllUpdatesFragment;
 import org.exoplatform.utils.ExoConstants;
 
 import android.content.Context;

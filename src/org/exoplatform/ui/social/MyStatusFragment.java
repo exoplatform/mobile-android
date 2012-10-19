@@ -24,9 +24,7 @@ import org.exoplatform.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SectionListAdapter;
 import org.exoplatform.widget.SectionListView;
 import org.exoplatform.widget.StandardArrayAdapter;
@@ -34,7 +32,6 @@ import org.exoplatform.widget.StandardArrayAdapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,23 +45,9 @@ import android.widget.TextView;
  */
 public class MyStatusFragment extends ActivityStreamFragment {
 
-//  private SectionListView        listview;
-
-//  private StandardArrayAdapter   arrayAdapter;
-
-//  private SectionListAdapter     sectionAdapter;
-
-//  private View                   emptyStubView;
-
-//  private MyStausLoadTask        mLoadTask;
 
   public static MyStatusFragment instance;
 
-//  private int                    firstIndex;
-
-//  private int                    currentPosition = 0;
-
-//  public int                     actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
 
   public static MyStatusFragment getInstance() {
     MyStatusFragment fragment = new MyStatusFragment();
@@ -109,51 +92,11 @@ public class MyStatusFragment extends ActivityStreamFragment {
     instance = null;
   }
 
-//  public void onPrepareLoad(int actNumber, boolean isRefresh, int pos) {
-//    currentPosition = pos;
-//    if (isRefresh) {
-//      onLoad(actNumber);
-//      return;
-//    }
-//
-//    if (SocialServiceHelper.getInstance().myStatusList == null
-//        || SocialServiceHelper.getInstance().myStatusList.size() == 0) {
-//      onLoad(actNumber);
-//      return;
-//    }
-//  }
   
   public boolean isEmpty() {
 	  return (SocialServiceHelper.getInstance().myStatusList == null
 	        || SocialServiceHelper.getInstance().myStatusList.size() == 0);
   }
-
-//  private void onLoad(int actNumber) {
-//    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
-//      if (mLoadTask == null || mLoadTask.getStatus() == MyStausLoadTask.Status.FINISHED) {
-//        mLoadTask = (MyStausLoadTask) new MyStausLoadTask(getActivity(),
-//                                                          SocialTabsActivity.instance.loaderItem).execute(actNumber,
-//                                                                                                          SocialTabsActivity.MY_STATUS);
-//      }
-//    } else {
-//      new ConnectionErrorDialog(getActivity()).show();
-//    }
-//  }
-
-//  private void onCancelLoad() {
-//    if (mLoadTask != null && mLoadTask.getStatus() == MyStausLoadTask.Status.RUNNING) {
-//      mLoadTask.cancel(true);
-//      mLoadTask = null;
-//    }
-//  }
-
-//  public boolean isLoading() {
-//    if (mLoadTask != null && mLoadTask.getStatus() == MyStausLoadTask.Status.RUNNING) {
-//      return true;
-//    }
-//
-//    return false;
-//  }
 
   public void setListAdapter() {
 	  ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().myStatusList;

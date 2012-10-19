@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2012 eXo Platform SAS.
+  * Copyright (C) 2003-2012 eXo Platform SAS.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -24,9 +24,7 @@ import org.exoplatform.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SectionListAdapter;
 import org.exoplatform.widget.SectionListView;
 import org.exoplatform.widget.StandardArrayAdapter;
@@ -34,7 +32,6 @@ import org.exoplatform.widget.StandardArrayAdapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,51 +106,12 @@ public class MySpacesFragment extends ActivityStreamFragment {
     instance = null;
   }
 
-//  public void onPrepareLoad(int actNumber, boolean isRefresh, int pos) {
-//    currentPosition = pos;
-//    if (isRefresh) {
-//      onLoad(actNumber);
-//      return;
-//    }
-//
-//    if (SocialServiceHelper.getInstance().mySpacesList == null
-//        || SocialServiceHelper.getInstance().mySpacesList.size() == 0) {
-//      onLoad(actNumber);
-//      return;
-//    }
-//  }
   
   public boolean isEmpty() {
 	  return (SocialServiceHelper.getInstance().mySpacesList == null
 	        || SocialServiceHelper.getInstance().mySpacesList.size() == 0);
   }
 
-//  private void onLoad(int actNumber) {
-//    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
-//      if (mLoadTask == null || mLoadTask.getStatus() == MySpacesLoadTask.Status.FINISHED) {
-//        mLoadTask = (MySpacesLoadTask) new MySpacesLoadTask(getActivity(),
-//                                                            SocialTabsActivity.instance.loaderItem).execute(actNumber,
-//                                                                                                            SocialTabsActivity.MY_SPACES);
-//      }
-//    } else {
-//      new ConnectionErrorDialog(getActivity()).show();
-//    }
-//  }
-
-//  private void onCancelLoad() {
-//    if (mLoadTask != null && mLoadTask.getStatus() == MySpacesLoadTask.Status.RUNNING) {
-//      mLoadTask.cancel(true);
-//      mLoadTask = null;
-//    }
-//  }
-
-//  public boolean isLoading() {
-//    if (mLoadTask != null && mLoadTask.getStatus() == MySpacesLoadTask.Status.RUNNING) {
-//      return true;
-//    }
-//
-//    return false;
-//  }
 
   public void setListAdapter() {
 	  ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().mySpacesList;
@@ -179,12 +137,7 @@ public class MySpacesFragment extends ActivityStreamFragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    /*
-     * Store the current first visible position of listview
-     */
-//    if (listview != null) {
-//      firstIndex = listview.getFirstVisiblePosition();
-//    }
+    
   }
   
   public class MySpacesLoadTask extends SocialLoadTask {
