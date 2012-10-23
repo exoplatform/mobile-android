@@ -21,7 +21,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <!-- Application Uses SDK -->
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="10"/>
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
 
     <!-- Application Informations -->
     <application
