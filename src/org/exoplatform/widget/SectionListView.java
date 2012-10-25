@@ -49,7 +49,7 @@ public class SectionListView extends ListView implements OnScrollListener {
     setOnScrollListener(this);
     setVerticalFadingEdgeEnabled(false);
     setFadingEdgeLength(0);    
-    autoLoadProgress = new ProgressBar(getContext());
+    autoLoadProgress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
     autoLoadProgress.setLayoutParams(new ListView.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
     autoLoadProgress.setVisibility(View.INVISIBLE);
     LinearLayout layout = new LinearLayout(getContext());
@@ -108,14 +108,17 @@ public class SectionListView extends ListView implements OnScrollListener {
     
     if (totalItemCount > 0 && firstVisibleItem+visibleItemCount==totalItemCount) {
     	if (parentFragment instanceof ActivityStreamFragment) {
-    		Log.d("EXO_MOB", "*** Reached bottom of the list, loading more activities...");
+    		Log.d("EXO_MOB", "*** Reached bottom of the list, loading more activities..."); //TODO
     		autoLoadProgress.setVisibility(View.VISIBLE);
     		((ActivityStreamFragment)parentFragment).onLoadMore(
-    				ExoConstants.NUMBER_OF_ACTIVITY, firstVisibleItem
+    				ExoConstants.NUMBER_OF_ACTIVITY, totalItemCount-1
     		);
     	}
     }
-
+  }
+  
+  public ProgressBar getAutoLoadProgressBar() {
+	  return autoLoadProgress;
   }
 
     @Override

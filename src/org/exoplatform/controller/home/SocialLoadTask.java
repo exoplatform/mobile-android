@@ -27,7 +27,10 @@ import android.util.Log;
 
 import com.cyrilmottier.android.greendroid.R;
 
-public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialActivityInfo>> {
+/**
+ * The asynchronous task that loads activities from the Social REST service.
+ */
+public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialActivityInfo>> {
 
   private Context             mContext;
 
@@ -42,11 +45,14 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
   private int                 feedType = 0;
   
   private boolean				isLoadingMoreActivities = false;
+  
+  protected ActivityService<RestActivity> activityService;
 
   public SocialLoadTask(Context context, LoaderActionBarItem loader) {
     mContext = context;
     loaderItem = loader;
     changeLanguage();
+    activityService = SocialServiceHelper.getInstance().activityService;
   }
 
   private void changeLanguage() {
@@ -61,15 +67,35 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
   public void onPreExecute() {
     if (loaderItem != null)
       loaderItem.setLoading(true);
-
   }
+  
+  /**
+   * Get the list of RestActivity from the Social REST service.
+   * @param identity The RestIdentity of the user.
+   * @param params The parameters to send to the REST service.
+   * @return The list of RestActivity.
+   * @throws SocialClientLibException
+   */
+  protected abstract RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException;
+  /**
+   * Get the list of SocialActivity for the current stream.
+   * @return the list of SocialActivityInfo.
+   */
+  protected abstract ArrayList<SocialActivityInfo> getSocialActivityList();
 
   @Override
+  /*
+   * Parameters are expected as follows:
+   * - The number of activities to load (params[0]).
+   * - The current activity stream (params[1]).
+   * - [optional] The position of the activity from which to load more activities (params[2]).
+   *   If set, the task will add more activities to the current stream.
+   */
   public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
     try {
       ArrayList<SocialActivityInfo> listActivity = new ArrayList<SocialActivityInfo>();
       int loadSize = params[0];
-      ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
+      
       IdentityService<?> identityService = SocialServiceHelper.getInstance().identityService;
       RestIdentity identity = (RestIdentity) identityService.get(SocialServiceHelper.getInstance().userIdentity);
       QueryParams queryParams = new QueryParamsImpl();
@@ -78,36 +104,19 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
       queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
 
       feedType = params[1];
-      Log.d("EXO_MOB", "*** Task started, updating stream: "+feedType);
-      RealtimeListAccess<RestActivity> list = null;
-      ArrayList<SocialActivityInfo> socialList = null;
-      switch (feedType) {
-      case SocialTabsActivity.ALL_UPDATES:
-        list = activityService.getFeedActivityStream(identity, queryParams);
-        socialList = SocialServiceHelper.getInstance().socialInfoList;
-        break;
-      case SocialTabsActivity.MY_CONNECTIONS:
-        list = activityService.getConnectionsActivityStream(identity, queryParams);
-        socialList = SocialServiceHelper.getInstance().myConnectionsList;
-        break;
-      case SocialTabsActivity.MY_SPACES:
-        list = activityService.getSpacesActivityStream(identity, queryParams);
-        socialList = SocialServiceHelper.getInstance().mySpacesList;
-        break;
-      case SocialTabsActivity.MY_STATUS:
-        list = activityService.getActivityStream(identity, queryParams);
-        socialList = SocialServiceHelper.getInstance().myStatusList;
-        break;
-      }
+      Log.d("EXO_MOB", "*** Task started, updating stream: "+feedType); //TODO
+      
+      RealtimeListAccess<RestActivity> list = getRestActivityList(identity, queryParams);
+      ArrayList<SocialActivityInfo> socialList = getSocialActivityList();
 
       ArrayList<RestActivity> activityList = null;
       if (params.length == 3 && socialList != null) {
     	  isLoadingMoreActivities = true;
     	  SocialActivityInfo socialActiv = socialList.get(params[2]);
-    	  RestActivity rActiv = new RestActivity();
-    	  rActiv.setId(socialActiv.getActivityId());
-    	  Log.d("EXO_MOB", "**** Load more activities before "+socialActiv.getActivityId());
-    	  activityList = (ArrayList<RestActivity>) list.loadOlderAsList(rActiv, loadSize);
+    	  RestActivity restActiv = new RestActivity();
+    	  restActiv.setId(socialActiv.getActivityId());
+    	  Log.d("EXO_MOB", "**** Load more activities before "+socialActiv.getActivityId()); //TODO
+    	  activityList = (ArrayList<RestActivity>) list.loadOlderAsList(restActiv, loadSize);
       } else {
     	  activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);
       }
@@ -143,7 +152,7 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
 
   @Override
   public void onPostExecute(ArrayList<SocialActivityInfo> result) {
-	  Log.d("EXO_MOB", "*** Task done");
+	  Log.d("EXO_MOB", "*** Task done on stream "+feedType); //TODO
     if (result != null) {
 
       setResult(result);
@@ -154,50 +163,15 @@ public class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<SocialAct
     }
     if (loaderItem != null)
       loaderItem.setLoading(false);
-    isLoadingMoreActivities = false;
   }
 
   public void setResult(ArrayList<SocialActivityInfo> result) {
-
-    switch (feedType) {
-    case SocialTabsActivity.ALL_UPDATES:
-    	if (!isLoadingMoreActivities)
-    		SocialServiceHelper.getInstance().socialInfoList = result;
-    	else
-    		SocialServiceHelper.getInstance().socialInfoList.addAll(result);
-      if (HomeActivity.homeActivity != null) {
+    if (feedType == SocialTabsActivity.ALL_UPDATES && HomeActivity.homeActivity != null) {
         HomeActivity.homeActivity.setSocialInfo(result);
       }
-      break;
-    case SocialTabsActivity.MY_CONNECTIONS:
-    	if (!isLoadingMoreActivities)
-    		SocialServiceHelper.getInstance().myConnectionsList = result;
-    	else
-    		SocialServiceHelper.getInstance().myConnectionsList.addAll(result);
-      break;
-    case SocialTabsActivity.MY_SPACES:
-    	if (!isLoadingMoreActivities)
-    		SocialServiceHelper.getInstance().mySpacesList = result;
-    	else
-    		SocialServiceHelper.getInstance().mySpacesList.addAll(result);
-      break;
-    case SocialTabsActivity.MY_STATUS:
-    	if (!isLoadingMoreActivities)
-    		SocialServiceHelper.getInstance().myStatusList = result;
-    	else
-    		SocialServiceHelper.getInstance().myStatusList.addAll(result);
-      break;
-    }
     if (isLoadingMoreActivities) {
-      Log.d("EXO_MOB", "*** Adding "+result.size()+" activities");
   	  SocialTabsActivity.instance.number_of_activity += result.size();
   	  isLoadingMoreActivities = false;
     }
-    notifyDataChange();
   }
-
-  public void notifyDataChange() {
-
-  }
-
 }

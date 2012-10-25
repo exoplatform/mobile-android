@@ -156,5 +156,6 @@
         <item>My Spaces</item>
         <item>My Status</item>
     </string-array>
+    <string name="CannotLoadMoreActivities">Cannot load older activities. The list is being refreshed.</string>
 
 </resources>

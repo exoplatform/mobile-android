@@ -24,20 +24,14 @@ import org.exoplatform.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.SectionListAdapter;
-import org.exoplatform.widget.SectionListView;
-import org.exoplatform.widget.StandardArrayAdapter;
-
+import org.exoplatform.social.client.api.SocialClientLibException;
+import org.exoplatform.social.client.api.common.RealtimeListAccess;
+import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.api.model.RestIdentity;
+import org.exoplatform.social.client.api.service.QueryParams;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
@@ -45,9 +39,12 @@ import android.widget.TextView;
  */
 public class MyStatusFragment extends ActivityStreamFragment {
 
-
   public static MyStatusFragment instance;
-
+  
+  @Override
+	public int getThisTabId() {
+		return SocialTabsActivity.MY_STATUS;
+	}
 
   public static MyStatusFragment getInstance() {
     MyStatusFragment fragment = new MyStatusFragment();
@@ -56,27 +53,11 @@ public class MyStatusFragment extends ActivityStreamFragment {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
     instance = this;
-    onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false, 0);
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.social_my_status_layout, container, false);
-    listview = (SectionListView) view.findViewById(R.id.my_status_listview);
-    listview.setDivider(null);
-    listview.setDividerHeight(0);
-    listview.setFadingEdgeLength(0);
-    listview.setCacheColorHint(Color.TRANSPARENT);
-    listview.setParentFragment(this);
-    emptyStubView = ((ViewStub) view.findViewById(R.id.social_my_status_empty_stub)).inflate();
-    ImageView emptyImage = (ImageView) emptyStubView.findViewById(R.id.empty_image);
-    emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
-    TextView emptyStatus = (TextView) emptyStubView.findViewById(R.id.empty_status);
-    emptyStatus.setText(getActivity().getString(R.string.EmptyActivity));
-
-    return view;
+    fragment_layout = R.layout.social_my_status_layout;
+    fragment_list_view_id = R.id.my_status_listview;
+    fragment_empty_view_id = R.id.social_my_status_empty_stub;
+    super.onCreate(savedInstanceState);
   }
 
   @Override
@@ -88,47 +69,29 @@ public class MyStatusFragment extends ActivityStreamFragment {
   @Override
   public void onDestroy() {
     super.onDestroy();
-//    onCancelLoad();
     instance = null;
   }
-
-  
   public boolean isEmpty() {
 	  return (SocialServiceHelper.getInstance().myStatusList == null
 	        || SocialServiceHelper.getInstance().myStatusList.size() == 0);
   }
+  
+  @Override
+  public SocialLoadTask getThisLoadTask() {
+  	return new MyStatusLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+  }
 
   public void setListAdapter() {
-	  ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().myStatusList;
-    if (list == null || list.size() == 0) {
-      emptyStubView.setVisibility(View.VISIBLE);
-      return;
-    }
-    emptyStubView.setVisibility(View.GONE);
-
-    arrayAdapter = new StandardArrayAdapter(getActivity(), list);
-    sectionAdapter = new SectionListAdapter(getActivity(),
-                                            getActivity().getLayoutInflater(),
-                                            arrayAdapter);
-    listview.setAdapter(sectionAdapter);
-    /*
-     * Make section invisible at first in list
-     */
-    sectionAdapter.makeSectionInvisibleIfFirstInList(firstIndex);
-
-    listview.setSelectionFromTop(currentPosition, 0);
+	  super.setListAdapter(SocialServiceHelper.getInstance().myStatusList);
   }
-
+  
   @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-    /*
-     * Store the current first visible position of listview
-     */
-//    if (listview != null) {
-//      firstIndex = listview.getFirstVisiblePosition();
-//    }
-  }
+	public void setActivityList(ArrayList<SocialActivityInfo> list) {
+		if (!isLoadingMoreActivities)
+			SocialServiceHelper.getInstance().myStatusList = list;
+		else
+			SocialServiceHelper.getInstance().myStatusList.addAll(list);
+	}
 
   public class MyStatusLoadTask extends SocialLoadTask {
 
@@ -138,9 +101,23 @@ public class MyStatusFragment extends ActivityStreamFragment {
 
     @Override
     public void setResult(ArrayList<SocialActivityInfo> result) {
-      super.setResult(result);
-      setListAdapter();
+    	setActivityList(result);
+    	setListAdapter();
+    	listview.getAutoLoadProgressBar().setVisibility(View.GONE);
+    	super.setResult(result);
     }
+
+	@Override
+	protected RealtimeListAccess<RestActivity> getRestActivityList(
+			RestIdentity identity, QueryParams params)
+			throws SocialClientLibException {
+		return activityService.getActivityStream(identity, params);
+	}
+
+	@Override
+	protected ArrayList<SocialActivityInfo> getSocialActivityList() {
+		return SocialServiceHelper.getInstance().myStatusList;
+	}
 
   }
 }
