@@ -205,7 +205,7 @@ public class SocialTabsActivity extends MyActionBar {
 
     @Override
     public Fragment getItem(int position) {
-      Fragment fragment = null;
+      ActivityStreamFragment fragment = null;
       switch (position) {
       case ALL_UPDATES:
         fragment = AllUpdatesFragment.getInstance();

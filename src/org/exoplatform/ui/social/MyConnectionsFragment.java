@@ -31,7 +31,6 @@ import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -49,13 +48,11 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
 
   public static MyConnectionsFragment getInstance() {
     MyConnectionsFragment fragment = new MyConnectionsFragment();
-    Log.d("EXO_MOB", "*** Creating "+fragment); //TODO
     return fragment;
   }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-	  Log.d("EXO_MOB", "*** onCreate "+this); //TODO
     instance = this;
     fragment_layout = R.layout.social_my_connections_layout;
     fragment_list_view_id = R.id.my_connections_listview;

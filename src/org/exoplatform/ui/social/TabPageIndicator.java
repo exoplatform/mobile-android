@@ -27,7 +27,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
@@ -63,7 +62,6 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
                TabView tabView = (TabView) view;
                final int oldSelected = mViewPager.getCurrentItem();
                final int newSelected = tabView.getIndex();
-               Log.d("EXO_MOB", "Moving from old: "+oldSelected+" to new: "+newSelected); //TODO
                mViewPager.setCurrentItem(newSelected);
                if (oldSelected == newSelected && mTabReselectedListener != null) {
                  mTabReselectedListener.onTabReselected(newSelected);
@@ -248,11 +246,9 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
       /*
        * Set text color in case of selected
        */
-      Log.d("EXO_MOB", "*** Checking item: "+i+"/"+tabCount); //TODO
       if (isSelected) {
         child.setTextColor(Color.rgb(65, 65, 65));
         animateToTab(item);
-        Log.d("EXO_MOB", "*** Animating to: "+item); //TODO
       } else
         child.setTextColor(Color.rgb(120, 120, 120));
     }

@@ -6,9 +6,7 @@ import org.exoplatform.ui.social.ActivityStreamFragment;
 import org.exoplatform.utils.ExoConstants;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewParent;
@@ -27,7 +25,7 @@ import android.widget.ProgressBar;
 public class SectionListView extends ListView implements OnScrollListener {
 
   private View transparentView;
-  private Fragment parentFragment;
+  private ActivityStreamFragment parentFragment;
   private ProgressBar autoLoadProgress;
 
   public SectionListView(final Context context, final AttributeSet attrs, final int defStyle) {
@@ -51,6 +49,7 @@ public class SectionListView extends ListView implements OnScrollListener {
     setFadingEdgeLength(0);    
     autoLoadProgress = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleSmall);
     autoLoadProgress.setLayoutParams(new ListView.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+    autoLoadProgress.setPadding(0, 0, 0, 10); // 0px left, top and right, 10px bottom
     autoLoadProgress.setVisibility(View.INVISIBLE);
     LinearLayout layout = new LinearLayout(getContext());
     layout.setGravity(Gravity.CENTER);
@@ -79,10 +78,9 @@ public class SectionListView extends ListView implements OnScrollListener {
     if (adapter.isEmpty()) {
       transparentView.setVisibility(View.INVISIBLE);
     }
-
   }
   
-  public void setParentFragment(Fragment p) {
+  public void setParentFragment(ActivityStreamFragment p) {
 	  if (p != null) {
 		  parentFragment = p;
 	  } else {
@@ -107,13 +105,10 @@ public class SectionListView extends ListView implements OnScrollListener {
     }
     
     if (totalItemCount > 0 && firstVisibleItem+visibleItemCount==totalItemCount) {
-    	if (parentFragment instanceof ActivityStreamFragment) {
-    		Log.d("EXO_MOB", "*** Reached bottom of the list, loading more activities..."); //TODO
-    		autoLoadProgress.setVisibility(View.VISIBLE);
-    		((ActivityStreamFragment)parentFragment).onLoadMore(
-    				ExoConstants.NUMBER_OF_ACTIVITY, totalItemCount-1
-    		);
-    	}
+		autoLoadProgress.setVisibility(View.VISIBLE);
+		((ActivityStreamFragment)parentFragment).onLoadMore(
+				ExoConstants.NUMBER_OF_ACTIVITY, totalItemCount-1, firstVisibleItem
+		);
     }
   }
   

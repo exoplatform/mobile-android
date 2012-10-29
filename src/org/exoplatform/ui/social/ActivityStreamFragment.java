@@ -6,7 +6,6 @@ import org.exoplatform.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.ui.social.AllUpdatesFragment.AllUpdateLoadTask;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.ConnectionErrorDialog;
@@ -15,9 +14,9 @@ import org.exoplatform.widget.SectionListView;
 import org.exoplatform.widget.StandardArrayAdapter;
 
 import android.graphics.Color;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,8 +91,8 @@ public abstract class ActivityStreamFragment extends Fragment {
 	    super.onDestroy();
 	    onCancelLoad();
 	  }
-	  
-	  @Override
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false, 0);
@@ -128,7 +127,6 @@ public abstract class ActivityStreamFragment extends Fragment {
 	   */
 	  public void onPrepareLoad(int actNums, boolean isRefresh, int position) {
 		    currentPosition = position;
-		    Log.d("EXO_MOB", "*** Prepare load "+this); //TODO
 		    if (isRefresh) {
 		      onLoad(actNums);
 		      return;
@@ -146,10 +144,12 @@ public abstract class ActivityStreamFragment extends Fragment {
 	   */
 	  private void onLoad(int actNums) {
 		    if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
-		      if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
+		      if (mLoadTask == null || mLoadTask.getStatus() == Status.FINISHED) {
 		    	  int currentTab = getThisTabId();
 		    	  mLoadTask = getThisLoadTask();
 		    	  mLoadTask.execute(actNums, currentTab);
+		    	  firstIndex = 0;
+		    	  isLoadingMoreActivities = false;
 		     }
 		  } else {
 		      new ConnectionErrorDialog(getActivity()).show();
@@ -161,9 +161,9 @@ public abstract class ActivityStreamFragment extends Fragment {
 	   * @param numberOfActivities The number of activities to add to the current list.
 	   * @param currentPos The position of the 1st newly loaded activity.
 	   */
-	  public void onLoadMore(int numberOfActivities, int currentPos) {
+	  public void onLoadMore(int numberOfActivities, int currentPos, int firstVisible) {
 		  if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
-		      if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
+		      if (mLoadTask == null || mLoadTask.getStatus() == Status.FINISHED) {
 		    	  int currentTab = SocialTabsActivity.instance.mPager.getCurrentItem();
 		    	  int lastActivity = 0;
 		    	  ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().getSocialListForTab(currentTab);
@@ -172,6 +172,7 @@ public abstract class ActivityStreamFragment extends Fragment {
 		    		  lastActivity = list.size()-1;
 		    		  isLoadingMoreActivities = true;
 			    	  currentPosition = currentPos;
+			    	  firstIndex = firstVisible;
 			    	  mLoadTask.execute(numberOfActivities, currentTab, lastActivity);
 		    	  } else { 			  // otherwise we simply reload the current tab's activities and inform the user
 		    		  Toast.makeText(getActivity(), getActivity().getString(R.string.CannotLoadMoreActivities), Toast.LENGTH_LONG).show();
@@ -186,19 +187,19 @@ public abstract class ActivityStreamFragment extends Fragment {
 	  
 	  
 	  private void onCancelLoad() {
-		    if (mLoadTask != null && mLoadTask.getStatus() == AllUpdateLoadTask.Status.RUNNING) {
+		    if (isLoading()) {
 		      mLoadTask.cancel(true);
 		      mLoadTask = null;
 		      isLoadingMoreActivities = false;
 		    }
 	  }
 	  
-	  public boolean isLoading() {
-		    return (mLoadTask != null && mLoadTask.getStatus() == AllUpdateLoadTask.Status.RUNNING);
+	public boolean isLoading() {
+		 return (mLoadTask != null && mLoadTask.getStatus() == Status.RUNNING);
 	}
 		  
 	public int getPosition() {
-			  return currentPosition;
+		return currentPosition;
 	}
 	/**
 	 * Set the array adapter with the content of the given list.
@@ -218,13 +219,12 @@ public abstract class ActivityStreamFragment extends Fragment {
 	                                                arrayAdapter);
 	        listview.setAdapter(sectionAdapter);
 	        /*
-	         * Make section invisible at first in list
+	         * Hide the section header if it's the first item of the list
 	         */
-	        if (!isLoadingMoreActivities)
-	        	sectionAdapter.makeSectionInvisibleIfFirstInList(firstIndex);
+	       	sectionAdapter.makeSectionInvisibleIfFirstInList(firstIndex);
 
 	        /*
-	         * Keep the current position when listview was refreshed or more activities were loaded
+	         * Keep the current position when the listview is refreshed or more activities are loaded
 	         */
 	        int h = 0;
 	        if (isLoadingMoreActivities)

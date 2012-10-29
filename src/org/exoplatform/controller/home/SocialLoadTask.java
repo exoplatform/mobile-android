@@ -23,7 +23,6 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.cyrilmottier.android.greendroid.R;
 
@@ -64,7 +63,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   }
 
   @Override
-  public void onPreExecute() {
+  public void onPreExecute() {	
     if (loaderItem != null)
       loaderItem.setLoading(true);
   }
@@ -104,7 +103,6 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
       queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
 
       feedType = params[1];
-      Log.d("EXO_MOB", "*** Task started, updating stream: "+feedType); //TODO
       
       RealtimeListAccess<RestActivity> list = getRestActivityList(identity, queryParams);
       ArrayList<SocialActivityInfo> socialList = getSocialActivityList();
@@ -115,7 +113,6 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
     	  SocialActivityInfo socialActiv = socialList.get(params[2]);
     	  RestActivity restActiv = new RestActivity();
     	  restActiv.setId(socialActiv.getActivityId());
-    	  Log.d("EXO_MOB", "**** Load more activities before "+socialActiv.getActivityId()); //TODO
     	  activityList = (ArrayList<RestActivity>) list.loadOlderAsList(restActiv, loadSize);
       } else {
     	  activityList = (ArrayList<RestActivity>) list.loadAsList(0, loadSize);
@@ -152,7 +149,6 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   @Override
   public void onPostExecute(ArrayList<SocialActivityInfo> result) {
-	  Log.d("EXO_MOB", "*** Task done on stream "+feedType); //TODO
     if (result != null) {
 
       setResult(result);
