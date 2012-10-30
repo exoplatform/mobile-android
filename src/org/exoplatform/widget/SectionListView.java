@@ -24,9 +24,22 @@ import android.widget.ProgressBar;
  */
 public class SectionListView extends ListView implements OnScrollListener {
 
+  /**
+   * The view that contains the fixed section header
+   */
   private View transparentView;
+  /**
+   * The Fragment that holds this list view
+   */
   private ActivityStreamFragment parentFragment;
+  /**
+   * The progress bar in the footer
+   */
   private ProgressBar autoLoadProgress;
+  /**
+   * A flag that indicates whether the user has scrolled to reach the current position in the list
+   */
+  private boolean hasScrolled;
 
   public SectionListView(final Context context, final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
@@ -55,6 +68,7 @@ public class SectionListView extends ListView implements OnScrollListener {
     layout.setGravity(Gravity.CENTER);
     layout.addView(autoLoadProgress);
     addFooterView(layout);
+    hasScrolled = false;
   }
 
   @Override
@@ -103,12 +117,14 @@ public class SectionListView extends ListView implements OnScrollListener {
     if (adapter != null) {
       adapter.makeSectionInvisibleIfFirstInList(firstVisibleItem);
     }
-    
-    if (totalItemCount > 0 && firstVisibleItem+visibleItemCount==totalItemCount) {
+    // More activities will be automatically loaded if:
+    // - the user has scrolled AND
+    // - the user has reached the bottom of the list
+    if (hasScrolled && totalItemCount > 0 && firstVisibleItem+visibleItemCount==totalItemCount) {
 		autoLoadProgress.setVisibility(View.VISIBLE);
-		((ActivityStreamFragment)parentFragment).onLoadMore(
-				ExoConstants.NUMBER_OF_ACTIVITY, totalItemCount-1, firstVisibleItem
-		);
+		parentFragment.onLoadMore(ExoConstants.NUMBER_OF_ACTIVITY, totalItemCount-1, firstVisibleItem);
+		// set back to false to avoid multiple calls to the onLoadMore(...) method
+		hasScrolled = false;
     }
   }
   
@@ -118,7 +134,8 @@ public class SectionListView extends ListView implements OnScrollListener {
 
     @Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// do nothing
+    	// false if the user is not scrolling, true otherwise
+		hasScrolled = (scrollState!=OnScrollListener.SCROLL_STATE_IDLE);
  	}
 
 }
