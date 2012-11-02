@@ -18,6 +18,15 @@ package org.exoplatform.controller.home;
 
 import greendroid.widget.LoaderActionBarItem;
 
+import java.util.ArrayList;
+
+import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.client.api.SocialClientLibException;
+import org.exoplatform.social.client.api.common.RealtimeListAccess;
+import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.api.model.RestIdentity;
+import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 
@@ -70,7 +79,16 @@ public class HomeController {
   public void onLoad(int number, int type) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, loader).execute(number, type);
+        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, loader) {
+			@Override
+			protected ArrayList<SocialActivityInfo> getSocialActivityList() {
+				return SocialServiceHelper.getInstance().socialInfoList;
+			}
+			@Override
+			protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
+				return activityService.getFeedActivityStream(identity, params);
+			}
+		}.execute(number, type);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -78,17 +96,8 @@ public class HomeController {
   }
 
   public boolean isLoadingTask() {
-    if (mServiceLoadTask != null
-        && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING) {
-      return true;
-    }
-    // if (mLoadTask != null && mLoadTask.getStatus() ==
-    // SocialLoadTask.Status.RUNNING) {
-    // return true;
-    // }
-
-    return false;
-
+    return (mServiceLoadTask != null
+        && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING);
   }
 
   private void onCancelLoad() {

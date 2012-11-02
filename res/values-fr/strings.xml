@@ -183,4 +183,5 @@
         <item>Mon Statut</item>
     </string-array>
 
+    <string name="CannotLoadMoreActivities">Impossible de charger les anciennes activités. La liste est en cours de rafraichissement.</string>
 </resources>

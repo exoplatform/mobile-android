@@ -7,6 +7,7 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
+import org.exoplatform.ui.social.SocialTabsActivity;
 
 /*
  * The singleton for management the activity and identity service, which are used while
@@ -43,6 +44,25 @@ public class SocialServiceHelper {
 
   public static SocialServiceHelper getInstance() {
     return serviceHelper;
+  }
+  
+  public ArrayList<SocialActivityInfo> getSocialListForTab(int tabId) {
+	  switch (tabId) {
+	  case SocialTabsActivity.ALL_UPDATES:
+		  return socialInfoList;
+		  
+	  case SocialTabsActivity.MY_CONNECTIONS:
+		  return myConnectionsList;
+	  
+	  case SocialTabsActivity.MY_SPACES:
+		  return mySpacesList;
+		  
+	  case SocialTabsActivity.MY_STATUS:
+		  return myStatusList;
+		  
+	  default:
+		  return null;
+	  }
   }
 
   public void clearData() {

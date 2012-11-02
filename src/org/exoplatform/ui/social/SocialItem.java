@@ -18,7 +18,6 @@ import android.graphics.Color;
 import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

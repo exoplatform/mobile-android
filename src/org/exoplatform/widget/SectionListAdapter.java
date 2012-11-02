@@ -40,18 +40,33 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
                                                             };
                                                           };
 
+  /**
+   * The list of items, as a ListAdapter.
+   */
   private final ListAdapter           linkedAdapter;
 
+  /**
+   * Map the position of each section in the list with the name of this section
+   */
   private final Map<Integer, String>  sectionPositions    = new LinkedHashMap<Integer, String>();
 
+  /**
+   * Map the position of each item after adding the sections with the actual position in the adapter
+   */
   private final Map<Integer, Integer> itemPositions       = new LinkedHashMap<Integer, Integer>();
 
   private final Map<View, String>     currentViewSections = new HashMap<View, String>();
 
+  /**
+   * Returns the number of types of Views that will be created by getView(int, View, ViewGroup).
+   */
   private int                         viewTypeCount;
 
   protected final LayoutInflater      inflater;
 
+  /**
+   * The fixed section header at the top-right of the list
+   */
   private View                        transparentSectionView;
 
   private OnItemClickListener         linkedListener;
@@ -80,14 +95,17 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
     int currentPosition = 0;
     sectionPositions.clear();
     itemPositions.clear();
+    // The number of view types in the adapter + 1 for the section headers.
     viewTypeCount = linkedAdapter.getViewTypeCount() + 1;
     String currentSection = null;
     final int count = linkedAdapter.getCount();
     String section = null;
     for (int i = 0; i < count; i++) {
       final SocialActivityInfo item = (SocialActivityInfo) linkedAdapter.getItem(i);
+      // a label that indicates when this activity was created (approximatively)
       section = SocialActivityUtil.getActivityStreamHeader(mContext, item.getPostedTime());
       if (!isTheSame(currentSection, section)) {
+    	// we're entering a new section (activities were created at a different date)
         sectionPositions.put(currentPosition, section);
         currentSection = section;
         currentPosition++;
@@ -172,6 +190,11 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
     return theView;
   }
 
+  /**
+   * Writes <code>section</code> on the view <code>sectionView</code>.
+   * @param section The label to write for this section.
+   * @param sectionView The view on which the label is set.
+   */
   protected void setSectionText(final String section, final View sectionView) {
     final TextView textView = (TextView) sectionView.findViewById(R.id.textView_Section_Title);
     textView.setText(section);
@@ -240,6 +263,10 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
     return linkedAdapter.isEnabled(getLinkedPosition(position));
   }
 
+  /**
+   * Hide the section header when it reaches the top of the list.
+   * @param firstVisibleItem The position of the item currently at the top of the list.
+   */
   public void makeSectionInvisibleIfFirstInList(final int firstVisibleItem) {
     final String section = getSectionName(firstVisibleItem);
     // only make invisible the first section with that name in case there
@@ -261,6 +288,9 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
     }
   }
 
+  /**
+   * @return The fixed section header view. Inflate it first if it doesn't exist.
+   */
   public synchronized View getTransparentSectionView() {
     if (transparentSectionView == null) {
       transparentSectionView = createNewSectionView();

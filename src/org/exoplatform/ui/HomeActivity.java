@@ -253,7 +253,7 @@ public class HomeActivity extends MyActionBar {
   public void onNewsClick(View view) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (!homeController.isLoadingTask())
-        launchNewsService();
+    	  launchNewsService();
     } else {
       new ConnectionErrorDialog(this).show();
     }

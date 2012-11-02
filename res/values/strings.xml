@@ -4,8 +4,8 @@
     <string name="SignInButton">Login</string>
     <string name="SigningIn">Logging in …</string>
     <string name="NoServerSelected"> Please select a server</string>
-    <string name="NoUsernameEnter"> Please enter username</string>
-    <string name="NoPasswordEnter"> Please enter password</string>
+    <string name="NoUsernameEnter"> Please enter your username</string>
+    <string name="NoPasswordEnter"> Please enter your password</string>
     <string name="UserNamePasswordFailed">Invalid username/password combination.</string>
     <string name="ServerInvalid">  Invalid server address</string>
     <string name="ServerUnreachable">  Server address is unreachable</string>
@@ -15,7 +15,7 @@
     <string name="Server">SERVER</string>
     <string name="ServerList"> Server List</string>
     <string name="AddAServer"> Add a Server</string>
-    <string name="ModifyServerList">Modify the List</string>
+    <string name="ModifyServerList">Modify the list</string>
     <string name="ServerDetail">Server Configuration</string>
     <string name="NewServer">New Server</string>
     <string name="NameOfTheServer">Name of the server</string>
@@ -78,7 +78,7 @@
     <string name="SelectedPhoto"> Selected Image</string>
     <string name="AttachedPhoto"> Attached Photo</string>
     <string name="Warning"> Warning</string>
-    <string name="PostError"> Error on post an activity.</string>
+    <string name="PostError"> Error while posting an activity.</string>
     <string name="ConnectionError"> The network can not be reached.</string>
     <string name="LoadingDataError"> Error on loading data.</string>
     <string name="DoNotHavePermision"> You don\'t have permission for this because SDCard is not available.</string>
@@ -86,8 +86,8 @@
     <string name="WarningServerNameIsExist"> This server name already exists in your list</string>
     <string name="WarningServerUrlIsExist"> This server url already exists in your list</string>
     <string name="DetailsNotAvaiable"> Details of the news are not available</string>
-    <string name="ErrorOnLike">Action on this activity impossible.</string>
-    <string name="ErrorOnComment"> You can not comment this activity.</string>
+    <string name="ErrorOnLike">Action on this activity is impossible.</string>
+    <string name="ErrorOnComment"> You can not comment on this activity.</string>
     <string name="LogoutTitle"> Logout Dialog</string>
     <string name="LogoutContent"> Do you want to exit?</string>
     <string name="ApplicationInformation"> APPLICATION INFORMATIONS</string>
@@ -96,9 +96,9 @@
     <string name="ApplicationVersion"> Application Version</string>
     <string name="EmptyFolder"> The content of this folder is empty</string>
     <string name="UnreachableFileTitle"> Unreadable File</string>
-    <string name="UnreachableFile"> This file cannot be opened on the application</string>
+    <string name="UnreachableFile"> This file cannot be opened by the application</string>
     <string name="EmptyDashboard"> You haven\'t got any gadgets on your apps</string>
-    <string name="EmptyActivity"> Any activities has been posted on your activity stream</string>
+    <string name="EmptyActivity"> No activities has been posted on your activity stream yet</string>
     <string name="EmptyContact"> Your chat buddies list is empty</string>
     <string name="EmptyComment"> No one has commented, be the first one</string>
     <string name="HasEditWikiPage"> has edited Wiki page:</string>
@@ -117,7 +117,7 @@
     <string name="DocumentRenameTitle">  Rename Folder</string>
     <string name="DocumentRenameContent"> Enter a new name:</string>
     <string name="DocumentCreateTitle"> Create Folder</string>
-    <string name="DocumentCreateContent">  Enter the name of folder:</string>
+    <string name="DocumentCreateContent">  Enter the folder name:</string>
     <string name="DocumentCannotDelete"> Can not delete this file.</string>
     <string name="DocumentCopyPasteError"> Paste file error.</string>
     <string name="DocumentUploadError"> Upload file error.</string>
@@ -140,8 +140,8 @@
     <string name="NoAppFound"> No application was found.</string>
     <string name="CannotOpenFile"> Can not open this file.</string>
     <string name="FileNotFound"> File not found.</string>
-    <string name="FileNotSupported"> File was not support to open.</string>
-    <string name="CompatibleFileSuggest">Do you like open in installed app?</string>
+    <string name="FileNotSupported"> This file cannot be opened</string>
+    <string name="CompatibleFileSuggest">Open with another application ? </string>
     <string name="OpenIn">Open in …</string>
     <string name="DownloadingFile">Downloading file …</string>
     <string name="MemoryWarning">Memory is unavailable or doesn\'t have enough free space.</string>
@@ -156,5 +156,6 @@
         <item>My Spaces</item>
         <item>My Status</item>
     </string-array>
+    <string name="CannotLoadMoreActivities">Cannot load older activities. The list is being refreshed.</string>
 
 </resources>

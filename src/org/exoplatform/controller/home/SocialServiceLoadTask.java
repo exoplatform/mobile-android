@@ -29,6 +29,14 @@ import android.os.AsyncTask;
 
 import com.cyrilmottier.android.greendroid.R;
 
+/**
+ * Load and connect the app to the Social services and objects:<br/>
+ * - Identity service <br/>
+ * - Activity service <br/>
+ * - User identity <br/>
+ * - User profile <br/>
+ * Initialize SocialServiceHelper with these objects.
+ */
 public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
   private Context                       mContext;
 

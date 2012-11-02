@@ -17,7 +17,6 @@ import org.exoplatform.utils.image.SocialImageLoader;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Configuration;
 import android.os.Environment;
 import android.util.Log;
 

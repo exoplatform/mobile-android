@@ -17,7 +17,6 @@
 package org.exoplatform.singleton;
 
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.utils.ExoConstants;
 
 import android.os.Bundle;
 import android.os.Parcel;
