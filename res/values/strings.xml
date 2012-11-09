@@ -38,7 +38,6 @@
     <string name="Dashboard">Apps</string>
     <string name="Settings">Settings</string>
     <string name="GadgetsCannotBeRetrieved">Gadgets Cannot Be Retrieved.</string>
-    <string name="ChatApplication">Chat</string>
     <string name="ActivityStream">News</string>
     <string name="ActivityDetail">Details</string>
     <string name="You">You</string>
@@ -99,7 +98,6 @@
     <string name="UnreachableFile"> This file cannot be opened by the application</string>
     <string name="EmptyDashboard"> You haven\'t got any gadgets on your apps</string>
     <string name="EmptyActivity"> No activities has been posted on your activity stream yet</string>
-    <string name="EmptyContact"> Your chat buddies list is empty</string>
     <string name="EmptyComment"> No one has commented, be the first one</string>
     <string name="HasEditWikiPage"> has edited Wiki page:</string>
     <string name="HasCreatWikiPage"> has created Wiki page:</string>
