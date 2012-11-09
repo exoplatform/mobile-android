@@ -17,7 +17,6 @@
     <string name="UserNamePasswordFailed">Combinaison du nom d\'utilisateur et/ou du mot de passe invalide !</string>
     <string name="ServerInvalid">URL du serveur invalide</string>
     <string name="ServerUnreachable">Le serveur ne peut être contacté</string>
-    <string name="ChatServer">Le serveur de tchat n\'est pas disponible</string>
     <string name="SignOutButton">Déconnection</string>
     <string name="DomainCellTitle">Serveur</string>
     <string name="UserNameCellTitle">Nom d\'utilisateur</string>
@@ -59,7 +58,6 @@
     <string name="GadgetsHeader">Mon Dashboard</string>
     <string name="GadgetsCannotBeRetrieved">Les données des gadgets ne peuvent pas être récupérées.</string>
     <string name="FilesApplication">Documents</string>
-    <string name="ChatApplication">Tchat</string>
     <string name="NoService">Service non disponible</string>
     <string name="ActivityStream">Nouvelles</string>
     <string name="ActivityDetail">Détails</string>
@@ -123,7 +121,6 @@
     <string name="UnreachableFile">The fichier ne peut être ouvert dans l\'application</string>
     <string name="EmptyDashboard">Vous n\'avez aucun gadgets dans vos Apps</string>
     <string name="EmptyActivity">Aucune activité n\'a encore été postée dans vos News</string>
-    <string name="EmptyContact">Votre liste d\'amis est vide</string>
     <string name="EmptyComment">Personne n\'a commenté, soyez le premier !</string>
     <string name="HasEditWikiPage">a édité la page Wiki :</string>
     <string name="HasCreatWikiPage">a créé la page Wiki:</string>
