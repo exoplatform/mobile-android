@@ -131,7 +131,7 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
         HomeActivity.homeActivity.setProfileInfo(result);
       }
 
-      homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY, SocialTabsActivity.ALL_UPDATES);
+      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
 
     } else {
       loaderItem.setLoading(false);
