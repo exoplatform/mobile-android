@@ -222,7 +222,7 @@ public class HomeActivity extends MyActionBar {
       if (SocialServiceHelper.getInstance().activityService == null) {
         homeController.launchNewsService();
       } else {
-        homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY, SocialTabsActivity.ALL_UPDATES);
+        homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
       }
       break;
     case 1:

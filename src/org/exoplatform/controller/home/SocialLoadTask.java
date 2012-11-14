@@ -4,6 +4,7 @@ import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
+import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
@@ -23,8 +24,6 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-
-import com.cyrilmottier.android.greendroid.R;
 
 /**
  * The asynchronous task that loads activities from the Social REST service.
