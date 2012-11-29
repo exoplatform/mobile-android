@@ -5,8 +5,8 @@
   <string name="SignInInformation">Sign In</string>
   <string name="SigningIn">Logging in …</string>
   <string name="NoServerSelected">Please select a server</string>
-  <string name="NoUsernameEnter">Please enter a username</string>
-  <string name="NoPasswordEnter">Please enter a password</string>
+  <string name="NoUsernameEnter">Please enter your username</string>
+  <string name="NoPasswordEnter">Please enter your password</string>
   <string name="UserNamePasswordFailed">Invalid username/password combination.</string>
   <string name="ServerInvalid">Invalid server address</string>
   <string name="ServerUnreachable">Server address is unreachable</string>
@@ -24,7 +24,7 @@
   <string name="CannotEditServer">The server can not be modified or deleted. It is currently in use. </string>
   <string name="English">English</string>
   <string name="French">French</string>
-  <string name="CompliantMessage">The application is not compliant with the Platform version</string>
+  <string name="CompliantMessage">We cannot connect to a compatible Platform version at this URL, please contact your administrator.</string>
   <string name="Delete">Delete</string>
   <string name="Copy">Copy</string>
   <string name="Move">Cut</string>
@@ -39,7 +39,6 @@
   <string name="Dashboard">Apps</string>
   <string name="Settings">Settings</string>
   <string name="GadgetsCannotBeRetrieved">Gadgets cannot be retrieved.</string>
-  <string name="ChatApplication">Chat</string>
   <string name="ActivityStream">News</string>
   <string name="ActivityDetail">Details</string>
   <string name="You">You</string>
@@ -56,7 +55,7 @@
   <string name="LikedThis"> liked this</string>
   <string name="And"> and</string>
   <string name="PeoplesLikedThis"> people liked this</string>
-  <string name="PeopleLikedThis"> people liked this</string>
+  <string name="PeopleLikedThis"> person liked this</string>
   <string name="LessThanAMinute"> less than a minute</string>
   <string name="AboutAMinuteAgo"> about a minute ago</string>
   <string name="About"> about</string>
@@ -101,7 +100,6 @@
   <string name="UnreachableFile">This file cannot be opened on the application</string>
   <string name="EmptyDashboard">You haven\'t got any gadgets on your apps</string>
   <string name="EmptyActivity">No activities have been posted on your activity stream yet</string>
-  <string name="EmptyContact">Your chat buddies list is empty</string>
   <string name="EmptyComment">No one has commented, be the first one</string>
   <string name="HasEditWikiPage"> has edited the Wiki page:</string>
   <string name="HasCreatWikiPage"> has created the Wiki page:</string>
@@ -111,7 +109,7 @@
   <string name="HasUpdateANewPost"> has updated a post:</string>
   <string name="HasAskAnswer"> has asked:</string>
   <string name="HasUpdatedQuestion"> has updated question: </string>
-  <string name="HasAnswerQuestion"> has answered for question:</string>
+  <string name="HasAnswerQuestion"> has answered the question:</string>
   <string name="AddedAnEvent"> added an event:</string>
   <string name="UpdatedAnEvent"> has just updated the event:</string>
   <string name="AddedATask"> added a task:</string>
@@ -119,7 +117,7 @@
   <string name="DocumentRenameTitle">Rename Folder</string>
   <string name="DocumentRenameContent">Enter a new name:</string>
   <string name="DocumentCreateTitle">Create Folder</string>
-  <string name="DocumentCreateContent">Enter the name of folder:</string>
+  <string name="DocumentCreateContent">Enter the folder name:</string>
   <string name="DocumentCannotDelete">Can not delete this file.</string>
   <string name="DocumentCopyPasteError">Error while pasting.</string>
   <string name="DocumentUploadError">Error while uploading the file.</string>

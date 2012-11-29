@@ -24,7 +24,7 @@
   <string name="CannotEditServer">Ce server est actuellement utilisé, il ne peut pas être édité ou supprimé.</string>
   <string name="English">Anglais</string>
   <string name="French">Français</string>
-  <string name="CompliantMessage">L\'application n\'est pas compatible avec cette version de Platform</string>
+  <string name="CompliantMessage">L\'application n\'est pas compatible avec la version de Platform à cette URL. Veuillez contacter votre administrateur.</string>
   <string name="Delete">Supprimer</string>
   <string name="Copy">Copier</string>
   <string name="Move">Couper</string>
@@ -39,7 +39,6 @@
   <string name="Dashboard">Apps</string>
   <string name="Settings">Réglages</string>
   <string name="GadgetsCannotBeRetrieved">Les données des gadgets ne peuvent pas être récupérées.</string>
-  <string name="ChatApplication">Tchat</string>
   <string name="ActivityStream">Nouvelles</string>
   <string name="ActivityDetail">Détails</string>
   <string name="You">Vous</string>
@@ -79,12 +78,12 @@
   <string name="SelectedPhoto">Image sélectionnée</string>
   <string name="AttachedPhoto">Photo attachée</string>
   <string name="Warning">Attention</string>
-  <string name="PostError">Erreur en affichant une activité.</string>
+  <string name="PostError">Erreur lors de l\'envoi de l\'activité.</string>
   <string name="ErrorOnLike">Vous ne pouvez pas aimer cette activité.</string>
   <string name="ConnectionError">Réseau inaccessible.</string>
   <string name="LoadingDataError">Erreur en chargeant les données.</string>
   <string name="DoNotHavePermision">Vous n\'avez pas l\'autorisation pour cela car la carte SD n\'est pas disponible.</string>
-  <string name="WarningServerNameIsEmpty">Nom du serveur ou l\'URL ne doivent pas être vides.</string>
+  <string name="WarningServerNameIsEmpty">Le nom du serveur ou son URL ne peuvent être vide. Veuillez les renseigner.</string>
   <string name="WarningServerNameIsExist">Ce nom de serveur figure déjà sur votre liste.</string>
   <string name="WarningServerUrlIsExist">L\'URL de ce serveur figure déjà sur votre liste.</string>
   <string name="DetailsNotAvaiable">Les détails de cette activité ne sont pas disponibles</string>
@@ -101,7 +100,6 @@
   <string name="UnreachableFile">Ce fichier ne peut être ouvert dans l\'application</string>
   <string name="EmptyDashboard">Vous n\'avez aucun gadgets dans vos Dashboards</string>
   <string name="EmptyActivity">Aucune activité n\'a encore été postée dans vos News</string>
-  <string name="EmptyContact">Votre liste d\'amis est vide</string>
   <string name="EmptyComment">Personne n\'a commenté, soyez le premier !</string>
   <string name="HasEditWikiPage">a édité la page Wiki :</string>
   <string name="HasCreatWikiPage">a créé la page Wiki:</string>
@@ -124,7 +122,7 @@
   <string name="DocumentCopyPasteError">Erreur en collant le fichier.</string>
   <string name="DocumentUploadError">Erreur lors de l\'upload du fichier.</string>
   <string name="DocumentRenameError">Erreur en renommant le fichier.</string>
-  <string name="DocumentCreateFolderError">Erreur en créant le dossier.</string>
+  <string name="DocumentCreateFolderError">Impossible de créer un nouveau dossier.</string>
   <string name="DocumentFolderNameEmpty">Veuillez entrer le nom du dossier.</string>
   <string name="DocumentSettingTitle">DOCUMENTS</string>
   <string name="DocumentShowPrivateDrive">Afficher le lecteur privé</string>
@@ -148,7 +146,7 @@
   <string name="CompatibleFileSuggest">Souhaitez-vous ouvrir ce fichier avec une application installée sur votre terminal ?</string>
   <string name="OpenIn">Ouvrir avec ...</string>
   <string name="DownloadingFile">Téléchargement du fichier...</string>
-  <string name="MemoryWarning">La mémoire n\'est pas disponible ou manque d\'espace libre.</string>
+  <string name="MemoryWarning">Mémoire indisponible ou insuffisante.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Mémoriser mon filtre</string>
   <string-array name="SocialTabs">
