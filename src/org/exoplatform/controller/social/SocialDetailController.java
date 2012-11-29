@@ -5,6 +5,7 @@ import greendroid.widget.LoaderActionBarItem;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
 import org.exoplatform.model.SocialLikeInfo;
@@ -27,8 +28,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-
-import com.cyrilmottier.android.greendroid.R;
 
 public class SocialDetailController {
 

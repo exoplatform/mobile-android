@@ -6,6 +6,7 @@ import greendroid.widget.ActionBarItem;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.exoplatform.R;
 import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentLoadTask;
 import org.exoplatform.model.ExoFile;
@@ -32,8 +33,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.cyrilmottier.android.greendroid.R;
 
 public class DocumentActivity extends MyActionBar {
   // add photo

@@ -16,6 +16,8 @@
  */
 package org.exoplatform.widget;
 
+import org.exoplatform.R;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -29,8 +31,6 @@ import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
-
-import com.cyrilmottier.android.greendroid.R;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jan

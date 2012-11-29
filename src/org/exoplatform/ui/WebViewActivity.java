@@ -6,6 +6,7 @@ import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
+import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
@@ -28,8 +29,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.cyrilmottier.android.greendroid.R;
 
 public class WebViewActivity extends MyActionBar {
   private static final String ACCOUNT_SETTING = "account_setting";

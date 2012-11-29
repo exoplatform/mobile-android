@@ -2,6 +2,7 @@ package org.exoplatform.controller.setting;
 
 import java.util.ArrayList;
 
+import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -13,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.cyrilmottier.android.greendroid.R;
 
 public class ModifyServerAdapter extends BaseAdapter {
   private Context              mContext;

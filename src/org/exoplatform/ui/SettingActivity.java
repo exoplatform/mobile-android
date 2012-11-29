@@ -2,6 +2,7 @@ package org.exoplatform.ui;
 
 import greendroid.widget.ActionBarItem;
 
+import org.exoplatform.R;
 import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -21,8 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.cyrilmottier.android.greendroid.R;
 
 public class SettingActivity extends MyActionBar implements OnClickListener {
   public static final int       GLOBAL_TYPE           = 0;

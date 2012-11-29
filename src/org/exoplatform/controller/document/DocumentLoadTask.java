@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
@@ -14,11 +15,11 @@ import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.DocumentWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
+
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.view.animation.AnimationUtils;
 
-import com.cyrilmottier.android.greendroid.R;
 
 public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.exoplatform.R;
 import org.exoplatform.model.DashboardItem;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -21,8 +22,6 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
-
-import com.cyrilmottier.android.greendroid.R;
 
 public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
   private static final int         RESULT_OK      = 1;
