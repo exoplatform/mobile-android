@@ -5,6 +5,7 @@ import greendroid.widget.LoaderActionBarItem;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;
@@ -26,8 +27,6 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-
-import com.cyrilmottier.android.greendroid.R;
 
 /**
  * Load and connect the app to the Social services and objects:<br/>

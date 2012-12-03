@@ -4,6 +4,7 @@ import greendroid.widget.ActionBarItem;
 
 import java.io.File;
 
+import org.exoplatform.R;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -26,8 +27,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-
-import com.cyrilmottier.android.greendroid.R;
 
 public class SelectedImageActivity extends MyActionBar implements OnClickListener {
 

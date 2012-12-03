@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.exoplatform.R;
 import org.exoplatform.controller.social.ComposeMessageController;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
@@ -36,8 +37,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
-
-import com.cyrilmottier.android.greendroid.R;
 
 public class ComposeMessageActivity extends MyActionBar implements View.OnClickListener {
 

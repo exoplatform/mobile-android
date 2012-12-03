@@ -21,6 +21,7 @@ import greendroid.widget.LoaderActionBarItem;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
@@ -42,8 +43,6 @@ import org.exoplatform.widget.SocialDetailsWarningDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-
-import com.cyrilmottier.android.greendroid.R;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun

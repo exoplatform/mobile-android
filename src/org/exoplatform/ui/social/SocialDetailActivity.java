@@ -4,6 +4,7 @@ import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
+import org.exoplatform.R;
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
@@ -21,8 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.cyrilmottier.android.greendroid.R;
 
 public class SocialDetailActivity extends MyActionBar implements OnClickListener {
   public LinearLayout                startScreen;

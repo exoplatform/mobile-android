@@ -1,6 +1,6 @@
 package org.exoplatform.utils;
 
-import com.cyrilmottier.android.greendroid.R;
+import org.exoplatform.R;
 
 public class ExoConstants {
 

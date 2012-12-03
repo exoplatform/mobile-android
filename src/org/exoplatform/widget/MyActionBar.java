@@ -11,6 +11,7 @@ import greendroid.widget.ActionBarHost;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.NormalActionBarItem;
 
+import org.exoplatform.R;
 import org.exoplatform.utils.SettingUtils;
 
 import android.content.Intent;
@@ -27,8 +28,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
-
-import com.cyrilmottier.android.greendroid.R;
 
 public class MyActionBar extends FragmentActivity implements ActionBarActivity {
 
