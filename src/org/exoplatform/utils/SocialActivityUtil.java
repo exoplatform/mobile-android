@@ -9,6 +9,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.social.client.api.model.RestActivityStream;
 import org.exoplatform.widget.TextUrlSpan;
 
@@ -433,27 +434,34 @@ public class SocialActivityUtil {
       forumBuffer.append(spaceInfo);
     }
     forumBuffer.append(" ");
-    String actType = activityInfo.templateParams.get("ActivityType");
+    String plfVersion = ServerSettingHelper.getInstance().getServerVersion();
     String actTypeDesc = null;
     String forumName = null;
-    // forumBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-    forumBuffer.append(appendFontColor(fontColor));
-    if (actType.equalsIgnoreCase("AddPost")) {
-      forumLink = activityInfo.templateParams.get("PostLink");
-      actTypeDesc = resource.getString(R.string.HasAddANewPost);
-      forumName = activityInfo.templateParams.get("PostName");
-    } else if (actType.equalsIgnoreCase("UpdatePost")) {
-      forumLink = activityInfo.templateParams.get("PostLink");
-      actTypeDesc = resource.getString(R.string.HasUpdateANewPost);
-      forumName = activityInfo.templateParams.get("PostName");
-    } else if (actType.equalsIgnoreCase("AddTopic")) {
-      forumLink = activityInfo.templateParams.get("TopicLink");
-      actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
-      forumName = activityInfo.templateParams.get("TopicName");
-    } else if (actType.equalsIgnoreCase("UpdateTopic")) {
-      forumLink = activityInfo.templateParams.get("TopicLink");
-      actTypeDesc = resource.getString(R.string.HasUpdateAnewTopic);
-      forumName = activityInfo.templateParams.get("TopicName");
+    if (plfVersion != null && plfVersion.startsWith("4.0")) {
+    	// on PLF4.0 only AddTopic action creates an activity
+    	actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
+    	forumLink = activityInfo.templateParams.get("TopicId");
+    	forumName = activityInfo.templateParams.get("RESOURCE_BUNDLE_VALUES_PARAM");
+    } else {
+	    String actType = activityInfo.templateParams.get("ActivityType");
+	    forumBuffer.append(appendFontColor(fontColor));
+	    if (actType.equalsIgnoreCase("AddPost")) {
+	      forumLink = activityInfo.templateParams.get("PostLink");
+	      actTypeDesc = resource.getString(R.string.HasAddANewPost);
+	      forumName = activityInfo.templateParams.get("PostName");
+	    } else if (actType.equalsIgnoreCase("UpdatePost")) {
+	      forumLink = activityInfo.templateParams.get("PostLink");
+	      actTypeDesc = resource.getString(R.string.HasUpdateANewPost);
+	      forumName = activityInfo.templateParams.get("PostName");
+	    } else if (actType.equalsIgnoreCase("AddTopic")) {
+	      forumLink = activityInfo.templateParams.get("TopicLink");
+	      actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
+	      forumName = activityInfo.templateParams.get("TopicName");
+	    } else if (actType.equalsIgnoreCase("UpdateTopic")) {
+	      forumLink = activityInfo.templateParams.get("TopicLink");
+	      actTypeDesc = resource.getString(R.string.HasUpdateAnewTopic);
+	      forumName = activityInfo.templateParams.get("TopicName");
+	    }
     }
     forumBuffer.append(actTypeDesc);
     forumBuffer.append("</font>");
