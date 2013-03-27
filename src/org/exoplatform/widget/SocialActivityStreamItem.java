@@ -262,9 +262,8 @@ public class SocialActivityStreamItem extends LinearLayout {
       textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
     }
   }
-
+  
   private void setActivityTypeAnswer() {
-
     String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName,
                                                                    activityInfo,
                                                                    resource,
@@ -285,10 +284,8 @@ public class SocialActivityStreamItem extends LinearLayout {
                                                                        resource,
                                                                        FONT_COLOR,
                                                                        false);
-
     textViewName.setText(Html.fromHtml(calendarBuffer), TextView.BufferType.SPANNABLE);
     SocialActivityUtil.setCaledarContent(textViewMessage, activityInfo, resource);
-
   }
 
   private void setActivityTypeLink() {
