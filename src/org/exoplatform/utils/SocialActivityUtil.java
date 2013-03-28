@@ -9,6 +9,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.social.client.api.model.RestActivityStream;
 import org.exoplatform.widget.TextUrlSpan;
 
@@ -433,27 +434,33 @@ public class SocialActivityUtil {
       forumBuffer.append(spaceInfo);
     }
     forumBuffer.append(" ");
-    String actType = activityInfo.templateParams.get("ActivityType");
     String actTypeDesc = null;
     String forumName = null;
-    // forumBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-    forumBuffer.append(appendFontColor(fontColor));
-    if (actType.equalsIgnoreCase("AddPost")) {
-      forumLink = activityInfo.templateParams.get("PostLink");
-      actTypeDesc = resource.getString(R.string.HasAddANewPost);
-      forumName = activityInfo.templateParams.get("PostName");
-    } else if (actType.equalsIgnoreCase("UpdatePost")) {
-      forumLink = activityInfo.templateParams.get("PostLink");
-      actTypeDesc = resource.getString(R.string.HasUpdateANewPost);
-      forumName = activityInfo.templateParams.get("PostName");
-    } else if (actType.equalsIgnoreCase("AddTopic")) {
-      forumLink = activityInfo.templateParams.get("TopicLink");
-      actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
-      forumName = activityInfo.templateParams.get("TopicName");
-    } else if (actType.equalsIgnoreCase("UpdateTopic")) {
-      forumLink = activityInfo.templateParams.get("TopicLink");
-      actTypeDesc = resource.getString(R.string.HasUpdateAnewTopic);
-      forumName = activityInfo.templateParams.get("TopicName");
+    if (getPlatformVersion() >= 4.0f) {
+    	// on PLF4.0 only AddTopic action creates an activity
+    	actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
+    	forumLink = activityInfo.templateParams.get("TopicId");
+    	forumName = activityInfo.templateParams.get("RESOURCE_BUNDLE_VALUES_PARAM");
+    } else {
+	    String actType = activityInfo.templateParams.get("ActivityType");
+	    forumBuffer.append(appendFontColor(fontColor));
+	    if (actType.equalsIgnoreCase("AddPost")) {
+	      forumLink = activityInfo.templateParams.get("PostLink");
+	      actTypeDesc = resource.getString(R.string.HasAddANewPost);
+	      forumName = activityInfo.templateParams.get("PostName");
+	    } else if (actType.equalsIgnoreCase("UpdatePost")) {
+	      forumLink = activityInfo.templateParams.get("PostLink");
+	      actTypeDesc = resource.getString(R.string.HasUpdateANewPost);
+	      forumName = activityInfo.templateParams.get("PostName");
+	    } else if (actType.equalsIgnoreCase("AddTopic")) {
+	      forumLink = activityInfo.templateParams.get("TopicLink");
+	      actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
+	      forumName = activityInfo.templateParams.get("TopicName");
+	    } else if (actType.equalsIgnoreCase("UpdateTopic")) {
+	      forumLink = activityInfo.templateParams.get("TopicLink");
+	      actTypeDesc = resource.getString(R.string.HasUpdateAnewTopic);
+	      forumName = activityInfo.templateParams.get("TopicName");
+	    }
     }
     forumBuffer.append(actTypeDesc);
     forumBuffer.append("</font>");
@@ -470,6 +477,17 @@ public class SocialActivityUtil {
     return forumBuffer.toString();
   }
 
+  
+  private static float getPlatformVersion() {
+    /* if server does not return platform version then use 3.5 */
+    if (ServerSettingHelper.getInstance().getServerVersion() == null) {
+      return 3.5f;
+    }
+    
+    /* use first 3 character to represent platform version */
+    return Float.parseFloat(ServerSettingHelper.getInstance().getServerVersion().substring(0, 3));
+  }
+  
   public static String getActivityTypeWiki(String userName,
                                            SocialActivityInfo activityInfo,
                                            Resources resource,
@@ -489,16 +507,30 @@ public class SocialActivityUtil {
     // buffer.append("<font color=\"#696969\">");
     buffer.append(appendFontColor(fontColor));
     String act_key = activityInfo.templateParams.get("act_key");
-    String act_key_des = null;
+
+    String act_key_des = "";
     if (act_key != null) {
-      if (act_key.equalsIgnoreCase("update_page")) {
-        wiki_url = activityInfo.templateParams.get("view_change_url");
-        act_key_des = resource.getString(R.string.HasEditWikiPage);
-      } else if (act_key.equalsIgnoreCase("add_page")) {
+      
+      if (getPlatformVersion() >= 4.0f) {
+        /* on PLF4 we have editPageContent and editPageTitle action instead of update_page */
+        if (act_key.equalsIgnoreCase("editPageContent") || act_key.equalsIgnoreCase("editPageTitle")) {
+          wiki_url = activityInfo.templateParams.get("view_change_url");
+          act_key_des = resource.getString(R.string.HasEditWikiPage);        
+        }
+      }  
+      else { 
+        if (act_key.equalsIgnoreCase("update_page")) {
+          wiki_url = activityInfo.templateParams.get("view_change_url");
+          act_key_des = resource.getString(R.string.HasEditWikiPage);
+        }
+      }
+      
+      if (act_key.equalsIgnoreCase("add_page")) {
         wiki_url = activityInfo.templateParams.get("page_url");
         act_key_des = resource.getString(R.string.HasCreatWikiPage);
       }
     }
+  
     buffer.append(act_key_des);
     buffer.append("</font>");
     buffer.append("<br>");
@@ -509,18 +541,19 @@ public class SocialActivityUtil {
       buffer.append(appendLinkStyleColor());
     }
     buffer.append(">");
-    buffer.append(page_name);
+    buffer.append(page_name);    
     buffer.append("</a>");
     buffer.append("</body></html>");
     return buffer.toString();
   }
 
+  
   public static String getActivityTypeAnswer(String userName,
                                              SocialActivityInfo activityInfo,
                                              Resources resource,
                                              String fontColor,
-                                             boolean isHomeStyle) {
-    String answer_link = null;
+                                             boolean isHomeStyle) {    
+    String answer_link = "";
     StringBuffer answerBuffer = new StringBuffer();
     answerBuffer.append("<html><body>");
     answerBuffer.append("<a>");
@@ -533,20 +566,32 @@ public class SocialActivityUtil {
     answerBuffer.append(" ");
     // answerBuffer.append("<font color=\"#696969\">");
     answerBuffer.append(appendFontColor(fontColor));
-    String act_key = activityInfo.templateParams.get("ActivityType");
-    String act_key_des = null;
-    if (act_key.equalsIgnoreCase("QuestionUpdate")) {
-      act_key_des = resource.getString(R.string.HasUpdatedQuestion);
-    } else if (act_key.equalsIgnoreCase("QuestionAdd")) {
+
+    String act_key_des = "";
+    String page_name = "";
+            
+    if (getPlatformVersion() >= 4.0f) {
+      /* on PLF 4, currently we do not have act_key so no way to distinguish QuestionAdd, QuestionUpdate or AnswerAdd */
       act_key_des = resource.getString(R.string.HasAskAnswer);
-    } else if (act_key.equalsIgnoreCase("AnswerAdd")) {
-      act_key_des = resource.getString(R.string.HasAnswerQuestion);
+      page_name = activityInfo.getTitle();
+    } 
+    else {
+    
+      String act_key = activityInfo.templateParams.get("ActivityType");
+      if (act_key.equalsIgnoreCase("QuestionUpdate")) {
+        act_key_des = resource.getString(R.string.HasUpdatedQuestion);
+      } else if (act_key.equalsIgnoreCase("QuestionAdd")) {
+        act_key_des = resource.getString(R.string.HasAskAnswer);
+      } else if (act_key.equalsIgnoreCase("AnswerAdd")) {
+        act_key_des = resource.getString(R.string.HasAnswerQuestion);
+      }
+      
+      page_name = activityInfo.templateParams.get("Name");
     }
     answerBuffer.append(act_key_des);
     answerBuffer.append("</font>");
     answerBuffer.append("<br>");
-    answer_link = activityInfo.templateParams.get("Link");
-    String page_name = activityInfo.templateParams.get("Name");
+    answer_link = activityInfo.templateParams.get("Link");      
     answerBuffer.append("<a href=");
     answerBuffer.append(answer_link);
     if (isHomeStyle) {
@@ -564,7 +609,7 @@ public class SocialActivityUtil {
                                                SocialActivityInfo activityInfo,
                                                Resources resource,
                                                String fontColor,
-                                               boolean isHomeStyle) {
+                                               boolean isHomeStyle) {    
     StringBuffer forumBuffer = new StringBuffer();
     forumBuffer.append("<html><body>");
     forumBuffer.append("<a>");
@@ -575,7 +620,7 @@ public class SocialActivityUtil {
       forumBuffer.append(spaceInfo);
     }
     forumBuffer.append(" ");
-    String actType = activityInfo.templateParams.get("EventType");
+    String actType = activityInfo.templateParams.get("EventType");    
     String actTypeDesc = null;
     String forumName = null;
     // forumBuffer.append("<font color=\"#696969\">");
@@ -608,7 +653,7 @@ public class SocialActivityUtil {
   public static String getActivityTypeLink(String userName,
                                            SocialActivityInfo activityInfo,
                                            String fontColor,
-                                           boolean isHomeStyle) {
+                                           boolean isHomeStyle) {    
     StringBuffer linkBuffer = new StringBuffer();
     String linkTitle = activityInfo.templateParams.get("title").trim();
     String linkUrl = activityInfo.templateParams.get("link");
@@ -647,11 +692,12 @@ public class SocialActivityUtil {
 
   public static void setCaledarContent(TextView textView,
                                        SocialActivityInfo activityInfo,
-                                       Resources resource) {
+                                       Resources resource) {    
     StringBuffer caledarBuffer = new StringBuffer();
     caledarBuffer.append("<html><body>");
     caledarBuffer.append(resource.getString(R.string.CalendarDescription));
     caledarBuffer.append("\n");
+    
     String description = activityInfo.templateParams.get("EventDescription");
     if (description != null) {
       caledarBuffer.append(description);
