@@ -434,10 +434,9 @@ public class SocialActivityUtil {
       forumBuffer.append(spaceInfo);
     }
     forumBuffer.append(" ");
-    String plfVersion = ServerSettingHelper.getInstance().getServerVersion();
     String actTypeDesc = null;
     String forumName = null;
-    if (plfVersion != null && plfVersion.startsWith("4.0")) {
+    if (getPlatformVersion() >= 4.0f) {
     	// on PLF4.0 only AddTopic action creates an activity
     	actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
     	forumLink = activityInfo.templateParams.get("TopicId");
@@ -479,6 +478,16 @@ public class SocialActivityUtil {
   }
 
   
+  private static float getPlatformVersion() {
+    /* if server does not return platform version then use 3.5 */
+    if (ServerSettingHelper.getInstance().getServerVersion() == null) {
+      return 3.5f;
+    }
+    
+    /* use first 3 character to represent platform version */
+    return Float.parseFloat(ServerSettingHelper.getInstance().getServerVersion().substring(0, 3));
+  }
+  
   public static String getActivityTypeWiki(String userName,
                                            SocialActivityInfo activityInfo,
                                            Resources resource,
@@ -498,11 +507,11 @@ public class SocialActivityUtil {
     // buffer.append("<font color=\"#696969\">");
     buffer.append(appendFontColor(fontColor));
     String act_key = activityInfo.templateParams.get("act_key");
-    String plfVersion = ServerSettingHelper.getInstance().getServerVersion();    
+
     String act_key_des = "";
     if (act_key != null) {
       
-      if (plfVersion != null && plfVersion.startsWith("4.0")) {
+      if (getPlatformVersion() >= 4.0f) {
         /* on PLF4 we have editPageContent and editPageTitle action instead of update_page */
         if (act_key.equalsIgnoreCase("editPageContent") || act_key.equalsIgnoreCase("editPageTitle")) {
           wiki_url = activityInfo.templateParams.get("view_change_url");
@@ -557,11 +566,11 @@ public class SocialActivityUtil {
     answerBuffer.append(" ");
     // answerBuffer.append("<font color=\"#696969\">");
     answerBuffer.append(appendFontColor(fontColor));
-    String plfVersion = ServerSettingHelper.getInstance().getServerVersion();
+
     String act_key_des = "";
     String page_name = "";
-        
-    if (plfVersion != null && plfVersion.startsWith("4.0")) {
+            
+    if (getPlatformVersion() >= 4.0f) {
       /* on PLF 4, currently we do not have act_key so no way to distinguish QuestionAdd, QuestionUpdate or AnswerAdd */
       act_key_des = resource.getString(R.string.HasAskAnswer);
       page_name = activityInfo.getTitle();
