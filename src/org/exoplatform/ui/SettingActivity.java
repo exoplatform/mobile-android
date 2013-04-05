@@ -7,6 +7,7 @@ import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.ServerEditionDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -138,7 +139,6 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     socialTitleLayout = (RelativeLayout) findViewById(R.id.social_store_setting_title_layout);
     socialLayout = (RelativeLayout) findViewById(R.id.social_store_setting_layout);
     socialLayout.setOnClickListener(this);
-
     documentTitleView = (TextView) findViewById(R.id.document_setting_title);
     documentContentView = (TextView) findViewById(R.id.document_store_setting_content);
     documentCheckedView = (ImageView) findViewById(R.id.document_store_setting_checked);
@@ -159,6 +159,10 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     } else {
       setttingController.initSocialFilter(socialCheckedView);
       setttingController.initDocumentHiddenFile(documentCheckedView);
+    }
+    if(SocialActivityUtil.getPlatformVersion() >= 4.0f) {
+      documentTitleLayout.setVisibility(View.GONE);
+      documentLayout.setVisibility(View.GONE);
     }
 
     settingAppInfoTitle = (TextView) findViewById(R.id.setting_application_info_title);
