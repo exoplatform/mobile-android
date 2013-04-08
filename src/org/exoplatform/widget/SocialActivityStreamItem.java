@@ -5,6 +5,7 @@ import java.net.URLConnection;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.SocialImageLoader;
@@ -305,9 +306,9 @@ public class SocialActivityStreamItem extends LinearLayout {
                                                                FONT_COLOR,
                                                                false);
 
-    String imageParams = activityInfo.templateParams.get("image");
-    if ((imageParams != null) && (imageParams.contains("http"))) {
-      displayAttachImage(imageParams, "", linkBuffer, "image", true);
+    String imageParams = activityInfo.templateParams.get(ExoDocumentUtils.IMAGE_TYPE);
+    if ((imageParams != null) && (imageParams.toLowerCase().contains(ExoConstants.HTTP_PROTOCOL))) {
+      displayAttachImage(imageParams, "", linkBuffer, ExoDocumentUtils.IMAGE_TYPE, true);
     } else {
       textViewTempMessage.setText(Html.fromHtml(linkBuffer), TextView.BufferType.SPANNABLE);
       textViewTempMessage.setVisibility(View.VISIBLE);
