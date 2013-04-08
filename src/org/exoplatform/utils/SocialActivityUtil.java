@@ -478,7 +478,7 @@ public class SocialActivityUtil {
   }
 
   
-  private static float getPlatformVersion() {
+  public static float getPlatformVersion() {
     /* if server does not return platform version then use 3.5 */
     if (ServerSettingHelper.getInstance().getServerVersion() == null) {
       return 3.5f;
