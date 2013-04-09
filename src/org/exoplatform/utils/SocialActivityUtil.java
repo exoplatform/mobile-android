@@ -353,7 +353,7 @@ public class SocialActivityUtil {
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
           TextUrlSpan myUrlSpan = null;
-          if (spanUrl.startsWith(ExoConstants.HTTP_PROTOCOL)) {
+          if (spanUrl.toLowerCase().startsWith(ExoConstants.HTTP_PROTOCOL)) {
             myUrlSpan = new TextUrlSpan(spanUrl);
           } else {
             String link = AccountSetting.getInstance().getDomainName() + spanUrl;
