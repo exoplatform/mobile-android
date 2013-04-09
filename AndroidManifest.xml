@@ -4,7 +4,7 @@
     android:versionCode="1"
     android:installLocation="auto"
     android:versionName="2.3" >
-
+    
     <!-- Application Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -18,7 +18,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <!-- Application Uses SDK -->
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="10"/>
+    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="10"/>
 
     <!-- Application Informations -->
     <application
