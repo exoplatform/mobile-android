@@ -120,9 +120,9 @@ public class ExoConstants {
 
   public static final String DOCUMENT_USERS                        = "Users";
 
-  public static final String DOCUMENT_DRIVE_PATH_REST              = "/portal/rest/managedocument/getDrives?driveType=";
+  public static final String DOCUMENT_DRIVE_PATH_REST              = "/rest/managedocument/getDrives?driveType=";
 
-  public static final String DOCUMENT_FILE_PATH_REST               = "/portal/rest/managedocument/getFoldersAndFiles?driveName=";
+  public static final String DOCUMENT_FILE_PATH_REST               = "/rest/managedocument/getFoldersAndFiles?driveName=";
 
   public static final String DOCUMENT_WORKSPACE_NAME               = "&workspaceName=";
 
