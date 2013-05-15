@@ -216,9 +216,7 @@ public class HomeActivity extends MyActionBar {
 
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    Log.i("onHandleActionBarItemClick", "click me " + position);
     switch (position) {
-
     case -1:
       break;
     case 0:
@@ -230,7 +228,6 @@ public class HomeActivity extends MyActionBar {
       }
       break;
     case 1:
-      // new LogoutDialog(HomeActivity.this, homeController).show();
       onFinish();
       break;
     }
