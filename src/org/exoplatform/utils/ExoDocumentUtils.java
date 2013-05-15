@@ -447,13 +447,13 @@ public class ExoDocumentUtils {
         }
       }
     } catch (ParserConfigurationException e) {
-      Log.i(" ParserConfigurationException ", e.getMessage());
+      Log.e(" ParserConfigurationException ", e.getMessage());
       folderArray = null;
     } catch (SAXException e) {
-      Log.i(" SAXException ", e.getMessage());
+      Log.e(" SAXException ", e.getMessage());
       folderArray = null;
     } catch (IOException e) {
-      Log.i(" IOException ", e.getMessage());
+      Log.e(" IOException ", e.getMessage());
       folderArray = null;
     }
 
