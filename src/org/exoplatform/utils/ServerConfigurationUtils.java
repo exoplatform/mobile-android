@@ -68,13 +68,35 @@ public class ServerConfigurationUtils {
 
   // Get app's current version, create DefaultServerList.xml if needed
   public static String getAppVersion(Context _context) {
-    if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {
-      return "0";
-    } else {
 
-      String filePath = Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml";
-      createLocalFileDirectory(Environment.getExternalStorageDirectory() + "/eXo", true);
-      File file = new File(filePath);
+      boolean mExternalStorageAvailable = false;
+      boolean mExternalStorageWriteable = false;
+      String state = Environment.getExternalStorageState();
+
+      if (Environment.MEDIA_MOUNTED.equals(state)) {
+          // We can read and write the media
+          mExternalStorageAvailable = mExternalStorageWriteable = true;
+      } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+          // We can only read the media
+          mExternalStorageAvailable = true;
+          mExternalStorageWriteable = false;
+      } else {
+          // Something else is wrong. It may be one of many other states, but all we need
+          //  to know is we can neither read nor write
+          mExternalStorageAvailable = mExternalStorageWriteable = false;
+      }
+    String filePath ="";
+    String rootPath ="";
+    if (!(mExternalStorageAvailable && mExternalStorageWriteable)) {
+       File folder = _context.getDir("eXo", Context.MODE_WORLD_WRITEABLE);
+        rootPath = folder.getPath();
+        filePath = rootPath + "/DefaultServerList.xml";
+    } else {
+       rootPath = Environment.getExternalStorageDirectory().getPath();
+       filePath =  rootPath + "/eXo/DefaultServerList.xml";
+    }
+      createLocalFileDirectory(rootPath + "/eXo", true);
+       File file = new File(filePath);
       if (!file.exists()) {
         createXmlDataWithServerList(getDefaultServerList(_context), "DefaultServerList.xml", "0");
         return "0";
@@ -114,7 +136,7 @@ public class ServerConfigurationUtils {
       } catch (IOException e) {
         return "0";
       }
-    }
+
 
     return "0";
   }
@@ -168,7 +190,34 @@ public class ServerConfigurationUtils {
         Log.e("XmlPullParserException", "Cannot parse XML");
     }
 
-    String filePath = Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml";
+      boolean mExternalStorageAvailable = false;
+      boolean mExternalStorageWriteable = false;
+      String state = Environment.getExternalStorageState();
+
+      if (Environment.MEDIA_MOUNTED.equals(state)) {
+          // We can read and write the media
+          mExternalStorageAvailable = mExternalStorageWriteable = true;
+      } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+          // We can only read the media
+          mExternalStorageAvailable = true;
+          mExternalStorageWriteable = false;
+      } else {
+          // Something else is wrong. It may be one of many other states, but all we need
+          //  to know is we can neither read nor write
+          mExternalStorageAvailable = mExternalStorageWriteable = false;
+      }
+      String filePath ="";
+      String rootPath ="";
+      if (!(mExternalStorageAvailable && mExternalStorageWriteable)) {
+          File folder = _context.getDir("eXo", Context.MODE_WORLD_WRITEABLE);
+          rootPath = folder.getPath();
+          filePath = rootPath + "/DefaultServerList.xml";
+      } else {
+          rootPath = Environment.getExternalStorageDirectory().getPath();
+          filePath =  rootPath + "/eXo/DefaultServerList.xml";
+      }
+
+    //String filePath = Environment.getExternalStorageDirectory() + "/eXo/DefaultServerList.xml";
     File file = new File(filePath);
     if (!file.exists()) {
       createXmlDataWithServerList(arrServerList, "DefaultServerList.xml", "0");

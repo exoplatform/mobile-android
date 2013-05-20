@@ -256,15 +256,9 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
       setttingController.setDocumentShowPrivateDrive(documentCheckedView);
     }
     if (view.equals(addServerBtn)) {
-      if (!(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))) {
-        WarningDialog dialog = new WarningDialog(SettingActivity.this,
-                                                 titleString,
-                                                 errorMessage,
-                                                 okString);
-        dialog.show();
-      } else {
+       
         new ServerEditionDialog(this, setttingController, null, 0).show();
-      }
+
     }
 
   }
