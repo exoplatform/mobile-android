@@ -319,7 +319,7 @@ public class ExoDocumentUtils {
       urlStr = buffer.toString();
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       fileList = getDrives(response);
-      if (fileList.size() > 0) {
+      if (fileList != null && fileList.size() > 0) {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_PERSONAL_DRIVER));
         arrFilesTmp.addAll(fileList);
       }
@@ -331,7 +331,7 @@ public class ExoDocumentUtils {
       urlStr = buffer.toString();
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       fileList = getDrives(response);
-      if (fileList.size() > 0) {
+      if (fileList != null && fileList.size() > 0) {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GENERAL_DRIVER));
         arrFilesTmp.addAll(fileList);
       }
@@ -344,7 +344,7 @@ public class ExoDocumentUtils {
       urlStr = buffer.toString();
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       fileList = getDrives(response);
-      if (fileList.size() > 0) {
+      if (fileList != null && fileList.size() > 0) {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GROUP_DRIVER));
         arrFilesTmp.addAll(fileList);
       }
@@ -447,10 +447,13 @@ public class ExoDocumentUtils {
         }
       }
     } catch (ParserConfigurationException e) {
+      Log.e(" ParserConfigurationException ", e.getMessage());
       folderArray = null;
     } catch (SAXException e) {
+      Log.e(" SAXException ", e.getMessage());
       folderArray = null;
     } catch (IOException e) {
+      Log.e(" IOException ", e.getMessage());
       folderArray = null;
     }
 
