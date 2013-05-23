@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -107,6 +108,7 @@ public class HomeActivity extends MyActionBar {
     setActionBarContentView(R.layout.home_layout);
     SettingUtils.setDefaultLanguage(this);
     init();
+    startSocialService(loaderItem);
   }
 
   @Override
@@ -153,7 +155,6 @@ public class HomeActivity extends MyActionBar {
     homeUserAvatar.setVisibility(View.GONE);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
-
     setInfo();
   }
 
@@ -175,6 +176,8 @@ public class HomeActivity extends MyActionBar {
   private void startSocialService(LoaderActionBarItem loader) {
     if (SocialServiceHelper.getInstance().activityService == null) {
       homeController.launchNewsService();
+    }else {
+      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
     }
   }
 
@@ -214,7 +217,6 @@ public class HomeActivity extends MyActionBar {
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
-
     case -1:
       break;
     case 0:
@@ -226,7 +228,6 @@ public class HomeActivity extends MyActionBar {
       }
       break;
     case 1:
-      // new LogoutDialog(HomeActivity.this, homeController).show();
       onFinish();
       break;
     }
