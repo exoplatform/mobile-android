@@ -3,6 +3,8 @@ package org.exoplatform.controller.login;
 import java.io.IOException;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.conn.HttpHostConnectException;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.HomeActivity;
@@ -146,9 +148,14 @@ public class LoginController {
       try {
         String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
         response = ExoConnectionUtils.getPlatformResponse(userName, password, versionUrl);
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND){
+         return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
+        }
         isCompliant = ExoConnectionUtils.checkPLFVersion(response);
         ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
         return ExoConnectionUtils.checkPlatformRespose(response);
+      } catch(HttpHostConnectException e) {
+          return ExoConnectionUtils.LOGIN_FAILED;
       } catch (IOException e) {
         return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
       }
