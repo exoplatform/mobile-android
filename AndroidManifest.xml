@@ -44,9 +44,6 @@
             android:configChanges="keyboardHidden|orientation" />
         <activity
             android:name=".ui.SettingActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.SettingServerListEditionActivity"
             android:configChanges="keyboardHidden|orientation" /> 
         <activity
             android:name=".ui.DocumentActivity"
@@ -61,9 +58,6 @@
             android:name=".ui.WebViewActivity"
             android:configChanges="orientation" >
         </activity>
-        <activity
-            android:name=".ui.social.SocialActivity"
-            android:configChanges="keyboardHidden|orientation" />
         <activity
             android:name=".ui.social.SocialDetailActivity"
             android:configChanges="keyboardHidden|orientation" />
