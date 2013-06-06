@@ -24,7 +24,6 @@
     <!-- Runtimes -->
     <com.google.android.version>2.3.1</com.google.android.version>
     <!-- Libraries -->
-    <org.jivesoftware.smack.version>3.1.0</org.jivesoftware.smack.version>
     <commons-lang.version>2.4</commons-lang.version>
     <!-- Default version of SDK to use -->
     <android.sdk.platform>9</android.sdk.platform>
@@ -74,12 +73,6 @@
       <artifactId>android</artifactId>
       <version>${com.google.android.version}</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>jivesoftware</groupId>
-      <artifactId>smack</artifactId>
-      <version>${org.jivesoftware.smack.version}</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
