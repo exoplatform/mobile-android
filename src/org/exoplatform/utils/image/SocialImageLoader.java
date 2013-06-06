@@ -38,10 +38,10 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.utils.Base64;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
-import org.jivesoftware.smack.util.Base64;
 
 import android.app.Activity;
 import android.content.Context;
