@@ -24,14 +24,12 @@ import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.jivesoftware.smack.util.Base64;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-//import android.util.Base64;
 
 //interact with server
 public class ExoConnectionUtils {
