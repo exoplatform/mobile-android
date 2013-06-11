@@ -22,7 +22,7 @@
             android:shadowDy="2.0"
             android:shadowRadius="1.0"
             android:textColor="#ffffff"
-            android:textSize="18dip"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <ImageView
@@ -62,7 +62,7 @@
                 android:layout_toRightOf="@id/ImageView_English"
                 android:gravity="center_vertical"
                 android:textColor="#000000"
-                android:textSize="18dip"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -102,7 +102,7 @@
                 android:layout_toRightOf="@id/ImageView_French"
                 android:gravity="center_vertical"
                 android:textColor="#000000"
-                android:textSize="18dip"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -144,7 +144,7 @@
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"
                 android:textColor="#ffffff"
-                android:textSize="18dip"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -170,7 +170,7 @@
                 android:layout_marginLeft="10dip"
                 android:gravity="center_vertical"
                 android:textColor="#000000"
-                android:textSize="18dip"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -211,7 +211,7 @@
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"
                 android:textColor="#ffffff"
-                android:textSize="18dip"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -237,7 +237,7 @@
                 android:layout_marginLeft="10dip"
                 android:gravity="center_vertical"
                 android:textColor="#000000"
-                android:textSize="18dip"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -278,7 +278,7 @@
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"
                 android:textColor="#ffffff"
-                android:textSize="18dip"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -335,7 +335,7 @@
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"
                 android:textColor="#ffffff"
-                android:textSize="18dip"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -363,7 +363,7 @@
                 android:layout_weight="1"
                 android:padding="4dp"
                 android:textColor="#000000"
-                android:textSize="16dip"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -373,7 +373,7 @@
                 android:layout_marginRight="10dp"
                 android:padding="4dp"
                 android:textColor="#000000"
-                android:textSize="16dip"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -395,7 +395,7 @@
                 android:layout_weight="1"
                 android:padding="4dp"
                 android:textColor="#000000"
-                android:textSize="16dip"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -405,7 +405,7 @@
                 android:layout_marginRight="10dp"
                 android:padding="4dp"
                 android:textColor="#000000"
-                android:textSize="16dip"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -426,7 +426,7 @@
                 android:layout_weight="1"
                 android:padding="4dp"
                 android:textColor="#000000"
-                android:textSize="16dip"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -436,7 +436,7 @@
                 android:layout_marginRight="10dp"
                 android:padding="4dp"
                 android:textColor="#000000"
-                android:textSize="16dip"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>

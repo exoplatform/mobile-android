@@ -31,6 +31,8 @@ public class ExoConstants {
   public static final String WEB_VIEW_TITLE                        = "WEB_VIEW_TITLE";
 
   public static final String WEB_VIEW_MIME_TYPE                    = "WEB_VIEW_MIME_TYPE";
+  
+  public static final String WEB_VIEW_ALLOW_JS                     = "WEB_VIEW_ALLOW_JS";
 
   public static final String ACTIVITY_DETAIL_EXTRA                 = "ACTIVITY_DETAIL_EXTRA";
 

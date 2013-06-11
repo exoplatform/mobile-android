@@ -25,7 +25,7 @@
             android:shadowDy="2.0"
             android:shadowRadius="1.0"
             android:textColor="#FFFFFFFF"
-            android:textSize="18dip" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <ScrollView

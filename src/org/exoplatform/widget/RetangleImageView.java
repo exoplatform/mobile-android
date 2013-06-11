@@ -37,8 +37,9 @@ import android.widget.ImageView;
  * 16, 2012 This image view for attached image view in compose message activity
  */
 public class RetangleImageView extends ImageView {
+  
   public RetangleImageView(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
+    super(context, attrs, defStyle);    
   }
 
   public RetangleImageView(Context context, AttributeSet attrs) {
@@ -47,9 +48,54 @@ public class RetangleImageView extends ImageView {
 
   public RetangleImageView(Context context) {
     super(context);
-
   }
 
+  private Bitmap _bitmap = null;
+  
+  private Bitmap getCachedBitmap(int width, int height) {
+    if ((_bitmap != null) && (_bitmap.getWidth() == width) && (_bitmap.getHeight() == height)) return _bitmap; 
+    
+    _bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+    return _bitmap;
+  }
+  
+  private Canvas _canvasT = null;
+  
+  private Canvas getCachedCanvas(int width, int height) {
+    if (_canvasT != null) return _canvasT;
+    Log.i("RetangleImageView", "create new canvas");
+
+    _canvasT = new Canvas(getCachedBitmap(width, height));
+    return _canvasT;
+  }
+  
+  private Canvas getDrawnCanvas(int width, int height, Bitmap fullSizeBitmap) {
+    Canvas canvas = getCachedCanvas(width, height);
+    Paint p = new Paint();
+    p.setColor(Color.TRANSPARENT);
+    // Draw in the original image with transparent
+    canvas.drawBitmap(fullSizeBitmap, 0, 0, p);
+    return canvas;
+  }
+  
+  private NinePatchDrawable _nicepatchDrawable = null;
+  
+  private NinePatchDrawable getCachedNinePatchDrawable(int width, int height) {
+    if ((_nicepatchDrawable != null) 
+      && (_nicepatchDrawable.getBounds().height() == height) 
+      && (_nicepatchDrawable.getBounds().width() == width)) 
+      return _nicepatchDrawable; 
+    
+    // Get the image bitmap frame
+    Bitmap maskBm = BitmapFactory.decodeResource(getResources(),
+                                                 R.drawable.social_attached_image_border);
+    // Create nine patch drawable from image bitmap frame
+    byte[] chunk = maskBm.getNinePatchChunk();
+    _nicepatchDrawable = new NinePatchDrawable(maskBm, chunk, new Rect(), null);
+    _nicepatchDrawable.setBounds(0, 0, width, height);
+    return _nicepatchDrawable;
+  }
+  
   @Override
   protected void onDraw(Canvas canvas) {
     try {
@@ -63,24 +109,19 @@ public class RetangleImageView extends ImageView {
 
       int height = fullSizeBitmap.getHeight();
       int width = fullSizeBitmap.getWidth();
-      Bitmap copyBitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
-      Canvas canvasT = new Canvas(copyBitmap);
-      Paint p = new Paint();
-      p.setColor(Color.TRANSPARENT);
-      // Draw in the original image with transparent
-      canvasT.drawBitmap(fullSizeBitmap, 0, 0, p);
+      
+      Canvas canvasT = getDrawnCanvas(width, height, fullSizeBitmap);
+      
       // Draw this bitmap to the image view
       canvas.drawBitmap(fullSizeBitmap, 0, 0, null);
-      // Get the image bitmap frame
-      Bitmap maskBm = BitmapFactory.decodeResource(getResources(),
-                                                   R.drawable.social_attached_image_border);
-      // Create nine patch drawable from image bitmap frame
-      byte[] chunk = maskBm.getNinePatchChunk();
-      NinePatchDrawable nicepatchDrawable = new NinePatchDrawable(maskBm, chunk, new Rect(), null);
-      nicepatchDrawable.setBounds(0, 0, width, height);
+
+      NinePatchDrawable nicepatchDrawable = getCachedNinePatchDrawable(width, height);
+      
       // Draw the NinePatchDrawable to a new output_bitmap
-      Bitmap output_bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-      canvasT = new Canvas(output_bitmap);
+      Bitmap output_bitmap = getCachedBitmap(width, height);
+
+      canvasT = getCachedCanvas(width, height);
+
       nicepatchDrawable.draw(canvasT);
       // Draw the output_bitmap to image view
       canvas.drawBitmap(output_bitmap, 0, 0, null);

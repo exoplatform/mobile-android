@@ -1,6 +1,7 @@
 package org.exoplatform.widget;
 
 import java.net.URLConnection;
+import java.util.Locale;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -307,7 +308,7 @@ public class SocialActivityStreamItem extends LinearLayout {
                                                                false);
 
     String imageParams = activityInfo.templateParams.get(ExoDocumentUtils.IMAGE_TYPE);
-    if ((imageParams != null) && (imageParams.toLowerCase().contains(ExoConstants.HTTP_PROTOCOL))) {
+    if ((imageParams != null) && (imageParams.toLowerCase(Locale.US).contains(ExoConstants.HTTP_PROTOCOL))) {
       displayAttachImage(imageParams, "", linkBuffer, ExoDocumentUtils.IMAGE_TYPE, true);
     } else {
       textViewTempMessage.setText(Html.fromHtml(linkBuffer), TextView.BufferType.SPANNABLE);

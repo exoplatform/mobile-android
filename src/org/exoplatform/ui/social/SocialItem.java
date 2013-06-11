@@ -1,6 +1,7 @@
 package org.exoplatform.ui.social;
 
 import java.net.URLConnection;
+import java.util.Locale;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -308,7 +309,7 @@ public class SocialItem {
                                                                false);
 
     String imageParams = activityInfo.templateParams.get("image");
-    if ((imageParams != null) && (imageParams.toLowerCase().contains(ExoConstants.HTTP_PROTOCOL))) {
+    if ((imageParams != null) && (imageParams.toLowerCase(Locale.US).contains(ExoConstants.HTTP_PROTOCOL))) {
       displayAttachImage(imageParams, "", linkBuffer, "image", true);
     } else {
       textViewTempMessage.setText(Html.fromHtml(linkBuffer), TextView.BufferType.SPANNABLE);

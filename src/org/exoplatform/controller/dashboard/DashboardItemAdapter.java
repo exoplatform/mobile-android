@@ -163,6 +163,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
     Intent intent = new Intent(mContext, WebViewActivity.class);
     intent.putExtra(ExoConstants.WEB_VIEW_URL, gadgetUrl);
     intent.putExtra(ExoConstants.WEB_VIEW_TITLE, gadget.getGadgetName());
+    intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "true");
     mContext.startActivity(intent);
 
   }
