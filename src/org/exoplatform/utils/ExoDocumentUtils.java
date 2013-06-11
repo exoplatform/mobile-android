@@ -148,6 +148,7 @@ public class ExoDocumentUtils {
       intent.putExtra(ExoConstants.WEB_VIEW_URL, filePath);
       intent.putExtra(ExoConstants.WEB_VIEW_TITLE, fileName);
       intent.putExtra(ExoConstants.WEB_VIEW_MIME_TYPE, fileType);
+      intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "false");
       context.startActivity(intent);
     } else {
       new CompatibleFileOpen(context, fileType, filePath, fileName);

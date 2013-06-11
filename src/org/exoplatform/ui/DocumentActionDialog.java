@@ -22,7 +22,7 @@ public class DocumentActionDialog extends Dialog {
                                                        // file
 
   public DocumentActionAdapter _documentActionAdapter;
-
+  
   // Constructor
   public DocumentActionDialog(DocumentActivity context, ExoFile file, boolean isActBar) {
 
