@@ -85,6 +85,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     textView_Like_Count = (TextView) findViewById(R.id.textView_Like_Count);
     editTextComment = (EditText) findViewById(R.id.editText_Comment);
     editTextComment.setHint(yourCommentText);
+    // uses this instead of deprecated android:editable="false"
+    editTextComment.setKeyListener(null);
     editTextComment.setOnClickListener(this);
     likeButton = (Button) findViewById(R.id.like_button);
     likeButton.setOnClickListener(this);

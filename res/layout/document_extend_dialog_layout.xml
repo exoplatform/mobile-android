@@ -20,7 +20,7 @@
         android:shadowDy="2.0"
         android:shadowRadius="1.0"
         android:textColor="#FFFFFFFF"
-        android:textSize="18dip" />
+        android:textSize="18sp" />
 
     <RelativeLayout
         android:id="@+id/RelativeLayout_TextfieldPanel"
@@ -38,7 +38,7 @@
             android:layout_marginTop="10dip"
             android:padding="5dp"
             android:textColor="#FF000000"
-            android:textSize="18dip" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/document_extend_edittext"
@@ -52,7 +52,7 @@
             android:background="@drawable/settingcellstreachablebackground"
             android:inputType="textNoSuggestions"
             android:textColor="#FF000000"
-            android:textSize="16dip" />
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <RelativeLayout

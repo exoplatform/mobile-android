@@ -53,6 +53,11 @@ public class ShaderImageView extends AsyncImageView {
 
   private boolean          slideLeft    = false;
 
+  private BlurMaskFilter _bmfilter = null; 
+
+  private Paint _paint;
+
+  
   public ShaderImageView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
   }
@@ -65,7 +70,34 @@ public class ShaderImageView extends AsyncImageView {
     super(context);
     this.slideLeft = slideLeft;
   }
-
+ 
+  private Paint getCachedPaint() {
+    if (_paint != null) return _paint;
+    
+    _paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    return _paint;
+  }
+  
+  private RectF getNewFrame(float left, float top, float right, float bottom) { 
+    return new RectF(left, top, right, bottom);
+  }
+    
+  private Bitmap getScaledBitmap(Bitmap src, int dstWidth, int dstHeight, boolean filter) {
+    return Bitmap.createScaledBitmap(src, dstWidth, dstHeight, filter);
+  }
+  
+  private BitmapShader getNewBitmapShader(Bitmap bitmap, Shader.TileMode tileX, Shader.TileMode tileY) {
+    return new BitmapShader(bitmap, tileX, tileY);
+  }
+    
+  private BlurMaskFilter getCachedBlurMaskFilter() {
+    if (_bmfilter != null) return _bmfilter;
+    
+    int bleed = 2;
+    _bmfilter = new BlurMaskFilter(bleed, Blur.INNER);
+    return _bmfilter;
+  }
+  
   @Override
   protected void onDraw(Canvas canvas) {
 
@@ -91,17 +123,17 @@ public class ShaderImageView extends AsyncImageView {
     if (scaledWidth == fullSizeBitmap.getWidth() && scaledHeight == fullSizeBitmap.getHeight()) {
       mBitmap = fullSizeBitmap;
     } else {
-      mBitmap = Bitmap.createScaledBitmap(fullSizeBitmap, scaledWidth, scaledHeight, true /* filter */);
+      mBitmap = getScaledBitmap(fullSizeBitmap, scaledWidth, scaledHeight, true /* filter */);
     }
 
     int radius = getContext().getResources().getDimensionPixelSize(R.dimen.image_radius);
     int padding = 2;
-    int bleed = 2;
+
     /*
      * Draw the border background
      */
-    RectF frame = new RectF(padding, padding, getWidth() - padding, getHeight() - padding);
-    mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    RectF frame = getNewFrame(padding, padding, getWidth() - padding, getHeight() - padding);
+    mPaint = getCachedPaint(); 
     mPaint.setColor(boderColor);
     canvas.drawRoundRect(frame, radius, radius, mPaint);
 
@@ -109,25 +141,25 @@ public class ShaderImageView extends AsyncImageView {
      * Draw the border frame
      */
     padding = 3;
-    frame = new RectF(padding, padding, getWidth() - padding, getHeight() - padding);
-    mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    frame = getNewFrame(padding, padding, getWidth() - padding, getHeight() - padding);
+    mPaint = getCachedPaint() ;
     mPaint.setColor(LAYER_COLOR);
     canvas.drawRoundRect(frame, radius, radius, mPaint);
 
     /*
      * Draw the image bitmap with bitmap shader
      */
-    frame = new RectF(padding + 1, padding + 1, getWidth() - padding, getHeight() - padding);
-    Shader bitmapShader = new BitmapShader(mBitmap, TileMode.CLAMP, TileMode.CLAMP);
-    mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    frame = getNewFrame(padding + 1, padding + 1, getWidth() - padding, getHeight() - padding);
+    Shader bitmapShader = getNewBitmapShader(mBitmap, TileMode.CLAMP, TileMode.CLAMP);
+    mPaint = getCachedPaint();
     // mPaint.setColor(0xFFFFFFFF);
-    mPaint.setMaskFilter(new BlurMaskFilter(bleed, Blur.INNER));
+    mPaint.setMaskFilter(getCachedBlurMaskFilter());
     mPaint.setShader(bitmapShader);
     canvas.drawRoundRect(frame, radius, radius, mPaint);
     /*
      * Draw shadow for left and top edge
      */
-    mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    mPaint = getCachedPaint();
     mPaint.setColor(SHADOW_COLOR);
     mPaint.setStyle(Paint.Style.STROKE);
     mPaint.setStrokeJoin(Join.ROUND);
