@@ -14,13 +14,13 @@
         android:background="@drawable/compose_textfield_background"
         android:minHeight="150dp"
         android:orientation="horizontal"
-        android:padding="10dp" >
+        android:padding="10dp"
+        android:baselineAligned="false">
 
         <ScrollView
             android:id="@+id/compose_textfield_scroll"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" >
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
             <EditText
                 android:id="@+id/compose_text_view"

@@ -5,6 +5,7 @@ import com.cyrilmottier.android.greendroid.R;
 
 import greendroid.util.Config;
 import greendroid.widget.ActionBar;
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +13,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 
+@SuppressLint("Registered")
 public class MyListActivity extends MyActionBar {
 
     private ListAdapter mAdapter;

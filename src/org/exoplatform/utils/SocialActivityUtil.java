@@ -4,6 +4,7 @@ import greendroid.util.Config;
 
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.Locale;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -353,7 +354,7 @@ public class SocialActivityUtil {
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
           TextUrlSpan myUrlSpan = null;
-          if (spanUrl.toLowerCase().startsWith(ExoConstants.HTTP_PROTOCOL)) {
+          if (spanUrl.toLowerCase(Locale.US).startsWith(ExoConstants.HTTP_PROTOCOL)) {
             myUrlSpan = new TextUrlSpan(spanUrl);
           } else {
             String link = AccountSetting.getInstance().getDomainName() + spanUrl;

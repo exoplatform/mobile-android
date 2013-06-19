@@ -14,6 +14,7 @@ import greendroid.widget.NormalActionBarItem;
 import org.exoplatform.R;
 import org.exoplatform.utils.SettingUtils;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -29,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
+@SuppressLint("Registered")
 public class MyActionBar extends FragmentActivity implements ActionBarActivity {
 
   private boolean       mDefaultConstructorUsed = false;

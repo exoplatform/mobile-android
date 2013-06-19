@@ -23,7 +23,7 @@
             android:shadowRadius="1.0"
             android:text="@string/AttachedPhoto"
             android:textColor="#FFFFFFFF"
-            android:textSize="18dip" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <Button

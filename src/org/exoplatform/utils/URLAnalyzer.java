@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Locale;
 
 import android.util.Log;
 import android.webkit.URLUtil;
@@ -55,7 +56,7 @@ public class URLAnalyzer {
     if (urlStr == null || urlStr.length() == 0)
       return "";
 
-    String url = urlStr = urlStr.toLowerCase();
+    String url = urlStr = urlStr.toLowerCase(Locale.US);
 
     boolean isHTTPSUrl = false;
 

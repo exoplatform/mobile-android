@@ -46,6 +46,7 @@ public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
     Intent intent = new Intent(context, WebViewActivity.class);
     intent.putExtra(ExoConstants.WEB_VIEW_URL, getURL());
     intent.putExtra(ExoConstants.WEB_VIEW_TITLE, getURL());
+    intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "false");
     context.startActivity(intent);
   }
 

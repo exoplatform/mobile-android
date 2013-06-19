@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -156,12 +157,12 @@ public class ServerConfigurationUtils {
 
         switch (eventType) {
         case XmlPullParser.START_TAG:
-          name = parser.getName().toLowerCase();
+          name = parser.getName().toLowerCase(Locale.US);
 
           if (name.equalsIgnoreCase("server")) {
             ServerObjInfo serverObj = new ServerObjInfo();
             for (int i = 0; i < parser.getAttributeCount(); i++) {
-              String attribute = parser.getAttributeName(i).toLowerCase();
+              String attribute = parser.getAttributeName(i).toLowerCase(Locale.US);
               if (attribute.equalsIgnoreCase("name")) {
                 serverObj._strServerName = parser.getAttributeValue(i);
               } else if (attribute.equalsIgnoreCase("serverURL")) {

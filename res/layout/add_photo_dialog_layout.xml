@@ -22,7 +22,7 @@
             android:shadowRadius="1.0"
             android:text="@string/AddAPhoto"
             android:textColor="#FFFFFFFF"
-            android:textSize="18dip" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <ScrollView

@@ -57,7 +57,7 @@
                     android:singleLine="true"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#AAAAAAAA"
-                    android:textSize="16dip"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <EditText
@@ -71,11 +71,11 @@
                     android:ellipsize="start"
                     android:gravity="center|center_horizontal"
                     android:hint="@string/PasswordCellTitle"
-                    android:password="true"
+                    android:inputType="textPassword"
                     android:singleLine="true"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#AAAAAAAA"
-                    android:textSize="16dip"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -90,7 +90,7 @@
                 android:background="@drawable/login_button_background_shape"
                 android:text="@string/SignInButton"
                 android:textColor="#000000"
-                android:textSize="16dip"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
 

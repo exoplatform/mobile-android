@@ -48,6 +48,10 @@ public class HomeSocialItem extends LinearLayout {
 
   private SocialActivityInfo  activityInfo;
 
+  public HomeSocialItem(Context context) {
+    super(context);
+  }
+  
   public HomeSocialItem(Context context, SocialActivityInfo info) {
     super(context);
     userName = info.getUserName();

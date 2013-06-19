@@ -17,6 +17,7 @@ import org.exoplatform.widget.CompatibleFileOpenDialog;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ public class WebViewActivity extends MyActionBar {
 
   public void onCreate(Bundle icicle) {
 
-    super.onCreate(icicle);
+    super.onCreate(icicle);    
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.webview);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
@@ -78,8 +79,15 @@ public class WebViewActivity extends MyActionBar {
     _wvGadget.clearCache(true);
     _wvGadget.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     _wvGadget.getSettings().setSupportZoom(true);
-    _wvGadget.getSettings().setJavaScriptEnabled(true);
-    _wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+    if (getIntent().getStringExtra(ExoConstants.WEB_VIEW_ALLOW_JS) != null) {
+      boolean allowJS = Boolean.parseBoolean( getIntent().getStringExtra(ExoConstants.WEB_VIEW_ALLOW_JS) );
+      setJavascript(allowJS);  
+    }
+    else {
+      // Disable JS by default 
+      setJavascript(false);  
+    }
+    
     _wvGadget.getSettings().setPluginsEnabled(true);
     _wvGadget.getSettings().setLoadsImagesAutomatically(true);
     _wvGadget.addJavascriptInterface(this, "MainScreen");
@@ -123,6 +131,12 @@ public class WebViewActivity extends MyActionBar {
 
   }
 
+  @SuppressLint("SetJavaScriptEnabled")
+  public void setJavascript(boolean allowJS) {
+    _wvGadget.getSettings().setJavaScriptEnabled(allowJS);
+    _wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(allowJS);
+  }
+  
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
