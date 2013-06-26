@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@android:color/white"
+                android:padding="20dp">
+
+    <TextView
+            android:id="@+id/email_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="#2865CC"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:singleLine="true"
+            android:text="@string/EmailSignUp"
+            android:layout_marginBottom="15dp"/>
+
+    <EditText
+            android:id="@+id/edit_txt_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/email_txt"
+            android:hint="@string/Email"
+            android:layout_alignParentRight="true"
+            android:gravity="center|right"
+            android:textSize="14sp"
+            android:inputType="textEmailAddress"
+            android:paddingRight="10dp"
+            android:background="@drawable/edit_email"
+            android:layout_marginBottom="5dp"/>
+
+    <TextView
+            android:id="@+id/alert_txt"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/edit_txt_email"
+            android:layout_alignParentRight="true"
+            android:visibility="invisible"
+            android:text="@string/InvalidEmail"
+            android:textColor="#FF1C1C"
+            android:textStyle="bold"
+            android:layout_marginBottom="15dp"/>
+
+    <Button
+            android:id="@+id/create_acc_btn"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/alert_txt"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/btn_blue"
+            android:textColor="@android:color/white"
+            android:text="@string/CreateAccount"
+            android:textStyle="bold"
+            android:paddingBottom="15dp"
+            android:gravity="center" />
+
+</RelativeLayout>

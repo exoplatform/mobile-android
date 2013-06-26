@@ -20,24 +20,37 @@
     <!-- Application Uses SDK -->
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="9"/>
 
-    <!-- Application Informations -->
+    <!-- Application Information -->
     <application
         android:name=".ExoApplication"
         android:icon="@drawable/application_icon"
         android:label="eXo Mobile"
         android:theme="@style/Theme.eXo" 
         android:allowBackup="true">
-        
+
+        <activity
+            android:name=".ui.WelcomeActivity"
+            android:configChanges="keyboardHidden|orientation">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
         <!-- First Activity of the Application -->
         <activity
             android:name=".ui.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
-
             android:windowSoftInputMode="stateUnchanged|adjustPan" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+            <!-- custom URL scheme -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="exomobile" />
             </intent-filter>
         </activity>
         <activity
@@ -79,6 +92,12 @@
             android:name=".ui.social.SocialTabsActivity"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@style/Theme.PageIndicatorDefaults" />
+        <activity
+            android:name=".ui.SignUpActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".ui.SignInActivity"
+            android:configChanges="keyboardHidden|orientation" />
     </application>
 
 </manifest>

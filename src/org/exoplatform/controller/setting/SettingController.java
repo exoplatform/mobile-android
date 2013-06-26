@@ -3,6 +3,7 @@ package org.exoplatform.controller.setting;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -45,7 +46,10 @@ public class SettingController {
 
   private String                   serverNameURLInvalid;
 
+  private static final String TAG = "SettingController";
+
   public SettingController(Context context, LinearLayout listServerWrap) {
+    Log.i(TAG, "constructor");
     mContext = context;
     prefs = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     this.listServerWrap = listServerWrap;
@@ -132,6 +136,7 @@ public class SettingController {
   }
 
   public void setServerList() {
+    Log.i(TAG, "setServerList");
     List<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
     listServerWrap.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -167,6 +172,7 @@ public class SettingController {
   }
 
   private void init() {
+    Log.i(TAG, "init");
     serverInfoList = ServerSettingHelper.getInstance().getServerInfoList();
     selectedServerIndex = Integer.parseInt(AccountSetting.getInstance().getDomainIndex());
     changeLanguage();

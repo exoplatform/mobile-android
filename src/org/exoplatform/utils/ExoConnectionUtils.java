@@ -1,23 +1,22 @@
 package org.exoplatform.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 //import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
+import android.util.Log;
+import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -52,6 +51,19 @@ public class ExoConnectionUtils {
   public static DefaultHttpClient httpClient;
 
   public static CookieStore       cookiesStore;
+
+  public static final int         SIGNUP_OK                = 10;
+
+  /* internal server problem, strange response status code */
+  public static final int         SIGNUP_INVALID           = 11;
+
+  /* domain for the email is invalid, such as gmail, yahoo ... */
+  public static final int         SIGNUP_WRONG_DOMAIN      = 12;
+
+  /* an account already exists for this email */
+  public static final int         SIGNUP_ACCOUNT_EXISTS    = 13;
+
+  private static final String    TAG                       = "ExoConnectionUtils";
 
   /*
    * Check mobile network and wireless status
@@ -193,6 +205,42 @@ public class ExoConnectionUtils {
 
     return response;
 
+  }
+
+  /**
+   * Make a Sign up request to eXo cloud
+   *
+   * @param email
+   */
+  public static HttpResponse makeCloudSignUpRequest(String email) throws IOException {
+    if (httpClient == null) {
+      httpClient = initHttpClient();
+    }
+
+    HttpPost httpPost = new HttpPost("http://cloud-workspaces.com/rest/cloud-admin/cloudworkspaces/tenant-service/signup");
+    List<NameValuePair> requestParameters = new ArrayList<NameValuePair>(1);
+    requestParameters.add(new BasicNameValuePair("user-mail", email));
+    httpPost.setEntity(new UrlEncodedFormEntity(requestParameters));
+    return httpClient.execute(httpPost);
+  }
+
+  public static int checkSignUpResponse(HttpResponse response) {
+    int statusCode = response.getStatusLine().getStatusCode();
+    /* code 309 */
+    if (statusCode == ExoConstants.UNKNOWN) {
+
+      Log.i(TAG, "Location header: " + response.getLastHeader("Location").getValue());
+
+      if (response.getLastHeader("Location").getValue().contains("tryagain.jsp"))
+        return ExoConnectionUtils.SIGNUP_WRONG_DOMAIN;
+      else return ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS;
+    }
+
+    if (statusCode != HttpStatus.SC_OK)
+      return ExoConnectionUtils.SIGNUP_INVALID;
+
+    /* code 200 */
+    return ExoConnectionUtils.SIGNUP_OK;
   }
 
   /*

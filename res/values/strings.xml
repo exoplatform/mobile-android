@@ -149,7 +149,41 @@
   <string name="MemoryWarning">Memory is unavailable or doesn\'t have enough free space.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Remember my filter</string>
-  <string-array name="SocialTabs">
+
+  <!-- Welcome screen -->
+  <string name="Slogan">Your eXo intranet, anywhere at anytime!</string>
+  <string name="title_template_step">Step</string>
+  <string name="SignUp">Sign Up</string>
+  <string name="CreateAnAccount">Create an account</string>
+  <string name="LogIn">Log In</string>
+  <string name="AlreadyAnUser">Already an user</string>
+  <string name="SkipStep">or skip this for now</string>
+  <string name="Or">or</string>
+
+  <string name="SliderDesc1">Description 1</string>
+  <string name="SliderDesc2">Description 2</string>
+  <string name="SliderDesc3">Description 3</string>
+
+  <!-- Sign up -->
+  <string name="SocialIntranet">The Free Social Intranet for Your Company</string>
+  <string name="GetStarted">Get Started</string>
+  <string name="EmailSignUp">Enter your email address and Sign up :</string>
+  <string name="Email">email address</string>
+  <string name="CreateAccount">Create Account</string>
+  <string name="InvalidEmail">invalid email format</string>
+  <string name="SigningUp">Signing up ...</string>
+  <string name="InvalidSignUp">A problem occurs with the sign up process</string>
+  <string name="WrongEmailDomain">Email Domain for this account is not correct</string>
+  <string name="AccountExists">An account already exists for this email</string>
+  <string name="CheckMail">Check Your Mail</string>
+  <string name="CheckYourMailInbox">Check your email inbox to complete your registration.</string>
+
+  <!-- Sign In -->
+  <string name="EmailSignIn">Enter your credentials and Login:</string>
+  <string name="ConnectOnPremise">Connect to an On Premise Installation</string>
+
+
+    <string-array name="SocialTabs">
     <item>All Updates</item>
     <item>My Connections</item>
     <item>My Spaces</item>

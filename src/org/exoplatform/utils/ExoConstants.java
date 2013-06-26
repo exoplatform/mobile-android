@@ -158,4 +158,6 @@ public class ExoConstants {
 
   public static final String DOCUMENT_GENERAL_DRIVER               = "general";
 
+  /* Http response status */
+  public static final int UNKNOWN = 309;
 }

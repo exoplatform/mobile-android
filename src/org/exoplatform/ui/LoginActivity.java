@@ -1,10 +1,13 @@
 package org.exoplatform.ui;
 
+
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
 import org.exoplatform.controller.login.LoginController;
 import org.exoplatform.controller.login.ServerAdapter;
+import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SettingUtils;
 
@@ -15,7 +18,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,6 +68,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   private LinearLayout      userpassPanel;
 
+  private static final String TAG = "LoginActivity";
+
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -90,6 +97,7 @@ public class LoginActivity extends Activity implements OnClickListener {
   }
 
   private void init() {
+    Log.i(TAG, "init");
     new LaunchController(this, sharedPreference);
     _imageAccount = (ImageView) findViewById(R.id.Image_Account);
     _imageServer = (ImageView) findViewById(R.id.Image_Server);
@@ -109,7 +117,40 @@ public class LoginActivity extends Activity implements OnClickListener {
     _listViewServer.setFadingEdgeLength(0);
     _listViewServer.setDivider(null);
     _listViewServer.setDividerHeight(1);
+
+    boolean isLaunchedFromUrl = (getIntent().getData() != null);
+    if (isLaunchedFromUrl) setUpUserAndServerFromUrl();
+
     setInfomation();
+  }
+
+  private void setUpUserAndServerFromUrl() {
+    Uri eXoUri = getIntent().getData();
+    if (eXoUri == null) return;
+    if ((eXoUri.getHost() == null) || (eXoUri.getQueryParameter("serverURL") == null)) return;
+
+    Log.i(TAG, "uri not null - fired from custom scheme"); //  exomobile://username=xxx?serverURL=xxxx
+
+    String host  = eXoUri.getHost();
+    String serverUrl = eXoUri.getQueryParameter("serverURL");
+    String username;
+
+    Log.i(TAG, "serverUrl: " + serverUrl);  // xxxx
+    int equalIdx = host.indexOf("=");
+    if ((equalIdx == -1) || (equalIdx == host.length())) username = null;
+    else username = host.substring(equalIdx + 1, host.length());
+    Log.i(TAG, "username: " + username);    // xxx
+    AccountSetting.getInstance().setUsername(username);
+
+    ServerObjInfo serverObj = new ServerObjInfo();
+    serverObj._bSystemServer = false;
+    serverObj._strServerName = Uri.parse(serverUrl).getAuthority();
+    serverObj._strServerUrl = serverUrl;
+
+    ServerSettingHelper settingHelper = ServerSettingHelper.getInstance();
+    settingHelper.getServerInfoList().add(serverObj);
+    // set current selected server to the new server
+    AccountSetting.getInstance().setDomainIndex(String.valueOf(settingHelper.getServerInfoList().size() -1));
   }
 
   private void setInfomation() {
@@ -189,6 +230,7 @@ public class LoginActivity extends Activity implements OnClickListener {
       InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
       mgr.showSoftInput(_edtxUserName, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
+
     if (view.equals(_btnAccount)) {
       view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
       _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_on);
@@ -200,7 +242,6 @@ public class LoginActivity extends Activity implements OnClickListener {
       _listViewServer.setVisibility(View.INVISIBLE);
       userpassPanel.setVisibility(View.VISIBLE);
       listviewPanel.setVisibility(View.INVISIBLE);
-
     }
   }
 }

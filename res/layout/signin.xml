@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#dddddd">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="?attr/gdActionBarTitleColor"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="@string/GetStarted"
+            android:background="@drawable/action_bar_background_repeate"/>
+
+    <TextView
+            android:id="@+id/eXo_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#656565"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="right"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@android:color/white"
+                    android:padding="20dp">
+
+        <TextView
+                android:id="@+id/signin_email_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textColor="#2865CC"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:singleLine="true"
+                android:text="@string/EmailSignIn"
+                android:layout_marginBottom="15dp"/>
+
+        <EditText
+                android:id="@+id/signin_edit_txt_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/signin_email_txt"
+                android:hint="@string/Email"
+                android:layout_alignParentRight="true"
+                android:gravity="center|right"
+                android:textSize="14sp"
+                android:inputType="textEmailAddress"
+                android:paddingRight="10dp"
+                android:background="@drawable/edit_email"
+                android:layout_marginBottom="5dp"/>
+
+        <TextView
+                android:id="@+id/signin_alert_txt"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_below="@id/signin_edit_txt_email"
+                android:layout_alignParentRight="true"
+                android:visibility="invisible"
+                android:text="@string/InvalidEmail"
+                android:textColor="#FF1C1C"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"/>
+
+        <EditText
+                android:id="@+id/signin_edit_txt_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/signin_alert_txt"
+                android:layout_alignParentRight="true"
+                android:gravity="center|right"
+                android:textSize="14sp"
+                android:hint="@string/PasswordCellTitle"
+                android:inputType="textPassword"
+                android:paddingRight="10dp"
+                android:background="@drawable/edit_pass"
+                android:layout_marginBottom="15dp"/>
+
+        <Button
+                android:id="@+id/signin_login_btn"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_below="@id/signin_edit_txt_pass"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/btn_blue"
+                android:textColor="@android:color/white"
+                android:text="@string/LogIn"
+                android:textStyle="bold"
+                android:paddingBottom="15dp"
+                android:gravity="center"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/Or"
+        android:textColor="#2865CC"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:singleLine="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+            android:id="@+id/connect_on_premises_btn"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="@drawable/btn_blue"
+            android:textColor="@android:color/white"
+            android:text="@string/ConnectOnPremise"
+            android:textStyle="bold"
+            android:paddingBottom="15dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"/>
+
+</LinearLayout>

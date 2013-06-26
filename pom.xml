@@ -105,9 +105,7 @@
   	  <artifactId>annotations</artifactId>
   	  <version>${android.annotations.version}</version>
     </dependency>
-    
   </dependencies>
-  
   
   <build>
     <pluginManagement>

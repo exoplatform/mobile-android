@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/login_background">
+
+    <TextView
+            android:id="@+id/welcome_slogan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/Slogan"
+            android:layout_marginLeft="5dp"
+            android:drawableLeft="@drawable/exo_application_logo"/>
+
+    <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_below="@id/welcome_slogan" />
+
+    <org.exoplatform.ui.LinePageIndicator
+            android:id="@+id/line_page_indicator"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@id/pager"/>
+
+    <Button
+            android:id="@+id/welcome_btn_signup"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line_page_indicator"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/btn_blue"
+            android:onClick="redirectToSignUp"/>
+
+    <TextView
+            android:id="@+id/welcome_txt_or"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line_page_indicator"
+            android:layout_toRightOf="@id/welcome_btn_signup"
+            android:gravity="center_horizontal"
+            android:background="@drawable/circle"
+            android:text="@string/Or"/>
+
+    <Button
+            android:id="@+id/welcome_btn_login"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line_page_indicator"
+            android:layout_toRightOf="@id/welcome_txt_or"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_grey"
+            android:onClick="logUserIn"/>
+
+    <TextView
+            android:id="@+id/welcome_txt_skipStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcome_btn_login"
+            android:gravity="center_horizontal"
+            android:text="@string/SkipStep"
+            android:clickable="true"
+            android:onClick="redirectToLogIn"/>
+
+</RelativeLayout>
