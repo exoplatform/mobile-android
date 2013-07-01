@@ -2,6 +2,7 @@ package org.exoplatform.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,15 +11,20 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import org.exoplatform.R;
+import org.exoplatform.controller.signup.SignInController;
+import org.exoplatform.utils.ExoConnectionUtils;
 
 public class SignInActivity extends Activity {
 
-  private Button mLoginBtn;
+  private Button   mLoginBtn;
 
   private EditText mEmailTxt;
 
   private EditText mPassTxt;
+
+  private TextView mAlertTxt;
 
   private static final String TAG = "eXoSignInActivity";
 
@@ -38,17 +44,35 @@ public class SignInActivity extends Activity {
 
     mPassTxt = (EditText) findViewById(R.id.signin_edit_txt_pass);
     mPassTxt.addTextChangedListener(_onEmailOrPasswordChanged);
+
+    mAlertTxt = (TextView) findViewById(R.id.signin_alert_txt);
   }
 
   public View.OnClickListener onClickLogIn() {
+
     return new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Log.i(TAG, "click on log in");
+      Log.i(TAG, "click on log in");
 
-
+        mAlertTxt.setVisibility(View.INVISIBLE);
+        String email    = mEmailTxt.getText().toString();
+        String password = mPassTxt.getText().toString();
+        if (!ExoConnectionUtils.validateEmail(email)) showAlertMessage();
+        else makeRequestSigningIn(email, password);
       }
     };
+  }
+
+
+  private void showAlertMessage() {
+    mAlertTxt.setVisibility(View.VISIBLE);
+  }
+
+  private void makeRequestSigningIn(String email, String password) {
+    Log.i(TAG, "makeRequestSigningIn");
+
+    new SignInController(this, email, password);
   }
 
 
@@ -66,10 +90,8 @@ public class SignInActivity extends Activity {
         /* check password and email is inputted */
         if ((email != null) && (pass != null)) {
           if ((!email.isEmpty()) && (!pass.isEmpty())) {
-
             mLoginBtn.setEnabled(true);
             mLoginBtn.setOnClickListener(onClickLogIn());
-
             return;
           }
         }
@@ -80,6 +102,14 @@ public class SignInActivity extends Activity {
       @Override
       public void afterTextChanged(Editable editable) { }
     };
+  }
+
+
+  public void connectToOnPremise(View connectOnPremiseBtn) {
+    Log.i(TAG, "connectToOnPremise");
+
+    Intent next = new Intent(this, SignInOnPremiseActivity.class);
+    startActivity(next);
   }
 
 }

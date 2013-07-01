@@ -4,11 +4,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@android:color/white"
+                android:background="@drawable/bg_white_repeat"
                 android:padding="20dp">
 
     <ImageView
-        android:id="@+id/ok_img"
+        android:id="@+id/signup_ok_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ok_mark"
@@ -16,11 +16,11 @@
         android:layout_marginBottom="10dp" />
 
     <TextView
-        android:id="@+id/check_mail_txt"
+        android:id="@+id/signup_check_mail_txt"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:gravity="center_horizontal"
-        android:layout_below="@id/ok_img"
+        android:layout_below="@id/signup_ok_img"
         android:text="@string/CheckYourMailInbox"
         android:textStyle="bold"
         android:textColor="#2865CC"
@@ -28,16 +28,11 @@
         android:layout_marginBottom="30dp"/>
 
     <Button
-        android:id="@+id/check_mail_btn"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_below="@id/check_mail_txt"
+        android:id="@+id/signup_check_mail_btn"
+        style="@style/SignUpBlueBtnStyle"
+        android:layout_below="@id/signup_check_mail_txt"
         android:text="@string/CheckMail"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/btn_blue"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:gravity="center"
         android:paddingBottom="10dp" />
 
 </RelativeLayout>

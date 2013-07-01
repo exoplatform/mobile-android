@@ -97,7 +97,6 @@ public class LoginActivity extends Activity implements OnClickListener {
   }
 
   private void init() {
-    Log.i(TAG, "init");
     new LaunchController(this, sharedPreference);
     _imageAccount = (ImageView) findViewById(R.id.Image_Account);
     _imageServer = (ImageView) findViewById(R.id.Image_Server);
@@ -142,10 +141,10 @@ public class LoginActivity extends Activity implements OnClickListener {
     Log.i(TAG, "username: " + username);    // xxx
     AccountSetting.getInstance().setUsername(username);
 
-    ServerObjInfo serverObj = new ServerObjInfo();
+    ServerObjInfo serverObj  = new ServerObjInfo();
     serverObj._bSystemServer = false;
     serverObj._strServerName = Uri.parse(serverUrl).getAuthority();
-    serverObj._strServerUrl = serverUrl;
+    serverObj._strServerUrl  = serverUrl;
 
     ServerSettingHelper settingHelper = ServerSettingHelper.getInstance();
     settingHelper.getServerInfoList().add(serverObj);

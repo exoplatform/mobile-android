@@ -151,11 +151,17 @@
   <string name="SocialSettingContent">Remember my filter</string>
 
   <!-- Welcome screen -->
-  <string name="Slogan">Your eXo intranet, anywhere at anytime!</string>
+  <string name="Slogan">Your social intranet, anywhere, anytime!</string>
   <string name="title_template_step">Step</string>
   <string name="SignUp">Sign Up</string>
+  <!--
+  <string name="SignUpCreateAcc"><big>Sign Up</big>/n<small><i>Create an account</i></small></string>
+  -->
   <string name="CreateAnAccount">Create an account</string>
   <string name="LogIn">Log In</string>
+    <!--
+  <string name="LogInAlreadyUser"><big>Log In</big>/n<small><i>Already an user</i></small></string>
+  -->
   <string name="AlreadyAnUser">Already an user</string>
   <string name="SkipStep">or skip this for now</string>
   <string name="Or">or</string>
@@ -170,7 +176,7 @@
   <string name="EmailSignUp">Enter your email address and Sign up :</string>
   <string name="Email">email address</string>
   <string name="CreateAccount">Create Account</string>
-  <string name="InvalidEmail">invalid email format</string>
+  <string name="InvalidEmail">Please enter a valid email address</string>
   <string name="SigningUp">Signing up ...</string>
   <string name="InvalidSignUp">A problem occurs with the sign up process</string>
   <string name="WrongEmailDomain">Email Domain for this account is not correct</string>
@@ -181,6 +187,22 @@
   <!-- Sign In -->
   <string name="EmailSignIn">Enter your credentials and Login:</string>
   <string name="ConnectOnPremise">Connect to an On Premise Installation</string>
+  <string name="SigningIn">Signing in ...</string>
+  <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
+  <string name="InvalidCredentials">Impossible to connect, check your password.</string>
+  <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
+  <string name="SigningIn">Signing in ...</string>
+  <string name="NoTenantForEmail">Impossible to find tenant for this email, please check your email</string>
+  <string name="DefaultServer">My Intranet</string>
+
+
+  <!-- On Premise -->
+  <string name="OnPremise">On Premise</string>
+  <string name="EnterUrl">1. Enter URL of your intranet</string>
+  <string name="EnterLogin">2. Enter your credentials and Login</string>
+  <string name="YourIntranetHint">http://www.mycompany.com/intranet</string>
+  <string name="PasswordHint">password</string>
+  <string name="UserNameHint">username</string>
 
 
     <string-array name="SocialTabs">

@@ -1,61 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@android:color/white"
-                android:padding="20dp">
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_white_repeat">
 
     <TextView
-            android:id="@+id/email_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:textColor="#2865CC"
-            android:textStyle="bold"
-            android:textSize="13sp"
-            android:singleLine="true"
+            android:id="@+id/signup_email_txt"
+            style="@style/SignUpHeadingTxtStyle"
+            android:gravity="center"
             android:text="@string/EmailSignUp"
             android:layout_marginBottom="15dp"/>
 
-    <EditText
-            android:id="@+id/edit_txt_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/email_txt"
-            android:hint="@string/Email"
-            android:layout_alignParentRight="true"
-            android:gravity="center|right"
-            android:textSize="14sp"
-            android:inputType="textEmailAddress"
-            android:paddingRight="10dp"
-            android:background="@drawable/edit_email"
-            android:layout_marginBottom="5dp"/>
-
     <TextView
-            android:id="@+id/alert_txt"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_below="@id/edit_txt_email"
-            android:layout_alignParentRight="true"
-            android:visibility="invisible"
+            android:id="@+id/signup_alert_txt"
+            style="@style/SignUpAlertTxtStyle"
+            android:layout_below="@id/signup_email_txt"
             android:text="@string/InvalidEmail"
-            android:textColor="#FF1C1C"
-            android:textStyle="bold"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="5dp" />
+
+    <EditText
+            android:id="@+id/signup_email_edit_txt"
+            style="@style/SignUpEditTxtStyle"
+            android:layout_below="@id/signup_alert_txt"
+            android:hint="@string/Email"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edit_email"
             android:layout_marginBottom="15dp"/>
 
     <Button
-            android:id="@+id/create_acc_btn"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_below="@id/alert_txt"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/btn_blue"
-            android:textColor="@android:color/white"
+            android:id="@+id/signup_create_acc_btn"
+            style="@style/SignUpBlueBtnStyle"
+            android:layout_below="@id/signup_email_edit_txt"
+            android:layout_centerHorizontal="true"
             android:text="@string/CreateAccount"
-            android:textStyle="bold"
-            android:paddingBottom="15dp"
-            android:gravity="center" />
+            android:paddingBottom="15dp" />
 
 </RelativeLayout>

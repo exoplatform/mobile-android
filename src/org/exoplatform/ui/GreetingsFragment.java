@@ -25,7 +25,7 @@ public class GreetingsFragment extends Fragment {
 
 
     View layout = inflater.inflate(R.layout.greetings_panel, container, false);
-    mCheckMailBtn = (Button) layout.findViewById(R.id.check_mail_btn);
+    mCheckMailBtn = (Button) layout.findViewById(R.id.signup_check_mail_btn);
     mCheckMailBtn.setOnClickListener(onClickCheckMail());
 
     return layout;

@@ -98,6 +98,9 @@
         <activity
             android:name=".ui.SignInActivity"
             android:configChanges="keyboardHidden|orientation" />
+        <activity
+            android:name=".ui.SignInOnPremiseActivity"
+            android:configChanges="keyboardHidden|orientation" />
     </application>
 
 </manifest>

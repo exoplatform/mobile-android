@@ -16,9 +16,6 @@ public class SignUpActivity extends FragmentActivity {
 
     setContentView(R.layout.signup);
 
-    TextView eXo_txt = (TextView) findViewById(R.id.eXo_txt);
-    eXo_txt.setText(Html.fromHtml("<font>eXo</font><br/>" + "<font>" + getResources().getString(R.string.SocialIntranet ) + "</font>"));
-
     getSupportFragmentManager()
         .beginTransaction()
         .add(R.id.fragment_panel, new CreationAccountFragment(this))

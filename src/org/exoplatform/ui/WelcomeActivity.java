@@ -1,6 +1,7 @@
 package org.exoplatform.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import org.exoplatform.R;
+import org.exoplatform.controller.login.LaunchController;
 
 import java.util.Date;
 
@@ -22,6 +24,8 @@ import java.util.Date;
  * Welcome screen
  */
 public class WelcomeActivity extends FragmentActivity {
+
+  private SharedPreferences mSharedPreference;
 
   private static final String TAG = "eXoWelcomeActivity";
 
@@ -35,6 +39,9 @@ public class WelcomeActivity extends FragmentActivity {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.welcome);
+
+    Log.i(TAG, "launch controller");
+    new LaunchController(this, mSharedPreference);
 
     // Instantiate a ViewPager and a PagerAdapter.
     mPager = (ViewPager) findViewById(R.id.pager);
@@ -52,12 +59,12 @@ public class WelcomeActivity extends FragmentActivity {
     });
 
     Button btn_signUp = (Button) findViewById(R.id.welcome_btn_signup);
-    btn_signUp.setText(Html.fromHtml("<font>" + getResources().getString(R.string.SignUp) + "</font><br/>" +
-        "<font size='20'><i>" + getResources().getString(R.string.CreateAnAccount) + "</i></font>"));
+    btn_signUp.setText(Html.fromHtml("<big>" + getResources().getString(R.string.SignUp) + "</big><br/>" +
+        "<small><i>" + getResources().getString(R.string.CreateAnAccount) + "</i></small>"));
 
     Button btn_logIn = (Button) findViewById(R.id.welcome_btn_login);
-    btn_logIn.setText(Html.fromHtml("<font>" + getResources().getString(R.string.LogIn) + "</font><br/>" +
-        "<font size='20'><i>" + getResources().getString(R.string.AlreadyAnUser) + "</i></font>"));
+    btn_logIn.setText(Html.fromHtml("<big>" + getResources().getString(R.string.LogIn) + "</big><br/>" +
+        "<small><i>" + getResources().getString(R.string.AlreadyAnUser) + "</i></small>"));
 
     long start = new Date().getTime();
     Log.i(TAG, "start time loading image: " + start);
@@ -100,6 +107,9 @@ public class WelcomeActivity extends FragmentActivity {
 
   public void logUserIn(View view) {
     Log.i(TAG, "logUserIn");
+
+    Intent next = new Intent(this, SignInActivity.class);
+    startActivity(next);
   }
 
   /**

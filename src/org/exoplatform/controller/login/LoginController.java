@@ -2,6 +2,7 @@ package org.exoplatform.controller.login;
 
 import java.io.IOException;
 
+import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.conn.HttpHostConnectException;
@@ -135,6 +136,8 @@ public class LoginController {
     private HttpResponse response;
 
     private boolean      isCompliant;
+
+    private static final String TAG = "eXoLoginTask";
 
     @Override
     public void onPreExecute() {

@@ -31,6 +31,8 @@ public class LaunchController {
 
   private ArrayList<ServerObjInfo> _arrServerList;
 
+  private static final String TAG = "eXoLaunchController";
+
   public LaunchController(Context c, SharedPreferences prefs) {
     sharedPreference = prefs;
     context = c;
@@ -47,8 +49,10 @@ public class LaunchController {
   }
 
   private void getLaunchInfo() {
+    Log.i(TAG, "getLaunchInfo");
     sharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     String strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE, "");
+    Log.i(TAG, "strLocalize: " + strLocalize);
     if (strLocalize.equals("")) {
 
       strLocalize = Locale.getDefault().getLanguage();
@@ -61,6 +65,11 @@ public class LaunchController {
       }
 
     }
+
+    Log.i(TAG, "user: " + sharedPreference.getString(ExoConstants.EXO_PRF_USERNAME, ""));
+    Log.i(TAG, "pass: " + sharedPreference.getString(ExoConstants.EXO_PRF_PASSWORD, ""));
+    Log.i(TAG, "domain index: " + sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
+    Log.i(TAG, "domain name: " + sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
 
     /*
      * Set the Locale which affect to our application
@@ -93,10 +102,14 @@ public class LaunchController {
     }
 
     if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {
+
+      Log.i(TAG, "get default server list from default configuration");
       _arrDefaulServerList = ServerConfigurationUtils.getDefaultServerList(context);
       if (_arrDefaulServerList.size() > 0)
         _arrServerList.addAll(_arrDefaulServerList);
     } else {
+
+      Log.i(TAG, "get default server list from xml file DefaultServerList.xml");
       ArrayList<ServerObjInfo> defaultServerList = ServerConfigurationUtils.getServerListWithFileName("DefaultServerList.xml");
 
       _arrDeletedServerList = ServerConfigurationUtils.getServerListWithFileName("DeletedDefaultServerList.xml");

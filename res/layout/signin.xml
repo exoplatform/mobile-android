@@ -4,127 +4,92 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#dddddd">
+              android:background="@drawable/welcome_bg_repeat">
 
     <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="?attr/gdActionBarTitleColor"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="@string/GetStarted"
-            android:background="@drawable/action_bar_background_repeate"/>
+            style="@style/SignUpBlueHeaderStyle"
+            android:text="@string/GetStarted" />
 
-    <TextView
-            android:id="@+id/eXo_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#656565"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:gravity="right"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"/>
+    <include android:id="@+id/signin_eXo_banner"
+             layout="@layout/exo_banner" />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@android:color/white"
-                    android:padding="20dp">
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_white_repeat">
 
         <TextView
                 android:id="@+id/signin_email_txt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:textColor="#2865CC"
-                android:textStyle="bold"
-                android:textSize="13sp"
-                android:singleLine="true"
+                style="@style/SignUpHeadingTxtStyle"
+                android:gravity="center"
                 android:text="@string/EmailSignIn"
                 android:layout_marginBottom="15dp"/>
 
-        <EditText
-                android:id="@+id/signin_edit_txt_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/signin_email_txt"
-                android:hint="@string/Email"
-                android:layout_alignParentRight="true"
-                android:gravity="center|right"
-                android:textSize="14sp"
-                android:inputType="textEmailAddress"
-                android:paddingRight="10dp"
-                android:background="@drawable/edit_email"
-                android:layout_marginBottom="5dp"/>
-
         <TextView
                 android:id="@+id/signin_alert_txt"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_below="@id/signin_edit_txt_email"
-                android:layout_alignParentRight="true"
-                android:visibility="invisible"
+                style="@style/SignUpAlertTxtStyle"
+                android:layout_below="@id/signin_email_txt"
+                android:layout_centerHorizontal="true"
                 android:text="@string/InvalidEmail"
-                android:textColor="#FF1C1C"
-                android:textStyle="bold"
+                android:layout_marginBottom="5dp"/>
+
+        <EditText
+                android:id="@+id/signin_edit_txt_email"
+                style="@style/SignUpEditTxtStyle"
+                android:layout_below="@id/signin_alert_txt"
+                android:hint="@string/Email"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edit_email"
                 android:layout_marginBottom="5dp"/>
 
         <EditText
                 android:id="@+id/signin_edit_txt_pass"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/signin_alert_txt"
-                android:layout_alignParentRight="true"
-                android:gravity="center|right"
-                android:textSize="14sp"
-                android:hint="@string/PasswordCellTitle"
+                style="@style/SignUpEditTxtStyle"
+                android:layout_below="@id/signin_edit_txt_email"
+                android:hint="@string/PasswordHint"
                 android:inputType="textPassword"
-                android:paddingRight="10dp"
-                android:background="@drawable/edit_pass"
+                android:background="@drawable/edit_email"
                 android:layout_marginBottom="15dp"/>
 
         <Button
                 android:id="@+id/signin_login_btn"
+                style="@style/SignUpBlueBtnStyle"
+                android:layout_below="@id/signin_edit_txt_pass"
+                android:layout_alignParentLeft="true"
+                android:text="@string/LogIn"
+                android:paddingBottom="15dp"
+                android:layout_marginLeft="10dp"/>
+
+        <TextView
+                android:id="@+id/signin_or_txt"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_below="@id/signin_edit_txt_pass"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/btn_blue"
-                android:textColor="@android:color/white"
-                android:text="@string/LogIn"
+                android:layout_toRightOf="@id/signin_login_btn"
+                android:text="@string/Or"
+                android:textColor="#2865CC"
                 android:textStyle="bold"
+                android:textSize="13sp"
+                android:singleLine="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingTop="15dp"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"/>
+
+        <Button
+                android:id="@+id/signin_connect_on_premises_btn"
+                style="@style/SignUpBlueBtnStyle"
+                android:layout_below="@id/signin_edit_txt_pass"
+                android:layout_toRightOf="@id/signin_or_txt"
+                android:text="@string/ConnectOnPremise"
                 android:paddingBottom="15dp"
-                android:gravity="center"/>
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:onClick="connectToOnPremise"/>
 
     </RelativeLayout>
-
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/Or"
-        android:textColor="#2865CC"
-        android:textStyle="bold"
-        android:textSize="13sp"
-        android:singleLine="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"/>
-
-    <Button
-            android:id="@+id/connect_on_premises_btn"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:background="@drawable/btn_blue"
-            android:textColor="@android:color/white"
-            android:text="@string/ConnectOnPremise"
-            android:textStyle="bold"
-            android:paddingBottom="15dp"
-            android:layout_gravity="center_horizontal"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"/>
 
 </LinearLayout>

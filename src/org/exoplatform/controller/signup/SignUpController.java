@@ -4,7 +4,6 @@ package org.exoplatform.controller.signup;
 // this sign up controller will handle the making request and response to
 // the cloud workspace
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -13,13 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.exoplatform.R;
 import org.exoplatform.ui.SignInActivity;
 import org.exoplatform.ui.SignUpActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
@@ -63,7 +60,7 @@ public class SignUpController {
 
 
   public SignUpController(SignUpActivity context, String email) {
-    mContext = (Context) context;
+    mContext = context;
     mSignUpActivity = context;
     SettingUtils.setDefaultLanguage(mContext);
     mResource = mContext.getResources();
@@ -147,8 +144,7 @@ public class SignUpController {
               Intent next = new Intent(mSignUpActivity, SignInActivity.class);
               mContext.startActivity(next);
             }
-          }
-          );
+          });
           break;
         case ExoConnectionUtils.SIGNUP_OK:
           dialog.getOkButton().setOnClickListener(new Button.OnClickListener() {
@@ -159,8 +155,7 @@ public class SignUpController {
               // swipe view to account creation in progress
               mSignUpActivity.flipToGreetingsPanel();
             }
-          }
-          );
+          });
           break;
       }
 
@@ -191,7 +186,5 @@ public class SignUpController {
     public Button getOkButton() {
       return (Button) findViewById(R.id.warning_ok_button);
     }
-
-
   }
 }

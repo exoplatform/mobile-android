@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import org.exoplatform.R;
 import org.exoplatform.controller.signup.SignUpController;
+import org.exoplatform.utils.ExoConnectionUtils;
 
 public class CreationAccountFragment extends Fragment {
 
@@ -24,7 +25,7 @@ public class CreationAccountFragment extends Fragment {
 
   private TextView mAlertText;
 
-  private EditText edit_txt_email;
+  private EditText mEmailEditTxt;
 
   private static final String TAG = "CreationAccountFragment";
 
@@ -37,24 +38,24 @@ public class CreationAccountFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     View layout = inflater.inflate(R.layout.account_creation_panel, container, false);
-    mAlertText = (TextView) layout.findViewById(R.id.alert_txt);
+    mAlertText = (TextView) layout.findViewById(R.id.signup_alert_txt);
 
-    edit_txt_email = (EditText) layout.findViewById(R.id.edit_txt_email);
-    edit_txt_email.addTextChangedListener(createTextWatcher());
-    edit_txt_email.setOnClickListener(onClickEditEmail());
-    Button create_acc_btn = (Button) layout.findViewById(R.id.create_acc_btn);
-    create_acc_btn.setOnClickListener(onClickCreateAccBtn());
+    mEmailEditTxt = (EditText) layout.findViewById(R.id.signup_email_edit_txt);
+    mEmailEditTxt.addTextChangedListener(createTextWatcher());
+    mEmailEditTxt.setOnClickListener(onClickEditEmail());
+    Button createAccBtn = (Button) layout.findViewById(R.id.signup_create_acc_btn);
+    createAccBtn.setOnClickListener(onClickCreateAccBtn());
     return layout;
   }
 
   private View.OnClickListener onClickCreateAccBtn() {
     return new View.OnClickListener() {
       @Override
-      public void onClick(View create_acc_btn) {
+      public void onClick(View createAccBtn) {
         Log.i(TAG, "createAccount");
 
-        String email = edit_txt_email.getText().toString();
-        if (!validateEmail(email)) showAlertMessage();
+        String email = mEmailEditTxt.getText().toString();
+        if (!ExoConnectionUtils.validateEmail(email)) showAlertMessage();
         else makeRequestCreatingAccount(email);
       }
     };
@@ -64,12 +65,12 @@ public class CreationAccountFragment extends Fragment {
 
     return new View.OnClickListener() {
       @Override
-      public void onClick(View edit_txt_email) {
+      public void onClick(View mEmailEditTxt) {
         Log.i(TAG, "editEmailAddress");
 
         mAlertText.setVisibility(View.INVISIBLE);
         InputMethodManager mgr = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.showSoftInput(edit_txt_email, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        mgr.showSoftInput(mEmailEditTxt, InputMethodManager.HIDE_IMPLICIT_ONLY);
       }
     };
   }
@@ -99,27 +100,6 @@ public class CreationAccountFragment extends Fragment {
   private void makeRequestCreatingAccount(String email) {
     Log.i(TAG, "makeRequestCreatingAccount");
 
-    // prepare the request to cloud workspace WS, send it then
-    // display the loader
-
-    // check server not available
-    // account already exists for this email
     new SignUpController(mSignUpActivity, email);
   }
-
-  private boolean validateEmail(String aEmailAddress) {
-    if (aEmailAddress == null) return false;
-    boolean result = true;
-    if (!hasNameAndDomain(aEmailAddress)) {
-      result = false;
-    }
-    return result;
-  }
-
-  private boolean hasNameAndDomain(String aEmailAddress) {
-    String[] tokens = aEmailAddress.split("@");
-    return tokens.length == 2 && tokens[0].trim().length() > 0 && tokens[1].trim().length() > 0
-        && tokens[1].split("\\.").length > 1;
-  }
-
 }

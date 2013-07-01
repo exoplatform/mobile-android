@@ -63,6 +63,18 @@ public class ExoConnectionUtils {
   /* an account already exists for this email */
   public static final int         SIGNUP_ACCOUNT_EXISTS    = 13;
 
+  public static final int         SIGNIN_OK                = 20;
+
+  public static final int         SIGNIN_INVALID           = 21;
+
+  public static final int         SIGNIN_NO_ACCOUNT        = 22;
+
+  public static final int         SIGNIN_NO_TENANT_FOR_EMAIL  = 23;
+
+  public static final int         SIGNIN_SERVER_NOT_AVAILABLE = 24;
+
+
+
   private static final String    TAG                       = "ExoConnectionUtils";
 
   /*
@@ -207,6 +219,22 @@ public class ExoConnectionUtils {
 
   }
 
+  /* for signup: validate email according rules of eXo cloud */
+  public static boolean validateEmail(String aEmailAddress) {
+    if (aEmailAddress == null) return false;
+    boolean result = true;
+    if (!hasNameAndDomain(aEmailAddress)) {
+      result = false;
+    }
+    return result;
+  }
+
+  private static boolean hasNameAndDomain(String aEmailAddress) {
+    String[] tokens = aEmailAddress.split("@");
+    return tokens.length == 2 && tokens[0].trim().length() > 0 && tokens[1].trim().length() > 0
+        && tokens[1].split("\\.").length > 1;
+  }
+
   /**
    * Make a Sign up request to eXo cloud
    *
@@ -241,6 +269,43 @@ public class ExoConnectionUtils {
 
     /* code 200 */
     return ExoConnectionUtils.SIGNUP_OK;
+  }
+
+  public static HttpResponse requestTenantForEmail(String email) throws IOException {
+    return getRequestResponse("http://cloud-workspaces.com/rest/cloud-admin/cloudworkspaces/tenant-service/usermailinfo/" + email);
+  }
+
+  public static String[] checkRequestTenant(HttpResponse response) {
+
+    String[] results = new String[2];
+    if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) return null;
+
+    try {
+      String result   = getPLFStream(response);
+      Log.i(TAG, "result of request: " + result);
+      JSONObject json = (JSONObject) JSONValue.parse(result);
+      results[0]      = json.get(ExoConstants.USERNAME).toString();
+      results[1]      = json.get(ExoConstants.TENANT).toString();
+      Log.i(TAG, "user:   " + results[0]);
+      Log.i(TAG, "tenant: " + results[1]);
+      return results;
+    } catch (RuntimeException e) {
+      return null;
+    }
+  }
+
+
+  public static boolean requestAccountExistsForUser(String user, String tenant) {
+    try {
+      HttpResponse response = getRequestResponse("http://cloud-workspaces.com/rest/cloud-admin/cloudworkspaces/tenant-service/isuserexist/"
+          + tenant + "/" + user);
+      if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) return false;
+      return convertStreamToString(response.getEntity().getContent())
+          .replace("\n", "").replace("\r", "").replace("\r\n", "")
+          .equalsIgnoreCase("true");
+    } catch (IOException e) {
+      return false;
+    }
   }
 
   /*
