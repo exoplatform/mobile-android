@@ -52,6 +52,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   private ListView          _listViewServer;
 
+  private Button            mSettingBtn;
+
   private String            strSignIn;
 
   private String            settingText;
@@ -68,7 +70,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   private LinearLayout      userpassPanel;
 
-  private static final String TAG = "LoginActivity";
+  private static final String TAG = "eXoLoginActivity";
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -117,6 +119,9 @@ public class LoginActivity extends Activity implements OnClickListener {
     _listViewServer.setDivider(null);
     _listViewServer.setDividerHeight(1);
 
+    mSettingBtn = (Button) findViewById(R.id.login_setting_btn);
+    mSettingBtn.setOnClickListener(this);
+
     boolean isLaunchedFromUrl = (getIntent().getData() != null);
     if (isLaunchedFromUrl) setUpUserAndServerFromUrl();
 
@@ -142,7 +147,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     AccountSetting.getInstance().setUsername(username);
 
     ServerObjInfo serverObj  = new ServerObjInfo();
-    serverObj._bSystemServer = false;
+    //serverObj._bSystemServer = false;
     serverObj._strServerName = Uri.parse(serverUrl).getAuthority();
     serverObj._strServerUrl  = serverUrl;
 
@@ -155,14 +160,12 @@ public class LoginActivity extends Activity implements OnClickListener {
   private void setInfomation() {
     changeLanguage();
     _edtxUserName.setHint(userNameHint);
-    if (username == null)
-      username = AccountSetting.getInstance().getUsername();
+    if (username == null) username = AccountSetting.getInstance().getUsername();
     if (username != null && !"".equals(username)) {
       _edtxUserName.setText(username);
     }
     _edtxPassword.setHint(passWordHint);
-    if (password == null)
-      password = AccountSetting.getInstance().getPassword();
+    if (password == null) password = AccountSetting.getInstance().getPassword();
     if (password != null && !"".equals(password)) {
       _edtxPassword.setText(password);
     }
@@ -178,7 +181,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     username = _edtxUserName.getText().toString();
     password = _edtxPassword.getText().toString();
     new LoginController(this, username, password);
-
   }
 
   public void changeLanguage() {
@@ -235,12 +237,21 @@ public class LoginActivity extends Activity implements OnClickListener {
       _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_on);
       _btnServer.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
       _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
+
       _edtxUserName.setVisibility(View.VISIBLE);
+      _edtxUserName.setText(AccountSetting.getInstance().getUsername());
       _edtxPassword.setVisibility(View.VISIBLE);
+      _edtxPassword.setText(AccountSetting.getInstance().getPassword());
+
       _btnLogIn.setVisibility(View.VISIBLE);
       _listViewServer.setVisibility(View.INVISIBLE);
       userpassPanel.setVisibility(View.VISIBLE);
       listviewPanel.setVisibility(View.INVISIBLE);
+    }
+
+    if (view.equals(mSettingBtn)) {
+      Intent next = new Intent(this, SettingActivity.class);
+      startActivity(next);
     }
   }
 }

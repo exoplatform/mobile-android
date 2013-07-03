@@ -26,14 +26,13 @@
             android:hint="@string/Email"
             android:inputType="textEmailAddress"
             android:background="@drawable/edit_email"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="25dp"/>
 
     <Button
             android:id="@+id/signup_create_acc_btn"
             style="@style/SignUpBlueBtnStyle"
             android:layout_below="@id/signup_email_edit_txt"
             android:layout_centerHorizontal="true"
-            android:text="@string/CreateAccount"
-            android:paddingBottom="15dp" />
+            android:text="@string/CreateAccount"/>
 
 </RelativeLayout>

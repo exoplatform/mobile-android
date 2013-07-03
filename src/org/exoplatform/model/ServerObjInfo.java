@@ -29,12 +29,20 @@ public class ServerObjInfo implements Parcelable {
 
   public String  _strServerUrl; // URL of server
 
-  public boolean _bSystemServer; // Is default server
+  /* username */
+  public String  username;
+
+  /* encrypted password */
+  public String  password;
+
+  //public boolean _bSystemServer; // Is default server
 
   public ServerObjInfo() {
     _strServerName = "";
-    _strServerUrl = "";
-    _bSystemServer = false;
+    _strServerUrl  = "";
+    //_bSystemServer = false;
+    username       = "";
+    password       = "";
   }
 
   private ServerObjInfo(Parcel in) {
@@ -53,8 +61,10 @@ public class ServerObjInfo implements Parcelable {
 
   private void readFromParcel(Parcel in) {
     _strServerName = in.readString();
-    _strServerUrl = in.readString();
-    _bSystemServer = (Boolean) in.readValue(null);
+    _strServerUrl  = in.readString();
+    //_bSystemServer = (Boolean) in.readValue(null);
+    username       = in.readString();
+    password       = in.readString();
   }
 
   @Override
@@ -66,7 +76,9 @@ public class ServerObjInfo implements Parcelable {
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(_strServerName);
     dest.writeString(_strServerUrl);
-    dest.writeValue(_bSystemServer);
+    //dest.writeValue(_bSystemServer);
+    dest.writeString(username);
+    dest.writeString(password);
   }
 
 }

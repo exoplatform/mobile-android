@@ -25,6 +25,9 @@ public class LaunchController {
 
   private Context                  context;
 
+  /* TODO: removed?
+  * now we don't use default server list anymore
+  * */
   private ArrayList<ServerObjInfo> _arrDefaulServerList;
 
   private ArrayList<ServerObjInfo> _arrDeletedServerList;
@@ -37,7 +40,10 @@ public class LaunchController {
     sharedPreference = prefs;
     context = c;
     getLaunchInfo();
-    getServerInfo();
+    //getServerInfo();
+
+    getServerInfo1();
+
     /*
      * Initialize SocialImageLoader when application start up and clear all data
      * cache.
@@ -146,6 +152,25 @@ public class LaunchController {
         _arrServerList.addAll(_arrDefaulServerList);
     }
 
+    ServerSettingHelper.getInstance().setServerInfoList(_arrServerList);
+  }
+
+
+  private void getServerInfo1() {
+    Log.i(TAG, "getServerInfo1");
+
+    String appVer = "";
+    String oldVer = ServerConfigurationUtils.getAppVersion(context);
+    try {
+      appVer = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+      ServerSettingHelper.getInstance().setApplicationVersion(appVer);
+    } catch (NameNotFoundException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("NameNotFoundException", "Get package information is error!");
+    }
+
+    _arrServerList = ServerConfigurationUtils.getServerListFromFile(context, ExoConstants.EXO_SERVER_SETTING_FILE);
+    if (_arrServerList == null) _arrServerList = new ArrayList<ServerObjInfo>();
     ServerSettingHelper.getInstance().setServerInfoList(_arrServerList);
   }
 

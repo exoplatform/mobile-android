@@ -21,17 +21,19 @@ public class CreationAccountFragment extends Fragment {
 
   private SignUpActivity mSignUpActivity;
 
-  private Context mContext;
+  private Context  mContext;
 
   private TextView mAlertText;
 
   private EditText mEmailEditTxt;
 
+  private Button   mCreateAccBtn;
+
   private static final String TAG = "CreationAccountFragment";
 
   public CreationAccountFragment(SignUpActivity context) {
     mSignUpActivity = context;
-    mContext = (Context) context;
+    mContext = context;
   }
 
   @Override
@@ -43,8 +45,8 @@ public class CreationAccountFragment extends Fragment {
     mEmailEditTxt = (EditText) layout.findViewById(R.id.signup_email_edit_txt);
     mEmailEditTxt.addTextChangedListener(createTextWatcher());
     mEmailEditTxt.setOnClickListener(onClickEditEmail());
-    Button createAccBtn = (Button) layout.findViewById(R.id.signup_create_acc_btn);
-    createAccBtn.setOnClickListener(onClickCreateAccBtn());
+    mCreateAccBtn = (Button) layout.findViewById(R.id.signup_create_acc_btn);
+    mCreateAccBtn.setEnabled(false);
     return layout;
   }
 
@@ -83,6 +85,15 @@ public class CreationAccountFragment extends Fragment {
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
         mAlertText.setVisibility(View.INVISIBLE);
+
+        String email = mEmailEditTxt.getText().toString();
+        if (email.isEmpty()) {
+          mCreateAccBtn.setEnabled(false);
+          return ;
+        }
+
+        mCreateAccBtn.setEnabled(true);
+        mCreateAccBtn.setOnClickListener(onClickCreateAccBtn());
       }
 
       @Override

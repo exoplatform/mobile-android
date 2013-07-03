@@ -1,5 +1,6 @@
 package org.exoplatform.ui;
 
+import android.content.Intent;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.R;
@@ -89,6 +90,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
   private String                okString;
 
+  private Button                mStartCloudSignUpBtn;
+
   public static SettingActivity settingActivity;
 
   @Override
@@ -148,6 +151,9 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     listServerWrap = (LinearLayout) findViewById(R.id.listview_server_wrap);
     addServerBtn = (Button) findViewById(R.id.modify_server_btn);
     addServerBtn.setOnClickListener(this);
+
+    mStartCloudSignUpBtn = (Button) findViewById(R.id.setting_start_cloud_signup_btn);
+    mStartCloudSignUpBtn.setOnClickListener(this);
 
     setttingController = new SettingController(this, listServerWrap);
     setttingController.initLocation(imgViewECheckMark, imgViewFCheckMark);
@@ -225,7 +231,6 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     errorMessage = resource.getString(R.string.DoNotHavePermision);
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
-
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -256,9 +261,14 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
       setttingController.setDocumentShowPrivateDrive(documentCheckedView);
     }
     if (view.equals(addServerBtn)) {
-       
-        new ServerEditionDialog(this, setttingController, null, 0).show();
-
+      Intent next = new Intent(this, ServerEditionActivity.class);
+      next.putExtra(ExoConstants.SETTING_ADDING_SERVER, true);
+      SettingController.useInstance(setttingController);
+      startActivity(next);
+    }
+    if (view.equals(mStartCloudSignUpBtn)) {
+      Intent next = new Intent(this, WelcomeActivity.class);
+      startActivity(next);
     }
 
   }

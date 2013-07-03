@@ -310,11 +310,25 @@
             android:textColor="#000000"
             android:textStyle="bold" />
 
+        <Button
+                android:id="@+id/setting_start_cloud_signup_btn"
+                android:layout_width="match_parent"
+                android:layout_height="44dip"
+                android:layout_below="@id/modify_server_btn"
+                android:padding="4dp"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:text="@string/StartCloudSignUpAssistant"
+                android:background="@drawable/file_item_background_shape"
+                android:gravity="center"/>
+
+
         <RelativeLayout
             android:id="@+id/Server_Information_Section"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/modify_server_btn" >
+            android:layout_below="@id/setting_start_cloud_signup_btn" >
 
             <ImageView
                 android:id="@+id/ImageView_Server_Information_Section_Header"
@@ -346,6 +360,7 @@
                 android:background="@drawable/serversectionseparator"
                 android:contentDescription="@string/Settings" />
         </RelativeLayout>
+
         <!-- Server Edition Info -->
 
         <LinearLayout
@@ -408,6 +423,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
 
         <!-- Application Version Info -->
 

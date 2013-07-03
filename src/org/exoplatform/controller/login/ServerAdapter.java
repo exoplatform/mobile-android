@@ -2,6 +2,7 @@ package org.exoplatform.controller.login;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -29,6 +30,8 @@ public class ServerAdapter extends BaseAdapter {
   private int                      _intDomainIndex;
 
   private String                   _strDomain;
+
+  private static final String TAG = "eXoServerAdapter";
 
   public ServerAdapter(Context context, ListView lv) {
     mContext = context;
@@ -75,6 +78,7 @@ public class ServerAdapter extends BaseAdapter {
     rowView.setOnClickListener(new OnClickListener() {
 
       public void onClick(View v) {
+        Log.i(TAG, "onClick server list item");
 
         View rowView = getView(pos, null, _listViewServer);
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
@@ -85,12 +89,17 @@ public class ServerAdapter extends BaseAdapter {
         AccountSetting.getInstance().setDomainIndex(String.valueOf(_intDomainIndex));
         AccountSetting.getInstance().setDomainName(_strDomain);
 
-        SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE,
-                                                                        0)
+        AccountSetting.getInstance().setUsername(serverObj.username);
+        AccountSetting.getInstance().setPassword(serverObj.password);
+        // TODO: set username and password
+
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
                                                   .edit();
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance()
                                                                           .getDomainIndex());
+        editor.putString(ExoConstants.EXO_PRF_USERNAME, serverObj.username);
+        editor.putString(ExoConstants.EXO_PRF_PASSWORD, serverObj.password);
         editor.commit();
 
         rowView = getView(_intDomainIndex, null, _listViewServer);

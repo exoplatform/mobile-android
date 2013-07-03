@@ -101,6 +101,7 @@
         <activity
             android:name=".ui.SignInOnPremiseActivity"
             android:configChanges="keyboardHidden|orientation" />
+        <activity android:name=".ui.ServerEditionActivity"/>
     </application>
 
 </manifest>

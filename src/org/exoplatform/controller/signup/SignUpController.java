@@ -147,15 +147,8 @@ public class SignUpController {
           });
           break;
         case ExoConnectionUtils.SIGNUP_OK:
-          dialog.getOkButton().setOnClickListener(new Button.OnClickListener() {
-
-            public void onClick(View view) {
-              dialog.dismiss();
-
-              // swipe view to account creation in progress
-              mSignUpActivity.flipToGreetingsPanel();
-            }
-          });
+          // swipe view to account creation in progress
+          mSignUpActivity.flipToGreetingsPanel();
           break;
       }
 

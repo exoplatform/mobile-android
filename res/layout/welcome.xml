@@ -11,36 +11,23 @@
     <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="320dp"
             android:layout_below="@id/welcome_eXo_banner"/>
 
-    <org.exoplatform.ui.LinePageIndicator
-            android:id="@+id/line_page_indicator"
+    <org.exoplatform.ui.CirclePageIndicator
+            android:id="@+id/circle_page_indicator"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_below="@id/pager"
-            android:layout_marginBottom="10dp"/>
-
-    <Button
-            android:id="@+id/welcome_btn_signup"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/line_page_indicator"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:gravity="center"
-            android:paddingBottom="5dp"
-            android:background="@drawable/btn_blue"
-            android:onClick="redirectToSignUp"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="3dp"/>
 
     <TextView
             android:id="@+id/welcome_txt_or"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/line_page_indicator"
-            android:layout_toRightOf="@id/welcome_btn_signup"
+            android:layout_height="72dp"
+            android:layout_below="@id/circle_page_indicator"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
             android:paddingBottom="15dp"
             android:background="@drawable/circle"
@@ -49,17 +36,30 @@
             android:textColor="@android:color/white"/>
 
     <Button
+            android:id="@+id/welcome_btn_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            android:layout_below="@id/circle_page_indicator"
+            android:layout_toLeftOf="@id/welcome_txt_or"
+            android:layout_marginLeft="20dp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:background="@drawable/btn_blue_half"
+            android:onClick="redirectToSignUp"/>
+
+    <Button
             android:id="@+id/welcome_btn_login"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/line_page_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            android:layout_below="@id/circle_page_indicator"
             android:layout_toRightOf="@id/welcome_txt_or"
-            android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:gravity="center"
-            android:paddingBottom="5dp"
+            android:paddingBottom="10dp"
             android:background="@drawable/btn_grey"
             android:onClick="logUserIn"/>
 
@@ -71,7 +71,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="@string/SkipStep"
-            android:textSize="12dp"
+            android:textSize="12sp"
             android:clickable="true"
             android:onClick="redirectToLogIn"
             android:background="@drawable/rect_rounded_corner"/>

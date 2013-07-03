@@ -6,21 +6,28 @@
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
-                  android:background="@drawable/bg_blurry">
+                  android:background="@drawable/welcome_bg_repeat">
 
-        <ImageView
-                android:id="@+id/slider_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="280dp"
+                      android:orientation="vertical"
+                      android:background="@drawable/bg_blurry">
+            <ImageView
+                    android:id="@+id/slider_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
 
         <TextView
                 android:id="@+id/slider_txt_description"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textSize="9dp"
-                android:textColor="#B6B7BB" />
+                android:textSize="10dp"
+                android:textColor="#B6B7BB"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"/>
 
     </LinearLayout>
 </ScrollView>

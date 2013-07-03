@@ -164,9 +164,9 @@ public class SignInController {
           String[] userAndTenant    = ExoConnectionUtils.checkRequestTenant(mResponse);
           if (userAndTenant == null) return ExoConnectionUtils.SIGNIN_NO_TENANT_FOR_EMAIL;
 
-          mUsername         = userAndTenant[0];
+          mUsername   = userAndTenant[0];
           mTenant     = userAndTenant[1];
-          mDomain           = "http://" + mTenant + ".cloud-workspaces.com";
+          mDomain     = "http://" + mTenant + ".cloud-workspaces.com";
 
           if (!ExoConnectionUtils.requestAccountExistsForUser(mUsername, mTenant))
             return ExoConnectionUtils.SIGNIN_NO_ACCOUNT;
@@ -229,15 +229,17 @@ public class SignInController {
 
           // save server to default server list
           ServerObjInfo serverObj  = new ServerObjInfo();
-          serverObj._bSystemServer = false;
+          //serverObj._bSystemServer = false;
           serverObj._strServerName = mResource.getString(R.string.DefaultServer);
           // (mTenant != null) ? mTenant : Uri.parse(mDomain).getAuthority();
           serverObj._strServerUrl  = mDomain;
+          serverObj.username       = mUsername;
+          serverObj.password       = mPassword;
 
           ServerSettingHelper settingHelper = ServerSettingHelper.getInstance();
           settingHelper.getServerInfoList().add(serverObj);
-          ServerConfigurationUtils.createXmlDataWithServerList(settingHelper.getServerInfoList(),
-              "DefaultServerList.xml", "");
+          ServerConfigurationUtils.generateXmlFileWithServerList(mContext, settingHelper.getServerInfoList(),
+              ExoConstants.EXO_SERVER_SETTING_FILE, "");
           // set current selected server to the new server
           AccountSetting.getInstance().setDomainIndex(String.valueOf(settingHelper.getServerInfoList().size() -1));
 

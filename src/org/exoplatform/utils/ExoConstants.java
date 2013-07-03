@@ -164,4 +164,19 @@ public class ExoConstants {
 
   /* Http response status */
   public static final int UNKNOWN = 309;
+
+  /* Server setting */
+  public static final String SETTING_ADDING_SERVER                 = "SETTING_ADDING_SERVER";
+
+  public static final String SETTING_SERVER_OBJ                    = "SETTING_SERVER_OBJ";
+
+  public static final String SETTING_SERVER_INDEX                  = "SETTING_SERVER_INDEX";
+
+  public static final String SETTING_USERNAME                      = "SETTING_USERNAME";
+
+  public static final String SETTING_PASSWORD                      = "SETTING_PASSWORD";
+
+  public static final String EXO_MASTER_PASSWORD                   = "EXO_MASTER_PASSWORD";
+
+  public static final String EXO_SERVER_SETTING_FILE               = "ServerList.xml";
 }

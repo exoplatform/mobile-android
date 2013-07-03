@@ -96,7 +96,7 @@ public class ServerEditionDialog extends Dialog implements android.view.View.OnC
     if (serverObj == null) {
       isNewServer = true;
       serverObj = new ServerObjInfo();
-      serverObj._bSystemServer = false;
+      //serverObj._bSystemServer = false;
       serverObj._strServerName = "";
       serverObj._strServerUrl = "";
 

@@ -78,17 +78,13 @@ public class SignInOnPremiseActivity extends Activity {
         String pass  = mPassTxt.getText().toString();
 
         /* check password and email is inputted */
-        if ((url != null) && (user != null) && (pass != null)) {
-          if ((!url.isEmpty()) && (!user.isEmpty()) && (!pass.isEmpty()) ) {
-
-            mLoginBtn.setEnabled(true);
-            mLoginBtn.setOnClickListener(onClickLogIn());
-
-            return;
-          }
+        if (url.isEmpty() || user.isEmpty() || pass.isEmpty()) {
+          mLoginBtn.setEnabled(false);
+          return ;
         }
 
-        mLoginBtn.setEnabled(false);
+        mLoginBtn.setEnabled(true);
+        mLoginBtn.setOnClickListener(onClickLogIn());
       }
 
       @Override

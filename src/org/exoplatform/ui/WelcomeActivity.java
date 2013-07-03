@@ -49,9 +49,13 @@ public class WelcomeActivity extends FragmentActivity {
     mPager.setAdapter(mPagerAdapter);
     //mPager.setOnPageChangeListener();
 
-    LinePageIndicator linePageIndicator = (LinePageIndicator) findViewById(R.id.line_page_indicator);
-    linePageIndicator.setViewPager(mPager);
-    linePageIndicator.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+    //LinePageIndicator linePageIndicator = (LinePageIndicator) findViewById(R.id.line_page_indicator);
+    CirclePageIndicator circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circle_page_indicator);
+    //linePageIndicator.setViewPager(mPager);
+    circlePageIndicator.setViewPager(mPager);
+    //linePageIndicator.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+    circlePageIndicator.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
       @Override
       public void onPageSelected(int position) {
         Log.i(TAG, "onPageSelected - position: " + position);

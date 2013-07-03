@@ -3,11 +3,14 @@ package org.exoplatform.controller.setting;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.ui.ServerEditionActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.ServerConfigurationUtils;
@@ -46,14 +49,24 @@ public class SettingController {
 
   private String                   serverNameURLInvalid;
 
-  private static final String TAG = "SettingController";
+  private static  SettingController _instance;
+
+  private static final String TAG = "eXoSettingController";
 
   public SettingController(Context context, LinearLayout listServerWrap) {
-    Log.i(TAG, "constructor");
     mContext = context;
     prefs = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     this.listServerWrap = listServerWrap;
     init();
+    _instance = this;
+  }
+
+  public static SettingController getInstance() {
+    return _instance;
+  }
+
+  public static void useInstance(SettingController instance) {
+    _instance = instance;
   }
 
   public void initLocation(ImageView imgViewE, ImageView imgViewF) {
@@ -69,7 +82,6 @@ public class SettingController {
     } else {
       setEnglishLocation(imgViewE, imgViewF);
     }
-
   }
 
   public void initSocialFilter(ImageView socialChecked) {
@@ -121,13 +133,11 @@ public class SettingController {
   public boolean updateLocallize(String localize) {
     SettingUtils.setLocale(mContext, localize);
     return true;
-
   }
 
   public void setEnglishLocation(ImageView imgViewE, ImageView imgViewF) {
     imgViewE.setVisibility(View.VISIBLE);
     imgViewF.setVisibility(View.INVISIBLE);
-
   }
 
   public void setFrenchLocation(ImageView imgViewE, ImageView imgViewF) {
@@ -136,7 +146,6 @@ public class SettingController {
   }
 
   public void setServerList() {
-    Log.i(TAG, "setServerList");
     List<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
     listServerWrap.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -151,6 +160,8 @@ public class SettingController {
       else
         serverItem.serverImageView.setVisibility(View.INVISIBLE);
       final int pos = i;
+
+      /* onclick server item */
       serverItem.layout.setOnClickListener(new OnClickListener() {
 
         @Override
@@ -159,21 +170,28 @@ public class SettingController {
           if (domainIndex == pos) {
             String strCannotEdit = mContext.getString(R.string.CannotEditServer);
             Toast.makeText(mContext, strCannotEdit, Toast.LENGTH_SHORT).show();
-          } else {
-            new ServerEditionDialog(mContext, SettingController.this, serverObj, pos).show();
+            return;
           }
 
+          Intent next  = new Intent(mContext, ServerEditionActivity.class);
+          Bundle bundle = new Bundle();
+          next.putExtra(ExoConstants.SETTING_ADDING_SERVER, false);
+          bundle.putParcelable(ExoConstants.SETTING_SERVER_OBJ, serverObj);
+          next.putExtra(ExoConstants.SETTING_SERVER_INDEX, pos);
+          next.putExtras(bundle);
+          next.putExtra(ExoConstants.SETTING_USERNAME, serverObj.username);
+          next.putExtra(ExoConstants.SETTING_PASSWORD, serverObj.password);
+          mContext.startActivity(next);
         }
       });
-      listServerWrap.addView(serverItem, params);
 
+      listServerWrap.addView(serverItem, params);
     }
 
   }
 
   private void init() {
-    Log.i(TAG, "init");
-    serverInfoList = ServerSettingHelper.getInstance().getServerInfoList();
+    serverInfoList      = ServerSettingHelper.getInstance().getServerInfoList();
     selectedServerIndex = Integer.parseInt(AccountSetting.getInstance().getDomainIndex());
     changeLanguage();
   }
@@ -204,11 +222,13 @@ public class SettingController {
       int serverSize = serverInfoList.size();
       for (int i = 0; i < serverSize; i++) {
         ServerObjInfo tmp = serverInfoList.get(i);
-        if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
-          Toast.makeText(mContext, serverNameIsExisted, Toast.LENGTH_SHORT).show();
+
+        // TODO Does not make sense to compare server name, only server url matters
+        //if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
+        //  Toast.makeText(mContext, serverNameIsExisted, Toast.LENGTH_SHORT).show();
           // break;
-          return false;
-        }
+        //  return false;
+        //}
 
         if (myServerObj._strServerUrl.equalsIgnoreCase(tmp._strServerUrl)) {
           Toast.makeText(mContext, serverUrlIsExisted, Toast.LENGTH_SHORT).show();
@@ -218,11 +238,9 @@ public class SettingController {
 
       }
 
-      myServerObj._bSystemServer = false;
+      //myServerObj._bSystemServer = false;
       serverInfoList.add(myServerObj);
-      ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
-                                                           "DefaultServerList.xml",
-                                                           "");
+
       onSave();
       return true;
 
@@ -232,6 +250,8 @@ public class SettingController {
 
   public boolean onUpdate(ServerObjInfo myServerObj, int serverIndex) {
     if (isServerValid(myServerObj)) {
+
+      /**  no need to compare anything
       for (int i = 0; i < serverInfoList.size(); i++) {
         ServerObjInfo tmp = serverInfoList.get(i);
 
@@ -239,24 +259,20 @@ public class SettingController {
           continue;
         }
 
-        if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
-          Toast.makeText(mContext, serverNameIsExisted, Toast.LENGTH_SHORT).show();
-          return false;
-        }
+        //if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
+        //  Toast.makeText(mContext, serverNameIsExisted, Toast.LENGTH_SHORT).show();
+        //  return false;
+        //}
 
         if (myServerObj._strServerUrl.equalsIgnoreCase(tmp._strServerUrl)) {
           Toast.makeText(mContext, serverUrlIsExisted, Toast.LENGTH_SHORT).show();
           return false;
         }
       }
+       **/
 
       serverInfoList.remove(serverIndex);
-      myServerObj._strServerName = myServerObj._strServerName;
-      myServerObj._strServerUrl = myServerObj._strServerUrl;
       serverInfoList.add(serverIndex, myServerObj);
-      ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
-                                                           "DefaultServerList.xml",
-                                                           "");
       onSave();
       return true;
     }
@@ -264,22 +280,29 @@ public class SettingController {
   }
 
   public void onDelete(int serverIndex) {
+    /* delete currently-used server */
     if (serverIndex == selectedServerIndex) {
+      /* clear setting */
       AccountSetting.getInstance().setDomainIndex(String.valueOf(-1));
       AccountSetting.getInstance().setDomainName("");
+      AccountSetting.getInstance().setUsername("");
+      AccountSetting.getInstance().setPassword("");
     } else if (serverIndex < selectedServerIndex) {
       int index = selectedServerIndex - 1;
       AccountSetting.getInstance().setDomainIndex(String.valueOf(index));
     }
-    serverInfoList.remove(serverIndex);
-    ServerConfigurationUtils.createXmlDataWithServerList(serverInfoList,
-                                                         "DefaultServerList.xml",
-                                                         "");
 
+    serverInfoList.remove(serverIndex);
     onSave();
   }
 
+  /**
+   * make change to shared perf
+   * and generate xml file
+   */
   private void onSave() {
+    ServerConfigurationUtils.generateXmlFileWithServerList(mContext,
+        serverInfoList, ExoConstants.EXO_SERVER_SETTING_FILE, "");
 
     ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
     SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
@@ -287,6 +310,8 @@ public class SettingController {
     editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
     editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance()
                                                                       .getDomainIndex());
+    editor.putString(ExoConstants.EXO_PRF_USERNAME, AccountSetting.getInstance().getUsername());
+    editor.putString(ExoConstants.EXO_PRF_PASSWORD, AccountSetting.getInstance().getPassword());
     editor.commit();
   }
 
@@ -296,7 +321,6 @@ public class SettingController {
     serverNameIsExisted = resource.getString(R.string.WarningServerNameIsExist);
     serverUrlIsExisted = resource.getString(R.string.WarningServerUrlIsExist);
     serverNameURLInvalid = resource.getString(R.string.SpecialCharacters);
-
   }
 
 }
