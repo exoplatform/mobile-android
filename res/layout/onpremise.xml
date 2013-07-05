@@ -67,7 +67,7 @@
                 android:layout_below="@id/onpremise_url_txt"
                 android:hint="@string/YourIntranetHint"
                 android:inputType="textUri"
-                android:background="@drawable/edit_email"
+                android:background="@drawable/form_link"
                 android:layout_marginBottom="15dp"/>
 
         <TextView
@@ -111,7 +111,7 @@
                 android:layout_below="@id/onpremise_login_txt"
                 android:hint="@string/UserNameHint"
                 android:inputType="textEmailAddress"
-                android:background="@drawable/edit_email"
+                android:background="@drawable/form_user"
                 android:layout_marginBottom="5dp"/>
 
         <EditText
@@ -120,7 +120,7 @@
                 android:layout_below="@id/onpremise_user_edit_txt"
                 android:hint="@string/PasswordHint"
                 android:inputType="textPassword"
-                android:background="@drawable/edit_email"
+                android:background="@drawable/form_lock"
                 android:layout_marginBottom="15dp"/>
 
         <Button
