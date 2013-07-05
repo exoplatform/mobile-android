@@ -3,15 +3,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/bg_white_repeat"
+                android:background="@drawable/bg_rect_rounded_corner"
                 android:padding="20dp">
+
+    <TextView
+        android:id="@+id/signup_thanks_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/ThanksForInterest"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#5A5A5A"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/separator"/>
 
     <ImageView
         android:id="@+id/signup_ok_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ok_mark"
+        android:layout_below="@id/signup_thanks_txt"
+        android:src="@drawable/icon_check"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp" />
 
@@ -22,9 +36,8 @@
         android:gravity="center_horizontal"
         android:layout_below="@id/signup_ok_img"
         android:text="@string/CheckYourMailInbox"
-        android:textStyle="bold"
-        android:textColor="#2865CC"
-        android:textSize="13sp"
+        android:textColor="#686868"
+        android:textSize="14sp"
         android:layout_marginBottom="30dp"/>
 
     <Button
@@ -33,6 +46,9 @@
         android:layout_below="@id/signup_check_mail_txt"
         android:text="@string/CheckMail"
         android:layout_centerHorizontal="true"
-        android:paddingBottom="10dp" />
+        android:gravity="center_vertical"
+        android:paddingBottom="10dp"
+        android:drawableLeft="@drawable/icon_email_white"
+        android:drawablePadding="3dp"/>
 
 </RelativeLayout>

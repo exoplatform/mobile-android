@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/signin_layout"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -10,13 +11,12 @@
             style="@style/SignUpBlueHeaderStyle"
             android:text="@string/GetStarted" />
 
-    <include android:id="@+id/signin_eXo_banner"
-             layout="@layout/exo_banner" />
-
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bg_white_repeat">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:paddingBottom="30dp"
+                    android:background="@drawable/bg_rect_rounded_corner">
 
         <TextView
                 android:id="@+id/signin_email_txt"
@@ -31,7 +31,8 @@
                 android:layout_below="@id/signin_email_txt"
                 android:layout_centerHorizontal="true"
                 android:text="@string/InvalidEmail"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="8dp" />
 
         <EditText
                 android:id="@+id/signin_edit_txt_email"
@@ -67,9 +68,8 @@
                 android:layout_below="@id/signin_edit_txt_pass"
                 android:layout_toRightOf="@id/signin_login_btn"
                 android:text="@string/Or"
-                android:textColor="#2865CC"
-                android:textStyle="bold"
-                android:textSize="13sp"
+                android:textColor="#5A5A5A"
+                android:textSize="14sp"
                 android:singleLine="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"

@@ -6,12 +6,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import org.exoplatform.R;
 import org.exoplatform.controller.signup.SignInController;
-import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.*;
 
 public class SignInOnPremiseActivity extends Activity {
 
@@ -32,6 +34,10 @@ public class SignInOnPremiseActivity extends Activity {
 
     setContentView(R.layout.onpremise);
 
+    ViewGroup vg = (ViewGroup) findViewById(R.id.onpremise_layout);
+    AssetUtils.setTypeFace(
+        AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BOLD), vg);
+
     mLoginBtn = (Button) findViewById(R.id.onpremise_login_btn);
     mLoginBtn.setEnabled(false);
 
@@ -42,6 +48,13 @@ public class SignInOnPremiseActivity extends Activity {
     mUrlTxt.addTextChangedListener(onAnyInputChanged());
     mUserTxt.addTextChangedListener(onAnyInputChanged());
     mPassTxt.addTextChangedListener(onAnyInputChanged());
+
+    AssetUtils.setTypeFace(
+        AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mUrlTxt);
+    AssetUtils.setTypeFace(
+        AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mUserTxt);
+    AssetUtils.setTypeFace(
+        AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mPassTxt);
   }
 
 

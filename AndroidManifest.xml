@@ -70,8 +70,7 @@
             android:configChanges="keyboardHidden|orientation" />
         <activity
             android:name=".ui.WebViewActivity"
-            android:configChanges="orientation" >
-        </activity>
+            android:configChanges="orientation" />
         <activity
             android:name=".ui.social.SocialDetailActivity"
             android:configChanges="keyboardHidden|orientation" />
@@ -80,8 +79,7 @@
             android:configChanges="keyboardHidden|orientation" />
         <activity
             android:name=".ui.social.SelectedImageActivity"
-            android:configChanges="keyboardHidden|orientation" >
-        </activity>
+            android:configChanges="keyboardHidden|orientation" />
         <activity
             android:name=".ui.social.SocialAttachedImageActivity"
             android:configChanges="keyboardHidden|orientation" />
@@ -101,7 +99,9 @@
         <activity
             android:name=".ui.SignInOnPremiseActivity"
             android:configChanges="keyboardHidden|orientation" />
-        <activity android:name=".ui.ServerEditionActivity"/>
+        <activity
+            android:name=".ui.ServerEditionActivity"
+            android:configChanges="keyboardHidden|orientation" />
     </application>
 
 </manifest>

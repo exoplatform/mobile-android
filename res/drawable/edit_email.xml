@@ -3,7 +3,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_focused="true"
-          android:drawable="@drawable/edit_email_selected"/>
-    <item android:drawable="@drawable/edit_email_normal"/>
+          android:drawable="@drawable/edit_email_stretchable"/>
+    <item android:drawable="@drawable/edit_email_stretchable"/>
 
 </selector>

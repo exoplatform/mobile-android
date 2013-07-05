@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/welcome_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/welcome_bg_repeat">
@@ -12,7 +11,7 @@
     <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="280dp"
             android:layout_below="@id/welcome_eXo_banner"/>
 
     <org.exoplatform.ui.CirclePageIndicator

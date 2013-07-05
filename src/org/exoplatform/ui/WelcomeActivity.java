@@ -2,7 +2,10 @@ package org.exoplatform.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,10 +15,15 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
+import org.exoplatform.utils.AssetUtils;
 
 import java.util.Date;
 
@@ -35,13 +43,21 @@ public class WelcomeActivity extends FragmentActivity {
 
   private PagerAdapter mPagerAdapter;
 
+  private static Typeface mRobotoTF;
+
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.welcome);
 
-    Log.i(TAG, "launch controller");
     new LaunchController(this, mSharedPreference);
+
+    /* init assets utils */
+    AssetUtils.setContext(this);
+    mRobotoTF = AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BOLD);
+
+    ViewGroup vg = (ViewGroup) findViewById(R.id.welcome_layout);
+    AssetUtils.setTypeFace(mRobotoTF, vg);
 
     // Instantiate a ViewPager and a PagerAdapter.
     mPager = (ViewPager) findViewById(R.id.pager);
@@ -64,11 +80,13 @@ public class WelcomeActivity extends FragmentActivity {
 
     Button btn_signUp = (Button) findViewById(R.id.welcome_btn_signup);
     btn_signUp.setText(Html.fromHtml("<big>" + getResources().getString(R.string.SignUp) + "</big><br/>" +
-        "<small><i>" + getResources().getString(R.string.CreateAnAccount) + "</i></small>"));
+        "<small>" + getResources().getString(R.string.CreateAnAccount) + "</small>"));
+    //AssetUtils.setTypeFace(mRobotoTF, btn_signUp);
 
     Button btn_logIn = (Button) findViewById(R.id.welcome_btn_login);
     btn_logIn.setText(Html.fromHtml("<big>" + getResources().getString(R.string.LogIn) + "</big><br/>" +
-        "<small><i>" + getResources().getString(R.string.AlreadyAnUser) + "</i></small>"));
+        "<small>" + getResources().getString(R.string.AlreadyAnUser) + "</small>"));
+
 
     long start = new Date().getTime();
     Log.i(TAG, "start time loading image: " + start);
@@ -92,6 +110,8 @@ public class WelcomeActivity extends FragmentActivity {
 
     Log.i(TAG, "diff loading image: " + (new Date().getTime() - start));
   }
+
+
 
   // Called when user clicks on Signup btn
   public void redirectToSignUp(View view) {

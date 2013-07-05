@@ -173,6 +173,8 @@ public class SignInController {
         }
 
         String versionUrl = mDomain + ExoConstants.DOMAIN_PLATFORM_VERSION;
+        if (!URLAnalyzer.isValidUrl(versionUrl)) return ExoConnectionUtils.LOGIN_INVALID;
+
         Log.i(TAG, "pass: " + mPassword);
         Log.i(TAG, "user: " + mUsername);
         mResponse = ExoConnectionUtils.getPlatformResponse(mUsername, mPassword, versionUrl);

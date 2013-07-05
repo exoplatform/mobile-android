@@ -173,7 +173,7 @@
   <!-- Sign up -->
   <string name="SocialIntranet">The Free Social Intranet for Your Company</string>
   <string name="GetStarted">Get Started</string>
-  <string name="EmailSignUp">Enter your email address and Sign up :</string>
+  <string name="EmailSignUp">Enter your email address and Sign up:</string>
   <string name="Email">email address</string>
   <string name="CreateAccount">Create your account</string>
   <string name="InvalidEmail">Please enter a valid email address</string>
@@ -183,6 +183,7 @@
   <string name="AccountExists">An account already exists for this email</string>
   <string name="CheckMail">Check Your Mail</string>
   <string name="CheckYourMailInbox">Check your email inbox to complete your registration.</string>
+  <string name="ThanksForInterest">Thank you for your interest</string>
 
   <!-- Sign In -->
   <string name="EmailSignIn">Enter your credentials and Login:</string>
@@ -198,8 +199,8 @@
 
   <!-- On Premise -->
   <string name="OnPremise">On Premise</string>
-  <string name="EnterUrl">1. Enter URL of your intranet</string>
-  <string name="EnterLogin">2. Enter your credentials and Login</string>
+  <string name="EnterUrl">Enter URL of your intranet</string>
+  <string name="EnterLogin">Enter your credentials and Login</string>
   <string name="YourIntranetHint">http://www.mycompany.com/intranet</string>
   <string name="PasswordHint">password</string>
   <string name="UserNameHint">username</string>

@@ -2,22 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_white_repeat">
+                android:background="@drawable/bg_rect_rounded_corner"
+                android:paddingBottom="30dp">
 
     <TextView
             android:id="@+id/signup_email_txt"
             style="@style/SignUpHeadingTxtStyle"
-            android:gravity="center"
-            android:text="@string/EmailSignUp"
-            android:layout_marginBottom="15dp"/>
+            android:text="@string/EmailSignUp" />
 
     <TextView
             android:id="@+id/signup_alert_txt"
             style="@style/SignUpAlertTxtStyle"
             android:layout_below="@id/signup_email_txt"
             android:text="@string/InvalidEmail"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="8dp" />
 
     <EditText
             android:id="@+id/signup_email_edit_txt"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/onpremise_layout"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -18,45 +19,47 @@
             android:text="@string/OnPremise"
             android:background="@drawable/action_bar_background_repeate"/>
 
-    <!-- include does not work -->
-    <ImageView
-            android:id="@+id/onpremise_eXo_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/onpremise_title_txt"
-            android:src="@drawable/exo_application_logo"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="5dp"/>
-
-    <TextView
-            android:id="@+id/onpremise_slogan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/onpremise_title_txt"
-            android:layout_toRightOf="@id/onpremise_eXo_logo"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="15dp"
-            android:text="@string/Slogan"
-            android:textStyle="bold"
-            android:textSize="13dp"
-            android:textColor="#B6B7BB"
-            android:singleLine="true" />
-
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/onpremise_slogan"
-                    android:background="@drawable/bg_white_repeat">
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/onpremise_title_txt"
+                    android:layout_margin="15dp"
+                    android:paddingBottom="15dp"
+                    android:background="@drawable/bg_rect_rounded_corner">
+
 
         <TextView
                 android:id="@+id/onpremise_url_txt"
-                style="@style/SignUpHeadingTxtStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="#5A5A5A"
+                android:singleLine="true"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingRight="5dp"
+                android:background="@drawable/label_stretchable"
+                android:paddingLeft="35dp"
                 android:gravity="left"
-                android:text="@string/EnterUrl"
-                android:layout_marginBottom="15dp"/>
+                android:text="@string/EnterUrl"/>
+
+        <TextView
+                android:id="@+id/onpremise_1_txt"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/number_bg"
+                android:text="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/white"/>
 
         <EditText
                 android:id="@+id/onpremise_url_edit_txt"
@@ -69,24 +72,43 @@
 
         <TextView
                 android:id="@+id/onpremise_login_txt"
-                style="@style/SignUpHeadingTxtStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/onpremise_url_edit_txt"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="#5A5A5A"
+                android:singleLine="true"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingRight="5dp"
+                android:background="@drawable/label_stretchable"
+                android:paddingLeft="35dp"
                 android:gravity="left"
-                android:text="@string/EnterLogin"
-                android:layout_marginBottom="15dp" />
+                android:text="@string/EnterLogin" />
 
         <TextView
-                android:id="@+id/onpremise_alert_txt"
-                style="@style/SignUpAlertTxtStyle"
-                android:layout_below="@id/onpremise_login_txt"
-                android:text="@string/InvalidEmail"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="5dp" />
+                android:id="@+id/onpremise_2_txt"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_below="@id/onpremise_url_edit_txt"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/number_bg"
+                android:text="2"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/white"/>
 
         <EditText
                 android:id="@+id/onpremise_user_edit_txt"
                 style="@style/SignUpEditTxtStyle"
-                android:layout_below="@id/onpremise_alert_txt"
+                android:layout_below="@id/onpremise_login_txt"
                 android:hint="@string/UserNameHint"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edit_email"
