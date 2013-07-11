@@ -61,6 +61,8 @@ public class LoginController {
 
   private Resources          resource;
 
+  private static final String TAG = "eXoLoginController";
+
   public LoginController(Context context, String user, String pass) {
     SettingUtils.setDefaultLanguage(context);
     mContext = context;
@@ -68,6 +70,7 @@ public class LoginController {
     userName = user;
     password = pass;
     _strDomain = AccountSetting.getInstance().getDomainName();
+
     getLanguage();
     if (checkLogin() == true) {
       onLoad();

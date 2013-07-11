@@ -70,6 +70,12 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   private LinearLayout      userpassPanel;
 
+  /* eXo URL scheme */
+  private static final String EXO_URL_USERNAME = "username";
+
+  private static final String EXO_URL_SERVER   = "serverUrl";
+
+
   private static final String TAG = "eXoLoginActivity";
 
   public void onCreate(Bundle savedInstanceState) {
@@ -130,21 +136,33 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   private void setUpUserAndServerFromUrl() {
     Uri eXoUri = getIntent().getData();
-    if (eXoUri == null) return;
-    if ((eXoUri.getHost() == null) || (eXoUri.getQueryParameter("serverURL") == null)) return;
+    /* exomobile:// */
+    if ((eXoUri == null) || (eXoUri.getHost() == null)) return;
 
-    Log.i(TAG, "uri not null - fired from custom scheme"); //  exomobile://username=xxx?serverURL=xxxx
+    String host      = eXoUri.getHost();
+    String serverUrl;
+    String username  = null;
 
-    String host  = eXoUri.getHost();
-    String serverUrl = eXoUri.getQueryParameter("serverURL");
-    String username;
+    /* exomobile://serverUrl=xxx */
+    if (host.contains(EXO_URL_SERVER)) {
 
-    Log.i(TAG, "serverUrl: " + serverUrl);  // xxxx
-    int equalIdx = host.indexOf("=");
-    if ((equalIdx == -1) || (equalIdx == host.length())) username = null;
-    else username = host.substring(equalIdx + 1, host.length());
-    Log.i(TAG, "username: " + username);    // xxx
-    AccountSetting.getInstance().setUsername(username);
+      int equalIdx = host.indexOf("=");
+      if ((equalIdx == -1) || (equalIdx == host.length())) return;
+      serverUrl = host.substring(equalIdx + 1, host.length());
+    }
+    /* exomobile://username=xxx */
+    else if (host.contains(EXO_URL_USERNAME)) {
+      /* automatic decode URL */
+      serverUrl = eXoUri.getQueryParameter(EXO_URL_SERVER);
+      if (serverUrl == null) return;
+      int equalIdx = host.indexOf("=");
+      if ((equalIdx == -1) || (equalIdx == host.length())) username = null;
+      username = host.substring(equalIdx + 1, host.length());
+    }
+    else return ;
+
+    if (username!= null) AccountSetting.getInstance().setUsername(username);
+    AccountSetting.getInstance().setDomainName(serverUrl);
 
     ServerObjInfo serverObj  = new ServerObjInfo();
     //serverObj._bSystemServer = false;
