@@ -185,8 +185,7 @@ public class LoginController {
         AccountSetting.getInstance().documentKey = builder.toString()
             + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
 
-        SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE,
-                                                                        0)
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
                                                   .edit();
         /*
          * disable saving social filter when login with difference account and
@@ -198,8 +197,13 @@ public class LoginController {
         }
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance().getDomainIndex());
-        editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);
-        editor.putString(ExoConstants.EXO_PRF_PASSWORD, password);
+
+        boolean isRememberMeEnabled = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
+            .getBoolean(ExoConstants.SETTING_REMEMBER_ME, false);
+        if (isRememberMeEnabled) {
+          editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);
+          editor.putString(ExoConstants.EXO_PRF_PASSWORD, password);
+        }
         editor.commit();
         AccountSetting.getInstance().setUsername(userName);
         AccountSetting.getInstance().setPassword(password);

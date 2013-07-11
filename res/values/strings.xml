@@ -184,6 +184,7 @@
   <string name="CheckMail">Check Your Mail</string>
   <string name="CheckYourMailInbox">Check your email inbox to complete your registration.</string>
   <string name="ThanksForInterest">Thank you for your interest</string>
+  <string name="MaxUsers">Impossible to create a new account. The maximum number of users has been reached for your intranet, please contact your administrator.</string>
 
   <!-- Sign In -->
   <string name="EmailSignIn">Enter your credentials and Login:</string>
@@ -205,8 +206,13 @@
   <string name="PasswordHint">password</string>
   <string name="UserNameHint">username</string>
 
+  <!-- Setting -->
+  <string name="RememberMe">Remember Me</string>
+  <string name="Autologin">Auto login</string>
+  <string name="LoginTitle">LOGIN</string>
+
   <!-- Server edition -->
-  <string name="AddServer">Add Server</string>
+  <string name="AddServer">New Server</string>
   <string name="ModifyServer">Modify Server</string>
   <string name="OptionalHint">Optional</string>
   <string name="RequiredHint">Required</string>

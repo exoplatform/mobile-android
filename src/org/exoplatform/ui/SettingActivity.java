@@ -26,8 +26,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SettingActivity extends MyActionBar implements OnClickListener {
+
+  /* launch setting without logging in */
   public static final int       GLOBAL_TYPE           = 0;
 
+  /* launch setting while logging in */
   public static final int       PERSONAL_TYPE         = 1;
 
   private static final String   SERVER_SETTING_HELPER = "SERVER_SETTING_HELPER";
@@ -45,7 +48,19 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
   private TextView              txtvLanguage;                                   // Language
 
   private TextView              txtvServer;                                     // Server
+
+  /* Login settings */
+  private RelativeLayout        mLoginLayout;
+
+  private ImageView             mRememberMeImg;
+
+  private ImageView             mAutoLoginImg;
                                                                                  // label
+  private TextView              mRememberMeTxt;
+
+  private TextView              mAutoLoginTxt;
+
+  private TextView              mLoginTitleTxt;
 
   /*
    * Social settings
@@ -123,6 +138,15 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
   }
 
   private void init() {
+
+    /* Login */
+    mLoginLayout   = (RelativeLayout) findViewById(R.id.setting_login_layout);
+    mRememberMeImg = (ImageView) mLoginLayout.findViewById(R.id.setting_remember_me_check_img);
+    mAutoLoginImg  = (ImageView) mLoginLayout.findViewById(R.id.setting_autologin_check_img);
+    mRememberMeTxt = (TextView)  mLoginLayout.findViewById(R.id.setting_remember_me_txt);
+    mAutoLoginTxt  = (TextView)  mLoginLayout.findViewById(R.id.setting_autologin_txt);
+    mLoginTitleTxt = (TextView)  findViewById(R.id.setting_login_title_txt);
+
     txtvLanguage = (TextView) findViewById(R.id.TextView_Language);
     txtvServer = (TextView) findViewById(R.id.TextView_Server_List);
 
@@ -162,9 +186,11 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
       socialLayout.setVisibility(View.GONE);
       documentTitleLayout.setVisibility(View.GONE);
       documentLayout.setVisibility(View.GONE);
+      hideLoginSetting();
     } else {
       setttingController.initSocialFilter(socialCheckedView);
       setttingController.initDocumentHiddenFile(documentCheckedView);
+      setttingController.initLoginSetting(mRememberMeImg, mAutoLoginImg);
     }
     if(SocialActivityUtil.getPlatformVersion() >= 4.0f) {
       documentTitleLayout.setVisibility(View.GONE);
@@ -191,6 +217,18 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     setttingController.setServerList();
   }
 
+
+  private void hideLoginSetting() {
+    mLoginLayout.setVisibility(View.GONE);
+    findViewById(R.id.setting_login_title_txt).setVisibility(View.GONE);
+    findViewById(R.id.setting_login_separator_img).setVisibility(View.GONE);
+    findViewById(R.id.setting_login_separator_bottom_img).setVisibility(View.GONE);
+  }
+
+  /**
+   * Update app language
+   * @param localize
+   */
   private void updateLocation(String localize) {
     if (setttingController.updateLocallize(localize) == true) {
       changeLanguage();
@@ -215,6 +253,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     String settings = resource.getString(R.string.Settings);
     setTitle(settings);
     String addNewServer = resource.getString(R.string.AddAServer);
+
     addServerBtn.setText(addNewServer);
     txtvEnglish.setText(strEnglish);
     txtvFrench.setText(strFrench);
@@ -231,6 +270,15 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     errorMessage = resource.getString(R.string.DoNotHavePermision);
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
+
+    /* Login */
+    String rememberMe   = resource.getString(R.string.RememberMe);
+    String autoLogin    = resource.getString(R.string.Autologin);
+    String loginTitle   = resource.getString(R.string.LoginTitle);
+
+    mRememberMeTxt.setText(rememberMe);
+    mAutoLoginTxt.setText(autoLogin);
+    mLoginTitleTxt.setText(loginTitle);
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {

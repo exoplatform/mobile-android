@@ -265,8 +265,14 @@ public class SignInController {
           }
           editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
           editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance().getDomainIndex());
-          editor.putString(ExoConstants.EXO_PRF_USERNAME, mUsername);
-          editor.putString(ExoConstants.EXO_PRF_PASSWORD, mPassword);
+
+          /* save credentials if remember me enabled */
+          boolean isRememberMeEnabled = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
+              .getBoolean(ExoConstants.SETTING_REMEMBER_ME, false);
+          if (isRememberMeEnabled) {
+            editor.putString(ExoConstants.EXO_PRF_USERNAME, mUsername);
+            editor.putString(ExoConstants.EXO_PRF_PASSWORD, mPassword);
+          }
           editor.commit();
 
            /* Checking platform version */

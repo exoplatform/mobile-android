@@ -9,12 +9,110 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
+        <!-- Login Setting -->
+        <TextView
+                android:id="@+id/setting_login_title_txt"
+                android:layout_width="fill_parent"
+                android:layout_height="40dip"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:shadowColor="#000000"
+                android:shadowDx="1.0"
+                android:shadowDy="2.0"
+                android:shadowRadius="1.0"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+        <ImageView
+                android:id="@+id/setting_login_separator_img"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/setting_login_title_txt"
+                android:background="@drawable/serversectionseparator"
+                android:contentDescription="@string/Settings" />
+
+        <RelativeLayout
+            android:id="@+id/setting_login_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/setting_login_separator_img" >
+
+            <View
+                    android:id="@+id/setting_remember_me_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dip"
+                    android:background="@drawable/file_item_background_shape" />
+
+            <TextView
+                    android:id="@+id/setting_remember_me_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dip"
+                    android:layout_marginLeft="10dip"
+                    android:gravity="center_vertical"
+                    android:padding="4dp"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+            <ImageView
+                    android:id="@+id/setting_remember_me_check_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dip"
+                    android:layout_marginTop="5dip"
+                    android:background="@drawable/authenticate_checkmark_off"
+                    android:contentDescription="@string/Settings" />
+
+            <View
+                    android:id="@+id/setting_autologin_view"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dip"
+                    android:layout_below="@id/setting_remember_me_check_img"
+                    android:layout_marginTop="-1dp"
+                    android:background="@drawable/file_item_background_shape" />
+
+            <TextView
+                    android:id="@+id/setting_autologin_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dip"
+                    android:layout_below="@id/setting_remember_me_check_img"
+                    android:layout_marginLeft="10dip"
+                    android:gravity="center_vertical"
+                    android:padding="4dp"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+            <ImageView
+                    android:id="@+id/setting_autologin_check_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/setting_remember_me_check_img"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dip"
+                    android:layout_marginTop="5dip"
+                    android:background="@drawable/authenticate_checkmark_off"
+                    android:contentDescription="@string/Settings" />
+
+        </RelativeLayout>
+
+        <ImageView
+                android:id="@+id/setting_login_separator_bottom_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/setting_login_layout"
+                android:background="@drawable/serversectionseparator"
+                android:contentDescription="@string/Settings" />
+
         <!-- Language Settings -->
 
         <TextView
             android:id="@+id/TextView_Language"
             android:layout_width="fill_parent"
             android:layout_height="40dip"
+            android:layout_below="@id/setting_login_separator_bottom_img"
             android:gravity="center_vertical"
             android:padding="3dp"
             android:shadowColor="#000000"

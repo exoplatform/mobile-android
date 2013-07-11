@@ -149,6 +149,12 @@
   <string name="MemoryWarning">Mémoire indisponible ou insuffisante.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Mémoriser mon filtre</string>
+
+    <!-- Setting -->
+    <string name="RememberMe">Mémoriser mon login</string>
+    <string name="Autologin">Connexion automatique</string>
+    <string name="LoginTitle">LOGIN</string>
+
   <string-array name="SocialTabs">
     <item>Fil d\'actualités</item>
     <item>Mes Contacts</item>

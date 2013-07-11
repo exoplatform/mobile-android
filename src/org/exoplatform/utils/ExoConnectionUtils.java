@@ -73,7 +73,7 @@ public class ExoConnectionUtils {
 
   public static final int         SIGNIN_SERVER_NOT_AVAILABLE = 24;
 
-
+  public static final int         SIGNUP_MAX_USERS         = 25;
 
   private static final String    TAG                       = "ExoConnectionUtils";
 
@@ -263,6 +263,9 @@ public class ExoConnectionUtils {
         return ExoConnectionUtils.SIGNUP_WRONG_DOMAIN;
       else return ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS;
     }
+    /* code 202 */
+    else if (statusCode == HttpStatus.SC_ACCEPTED)
+      return ExoConnectionUtils.SIGNUP_MAX_USERS;
 
     if (statusCode != HttpStatus.SC_OK)
       return ExoConnectionUtils.SIGNUP_INVALID;
@@ -308,10 +311,23 @@ public class ExoConnectionUtils {
     }
   }
 
-  /*
+  /**
+   * Create marketo lead
+   */
+  public static void requestCreatingMarketo(String email) {
+    String marketoUrl = "http://learn.exoplatform.com/MobileApp_RegistrationPage-English.html?Email="
+        + email + "&lpId=1967&subId=46&munchkinId=577-PCT-880&formid=1167&returnLPId=-1";
+    try {
+      getRequestResponse(marketoUrl);
+    } catch (IOException e) {
+      Log.i(TAG, "Can not create marketo lead");
+    }
+  }
+
+
+  /**
    * Checking the response status code
    */
-
   public static int checkPlatformRespose(HttpResponse response) {
     int statusCode = response.getStatusLine().getStatusCode();
     if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {

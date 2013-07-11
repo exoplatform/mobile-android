@@ -135,6 +135,8 @@ public class ServerEditionActivity extends Activity {
 
   private void returnToSetting() {
     Intent next = new Intent(this, SettingActivity.class);
+    next.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.PERSONAL_TYPE);
     startActivity(next);
   }
 
@@ -187,5 +189,6 @@ public class ServerEditionActivity extends Activity {
       }
     };
   }
+
 
 }

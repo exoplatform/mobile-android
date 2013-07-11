@@ -93,6 +93,67 @@ public class SettingController {
 
   }
 
+  /**
+   * Retrieve login setting from preferences
+   */
+  public void initLoginSetting(ImageView rememberMeImg, ImageView autoLoginImg) {
+    boolean isRememberMeEnabled = prefs.getBoolean(ExoConstants.SETTING_REMEMBER_ME, false);
+    boolean isAutoLoginEnabled  = prefs.getBoolean(ExoConstants.SETTING_AUTOLOGIN, false);
+    Log.i(TAG, "init login setting - remember me: " + isRememberMeEnabled + " - auto login: " + isAutoLoginEnabled);
+
+    final ImageView _rememberMeImg = rememberMeImg;
+    final ImageView _autoLoginImg  = autoLoginImg;
+
+    if (isRememberMeEnabled) {
+      _autoLoginImg.setEnabled(true);
+      _autoLoginImg.setOnClickListener(onClickAutoLogin());
+    }
+    else _autoLoginImg.setEnabled(false);
+
+    toggleCheckBoxImage(_rememberMeImg, isRememberMeEnabled);
+    toggleCheckBoxImage(_autoLoginImg, isAutoLoginEnabled);
+
+    _rememberMeImg.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        boolean isRememberMeEnabled = !prefs.getBoolean(ExoConstants.SETTING_REMEMBER_ME, false);
+        Log.i(TAG, "click remember me: " + isRememberMeEnabled);
+        if (isRememberMeEnabled) {
+          _autoLoginImg.setEnabled(true);
+          _autoLoginImg.setOnClickListener(onClickAutoLogin());
+        }
+        else _autoLoginImg.setEnabled(false);
+
+        toggleCheckBoxImage(_rememberMeImg, isRememberMeEnabled);
+        Editor editor = prefs.edit();
+        editor.putBoolean(ExoConstants.SETTING_REMEMBER_ME, isRememberMeEnabled);
+        editor.commit();
+      }
+    });
+  }
+
+  private View.OnClickListener onClickAutoLogin() {
+    return new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+        boolean isAutoLoginEnabled = !prefs.getBoolean(ExoConstants.SETTING_AUTOLOGIN, false);
+        Log.i(TAG, "click autologin: " + isAutoLoginEnabled);
+        toggleCheckBoxImage((ImageView) v, isAutoLoginEnabled);
+
+        Editor editor = prefs.edit();
+        editor.putBoolean(ExoConstants.SETTING_AUTOLOGIN, isAutoLoginEnabled);
+        editor.commit();
+      }
+    };
+  }
+
+  private void toggleCheckBoxImage(ImageView imageView, boolean isEnabled) {
+    if (isEnabled) imageView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
+    else imageView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
+
+  }
+
   public void setSocialFilter(ImageView socialChecked) {
     boolean isSocialFilter = prefs.getBoolean(AccountSetting.getInstance().socialKey, false);
     Editor editor = prefs.edit();

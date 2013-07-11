@@ -54,6 +54,8 @@ public class SignUpController {
 
   private String accountExistsMess;
 
+  private String maxUsersMess;
+
   private String OkMess;
 
   private static final String TAG = "eXoSignUpController";
@@ -77,7 +79,6 @@ public class SignUpController {
         mSignUpTask = (SignUpTask) new SignUpTask().execute();
       }
 
-      // TODO: create a makerto lead
     } else {
       new ConnectionErrorDialog(mContext).show();
     }
@@ -91,6 +92,7 @@ public class SignUpController {
 
     wrongEmailDomainMess = mResource.getString(R.string.WrongEmailDomain);
     accountExistsMess    = mResource.getString(R.string.AccountExists);
+    maxUsersMess         = mResource.getString(R.string.MaxUsers);
   }
 
   public class SignUpTask extends AsyncTask<Void, Void, Integer> {
@@ -123,13 +125,22 @@ public class SignUpController {
     @Override
     public void onPostExecute(Integer result) {
 
+      View.OnClickListener closeDialog = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          dialog.dismiss();
+        }
+      };
+
       switch (result) {
         case ExoConnectionUtils.SIGNUP_INVALID:
           dialog = new SignUpWarningDialog(mContext, warningTitle, invalidMess, OkMess);
+          dialog.getOkButton().setOnClickListener(closeDialog);
           dialog.show();
           break;
         case ExoConnectionUtils.SIGNUP_WRONG_DOMAIN:
           dialog = new SignUpWarningDialog(mContext, warningTitle, wrongEmailDomainMess, OkMess);
+          dialog.getOkButton().setOnClickListener(closeDialog);
           dialog.show();
           break;
         case ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS:
@@ -146,13 +157,33 @@ public class SignUpController {
             }
           });
           break;
+        case ExoConnectionUtils.SIGNUP_MAX_USERS:
+          dialog = new SignUpWarningDialog(mContext, warningTitle, maxUsersMess, OkMess);
+          dialog.getOkButton().setOnClickListener(closeDialog);
+          dialog.show();
+          new CreatingMarketoTask().execute();
+
+          break;
         case ExoConnectionUtils.SIGNUP_OK:
           // swipe view to account creation in progress
           mSignUpActivity.flipToGreetingsPanel();
+
+          // TODO: test
+          new CreatingMarketoTask().execute();
           break;
       }
 
       mProgressDialog.dismiss();
+    }
+  }
+
+
+  public class CreatingMarketoTask extends AsyncTask<Void, Void, Void> {
+
+    @Override
+    protected Void doInBackground(Void... params) {
+      ExoConnectionUtils.requestCreatingMarketo(mEmail);
+      return null;
     }
   }
 

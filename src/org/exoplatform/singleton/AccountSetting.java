@@ -44,6 +44,12 @@ public class AccountSetting implements Parcelable {
 
   public ArrayList<String>      cookiesList;
 
+
+  /* LOGIN SETTING */
+  public boolean                isRememberMeEnabled;
+
+  public boolean                isAutoLoginEnabled;
+
   private AccountSetting() {
 
   }

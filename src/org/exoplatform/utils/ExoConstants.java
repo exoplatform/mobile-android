@@ -179,4 +179,9 @@ public class ExoConstants {
   public static final String EXO_MASTER_PASSWORD                   = "EXO_MASTER_PASSWORD";
 
   public static final String EXO_SERVER_SETTING_FILE               = "ServerList.xml";
+
+  /* Login setting */
+  public static final String SETTING_REMEMBER_ME                   = "SETTING_REMEMBER_ME";
+
+  public static final String SETTING_AUTOLOGIN                     = "SETTING_AUTOLOGIN";
 }
