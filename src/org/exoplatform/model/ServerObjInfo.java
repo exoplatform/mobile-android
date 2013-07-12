@@ -35,6 +35,11 @@ public class ServerObjInfo implements Parcelable {
   /* encrypted password */
   public String  password;
 
+  /* by default remember me is set to true */
+  public boolean isRememberEnabled;
+
+  public boolean isAutoLoginEnabled;
+
   //public boolean _bSystemServer; // Is default server
 
   public ServerObjInfo() {
@@ -43,6 +48,8 @@ public class ServerObjInfo implements Parcelable {
     //_bSystemServer = false;
     username       = "";
     password       = "";
+    isRememberEnabled  = true;
+    isAutoLoginEnabled = true;
   }
 
   private ServerObjInfo(Parcel in) {
@@ -65,6 +72,8 @@ public class ServerObjInfo implements Parcelable {
     //_bSystemServer = (Boolean) in.readValue(null);
     username       = in.readString();
     password       = in.readString();
+    isRememberEnabled  = in.readByte() == 1;
+    isAutoLoginEnabled = in.readByte() == 1;
   }
 
   @Override
@@ -79,6 +88,7 @@ public class ServerObjInfo implements Parcelable {
     //dest.writeValue(_bSystemServer);
     dest.writeString(username);
     dest.writeString(password);
+    dest.writeByte((byte) (isRememberEnabled  ? 1 : 0));
+    dest.writeByte((byte) (isAutoLoginEnabled ? 1 : 0));
   }
-
 }

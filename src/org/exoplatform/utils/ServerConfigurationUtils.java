@@ -144,6 +144,7 @@ public class ServerConfigurationUtils {
   }
 
   // Get default server list
+  @Deprecated
   public static ArrayList<ServerObjInfo> getDefaultServerList(Context _context) {
 
     ArrayList<ServerObjInfo> arrServerList = getServerListWithFileName("");
@@ -230,6 +231,7 @@ public class ServerConfigurationUtils {
   }
 
   // Get added/deleted servers
+  @Deprecated
   public static ArrayList<ServerObjInfo> getServerListWithFileName(String name) {
 
     ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
@@ -291,6 +293,14 @@ public class ServerConfigurationUtils {
     return arrServerList;
   }
 
+
+  /**
+   * Retrieve server list from XML config file
+   *
+   * @param context
+   * @param fileName
+   * @return
+   */
   public static ArrayList<ServerObjInfo> getServerListFromFile(Context context, String fileName) {
     Log.i(TAG, "getServerListFromFile: " + fileName);
 
@@ -313,18 +323,12 @@ public class ServerConfigurationUtils {
 
             ServerObjInfo serverObj  = new ServerObjInfo();
             serverObj._strServerName = itemElement.getAttribute("name");
-            Log.i(TAG, "serv name: " + serverObj._strServerName);
-            serverObj._strServerUrl  = itemElement.getAttribute("serverURL");
-            Log.i(TAG, "serv url: " + serverObj._strServerUrl);
-
-            //serverObj._bSystemServer = false;
-            serverObj.username       = itemElement.getAttribute("username");
-            Log.i(TAG, "user: " + serverObj.username);
-
-            Log.i(TAG, "pass before decrypt: " + itemElement.getAttribute("password"));
+            serverObj._strServerUrl  = itemElement.getAttribute(ExoConstants.EXO_URL_SERVER);
+            serverObj.username       = itemElement.getAttribute(ExoConstants.EXO_URL_USERNAME);
             serverObj.password       =
                 SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD, itemElement.getAttribute("password"));
-            Log.i(TAG, "pass: " + serverObj.password);
+            serverObj.isRememberEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
+            serverObj.isRememberEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
 
             //if (name.equalsIgnoreCase("DefaultServerList.xml"))
             //  serverObj._bSystemServer = true;
@@ -356,6 +360,7 @@ public class ServerConfigurationUtils {
 
 
   // Create user configuration file: deleted & added servers
+  @Deprecated
   public static boolean createXmlDataWithServerList(ArrayList<ServerObjInfo> objList,
                                                     String fileName,
                                                     String appVersion) {
@@ -401,7 +406,7 @@ public class ServerConfigurationUtils {
         ServerObjInfo serverObj = objList.get(i);
         serializer.startTag(null, "server");
         serializer.attribute(null, "name", serverObj._strServerName);
-        serializer.attribute(null, "serverURL", serverObj._strServerUrl);
+        serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj._strServerUrl);
         serializer.endTag(null, "server");
       }
 
@@ -424,7 +429,15 @@ public class ServerConfigurationUtils {
   }
 
 
-  // Create user configuration file: deleted & added servers
+  /**
+   * Create XML config file from server list
+   *
+   * @param context
+   * @param objList
+   * @param fileName
+   * @param appVersion
+   * @return
+   */
   public static boolean generateXmlFileWithServerList(Context context, ArrayList<ServerObjInfo> objList,
                                                     String fileName,
                                                     String appVersion) {
@@ -460,8 +473,10 @@ public class ServerConfigurationUtils {
         ServerObjInfo serverObj = objList.get(i);
         serializer.startTag(null, "server");
         serializer.attribute(null, "name", serverObj._strServerName);
-        serializer.attribute(null, "serverURL", serverObj._strServerUrl);
-        serializer.attribute(null, "username", serverObj.username);
+        serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj._strServerUrl);
+        serializer.attribute(null, ExoConstants.EXO_URL_USERNAME, serverObj.username);
+
+        /* encrypt password */
         try {
 
           Log.i(TAG, "password before encrypt: " + serverObj.password);
@@ -473,6 +488,9 @@ public class ServerConfigurationUtils {
           Log.i(TAG, "error while encrypting: " + e.getLocalizedMessage());
           serializer.attribute(null, "password", serverObj.password);
         }
+
+        serializer.attribute(null, ExoConstants.EXO_REMEMBER_ME, String.valueOf(serverObj.isRememberEnabled));
+        serializer.attribute(null, ExoConstants.EXO_AUTOLOGIN, String.valueOf(serverObj.isAutoLoginEnabled));
         serializer.endTag(null, "server");
       }
 

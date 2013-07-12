@@ -148,6 +148,9 @@ public class SettingController {
     };
   }
 
+  /**
+   * Change checkbox image
+   */
   private void toggleCheckBoxImage(ImageView imageView, boolean isEnabled) {
     if (isEnabled) imageView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
     else imageView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
@@ -206,6 +209,9 @@ public class SettingController {
     imgViewF.setVisibility(View.VISIBLE);
   }
 
+  /**
+   * Populate server list
+   */
   public void setServerList() {
     List<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
     listServerWrap.removeAllViews();

@@ -20,6 +20,9 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.util.Log;
 
+/**
+ * Setup server list and account setting
+ */
 public class LaunchController {
   private SharedPreferences        sharedPreference;
 
@@ -58,7 +61,6 @@ public class LaunchController {
     Log.i(TAG, "getLaunchInfo");
     sharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     String strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE, "");
-    Log.i(TAG, "strLocalize: " + strLocalize);
     if (strLocalize.equals("")) {
 
       strLocalize = Locale.getDefault().getLanguage();
@@ -93,6 +95,7 @@ public class LaunchController {
                   .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
   }
 
+  // TODO: check and remove
   private void getServerInfo() {
 
     _arrServerList = new ArrayList<ServerObjInfo>();
@@ -156,9 +159,13 @@ public class LaunchController {
   }
 
 
+  /**
+   * Retrieve server list from config file along with application information
+   */
   private void getServerInfo1() {
     Log.i(TAG, "getServerInfo1");
 
+    /* get app info */
     String appVer = "";
     String oldVer = ServerConfigurationUtils.getAppVersion(context);
     try {
@@ -169,9 +176,10 @@ public class LaunchController {
         Log.e("NameNotFoundException", "Get package information is error!");
     }
 
+    /* retrieve server list */
     _arrServerList = ServerConfigurationUtils.getServerListFromFile(context, ExoConstants.EXO_SERVER_SETTING_FILE);
-    if (_arrServerList == null) _arrServerList = new ArrayList<ServerObjInfo>();
-    ServerSettingHelper.getInstance().setServerInfoList(_arrServerList);
+    ServerSettingHelper.getInstance()
+        .setServerInfoList( (_arrServerList == null) ? new ArrayList<ServerObjInfo>(): _arrServerList);
   }
 
 }

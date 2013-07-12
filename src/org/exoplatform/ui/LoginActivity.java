@@ -70,10 +70,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   private LinearLayout      userpassPanel;
 
-  /* eXo URL scheme */
-  private static final String EXO_URL_USERNAME = "username";
-
-  private static final String EXO_URL_SERVER   = "serverUrl";
 
 
   private static final String TAG = "eXoLoginActivity";
@@ -92,7 +88,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     SettingUtils.setDefaultLanguage(this);
     username = _edtxUserName.getText().toString();
     password = _edtxPassword.getText().toString();
-    setInfomation();
+    setInformation();
   }
 
   @Override
@@ -131,7 +127,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     boolean isLaunchedFromUrl = (getIntent().getData() != null);
     if (isLaunchedFromUrl) setUpUserAndServerFromUrl();
 
-    setInfomation();
+    setInformation();
   }
 
   private void setUpUserAndServerFromUrl() {
@@ -144,16 +140,16 @@ public class LoginActivity extends Activity implements OnClickListener {
     String username  = null;
 
     /* exomobile://serverUrl=xxx */
-    if (host.contains(EXO_URL_SERVER)) {
+    if (host.contains(ExoConstants.EXO_URL_SERVER)) {
 
       int equalIdx = host.indexOf("=");
       if ((equalIdx == -1) || (equalIdx == host.length())) return;
       serverUrl = host.substring(equalIdx + 1, host.length());
     }
     /* exomobile://username=xxx */
-    else if (host.contains(EXO_URL_USERNAME)) {
+    else if (host.contains(ExoConstants.EXO_URL_USERNAME)) {
       /* automatic decode URL */
-      serverUrl = eXoUri.getQueryParameter(EXO_URL_SERVER);
+      serverUrl = eXoUri.getQueryParameter(ExoConstants.EXO_URL_SERVER);
       if (serverUrl == null) return;
       int equalIdx = host.indexOf("=");
       if ((equalIdx == -1) || (equalIdx == host.length())) username = null;
@@ -161,9 +157,13 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
     else return ;
 
-    if (username!= null) AccountSetting.getInstance().setUsername(username);
+    /* saves to account setting */
+    AccountSetting.getInstance().setUsername(username == null ? "": username);
     AccountSetting.getInstance().setDomainName(serverUrl);
+    AccountSetting.getInstance().isRememberMeEnabled = true;
+    AccountSetting.getInstance().isAutoLoginEnabled  = true;
 
+    /* Add server to server list */
     ServerObjInfo serverObj  = new ServerObjInfo();
     //serverObj._bSystemServer = false;
     serverObj._strServerName = Uri.parse(serverUrl).getAuthority();
@@ -175,18 +175,17 @@ public class LoginActivity extends Activity implements OnClickListener {
     AccountSetting.getInstance().setDomainIndex(String.valueOf(settingHelper.getServerInfoList().size() -1));
   }
 
-  private void setInfomation() {
+  /**
+   * Retrieve username and password from input field or from account setting
+   */
+  private void setInformation() {
     changeLanguage();
     _edtxUserName.setHint(userNameHint);
-    if (username == null) username = AccountSetting.getInstance().getUsername();
-    if (username != null && !"".equals(username)) {
-      _edtxUserName.setText(username);
-    }
+    _edtxUserName.setText(username==null || username.equals("")
+        ? AccountSetting.getInstance().getUsername(): username);
     _edtxPassword.setHint(passWordHint);
-    if (password == null) password = AccountSetting.getInstance().getPassword();
-    if (password != null && !"".equals(password)) {
-      _edtxPassword.setText(password);
-    }
+    _edtxPassword.setText(password==null || password.equals("")
+        ? AccountSetting.getInstance().getPassword():password);
     _btnLogIn.setText(strSignIn);
     setServerAdapter();
   }
@@ -207,7 +206,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     settingText = resource.getString(R.string.Settings);
     userNameHint = resource.getString(R.string.UserNameCellTitle);
     passWordHint = resource.getString(R.string.PasswordCellTitle);
-
   }
 
   @Override

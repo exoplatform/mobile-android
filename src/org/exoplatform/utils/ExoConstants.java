@@ -184,4 +184,13 @@ public class ExoConstants {
   public static final String SETTING_REMEMBER_ME                   = "SETTING_REMEMBER_ME";
 
   public static final String SETTING_AUTOLOGIN                     = "SETTING_AUTOLOGIN";
+
+  /* eXo URL scheme */
+  public static final String EXO_URL_USERNAME                      = "username";
+
+  public static final String EXO_URL_SERVER                        = "serverUrl";
+
+  public static final String EXO_REMEMBER_ME                       = "rememberMe";
+
+  public static final String EXO_AUTOLOGIN                         = "autoLogin";
 }

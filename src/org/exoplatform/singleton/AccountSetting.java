@@ -101,6 +101,8 @@ public class AccountSetting implements Parcelable {
   public void readFromParcel(Parcel in) {
     userName = in.readString();
     password = in.readString();
+    isRememberMeEnabled = in.readByte() == 1;
+    isAutoLoginEnabled  = in.readByte() == 1;
     domainName = in.readString();
     domainIndex = in.readString();
     cookiesList = new ArrayList<String>();
@@ -137,6 +139,8 @@ public class AccountSetting implements Parcelable {
     par.writeString(password);
     par.writeString(domainName);
     par.writeString(domainIndex);
+    par.writeByte((byte) (isRememberMeEnabled ? 1:0));
+    par.writeByte((byte) (isAutoLoginEnabled  ? 1:0));
     par.writeStringList(cookiesList);
   }
 

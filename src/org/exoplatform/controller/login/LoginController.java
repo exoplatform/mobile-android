@@ -93,17 +93,14 @@ public class LoginController {
     return false;
   }
   private boolean isLastAccount(String username) {
-    if (username.equals(AccountSetting.getInstance().getUsername())) {
-      return true;
-    }
-
-    return false;
+    return username.equals(AccountSetting.getInstance().getUsername());
   }
 
   private void clearDownloadRepository() {
     FileCache filecache = new FileCache(mContext, ExoConstants.DOCUMENT_FILE_CACHE);
     filecache.clear();
   }
+
   private void onLoad() {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == LoginTask.Status.FINISHED) {
@@ -112,7 +109,6 @@ public class LoginController {
     } else {
       new ConnectionErrorDialog(mContext).show();
     }
-
   }
 
   public void onCancelLoad() {
@@ -201,9 +197,7 @@ public class LoginController {
         editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
         editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance().getDomainIndex());
 
-        boolean isRememberMeEnabled = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
-            .getBoolean(ExoConstants.SETTING_REMEMBER_ME, false);
-        if (isRememberMeEnabled) {
+        if (AccountSetting.getInstance().isRememberMeEnabled) {
           editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);
           editor.putString(ExoConstants.EXO_PRF_PASSWORD, password);
         }
