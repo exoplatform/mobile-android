@@ -168,22 +168,9 @@ public class ExoConstants {
   /* Server setting */
   public static final String SETTING_ADDING_SERVER                 = "SETTING_ADDING_SERVER";
 
-  public static final String SETTING_SERVER_OBJ                    = "SETTING_SERVER_OBJ";
-
-  public static final String SETTING_SERVER_INDEX                  = "SETTING_SERVER_INDEX";
-
-  public static final String SETTING_USERNAME                      = "SETTING_USERNAME";
-
-  public static final String SETTING_PASSWORD                      = "SETTING_PASSWORD";
-
   public static final String EXO_MASTER_PASSWORD                   = "EXO_MASTER_PASSWORD";
 
   public static final String EXO_SERVER_SETTING_FILE               = "ServerList.xml";
-
-  /* Login setting */
-  public static final String SETTING_REMEMBER_ME                   = "SETTING_REMEMBER_ME";
-
-  public static final String SETTING_AUTOLOGIN                     = "SETTING_AUTOLOGIN";
 
   /* eXo URL scheme */
   public static final String EXO_URL_USERNAME                      = "username";
@@ -193,4 +180,9 @@ public class ExoConstants {
   public static final String EXO_REMEMBER_ME                       = "rememberMe";
 
   public static final String EXO_AUTOLOGIN                         = "autoLogin";
+
+  /* Account setting */
+  public static final String ACCOUNT_SETTING                       = "ACCOUNT_SETTING";
+
+  public static final String SERVER_SETTING_HELPER                 = "SERVER_SETTING_HELPER";
 }

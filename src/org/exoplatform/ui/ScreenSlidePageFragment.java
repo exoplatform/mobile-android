@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.exoplatform.R;
+import org.exoplatform.utils.AssetUtils;
 
 import java.util.Date;
 
@@ -37,7 +38,6 @@ public class ScreenSlidePageFragment extends Fragment {
    */
   private int mPageNumber;
 
-
   /**
    * Factory method for this fragment class. Constructs a new fragment for the given page number.
    */
@@ -56,7 +56,7 @@ public class ScreenSlidePageFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Log.i(TAG, "onCreate");
+    Log.i(TAG, "onCreate: " + mPageNumber);
     mPageNumber = getArguments().getInt(ARG_PAGE);
   }
 
@@ -68,25 +68,34 @@ public class ScreenSlidePageFragment extends Fragment {
     long start = new Date().getTime();
     Log.i(TAG, "start time: " + start);
 
-    // Inflate the layout containing a title and body text - need to optimize this one
-    ViewGroup mRootView = (ViewGroup) inflater
-        .inflate(R.layout.fragment_screen_slide_page, container, false);
-    long middle = new Date().getTime();
-    Log.i(TAG, "time inflate layout: " + (middle - start));
+    ViewGroup mRootView;
 
-    //Bitmap img = BitmapFactory.decodeResource(getResources(), SLIDER_IMGS[mPageNumber]);
-    //Log.i(TAG, "time  image: " + (new Date().getTime() - middle));
+    if (mPageNumber != 0) {
+      // Inflate the layout containing a title and body text - need to optimize this one
+      mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
 
-    ((ImageView) mRootView.findViewById(R.id.slider_img)).setImageBitmap(SLIDER_BITMAPS[mPageNumber]);   // need to run this one in background
-    Log.i(TAG, "time set image: " + (new Date().getTime() - middle));
+      long middle = new Date().getTime();
+      Log.i(TAG, "time inflate layout: " + (middle - start));  // 235 ms
 
-    ((TextView) mRootView.findViewById(R.id.slider_txt_description)).setText(
-        getResources().getText(SLIDER_DESC[mPageNumber]));
+      //Bitmap img = BitmapFactory.decodeResource(getResources(), SLIDER_IMGS[mPageNumber]);
+      //Log.i(TAG, "time  image: " + (new Date().getTime() - middle));
 
-    long end = new Date().getTime();
-    Log.i(TAG, "end time: " + end);
-    Log.i(TAG, "diff: " + (end - start));
+      ((ImageView) mRootView.findViewById(R.id.slider_img)).setImageBitmap(SLIDER_BITMAPS[mPageNumber]);   // need to run this one in background
+      Log.i(TAG, "time set image: " + (new Date().getTime() - middle));
 
+      ((TextView) mRootView.findViewById(R.id.slider_txt_description)).setText(
+          getResources().getText(SLIDER_DESC[mPageNumber]));
+
+      long end = new Date().getTime();
+      Log.i(TAG, "end time: " + end);
+      Log.i(TAG, "diff: " + (end - start));   // 236ms
+    }
+    else {
+      // first slide
+      mRootView = (ViewGroup) inflater.inflate(R.layout.exo_intranet_slide, container, false);
+    }
+
+    AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BLACK), mRootView);
     return mRootView;
   }
 

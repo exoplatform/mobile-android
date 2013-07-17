@@ -6,6 +6,7 @@
     android:fadingEdge="none" >
 
     <RelativeLayout
+        android:id="@+id/setting_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 

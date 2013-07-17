@@ -1,19 +1,18 @@
 package org.exoplatform.controller.login;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.conn.HttpHostConnectException;
 import org.exoplatform.R;
+import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.HomeActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.utils.SettingUtils;
-import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.*;
 import org.exoplatform.utils.image.FileCache;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
@@ -25,13 +24,23 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 
+/**
+ * Performs login<br/>
+ *
+ * Requires setting
+ */
 public class LoginController {
 
-  private String             userName;
+  private AccountSetting     mSetting;
 
-  private String             password;
+  /* new username to login, might be different from username in current setting */
+  private String             mNewUserName;
 
-  private String             _strDomain;
+  /* new password to login, might be different from password in current setting */
+  private String             mNewPassword;
+
+  /* current domain */
+  private String             mDomain;
 
   private Context            mContext;
 
@@ -57,19 +66,24 @@ public class LoginController {
 
   private WarningDialog      dialog;
 
-  private LoginWaitingDialog _progressDialog;
+  private LoginWaitingDialog mProgressDialog;
+
+  private boolean            mIsShowingWaitingDialog;
 
   private Resources          resource;
 
+
   private static final String TAG = "eXoLoginController";
 
-  public LoginController(Context context, String user, String pass) {
+  public LoginController(Context context, String user, String pass, boolean isShowingWaitingDialog, AccountSetting setting) {
     SettingUtils.setDefaultLanguage(context);
     mContext = context;
     resource = mContext.getResources();
-    userName = user;
-    password = pass;
-    _strDomain = AccountSetting.getInstance().getDomainName();
+    mNewUserName = user;
+    mNewPassword = pass;
+    mSetting = (setting!=null) ? setting: AccountSetting.getInstance();
+    mDomain  = mSetting.getDomainName();
+    mIsShowingWaitingDialog = isShowingWaitingDialog;
 
     getLanguage();
     if (checkLogin() == true) {
@@ -82,24 +96,17 @@ public class LoginController {
   }
 
   private boolean checkLogin() {
-    if (userName == null || userName.length() == 0) {
+    if (mNewUserName == null || mNewUserName.length() == 0) {
       blankError = resource.getString(R.string.NoUsernameEnter);
-    } else if (password == null || password.length() == 0) {
+    } else if (mNewPassword == null || mNewPassword.length() == 0) {
       blankError = resource.getString(R.string.NoPasswordEnter);
-    } else if (_strDomain == null || _strDomain.length() == 0) {
+    } else if (mDomain == null || mDomain.length() == 0) {
       blankError = resource.getString(R.string.NoServerSelected);
-    } else
-      return true;
+    } else return true;
+
     return false;
   }
-  private boolean isLastAccount(String username) {
-    return username.equals(AccountSetting.getInstance().getUsername());
-  }
 
-  private void clearDownloadRepository() {
-    FileCache filecache = new FileCache(mContext, ExoConstants.DOCUMENT_FILE_CACHE);
-    filecache.clear();
-  }
 
   private void onLoad() {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
@@ -140,8 +147,10 @@ public class LoginController {
 
     @Override
     public void onPreExecute() {
-      _progressDialog = new LoginWaitingDialog(mContext, null, strSigning);
-      _progressDialog.show();
+      if (mIsShowingWaitingDialog) {
+        mProgressDialog = new LoginWaitingDialog(mContext, null, strSigning);
+        mProgressDialog.show();
+      }
     }
 
     @Override
@@ -149,15 +158,15 @@ public class LoginController {
 
       try {
         String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
-        response = ExoConnectionUtils.getPlatformResponse(userName, password, versionUrl);
+        response = ExoConnectionUtils.getPlatformResponse(mNewUserName, mNewPassword, versionUrl);
         if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND){
-         return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
+          return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
         }
         isCompliant = ExoConnectionUtils.checkPLFVersion(response);
-        ExoDocumentUtils.setRepositoryHomeUrl(userName, _strDomain);
+        ExoDocumentUtils.setRepositoryHomeUrl(mNewUserName, mDomain);
         return ExoConnectionUtils.checkPlatformRespose(response);
       } catch(HttpHostConnectException e) {
-          return ExoConnectionUtils.LOGIN_FAILED;
+        return ExoConnectionUtils.LOGIN_FAILED;
       } catch (IOException e) {
         return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
       }
@@ -170,46 +179,52 @@ public class LoginController {
         dialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
         dialog.show();
       } else if (result == ExoConnectionUtils.LOGIN_SUSCESS) {
-        /*
-         * Set social and document settings
-         */
-        StringBuilder builder = new StringBuilder(AccountSetting.getInstance().getDomainName());
-        builder.append("_");
-        builder.append(userName);
-        builder.append("_");
-        AccountSetting.getInstance().socialKey = builder.toString()
-            + ExoConstants.SETTING_SOCIAL_FILTER;
-        AccountSetting.getInstance().socialKeyIndex = builder.toString()
-            + ExoConstants.SETTING_SOCIAL_FILTER_INDEX;
-        AccountSetting.getInstance().documentKey = builder.toString()
-            + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
+        /* Set social and document settings */
+        StringBuilder builder = new StringBuilder(mDomain)
+            .append("_").append(mNewUserName).append("_");
+        mSetting.socialKey = builder.toString() + ExoConstants.SETTING_SOCIAL_FILTER;
+        mSetting.socialKeyIndex = builder.toString() + ExoConstants.SETTING_SOCIAL_FILTER_INDEX;
+        mSetting.documentKey = builder.toString() + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
 
-        SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
-                                                  .edit();
-        /*
-         * disable saving social filter when login with difference account and
-         * clear the download repository
+        /**
+         * Login can only be done with existing server
+         * but there's case when user inputs new username changes or
+         * new password, we need to persist both
          */
-        if (!isLastAccount(userName)) {
-          editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
-          clearDownloadRepository();
-        }
-        editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
-        editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance().getDomainIndex());
+        boolean needToSave = false;
+        ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
 
-        if (AccountSetting.getInstance().isRememberMeEnabled) {
-          editor.putString(ExoConstants.EXO_PRF_USERNAME, userName);
-          editor.putString(ExoConstants.EXO_PRF_PASSWORD, password);
+        if ( !mNewUserName.equals(mSetting.getUsername()) ) {    // new credential
+          ServerObjInfo newServer = mSetting.getCurrentServer().clone();
+          newServer.username   = mNewUserName;
+          newServer.password   = mNewPassword;
+          newServer.isRememberEnabled  = true;
+          newServer.isAutoLoginEnabled = true;
+
+          serverList.add(newServer);
+          // set current selected server to the new server
+          mSetting.setDomainIndex(String.valueOf(serverList.size() - 1));
+          mSetting.setCurrentServer(newServer);
+          needToSave = true;
         }
-        editor.commit();
-        AccountSetting.getInstance().setUsername(userName);
-        AccountSetting.getInstance().setPassword(password);
+        else {
+          // same user, but password might change
+          if ( !mSetting.getPassword().equals(mNewPassword) ) {
+            needToSave = true;
+            mSetting.getCurrentServer().password = mNewPassword;
+          }
+        }
+
+        // Save config
+        if (needToSave) SettingUtils.persistServerSetting(mContext);
+
         /*
          * Checking platform version
          */
         if (isCompliant == true) {
           Intent next = new Intent(mContext, HomeActivity.class);
           next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
           mContext.startActivity(next);
         } else {
           dialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
@@ -229,7 +244,7 @@ public class LoginController {
         dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
         dialog.show();
       }
-      _progressDialog.dismiss();
+      if (mIsShowingWaitingDialog) mProgressDialog.dismiss();
     }
 
   }

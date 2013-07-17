@@ -35,10 +35,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+/**
+ * Represents the home screen<br/>
+ *
+ * Requires setting
+ */
 public class HomeActivity extends MyActionBar {
-  private static final String SERVER_SETTING_HELPER = "SERVER_SETTING_HELPER";
-
-  private static final String ACCOUNT_SETTING       = "ACCOUNT_SETTING";
 
   private TextView            activityButton;
 
@@ -68,6 +70,8 @@ public class HomeActivity extends MyActionBar {
 
   public static HomeActivity  homeActivity;
 
+  private AccountSetting      mSetting;
+
   @Override
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);
@@ -79,13 +83,17 @@ public class HomeActivity extends MyActionBar {
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     addActionBarItem();
     getActionBar().getItem(1).setDrawable(R.drawable.action_bar_logout_button);
+
+    mSetting = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
+    if (mSetting == null) mSetting = AccountSetting.getInstance();
+
     homeActivity = this;
     if (bundle != null) {
-      AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
-      AccountSetting.getInstance().setInstance(accountSetting);
-      ServerSettingHelper settingHelper = bundle.getParcelable(SERVER_SETTING_HELPER);
+      mSetting = bundle.getParcelable(ExoConstants.ACCOUNT_SETTING);
+      if (mSetting == null) mSetting = AccountSetting.getInstance();
+      ServerSettingHelper settingHelper = bundle.getParcelable(ExoConstants.SERVER_SETTING_HELPER);
       ServerSettingHelper.getInstance().setInstance(settingHelper);
-      ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
+      ArrayList<String> cookieList = mSetting.cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
     loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
@@ -96,9 +104,8 @@ public class HomeActivity extends MyActionBar {
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putParcelable(SERVER_SETTING_HELPER, ServerSettingHelper.getInstance());
-    outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
-
+    outState.putParcelable(ExoConstants.SERVER_SETTING_HELPER, ServerSettingHelper.getInstance());
+    outState.putParcelable(ExoConstants.ACCOUNT_SETTING, mSetting);
   }
 
   @Override
@@ -134,7 +141,8 @@ public class HomeActivity extends MyActionBar {
 
     if (selectedItemIndex == 1) {
       Intent next = new Intent(HomeActivity.this, SettingActivity.class);
-      next.putExtra(ExoConstants.SETTING_TYPE, 1);
+      next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.PERSONAL_TYPE);
+      next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
       startActivity(next);
     }
     return false;

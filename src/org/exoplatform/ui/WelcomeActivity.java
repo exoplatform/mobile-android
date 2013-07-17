@@ -2,6 +2,7 @@ package org.exoplatform.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
@@ -23,17 +24,21 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.AssetUtils;
+import org.exoplatform.utils.ExoConstants;
 
 import java.util.Date;
 
 
 /**
- * Welcome screen
+ * Welcome screen<br/>
+ *
+ * Requires setting
+ *
+ * Overall time: +925ms +692ms +845ms +1s35ms
  */
 public class WelcomeActivity extends FragmentActivity {
-
-  private SharedPreferences mSharedPreference;
 
   private static final String TAG = "eXoWelcomeActivity";
 
@@ -43,33 +48,34 @@ public class WelcomeActivity extends FragmentActivity {
 
   private PagerAdapter mPagerAdapter;
 
-  private static Typeface mRobotoTF;
+  private AccountSetting  mSetting;
 
   public void onCreate(Bundle savedInstanceState) {
+
+    long start = new Date().getTime();
+
+    mSetting = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
+    if( mSetting==null) mSetting = AccountSetting.getInstance();
+
+    new LaunchController(this, mSetting);              // 29ms  - 36ms
+    Log.i(TAG, "launch controller runs - duration: " + (new Date().getTime() - start));
+
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.welcome);
 
-    new LaunchController(this, mSharedPreference);
-
-    /* init assets utils */
-    AssetUtils.setContext(this);
-    mRobotoTF = AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BOLD);
+    setUpScreenOrientationSetting();
 
     ViewGroup vg = (ViewGroup) findViewById(R.id.welcome_layout);
-    AssetUtils.setTypeFace(mRobotoTF, vg);
+    AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BOLD), vg);
 
     // Instantiate a ViewPager and a PagerAdapter.
     mPager = (ViewPager) findViewById(R.id.pager);
     mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     mPager.setAdapter(mPagerAdapter);
-    //mPager.setOnPageChangeListener();
 
-    //LinePageIndicator linePageIndicator = (LinePageIndicator) findViewById(R.id.line_page_indicator);
     CirclePageIndicator circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circle_page_indicator);
-    //linePageIndicator.setViewPager(mPager);
     circlePageIndicator.setViewPager(mPager);
-    //linePageIndicator.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
     circlePageIndicator.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
       @Override
@@ -88,8 +94,8 @@ public class WelcomeActivity extends FragmentActivity {
         "<small>" + getResources().getString(R.string.AlreadyAnUser) + "</small>"));
 
 
-    long start = new Date().getTime();
-    Log.i(TAG, "start time loading image: " + start);
+    long startLoadingImg = new Date().getTime();
+    //Log.i(TAG, "start time loading image: " + start);
 
     // pre-loading image for screen slider
     for (int k = 0; k < ScreenSlidePageFragment.SLIDER_IMGS.length; k++) {
@@ -99,19 +105,38 @@ public class WelcomeActivity extends FragmentActivity {
         @Override
         public void run() {
           long start1 = new Date().getTime();
-          Log.i(TAG, "start for " + _k + ": " + start1);
+          //Log.i(TAG, "start for " + _k + ": " + start1);
           ScreenSlidePageFragment.SLIDER_BITMAPS[_k]
               = BitmapFactory.decodeResource(getResources(), ScreenSlidePageFragment.SLIDER_IMGS[_k]);
           long end1 = new Date().getTime();
-          Log.i(TAG, "diff for " + _k + ": " + (end1 - start1));
+          Log.i(TAG, "diff for loading image " + _k + ": " + (end1 - start1));   // 1: 160ms, 2: 195ms, 3: 211ms
         }
       }).start();
     }
 
-    Log.i(TAG, "diff loading image: " + (new Date().getTime() - start));
+    Log.i(TAG, "overall loading time: " + (new Date().getTime() - start) + "/r/n loading image time: " + (new Date().getTime() - startLoadingImg));
+    // 181ms - 11ms, 168ms - 14ms
   }
 
 
+  private void setUpScreenOrientationSetting() {
+
+    int size = getResources().getConfiguration().screenLayout
+        & Configuration.SCREENLAYOUT_SIZE_MASK;
+
+    switch (size) {
+      case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+        Log.i(TAG, "normal");       // 320x470 dp units
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        break;
+      case Configuration.SCREENLAYOUT_SIZE_SMALL:
+        Log.i(TAG, "small");        // 320x426 dp units
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        break;
+      default:
+        break;
+    }
+  }
 
   // Called when user clicks on Signup btn
   public void redirectToSignUp(View view) {
@@ -121,11 +146,16 @@ public class WelcomeActivity extends FragmentActivity {
     startActivity(next);
   }
 
-  // Called when user clicks on Skip this for now txt
+  /**
+   * Redirect user to login screen
+   *
+   * @param view
+   */
   public void redirectToLogIn(View view) {
     Log.i(TAG, "redirectToLogIn");
 
     Intent next = new Intent(this, LoginActivity.class);
+    next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
     startActivity(next);
   }
 
@@ -137,7 +167,7 @@ public class WelcomeActivity extends FragmentActivity {
   }
 
   /**
-   * A simple pager adapter that represents 5 {@link ScreenSlidePageFragment} objects, in
+   * A simple pager adapter that represents 4 {@link ScreenSlidePageFragment} objects, in
    * sequence.
    */
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

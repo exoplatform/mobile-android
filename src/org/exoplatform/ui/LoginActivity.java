@@ -14,7 +14,6 @@ import org.exoplatform.utils.SettingUtils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -33,8 +32,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+/**
+ * Represents screen for authentication<br/>
+ *
+ * Requires setting
+ */
 public class LoginActivity extends Activity implements OnClickListener {
-  private SharedPreferences sharedPreference;
 
   private ImageView         _imageAccount;
 
@@ -52,8 +58,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   private ListView          _listViewServer;
 
-  private Button            mSettingBtn;
-
   private String            strSignIn;
 
   private String            settingText;
@@ -70,16 +74,31 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   private LinearLayout      userpassPanel;
 
-
+  private AccountSetting    mSetting;
 
   private static final String TAG = "eXoLoginActivity";
 
   public void onCreate(Bundle savedInstanceState) {
+    long start = new Date().getTime();
+    Log.i(TAG, "start time login activity: " + start);
+
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
+    setContentView(R.layout.login);
 
-    this.setContentView(R.layout.login);
+    /* launch app from custom url - need to init setting */
+    boolean isLaunchedFromUrl = (getIntent().getData() != null);
+    if (isLaunchedFromUrl) {
+      setUpUserAndServerFromUrl();
+      new LaunchController(this, mSetting);
+    }
+    else {
+      mSetting = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
+      if( mSetting==null) mSetting = AccountSetting.getInstance();
+    }
+
     init();
+    Log.i(TAG, "end time login: " + (new Date().getTime() - start) );
   }
 
   @Override
@@ -94,23 +113,23 @@ public class LoginActivity extends Activity implements OnClickListener {
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    this.setContentView(R.layout.login);
+    setContentView(R.layout.login);
     username = _edtxUserName.getText().toString();
     password = _edtxPassword.getText().toString();
     init();
   }
 
   private void init() {
-    new LaunchController(this, sharedPreference);
+    /* init app setting */
     _imageAccount = (ImageView) findViewById(R.id.Image_Account);
-    _imageServer = (ImageView) findViewById(R.id.Image_Server);
-    _edtxUserName = (EditText) findViewById(R.id.EditText_UserName);
-    _edtxPassword = (EditText) findViewById(R.id.EditText_Password);
-    _btnAccount = (Button) findViewById(R.id.Button_Account);
+    _imageServer  = (ImageView) findViewById(R.id.Image_Server);
+    _edtxUserName = (EditText)  findViewById(R.id.EditText_UserName);
+    _edtxPassword = (EditText)  findViewById(R.id.EditText_Password);
+    _btnAccount   = (Button)    findViewById(R.id.Button_Account);
     _btnAccount.setOnClickListener(this);
-    _btnServer = (Button) findViewById(R.id.Button_Server);
+    _btnServer    = (Button)    findViewById(R.id.Button_Server);
     _btnServer.setOnClickListener(this);
-    _btnLogIn = (Button) findViewById(R.id.Button_Login);
+    _btnLogIn     = (Button)    findViewById(R.id.Button_Login);
     _btnLogIn.setOnClickListener(this);
     listviewPanel = (LinearLayout) findViewById(R.id.login_listview_panel);
     userpassPanel = (LinearLayout) findViewById(R.id.login_userpass_panel);
@@ -121,15 +140,19 @@ public class LoginActivity extends Activity implements OnClickListener {
     _listViewServer.setDivider(null);
     _listViewServer.setDividerHeight(1);
 
-    mSettingBtn = (Button) findViewById(R.id.login_setting_btn);
-    mSettingBtn.setOnClickListener(this);
-
-    boolean isLaunchedFromUrl = (getIntent().getData() != null);
-    if (isLaunchedFromUrl) setUpUserAndServerFromUrl();
-
     setInformation();
   }
 
+  /**
+   * Set up user and server from eXo url scheme
+   * Saves this server and make it as the current server
+   *
+   * Current support url scheme:
+   *
+   * exomobile://
+   * exomobile://serverUrl=xxx
+   * exomobile://username=xx?serverUrl=xxx
+   */
   private void setUpUserAndServerFromUrl() {
     Uri eXoUri = getIntent().getData();
     /* exomobile:// */
@@ -137,7 +160,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     String host      = eXoUri.getHost();
     String serverUrl;
-    String username  = null;
+    String username  = "";
 
     /* exomobile://serverUrl=xxx */
     if (host.contains(ExoConstants.EXO_URL_SERVER)) {
@@ -152,27 +175,33 @@ public class LoginActivity extends Activity implements OnClickListener {
       serverUrl = eXoUri.getQueryParameter(ExoConstants.EXO_URL_SERVER);
       if (serverUrl == null) return;
       int equalIdx = host.indexOf("=");
-      if ((equalIdx == -1) || (equalIdx == host.length())) username = null;
-      username = host.substring(equalIdx + 1, host.length());
+      if ((equalIdx != -1) && (equalIdx < host.length()))
+        username = host.substring(equalIdx + 1, host.length());
     }
     else return ;
 
-    /* saves to account setting */
-    AccountSetting.getInstance().setUsername(username == null ? "": username);
-    AccountSetting.getInstance().setDomainName(serverUrl);
-    AccountSetting.getInstance().isRememberMeEnabled = true;
-    AccountSetting.getInstance().isAutoLoginEnabled  = true;
-
-    /* Add server to server list */
+    /* Add server to server list if server is new */
     ServerObjInfo serverObj  = new ServerObjInfo();
-    //serverObj._bSystemServer = false;
-    serverObj._strServerName = Uri.parse(serverUrl).getAuthority();
-    serverObj._strServerUrl  = serverUrl;
+    serverObj.serverName = Uri.parse(serverUrl).getAuthority();
+    serverObj.serverUrl  = serverUrl;
+    serverObj.username   = username;
 
-    ServerSettingHelper settingHelper = ServerSettingHelper.getInstance();
-    settingHelper.getServerInfoList().add(serverObj);
+    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+    String domainIdx;
+    int serverIdx = serverList.indexOf(serverObj);
+    if (serverIdx > -1) {
+      domainIdx = String.valueOf(serverIdx);
+    }
+    else {
+      serverList.add(serverObj);
+      domainIdx = String.valueOf(serverList.size() - 1);
+      // Persist config - TODO: check whether this need to be done in a separate Thread
+      SettingUtils.persistServerSetting(this);
+    }
+
     // set current selected server to the new server
-    AccountSetting.getInstance().setDomainIndex(String.valueOf(settingHelper.getServerInfoList().size() -1));
+    mSetting.setDomainIndex(String.valueOf(domainIdx));
+    mSetting.setCurrentServer(serverList.get(serverIdx));
   }
 
   /**
@@ -181,11 +210,15 @@ public class LoginActivity extends Activity implements OnClickListener {
   private void setInformation() {
     changeLanguage();
     _edtxUserName.setHint(userNameHint);
-    _edtxUserName.setText(username==null || username.equals("")
-        ? AccountSetting.getInstance().getUsername(): username);
+    _edtxUserName.setText( (username==null || username.equals(""))
+        && mSetting.isRememberMeEnabled()
+        ? mSetting.getUsername(): username);
+
     _edtxPassword.setHint(passWordHint);
-    _edtxPassword.setText(password==null || password.equals("")
-        ? AccountSetting.getInstance().getPassword():password);
+    _edtxPassword.setText( (password==null || password.equals(""))
+        && mSetting.isRememberMeEnabled()
+        ? mSetting.getPassword():password);
+
     _btnLogIn.setText(strSignIn);
     setServerAdapter();
   }
@@ -197,7 +230,7 @@ public class LoginActivity extends Activity implements OnClickListener {
   private void onLogin() {
     username = _edtxUserName.getText().toString();
     password = _edtxPassword.getText().toString();
-    new LoginController(this, username, password);
+    new LoginController(this, username, password, true, mSetting);
   }
 
   public void changeLanguage() {
@@ -220,8 +253,9 @@ public class LoginActivity extends Activity implements OnClickListener {
     int selectedItemIndex = item.getItemId();
 
     if (selectedItemIndex == 1) {
-      Intent next = new Intent(LoginActivity.this, SettingActivity.class);
+      Intent next = new Intent(this, SettingActivity.class);
       next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.GLOBAL_TYPE);
+      next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
       startActivity(next);
     }
     return false;
@@ -249,25 +283,25 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
 
     if (view.equals(_btnAccount)) {
+      Log.i(TAG, "switch to account panel");
       view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
       _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_on);
       _btnServer.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
       _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
 
       _edtxUserName.setVisibility(View.VISIBLE);
-      _edtxUserName.setText(AccountSetting.getInstance().getUsername());
+      Log.i(TAG, "remember me: " + mSetting.isRememberMeEnabled());
+      if (mSetting.getCurrentServer()!=null) Log.i(TAG, "server: " + mSetting.getCurrentServer().serverUrl);
+      Log.i(TAG, "user: " + mSetting.getUsername());
+
+      _edtxUserName.setText(mSetting.isRememberMeEnabled() ? mSetting.getUsername(): username);
       _edtxPassword.setVisibility(View.VISIBLE);
-      _edtxPassword.setText(AccountSetting.getInstance().getPassword());
+      _edtxPassword.setText(mSetting.isRememberMeEnabled() ? mSetting.getPassword(): password);
 
       _btnLogIn.setVisibility(View.VISIBLE);
       _listViewServer.setVisibility(View.INVISIBLE);
       userpassPanel.setVisibility(View.VISIBLE);
       listviewPanel.setVisibility(View.INVISIBLE);
-    }
-
-    if (view.equals(mSettingBtn)) {
-      Intent next = new Intent(this, SettingActivity.class);
-      startActivity(next);
     }
   }
 }

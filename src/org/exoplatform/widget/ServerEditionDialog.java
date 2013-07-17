@@ -34,6 +34,8 @@ import android.widget.Toast;
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Aug
  * 31, 2012
  */
+
+/**
 public class ServerEditionDialog extends Dialog implements android.view.View.OnClickListener {
   private Button            btnOK;
 
@@ -66,9 +68,7 @@ public class ServerEditionDialog extends Dialog implements android.view.View.OnC
                              ServerObjInfo info,
                              int index) {
     super(context);
-    /** 'Window.FEATURE_NO_TITLE' - Used to hide the title */
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    /** Design the dialog in main.xml file */
     setContentView(R.layout.exolanguagesetting);
     mContext = context;
     this.settingController = controller;
@@ -96,14 +96,13 @@ public class ServerEditionDialog extends Dialog implements android.view.View.OnC
     if (serverObj == null) {
       isNewServer = true;
       serverObj = new ServerObjInfo();
-      //serverObj._bSystemServer = false;
-      serverObj._strServerName = "";
-      serverObj._strServerUrl = "";
+      serverObj.serverName = "";
+      serverObj.serverUrl  = "";
 
     }
 
-    editTextServerName.setText(serverObj._strServerName);
-    editTextServerUrl.setText(serverObj._strServerUrl);
+    editTextServerName.setText(serverObj.serverName);
+    editTextServerUrl.setText(serverObj.serverUrl);
 
     changeLanguage();
 
@@ -113,12 +112,11 @@ public class ServerEditionDialog extends Dialog implements android.view.View.OnC
   public void onClick(View view) {
     ServerObjInfo myServerObj = new ServerObjInfo();
 
-    myServerObj._strServerName = editTextServerName.getText().toString();
-
-    myServerObj._strServerUrl = editTextServerUrl.getText().toString();
-    if (myServerObj._strServerUrl != null) {
-      myServerObj._strServerName = myServerObj._strServerName.trim();
-      myServerObj._strServerUrl = myServerObj._strServerUrl.trim();
+    myServerObj.serverName = editTextServerName.getText().toString();
+    myServerObj.serverUrl = editTextServerUrl.getText().toString();
+    if (myServerObj.serverUrl != null) {
+      myServerObj.serverName = myServerObj.serverName.trim();
+      myServerObj.serverUrl = myServerObj.serverUrl.trim();
 
       if (view.equals(btnOK)) {
         if (isNewServer) {
@@ -192,3 +190,5 @@ public class ServerEditionDialog extends Dialog implements android.view.View.OnC
 
   }
 }
+ **/
+

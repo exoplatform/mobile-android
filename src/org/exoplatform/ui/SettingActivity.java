@@ -1,6 +1,8 @@
 package org.exoplatform.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.R;
@@ -8,14 +10,13 @@ import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ServerConfigurationUtils;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.ServerEditionDialog;
-import org.exoplatform.widget.WarningDialog;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -25,6 +26,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+/**
+ * Represents the setting screen<br/>
+ *
+ * Requires setting, setting_type
+ */
 public class SettingActivity extends MyActionBar implements OnClickListener {
 
   /* launch setting without logging in */
@@ -33,11 +39,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
   /* launch setting while logging in */
   public static final int       PERSONAL_TYPE         = 1;
 
-  private static final String   SERVER_SETTING_HELPER = "SERVER_SETTING_HELPER";
-
-  private static final String   ACCOUNT_SETTING       = "account_setting";
-
-  private int                   settingType;
+  private int                   mSettingType;
 
   private View                  vEngLish, vFrench;
 
@@ -97,7 +99,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
   private TextView              serverEditionText;
 
-  private SettingController     setttingController;
+  private SettingController     mSettingController;
 
   private String                errorMessage;
 
@@ -107,10 +109,19 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
   private Button                mStartCloudSignUpBtn;
 
+  private AccountSetting        mSetting;
+
+  private ServerSettingHelper   mServerSetting = ServerSettingHelper.getInstance();
+
+  private SharedPreferences     mSharedPerf;
+
+  private static final String TAG = "eXoSettingActivity";
+
   public static SettingActivity settingActivity;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    Log.i(TAG, "onCreate");
     super.onCreate(savedInstanceState);
 
     requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -118,26 +129,34 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.exosetting);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    settingType = getIntent().getIntExtra(ExoConstants.SETTING_TYPE, GLOBAL_TYPE);
+
+    mSharedPerf  = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
+    mSettingType = getIntent().getIntExtra(ExoConstants.SETTING_TYPE, GLOBAL_TYPE);
+    mSetting     = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
+    if( mSetting==null) mSetting = AccountSetting.getInstance();
 
     settingActivity = this;
+
     if (savedInstanceState != null) {
-      ServerSettingHelper helper = savedInstanceState.getParcelable(SERVER_SETTING_HELPER);
+      ServerSettingHelper helper = savedInstanceState.
+          getParcelable(ExoConstants.SERVER_SETTING_HELPER);
       ServerSettingHelper.getInstance().setInstance(helper);
-      AccountSetting accountSetting = savedInstanceState.getParcelable(ACCOUNT_SETTING);
-      AccountSetting.getInstance().setInstance(accountSetting);
+      mSetting = savedInstanceState.getParcelable(ExoConstants.ACCOUNT_SETTING);
+      if( mSetting==null) mSetting = AccountSetting.getInstance();
     }
+
     init();
   }
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putParcelable(SERVER_SETTING_HELPER, ServerSettingHelper.getInstance());
-    outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
+    outState.putParcelable(ExoConstants.SERVER_SETTING_HELPER, ServerSettingHelper.getInstance());
+    outState.putParcelable(ExoConstants.ACCOUNT_SETTING, mSetting);
   }
 
   private void init() {
+    Log.i(TAG, "init");
 
     /* Login */
     mLoginLayout   = (RelativeLayout) findViewById(R.id.setting_login_layout);
@@ -172,25 +191,31 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     documentTitleLayout = (RelativeLayout) findViewById(R.id.document_setting_title_header_layout);
     documentLayout = (RelativeLayout) findViewById(R.id.document_store_setting_layout);
     documentLayout.setOnClickListener(this);
-    listServerWrap = (LinearLayout) findViewById(R.id.listview_server_wrap);
     addServerBtn = (Button) findViewById(R.id.modify_server_btn);
     addServerBtn.setOnClickListener(this);
 
     mStartCloudSignUpBtn = (Button) findViewById(R.id.setting_start_cloud_signup_btn);
     mStartCloudSignUpBtn.setOnClickListener(this);
 
-    setttingController = new SettingController(this, listServerWrap);
-    setttingController.initLocation(imgViewECheckMark, imgViewFCheckMark);
-    if (settingType == GLOBAL_TYPE) {
+    /* replacing old list server with new one */
+    listServerWrap = (LinearLayout) findViewById(R.id.listview_server_wrap);
+    RelativeLayout parent = (RelativeLayout) findViewById(R.id.setting_layout);
+    mSettingController = new SettingController(this, parent, mSetting);
+    int index = parent.indexOfChild(listServerWrap);
+    parent.removeView(listServerWrap);
+    parent.addView(mSettingController.getServerListLayout(), index);
+
+    mSettingController.initLocation(imgViewECheckMark, imgViewFCheckMark);
+    if (mSettingType == GLOBAL_TYPE) {
       socialTitleLayout.setVisibility(View.GONE);
       socialLayout.setVisibility(View.GONE);
       documentTitleLayout.setVisibility(View.GONE);
       documentLayout.setVisibility(View.GONE);
       hideLoginSetting();
     } else {
-      setttingController.initSocialFilter(socialCheckedView);
-      setttingController.initDocumentHiddenFile(documentCheckedView);
-      setttingController.initLoginSetting(mRememberMeImg, mAutoLoginImg);
+      mSettingController.initSocialFilter(socialCheckedView);
+      mSettingController.initDocumentHiddenFile(documentCheckedView);
+      mSettingController.initLoginSetting(mRememberMeImg, mAutoLoginImg);
     }
     if(SocialActivityUtil.getPlatformVersion() >= 4.0f) {
       documentTitleLayout.setVisibility(View.GONE);
@@ -199,22 +224,20 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
     settingAppInfoTitle = (TextView) findViewById(R.id.setting_application_info_title);
     serverInfoText = (TextView) findViewById(R.id.setting_server_info_title_text);
-    String serverVersion = ServerSettingHelper.getInstance().getServerVersion();
+    String serverVersion = mServerSetting.getServerVersion();
     TextView severValueText = (TextView) findViewById(R.id.setting_server_info_value_text);
     severValueText.setText(serverVersion);
 
     serverEditionText = (TextView) findViewById(R.id.setting_server_edition_info_title_text);
-    String serverEdition = ServerSettingHelper.getInstance().getServerEdition();
+    String serverEdition = mServerSetting.getServerEdition();
     TextView severEditionValueText = (TextView) findViewById(R.id.setting_server_edition_info_value_text);
     severEditionValueText.setText(serverEdition);
 
     applicationInfoText = (TextView) findViewById(R.id.setting_app_info_title_text);
     TextView appValueText = (TextView) findViewById(R.id.setting_app_info_value_text);
-    String appVersion = ServerSettingHelper.getInstance().getApplicationVersion();
-    appValueText.setText(appVersion);
-    changeLanguage();
+    appValueText.setText(mServerSetting.getApplicationVersion());
 
-    setttingController.setServerList();
+    changeLanguage();
   }
 
 
@@ -230,9 +253,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
    * @param localize
    */
   private void updateLocation(String localize) {
-    if (setttingController.updateLocallize(localize) == true) {
+    if (mSettingController.updateLocallize(localize) == true) {
       changeLanguage();
-      setttingController.setServerList();
     }
   }
 
@@ -294,31 +316,60 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
   @Override
   public void onClick(View view) {
     if (view.equals(vEngLish)) {
-      setttingController.setEnglishLocation(imgViewECheckMark, imgViewFCheckMark);
+      mSettingController.setEnglishLocation(imgViewECheckMark, imgViewFCheckMark);
       updateLocation(ExoConstants.ENGLISH_LOCALIZATION);
     }
     if (view.equals(vFrench)) {
-      setttingController.setFrenchLocation(imgViewECheckMark, imgViewFCheckMark);
+      mSettingController.setFrenchLocation(imgViewECheckMark, imgViewFCheckMark);
       updateLocation(ExoConstants.FRENCH_LOCALIZATION);
     }
     if (view.equals(socialLayout)) {
-      setttingController.setSocialFilter(socialCheckedView);
+      mSettingController.setSocialFilter(socialCheckedView);
     }
 
     if (view.equals(documentLayout)) {
-      setttingController.setDocumentShowPrivateDrive(documentCheckedView);
+      mSettingController.setDocumentShowPrivateDrive(documentCheckedView);
     }
     if (view.equals(addServerBtn)) {
       Intent next = new Intent(this, ServerEditionActivity.class);
       next.putExtra(ExoConstants.SETTING_ADDING_SERVER, true);
-      SettingController.useInstance(setttingController);
+      next.putExtra(ExoConstants.SETTING_TYPE, mSettingType);
+      SettingController.useInstance(mSettingController);
       startActivity(next);
     }
+    /**
+     * Users start cloud sign up
+     */
     if (view.equals(mStartCloudSignUpBtn)) {
+      mSetting.setCurrentServer(null);
+      mSetting.setDomainIndex("-1");
+      SettingUtils.modifySharedPerf(this);
+
+      /* do not allow to come back to setting */
       Intent next = new Intent(this, WelcomeActivity.class);
+      next.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+      next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
       startActivity(next);
     }
 
   }
 
+
+  @Override
+  protected void onPause(){
+    Log.i(TAG, "onPause");
+    super.onPause();
+
+    if (mSettingType == GLOBAL_TYPE) return ;
+    SharedPreferences.Editor editor = mSharedPerf.edit();
+    if (mSettingController.mIsSocialFilterEnabled)
+      editor.putInt(mSetting.socialKeyIndex, 0);
+    else
+      editor.putBoolean(mSetting.socialKey, mSettingController.mIsSocialFilterEnabled);
+    editor.putBoolean(mSetting.documentKey, mSettingController.mIsShowHidden);
+    editor.commit();
+
+    ServerConfigurationUtils.generateXmlFileWithServerList(this,
+      ServerSettingHelper.getInstance().getServerInfoList(), ExoConstants.EXO_SERVER_SETTING_FILE, "");
+  }
 }

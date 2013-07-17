@@ -28,6 +28,8 @@ public class AssetUtils {
 
   public static final String ROBOTO_MEDIUM  = "typefaces/Roboto-Medium.ttf";
 
+  public static final String ROBOTO_BLACK   = "typefaces/Roboto-Black.ttf";
+
   public static void setContext(Context context) {
     mContext      = context;
     mAssetManager = mContext.getAssets();

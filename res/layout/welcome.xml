@@ -6,28 +6,31 @@
         android:layout_height="match_parent"
         android:background="@drawable/welcome_bg_repeat">
 
-    <include layout="@layout/exo_banner"
-             android:id="@+id/welcome_eXo_banner"/>
+    <org.exoplatform.ui.CirclePageIndicator
+            android:id="@+id/circle_page_indicator"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"/>
 
     <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="320dp"
-            android:layout_below="@id/welcome_eXo_banner"/>
+            android:layout_below="@id/circle_page_indicator"/>
 
-    <org.exoplatform.ui.CirclePageIndicator
-            android:id="@+id/circle_page_indicator"
-            android:layout_height="wrap_content"
+    <ImageView
+            android:id="@+id/welcome_separator_img"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@id/pager"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="3dp"/>
+            android:src="@drawable/black_separator"/>
 
     <TextView
             android:id="@+id/welcome_txt_or"
             android:layout_width="wrap_content"
             android:layout_height="72dp"
-            android:layout_below="@id/circle_page_indicator"
+            android:layout_below="@id/welcome_separator_img"
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:paddingBottom="15dp"
@@ -40,7 +43,7 @@
             android:id="@+id/welcome_btn_signup"
             android:layout_width="wrap_content"
             android:layout_height="72dp"
-            android:layout_below="@id/circle_page_indicator"
+            android:layout_below="@id/welcome_separator_img"
             android:layout_toLeftOf="@id/welcome_txt_or"
             android:layout_marginLeft="20dp"
             android:textStyle="bold"
@@ -54,7 +57,7 @@
             android:id="@+id/welcome_btn_login"
             android:layout_width="wrap_content"
             android:layout_height="72dp"
-            android:layout_below="@id/circle_page_indicator"
+            android:layout_below="@id/welcome_separator_img"
             android:layout_toRightOf="@id/welcome_txt_or"
             android:layout_marginRight="20dp"
             android:textStyle="bold"

@@ -39,6 +39,9 @@ import android.os.Environment;
 import android.util.Log;
 import android.util.Xml;
 
+/**
+ * Help to deal with writing and reading from xml config file
+ */
 public class ServerConfigurationUtils {
 
   public static String version;
@@ -166,9 +169,9 @@ public class ServerConfigurationUtils {
             for (int i = 0; i < parser.getAttributeCount(); i++) {
               String attribute = parser.getAttributeName(i).toLowerCase(Locale.US);
               if (attribute.equalsIgnoreCase("name")) {
-                serverObj._strServerName = parser.getAttributeValue(i);
+                serverObj.serverName = parser.getAttributeValue(i);
               } else if (attribute.equalsIgnoreCase("serverURL")) {
-                serverObj._strServerUrl = parser.getAttributeValue(i);
+                serverObj.serverUrl = parser.getAttributeValue(i);
               }
             }
             //serverObj._bSystemServer = true;
@@ -268,12 +271,8 @@ public class ServerConfigurationUtils {
             Element itemElement = (Element) itemNode;
 
             ServerObjInfo serverObj = new ServerObjInfo();
-            serverObj._strServerName = itemElement.getAttribute("name");
-            serverObj._strServerUrl = itemElement.getAttribute("serverURL");
-            //serverObj._bSystemServer = false;
-            //if (name.equalsIgnoreCase("DefaultServerList.xml"))
-            //  serverObj._bSystemServer = true;
-
+            serverObj.serverName = itemElement.getAttribute("name");
+            serverObj.serverUrl  = itemElement.getAttribute("serverURL");
             arrServerList.add(serverObj);
           }
         }
@@ -322,16 +321,13 @@ public class ServerConfigurationUtils {
             Element itemElement = (Element) itemNode;
 
             ServerObjInfo serverObj  = new ServerObjInfo();
-            serverObj._strServerName = itemElement.getAttribute("name");
-            serverObj._strServerUrl  = itemElement.getAttribute(ExoConstants.EXO_URL_SERVER);
+            serverObj.serverName     = itemElement.getAttribute("name");
+            serverObj.serverUrl      = itemElement.getAttribute(ExoConstants.EXO_URL_SERVER);
             serverObj.username       = itemElement.getAttribute(ExoConstants.EXO_URL_USERNAME);
             serverObj.password       =
                 SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD, itemElement.getAttribute("password"));
             serverObj.isRememberEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
             serverObj.isRememberEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
-
-            //if (name.equalsIgnoreCase("DefaultServerList.xml"))
-            //  serverObj._bSystemServer = true;
 
             arrServerList.add(serverObj);
           }
@@ -405,8 +401,8 @@ public class ServerConfigurationUtils {
       for (int i = 0; i < objList.size(); i++) {
         ServerObjInfo serverObj = objList.get(i);
         serializer.startTag(null, "server");
-        serializer.attribute(null, "name", serverObj._strServerName);
-        serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj._strServerUrl);
+        serializer.attribute(null, "name", serverObj.serverName);
+        serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj.serverUrl);
         serializer.endTag(null, "server");
       }
 
@@ -472,8 +468,8 @@ public class ServerConfigurationUtils {
       for (int i = 0; i < objList.size(); i++) {
         ServerObjInfo serverObj = objList.get(i);
         serializer.startTag(null, "server");
-        serializer.attribute(null, "name", serverObj._strServerName);
-        serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj._strServerUrl);
+        serializer.attribute(null, "name", serverObj.serverName);
+        serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj.serverUrl);
         serializer.attribute(null, ExoConstants.EXO_URL_USERNAME, serverObj.username);
 
         /* encrypt password */

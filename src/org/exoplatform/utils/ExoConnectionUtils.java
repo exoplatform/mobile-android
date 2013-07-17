@@ -75,7 +75,7 @@ public class ExoConnectionUtils {
 
   public static final int         SIGNUP_MAX_USERS         = 25;
 
-  private static final String    TAG                       = "ExoConnectionUtils";
+  private static final String     TAG                      = "ExoConnectionUtils";
 
   /*
    * Check mobile network and wireless status

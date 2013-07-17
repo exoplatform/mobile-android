@@ -14,12 +14,13 @@ import android.widget.TextView;
 import org.exoplatform.R;
 import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConstants;
 
-/***
- * This screen is used to add new server or modify existing server
+/**
+ * This screen is used to add new server or modify existing server<br/>
  *
- *
+ * Requires setting, adding_server
  */
 public class ServerEditionActivity extends Activity {
 
@@ -39,11 +40,9 @@ public class ServerEditionActivity extends Activity {
 
   private Button   mDeleteBtn;
 
-  private ServerObjInfo mServerObj;
-
-  private int      mServerIndex;
-
   private boolean  mIsAddingServer;
+
+  private AccountSetting    mSetting;
 
   private SettingController mSettingController;
 
@@ -63,7 +62,6 @@ public class ServerEditionActivity extends Activity {
     mPassEditTxt       = (EditText) findViewById(R.id.server_setting_pass_edit_txt);
     mOkBtn             = (Button) findViewById(R.id.server_setting_ok_btn);
     mDeleteBtn         = (Button) findViewById(R.id.server_setting_delete_btn);
-    mServerObj         = new ServerObjInfo();
 
     /* allowing to click on OK only if server name and server url are inputted */
     mOkBtn.setEnabled(false);
@@ -73,7 +71,9 @@ public class ServerEditionActivity extends Activity {
     mPassEditTxt.setTypeface(Typeface.SANS_SERIF);
 
     /* change the title */
-    mIntent = getIntent();
+    mIntent  = getIntent();
+    mSetting = mIntent.getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
+    if (mSetting == null) mSetting = AccountSetting.getInstance();
     mIsAddingServer = mIntent.getBooleanExtra(ExoConstants.SETTING_ADDING_SERVER, true);
     if (mIsAddingServer) initAddingServer();
     else initModifyingServer();
@@ -120,23 +120,24 @@ public class ServerEditionActivity extends Activity {
     mDeleteBtn.setVisibility(View.VISIBLE);
     mDeleteBtn.setOnClickListener(onDeleteServer());
 
-    Bundle bundle = mIntent.getExtras();
-    mServerObj    = bundle.getParcelable(ExoConstants.SETTING_SERVER_OBJ);
-    mServerIndex  = mIntent.getIntExtra(ExoConstants.SETTING_SERVER_INDEX, 0);
-    String user   = mIntent.getStringExtra(ExoConstants.SETTING_USERNAME);
-    String pass   = mIntent.getStringExtra(ExoConstants.SETTING_PASSWORD);
+    String user   = mSetting.getUsername();
+    String pass   = mSetting.getPassword();
 
-    mServerNameEditTxt.setText(mServerObj._strServerName);
-    mServerUrlEditTxt.setText(mServerObj._strServerUrl);
-
-    if (user!= null) mUserEditTxt.setText(user);
-    if (pass!= null) mPassEditTxt.setText(pass);
+    mServerNameEditTxt.setText(mSetting.getServerName());
+    mServerUrlEditTxt.setText(mSetting.getDomainName());
+    mUserEditTxt.setText(user!=null? user: "");
+    mPassEditTxt.setText(pass!=null? pass: "");
   }
 
+  /**
+   * Return to setting screen
+   *
+   */
   private void returnToSetting() {
     Intent next = new Intent(this, SettingActivity.class);
     next.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.PERSONAL_TYPE);
+    next.putExtra(ExoConstants.SETTING_TYPE,
+        mIntent.getIntExtra(ExoConstants.SETTING_TYPE, SettingActivity.GLOBAL_TYPE));
     startActivity(next);
   }
 
@@ -146,9 +147,7 @@ public class ServerEditionActivity extends Activity {
       public void onClick(View view) {
         Log.i(TAG, "onDeleteServer");
 
-        mSettingController.onDelete(mServerIndex);
-        mSettingController.setServerList();
-
+        mSettingController.onDelete(Integer.valueOf(mSetting.getDomainIndex()));
         returnToSetting();
       }
     };
@@ -161,11 +160,12 @@ public class ServerEditionActivity extends Activity {
       public void onClick(View view) {
         Log.i(TAG, "onUpdateServer");
 
-        mServerObj._strServerUrl  = mServerUrlEditTxt.getText().toString();
-        mServerObj._strServerName = mServerNameEditTxt.getText().toString();
-        mServerObj.username       = mUserEditTxt.getText().toString();
-        mServerObj.password       = mPassEditTxt.getText().toString();
-        mSettingController.onUpdate(mServerObj, mServerIndex);
+        ServerObjInfo serverObj = mSetting.getCurrentServer().clone();
+        serverObj.serverUrl  = mServerUrlEditTxt.getText().toString();
+        serverObj.serverName = mServerNameEditTxt.getText().toString();
+        serverObj.username   = mUserEditTxt.getText().toString();
+        serverObj.password   = mPassEditTxt.getText().toString();
+        mSettingController.onUpdate(serverObj, Integer.valueOf(mSetting.getDomainIndex()));
 
         returnToSetting();
       }
@@ -179,11 +179,12 @@ public class ServerEditionActivity extends Activity {
       public void onClick(View view) {
         Log.i(TAG, "onAddServer");
 
-        mServerObj._strServerUrl  = mServerUrlEditTxt.getText().toString();
-        mServerObj._strServerName = mServerNameEditTxt.getText().toString();
-        mServerObj.username       = mUserEditTxt.getText().toString();
-        mServerObj.password       = mPassEditTxt.getText().toString();
-        mSettingController.onAdd(mServerObj);
+        ServerObjInfo serverObj = new ServerObjInfo();
+        serverObj.serverUrl  = mServerUrlEditTxt.getText().toString();
+        serverObj.serverName = mServerNameEditTxt.getText().toString();
+        serverObj.username   = mUserEditTxt.getText().toString();
+        serverObj.password   = mPassEditTxt.getText().toString();
+        mSettingController.onAdd(serverObj);
 
         returnToSetting();
       }

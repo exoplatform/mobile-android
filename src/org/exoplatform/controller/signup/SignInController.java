@@ -24,6 +24,7 @@ import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SignInController {
 
@@ -50,6 +51,8 @@ public class SignInController {
   private SharedPreferences mSharedPreference;
 
   private WarningDialog mDialog;
+
+  private AccountSetting mSetting;
 
   /* Sign In messages */
   private String signInMess;
@@ -83,6 +86,7 @@ public class SignInController {
     mContext = context;
     SettingUtils.setDefaultLanguage(mContext);
     mResource = mContext.getResources();
+    mSetting  = AccountSetting.getInstance();
 
     mEmail    = email;
     mPassword = password;
@@ -96,6 +100,7 @@ public class SignInController {
     mContext = context;
     SettingUtils.setDefaultLanguage(mContext);
     mResource = mContext.getResources();
+    mSetting  = AccountSetting.getInstance();
 
     mDomain   = url;
     mUsername = user;
@@ -224,56 +229,36 @@ public class SignInController {
           StringBuilder builder = new StringBuilder(mDomain)
               .append("_").append(mUsername).append("_");
 
-          // save account settings
-          AccountSetting.getInstance().setUsername(mUsername);
-          AccountSetting.getInstance().setPassword(mPassword);
-          AccountSetting.getInstance().setDomainName(mDomain);
+          mSetting.socialKey      = builder.toString() + ExoConstants.SETTING_SOCIAL_FILTER;
+          mSetting.socialKeyIndex = builder.toString() + ExoConstants.SETTING_SOCIAL_FILTER_INDEX;
+          mSetting.documentKey    = builder.toString() + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
 
           // save server to default server list
           ServerObjInfo serverObj  = new ServerObjInfo();
-          //serverObj._bSystemServer = false;
-          serverObj._strServerName = mResource.getString(R.string.DefaultServer);
-          // (mTenant != null) ? mTenant : Uri.parse(mDomain).getAuthority();
-          serverObj._strServerUrl  = mDomain;
+          serverObj.serverName     = mResource.getString(R.string.DefaultServer);
+          serverObj.serverUrl      = mDomain;
           serverObj.username       = mUsername;
           serverObj.password       = mPassword;
 
-          ServerSettingHelper settingHelper = ServerSettingHelper.getInstance();
-          settingHelper.getServerInfoList().add(serverObj);
-          ServerConfigurationUtils.generateXmlFileWithServerList(mContext, settingHelper.getServerInfoList(),
-              ExoConstants.EXO_SERVER_SETTING_FILE, "");
-          // set current selected server to the new server
-          AccountSetting.getInstance().setDomainIndex(String.valueOf(settingHelper.getServerInfoList().size() -1));
-
-          AccountSetting.getInstance().socialKey = builder.toString()
-            + ExoConstants.SETTING_SOCIAL_FILTER;
-          AccountSetting.getInstance().socialKeyIndex = builder.toString()
-            + ExoConstants.SETTING_SOCIAL_FILTER_INDEX;
-          AccountSetting.getInstance().documentKey = builder.toString()
-            + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
-
-          SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
-            .edit();
-
-          /*
-           * disable saving social filter when login with difference account and
-           * clear the download repository
-           */
-          if (!isLastAccount(mUsername)) {
-            editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
-            clearDownloadRepository();
+          boolean needToSave = false;
+          ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+          int serverIdx = serverList.indexOf(serverObj);
+          if (serverIdx == -1) {       // new server
+            serverList.add(serverObj);
+            needToSave = true;
+            serverIdx  = serverList.size() - 1;
           }
-          editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
-          editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance().getDomainIndex());
-
-          /* save credentials if remember me enabled */
-          boolean isRememberMeEnabled = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
-              .getBoolean(ExoConstants.SETTING_REMEMBER_ME, false);
-          if (isRememberMeEnabled) {
-            editor.putString(ExoConstants.EXO_PRF_USERNAME, mUsername);
-            editor.putString(ExoConstants.EXO_PRF_PASSWORD, mPassword);
+          else { // might have new password
+            if (!serverList.get(serverIdx).password.equals(mPassword)) {
+              needToSave = true;
+              serverList.get(serverIdx).password = mPassword;
+            }
           }
-          editor.commit();
+
+          mSetting.setCurrentServer(serverList.get(serverIdx));
+          mSetting.setDomainIndex(String.valueOf(serverIdx));
+
+          if (needToSave) SettingUtils.persistServerSetting(mContext);
 
            /* Checking platform version */
           if (isCompliant == true) {

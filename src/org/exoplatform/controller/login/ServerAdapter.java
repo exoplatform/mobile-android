@@ -20,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * Adapter for server list view
+ */
 public class ServerAdapter extends BaseAdapter {
   private ArrayList<ServerObjInfo> serverInfoList;
 
@@ -27,17 +30,19 @@ public class ServerAdapter extends BaseAdapter {
 
   private Context                  mContext;
 
-  private int                      _intDomainIndex;
+  /** current selected server */
+  private int                      mDomainIdx;
 
-  private String                   _strDomain;
+  private AccountSetting           mSetting;
 
   private static final String TAG = "eXoServerAdapter";
 
   public ServerAdapter(Context context, ListView lv) {
-    mContext = context;
+    mContext        = context;
     _listViewServer = lv;
-    serverInfoList = ServerSettingHelper.getInstance().getServerInfoList();
-    _intDomainIndex = Integer.valueOf(AccountSetting.getInstance().getDomainIndex());
+    serverInfoList  = ServerSettingHelper.getInstance().getServerInfoList();
+    mSetting        = AccountSetting.getInstance();
+    mDomainIdx      = Integer.valueOf(mSetting.getDomainIndex());
   }
 
   // @Override
@@ -63,13 +68,13 @@ public class ServerAdapter extends BaseAdapter {
 
     final ServerObjInfo serverObj = serverInfoList.get(pos);
     TextView txtvServerName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
-    txtvServerName.setText(serverObj._strServerName);
+    txtvServerName.setText(serverObj.serverName);
 
     TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
-    txtvUrl.setText(serverObj._strServerUrl);
+    txtvUrl.setText(serverObj.serverUrl);
 
     ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-    if (_intDomainIndex == pos) {
+    if (mDomainIdx == pos) {
       imgView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
     } else {
       imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
@@ -78,31 +83,20 @@ public class ServerAdapter extends BaseAdapter {
     rowView.setOnClickListener(new OnClickListener() {
 
       public void onClick(View v) {
-        Log.i(TAG, "onClick server list item");
+        Log.i(TAG, "onClick server list item: " + serverObj.serverUrl);
 
         View rowView = getView(pos, null, _listViewServer);
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
         imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
+        mDomainIdx = pos;
 
-        _intDomainIndex = pos;
-        _strDomain = serverObj._strServerUrl;
-        AccountSetting.getInstance().setDomainIndex(String.valueOf(_intDomainIndex));
-        AccountSetting.getInstance().setDomainName(_strDomain);
+        /* changes setting */
+        mSetting.setDomainIndex(String.valueOf(mDomainIdx));
+        mSetting.setCurrentServer(serverObj);
+        Log.i(TAG, "is remember me: " + mSetting.isRememberMeEnabled());
+        Log.i(TAG, "is remember me: " + mSetting.getCurrentServer().serverUrl);
 
-        AccountSetting.getInstance().setUsername(serverObj.username);
-        AccountSetting.getInstance().setPassword(serverObj.password);
-        // TODO: set username and password
-
-        SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
-                                                  .edit();
-        editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
-        editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance()
-                                                                          .getDomainIndex());
-        editor.putString(ExoConstants.EXO_PRF_USERNAME, serverObj.username);
-        editor.putString(ExoConstants.EXO_PRF_PASSWORD, serverObj.password);
-        editor.commit();
-
-        rowView = getView(_intDomainIndex, null, _listViewServer);
+        rowView = getView(mDomainIdx, null, _listViewServer);
         imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
         imgView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
         notifyDataSetChanged();

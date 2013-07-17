@@ -1,14 +1,18 @@
 package org.exoplatform.controller.login;
 
+import android.content.Intent;
 import greendroid.util.Config;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.ui.LoginActivity;
+import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
@@ -17,50 +21,93 @@ import org.exoplatform.utils.image.SocialImageLoader;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Environment;
 import android.util.Log;
 
 /**
- * Setup server list and account setting
+ * Entry point of application
+ * load setting and redirect application to appropriate screen
+ *
+ * if no account is configured, welcome screen shows up
+ * if account is configured and auto-login disabled, login screen shows up
+ * if account is configured and auto-login enabled, home screen shows up
  */
 public class LaunchController {
-  private SharedPreferences        sharedPreference;
 
-  private Context                  context;
+  private Context                  mContext;
 
-  /* TODO: removed?
-  * now we don't use default server list anymore
-  * */
-  private ArrayList<ServerObjInfo> _arrDefaulServerList;
+  private SharedPreferences        mSharedPreference;
 
-  private ArrayList<ServerObjInfo> _arrDeletedServerList;
-
-  private ArrayList<ServerObjInfo> _arrServerList;
+  private AccountSetting           mSetting;
 
   private static final String TAG = "eXoLaunchController";
 
-  public LaunchController(Context c, SharedPreferences prefs) {
-    sharedPreference = prefs;
-    context = c;
-    getLaunchInfo();
-    //getServerInfo();
+  public LaunchController(Context context, AccountSetting setting) {
+    mContext = context;
+    mSharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
+    mSetting = (setting!=null) ? setting: AccountSetting.getInstance();
 
-    getServerInfo1();
+    initAssets();
+    setAppVersion();
+    setLocalize();
+    initSocialImageLoader();
+    retrieveConfigOfServerListAndRedirect();
+  }
 
-    /*
-     * Initialize SocialImageLoader when application start up and clear all data
-     * cache.
-     */
-    if (SocialDetailHelper.getInstance().socialImageLoader == null) {
-      SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(context);
-      SocialDetailHelper.getInstance().socialImageLoader.clearCache();
+  /**
+   * Init assets utils
+   */
+  private void initAssets() {
+    AssetUtils.setContext(mContext);
+  }
+
+  /**
+   * Retrieve server list from config file and set it up for server setting helper
+   *
+   */
+  private void retrieveConfigOfServerListAndRedirect() {
+    long start = new Date().getTime();
+    ArrayList<ServerObjInfo> _serverList =
+        ServerConfigurationUtils.getServerListFromFile(mContext, ExoConstants.EXO_SERVER_SETTING_FILE);
+    ServerSettingHelper.getInstance()
+        .setServerInfoList( (_serverList == null) ? new ArrayList<ServerObjInfo>(): _serverList);
+
+    int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
+    mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
+    mSetting.setCurrentServer((selectedServerIdx == -1) ? null : _serverList.get(selectedServerIdx));
+    Log.i(TAG, "server list time loading: " + (new Date().getTime() - start) );
+
+    if (mSetting.getCurrentServer() == null) return ;
+    if (mSetting.isAutoLoginEnabled())
+      new LoginController(mContext, mSetting.getUsername(), mSetting.getPassword(), false, mSetting);
+    else {
+      // redirect to login screen
+      Intent next = new Intent(mContext, LoginActivity.class);
+      next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
+      mContext.startActivity(next);
     }
   }
 
-  private void getLaunchInfo() {
-    Log.i(TAG, "getLaunchInfo");
-    sharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
-    String strLocalize = sharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE, "");
+  /**
+   * Provide app version for setting
+   */
+  private void setAppVersion() {
+    String appVer = "";
+    String oldVer = ServerConfigurationUtils.getAppVersion(mContext);
+
+    try {
+      appVer = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
+      ServerSettingHelper.getInstance().setApplicationVersion(appVer);
+    } catch (NameNotFoundException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("NameNotFoundException", "Error of getting package information!");
+    }
+  }
+
+  /**
+   * Set localize
+   */
+  private void setLocalize() {
+    String strLocalize = mSharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE, "");
     if (strLocalize.equals("")) {
 
       strLocalize = Locale.getDefault().getLanguage();
@@ -73,113 +120,17 @@ public class LaunchController {
       }
 
     }
-
-    Log.i(TAG, "user: " + sharedPreference.getString(ExoConstants.EXO_PRF_USERNAME, ""));
-    Log.i(TAG, "pass: " + sharedPreference.getString(ExoConstants.EXO_PRF_PASSWORD, ""));
-    Log.i(TAG, "domain index: " + sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
-    Log.i(TAG, "domain name: " + sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
-
-    /*
-     * Set the Locale which affect to our application
-     */
-    SettingUtils.setLocale(context, strLocalize);
-
-    AccountSetting.getInstance()
-                  .setUsername(sharedPreference.getString(ExoConstants.EXO_PRF_USERNAME, ""));
-    AccountSetting.getInstance()
-                  .setPassword(sharedPreference.getString(ExoConstants.EXO_PRF_PASSWORD, ""));
-    AccountSetting.getInstance()
-                  .setDomainIndex(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX,
-                                                             "-1"));
-    AccountSetting.getInstance()
-                  .setDomainName(sharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN, ""));
+    SettingUtils.setLocale(mContext, strLocalize);  // 7ms
   }
 
-  // TODO: check and remove
-  private void getServerInfo() {
-
-    _arrServerList = new ArrayList<ServerObjInfo>();
-
-    String appVer = "";
-    String oldVer = ServerConfigurationUtils.getAppVersion(context);
-    try {
-      appVer = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-      ServerSettingHelper.getInstance().setApplicationVersion(appVer);
-    } catch (NameNotFoundException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("NameNotFoundException", "Get package information is error!");
+ /**
+  * Initialize SocialImageLoader when application start up and clear all data
+  * cache.
+  */
+  private void initSocialImageLoader() {
+    if (SocialDetailHelper.getInstance().socialImageLoader == null) {
+      SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
+      SocialDetailHelper.getInstance().socialImageLoader.clearCache();
     }
-
-    if (!(Environment.getExternalStorageState().equalsIgnoreCase(Environment.MEDIA_MOUNTED))) {
-
-      Log.i(TAG, "get default server list from default configuration");
-      _arrDefaulServerList = ServerConfigurationUtils.getDefaultServerList(context);
-      if (_arrDefaulServerList.size() > 0)
-        _arrServerList.addAll(_arrDefaulServerList);
-    } else {
-
-      Log.i(TAG, "get default server list from xml file DefaultServerList.xml");
-      ArrayList<ServerObjInfo> defaultServerList = ServerConfigurationUtils.getServerListWithFileName("DefaultServerList.xml");
-
-      _arrDeletedServerList = ServerConfigurationUtils.getServerListWithFileName("DeletedDefaultServerList.xml");
-      if (appVer.compareToIgnoreCase(oldVer) > 0) {
-
-        ArrayList<ServerObjInfo> deletedDefaultServers = _arrDeletedServerList;
-
-        ArrayList<ServerObjInfo> tmp = new ArrayList<ServerObjInfo>();
-        if (deletedDefaultServers == null)
-          tmp = defaultServerList;
-        else {
-          for (int i = 0; i < defaultServerList.size(); i++) {
-            ServerObjInfo newServerObj = defaultServerList.get(i);
-            boolean isDeleted = false;
-            for (int j = 0; j < deletedDefaultServers.size(); j++) {
-              ServerObjInfo deletedServerObj = deletedDefaultServers.get(i);
-              if (newServerObj._strServerName.equalsIgnoreCase(deletedServerObj._strServerName)
-                  && newServerObj._strServerUrl.equalsIgnoreCase(deletedServerObj._strServerUrl)) {
-                isDeleted = true;
-                break;
-              }
-            }
-            if (!isDeleted)
-              tmp.add(newServerObj);
-          }
-        }
-
-        ServerConfigurationUtils.createXmlDataWithServerList(tmp, "DefaultServerList.xml", appVer);
-      }
-
-      _arrDefaulServerList = ServerConfigurationUtils.getServerListWithFileName("DefaultServerList.xml");
-
-      if (_arrDefaulServerList.size() > 0)
-        _arrServerList.addAll(_arrDefaulServerList);
-    }
-
-    ServerSettingHelper.getInstance().setServerInfoList(_arrServerList);
   }
-
-
-  /**
-   * Retrieve server list from config file along with application information
-   */
-  private void getServerInfo1() {
-    Log.i(TAG, "getServerInfo1");
-
-    /* get app info */
-    String appVer = "";
-    String oldVer = ServerConfigurationUtils.getAppVersion(context);
-    try {
-      appVer = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-      ServerSettingHelper.getInstance().setApplicationVersion(appVer);
-    } catch (NameNotFoundException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("NameNotFoundException", "Get package information is error!");
-    }
-
-    /* retrieve server list */
-    _arrServerList = ServerConfigurationUtils.getServerListFromFile(context, ExoConstants.EXO_SERVER_SETTING_FILE);
-    ServerSettingHelper.getInstance()
-        .setServerInfoList( (_arrServerList == null) ? new ArrayList<ServerObjInfo>(): _arrServerList);
-  }
-
 }

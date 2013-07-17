@@ -22,6 +22,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.utils.image.FileCache;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Mar
@@ -62,4 +65,38 @@ public class SettingUtils {
     }
   }
 
+  /**
+   * Utility to persist server configuration after adding new server to server list
+   * Only saves domain index to shared pref
+   *
+   * @param context
+   */
+  public static void persistServerSetting(Context context) {
+    ServerSettingHelper settingHelper = ServerSettingHelper.getInstance();
+
+    // Persist the configuration
+    ServerConfigurationUtils.generateXmlFileWithServerList(context,
+        settingHelper.getServerInfoList(), ExoConstants.EXO_SERVER_SETTING_FILE, "");
+
+    modifySharedPerf(context);
+    clearDownloadRepository(context);
+  }
+
+  public static void modifySharedPerf(Context context) {
+    // Modify pref
+    SharedPreferences.Editor editor = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
+        .edit();
+    editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance().getDomainIndex());
+    /*
+     * disable saving social filter when login with difference account and
+     * clear the download repository
+     */
+    editor.putBoolean(ExoConstants.SETTING_SOCIAL_FILTER, false);
+    editor.commit();
+  }
+
+  private static void clearDownloadRepository(Context context) {
+    FileCache filecache = new FileCache(context, ExoConstants.DOCUMENT_FILE_CACHE);
+    filecache.clear();
+  }
 }

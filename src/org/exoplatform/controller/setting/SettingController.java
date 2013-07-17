@@ -1,11 +1,14 @@
 package org.exoplatform.controller.setting;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -16,7 +19,6 @@ import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.URLAnalyzer;
-import org.exoplatform.widget.ServerEditionDialog;
 import org.exoplatform.widget.ServerItemLayout;
 
 import android.content.Context;
@@ -30,35 +32,83 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
+/**
+ *
+ *
+ * Requires setting
+ */
 public class SettingController {
   private Context                  mContext;
 
-  private SharedPreferences        prefs;
+  private Activity                 mActivity;
 
-  private ArrayList<ServerObjInfo> serverInfoList;
-
-  private LinearLayout             listServerWrap;
-
-  private int                      selectedServerIndex;
+  private SharedPreferences        mSharedPreferences;
 
   private String                   serverIsEmpty;
 
-  private String                   serverNameIsExisted;
-
-  private String                   serverUrlIsExisted;
-
   private String                   serverNameURLInvalid;
+
+  private String                   serverURLAndUserExists;
+
+  private AccountSetting           mSetting;
+
+  private static LayoutParams      sListServerLayoutParams;
+
+  private static ArrayList<ServerObjInfo> sServerList;
+
+  private static LinearLayout      sListServerLayout;
 
   private static  SettingController _instance;
 
+  public  boolean                   mIsSocialFilterEnabled;
+
+  public  boolean                   mIsShowHidden;
+
   private static final String TAG = "eXoSettingController";
 
-  public SettingController(Context context, LinearLayout listServerWrap) {
-    mContext = context;
-    prefs = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
-    this.listServerWrap = listServerWrap;
-    init();
+  public SettingController(Activity context, ViewGroup parent, AccountSetting setting) {
+    mContext  = context;
+    mActivity = context;
+    mSetting  = (setting==null)? AccountSetting.getInstance(): setting;
+    mSharedPreferences  = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
+
+    sListServerLayoutParams = (sListServerLayoutParams == null) ?
+        new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT) : sListServerLayoutParams;
+    sListServerLayoutParams.setMargins(0, 0, 0, -1);
+
+    changeLanguage();
+
+    if (isTwoListEqual(sServerList, ServerSettingHelper.getInstance().getServerInfoList())) {
+      /* re-use old layout */
+      ViewGroup oldParent = (ViewGroup) sListServerLayout.getParent();
+      oldParent.removeView(sListServerLayout);
+      return ;
+    }
+
+    sServerList      = ServerSettingHelper.getInstance().getServerInfoList();
     _instance = this;
+    setServerList(parent);
+  }
+
+  public LinearLayout getServerListLayout() {
+    return sListServerLayout;
+  }
+
+  /**
+   * Used to quick check if 2 server list are equal
+   *
+   * @param list1
+   * @param list2
+   * @return
+   */
+  public static boolean isTwoListEqual(ArrayList<ServerObjInfo> list1, ArrayList<ServerObjInfo> list2) {
+    if ((list1 == null) || (list2 == null)) return false;
+    if (list1.size() != list2.size()) return false;
+
+    for (int i = 0; i < list1.size(); i++) {
+      if ( !list1.get(i).equals(list2.get(i)) ) return false;
+    }
+    return true;
   }
 
   public static SettingController getInstance() {
@@ -70,11 +120,10 @@ public class SettingController {
   }
 
   public void initLocation(ImageView imgViewE, ImageView imgViewF) {
-    String locallize = prefs.getString(ExoConstants.EXO_PRF_LOCALIZE,
+    String localize = mSharedPreferences.getString(ExoConstants.EXO_PRF_LOCALIZE,
                                        ExoConstants.ENGLISH_LOCALIZATION);
-    ;
-    if (locallize != null) {
-      if (locallize.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) {
+    if (localize != null) {
+      if (localize.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) {
         setFrenchLocation(imgViewE, imgViewF);
       } else {
         setEnglishLocation(imgViewE, imgViewF);
@@ -84,21 +133,12 @@ public class SettingController {
     }
   }
 
-  public void initSocialFilter(ImageView socialChecked) {
-    boolean isSocialFilter = prefs.getBoolean(AccountSetting.getInstance().socialKey, false);
-    if (isSocialFilter) {
-      socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-    } else
-      socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
-
-  }
-
   /**
    * Retrieve login setting from preferences
    */
   public void initLoginSetting(ImageView rememberMeImg, ImageView autoLoginImg) {
-    boolean isRememberMeEnabled = prefs.getBoolean(ExoConstants.SETTING_REMEMBER_ME, false);
-    boolean isAutoLoginEnabled  = prefs.getBoolean(ExoConstants.SETTING_AUTOLOGIN, false);
+    boolean isRememberMeEnabled = mSetting.isRememberMeEnabled();
+    boolean isAutoLoginEnabled  = mSetting.isAutoLoginEnabled();
     Log.i(TAG, "init login setting - remember me: " + isRememberMeEnabled + " - auto login: " + isAutoLoginEnabled);
 
     final ImageView _rememberMeImg = rememberMeImg;
@@ -116,18 +156,20 @@ public class SettingController {
     _rememberMeImg.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        boolean isRememberMeEnabled = !prefs.getBoolean(ExoConstants.SETTING_REMEMBER_ME, false);
+        boolean isRememberMeEnabled = !mSetting.isRememberMeEnabled();
         Log.i(TAG, "click remember me: " + isRememberMeEnabled);
         if (isRememberMeEnabled) {
           _autoLoginImg.setEnabled(true);
           _autoLoginImg.setOnClickListener(onClickAutoLogin());
         }
-        else _autoLoginImg.setEnabled(false);
+        else {
+          _autoLoginImg.setEnabled(false);
+          toggleCheckBoxImage(_autoLoginImg, false);
+          mSetting.getCurrentServer().isAutoLoginEnabled = false;
+        }
 
         toggleCheckBoxImage(_rememberMeImg, isRememberMeEnabled);
-        Editor editor = prefs.edit();
-        editor.putBoolean(ExoConstants.SETTING_REMEMBER_ME, isRememberMeEnabled);
-        editor.commit();
+        mSetting.getCurrentServer().isRememberEnabled = isRememberMeEnabled;
       }
     });
   }
@@ -137,13 +179,11 @@ public class SettingController {
 
       @Override
       public void onClick(View v) {
-        boolean isAutoLoginEnabled = !prefs.getBoolean(ExoConstants.SETTING_AUTOLOGIN, false);
+        boolean isAutoLoginEnabled = !mSetting.isAutoLoginEnabled();
         Log.i(TAG, "click autologin: " + isAutoLoginEnabled);
         toggleCheckBoxImage((ImageView) v, isAutoLoginEnabled);
 
-        Editor editor = prefs.edit();
-        editor.putBoolean(ExoConstants.SETTING_AUTOLOGIN, isAutoLoginEnabled);
-        editor.commit();
+        mSetting.getCurrentServer().isAutoLoginEnabled = isAutoLoginEnabled;
       }
     };
   }
@@ -154,44 +194,27 @@ public class SettingController {
   private void toggleCheckBoxImage(ImageView imageView, boolean isEnabled) {
     if (isEnabled) imageView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
     else imageView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
+  }
 
+  public void initSocialFilter(ImageView socialChecked) {
+    mIsSocialFilterEnabled = mSharedPreferences.getBoolean(mSetting.socialKey, false);
+    toggleCheckBoxImage(socialChecked, mIsSocialFilterEnabled);
   }
 
   public void setSocialFilter(ImageView socialChecked) {
-    boolean isSocialFilter = prefs.getBoolean(AccountSetting.getInstance().socialKey, false);
-    Editor editor = prefs.edit();
-    if (isSocialFilter) {
-      socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
-      editor.putInt(AccountSetting.getInstance().socialKeyIndex, 0);
-    } else {
-      socialChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-    }
-
-    editor.putBoolean(AccountSetting.getInstance().socialKey, !isSocialFilter);
-    editor.commit();
-
+    mIsSocialFilterEnabled = !mIsSocialFilterEnabled;
+    toggleCheckBoxImage(socialChecked, mIsSocialFilterEnabled);
   }
 
-  public void setDocumentShowPrivateDrive(ImageView documentChecked) {
-    boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
-    Editor editor = prefs.edit();
-    if (isShowHidden) {
-      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
-    } else {
-      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-    }
 
-    editor.putBoolean(AccountSetting.getInstance().documentKey, !isShowHidden);
-    editor.commit();
+  public void setDocumentShowPrivateDrive(ImageView documentChecked) {
+    mIsShowHidden = !mIsShowHidden;
+    toggleCheckBoxImage(documentChecked, mIsShowHidden);
   }
 
   public void initDocumentHiddenFile(ImageView documentChecked) {
-    boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
-    if (isShowHidden) {
-      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-    } else
-      documentChecked.setBackgroundResource(R.drawable.authenticate_checkmark_off);
-
+    mIsShowHidden = mSharedPreferences.getBoolean(AccountSetting.getInstance().documentKey, true);
+    toggleCheckBoxImage(documentChecked, mIsShowHidden);
   }
 
   public boolean updateLocallize(String localize) {
@@ -211,70 +234,85 @@ public class SettingController {
 
   /**
    * Populate server list
+   * Run only in case of updating new list of server
    */
-  public void setServerList() {
-    List<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
-    listServerWrap.removeAllViews();
-    LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-    params.setMargins(0, 0, 0, -1);
-    for (int i = 0; i < serverList.size(); i++) {
-      final ServerObjInfo serverObj = serverList.get(i);
-      ServerItemLayout serverItem = new ServerItemLayout(mContext);
-      serverItem.serverName.setText(serverObj._strServerName);
-      serverItem.serverUrl.setText(serverObj._strServerUrl);
-      if (Integer.valueOf(AccountSetting.getInstance().getDomainIndex()) == i)
-        serverItem.serverImageView.setVisibility(View.VISIBLE);
-      else
-        serverItem.serverImageView.setVisibility(View.INVISIBLE);
-      final int pos = i;
+  private void setServerList(ViewGroup parent) {
+    Log.i(TAG, "set server list");
+    long start = new Date().getTime();
+
+    if (sListServerLayout == null) {
+      sListServerLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.setting_server_list, parent ,false);
+    }
+    else sListServerLayout.removeAllViews();
+
+    ServerItemLayout serverItemLayout;
+    for (int i = 0; i < sServerList.size(); i++) {
+      serverItemLayout = initServerItem(sServerList.get(i), i);
+      sListServerLayout.addView(serverItemLayout, i, sListServerLayoutParams);
+    }
+    Log.i(TAG, "duration of setting server: " + (new Date().getTime() - start));  // 6ms for 1, 6ms for 2, 16ms for 3, 12ms for 4
+  }
+
+  /**
+   * Generate layout for a server item
+   *
+   * @param _serverObj
+   * @param serverIdx
+   * @return
+   */
+  private ServerItemLayout initServerItem(ServerObjInfo _serverObj, int serverIdx) {
+    final ServerObjInfo serverObj = _serverObj;
+    ServerItemLayout serverItem = new ServerItemLayout(mContext);
+    serverItem.serverName.setText(serverObj.serverName);
+    serverItem.serverUrl.setText(serverObj.serverUrl);
+
+    if (Integer.valueOf(mSetting.getDomainIndex()) == serverIdx)
+      serverItem.serverImageView.setVisibility(View.VISIBLE);
+    else
+      serverItem.serverImageView.setVisibility(View.INVISIBLE);
+    final int pos = serverIdx;
 
       /* onclick server item */
-      serverItem.layout.setOnClickListener(new OnClickListener() {
+    serverItem.layout.setOnClickListener(new OnClickListener() {
 
-        @Override
-        public void onClick(View v) {
-          int domainIndex = Integer.valueOf(AccountSetting.getInstance().getDomainIndex());
-          if (domainIndex == pos) {
-            String strCannotEdit = mContext.getString(R.string.CannotEditServer);
-            Toast.makeText(mContext, strCannotEdit, Toast.LENGTH_SHORT).show();
-            return;
-          }
-
-          Intent next  = new Intent(mContext, ServerEditionActivity.class);
-          Bundle bundle = new Bundle();
-          next.putExtra(ExoConstants.SETTING_ADDING_SERVER, false);
-          bundle.putParcelable(ExoConstants.SETTING_SERVER_OBJ, serverObj);
-          next.putExtra(ExoConstants.SETTING_SERVER_INDEX, pos);
-          next.putExtras(bundle);
-          next.putExtra(ExoConstants.SETTING_USERNAME, serverObj.username);
-          next.putExtra(ExoConstants.SETTING_PASSWORD, serverObj.password);
-          mContext.startActivity(next);
+      @Override
+      public void onClick(View v) {
+        int domainIndex = Integer.valueOf(mSetting.getDomainIndex());
+        if (domainIndex == pos) {
+          String strCannotEdit = mContext.getString(R.string.CannotEditServer);
+          Toast.makeText(mContext, strCannotEdit, Toast.LENGTH_SHORT).show();
+          return;
         }
-      });
 
-      listServerWrap.addView(serverItem, params);
-    }
+        Intent next  = new Intent(mContext, ServerEditionActivity.class);
+        next.putExtra(ExoConstants.SETTING_ADDING_SERVER, false);
+        next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
+        mContext.startActivity(next);
+      }
+    });
 
+    return serverItem;
   }
 
-  private void init() {
-    serverInfoList      = ServerSettingHelper.getInstance().getServerInfoList();
-    selectedServerIndex = Integer.parseInt(AccountSetting.getInstance().getDomainIndex());
-    changeLanguage();
-  }
 
+  /**
+   * Check whether server information is valid
+   *
+   * @param myServerObj
+   * @return
+   */
   private boolean isServerValid(ServerObjInfo myServerObj) {
-    if (myServerObj._strServerName.length() == 0 || myServerObj._strServerUrl.length() == 0) {
-
+    if (myServerObj.serverName.length() == 0 || myServerObj.serverUrl.length() == 0) {
       Toast.makeText(mContext, serverIsEmpty, Toast.LENGTH_SHORT).show();
       return false;
     }
-    URLAnalyzer urlAnanyzer = new URLAnalyzer();
-    myServerObj._strServerUrl = urlAnanyzer.parserURL(myServerObj._strServerUrl);
 
-    if (ExoDocumentUtils.isContainSpecialChar(myServerObj._strServerName,
+    URLAnalyzer urlAnanyzer = new URLAnalyzer();
+    myServerObj.serverUrl = urlAnanyzer.parserURL(myServerObj.serverUrl);
+
+    if (ExoDocumentUtils.isContainSpecialChar(myServerObj.serverName,
                                               ExoConstants.SPECIAL_CHAR_NAME_SET)
-        || ExoDocumentUtils.isContainSpecialChar(myServerObj._strServerUrl,
+        || ExoDocumentUtils.isContainSpecialChar(myServerObj.serverUrl,
                                                  ExoConstants.SPECIAL_CHAR_URL_SET)) {
 
       Toast.makeText(mContext, serverNameURLInvalid, Toast.LENGTH_SHORT).show();
@@ -284,110 +322,87 @@ public class SettingController {
     return true;
   }
 
+  /**
+   * Add server to server list
+   *
+   * @param myServerObj
+   * @return
+   */
   public boolean onAdd(ServerObjInfo myServerObj) {
-    if (isServerValid(myServerObj)) {
-      int serverSize = serverInfoList.size();
-      for (int i = 0; i < serverSize; i++) {
-        ServerObjInfo tmp = serverInfoList.get(i);
+    if (!isServerValid(myServerObj)) return false;
 
-        // TODO Does not make sense to compare server name, only server url matters
-        //if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
-        //  Toast.makeText(mContext, serverNameIsExisted, Toast.LENGTH_SHORT).show();
-          // break;
-        //  return false;
-        //}
-
-        if (myServerObj._strServerUrl.equalsIgnoreCase(tmp._strServerUrl)) {
-          Toast.makeText(mContext, serverUrlIsExisted, Toast.LENGTH_SHORT).show();
-          // break;
-          return false;
-        }
-
-      }
-
-      //myServerObj._bSystemServer = false;
-      serverInfoList.add(myServerObj);
-
-      onSave();
-      return true;
-
+    if (sServerList.contains(myServerObj)) {
+      Toast.makeText(mContext, serverURLAndUserExists, Toast.LENGTH_SHORT).show();
+      return false;
     }
-    return false;
+
+    sServerList.add(myServerObj);
+    sListServerLayout.addView(initServerItem(myServerObj, sServerList.size() -1),
+        sListServerLayoutParams );
+    onSave();
+    return true;
   }
 
+  /**
+   * Update existing server
+   *
+   * @param myServerObj
+   * @param serverIndex
+   * @return
+   */
   public boolean onUpdate(ServerObjInfo myServerObj, int serverIndex) {
-    if (isServerValid(myServerObj)) {
+    if (!isServerValid(myServerObj)) return false;
 
-      /**  no need to compare anything
-      for (int i = 0; i < serverInfoList.size(); i++) {
-        ServerObjInfo tmp = serverInfoList.get(i);
-
-        if (i == serverIndex) {
-          continue;
-        }
-
-        //if (myServerObj._strServerName.equalsIgnoreCase(tmp._strServerName)) {
-        //  Toast.makeText(mContext, serverNameIsExisted, Toast.LENGTH_SHORT).show();
-        //  return false;
-        //}
-
-        if (myServerObj._strServerUrl.equalsIgnoreCase(tmp._strServerUrl)) {
-          Toast.makeText(mContext, serverUrlIsExisted, Toast.LENGTH_SHORT).show();
-          return false;
-        }
-      }
-       **/
-
-      serverInfoList.remove(serverIndex);
-      serverInfoList.add(serverIndex, myServerObj);
-      onSave();
-      return true;
+    /* check whether server is duplicated with other server */
+    int serverIdx = sServerList.indexOf(myServerObj);
+    if ((serverIdx != serverIndex) && (serverIdx != -1)) {
+      Toast.makeText(mContext, serverURLAndUserExists, Toast.LENGTH_SHORT).show();
+      return false;
     }
-    return false;
+
+    sServerList.remove(serverIndex);
+    sServerList.add(serverIndex, myServerObj);
+    sListServerLayout.removeViewAt(serverIndex);
+    sListServerLayout.addView( initServerItem(myServerObj, serverIdx), serverIndex,
+        sListServerLayoutParams);
+    onSave();
+    return true;
   }
 
+  /**
+   * Delete existing server
+   *
+   * @param serverIndex
+   */
   public void onDelete(int serverIndex) {
-    /* delete currently-used server */
-    if (serverIndex == selectedServerIndex) {
-      /* clear setting */
-      AccountSetting.getInstance().setDomainIndex(String.valueOf(-1));
-      AccountSetting.getInstance().setDomainName("");
-      AccountSetting.getInstance().setUsername("");
-      AccountSetting.getInstance().setPassword("");
-    } else if (serverIndex < selectedServerIndex) {
-      int index = selectedServerIndex - 1;
-      AccountSetting.getInstance().setDomainIndex(String.valueOf(index));
-    }
+    int selectedServerIndex = Integer.parseInt(mSetting.getDomainIndex());
+    if (serverIndex < selectedServerIndex)
+      mSetting.setDomainIndex(String.valueOf(selectedServerIndex - 1));
 
-    serverInfoList.remove(serverIndex);
+    sServerList.remove(serverIndex);
+    sListServerLayout.removeViewAt(serverIndex);
     onSave();
   }
 
   /**
-   * make change to shared perf
-   * and generate xml file
+   * Make change to shared perf and generate xml file
    */
   private void onSave() {
+    Log.i(TAG, "onSave");
+    long start = new Date().getTime();
     ServerConfigurationUtils.generateXmlFileWithServerList(mContext,
-        serverInfoList, ExoConstants.EXO_SERVER_SETTING_FILE, "");
+        sServerList, ExoConstants.EXO_SERVER_SETTING_FILE, "");
+    Log.i(TAG, "time generate xml file: " + (new Date().getTime() - start));
+    // 23ms for 1 server, 16ms for 2 servers, 25ms for 3 servers. 45ms for 4
 
-    ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
-    SharedPreferences.Editor editor = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0)
-                                              .edit();
-    editor.putString(ExoConstants.EXO_PRF_DOMAIN, AccountSetting.getInstance().getDomainName());
-    editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, AccountSetting.getInstance()
-                                                                      .getDomainIndex());
-    editor.putString(ExoConstants.EXO_PRF_USERNAME, AccountSetting.getInstance().getUsername());
-    editor.putString(ExoConstants.EXO_PRF_PASSWORD, AccountSetting.getInstance().getPassword());
-    editor.commit();
+    ServerSettingHelper.getInstance().setServerInfoList(sServerList);
   }
 
   private void changeLanguage() {
     Resources resource = mContext.getResources();
     serverIsEmpty = resource.getString(R.string.WarningServerNameIsEmpty);
-    serverNameIsExisted = resource.getString(R.string.WarningServerNameIsExist);
-    serverUrlIsExisted = resource.getString(R.string.WarningServerUrlIsExist);
     serverNameURLInvalid = resource.getString(R.string.SpecialCharacters);
+    serverURLAndUserExists = resource.getString(R.string.WarningServerUrlAndUserAlreadyExist);
   }
 
 }

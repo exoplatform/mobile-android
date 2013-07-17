@@ -49,10 +49,10 @@ public class ModifyServerAdapter extends BaseAdapter {
     ServerObjInfo serverObj = serverList.get(position);
 
     TextView serverName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
-    serverName.setText(serverObj._strServerName);
+    serverName.setText(serverObj.serverName);
 
     TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
-    txtvUrl.setText(serverObj._strServerUrl);
+    txtvUrl.setText(serverObj.serverUrl);
 
     ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
     if (Integer.valueOf(AccountSetting.getInstance().getDomainIndex()) == position)

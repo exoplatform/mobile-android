@@ -86,6 +86,7 @@
   <string name="WarningServerNameIsEmpty">Server name or URL can not be empty.</string>
   <string name="WarningServerNameIsExist">This server name already exists in your list</string>
   <string name="WarningServerUrlIsExist">This server URL already exists in your list</string>
+  <string name="WarningServerUrlAndUserAlreadyExist">This combination of server URL and username already exist in your list</string>
   <string name="DetailsNotAvaiable">Details of the news are not available</string>
   <string name="ErrorOnComment">You can not comment this activity.</string>
   <string name="CannotLoadMoreActivities">Cannot load older activities. The list is being refreshed.</string>
@@ -169,6 +170,10 @@
   <string name="SliderDesc1">Description 1</string>
   <string name="SliderDesc2">Description 2</string>
   <string name="SliderDesc3">Description 3</string>
+  <string name="YourSocialIntranet">Your social intranet</string>
+  <string name="Anywhere">anywhere</string>
+  <string name="Anytime">anytime</string>
+  <string name="SwipeToSee">Swipe to see what you can do!</string>
 
   <!-- Sign up -->
   <string name="SocialIntranet">The Free Social Intranet for Your Company</string>
