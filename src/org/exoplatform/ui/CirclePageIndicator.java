@@ -48,8 +48,10 @@ public class CirclePageIndicator extends View implements PageIndicator {
   private static final int INVALID_POINTER = -1;
 
   private float mRadius;
+  /** current circle paint */
   private final Paint mPaintPageFill = new Paint(ANTI_ALIAS_FLAG);
   private final Paint mPaintStroke = new Paint(ANTI_ALIAS_FLAG);
+  /** other circle paint */
   private final Paint mPaintFill = new Paint(ANTI_ALIAS_FLAG);
   private ViewPager mViewPager;
   private ViewPager.OnPageChangeListener mListener;

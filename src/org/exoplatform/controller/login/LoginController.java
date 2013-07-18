@@ -82,6 +82,7 @@ public class LoginController {
     mNewUserName = user;
     mNewPassword = pass;
     mSetting = (setting!=null) ? setting: AccountSetting.getInstance();
+    mSetting.setInstance(mSetting);
     mDomain  = mSetting.getDomainName();
     mIsShowingWaitingDialog = isShowingWaitingDialog;
 

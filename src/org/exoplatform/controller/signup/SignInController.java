@@ -171,7 +171,7 @@ public class SignInController {
 
           mUsername   = userAndTenant[0];
           mTenant     = userAndTenant[1];
-          mDomain     = "http://" + mTenant + ".cloud-workspaces.com";
+          mDomain     = "http://" + mTenant + ".exoplatform.net";
 
           if (!ExoConnectionUtils.requestAccountExistsForUser(mUsername, mTenant))
             return ExoConnectionUtils.SIGNIN_NO_ACCOUNT;

@@ -100,6 +100,23 @@
         <item name="android:background">@null</item>
     </style>
 
+    <!-- Welcome: slogan text -->
+    <style name="WelcomeSloganTxtStyle">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">#7F000000</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">1.5</item>
+    </style>
+
+    <style name="ShadowTxtStyle">
+        <item name="android:shadowColor">#7F000000</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">1.5</item>
+    </style>
+
     <!-- Signup:  edit text with background drawable -->
     <style name="SignUpEditTxtStyle">
         <item name="android:layout_width">match_parent</item>

@@ -11,12 +11,12 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="30dp"/>
 
     <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="640dp"
             android:layout_below="@id/circle_page_indicator"/>
 
     <ImageView
@@ -47,7 +47,7 @@
             android:layout_below="@id/welcome_separator_img"
             android:layout_toLeftOf="@id/welcome_txt_or"
             android:layout_marginLeft="20dp"
-            android:textSize="20dp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:text="@string/SignUp"
             android:textColor="@android:color/white"
@@ -65,7 +65,7 @@
             android:layout_toRightOf="@id/welcome_txt_or"
             android:layout_marginRight="20dp"
             android:textStyle="bold"
-            android:textSize="20dp"
+            android:textSize="24sp"
             android:text="@string/LogIn"
             android:textColor="@android:color/white"
             android:gravity="center"
@@ -76,13 +76,13 @@
     <TextView
             android:id="@+id/welcome_txt_skipStep"
             style="@style/ShadowTxtStyle"
-            android:layout_width="150dp"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/welcome_btn_login"
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="@string/SkipStep"
-            android:textSize="12sp"
+            android:textSize="20sp"
             android:clickable="true"
             android:onClick="redirectToLogIn"
             android:background="@drawable/rect_rounded_corner"/>

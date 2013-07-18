@@ -134,6 +134,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     mSettingType = getIntent().getIntExtra(ExoConstants.SETTING_TYPE, GLOBAL_TYPE);
     mSetting     = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
     if( mSetting==null) mSetting = AccountSetting.getInstance();
+    mSetting.setInstance(mSetting);
 
     settingActivity = this;
 
@@ -143,6 +144,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
       ServerSettingHelper.getInstance().setInstance(helper);
       mSetting = savedInstanceState.getParcelable(ExoConstants.ACCOUNT_SETTING);
       if( mSetting==null) mSetting = AccountSetting.getInstance();
+      mSetting.setInstance(mSetting);
     }
 
     init();

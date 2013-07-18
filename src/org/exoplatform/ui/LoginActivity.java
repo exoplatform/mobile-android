@@ -95,6 +95,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     else {
       mSetting = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
       if( mSetting==null) mSetting = AccountSetting.getInstance();
+      mSetting.setInstance(mSetting);
     }
 
     init();

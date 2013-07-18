@@ -1,12 +1,9 @@
 package org.exoplatform.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -14,21 +11,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.Html;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.ExoConstants;
-
-import java.util.Date;
 
 
 /**
@@ -42,80 +32,68 @@ public class WelcomeActivity extends FragmentActivity {
 
   private static final String TAG = "eXoWelcomeActivity";
 
-  private static final int NUM_PAGES = 3;
+  private ViewPager       mPager;
 
-  private ViewPager mPager;
-
-  private PagerAdapter mPagerAdapter;
+  private PagerAdapter    mPagerAdapter;
 
   private AccountSetting  mSetting;
 
-  public void onCreate(Bundle savedInstanceState) {
+  private boolean         mIsTablet;
 
-    long start = new Date().getTime();
+  private int             mCurrentPage = 0;
+
+  public void onCreate(Bundle savedInstanceState) {
 
     mSetting = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
     if( mSetting==null) mSetting = AccountSetting.getInstance();
+    mSetting.setInstance(mSetting);
 
-    new LaunchController(this, mSetting);              // 29ms  - 36ms
-    Log.i(TAG, "launch controller runs - duration: " + (new Date().getTime() - start));
-
+    new LaunchController(this, mSetting);
     super.onCreate(savedInstanceState);
-
-    setContentView(R.layout.welcome);
-
     setUpScreenOrientationSetting();
 
+    init();
+  }
+
+
+  private void init() {
+
+    setContentView(R.layout.welcome);
+    if (mIsTablet) detectScreenOrientation();
+
     ViewGroup vg = (ViewGroup) findViewById(R.id.welcome_layout);
-    AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BOLD), vg);
+    AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BLACK), vg);
 
     // Instantiate a ViewPager and a PagerAdapter.
     mPager = (ViewPager) findViewById(R.id.pager);
     mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     mPager.setAdapter(mPagerAdapter);
+    Log.i(TAG, "current page: " + mCurrentPage);
+    mPager.setCurrentItem(mCurrentPage);
 
     CirclePageIndicator circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circle_page_indicator);
     circlePageIndicator.setViewPager(mPager);
     circlePageIndicator.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-
       @Override
       public void onPageSelected(int position) {
-        Log.i(TAG, "onPageSelected - position: " + position);
+        mCurrentPage = (position!=0) ? position: 0;
       }
     });
-
-    Button btn_signUp = (Button) findViewById(R.id.welcome_btn_signup);
-    btn_signUp.setText(Html.fromHtml("<big>" + getResources().getString(R.string.SignUp) + "</big><br/>" +
-        "<small>" + getResources().getString(R.string.CreateAnAccount) + "</small>"));
-    //AssetUtils.setTypeFace(mRobotoTF, btn_signUp);
-
-    Button btn_logIn = (Button) findViewById(R.id.welcome_btn_login);
-    btn_logIn.setText(Html.fromHtml("<big>" + getResources().getString(R.string.LogIn) + "</big><br/>" +
-        "<small>" + getResources().getString(R.string.AlreadyAnUser) + "</small>"));
-
-
-    long startLoadingImg = new Date().getTime();
-    //Log.i(TAG, "start time loading image: " + start);
+    circlePageIndicator.setCurrentItem(mCurrentPage);
 
     // pre-loading image for screen slider
-    for (int k = 0; k < ScreenSlidePageFragment.SLIDER_IMGS.length; k++) {
+    for (int k = 0; k < ScreenSlidePageFragment.sSliderImgs.length; k++) {
       final int _k = k;
       new Thread(new Runnable() {
 
         @Override
         public void run() {
-          long start1 = new Date().getTime();
-          //Log.i(TAG, "start for " + _k + ": " + start1);
           ScreenSlidePageFragment.SLIDER_BITMAPS[_k]
-              = BitmapFactory.decodeResource(getResources(), ScreenSlidePageFragment.SLIDER_IMGS[_k]);
-          long end1 = new Date().getTime();
-          Log.i(TAG, "diff for loading image " + _k + ": " + (end1 - start1));   // 1: 160ms, 2: 195ms, 3: 211ms
+              = BitmapFactory.decodeResource(getResources(), ScreenSlidePageFragment.sSliderImgs[_k]);
         }
       }).start();
     }
-
-    Log.i(TAG, "overall loading time: " + (new Date().getTime() - start) + "/r/n loading image time: " + (new Date().getTime() - startLoadingImg));
-    // 181ms - 11ms, 168ms - 14ms
+    //Overall loading time: 181ms - 11ms, 168ms - 14ms
   }
 
 
@@ -125,20 +103,48 @@ public class WelcomeActivity extends FragmentActivity {
         & Configuration.SCREENLAYOUT_SIZE_MASK;
 
     switch (size) {
-      case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-        Log.i(TAG, "normal");       // 320x470 dp units
+      case Configuration.SCREENLAYOUT_SIZE_NORMAL:  // 320x470 dp units
+        Log.i(TAG, "normal");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        mIsTablet = false;
         break;
-      case Configuration.SCREENLAYOUT_SIZE_SMALL:
-        Log.i(TAG, "small");        // 320x426 dp units
+      case Configuration.SCREENLAYOUT_SIZE_SMALL:   // 320x426 dp units
+        Log.i(TAG, "small");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        mIsTablet = false;
+        break;
+      case Configuration.SCREENLAYOUT_SIZE_LARGE:   // 480x640 dp units
+        Log.i(TAG, "large");
+        mIsTablet = true;
+        break;
+      case Configuration.SCREENLAYOUT_SIZE_XLARGE:  // 720x960 dp units
+        Log.i(TAG, "xlarge");
+        mIsTablet = true;
         break;
       default:
         break;
     }
   }
 
-  // Called when user clicks on Signup btn
+
+  private void detectScreenOrientation() {
+    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+      Log.i(TAG, "landscape");
+      ScreenSlidePageFragment.sSliderImgs = ScreenSlidePageFragment.SLIDER_IMGS_LANDSCAPE;
+    }
+    else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+      Log.i(TAG, "portrait");
+      ScreenSlidePageFragment.sSliderImgs = ScreenSlidePageFragment.SLIDER_IMGS_PORTRAIT;
+    }
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+
+    init();
+  }
+
   public void redirectToSignUp(View view) {
     Log.i(TAG, "redirectToSignUp");
 
@@ -167,8 +173,7 @@ public class WelcomeActivity extends FragmentActivity {
   }
 
   /**
-   * A simple pager adapter that represents 4 {@link ScreenSlidePageFragment} objects, in
-   * sequence.
+   * A simple pager adapter
    */
   private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
     public ScreenSlidePagerAdapter(FragmentManager fm) {
@@ -183,7 +188,8 @@ public class WelcomeActivity extends FragmentActivity {
 
     @Override
     public int getCount() {
-      return NUM_PAGES;
+      return ScreenSlidePageFragment.NUM_PAGES;
     }
   }
+
 }

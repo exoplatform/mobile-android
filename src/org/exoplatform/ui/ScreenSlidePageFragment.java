@@ -16,17 +16,38 @@ import java.util.Date;
 
 public class ScreenSlidePageFragment extends Fragment {
 
-  private static final String TAG  = "eXoScreenSlidePageFragment";
+  public  static final int      NUM_PAGES      = 5;
 
-  public static int[] SLIDER_IMGS  = {R.drawable.slider_activity_stream,
-                                      R.drawable.slider_documents,
-                                      R.drawable.slider_gadgets};
+  private static final String   TAG            = "eXoScreenSlidePageFragment";
 
-  public static Bitmap[] SLIDER_BITMAPS = new Bitmap[3];
+  public  static final int[]    SLIDER_IMGS    = {
+      R.drawable.activity_stream_slide,
+      R.drawable.activity_details_slide,
+      R.drawable.apps_slide,
+      R.drawable.documents_slide  };
 
-  private static int[] SLIDER_DESC = {R.string.SliderDesc1,
-                                      R.string.SliderDesc2,
-                                      R.string.SliderDesc3};
+  public  static final int[]    SLIDER_IMGS_PORTRAIT  = {
+      R.drawable.activity_stream_portrait_slide,
+      R.drawable.activity_details_portrait_slide,
+      R.drawable.apps_portrait_slide,
+      R.drawable.documents_portrait_slide  };
+
+  public  static final int[]    SLIDER_IMGS_LANDSCAPE = {
+      R.drawable.activity_stream_landscape_slide,
+      R.drawable.activity_details_landscape_slide,
+      R.drawable.apps_landscape_slide,
+      R.drawable.documents_landscape_slide  };
+
+  /** default slider image use normal images */
+  public  static       int[]    sSliderImgs    = SLIDER_IMGS;
+
+  public  static final Bitmap[] SLIDER_BITMAPS = new Bitmap[NUM_PAGES - 1];
+
+  private static final int[]    SLIDER_DESC    = {
+      R.string.SliderDesc1,
+      R.string.SliderDesc2,
+      R.string.SliderDesc3,
+      R.string.SliderDesc4   };
 
   /**
    * The argument key for the page number this fragment represents.
@@ -80,11 +101,11 @@ public class ScreenSlidePageFragment extends Fragment {
       //Bitmap img = BitmapFactory.decodeResource(getResources(), SLIDER_IMGS[mPageNumber]);
       //Log.i(TAG, "time  image: " + (new Date().getTime() - middle));
 
-      ((ImageView) mRootView.findViewById(R.id.slider_img)).setImageBitmap(SLIDER_BITMAPS[mPageNumber]);   // need to run this one in background
+      ((ImageView) mRootView.findViewById(R.id.slider_img)).setImageBitmap(SLIDER_BITMAPS[mPageNumber - 1]);
       Log.i(TAG, "time set image: " + (new Date().getTime() - middle));
 
       ((TextView) mRootView.findViewById(R.id.slider_txt_description)).setText(
-          getResources().getText(SLIDER_DESC[mPageNumber]));
+          getResources().getText(SLIDER_DESC[mPageNumber - 1]));
 
       long end = new Date().getTime();
       Log.i(TAG, "end time: " + end);

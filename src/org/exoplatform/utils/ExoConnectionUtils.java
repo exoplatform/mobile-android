@@ -245,7 +245,7 @@ public class ExoConnectionUtils {
       httpClient = initHttpClient();
     }
 
-    HttpPost httpPost = new HttpPost("http://cloud-workspaces.com/rest/cloud-admin/cloudworkspaces/tenant-service/signup");
+    HttpPost httpPost = new HttpPost("http://wks-acc.exoplatform.org/rest/cloud-admin/cloudworkspaces/tenant-service/signup");
     List<NameValuePair> requestParameters = new ArrayList<NameValuePair>(1);
     requestParameters.add(new BasicNameValuePair("user-mail", email));
     httpPost.setEntity(new UrlEncodedFormEntity(requestParameters));
@@ -275,7 +275,7 @@ public class ExoConnectionUtils {
   }
 
   public static HttpResponse requestTenantForEmail(String email) throws IOException {
-    return getRequestResponse("http://cloud-workspaces.com/rest/cloud-admin/cloudworkspaces/tenant-service/usermailinfo/" + email);
+    return getRequestResponse("http://wks-acc.exoplatform.org/rest/cloud-admin/cloudworkspaces/tenant-service/usermailinfo/" + email);
   }
 
   public static String[] checkRequestTenant(HttpResponse response) {
@@ -300,7 +300,7 @@ public class ExoConnectionUtils {
 
   public static boolean requestAccountExistsForUser(String user, String tenant) {
     try {
-      HttpResponse response = getRequestResponse("http://cloud-workspaces.com/rest/cloud-admin/cloudworkspaces/tenant-service/isuserexist/"
+      HttpResponse response = getRequestResponse("http://wks-acc.exoplatform.org/rest/cloud-admin/cloudworkspaces/tenant-service/isuserexist/"
           + tenant + "/" + user);
       if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) return false;
       return convertStreamToString(response.getEntity().getContent())

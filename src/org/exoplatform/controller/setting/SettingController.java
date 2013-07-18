@@ -70,6 +70,7 @@ public class SettingController {
     mContext  = context;
     mActivity = context;
     mSetting  = (setting==null)? AccountSetting.getInstance(): setting;
+    mSetting.setInstance(mSetting);
     mSharedPreferences  = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
 
     sListServerLayoutParams = (sListServerLayoutParams == null) ?
