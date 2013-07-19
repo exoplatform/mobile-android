@@ -71,7 +71,7 @@
             android:gravity="center"
             android:paddingBottom="13dp"
             android:background="@drawable/btn_grey"
-            android:onClick="logUserIn"/>
+            android:onClick="redirectToSignIn"/>
 
     <TextView
             android:id="@+id/welcome_txt_skipStep"
@@ -82,6 +82,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="@string/SkipStep"
+            android:textColor="@color/gray"
             android:textSize="12sp"
             android:clickable="true"
             android:onClick="redirectToLogIn"

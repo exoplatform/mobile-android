@@ -36,9 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Represents screen for authentication<br/>
- *
- * Requires setting
+ * Represents screen for authentication
  */
 public class LoginActivity extends Activity implements OnClickListener {
 
@@ -90,13 +88,9 @@ public class LoginActivity extends Activity implements OnClickListener {
     boolean isLaunchedFromUrl = (getIntent().getData() != null);
     if (isLaunchedFromUrl) {
       setUpUserAndServerFromUrl();
-      new LaunchController(this, mSetting);
+      new LaunchController(this);
     }
-    else {
-      mSetting = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
-      if( mSetting==null) mSetting = AccountSetting.getInstance();
-      mSetting.setInstance(mSetting);
-    }
+    else mSetting = AccountSetting.getInstance();
 
     init();
     Log.i(TAG, "end time login: " + (new Date().getTime() - start) );
@@ -256,7 +250,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     if (selectedItemIndex == 1) {
       Intent next = new Intent(this, SettingActivity.class);
       next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.GLOBAL_TYPE);
-      next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
       startActivity(next);
     }
     return false;

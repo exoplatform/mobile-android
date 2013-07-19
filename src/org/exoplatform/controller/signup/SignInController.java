@@ -81,7 +81,6 @@ public class SignInController {
 
   private static final String TAG = "eXoSignInController";
 
-
   public SignInController(Context context, String email, String password) {
     mContext = context;
     SettingUtils.setDefaultLanguage(mContext);
@@ -95,7 +94,6 @@ public class SignInController {
     onLoad();
   }
 
-  /* signing in on premise installation */
   public SignInController(Context context, String url, String user, String pass) {
     mContext = context;
     SettingUtils.setDefaultLanguage(mContext);
@@ -136,20 +134,6 @@ public class SignInController {
     }
   }
 
-  private boolean isLastAccount(String username) {
-    if (username.equals(AccountSetting.getInstance().getUsername())) {
-      return true;
-    }
-
-    return false;
-  }
-
-  private void clearDownloadRepository() {
-    FileCache filecache = new FileCache(mContext, ExoConstants.DOCUMENT_FILE_CACHE);
-    filecache.clear();
-  }
-
-
   public class SignInTask extends AsyncTask<Void, Void, Integer> {
 
     private boolean      isCompliant;
@@ -169,29 +153,27 @@ public class SignInController {
           String[] userAndTenant    = ExoConnectionUtils.checkRequestTenant(mResponse);
           if (userAndTenant == null) return ExoConnectionUtils.SIGNIN_NO_TENANT_FOR_EMAIL;
 
-          mUsername   = userAndTenant[0];
-          mTenant     = userAndTenant[1];
-          mDomain     = "http://" + mTenant + ".exoplatform.net";
+          mUsername = userAndTenant[0];
+          mTenant   = userAndTenant[1];
+          mDomain   = ExoConnectionUtils.HTTP + mTenant + "."
+              + ExoConnectionUtils.EXO_CLOUD_WS_DOMAIN;
 
           if (!ExoConnectionUtils.requestAccountExistsForUser(mUsername, mTenant))
             return ExoConnectionUtils.SIGNIN_NO_ACCOUNT;
         }
 
+        mDomain = !mDomain.startsWith(ExoConnectionUtils.HTTP)
+            ? ExoConnectionUtils.HTTP + mDomain: mDomain;
         String versionUrl = mDomain + ExoConstants.DOMAIN_PLATFORM_VERSION;
         if (!URLAnalyzer.isValidUrl(versionUrl)) return ExoConnectionUtils.LOGIN_INVALID;
 
-        Log.i(TAG, "pass: " + mPassword);
-        Log.i(TAG, "user: " + mUsername);
         mResponse = ExoConnectionUtils.getPlatformResponse(mUsername, mPassword, versionUrl);
         if(mResponse.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND){
           return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
         }
 
-        Log.i(TAG, "checkPLFVersion");
         isCompliant = ExoConnectionUtils.checkPLFVersion(mResponse);
         ExoDocumentUtils.setRepositoryHomeUrl(mUsername, mDomain);
-        Log.i(TAG, "checkPlatformResponse");
-
         return ExoConnectionUtils.checkPlatformRespose(mResponse);
       } catch(HttpHostConnectException e) {
         return ExoConnectionUtils.SIGNIN_SERVER_NOT_AVAILABLE;

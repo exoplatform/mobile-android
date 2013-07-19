@@ -3,6 +3,7 @@ package org.exoplatform.controller.login;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -25,9 +26,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 
 /**
- * Performs login<br/>
- *
- * Requires setting
+ * Performs login
  */
 public class LoginController {
 
@@ -72,17 +71,18 @@ public class LoginController {
 
   private Resources          resource;
 
+  private Activity           mCurrentActivity;
 
   private static final String TAG = "eXoLoginController";
 
-  public LoginController(Context context, String user, String pass, boolean isShowingWaitingDialog, AccountSetting setting) {
+  public LoginController(Activity context, String user, String pass, boolean isShowingWaitingDialog, AccountSetting setting) {
     SettingUtils.setDefaultLanguage(context);
     mContext = context;
+    mCurrentActivity = context;
     resource = mContext.getResources();
     mNewUserName = user;
     mNewPassword = pass;
-    mSetting = (setting!=null) ? setting: AccountSetting.getInstance();
-    mSetting.setInstance(mSetting);
+    mSetting     = AccountSetting.getInstance();
     mDomain  = mSetting.getDomainName();
     mIsShowingWaitingDialog = isShowingWaitingDialog;
 
@@ -107,7 +107,6 @@ public class LoginController {
 
     return false;
   }
-
 
   private void onLoad() {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
@@ -219,14 +218,12 @@ public class LoginController {
         // Save config
         if (needToSave) SettingUtils.persistServerSetting(mContext);
 
-        /*
-         * Checking platform version
-         */
+        /* Checking platform version */
         if (isCompliant == true) {
           Intent next = new Intent(mContext, HomeActivity.class);
           next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
           mContext.startActivity(next);
+          if (mSetting.isAutoLoginEnabled()) mCurrentActivity.finish();
         } else {
           dialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
           dialog.show();

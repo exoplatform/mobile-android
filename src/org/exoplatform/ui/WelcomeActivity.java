@@ -42,19 +42,15 @@ public class WelcomeActivity extends FragmentActivity {
 
   private int             mCurrentPage = 0;
 
-  public void onCreate(Bundle savedInstanceState) {
+  public  void onCreate(Bundle savedInstanceState) {
+    requestScreenOrientation();
+    mSetting = AccountSetting.getInstance();
 
-    mSetting = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
-    if( mSetting==null) mSetting = AccountSetting.getInstance();
-    mSetting.setInstance(mSetting);
-
-    new LaunchController(this, mSetting);
+    new LaunchController(this);
     super.onCreate(savedInstanceState);
-    setUpScreenOrientationSetting();
 
     init();
   }
-
 
   private void init() {
 
@@ -68,7 +64,6 @@ public class WelcomeActivity extends FragmentActivity {
     mPager = (ViewPager) findViewById(R.id.pager);
     mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     mPager.setAdapter(mPagerAdapter);
-    Log.i(TAG, "current page: " + mCurrentPage);
     mPager.setCurrentItem(mCurrentPage);
 
     CirclePageIndicator circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circle_page_indicator);
@@ -96,8 +91,10 @@ public class WelcomeActivity extends FragmentActivity {
     //Overall loading time: 181ms - 11ms, 168ms - 14ms
   }
 
-
-  private void setUpScreenOrientationSetting() {
+  /**
+   * Force screen orientation for small and medium size devices
+   */
+  private void requestScreenOrientation() {
 
     int size = getResources().getConfiguration().screenLayout
         & Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -126,7 +123,6 @@ public class WelcomeActivity extends FragmentActivity {
     }
   }
 
-
   private void detectScreenOrientation() {
     if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
       Log.i(TAG, "landscape");
@@ -139,33 +135,27 @@ public class WelcomeActivity extends FragmentActivity {
   }
 
   @Override
-  public void onConfigurationChanged(Configuration newConfig) {
+  public  void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
 
     init();
   }
 
-  public void redirectToSignUp(View view) {
+  public  void redirectToSignUp(View view) {
     Log.i(TAG, "redirectToSignUp");
 
     Intent next = new Intent(this, SignUpActivity.class);
     startActivity(next);
   }
 
-  /**
-   * Redirect user to login screen
-   *
-   * @param view
-   */
-  public void redirectToLogIn(View view) {
+  public  void redirectToLogIn(View view) {
     Log.i(TAG, "redirectToLogIn");
 
     Intent next = new Intent(this, LoginActivity.class);
-    next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
     startActivity(next);
   }
 
-  public void logUserIn(View view) {
+  public  void redirectToSignIn(View view) {
     Log.i(TAG, "logUserIn");
 
     Intent next = new Intent(this, SignInActivity.class);

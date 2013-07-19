@@ -1,5 +1,6 @@
 package org.exoplatform.controller.login;
 
+import android.app.Activity;
 import android.content.Intent;
 import greendroid.util.Config;
 
@@ -12,6 +13,7 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.ui.LoginActivity;
+import org.exoplatform.ui.WelcomeActivity;
 import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ServerConfigurationUtils;
@@ -39,19 +41,24 @@ public class LaunchController {
 
   private AccountSetting           mSetting;
 
+  private Activity                 mCurrentActivity;
+
   private static final String TAG = "eXoLaunchController";
 
-  public LaunchController(Context context, AccountSetting setting) {
+  public LaunchController(Activity context) {
     mContext = context;
+    mCurrentActivity = context;
     mSharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
-    mSetting = (setting!=null) ? setting: AccountSetting.getInstance();
+    mSetting = AccountSetting.getInstance();
 
     initAssets();
     setAppVersion();
     setLocalize();
     initSocialImageLoader();
-    retrieveConfigOfServerListAndRedirect();
+    setServerList();
+    redirect();
   }
+
 
   /**
    * Init assets utils
@@ -62,10 +69,8 @@ public class LaunchController {
 
   /**
    * Retrieve server list from config file and set it up for server setting helper
-   *
    */
-  private void retrieveConfigOfServerListAndRedirect() {
-    long start = new Date().getTime();
+  private void setServerList() {
     ArrayList<ServerObjInfo> _serverList =
         ServerConfigurationUtils.getServerListFromFile(mContext, ExoConstants.EXO_SERVER_SETTING_FILE);
     ServerSettingHelper.getInstance()
@@ -74,16 +79,20 @@ public class LaunchController {
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
     mSetting.setCurrentServer((selectedServerIdx == -1) ? null : _serverList.get(selectedServerIdx));
-    Log.i(TAG, "server list time loading: " + (new Date().getTime() - start) );
+  }
 
+  /**
+   * Performs logging or redirect to log in screen if necessary
+   */
+  private void redirect() {
     if (mSetting.getCurrentServer() == null) return ;
-    if (mSetting.isAutoLoginEnabled())
-      new LoginController(mContext, mSetting.getUsername(), mSetting.getPassword(), false, mSetting);
+    if (mSetting.isAutoLoginEnabled()) {
+      new LoginController(mCurrentActivity, mSetting.getUsername(), mSetting.getPassword(), false, mSetting);
+      mCurrentActivity.finish();
+    }
     else {
-      // redirect to login screen
-      Intent next = new Intent(mContext, LoginActivity.class);
-      next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
-      mContext.startActivity(next);
+      mContext.startActivity(new Intent(mContext, LoginActivity.class));
+      mCurrentActivity.finish();
     }
   }
 
@@ -123,7 +132,7 @@ public class LaunchController {
     SettingUtils.setLocale(mContext, strLocalize);  // 7ms
   }
 
- /**
+  /**
   * Initialize SocialImageLoader when application start up and clear all data
   * cache.
   */

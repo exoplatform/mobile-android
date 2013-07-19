@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//import org.apache.commons.codec.binary.Base64;
 import android.util.Log;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
@@ -54,13 +53,13 @@ public class ExoConnectionUtils {
 
   public static final int         SIGNUP_OK                = 10;
 
-  /* internal server problem, strange response status code */
+  /** internal server problem, strange response status code */
   public static final int         SIGNUP_INVALID           = 11;
 
-  /* domain for the email is invalid, such as gmail, yahoo ... */
+  /** domain for the email is invalid, such as gmail, yahoo ... */
   public static final int         SIGNUP_WRONG_DOMAIN      = 12;
 
-  /* an account already exists for this email */
+  /** an account already exists for this email */
   public static final int         SIGNUP_ACCOUNT_EXISTS    = 13;
 
   public static final int         SIGNIN_OK                = 20;
@@ -75,7 +74,18 @@ public class ExoConnectionUtils {
 
   public static final int         SIGNUP_MAX_USERS         = 25;
 
+
+  public static final String      HTTP                     = "http://";
+
+  /** eXo cloud workspace url */
+  public static final String      EXO_CLOUD_WS_DOMAIN      = "wks-acc.exoplatform.org";
+
+  /** eXo cloud base service url */
+  public static final String      SERVICE_BASE_URL         = "/rest/cloud-admin/cloudworkspaces/tenant-service";
+
   private static final String     TAG                      = "ExoConnectionUtils";
+
+
 
   /*
    * Check mobile network and wireless status
@@ -199,7 +209,6 @@ public class ExoConnectionUtils {
   /*
    * Get response from platform url
    */
-
   public static HttpResponse getPlatformResponse(String username,
                                                  String password,
                                                  String strUrlRequest) throws IOException {
@@ -219,7 +228,9 @@ public class ExoConnectionUtils {
 
   }
 
-  /* for signup: validate email according rules of eXo cloud */
+  /**
+   * Validate email according rules of eXo cloud
+   */
   public static boolean validateEmail(String aEmailAddress) {
     if (aEmailAddress == null) return false;
     boolean result = true;
@@ -229,6 +240,12 @@ public class ExoConnectionUtils {
     return result;
   }
 
+  /**
+   * Check whether the email has username and domain
+   *
+   * @param aEmailAddress
+   * @return
+   */
   private static boolean hasNameAndDomain(String aEmailAddress) {
     String[] tokens = aEmailAddress.split("@");
     return tokens.length == 2 && tokens[0].trim().length() > 0 && tokens[1].trim().length() > 0
@@ -245,7 +262,7 @@ public class ExoConnectionUtils {
       httpClient = initHttpClient();
     }
 
-    HttpPost httpPost = new HttpPost("http://wks-acc.exoplatform.org/rest/cloud-admin/cloudworkspaces/tenant-service/signup");
+    HttpPost httpPost = new HttpPost(HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/signup");
     List<NameValuePair> requestParameters = new ArrayList<NameValuePair>(1);
     requestParameters.add(new BasicNameValuePair("user-mail", email));
     httpPost.setEntity(new UrlEncodedFormEntity(requestParameters));
@@ -275,7 +292,7 @@ public class ExoConnectionUtils {
   }
 
   public static HttpResponse requestTenantForEmail(String email) throws IOException {
-    return getRequestResponse("http://wks-acc.exoplatform.org/rest/cloud-admin/cloudworkspaces/tenant-service/usermailinfo/" + email);
+    return getRequestResponse(HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/usermailinfo/" + email);
   }
 
   public static String[] checkRequestTenant(HttpResponse response) {
@@ -299,9 +316,9 @@ public class ExoConnectionUtils {
 
 
   public static boolean requestAccountExistsForUser(String user, String tenant) {
+    String url = HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/isuserexist/" + tenant + "/" + user;
     try {
-      HttpResponse response = getRequestResponse("http://wks-acc.exoplatform.org/rest/cloud-admin/cloudworkspaces/tenant-service/isuserexist/"
-          + tenant + "/" + user);
+      HttpResponse response = getRequestResponse(url);
       if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) return false;
       return convertStreamToString(response.getEntity().getContent())
           .replace("\n", "").replace("\r", "").replace("\r\n", "")

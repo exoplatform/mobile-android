@@ -326,9 +326,8 @@ public class ServerConfigurationUtils {
             serverObj.username       = itemElement.getAttribute(ExoConstants.EXO_URL_USERNAME);
             serverObj.password       =
                 SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD, itemElement.getAttribute("password"));
-            serverObj.isRememberEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
-            serverObj.isRememberEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
-
+            serverObj.isRememberEnabled  = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
+            serverObj.isAutoLoginEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
             arrServerList.add(serverObj);
           }
         }
@@ -474,12 +473,8 @@ public class ServerConfigurationUtils {
 
         /* encrypt password */
         try {
-
-          Log.i(TAG, "password before encrypt: " + serverObj.password);
-
           serializer.attribute(null, "password",
               SimpleCrypto.encrypt(ExoConstants.EXO_MASTER_PASSWORD, serverObj.password));
-          Log.i(TAG, "password after: " + SimpleCrypto.encrypt(ExoConstants.EXO_MASTER_PASSWORD, serverObj.password));
         } catch (Exception e) {
           Log.i(TAG, "error while encrypting: " + e.getLocalizedMessage());
           serializer.attribute(null, "password", serverObj.password);

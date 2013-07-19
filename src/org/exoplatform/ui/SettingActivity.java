@@ -29,14 +29,14 @@ import android.widget.TextView;
 /**
  * Represents the setting screen<br/>
  *
- * Requires setting, setting_type
+ * Requires setting_type
  */
 public class SettingActivity extends MyActionBar implements OnClickListener {
 
-  /* launch setting without logging in */
+  /** launch setting without logging in */
   public static final int       GLOBAL_TYPE           = 0;
 
-  /* launch setting while logging in */
+  /** launch setting while logging in */
   public static final int       PERSONAL_TYPE         = 1;
 
   private int                   mSettingType;
@@ -117,6 +117,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
   private static final String TAG = "eXoSettingActivity";
 
+  // TODO: highly susceptible of memory leak
   public static SettingActivity settingActivity;
 
   @Override
@@ -132,9 +133,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
     mSharedPerf  = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     mSettingType = getIntent().getIntExtra(ExoConstants.SETTING_TYPE, GLOBAL_TYPE);
-    mSetting     = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
-    if( mSetting==null) mSetting = AccountSetting.getInstance();
-    mSetting.setInstance(mSetting);
+    mSetting = AccountSetting.getInstance();
 
     settingActivity = this;
 
@@ -144,7 +143,6 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
       ServerSettingHelper.getInstance().setInstance(helper);
       mSetting = savedInstanceState.getParcelable(ExoConstants.ACCOUNT_SETTING);
       if( mSetting==null) mSetting = AccountSetting.getInstance();
-      mSetting.setInstance(mSetting);
     }
 
     init();
@@ -171,12 +169,12 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     txtvLanguage = (TextView) findViewById(R.id.TextView_Language);
     txtvServer = (TextView) findViewById(R.id.TextView_Server_List);
 
-    vEngLish = (View) findViewById(R.id.View_English);
+    vEngLish = findViewById(R.id.View_English);
     vEngLish.setOnClickListener(this);
     txtvEnglish = (TextView) findViewById(R.id.TextView_English);
     imgViewECheckMark = (ImageView) findViewById(R.id.ImageView_CheckMark_EN);
 
-    vFrench = (View) findViewById(R.id.View_French);
+    vFrench  = findViewById(R.id.View_French);
     vFrench.setOnClickListener(this);
     txtvFrench = (TextView) findViewById(R.id.TextView_French);
     imgViewFCheckMark = (ImageView) findViewById(R.id.ImageView_CheckMark_FR);
@@ -241,7 +239,6 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
     changeLanguage();
   }
-
 
   private void hideLoginSetting() {
     mLoginLayout.setVisibility(View.GONE);
@@ -350,12 +347,11 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
       /* do not allow to come back to setting */
       Intent next = new Intent(this, WelcomeActivity.class);
       next.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-      next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
       startActivity(next);
+      finish();
     }
 
   }
-
 
   @Override
   protected void onPause(){

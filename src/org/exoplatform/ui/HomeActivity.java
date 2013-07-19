@@ -36,9 +36,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 /**
- * Represents the home screen<br/>
- *
- * Requires setting
+ * Represents the home screen
  */
 public class HomeActivity extends MyActionBar {
 
@@ -70,6 +68,8 @@ public class HomeActivity extends MyActionBar {
 
   public static HomeActivity  homeActivity;
 
+  private static final String TAG   = "eXoHomeActivity";
+
   private AccountSetting      mSetting;
 
   @Override
@@ -84,8 +84,7 @@ public class HomeActivity extends MyActionBar {
     addActionBarItem();
     getActionBar().getItem(1).setDrawable(R.drawable.action_bar_logout_button);
 
-    mSetting = getIntent().getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
-    if (mSetting == null) mSetting = AccountSetting.getInstance();
+    mSetting = AccountSetting.getInstance();
 
     homeActivity = this;
     if (bundle != null) {
@@ -142,7 +141,6 @@ public class HomeActivity extends MyActionBar {
     if (selectedItemIndex == 1) {
       Intent next = new Intent(HomeActivity.this, SettingActivity.class);
       next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.PERSONAL_TYPE);
-      next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
       startActivity(next);
     }
     return false;
@@ -225,9 +223,9 @@ public class HomeActivity extends MyActionBar {
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
-    case -1:
+    case -1:      // click on home
       break;
-    case 0:
+    case 0:       // click on refresh button
       loaderItem = (LoaderActionBarItem) item;
       if (SocialServiceHelper.getInstance().activityService == null) {
         homeController.launchNewsService();
@@ -235,7 +233,7 @@ public class HomeActivity extends MyActionBar {
         homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
       }
       break;
-    case 1:
+    case 1:       // click on log out
       onFinish();
       break;
     }
@@ -243,6 +241,10 @@ public class HomeActivity extends MyActionBar {
 
   }
 
+  /**
+   * On logging out
+   *
+   */
   private void onFinish() {
     if (ExoConnectionUtils.httpClient != null) {
       ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
@@ -256,6 +258,16 @@ public class HomeActivity extends MyActionBar {
     SocialServiceHelper.getInstance().clearData();
     homeController.finishService();
     homeActivity = null;
+    Log.i(TAG, "remember me:" + mSetting.isRememberMeEnabled());
+    Log.i(TAG, "auto login:" + mSetting.isAutoLoginEnabled());
+
+    redirectToLogIn();
+  }
+
+  private void redirectToLogIn() {
+    Intent next = new Intent(this, LoginActivity.class);
+    next.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    startActivity(next);
     finish();
   }
 

@@ -81,6 +81,7 @@
             android:layout_below="@id/welcome_btn_login"
             android:layout_centerHorizontal="true"
             android:gravity="center"
+            android:textColor="@color/gray"
             android:text="@string/SkipStep"
             android:textSize="20sp"
             android:clickable="true"
