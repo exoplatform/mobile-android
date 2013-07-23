@@ -225,7 +225,7 @@
   <string name="YourCredentials">Your credentials</string>
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
-  <string name="StartCloudSignUpAssistant">Start Cloud Sign Up Assistant</string>
+  <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
 
 
     <string-array name="SocialTabs">

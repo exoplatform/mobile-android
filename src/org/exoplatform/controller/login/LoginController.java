@@ -63,11 +63,11 @@ public class LoginController {
 
   private String             okString;
 
-  private WarningDialog      dialog;
+  private WarningDialog      mWarningDialog;
 
   private LoginWaitingDialog mProgressDialog;
 
-  private boolean            mIsShowingWaitingDialog;
+  private boolean            mIsShowingDialog;
 
   private Resources          resource;
 
@@ -75,7 +75,7 @@ public class LoginController {
 
   private static final String TAG = "eXoLoginController";
 
-  public LoginController(Activity context, String user, String pass, boolean isShowingWaitingDialog, AccountSetting setting) {
+  public LoginController(Activity context, String user, String pass, boolean isShowingDialog) {
     SettingUtils.setDefaultLanguage(context);
     mContext = context;
     mCurrentActivity = context;
@@ -84,16 +84,16 @@ public class LoginController {
     mNewPassword = pass;
     mSetting     = AccountSetting.getInstance();
     mDomain  = mSetting.getDomainName();
-    mIsShowingWaitingDialog = isShowingWaitingDialog;
+    mIsShowingDialog = isShowingDialog;
 
     getLanguage();
-    if (checkLogin() == true) {
-      onLoad();
-    } else {
-      dialog = new WarningDialog(mContext, titleString, blankError, okString);
-      dialog.show();
+    if (checkLogin()) onLoad();
+    else {
+      if (isShowingDialog) {
+        mWarningDialog = new WarningDialog(mContext, titleString, blankError, okString);
+        mWarningDialog.show();
+      }
     }
-
   }
 
   private boolean checkLogin() {
@@ -147,7 +147,7 @@ public class LoginController {
 
     @Override
     public void onPreExecute() {
-      if (mIsShowingWaitingDialog) {
+      if (mIsShowingDialog) {
         mProgressDialog = new LoginWaitingDialog(mContext, null, strSigning);
         mProgressDialog.show();
       }
@@ -176,8 +176,8 @@ public class LoginController {
     @Override
     public void onPostExecute(Integer result) {
       if (result == ExoConnectionUtils.LOGIN_INCOMPATIBLE) {
-        dialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
-        dialog.show();
+        mWarningDialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
+        mWarningDialog.show();
       } else if (result == ExoConnectionUtils.LOGIN_SUSCESS) {
         /* Set social and document settings */
         StringBuilder builder = new StringBuilder(mDomain)
@@ -219,30 +219,30 @@ public class LoginController {
         if (needToSave) SettingUtils.persistServerSetting(mContext);
 
         /* Checking platform version */
-        if (isCompliant == true) {
+        if (isCompliant) {
           Intent next = new Intent(mContext, HomeActivity.class);
           next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           mContext.startActivity(next);
           if (mSetting.isAutoLoginEnabled()) mCurrentActivity.finish();
         } else {
-          dialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
-          dialog.show();
+          mWarningDialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
+          mWarningDialog.show();
         }
 
       } else if (result == ExoConnectionUtils.LOGIN_UNAUTHORIZED) {
-        dialog = new WarningDialog(mContext, titleString, strUserNamePasswordFailed, okString);
-        dialog.show();
+        mWarningDialog = new WarningDialog(mContext, titleString, strUserNamePasswordFailed, okString);
+        mWarningDialog.show();
       } else if (result == ExoConnectionUtils.LOGIN_INVALID) {
-        dialog = new WarningDialog(mContext, titleString, strServerInvalid, okString);
-        dialog.show();
+        mWarningDialog = new WarningDialog(mContext, titleString, strServerInvalid, okString);
+        mWarningDialog.show();
       } else if (result == ExoConnectionUtils.LOGIN_FAILED) {
-        dialog = new WarningDialog(mContext, titleString, strServerUnreachable, okString);
-        dialog.show();
+        mWarningDialog = new WarningDialog(mContext, titleString, strServerUnreachable, okString);
+        mWarningDialog.show();
       } else {
-        dialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
-        dialog.show();
+        mWarningDialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
+        mWarningDialog.show();
       }
-      if (mIsShowingWaitingDialog) mProgressDialog.dismiss();
+      if (mIsShowingDialog) mProgressDialog.dismiss();
     }
 
   }

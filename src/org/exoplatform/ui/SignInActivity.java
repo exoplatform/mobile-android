@@ -3,6 +3,7 @@ package org.exoplatform.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,6 +18,7 @@ import org.exoplatform.R;
 import org.exoplatform.controller.signup.SignInController;
 import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 
 public class SignInActivity extends Activity {
 
@@ -31,6 +33,8 @@ public class SignInActivity extends Activity {
   private static final String TAG = "eXoSignInActivity";
 
   public void onCreate(Bundle savedInstanceState) {
+    if (!WelcomeActivity.mIsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.signin);
@@ -42,6 +46,8 @@ public class SignInActivity extends Activity {
     mLoginBtn.setEnabled(false);
 
     mEmailTxt = (EditText) findViewById(R.id.signin_edit_txt_email);
+    String email = getIntent().getStringExtra(ExoConstants.EXO_EMAIL);
+    mEmailTxt.setText(email == null? "": email);
     TextWatcher _onEmailOrPasswordChanged = onEmailOrPasswordChanged();
     mEmailTxt.addTextChangedListener(_onEmailOrPasswordChanged);
     AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mEmailTxt);

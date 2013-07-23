@@ -163,7 +163,7 @@ public class ExoConstants {
   public static final String TENANT                                = "tenant";
 
   /* Http response status */
-  public static final int UNKNOWN = 309;
+  public static final int    UNKNOWN                               = 309;
 
   /* Server setting */
   public static final String SETTING_ADDING_SERVER                 = "SETTING_ADDING_SERVER";
@@ -181,8 +181,11 @@ public class ExoConstants {
 
   public static final String EXO_AUTOLOGIN                         = "autoLogin";
 
-  /* Account setting */
+  /** Account setting */
   public static final String ACCOUNT_SETTING                       = "ACCOUNT_SETTING";
 
   public static final String SERVER_SETTING_HELPER                 = "SERVER_SETTING_HELPER";
+
+  /** email used for sign in */
+  public static final String EXO_EMAIL                             = "EXO_EMAIL";
 }

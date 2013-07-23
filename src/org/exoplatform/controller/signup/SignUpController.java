@@ -12,11 +12,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.exoplatform.R;
 import org.exoplatform.ui.SignInActivity;
 import org.exoplatform.ui.SignUpActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
@@ -150,9 +152,9 @@ public class SignUpController {
 
             public void onClick(View view) {
               dialog.dismiss();
-
               // fires up activity for log in screen
               Intent next = new Intent(mSignUpActivity, SignInActivity.class);
+              next.putExtra(ExoConstants.EXO_EMAIL, mEmail);
               mContext.startActivity(next);
             }
           });
@@ -162,13 +164,10 @@ public class SignUpController {
           dialog.getOkButton().setOnClickListener(closeDialog);
           dialog.show();
           new CreatingMarketoTask().execute();
-
           break;
         case ExoConnectionUtils.SIGNUP_OK:
           // swipe view to account creation in progress
           mSignUpActivity.flipToGreetingsPanel();
-
-          // TODO: test
           new CreatingMarketoTask().execute();
           break;
       }
@@ -182,7 +181,21 @@ public class SignUpController {
 
     @Override
     protected Void doInBackground(Void... params) {
-      ExoConnectionUtils.requestCreatingMarketo(mEmail);
+      HttpResponse response;
+      try {
+        response = ExoConnectionUtils.requestCreatingMarketo(mEmail);
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode == HttpStatus.SC_MOVED_TEMPORARILY || statusCode == HttpStatus.SC_OK)
+          Log.d(TAG, "creating marketo for " + mEmail + " ok");
+        else Log.d(TAG, "creating marketo fails");
+      } catch (UnsupportedEncodingException e) {
+        Log.d(TAG, "UnsupportedEncodingException: " + e.getLocalizedMessage());
+      } catch (ClientProtocolException e) {
+        Log.d(TAG, "ClientProtocolException: " + e.getLocalizedMessage());
+      } catch (IOException e) {
+        Log.d(TAG, "IOException: " + e.getLocalizedMessage());
+      }
+
       return null;
     }
   }

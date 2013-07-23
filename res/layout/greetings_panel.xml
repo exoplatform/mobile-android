@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_rect_rounded_corner"
-                android:padding="20dp">
+                android:padding="@dimen/signup_frame_padding">
 
     <TextView
         android:id="@+id/signup_thanks_txt"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/ThanksForInterest"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
         android:textColor="#5A5A5A"
         android:layout_marginTop="5dp"
@@ -37,7 +37,7 @@
         android:layout_below="@id/signup_ok_img"
         android:text="@string/CheckYourMailInbox"
         android:textColor="#686868"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size_small"
         android:layout_marginBottom="30dp"/>
 
     <Button

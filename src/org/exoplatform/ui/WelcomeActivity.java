@@ -38,7 +38,7 @@ public class WelcomeActivity extends FragmentActivity {
 
   private AccountSetting  mSetting;
 
-  private boolean         mIsTablet;
+  public  static boolean  mIsTablet;
 
   private int             mCurrentPage = 0;
 
@@ -46,7 +46,9 @@ public class WelcomeActivity extends FragmentActivity {
     requestScreenOrientation();
     mSetting = AccountSetting.getInstance();
 
-    new LaunchController(this);
+    LaunchController launchController = new LaunchController(this);
+    launchController.redirect();
+
     super.onCreate(savedInstanceState);
 
     init();

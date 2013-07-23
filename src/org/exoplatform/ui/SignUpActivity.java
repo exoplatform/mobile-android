@@ -1,5 +1,6 @@
 package org.exoplatform.ui;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
@@ -14,6 +15,8 @@ public class SignUpActivity extends FragmentActivity {
   private static final String TAG = "eXoSignUpActivity";
 
   public void onCreate(Bundle savedInstanceState) {
+    if (!WelcomeActivity.mIsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.signup);

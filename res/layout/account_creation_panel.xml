@@ -3,7 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_rect_rounded_corner"
-                android:paddingBottom="30dp">
+                android:paddingBottom="@dimen/signup_padding_bottom">
 
     <TextView
             android:id="@+id/signup_email_txt"

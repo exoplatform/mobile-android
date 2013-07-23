@@ -12,9 +12,10 @@
             android:text="@string/GetStarted" />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/signup_frame_width"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/signup_frame_margin_top"
                     android:paddingBottom="30dp"
                     android:background="@drawable/bg_rect_rounded_corner">
 
@@ -69,7 +70,7 @@
                 android:layout_toRightOf="@id/signin_login_btn"
                 android:text="@string/Or"
                 android:textColor="#5A5A5A"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_small"
                 android:singleLine="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"

@@ -56,7 +56,6 @@ public class LaunchController {
     setLocalize();
     initSocialImageLoader();
     setServerList();
-    redirect();
   }
 
 
@@ -84,11 +83,10 @@ public class LaunchController {
   /**
    * Performs logging or redirect to log in screen if necessary
    */
-  private void redirect() {
+  public void redirect() {
     if (mSetting.getCurrentServer() == null) return ;
     if (mSetting.isAutoLoginEnabled()) {
-      new LoginController(mCurrentActivity, mSetting.getUsername(), mSetting.getPassword(), false, mSetting);
-      mCurrentActivity.finish();
+      new LoginController(mCurrentActivity, mSetting.getUsername(), mSetting.getPassword(), false);
     }
     else {
       mContext.startActivity(new Intent(mContext, LoginActivity.class));

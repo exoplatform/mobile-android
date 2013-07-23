@@ -31,25 +31,27 @@
     <dimen name="unreadable_file_size">75dp</dimen>
 
     <!-- text size -->
-    <dimen name="text_size_smallest">9sp</dimen>
-    <dimen name="text_size_small">14sp</dimen>
-    <dimen name="text_size_medium">16sp</dimen>
-    <dimen name="text_size_large">18sp</dimen>
-    <dimen name="text_size_xlarge">20sp</dimen>
+    <dimen name="text_size_smallest">13sp</dimen>
+    <dimen name="text_size_small">20sp</dimen>
+    <dimen name="text_size_medium">24sp</dimen>
+    <dimen name="text_size_large">28sp</dimen>
+    <dimen name="text_size_xlarge">32sp</dimen>
 
     <!-- sign up form -->
-    <dimen name="signup_frame_width">280dp</dimen>
-    <dimen name="signup_frame_margin_top">15dp</dimen>
-    <dimen name="signup_padding_bottom">30dp</dimen>
-    <dimen name="signup_frame_padding">20dp</dimen>
-    <dimen name="signup_image_radius">35dp</dimen>
+    <dimen name="signup_frame_width">440dp</dimen>
+    <dimen name="signup_frame_margin_top">25dp</dimen>
+    <dimen name="signup_padding_bottom">45dp</dimen>
+    <dimen name="signup_frame_padding">30dp</dimen>
+    <dimen name="signup_image_radius">52dp</dimen>
 
     <!-- on premise -->
-    <dimen name="onpremise_url_txt_margin_left">15dp</dimen>
-    <dimen name="onpremise_url_txt_margin_top">12dp</dimen>
-    <dimen name="onpremise_url_txt_padding_left">35dp</dimen>
-    <dimen name="onpremise_login_txt_margin_top">5dp</dimen>
-    <dimen name="onpremise_login_txt_margin_bottom">10dp</dimen>
+    <dimen name="onpremise_url_txt_margin_left">22dp</dimen>
+    <dimen name="onpremise_url_txt_margin_top">18dp</dimen>
+    <dimen name="onpremise_url_txt_padding_left">52dp</dimen>
+    <dimen name="onpremise_login_txt_margin_top">7.5dp</dimen>
+    <dimen name="onpremise_login_txt_margin_bottom">15dp</dimen>
+
+
 
 
 </resources>

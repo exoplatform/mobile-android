@@ -71,7 +71,7 @@
             android:gravity="center"
             android:paddingBottom="13dp"
             android:background="@drawable/btn_grey"
-            android:onClick="logUserIn"/>
+            android:onClick="redirectToSignIn"/>
 
     <TextView
             android:id="@+id/welcome_txt_skipStep"

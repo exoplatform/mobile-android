@@ -1,6 +1,7 @@
 package org.exoplatform.ui;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,6 +31,8 @@ public class SignInOnPremiseActivity extends Activity {
   private static final String TAG = "eXoSignInOnPremiseActivity";
 
   public void onCreate(Bundle savedInstanceState) {
+    if (!WelcomeActivity.mIsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.onpremise);

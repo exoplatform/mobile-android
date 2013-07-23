@@ -108,7 +108,6 @@
                 android:contentDescription="@string/Settings" />
 
         <!-- Language Settings -->
-
         <TextView
             android:id="@+id/TextView_Language"
             android:layout_width="fill_parent"
@@ -409,6 +408,7 @@
             android:textColor="#000000"
             android:textStyle="bold" />
 
+        <!-- Start cloud sign up button -->
         <Button
                 android:id="@+id/setting_start_cloud_signup_btn"
                 android:layout_width="match_parent"

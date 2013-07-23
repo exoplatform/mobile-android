@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/welcome_social_intranet_txt"
-            style="@style/WelcomeSloganTxtLargeStyle"
+            style="@style/WelcomeSloganTxtStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/welcome_exo_logo"
@@ -37,7 +37,7 @@
 
             <TextView
                 android:id="@+id/welcome_anywhere_txt"
-                style="@style/WelcomeSloganTxtLargeStyle"
+                style="@style/WelcomeSloganTxtStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
@@ -47,7 +47,7 @@
 
             <TextView
                 android:id="@+id/welcome_anytime_txt"
-                style="@style/WelcomeSloganTxtLargeStyle"
+                style="@style/WelcomeSloganTxtStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Anytime"
@@ -58,7 +58,7 @@
 
         <TextView
             android:id="@+id/welcome_swipe_txt"
-            style="@style/ShadowTxtLargeStyle"
+            style="@style/ShadowTxtStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/welcome_center_layout"

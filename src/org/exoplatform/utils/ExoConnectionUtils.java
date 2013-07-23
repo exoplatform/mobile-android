@@ -83,6 +83,8 @@ public class ExoConnectionUtils {
   /** eXo cloud base service url */
   public static final String      SERVICE_BASE_URL         = "/rest/cloud-admin/cloudworkspaces/tenant-service";
 
+  public static final String      MARKETO_URL              = "learn.exoplatform.com/index.php/leadCapture/save";
+
   private static final String     TAG                      = "ExoConnectionUtils";
 
 
@@ -273,9 +275,6 @@ public class ExoConnectionUtils {
     int statusCode = response.getStatusLine().getStatusCode();
     /* code 309 */
     if (statusCode == ExoConstants.UNKNOWN) {
-
-      Log.i(TAG, "Location header: " + response.getLastHeader("Location").getValue());
-
       if (response.getLastHeader("Location").getValue().contains("tryagain.jsp"))
         return ExoConnectionUtils.SIGNUP_WRONG_DOMAIN;
       else return ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS;
@@ -314,7 +313,6 @@ public class ExoConnectionUtils {
     }
   }
 
-
   public static boolean requestAccountExistsForUser(String user, String tenant) {
     String url = HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/isuserexist/" + tenant + "/" + user;
     try {
@@ -331,14 +329,17 @@ public class ExoConnectionUtils {
   /**
    * Create marketo lead
    */
-  public static void requestCreatingMarketo(String email) {
-    String marketoUrl = "http://learn.exoplatform.com/MobileApp_RegistrationPage-English.html?Email="
-        + email + "&lpId=1967&subId=46&munchkinId=577-PCT-880&formid=1167&returnLPId=-1";
-    try {
-      getRequestResponse(marketoUrl);
-    } catch (IOException e) {
-      Log.i(TAG, "Can not create marketo lead");
-    }
+  public static HttpResponse requestCreatingMarketo(String email) throws IOException {
+    HttpPost httpPost = new HttpPost(HTTP + MARKETO_URL);
+    List<NameValuePair> requestParameters = new ArrayList<NameValuePair>(1);
+    requestParameters.add(new BasicNameValuePair("Email", email));
+    requestParameters.add(new BasicNameValuePair("lpId" , "1967"));
+    requestParameters.add(new BasicNameValuePair("subId", "46"));
+    requestParameters.add(new BasicNameValuePair("munchkinId", "577-PCT-880"));
+    requestParameters.add(new BasicNameValuePair("formid", "1167"));
+    requestParameters.add(new BasicNameValuePair("returnLPId", "-1"));
+    httpPost.setEntity(new UrlEncodedFormEntity(requestParameters));
+    return httpClient.execute(httpPost);
   }
 
 

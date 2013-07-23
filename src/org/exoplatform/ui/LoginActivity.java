@@ -1,6 +1,7 @@
 package org.exoplatform.ui;
 
 
+import android.content.SharedPreferences;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
 import org.exoplatform.controller.login.LoginController;
@@ -9,6 +10,7 @@ import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
 
 import android.app.Activity;
@@ -83,14 +85,14 @@ public class LoginActivity extends Activity implements OnClickListener {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.login);
+    mSetting = AccountSetting.getInstance();
 
     /* launch app from custom url - need to init setting */
     boolean isLaunchedFromUrl = (getIntent().getData() != null);
     if (isLaunchedFromUrl) {
-      setUpUserAndServerFromUrl();
       new LaunchController(this);
+      setUpUserAndServerFromUrl();
     }
-    else mSetting = AccountSetting.getInstance();
 
     init();
     Log.i(TAG, "end time login: " + (new Date().getTime() - start) );
@@ -189,7 +191,9 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
     else {
       serverList.add(serverObj);
-      domainIdx = String.valueOf(serverList.size() - 1);
+      serverIdx = serverList.size() - 1;
+      domainIdx = String.valueOf(serverIdx);
+
       // Persist config - TODO: check whether this need to be done in a separate Thread
       SettingUtils.persistServerSetting(this);
     }
@@ -225,7 +229,7 @@ public class LoginActivity extends Activity implements OnClickListener {
   private void onLogin() {
     username = _edtxUserName.getText().toString();
     password = _edtxPassword.getText().toString();
-    new LoginController(this, username, password, true, mSetting);
+    new LoginController(this, username, password, true);
   }
 
   public void changeLanguage() {
@@ -296,6 +300,18 @@ public class LoginActivity extends Activity implements OnClickListener {
       _listViewServer.setVisibility(View.INVISIBLE);
       userpassPanel.setVisibility(View.VISIBLE);
       listviewPanel.setVisibility(View.INVISIBLE);
+    }
+  }
+
+  @Override
+  protected void onPause(){
+    Log.i(TAG, "onPause");
+    super.onPause();
+
+    if (!mSetting.getDomainIndex().equals("-1")) {
+      SharedPreferences.Editor editor = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0).edit();
+      editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, mSetting.getDomainIndex());
+      editor.commit();
     }
   }
 }

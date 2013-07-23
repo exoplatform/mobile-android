@@ -6,6 +6,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/welcome_bg_repeat">
 
+    <!-- Circle page indicator -->
     <org.exoplatform.ui.CirclePageIndicator
             android:id="@+id/circle_page_indicator"
             android:layout_height="wrap_content"
@@ -13,12 +14,14 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"/>
 
+    <!-- Screen-shot slider -->
     <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="320dp"
             android:layout_below="@id/circle_page_indicator"/>
 
+    <!-- Separator -->
     <ImageView
             android:id="@+id/welcome_separator_img"
             android:layout_width="match_parent"
@@ -26,6 +29,7 @@
             android:layout_below="@id/pager"
             android:src="@drawable/black_separator"/>
 
+    <!-- Or text -->
     <TextView
             android:id="@+id/welcome_txt_or"
             android:layout_width="wrap_content"
@@ -39,6 +43,7 @@
             android:textStyle="bold"
             android:textColor="@android:color/white"/>
 
+    <!-- Sign up button -->
     <Button
             android:id="@+id/welcome_btn_signup"
             style="@style/ShadowTxtStyle"
@@ -56,6 +61,7 @@
             android:background="@drawable/btn_blue_half"
             android:onClick="redirectToSignUp"/>
 
+    <!-- Log in button -->
     <Button
             android:id="@+id/welcome_btn_login"
             style="@style/ShadowTxtStyle"
@@ -73,6 +79,7 @@
             android:background="@drawable/btn_grey"
             android:onClick="redirectToSignIn"/>
 
+    <!-- Skip it for now text -->
     <TextView
             android:id="@+id/welcome_txt_skipStep"
             style="@style/ShadowTxtStyle"

@@ -15,24 +15,23 @@
                  style="@style/ServerSettingTableStyle"
                  android:layout_marginBottom="10dp">
 
+        <!-- 1st row -->
         <TableRow
                 style="@style/ServerSettingTableFirstRowStyle">
 
             <TextView
                     android:id="@+id/server_setting_server_name_txt"
                     style="@style/ServerSettingTextViewStyle"
-                    android:layout_marginRight="10dp"
                     android:text="@string/ServerName"/>
 
             <EditText
                     android:id="@+id/server_setting_server_name_edit_txt"
-                    style="@style/ServerSettingEditTextHinttyle"
-                    android:layout_toRightOf="@id/server_setting_server_name_txt"
-                    android:layout_marginRight="10dp"
+                    style="@style/ServerSettingEditTextStyle"
                     android:hint="@string/RequiredHint"/>
 
         </TableRow>
 
+        <!-- 2nd row -->
         <TableRow
                 style="@style/ServerSettingTableRowStyle">
 
@@ -43,8 +42,7 @@
 
         <EditText
                 android:id="@+id/server_setting_server_url_edit_txt"
-                style="@style/ServerSettingEditTextHinttyle"
-                android:layout_toRightOf="@id/server_setting_server_url_txt"
+                style="@style/ServerSettingEditTextStyle"
                 android:inputType="textUri"
                 android:hint="@string/RequiredHint"/>
 
@@ -69,16 +67,15 @@
     <TableRow
             style="@style/ServerSettingTableFirstRowStyle">
 
+        <!-- 3rd row -->
         <TextView
                 android:id="@+id/server_setting_user_txt"
                 style="@style/ServerSettingTextViewStyle"
-                android:layout_marginRight="10dp"
                 android:text="@string/UserNameCellTitle"/>
 
         <EditText
                 android:id="@+id/server_setting_user_edit_txt"
-                style="@style/ServerSettingEditTextHinttyle"
-                android:layout_toRightOf="@id/server_setting_user_txt"
+                style="@style/ServerSettingEditTextStyle"
                 android:hint="@string/OptionalHint"/>
 
     </TableRow>
@@ -86,6 +83,7 @@
     <TableRow
             style="@style/ServerSettingTableRowStyle">
 
+        <!-- 4th row -->
         <TextView
                 android:id="@+id/server_setting_pass_txt"
                 style="@style/ServerSettingTextViewStyle"
@@ -93,8 +91,7 @@
 
         <EditText
                 android:id="@+id/server_setting_pass_edit_txt"
-                style="@style/ServerSettingEditTextHinttyle"
-                android:layout_toRightOf="@id/server_setting_pass_txt"
+                style="@style/ServerSettingEditTextStyle"
                 android:inputType="textPassword"
                 android:hint="@string/OptionalHint"/>
 
