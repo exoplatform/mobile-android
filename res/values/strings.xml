@@ -216,6 +216,7 @@
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
   <string name="LoginTitle">LOGIN</string>
+  <string name="EXO">EXO</string>
 
   <!-- Server edition -->
   <string name="AddServer">New Server</string>

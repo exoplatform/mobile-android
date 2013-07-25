@@ -1,6 +1,7 @@
 package org.exoplatform.ui;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,7 +13,6 @@ import android.widget.TextView;
 import org.exoplatform.R;
 import org.exoplatform.utils.AssetUtils;
 
-import java.util.Date;
 
 public class ScreenSlidePageFragment extends Fragment {
 
@@ -71,13 +71,11 @@ public class ScreenSlidePageFragment extends Fragment {
     return fragment;
   }
 
-  public ScreenSlidePageFragment() {
-  }
+  public ScreenSlidePageFragment() { }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Log.i(TAG, "onCreate: " + mPageNumber);
     mPageNumber = getArguments().getInt(ARG_PAGE);
   }
 
@@ -86,30 +84,16 @@ public class ScreenSlidePageFragment extends Fragment {
                            Bundle savedInstanceState) {
     Log.i(TAG, "onCreateView");
 
-    long start = new Date().getTime();
-    Log.i(TAG, "start time: " + start);
-
     ViewGroup mRootView;
-
     if (mPageNumber != 0) {
       // Inflate the layout containing a title and body text - need to optimize this one
+      int index = mPageNumber - 1;
       mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
-
-      long middle = new Date().getTime();
-      Log.i(TAG, "time inflate layout: " + (middle - start));  // 235 ms
-
-      //Bitmap img = BitmapFactory.decodeResource(getResources(), SLIDER_IMGS[mPageNumber]);
-      //Log.i(TAG, "time  image: " + (new Date().getTime() - middle));
-
-      ((ImageView) mRootView.findViewById(R.id.slider_img)).setImageBitmap(SLIDER_BITMAPS[mPageNumber - 1]);
-      Log.i(TAG, "time set image: " + (new Date().getTime() - middle));
-
+      ((ImageView) mRootView.findViewById(R.id.slider_img)).setImageBitmap(
+          BitmapFactory.decodeResource(getResources(), sSliderImgs[index])
+      );
       ((TextView) mRootView.findViewById(R.id.slider_txt_description)).setText(
-          getResources().getText(SLIDER_DESC[mPageNumber - 1]));
-
-      long end = new Date().getTime();
-      Log.i(TAG, "end time: " + end);
-      Log.i(TAG, "diff: " + (end - start));   // 236ms
+          getResources().getText(SLIDER_DESC[index]));
     }
     else {
       // first slide

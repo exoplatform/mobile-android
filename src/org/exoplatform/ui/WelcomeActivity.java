@@ -3,7 +3,6 @@ package org.exoplatform.ui;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -14,20 +13,16 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.AssetUtils;
-import org.exoplatform.utils.ExoConstants;
 
 
 /**
  * Welcome screen<br/>
- *
- * Requires setting
  *
  * Overall time: +925ms +692ms +845ms +1s35ms
  */
@@ -90,20 +85,6 @@ public class WelcomeActivity extends FragmentActivity {
       }
     });
     mCirclePageIndicator.setCurrentItem(mCurrentPage);
-
-    // pre-loading image for screen slider
-    for (int k = 0; k < ScreenSlidePageFragment.sSliderImgs.length; k++) {
-      final int _k = k;
-      new Thread(new Runnable() {
-
-        @Override
-        public void run() {
-          ScreenSlidePageFragment.SLIDER_BITMAPS[_k]
-              = BitmapFactory.decodeResource(getResources(), ScreenSlidePageFragment.sSliderImgs[_k]);
-        }
-      }).start();
-    }
-    //Overall loading time: 181ms - 11ms, 168ms - 14ms
   }
 
   /**

@@ -109,6 +109,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
   private Button                mStartCloudSignUpBtn;
 
+  private TextView              mExoTitleTxt;
+
   private AccountSetting        mSetting;
 
   private ServerSettingHelper   mServerSetting = ServerSettingHelper.getInstance();
@@ -194,6 +196,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     addServerBtn = (Button) findViewById(R.id.modify_server_btn);
     addServerBtn.setOnClickListener(this);
 
+    mExoTitleTxt = (TextView) findViewById(R.id.setting_exo_title_txt);
+
     mStartCloudSignUpBtn = (Button) findViewById(R.id.setting_start_cloud_signup_btn);
     mStartCloudSignUpBtn.setOnClickListener(this);
 
@@ -204,6 +208,11 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     int index = parent.indexOfChild(listServerWrap);
     parent.removeView(listServerWrap);
     parent.addView(mSettingController.getServerListLayout(), index);
+
+    View serverListView = findViewById(R.id.Server_List_Section);
+    if (ServerSettingHelper.getInstance().getServerInfoList().size() == 0)
+      serverListView.setVisibility(View.GONE);
+    else serverListView.setVisibility(View.VISIBLE);
 
     mSettingController.initLocation(imgViewECheckMark, imgViewFCheckMark);
     if (mSettingType == GLOBAL_TYPE) {
@@ -274,6 +283,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     String settings = resource.getString(R.string.Settings);
     setTitle(settings);
     String addNewServer = resource.getString(R.string.AddAServer);
+    String eXo = resource.getString(R.string.EXO);
 
     addServerBtn.setText(addNewServer);
     txtvEnglish.setText(strEnglish);
@@ -291,6 +301,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     errorMessage = resource.getString(R.string.DoNotHavePermision);
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
+
+    mExoTitleTxt.setText(eXo);
 
     /* Login */
     String rememberMe   = resource.getString(R.string.RememberMe);

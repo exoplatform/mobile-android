@@ -349,8 +349,8 @@
                 android:contentDescription="@string/Settings" />
         </RelativeLayout>
 
-        <!-- Server List Settings -->
 
+        <!-- Server List Settings -->
         <RelativeLayout
             android:id="@+id/Server_List_Section"
             android:layout_width="fill_parent"
@@ -397,23 +397,58 @@
             android:orientation="vertical" >
         </LinearLayout>
 
-        <Button
-            android:id="@+id/modify_server_btn"
-            android:layout_width="fill_parent"
-            android:layout_height="44dip"
-            android:layout_below="@id/listview_server_wrap"
-            android:layout_marginLeft="-2dp"
-            android:layout_marginRight="-2dp"
-            android:background="@drawable/file_item_background_shape"
-            android:textColor="#000000"
-            android:textStyle="bold" />
 
-        <!-- Start cloud sign up button -->
-        <Button
+        <!-- eXo section -->
+        <LinearLayout
+            android:id="@+id/setting_exo_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listview_server_wrap"
+            android:orientation="vertical">
+
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/serversectionseparator"
+                    android:contentDescription="@string/Settings" />
+
+            <TextView
+                    android:id="@+id/setting_exo_title_txt"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dip"
+                    android:gravity="center_vertical"
+                    android:padding="3dp"
+                    android:shadowColor="#000000"
+                    android:shadowDx="1.0"
+                    android:shadowDy="2.0"
+                    android:shadowRadius="1.0"
+                    android:textColor="#ffffff"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/serversectionseparator"
+                    android:contentDescription="@string/Settings" />
+
+            <!-- Add server button -->
+            <Button
+                android:id="@+id/modify_server_btn"
+                android:layout_width="fill_parent"
+                android:layout_height="44dip"
+                android:layout_marginLeft="-2dp"
+                android:layout_marginRight="-2dp"
+                android:background="@drawable/file_item_background_shape"
+                android:textColor="#000000"
+                android:textStyle="bold"/>
+
+
+            <!-- Start cloud sign up button -->
+            <Button
                 android:id="@+id/setting_start_cloud_signup_btn"
                 android:layout_width="match_parent"
                 android:layout_height="44dip"
-                android:layout_below="@id/modify_server_btn"
                 android:padding="4dp"
                 android:textColor="#000000"
                 android:textSize="13sp"
@@ -422,12 +457,13 @@
                 android:background="@drawable/file_item_background_shape"
                 android:gravity="center"/>
 
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/Server_Information_Section"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/setting_start_cloud_signup_btn" >
+            android:layout_below="@id/setting_exo_section" >
 
             <ImageView
                 android:id="@+id/ImageView_Server_Information_Section_Header"
