@@ -14,6 +14,9 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
 import org.exoplatform.singleton.AccountSetting;
@@ -36,7 +39,13 @@ public class WelcomeActivity extends FragmentActivity {
 
   private PagerAdapter    mPagerAdapter;
 
+  private CirclePageIndicator mCirclePageIndicator;
+
+  private ImageView       mSeparatorImg;
+
   private AccountSetting  mSetting;
+
+  private RelativeLayout  mButtonSection;
 
   public  static boolean  mIsTablet;
 
@@ -62,21 +71,25 @@ public class WelcomeActivity extends FragmentActivity {
     ViewGroup vg = (ViewGroup) findViewById(R.id.welcome_layout);
     AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BLACK), vg);
 
+    mSeparatorImg = (ImageView) findViewById(R.id.welcome_separator_img);
+
+    mButtonSection = (RelativeLayout) findViewById(R.id.welcome_button_section);
+
     // Instantiate a ViewPager and a PagerAdapter.
     mPager = (ViewPager) findViewById(R.id.pager);
     mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     mPager.setAdapter(mPagerAdapter);
     mPager.setCurrentItem(mCurrentPage);
 
-    CirclePageIndicator circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circle_page_indicator);
-    circlePageIndicator.setViewPager(mPager);
-    circlePageIndicator.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+    mCirclePageIndicator = (CirclePageIndicator) findViewById(R.id.circle_page_indicator);
+    mCirclePageIndicator.setViewPager(mPager);
+    mCirclePageIndicator.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
       @Override
       public void onPageSelected(int position) {
         mCurrentPage = (position!=0) ? position: 0;
       }
     });
-    circlePageIndicator.setCurrentItem(mCurrentPage);
+    mCirclePageIndicator.setCurrentItem(mCurrentPage);
 
     // pre-loading image for screen slider
     for (int k = 0; k < ScreenSlidePageFragment.sSliderImgs.length; k++) {

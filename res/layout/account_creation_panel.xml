@@ -3,21 +3,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_rect_rounded_corner"
-                android:paddingBottom="@dimen/signup_padding_bottom">
+                android:paddingBottom="@dimen/margin_l">
 
+    <!-- Enter your email text -->
     <TextView
             android:id="@+id/signup_email_txt"
             style="@style/SignUpHeadingTxtStyle"
             android:text="@string/EmailSignUp" />
 
+    <!-- Invisible alert text -->
     <TextView
             android:id="@+id/signup_alert_txt"
             style="@style/SignUpAlertTxtStyle"
             android:layout_below="@id/signup_email_txt"
             android:text="@string/InvalidEmail"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="@dimen/margin_xs"
             android:layout_marginBottom="8dp" />
 
+    <!-- Edit email text -->
     <EditText
             android:id="@+id/signup_email_edit_txt"
             style="@style/SignUpEditTxtStyle"

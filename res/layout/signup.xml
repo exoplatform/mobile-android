@@ -16,6 +16,6 @@
                  android:layout_width="@dimen/signup_frame_width"
                  android:layout_height="wrap_content"
                  android:layout_gravity="center_horizontal"
-                 android:layout_marginTop="@dimen/signup_frame_margin_top"/>
+                 android:layout_marginTop="@dimen/margin_s"/>
 
 </LinearLayout>

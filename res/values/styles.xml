@@ -122,7 +122,7 @@
     <!-- Signup:  edit text with background drawable -->
     <style name="SignUpEditTxtStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">39dp</item>
+        <item name="android:layout_height">40dp</item>
         <item name="android:gravity">center|left</item> <!-- center text vertically and left -->
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColorHint">#B3B3B3</item>
@@ -144,7 +144,7 @@
         <item name="android:textColor">#5A5A5A</item>
         <item name="android:singleLine">true</item>
         <item name="android:padding">10dp</item>
-        <item name="android:background">@drawable/separator</item>
+        <item name="android:background">@drawable/separator_light</item>
         <item name="android:paddingBottom">5dp</item>
     </style>
 

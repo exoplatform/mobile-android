@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_rect_rounded_corner"
-                android:padding="@dimen/signup_frame_padding">
+                android:padding="@dimen/margin_s">
 
     <TextView
         android:id="@+id/signup_thanks_txt"
@@ -18,7 +18,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="15dp"
         android:paddingBottom="10dp"
-        android:background="@drawable/separator"/>
+        android:background="@drawable/separator_light"/>
 
     <ImageView
         android:id="@+id/signup_ok_img"
@@ -38,17 +38,6 @@
         android:text="@string/CheckYourMailInbox"
         android:textColor="#686868"
         android:textSize="@dimen/text_size_small"
-        android:layout_marginBottom="30dp"/>
-
-    <Button
-        android:id="@+id/signup_check_mail_btn"
-        style="@style/SignUpBlueBtnStyle"
-        android:layout_below="@id/signup_check_mail_txt"
-        android:text="@string/CheckMail"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_vertical"
-        android:paddingBottom="10dp"
-        android:drawableLeft="@drawable/icon_email_white"
-        android:drawablePadding="3dp"/>
+        android:paddingBottom="@dimen/margin_m"/>
 
 </RelativeLayout>

@@ -2,6 +2,6 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="false"
-          android:drawable="@drawable/btn_blue_stretchable_disabled"/>
+          android:drawable="@drawable/btn_blue_stretchable_light"/>
     <item android:drawable="@drawable/btn_blue_stretchable"/>
 </selector>

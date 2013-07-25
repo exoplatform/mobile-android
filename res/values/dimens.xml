@@ -38,18 +38,28 @@
     <dimen name="text_size_xlarge">20sp</dimen>
 
     <!-- sign up form -->
-    <dimen name="signup_frame_width">280dp</dimen>
-    <dimen name="signup_frame_margin_top">15dp</dimen>
-    <dimen name="signup_padding_bottom">30dp</dimen>
-    <dimen name="signup_frame_padding">20dp</dimen>
+    <dimen name="signup_frame_width">290dp</dimen>
     <dimen name="signup_image_radius">35dp</dimen>
 
     <!-- on premise -->
-    <dimen name="onpremise_url_txt_margin_left">15dp</dimen>
-    <dimen name="onpremise_url_txt_margin_top">12dp</dimen>
-    <dimen name="onpremise_url_txt_padding_left">35dp</dimen>
-    <dimen name="onpremise_login_txt_margin_top">5dp</dimen>
-    <dimen name="onpremise_login_txt_margin_bottom">10dp</dimen>
+    <dimen name="onpremise_label_txt_padding_left">35dp</dimen>
+    <dimen name="onpremise_label_height">28dp</dimen>
+    <dimen name="onpremise_url_txt_mTop">15dp</dimen>
+    <dimen name="onpremise_login_txt_mTop">5dp</dimen>
 
+    <!-- welcome -->
+    <dimen name="welcome_skip_txt_width">150dp</dimen>
+    <dimen name="welcome_btn_height">42dp</dimen>
+    <dimen name="welcome_btn_width">120dp</dimen>
+    <dimen name="welcome_or_txt_width">26dp</dimen>
+    <dimen name="welcome_btn_pBottom">7dp</dimen>
+
+    <dimen name="margin_xxs">5dp</dimen>
+    <dimen name="margin_xs">10dp</dimen>
+    <dimen name="margin_s">15dp</dimen>
+    <dimen name="margin_m">20dp</dimen>
+    <dimen name="margin_l">30dp</dimen>
+    <dimen name="margin_xl">40dp</dimen>
+    <dimen name="margin_xxl">60dp</dimen>
 
 </resources>

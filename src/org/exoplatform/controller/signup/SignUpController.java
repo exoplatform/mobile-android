@@ -168,7 +168,7 @@ public class SignUpController {
         case ExoConnectionUtils.SIGNUP_OK:
           // swipe view to account creation in progress
           mSignUpActivity.flipToGreetingsPanel();
-          new CreatingMarketoTask().execute();
+          //new CreatingMarketoTask().execute();
           break;
       }
 
