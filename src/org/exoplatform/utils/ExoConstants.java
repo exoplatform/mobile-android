@@ -172,6 +172,10 @@ public class ExoConstants {
 
   public static final String EXO_SERVER_SETTING_FILE               = "ServerList.xml";
 
+  public static final String EXO_OLD_SERVER_SETTING_FILE           = "DefaultServerList.xml";
+
+  public static final String EXO_SERVER_OBJ                        = "EXO_SERVER_OBJ";
+
   /* eXo URL scheme */
   public static final String EXO_URL_USERNAME                      = "username";
 

@@ -2,6 +2,8 @@ package org.exoplatform.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,12 +17,12 @@ import org.exoplatform.R;
 import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoConstants;
 
 /**
  * This screen is used to add new server or modify existing server<br/>
  *
- * Requires setting, adding_server
  */
 public class ServerEditionActivity extends Activity {
 
@@ -42,6 +44,10 @@ public class ServerEditionActivity extends Activity {
 
   private boolean  mIsAddingServer;
 
+  private ServerObjInfo mServerObj;
+
+  private int           mServerIdx;
+
   private AccountSetting    mSetting;
 
   private SettingController mSettingController;
@@ -49,8 +55,8 @@ public class ServerEditionActivity extends Activity {
   private static final String TAG = "eXoServerEditionActivity";
 
   public void onCreate(Bundle savedInstanceState) {
+    requestScreenOrientation();
     super.onCreate(savedInstanceState);
-
     setContentView(R.layout.server_edition);
 
     // we use extra passed along with Intent to specify: add server or modify one
@@ -72,14 +78,41 @@ public class ServerEditionActivity extends Activity {
 
     /* change the title */
     mIntent  = getIntent();
-    mSetting = mIntent.getParcelableExtra(ExoConstants.ACCOUNT_SETTING);
-    if (mSetting == null) mSetting = AccountSetting.getInstance();
-    mSetting.setInstance(mSetting);
+    mServerObj = mIntent.getParcelableExtra(ExoConstants.EXO_SERVER_OBJ);
+    mServerIdx = ServerSettingHelper.getInstance().getServerInfoList().indexOf(mServerObj);
+    mSetting = AccountSetting.getInstance();
     mIsAddingServer = mIntent.getBooleanExtra(ExoConstants.SETTING_ADDING_SERVER, true);
     if (mIsAddingServer) initAddingServer();
     else initModifyingServer();
   }
 
+  /**
+   * Force screen orientation for small and medium size devices
+   */
+  private void requestScreenOrientation() {
+
+    int size = getResources().getConfiguration().screenLayout
+        & Configuration.SCREENLAYOUT_SIZE_MASK;
+
+    switch (size) {
+      case Configuration.SCREENLAYOUT_SIZE_NORMAL:  // 320x470 dp units
+        Log.i(TAG, "normal");
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        break;
+      case Configuration.SCREENLAYOUT_SIZE_SMALL:   // 320x426 dp units
+        Log.i(TAG, "small");
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        break;
+      case Configuration.SCREENLAYOUT_SIZE_LARGE:   // 480x640 dp units
+        Log.i(TAG, "large");
+        break;
+      case Configuration.SCREENLAYOUT_SIZE_XLARGE:  // 720x960 dp units
+        Log.i(TAG, "xlarge");
+        break;
+      default:
+        break;
+    }
+  }
 
   private TextWatcher onServerNameOrServerUrlChanged() {
     return new TextWatcher() {
@@ -121,18 +154,14 @@ public class ServerEditionActivity extends Activity {
     mDeleteBtn.setVisibility(View.VISIBLE);
     mDeleteBtn.setOnClickListener(onDeleteServer());
 
-    String user   = mSetting.getUsername();
-    String pass   = mSetting.getPassword();
-
-    mServerNameEditTxt.setText(mSetting.getServerName());
-    mServerUrlEditTxt.setText(mSetting.getDomainName());
-    mUserEditTxt.setText(user!=null? user: "");
-    mPassEditTxt.setText(pass!=null? pass: "");
+    mServerNameEditTxt.setText(mServerObj.serverName);
+    mServerUrlEditTxt.setText(mServerObj.serverUrl);
+    mUserEditTxt.setText(mServerObj.username);
+    mPassEditTxt.setText(mServerObj.password);
   }
 
   /**
    * Return to setting screen
-   *
    */
   private void returnToSetting() {
     Intent next = new Intent(this, SettingActivity.class);
@@ -148,12 +177,11 @@ public class ServerEditionActivity extends Activity {
       public void onClick(View view) {
         Log.i(TAG, "onDeleteServer");
 
-        mSettingController.onDelete(Integer.valueOf(mSetting.getDomainIndex()));
+        mSettingController.onDelete(mServerIdx);
         returnToSetting();
       }
     };
   }
-
 
   private View.OnClickListener onUpdateServer() {
     return new View.OnClickListener() {
@@ -161,12 +189,12 @@ public class ServerEditionActivity extends Activity {
       public void onClick(View view) {
         Log.i(TAG, "onUpdateServer");
 
-        ServerObjInfo serverObj = mSetting.getCurrentServer().clone();
+        ServerObjInfo serverObj = mServerObj.clone();
         serverObj.serverUrl  = mServerUrlEditTxt.getText().toString();
         serverObj.serverName = mServerNameEditTxt.getText().toString();
         serverObj.username   = mUserEditTxt.getText().toString();
         serverObj.password   = mPassEditTxt.getText().toString();
-        mSettingController.onUpdate(serverObj, Integer.valueOf(mSetting.getDomainIndex()));
+        mSettingController.onUpdate(serverObj, mServerIdx);
 
         returnToSetting();
       }
@@ -191,6 +219,5 @@ public class ServerEditionActivity extends Activity {
       }
     };
   }
-
 
 }

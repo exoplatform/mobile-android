@@ -44,9 +44,7 @@ public class AccountSetting implements Parcelable {
   private ServerObjInfo         mCurrentServer;
 
 
-  private AccountSetting() {
-
-  }
+  private AccountSetting() { }
 
   public static AccountSetting getInstance() {
     return accountSetting;
@@ -101,7 +99,7 @@ public class AccountSetting implements Parcelable {
   }
 
   public String getDomainIndex() {
-    return domainIndex;
+    return (domainIndex == null) ? "-1": domainIndex;
   }
 
   public void setDomainIndex(String index) {

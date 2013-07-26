@@ -48,8 +48,7 @@ public class ServerConfigurationUtils {
 
   private static final String TAG = "eXoServerConfig";
 
-  public ServerConfigurationUtils(Context context) {
-  }
+  public ServerConfigurationUtils(Context context) { }
 
   // Constructor
 
@@ -353,6 +352,103 @@ public class ServerConfigurationUtils {
     return arrServerList;
   }
 
+  /**
+   * Check whether new config file for app exists
+   *
+   * @param context
+   * @return
+   */
+  public static boolean newAppConfigExists(Context context) {
+    return context.getFileStreamPath(ExoConstants.EXO_SERVER_SETTING_FILE).exists();
+  }
+
+  /**
+   * Check if previous config file exists
+   *
+   * @param context
+   * @return
+   */
+  public static String checkPreviousAppConfig(Context context) {
+    /* check external storage available */
+    String state = Environment.getExternalStorageState();
+    File oldConfig;
+    if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state) || Environment.MEDIA_MOUNTED.equals(state)) {
+      oldConfig = new File(Environment.getExternalStorageDirectory().getPath() +
+          "/eXo/" + ExoConstants.EXO_OLD_SERVER_SETTING_FILE);
+    }
+    else {
+      oldConfig = new File(context.getDir("eXo", Context.MODE_WORLD_READABLE).getPath()
+        + "/" + ExoConstants.EXO_OLD_SERVER_SETTING_FILE);
+    }
+
+    if (oldConfig.exists()) return oldConfig.getAbsolutePath();
+    return null;
+  }
+
+  /**
+   * Retrieve server list from XML config file
+   *
+   * @param fileName
+   * @return
+   */
+  public static ArrayList<ServerObjInfo> getServerListFromOldConfigFile(String fileName) {
+    Log.i(TAG, "getServerListFromOldConfigFile: " + fileName);
+
+    ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
+    File file = new File(fileName);
+    try {
+      FileInputStream fis = new FileInputStream(file);
+      DocumentBuilderFactory doc_build_fact = DocumentBuilderFactory.newInstance();
+      DocumentBuilder doc_builder           = doc_build_fact.newDocumentBuilder();
+      Document obj_doc                      = doc_builder.parse(fis);
+
+      if (null != obj_doc) {
+        org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+        NodeList obj_nod_list = feed.getElementsByTagName("server");
+
+        for (int i = 0; i < obj_nod_list.getLength(); i++) {
+          Node itemNode = obj_nod_list.item(i);
+          if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+            Element itemElement = (Element) itemNode;
+
+            ServerObjInfo serverObj  = new ServerObjInfo();
+            serverObj.serverName     = itemElement.getAttribute("name");
+            serverObj.serverUrl      = itemElement.getAttribute("serverURL");
+            Log.i(TAG, "server: " + serverObj.serverName + " - url: " + serverObj.serverUrl);
+            if (serverObj.serverUrl != null)
+              if (!serverObj.serverUrl.equals("")) arrServerList.add(serverObj);
+          }
+        }
+      }
+      fis.close();
+
+      /**
+       * This is a damn bug of Java or JVM or something...
+       * http://stackoverflow.com/questions/991489/i-cant-delete-a-file-in-java
+       * attention: the file will not be deleted, although we can not see it
+       * in file explorer
+       */
+      if (file.delete()) Log.i(TAG, "delete old config file");
+      else Log.e("Error", "Can not delete old config file: " + fileName);
+    } catch (FileNotFoundException e) {
+      Log.i(TAG, "File not found");
+      return null;
+    } catch (IOException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("IOException", "getServerListFromOldConfigFile");
+    } catch (ParserConfigurationException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("ParserConfigurationException", "getServerListFromOldConfigFile");
+    } catch (SAXException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("SAXException", "getServerListFromOldConfigFile");
+    } catch (Exception e) {
+      Log.e("Exception", "getServerListFromOldConfigFile - decryption exception");
+      e.printStackTrace();
+    }
+
+    return arrServerList;
+  }
 
   // Create user configuration file: deleted & added servers
   @Deprecated
@@ -380,7 +476,7 @@ public class ServerConfigurationUtils {
 
       // Write <?xml declaration with encoding (if encoding not null) and
       // standalone flag (if standalone not null)
-      serializer.startDocument(null, Boolean.valueOf(true));
+      serializer.startDocument(null, Boolean.TRUE);
 
       // set indentation option
       // serializer.setFeature(name,
@@ -447,7 +543,7 @@ public class ServerConfigurationUtils {
 
       // Write <?xml declaration with encoding (if encoding not null) and
       // standalone flag (if standalone not null)
-      serializer.startDocument(null, Boolean.valueOf(true));
+      serializer.startDocument(null, Boolean.TRUE);
 
       // set indentation option
       // serializer.setFeature(name,

@@ -158,8 +158,6 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
   }
 
   private void init() {
-    Log.i(TAG, "init");
-
     /* Login */
     mLoginLayout   = (RelativeLayout) findViewById(R.id.setting_login_layout);
     mRememberMeImg = (ImageView) mLoginLayout.findViewById(R.id.setting_remember_me_check_img);
@@ -204,7 +202,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     /* replacing old list server with new one */
     listServerWrap = (LinearLayout) findViewById(R.id.listview_server_wrap);
     RelativeLayout parent = (RelativeLayout) findViewById(R.id.setting_layout);
-    mSettingController = new SettingController(this, parent, mSetting);
+    mSettingController = new SettingController(this, parent);
     int index = parent.indexOfChild(listServerWrap);
     parent.removeView(listServerWrap);
     parent.addView(mSettingController.getServerListLayout(), index);

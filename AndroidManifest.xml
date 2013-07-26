@@ -1,109 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.exoplatform"
-    android:versionCode="1"
-    android:installLocation="auto"
-    android:versionName="2.3" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1" android:versionName="2.3" package="org.exoplatform">
 
-    <supports-screens android:smallScreens="false" />
+    <supports-screens android:smallScreens="false"/>
 
     <!-- Application Permissions -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_OWNER_DATA"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <!-- Application Uses SDK -->
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="9"/>
 
     <!-- Application Information -->
-    <application
-        android:name=".ExoApplication"
-        android:icon="@drawable/application_icon"
-        android:label="eXo Mobile"
-        android:theme="@style/Theme.eXo" 
-        android:allowBackup="true">
+    <application android:allowBackup="true" android:icon="@drawable/application_icon" android:label="eXo Mobile" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
 
-        <activity
-            android:name=".ui.WelcomeActivity"
-            android:configChanges="keyboardHidden|orientation">
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.WelcomeActivity">
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
         </activity>
 
         <!-- First Activity of the Application -->
-        <activity
-            android:name=".ui.LoginActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateUnchanged|adjustPan" >
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.LoginActivity" android:windowSoftInputMode="stateUnchanged|adjustPan">
 
             <!-- custom URL scheme -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="exomobile" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="exomobile"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.HomeActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.SettingActivity"
-            android:configChanges="keyboardHidden|orientation" /> 
-        <activity
-            android:name=".ui.DocumentActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.DocumentActionDialog"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.DashboardActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.WebViewActivity"
-            android:configChanges="orientation" />
-        <activity
-            android:name=".ui.social.SocialDetailActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.social.ComposeMessageActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.social.SelectedImageActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.social.SocialAttachedImageActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.social.LikeListActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.social.SocialTabsActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/Theme.PageIndicatorDefaults" />
-        <activity
-            android:name=".ui.SignUpActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.SignInActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.SignInOnPremiseActivity"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity
-            android:name=".ui.ServerEditionActivity"
-            android:configChanges="keyboardHidden|orientation" />
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.HomeActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SettingActivity"/> 
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DocumentActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DocumentActionDialog"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DashboardActivity"/>
+        <activity android:configChanges="orientation" android:name=".ui.WebViewActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialDetailActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.ComposeMessageActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SelectedImageActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialAttachedImageActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.LikeListActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialTabsActivity" android:theme="@style/Theme.PageIndicatorDefaults"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignUpActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignInActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignInOnPremiseActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.ServerEditionActivity"/>
     </application>
 
 </manifest>

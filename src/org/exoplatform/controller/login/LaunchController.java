@@ -55,7 +55,10 @@ public class LaunchController {
     setAppVersion();
     setLocalize();
     initSocialImageLoader();
-    setServerList();
+    String oldConfigFile = ServerConfigurationUtils.checkPreviousAppConfig(mContext);
+    if ((oldConfigFile != null) && !ServerConfigurationUtils.newAppConfigExists(mContext))
+      setOldServerList(oldConfigFile);
+    else setServerList();
   }
 
 
@@ -72,12 +75,37 @@ public class LaunchController {
   private void setServerList() {
     ArrayList<ServerObjInfo> _serverList =
         ServerConfigurationUtils.getServerListFromFile(mContext, ExoConstants.EXO_SERVER_SETTING_FILE);
-    ServerSettingHelper.getInstance()
-        .setServerInfoList( (_serverList == null) ? new ArrayList<ServerObjInfo>(): _serverList);
+    ServerSettingHelper.getInstance().setServerInfoList(_serverList);
 
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
     mSetting.setCurrentServer((selectedServerIdx == -1) ? null : _serverList.get(selectedServerIdx));
+  }
+
+
+  /**
+   * Get server list from previous config of app
+   *
+   * @param oldConfigFile
+   */
+  private void setOldServerList(String oldConfigFile) {
+    Log.i(TAG, "set old server list");
+    ArrayList<ServerObjInfo> _serverList =
+        ServerConfigurationUtils.getServerListFromOldConfigFile(oldConfigFile);
+    ServerSettingHelper.getInstance().setServerInfoList(_serverList);
+    if (_serverList.size() == 0) return;
+    /* force app to start login screen */
+    mSetting.setDomainIndex("0");
+    mSetting.setCurrentServer(_serverList.get(0));
+    _serverList.get(0).isAutoLoginEnabled = false;
+
+    /* persist the configuration */
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        SettingUtils.persistServerSetting(mContext);
+      }
+    }).start();
   }
 
   /**

@@ -33,9 +33,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
 /**
- *
- *
- * Requires setting
  */
 public class SettingController {
   private Context                  mContext;
@@ -66,11 +63,10 @@ public class SettingController {
 
   private static final String TAG = "eXoSettingController";
 
-  public SettingController(Activity context, ViewGroup parent, AccountSetting setting) {
+  public SettingController(Activity context, ViewGroup parent) {
     mContext  = context;
     mActivity = context;
-    mSetting  = (setting==null)? AccountSetting.getInstance(): setting;
-    mSetting.setInstance(mSetting);
+    mSetting  = AccountSetting.getInstance();
     mSharedPreferences  = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
 
     sListServerLayoutParams = (sListServerLayoutParams == null) ?
@@ -207,7 +203,6 @@ public class SettingController {
     toggleCheckBoxImage(socialChecked, mIsSocialFilterEnabled);
   }
 
-
   public void setDocumentShowPrivateDrive(ImageView documentChecked) {
     mIsShowHidden = !mIsShowHidden;
     toggleCheckBoxImage(documentChecked, mIsShowHidden);
@@ -238,9 +233,6 @@ public class SettingController {
    * Run only in case of updating new list of server
    */
   private void setServerList(ViewGroup parent) {
-    Log.i(TAG, "set server list");
-    long start = new Date().getTime();
-
     if (sListServerLayout == null) {
       sListServerLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.setting_server_list, parent ,false);
     }
@@ -251,7 +243,6 @@ public class SettingController {
       serverItemLayout = initServerItem(sServerList.get(i), i);
       sListServerLayout.addView(serverItemLayout, i, sListServerLayoutParams);
     }
-    Log.i(TAG, "duration of setting server: " + (new Date().getTime() - start));  // 6ms for 1, 6ms for 2, 16ms for 3, 12ms for 4
   }
 
   /**
@@ -287,7 +278,7 @@ public class SettingController {
 
         Intent next  = new Intent(mContext, ServerEditionActivity.class);
         next.putExtra(ExoConstants.SETTING_ADDING_SERVER, false);
-        next.putExtra(ExoConstants.ACCOUNT_SETTING, mSetting);
+        next.putExtra(ExoConstants.EXO_SERVER_OBJ, serverObj);
         mContext.startActivity(next);
       }
     });
@@ -390,12 +381,8 @@ public class SettingController {
    */
   private void onSave() {
     Log.i(TAG, "onSave");
-    long start = new Date().getTime();
     ServerConfigurationUtils.generateXmlFileWithServerList(mContext,
         sServerList, ExoConstants.EXO_SERVER_SETTING_FILE, "");
-    Log.i(TAG, "time generate xml file: " + (new Date().getTime() - start));
-    // 23ms for 1 server, 16ms for 2 servers, 25ms for 3 servers. 45ms for 4
-
     ServerSettingHelper.getInstance().setServerInfoList(sServerList);
   }
 
