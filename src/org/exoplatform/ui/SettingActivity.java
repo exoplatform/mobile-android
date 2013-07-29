@@ -259,7 +259,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
    * @param localize
    */
   private void updateLocation(String localize) {
-    if (mSettingController.updateLocallize(localize) == true) {
+    if (mSettingController.updateLocallize(localize)) {
       changeLanguage();
     }
   }

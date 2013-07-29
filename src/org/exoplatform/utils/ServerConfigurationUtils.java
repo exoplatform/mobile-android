@@ -71,6 +71,7 @@ public class ServerConfigurationUtils {
   }
 
   // Get app's current version, create DefaultServerList.xml if needed
+  @Deprecated
   public static String getAppVersion(Context _context) {
 
       boolean mExternalStorageAvailable = false;
@@ -334,19 +335,22 @@ public class ServerConfigurationUtils {
 
     } catch (FileNotFoundException e) {
       Log.i(TAG, "File not found");
-      return null;
+      return arrServerList;
     } catch (IOException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("IOException", "getServerListWithFileName");
+      return arrServerList;
     } catch (ParserConfigurationException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("ParserConfigurationException", "getServerListWithFileName");
+      return arrServerList;
     } catch (SAXException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("SAXException", "getServerListWithFileName");
+      return arrServerList;
     } catch (Exception e) {
-      Log.e("Exception", "getServerListWithFileName - decryption exception");
-      e.printStackTrace();
+      Log.e("Exception", "getServerListWithFileName - decryption exception - " + e.getLocalizedMessage());
+      return arrServerList;
     }
 
     return arrServerList;
@@ -422,12 +426,6 @@ public class ServerConfigurationUtils {
       }
       fis.close();
 
-      /**
-       * This is a damn bug of Java or JVM or something...
-       * http://stackoverflow.com/questions/991489/i-cant-delete-a-file-in-java
-       * attention: the file will not be deleted, although we can not see it
-       * in file explorer
-       */
       if (file.delete()) Log.i(TAG, "delete old config file");
       else Log.e("Error", "Can not delete old config file: " + fileName);
     } catch (FileNotFoundException e) {
@@ -550,9 +548,7 @@ public class ServerConfigurationUtils {
       // state)("http://xmlpull.org/v1/doc/features.htmlindent-output", true);
 
       // start a tag called "root"
-      serializer.startTag(null, "xml");
-      //if (fileName.equalsIgnoreCase("ServerList.xml")) {
-        serializer.startTag(null, "version");
+      serializer.startTag(null, "xml").startTag(null, "version");
         serializer.attribute(null, "number", appVersion);
         serializer.endTag(null, "version");
       //}

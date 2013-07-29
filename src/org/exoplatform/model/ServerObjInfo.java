@@ -31,7 +31,7 @@ public class ServerObjInfo implements Parcelable {
   public String  serverName;
 
   /** url of server, contains the protocol (http:// ) */
-  public String  serverUrl; // URL of server
+  public String  serverUrl;
 
   /** username */
   public String  username;

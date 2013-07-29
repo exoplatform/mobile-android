@@ -56,8 +56,7 @@ public class LaunchController {
     setLocalize();
     initSocialImageLoader();
     String oldConfigFile = ServerConfigurationUtils.checkPreviousAppConfig(mContext);
-    if ((oldConfigFile != null) && !ServerConfigurationUtils.newAppConfigExists(mContext))
-      setOldServerList(oldConfigFile);
+    if (oldConfigFile != null) setOldServerList(oldConfigFile);
     else setServerList();
   }
 
@@ -126,11 +125,8 @@ public class LaunchController {
    * Provide app version for setting
    */
   private void setAppVersion() {
-    String appVer = "";
-    String oldVer = ServerConfigurationUtils.getAppVersion(mContext);
-
     try {
-      appVer = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
+      String appVer = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
       ServerSettingHelper.getInstance().setApplicationVersion(appVer);
     } catch (NameNotFoundException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
@@ -155,7 +151,7 @@ public class LaunchController {
       }
 
     }
-    SettingUtils.setLocale(mContext, strLocalize);  // 7ms
+    SettingUtils.setLocale(mContext, strLocalize);
   }
 
   /**
