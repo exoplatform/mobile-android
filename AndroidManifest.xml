@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1" android:versionName="2.3" package="org.exoplatform">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1" android:versionName="2.4.0" package="org.exoplatform">
 
     <supports-screens android:smallScreens="false"/>
 
@@ -19,7 +19,7 @@
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="9"/>
 
     <!-- Application Information -->
-    <application android:allowBackup="true" android:icon="@drawable/application_icon" android:label="eXo Mobile" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
+    <application android:allowBackup="true" android:icon="@drawable/application_icon" android:label="eXo 2.4.0" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
 
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.WelcomeActivity">
 
