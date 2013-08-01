@@ -22,7 +22,7 @@
             android:layout_marginLeft="5dp"
             android:singleLine="true"
             android:textColor="#000000"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/TextView_URL"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:textColor="#000000"
-            android:textSize="13sp" />
+            android:textSize="13sp"/>
     </LinearLayout>
 
     <ImageView

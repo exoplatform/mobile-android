@@ -37,8 +37,6 @@ import android.widget.Toast;
 public class SettingController {
   private Context                  mContext;
 
-  private Activity                 mActivity;
-
   private SharedPreferences        mSharedPreferences;
 
   private String                   serverIsEmpty;
@@ -49,11 +47,9 @@ public class SettingController {
 
   private AccountSetting           mSetting;
 
-  private static LayoutParams      sListServerLayoutParams;
+  private LinearLayout mListServerLayout;
 
-  private static ArrayList<ServerObjInfo> sServerList;
-
-  private static LinearLayout      sListServerLayout;
+  private ArrayList<ServerObjInfo> mListServer;
 
   private static  SettingController _instance;
 
@@ -63,33 +59,19 @@ public class SettingController {
 
   private static final String TAG = "eXoSettingController";
 
-  public SettingController(Activity context, ViewGroup parent) {
+  public SettingController(Context context, LinearLayout listServer) {
     mContext  = context;
-    mActivity = context;
     mSetting  = AccountSetting.getInstance();
     mSharedPreferences  = mContext.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
-
-    sListServerLayoutParams = (sListServerLayoutParams == null) ?
-        new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT) : sListServerLayoutParams;
-    sListServerLayoutParams.setMargins(0, 0, 0, -1);
+    mListServerLayout = listServer;
+    mListServer = ServerSettingHelper.getInstance().getServerInfoList();
 
     changeLanguage();
 
-    if (isTwoListEqual(sServerList, ServerSettingHelper.getInstance().getServerInfoList())) {
-      /* re-use old layout */
-      ViewGroup oldParent = (ViewGroup) sListServerLayout.getParent();
-      oldParent.removeView(sListServerLayout);
-      return ;
-    }
-
-    sServerList      = ServerSettingHelper.getInstance().getServerInfoList();
     _instance = this;
-    setServerList(parent);
+    setServerList();
   }
 
-  public LinearLayout getServerListLayout() {
-    return sListServerLayout;
-  }
 
   /**
    * Used to quick check if 2 server list are equal
@@ -232,16 +214,17 @@ public class SettingController {
    * Populate server list
    * Run only in case of updating new list of server
    */
-  private void setServerList(ViewGroup parent) {
-    if (sListServerLayout == null) {
-      sListServerLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.setting_server_list, parent ,false);
-    }
-    else sListServerLayout.removeAllViews();
+  private void setServerList() {
+    mListServerLayout.removeAllViews();
+
+    LayoutParams layoutParams =
+        new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+    layoutParams.setMargins(0, 0, 0, -1);
 
     ServerItemLayout serverItemLayout;
-    for (int i = 0; i < sServerList.size(); i++) {
-      serverItemLayout = initServerItem(sServerList.get(i), i);
-      sListServerLayout.addView(serverItemLayout, i, sListServerLayoutParams);
+    for (int i = 0; i < mListServer.size(); i++) {
+      serverItemLayout = initServerItem(mListServer.get(i), i);
+      mListServerLayout.addView(serverItemLayout, i, layoutParams);
     }
   }
 
@@ -323,14 +306,12 @@ public class SettingController {
   public boolean onAdd(ServerObjInfo myServerObj) {
     if (!isServerValid(myServerObj)) return false;
 
-    if (sServerList.contains(myServerObj)) {
+    if (mListServer.contains(myServerObj)) {
       Toast.makeText(mContext, serverURLAndUserExists, Toast.LENGTH_SHORT).show();
       return false;
     }
 
-    sServerList.add(myServerObj);
-    sListServerLayout.addView(initServerItem(myServerObj, sServerList.size() -1),
-        sListServerLayoutParams );
+    mListServer.add(myServerObj);
     onSave();
     return true;
   }
@@ -346,17 +327,14 @@ public class SettingController {
     if (!isServerValid(myServerObj)) return false;
 
     /* check whether server is duplicated with other server */
-    int serverIdx = sServerList.indexOf(myServerObj);
+    int serverIdx = mListServer.indexOf(myServerObj);
     if ((serverIdx != serverIndex) && (serverIdx != -1)) {
       Toast.makeText(mContext, serverURLAndUserExists, Toast.LENGTH_SHORT).show();
       return false;
     }
 
-    sServerList.remove(serverIndex);
-    sServerList.add(serverIndex, myServerObj);
-    sListServerLayout.removeViewAt(serverIndex);
-    sListServerLayout.addView( initServerItem(myServerObj, serverIdx), serverIndex,
-        sListServerLayoutParams);
+    mListServer.remove(serverIndex);
+    mListServer.add(serverIndex, myServerObj);
     onSave();
     return true;
   }
@@ -371,8 +349,7 @@ public class SettingController {
     if (serverIndex < selectedServerIndex)
       mSetting.setDomainIndex(String.valueOf(selectedServerIndex - 1));
 
-    sServerList.remove(serverIndex);
-    sListServerLayout.removeViewAt(serverIndex);
+    mListServer.remove(serverIndex);
     onSave();
   }
 
@@ -382,8 +359,8 @@ public class SettingController {
   private void onSave() {
     Log.i(TAG, "onSave");
     ServerConfigurationUtils.generateXmlFileWithServerList(mContext,
-        sServerList, ExoConstants.EXO_SERVER_SETTING_FILE, "");
-    ServerSettingHelper.getInstance().setServerInfoList(sServerList);
+        mListServer, ExoConstants.EXO_SERVER_SETTING_FILE, "");
+    ServerSettingHelper.getInstance().setServerInfoList(mListServer);
   }
 
   private void changeLanguage() {

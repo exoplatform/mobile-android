@@ -21,22 +21,22 @@ public class ScreenSlidePageFragment extends Fragment {
   private static final String   TAG            = "eXoScreenSlidePageFragment";
 
   public  static final int[]    SLIDER_IMGS    = {
-      R.drawable.activity_stream_slide,
-      R.drawable.activity_details_slide,
-      R.drawable.apps_slide,
-      R.drawable.documents_slide  };
+      R.drawable.slide_activity_stream,
+      R.drawable.slide_activity_details,
+      R.drawable.slide_apps,
+      R.drawable.slide_documents  };
 
   public  static final int[]    SLIDER_IMGS_PORTRAIT  = {
-      R.drawable.activity_stream_portrait_slide,
-      R.drawable.activity_details_portrait_slide,
-      R.drawable.apps_portrait_slide,
-      R.drawable.documents_portrait_slide  };
+      R.drawable.slide_activity_stream_portrait,
+      R.drawable.slide_activity_details_portrait,
+      R.drawable.slide_apps_portrait,
+      R.drawable.slide_documents_portrait  };
 
   public  static final int[]    SLIDER_IMGS_LANDSCAPE = {
-      R.drawable.activity_stream_landscape_slide,
-      R.drawable.activity_details_landscape_slide,
-      R.drawable.apps_landscape_slide,
-      R.drawable.documents_landscape_slide  };
+      R.drawable.slide_activity_stream_land,
+      R.drawable.slide_activity_details_land,
+      R.drawable.slide_apps_land,
+      R.drawable.slide_documents_land  };
 
   /** default slider image use normal images */
   public  static       int[]    sSliderImgs    = SLIDER_IMGS;

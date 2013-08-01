@@ -201,11 +201,30 @@ public class LoginController {
           newServer.isRememberEnabled  = true;
           newServer.isAutoLoginEnabled = true;
 
-          serverList.add(newServer);
-          // set current selected server to the new server
-          mSetting.setDomainIndex(String.valueOf(serverList.size() - 1));
-          mSetting.setCurrentServer(newServer);
-          needToSave = true;
+          // check server conflict
+          ServerObjInfo conflictServer = null;
+          int serverIdx = 0;
+          for (ServerObjInfo serverObj : serverList) {
+            if (serverObj.serverUrl.equals(newServer.serverUrl) && serverObj.username.equals("")) {
+              conflictServer = serverObj;
+              break;
+            }
+            serverIdx++;
+          }
+
+          if (conflictServer!= null) {
+            conflictServer = newServer;
+            mSetting.setDomainIndex(String.valueOf(serverIdx));
+            mSetting.setCurrentServer(conflictServer);
+            needToSave = true;
+          }
+          else {
+            serverList.add(newServer);
+            // set current selected server to the new server
+            mSetting.setDomainIndex(String.valueOf(serverList.size() - 1));
+            mSetting.setCurrentServer(newServer);
+            needToSave = true;
+          }
         }
         else {
           // same user, but password might change

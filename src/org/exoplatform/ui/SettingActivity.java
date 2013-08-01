@@ -201,16 +201,12 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
 
     /* replacing old list server with new one */
     listServerWrap = (LinearLayout) findViewById(R.id.listview_server_wrap);
-    RelativeLayout parent = (RelativeLayout) findViewById(R.id.setting_layout);
-    mSettingController = new SettingController(this, parent);
-    int index = parent.indexOfChild(listServerWrap);
-    parent.removeView(listServerWrap);
-    parent.addView(mSettingController.getServerListLayout(), index);
+    mSettingController = new SettingController(this, listServerWrap);
 
-    View serverListView = findViewById(R.id.Server_List_Section);
-    if (ServerSettingHelper.getInstance().getServerInfoList().size() == 0)
-      serverListView.setVisibility(View.GONE);
-    else serverListView.setVisibility(View.VISIBLE);
+    //View serverListView = findViewById(R.id.Server_List_Section);
+    //if (ServerSettingHelper.getInstance().getServerInfoList().size() == 0)
+    //  serverListView.setVisibility(View.GONE);
+    //else serverListView.setVisibility(View.VISIBLE);
 
     mSettingController.initLocation(imgViewECheckMark, imgViewFCheckMark);
     if (mSettingType == GLOBAL_TYPE) {

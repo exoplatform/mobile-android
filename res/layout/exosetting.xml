@@ -377,7 +377,7 @@
                 android:shadowRadius="1.0"
                 android:textColor="#ffffff"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/ImageView_Server_List_Section_Bottom"
@@ -386,24 +386,36 @@
                 android:layout_below="@id/TextView_Server_List"
                 android:background="@drawable/serversectionseparator"
                 android:contentDescription="@string/Settings" />
+
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/listview_server_wrap"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/Server_List_Section"
-            android:layout_marginBottom="0dp"
-            android:orientation="vertical" >
+                android:id="@+id/listview_server_wrap"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Server_List_Section"
+                android:layout_marginBottom="0dp"
+                android:orientation="vertical" >
         </LinearLayout>
 
+        <!-- Add server button -->
+        <Button
+                android:id="@+id/modify_server_btn"
+                android:layout_width="fill_parent"
+                android:layout_height="44dip"
+                android:layout_below="@id/listview_server_wrap"
+                android:layout_marginLeft="-2dp"
+                android:layout_marginRight="-2dp"
+                android:background="@drawable/file_item_background_shape"
+                android:textColor="#000000"
+                android:textStyle="bold"/>
 
         <!-- eXo section -->
         <LinearLayout
             android:id="@+id/setting_exo_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/listview_server_wrap"
+            android:layout_below="@id/modify_server_btn"
             android:orientation="vertical">
 
             <ImageView
@@ -431,18 +443,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/serversectionseparator"
                     android:contentDescription="@string/Settings" />
-
-            <!-- Add server button -->
-            <Button
-                android:id="@+id/modify_server_btn"
-                android:layout_width="fill_parent"
-                android:layout_height="44dip"
-                android:layout_marginLeft="-2dp"
-                android:layout_marginRight="-2dp"
-                android:background="@drawable/file_item_background_shape"
-                android:textColor="#000000"
-                android:textStyle="bold"/>
-
 
             <!-- Start cloud sign up button -->
             <Button
@@ -497,7 +497,6 @@
         </RelativeLayout>
 
         <!-- Server Edition Info -->
-
         <LinearLayout
             android:id="@+id/setting_server_edition"
             android:layout_width="fill_parent"

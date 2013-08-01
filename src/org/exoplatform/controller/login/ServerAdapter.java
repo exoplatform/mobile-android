@@ -26,75 +26,88 @@ import android.widget.TextView;
 public class ServerAdapter extends BaseAdapter {
   private ArrayList<ServerObjInfo> serverInfoList;
 
-  private ListView                 _listViewServer;
-
   private Context                  mContext;
-
-  /** current selected server */
-  private int                      mDomainIdx;
 
   private AccountSetting           mSetting;
 
   private static final String TAG = "eXoServerAdapter";
 
-  public ServerAdapter(Context context, ListView lv) {
+  public ServerAdapter(Context context) {
     mContext        = context;
-    _listViewServer = lv;
     serverInfoList  = ServerSettingHelper.getInstance().getServerInfoList();
     mSetting        = AccountSetting.getInstance();
-    mDomainIdx      = Integer.valueOf(mSetting.getDomainIndex());
   }
 
-  // @Override
+  @Override
   public int getCount() {
     return serverInfoList.size();
   }
 
-  // @Override
+  @Override
   public Object getItem(int pos) {
     return serverInfoList.get(pos);
   }
 
-  // @Override
+  @Override
   public long getItemId(int pos) {
     return pos;
   }
 
-  // @Override
+  /**
+   * This method is called 3 times for each item
+   *
+   *
+   * @param position
+   * @param convertView
+   * @param parent
+   * @return rowView - view for the item, this view will be saved in the RecycleBin
+   * and will be passed as convertView for the next getView call
+   *
+   */
+  @Override
   public View getView(int position, View convertView, ViewGroup parent) {
-    final int pos = position;
+    Log.i(TAG, "getView: " + position + " - " + convertView);
+    int domainIdx = Integer.valueOf(mSetting.getDomainIndex());
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View rowView = inflater.inflate(R.layout.server_list_item, parent, false);
+    Log.i(TAG, "rowView after inflation: " + rowView);
 
-    final ServerObjInfo serverObj = serverInfoList.get(pos);
+    final ServerObjInfo serverObj = serverInfoList.get(position);
     TextView txtvServerName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
     txtvServerName.setText(serverObj.serverName);
+    Log.i(TAG, "server: " + serverObj);
 
     TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
     txtvUrl.setText(serverObj.serverUrl);
+    Log.i(TAG, "server url: " + serverObj.serverUrl);
+    Log.i(TAG, "username: " + serverObj.username);
+    Log.i(TAG, "domainIdx: " + domainIdx);
 
     ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-    if (mDomainIdx == pos) {
+    if (domainIdx == position) {
       imgView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
     } else {
       imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
     }
 
+    /**
     rowView.setOnClickListener(new OnClickListener() {
 
       public void onClick(View v) {
-        Log.i(TAG, "onClick server list item: " + serverObj.serverUrl);
+        Log.i(TAG, "rowView - onClick server list item: " + serverObj.serverUrl);
 
+        Log.i(TAG, "rowView - ===> getView: " + pos + " - domainIdx: " + mDomainIdx );
         View rowView = getView(pos, null, _listViewServer);
         ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
         imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
         mDomainIdx = pos;
 
-        /* changes setting */
         mSetting.setDomainIndex(String.valueOf(mDomainIdx));
         mSetting.setCurrentServer(serverObj);
+        Log.i(TAG, "server: " + mSetting.getCurrentServer());
         Log.i(TAG, "is remember me: " + mSetting.isRememberMeEnabled());
-        Log.i(TAG, "is remember me: " + mSetting.getCurrentServer().serverUrl);
+        Log.i(TAG, "server url: " + mSetting.getCurrentServer().serverUrl);
+        Log.i(TAG, "user : " + mSetting.getUsername());
 
         rowView = getView(mDomainIdx, null, _listViewServer);
         imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
@@ -102,8 +115,8 @@ public class ServerAdapter extends BaseAdapter {
         notifyDataSetChanged();
       }
     });
+    **/
 
-    return (rowView);
-
+    return rowView;
   }
 }

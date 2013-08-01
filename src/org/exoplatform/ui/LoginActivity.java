@@ -2,6 +2,7 @@ package org.exoplatform.ui;
 
 
 import android.content.SharedPreferences;
+import android.widget.*;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
 import org.exoplatform.controller.login.LoginController;
@@ -28,11 +29,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,23 +36,20 @@ import java.util.Date;
 /**
  * Represents screen for authentication
  */
-public class LoginActivity extends Activity implements OnClickListener {
+public class LoginActivity extends Activity implements OnClickListener, AdapterView.OnItemClickListener {
 
-  private ImageView         _imageAccount;
+  private ImageView         mAccountBtn;
 
-  private ImageView         _imageServer;
+  private ImageView         mServerBtn;
 
-  private Button            _btnAccount;
+  private Button            mLogInBtn;
 
-  private Button            _btnServer;
+  private EditText          mUserEditTxt;
 
-  private Button            _btnLogIn;
+  private EditText          mPassEditTxt;
 
-  private EditText          _edtxUserName;
-
-  private EditText          _edtxPassword;
-
-  private ListView          _listViewServer;
+  /** list view that contains list of servers */
+  private ListView          mServerListView;
 
   private String            strSignIn;
 
@@ -70,18 +63,22 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   private String            password;
 
-  private LinearLayout      listviewPanel;
+  private LinearLayout      mServerPanel;
 
-  private LinearLayout      userpassPanel;
+  private LinearLayout      mAccountPanel;
 
   private AccountSetting    mSetting;
+
+  /** Default is set to show account panel */
+  private String            mPanelMode     = ACCOUNT_PANEL;
+
+  public static final String ACCOUNT_PANEL = "ACCOUNT_PANEL";
+
+  public static final String SERVER_PANEL  = "SERVER_PANEL";
 
   private static final String TAG = "eXoLoginActivity";
 
   public void onCreate(Bundle savedInstanceState) {
-    long start = new Date().getTime();
-    Log.i(TAG, "start time login activity: " + start);
-
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.login);
@@ -94,16 +91,17 @@ public class LoginActivity extends Activity implements OnClickListener {
       setUpUserAndServerFromUrl();
     }
 
-    init();
-    Log.i(TAG, "end time login: " + (new Date().getTime() - start) );
+    initSubViews();
   }
 
   @Override
   protected void onResume() {
+    Log.i(TAG, "onResume");
     super.onResume();
     SettingUtils.setDefaultLanguage(this);
-    username = _edtxUserName.getText().toString();
-    password = _edtxPassword.getText().toString();
+    username = mUserEditTxt.getText().toString();
+    password = mPassEditTxt.getText().toString();
+    initSubViews();
     setInformation();
   }
 
@@ -111,33 +109,97 @@ public class LoginActivity extends Activity implements OnClickListener {
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     setContentView(R.layout.login);
-    username = _edtxUserName.getText().toString();
-    password = _edtxPassword.getText().toString();
-    init();
+    username = mUserEditTxt.getText().toString();
+    password = mPassEditTxt.getText().toString();
+    initSubViews();
   }
 
-  private void init() {
-    /* init app setting */
-    _imageAccount = (ImageView) findViewById(R.id.Image_Account);
-    _imageServer  = (ImageView) findViewById(R.id.Image_Server);
-    _edtxUserName = (EditText)  findViewById(R.id.EditText_UserName);
-    _edtxPassword = (EditText)  findViewById(R.id.EditText_Password);
-    _btnAccount   = (Button)    findViewById(R.id.Button_Account);
-    _btnAccount.setOnClickListener(this);
-    _btnServer    = (Button)    findViewById(R.id.Button_Server);
-    _btnServer.setOnClickListener(this);
-    _btnLogIn     = (Button)    findViewById(R.id.Button_Login);
-    _btnLogIn.setOnClickListener(this);
-    listviewPanel = (LinearLayout) findViewById(R.id.login_listview_panel);
-    userpassPanel = (LinearLayout) findViewById(R.id.login_userpass_panel);
-    _listViewServer = (ListView) findViewById(R.id.ListView_Servers);
-    _listViewServer.setVisibility(View.INVISIBLE);
-    _listViewServer.setCacheColorHint(Color.TRANSPARENT);
-    _listViewServer.setFadingEdgeLength(0);
-    _listViewServer.setDivider(null);
-    _listViewServer.setDividerHeight(1);
+  private void initSubViews() {
+    Log.i(TAG, "initSubViews");
+    /* init account panel */
+    mAccountPanel = (LinearLayout) findViewById(R.id.login_account_panel);
+    mUserEditTxt  = (EditText) mAccountPanel.findViewById(R.id.EditText_UserName);
+    mPassEditTxt  = (EditText) mAccountPanel.findViewById(R.id.EditText_Password);
+    mLogInBtn     = (Button) mAccountPanel.findViewById(R.id.Button_Login);
+    mLogInBtn.setOnClickListener(this);
 
+    /* init button */
+    mAccountBtn   = (ImageView) findViewById(R.id.login_account_btn);
+    mAccountBtn.setOnClickListener(this);
+    mServerBtn    = (ImageView) findViewById(R.id.login_server_btn);
+    mServerBtn.setOnClickListener(this);
+
+    /* init server panel */
+    mServerPanel = (LinearLayout) findViewById(R.id.login_server_panel);
+    mServerListView = (ListView) mServerPanel.findViewById(R.id.ListView_Servers);
+    mServerListView.setCacheColorHint(Color.TRANSPARENT);
+    mServerListView.setFadingEdgeLength(0);
+    mServerListView.setDivider(null);
+    mServerListView.setDividerHeight(1);
+
+    mServerListView.setOnItemClickListener(this);
+    mServerListView.setAdapter(new ServerAdapter(this));
+
+    switchPanel(mPanelMode);
     setInformation();
+  }
+
+
+  private void switchPanel(String panel) {
+    mPanelMode = panel;
+
+    if (mPanelMode.equals(ACCOUNT_PANEL)) {
+      Log.i(TAG, "switch to account panel");
+      mAccountPanel.setVisibility(View.VISIBLE);
+      mServerPanel.setVisibility(View.INVISIBLE);
+      mServerListView.setVisibility(View.INVISIBLE);
+      mAccountBtn.setSelected(true);
+      mServerBtn.setSelected(false);
+
+      Log.i(TAG, "server: " + mSetting.getCurrentServer());
+      Log.i(TAG, "remember me: " + mSetting.isRememberMeEnabled());
+      if (mSetting.getCurrentServer()!=null) Log.i(TAG, "server: " + mSetting.getCurrentServer().serverUrl);
+      Log.i(TAG, "user: " + mSetting.getUsername());
+      if (mSetting.getCurrentServer() != null) {
+        mUserEditTxt.setText(mSetting.isRememberMeEnabled() ? mSetting.getUsername(): username);
+        mPassEditTxt.setText(mSetting.isRememberMeEnabled() ? mSetting.getPassword(): password);
+      }
+    }
+    else {
+      Log.i(TAG, "switch to server panel");
+      mAccountPanel.setVisibility(View.INVISIBLE);
+      mServerPanel.setVisibility(View.VISIBLE);
+      mServerListView.setVisibility(View.VISIBLE);
+      mAccountBtn.setSelected(false);
+      mServerBtn.setSelected(true);
+    }
+  }
+
+  @Override
+  public void onItemClick(AdapterView<?> parent, View rowView, int position, long id) {
+    Log.i(TAG, "onItemClick - parent: " + parent + " - view: " + rowView + " - pos: " + position + " - id: " + id);
+
+    int selectedIdx = Integer.valueOf(mSetting.getDomainIndex());
+    if (selectedIdx == position) return;
+
+    /* unchecked the current selected */
+    if (selectedIdx > -1) {
+      int firstVisibleChildIdx = parent.getFirstVisiblePosition();
+      if ((firstVisibleChildIdx <= selectedIdx)
+          && (selectedIdx <= parent.getLastVisiblePosition())) {
+        parent.getChildAt(selectedIdx - firstVisibleChildIdx)
+          .findViewById(R.id.ImageView_Checked)
+          .setBackgroundResource(R.drawable.authenticate_checkmark_off);
+      }
+    }
+
+    /* check the current rowView */
+    rowView.findViewById(R.id.ImageView_Checked)
+        .setBackgroundResource(R.drawable.authenticate_checkmark_on);
+
+    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+    mSetting.setDomainIndex(String.valueOf(position));
+    mSetting.setCurrentServer(serverList.get(position));
   }
 
   /**
@@ -208,27 +270,22 @@ public class LoginActivity extends Activity implements OnClickListener {
    */
   private void setInformation() {
     changeLanguage();
-    _edtxUserName.setHint(userNameHint);
-    _edtxUserName.setText( (username==null || username.equals(""))
+    mUserEditTxt.setHint(userNameHint);
+    mUserEditTxt.setText( (username==null || username.equals(""))
         && mSetting.isRememberMeEnabled()
         ? mSetting.getUsername(): username);
 
-    _edtxPassword.setHint(passWordHint);
-    _edtxPassword.setText( (password==null || password.equals(""))
+    mPassEditTxt.setHint(passWordHint);
+    mPassEditTxt.setText( (password==null || password.equals(""))
         && mSetting.isRememberMeEnabled()
         ? mSetting.getPassword():password);
 
-    _btnLogIn.setText(strSignIn);
-    setServerAdapter();
-  }
-
-  private void setServerAdapter() {
-    _listViewServer.setAdapter(new ServerAdapter(this, _listViewServer));
+    mLogInBtn.setText(strSignIn);
   }
 
   private void onLogin() {
-    username = _edtxUserName.getText().toString();
-    password = _edtxPassword.getText().toString();
+    username = mUserEditTxt.getText().toString();
+    password = mPassEditTxt.getText().toString();
     new LoginController(this, username, password, true);
   }
 
@@ -250,7 +307,6 @@ public class LoginActivity extends Activity implements OnClickListener {
   public boolean onOptionsItemSelected(MenuItem item) {
 
     int selectedItemIndex = item.getItemId();
-
     if (selectedItemIndex == 1) {
       Intent next = new Intent(this, SettingActivity.class);
       next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.GLOBAL_TYPE);
@@ -261,46 +317,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 
   @Override
   public void onClick(View view) {
-    if (view.equals(_btnLogIn)) {
-      onLogin();
-    }
-
-    if (view.equals(_btnServer)) {
-      view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
-      _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneon);
-      _btnAccount.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
-      _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_off);
-      _edtxUserName.setVisibility(View.INVISIBLE);
-      _edtxPassword.setVisibility(View.INVISIBLE);
-      _btnLogIn.setVisibility(View.INVISIBLE);
-      userpassPanel.setVisibility(View.INVISIBLE);
-      _listViewServer.setVisibility(View.VISIBLE);
-      listviewPanel.setVisibility(View.VISIBLE);
-      InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-      mgr.showSoftInput(_edtxUserName, InputMethodManager.HIDE_IMPLICIT_ONLY);
-    }
-
-    if (view.equals(_btnAccount)) {
-      Log.i(TAG, "switch to account panel");
-      view.setBackgroundResource(R.drawable.authenticatepanelbuttonbgon);
-      _imageAccount.setBackgroundResource(R.drawable.authenticate_credentials_icon_on);
-      _btnServer.setBackgroundResource(R.drawable.authenticatepanelbuttonbgoff);
-      _imageServer.setBackgroundResource(R.drawable.authenticateserversiconiphoneoff);
-
-      _edtxUserName.setVisibility(View.VISIBLE);
-      Log.i(TAG, "remember me: " + mSetting.isRememberMeEnabled());
-      if (mSetting.getCurrentServer()!=null) Log.i(TAG, "server: " + mSetting.getCurrentServer().serverUrl);
-      Log.i(TAG, "user: " + mSetting.getUsername());
-
-      _edtxUserName.setText(mSetting.isRememberMeEnabled() ? mSetting.getUsername(): username);
-      _edtxPassword.setVisibility(View.VISIBLE);
-      _edtxPassword.setText(mSetting.isRememberMeEnabled() ? mSetting.getPassword(): password);
-
-      _btnLogIn.setVisibility(View.VISIBLE);
-      _listViewServer.setVisibility(View.INVISIBLE);
-      userpassPanel.setVisibility(View.VISIBLE);
-      listviewPanel.setVisibility(View.INVISIBLE);
-    }
+    if (view.equals(mLogInBtn))   onLogin();
+    if (view.equals(mServerBtn))  switchPanel(SERVER_PANEL);
+    if (view.equals(mAccountBtn)) switchPanel(ACCOUNT_PANEL);
   }
 
   @Override
@@ -314,4 +333,6 @@ public class LoginActivity extends Activity implements OnClickListener {
       editor.commit();
     }
   }
+
+
 }
