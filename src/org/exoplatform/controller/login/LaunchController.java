@@ -77,8 +77,10 @@ public class LaunchController {
     ServerSettingHelper.getInstance().setServerInfoList(_serverList);
 
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
+    Log.i(TAG, "selectedServerIdx: " + selectedServerIdx);
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
     mSetting.setCurrentServer((selectedServerIdx == -1) ? null : _serverList.get(selectedServerIdx));
+    Log.i(TAG, "current server: " + mSetting.getCurrentServer());
   }
 
 
@@ -102,6 +104,7 @@ public class LaunchController {
     new Thread(new Runnable() {
       @Override
       public void run() {
+        Log.i(TAG, "persisting config");
         SettingUtils.persistServerSetting(mContext);
       }
     }).start();
@@ -111,7 +114,11 @@ public class LaunchController {
    * Performs logging or redirect to log in screen if necessary
    */
   public void redirect() {
-    if (mSetting.getCurrentServer() == null) return ;
+    Log.i(TAG, "redirect: " + mSetting.getCurrentServer());
+    if (mSetting.getCurrentServer() == null) {
+      Log.i(TAG, "current server null");
+      return ;
+    }
     if (mSetting.isAutoLoginEnabled()) {
       new LoginController(mCurrentActivity, mSetting.getUsername(), mSetting.getPassword(), false);
     }

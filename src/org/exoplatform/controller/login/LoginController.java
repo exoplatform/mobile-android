@@ -194,41 +194,48 @@ public class LoginController {
         boolean needToSave = false;
         ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
 
-        if ( !mNewUserName.equals(mSetting.getUsername()) ) {    // new credential
+        if ( !mNewUserName.equals(mSetting.getUsername()) ) {    // new username - new credential
+          Log.i(TAG, "new user: " + mNewUserName);
           ServerObjInfo newServer = mSetting.getCurrentServer().clone();
           newServer.username   = mNewUserName;
           newServer.password   = mNewPassword;
           newServer.isRememberEnabled  = true;
           newServer.isAutoLoginEnabled = true;
 
-          // check server conflict
-          ServerObjInfo conflictServer = null;
-          int serverIdx = 0;
-          for (ServerObjInfo serverObj : serverList) {
-            if (serverObj.serverUrl.equals(newServer.serverUrl) && serverObj.username.equals("")) {
-              conflictServer = serverObj;
-              break;
-            }
-            serverIdx++;
-          }
-
-          if (conflictServer!= null) {
-            conflictServer = newServer;
-            mSetting.setDomainIndex(String.valueOf(serverIdx));
-            mSetting.setCurrentServer(conflictServer);
+          if (mSetting.getUsername().equals("")) {
+            // Override old server
+            Log.i(TAG, "override old server");
+            mSetting.getCurrentServer().username = mNewUserName;
+            mSetting.getCurrentServer().password = mNewPassword;
             needToSave = true;
           }
           else {
-            serverList.add(newServer);
-            // set current selected server to the new server
-            mSetting.setDomainIndex(String.valueOf(serverList.size() - 1));
-            mSetting.setCurrentServer(newServer);
-            needToSave = true;
+            // Add a new server
+            // Add only if no same server exist
+            int duplicatedIdx = serverList.indexOf(newServer);
+            if (duplicatedIdx > -1) {
+              Log.i(TAG, "duplicated server: " + duplicatedIdx);
+              mSetting.setDomainIndex(String.valueOf(duplicatedIdx));
+              mSetting.setCurrentServer(newServer);
+              needToSave = false;
+            }
+            else {
+              // no duplicated, add server
+              Log.i(TAG, "no duplicated");
+              serverList.add(newServer);
+              // set current selected server to the new server
+              mSetting.setDomainIndex(String.valueOf(serverList.size() - 1));
+              mSetting.setCurrentServer(newServer);
+              needToSave = true;
+            }
+
           }
+
         }
         else {
           // same user, but password might change
           if ( !mSetting.getPassword().equals(mNewPassword) ) {
+            Log.i(TAG, "password changes");
             needToSave = true;
             mSetting.getCurrentServer().password = mNewPassword;
           }

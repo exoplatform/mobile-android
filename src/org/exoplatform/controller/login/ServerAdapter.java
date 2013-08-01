@@ -68,11 +68,11 @@ public class ServerAdapter extends BaseAdapter {
   public View getView(int position, View convertView, ViewGroup parent) {
     Log.i(TAG, "getView: " + position + " - " + convertView);
     int domainIdx = Integer.valueOf(mSetting.getDomainIndex());
+
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View rowView = inflater.inflate(R.layout.server_list_item, parent, false);
-    Log.i(TAG, "rowView after inflation: " + rowView);
 
-    final ServerObjInfo serverObj = serverInfoList.get(position);
+    ServerObjInfo serverObj = serverInfoList.get(position);
     TextView txtvServerName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
     txtvServerName.setText(serverObj.serverName);
     Log.i(TAG, "server: " + serverObj);
@@ -89,33 +89,6 @@ public class ServerAdapter extends BaseAdapter {
     } else {
       imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
     }
-
-    /**
-    rowView.setOnClickListener(new OnClickListener() {
-
-      public void onClick(View v) {
-        Log.i(TAG, "rowView - onClick server list item: " + serverObj.serverUrl);
-
-        Log.i(TAG, "rowView - ===> getView: " + pos + " - domainIdx: " + mDomainIdx );
-        View rowView = getView(pos, null, _listViewServer);
-        ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-        imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
-        mDomainIdx = pos;
-
-        mSetting.setDomainIndex(String.valueOf(mDomainIdx));
-        mSetting.setCurrentServer(serverObj);
-        Log.i(TAG, "server: " + mSetting.getCurrentServer());
-        Log.i(TAG, "is remember me: " + mSetting.isRememberMeEnabled());
-        Log.i(TAG, "server url: " + mSetting.getCurrentServer().serverUrl);
-        Log.i(TAG, "user : " + mSetting.getUsername());
-
-        rowView = getView(mDomainIdx, null, _listViewServer);
-        imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-        imgView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-        notifyDataSetChanged();
-      }
-    });
-    **/
 
     return rowView;
   }
