@@ -136,7 +136,6 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     mSharedPerf  = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     mSettingType = getIntent().getIntExtra(ExoConstants.SETTING_TYPE, GLOBAL_TYPE);
     mSetting = AccountSetting.getInstance();
-
     settingActivity = this;
 
     if (savedInstanceState != null) {
@@ -202,11 +201,6 @@ public class SettingActivity extends MyActionBar implements OnClickListener {
     /* replacing old list server with new one */
     listServerWrap = (LinearLayout) findViewById(R.id.listview_server_wrap);
     mSettingController = new SettingController(this, listServerWrap);
-
-    //View serverListView = findViewById(R.id.Server_List_Section);
-    //if (ServerSettingHelper.getInstance().getServerInfoList().size() == 0)
-    //  serverListView.setVisibility(View.GONE);
-    //else serverListView.setVisibility(View.VISIBLE);
 
     mSettingController.initLocation(imgViewECheckMark, imgViewFCheckMark);
     if (mSettingType == GLOBAL_TYPE) {

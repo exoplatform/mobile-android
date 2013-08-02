@@ -2,6 +2,7 @@ package org.exoplatform.ui;
 
 
 import android.content.SharedPreferences;
+import android.view.*;
 import android.widget.*;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
@@ -23,11 +24,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
@@ -177,26 +174,15 @@ public class LoginActivity extends Activity implements OnClickListener, AdapterV
 
   @Override
   public void onItemClick(AdapterView<?> parent, View rowView, int position, long id) {
-    Log.i(TAG, "onItemClick - parent: " + parent + " - view: " + rowView + " - pos: " + position + " - id: " + id);
-
     int selectedIdx = Integer.valueOf(mSetting.getDomainIndex());
-    if (selectedIdx == position) return;
-
-    /* unchecked the current selected */
-    if (selectedIdx > -1) {
-      int firstVisibleChildIdx = parent.getFirstVisiblePosition();
-      if ((firstVisibleChildIdx <= selectedIdx)
-          && (selectedIdx <= parent.getLastVisiblePosition())) {
-        parent.getChildAt(selectedIdx - firstVisibleChildIdx)
+    int firstVisiblePosition = parent.getFirstVisiblePosition();
+    if ((firstVisiblePosition <= selectedIdx) && (selectedIdx <= parent.getLastVisiblePosition()))
+      parent.getChildAt(selectedIdx - firstVisiblePosition)
           .findViewById(R.id.ImageView_Checked)
           .setBackgroundResource(R.drawable.authenticate_checkmark_off);
-      }
-    }
 
-    /* check the current rowView */
     rowView.findViewById(R.id.ImageView_Checked)
         .setBackgroundResource(R.drawable.authenticate_checkmark_on);
-
     ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
     mSetting.setDomainIndex(String.valueOf(position));
     mSetting.setCurrentServer(serverList.get(position));

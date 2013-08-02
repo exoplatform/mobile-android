@@ -56,7 +56,6 @@ public class ServerAdapter extends BaseAdapter {
   /**
    * This method is called 3 times for each item
    *
-   *
    * @param position
    * @param convertView
    * @param parent
@@ -66,30 +65,33 @@ public class ServerAdapter extends BaseAdapter {
    */
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
-    Log.i(TAG, "getView: " + position + " - " + convertView);
-    int domainIdx = Integer.valueOf(mSetting.getDomainIndex());
-
-    LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    View rowView = inflater.inflate(R.layout.server_list_item, parent, false);
-
-    ServerObjInfo serverObj = serverInfoList.get(position);
-    TextView txtvServerName = (TextView) rowView.findViewById(R.id.TextView_ServerName);
-    txtvServerName.setText(serverObj.serverName);
-    Log.i(TAG, "server: " + serverObj);
-
-    TextView txtvUrl = (TextView) rowView.findViewById(R.id.TextView_URL);
-    txtvUrl.setText(serverObj.serverUrl);
-    Log.i(TAG, "server url: " + serverObj.serverUrl);
-    Log.i(TAG, "username: " + serverObj.username);
-    Log.i(TAG, "domainIdx: " + domainIdx);
-
-    ImageView imgView = (ImageView) rowView.findViewById(R.id.ImageView_Checked);
-    if (domainIdx == position) {
-      imgView.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-    } else {
-      imgView.setBackgroundResource(R.drawable.authenticate_checkmark_off);
+    ViewHolder holder;
+    if (convertView == null) {
+      LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      convertView = inflater.inflate(R.layout.server_list_item, parent, false);
+      holder = new ViewHolder();
+      holder.name = (TextView) convertView.findViewById(R.id.TextView_ServerName);
+      holder.url  = (TextView) convertView.findViewById(R.id.TextView_URL);
+      holder.bg   = (ImageView) convertView.findViewById(R.id.ImageView_Checked);
+      convertView.setTag(holder);
+    }
+    else {
+      holder = (ViewHolder) convertView.getTag();
     }
 
-    return rowView;
+    ServerObjInfo serverObj = serverInfoList.get(position);
+    holder.name.setText(serverObj.serverName);
+    holder.url.setText(serverObj.serverUrl);
+    if (Integer.valueOf(mSetting.getDomainIndex()) == position)
+      holder.bg.setBackgroundResource(R.drawable.authenticate_checkmark_on);
+    else holder.bg.setBackgroundResource(R.drawable.authenticate_checkmark_off);
+
+    return convertView;
+  }
+
+  static class ViewHolder {
+    TextView name;
+    TextView url;
+    ImageView bg;
   }
 }

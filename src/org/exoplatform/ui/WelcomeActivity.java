@@ -59,15 +59,13 @@ public class WelcomeActivity extends FragmentActivity {
   }
 
   private void init() {
-
     setContentView(R.layout.welcome);
     if (mIsTablet) detectScreenOrientation();
 
     ViewGroup vg = (ViewGroup) findViewById(R.id.welcome_layout);
     AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BLACK), vg);
 
-    mSeparatorImg = (ImageView) findViewById(R.id.welcome_separator_img);
-
+    mSeparatorImg  = (ImageView) findViewById(R.id.welcome_separator_img);
     mButtonSection = (RelativeLayout) findViewById(R.id.welcome_button_section);
 
     // Instantiate a ViewPager and a PagerAdapter.

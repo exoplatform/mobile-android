@@ -243,7 +243,7 @@ public class SignInController {
           if (needToSave) SettingUtils.persistServerSetting(mContext);
 
            /* Checking platform version */
-          if (isCompliant == true) {
+          if (isCompliant) {
             Intent next = new Intent(mContext, HomeActivity.class);
             next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(next);
