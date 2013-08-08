@@ -110,6 +110,7 @@
                     android:id="@+id/addition_layout"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:orientation="horizontal"
                     android:layout_weight="1"
                     android:gravity="center" >
                 </LinearLayout>

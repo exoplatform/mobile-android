@@ -10,6 +10,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_m"
             android:layout_marginBottom="@dimen/margin_m"
+            android:contentDescription="@string/ImageDesc"
             android:src="@drawable/logo"/>
 
 

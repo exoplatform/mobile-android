@@ -27,7 +27,8 @@
         android:layout_below="@id/signup_thanks_txt"
         android:src="@drawable/icon_check"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp" 
+        android:contentDescription="@string/ImageDesc"/>
 
     <TextView
         android:id="@+id/signup_check_mail_txt"

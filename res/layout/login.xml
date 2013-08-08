@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:padding="5dp"
-        android:contentDescription="exo logo"
+        android:contentDescription="@string/ImageDesc"
         android:src="@drawable/exo_logo_large" />
 
     <RelativeLayout
@@ -127,7 +127,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="5dp"
             android:clickable="true"
-            android:contentDescription="account btn"
+            android:contentDescription="@string/ImageDesc"
             android:src="@drawable/icon_credentials"
             android:background="@drawable/bg_tab" />
 
@@ -142,7 +142,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="5dp"
             android:clickable="true"
-            android:contentDescription="server btn"
+            android:contentDescription="@string/ImageDesc"
             android:layout_toRightOf="@id/login_account_btn"
             android:src="@drawable/icon_server"
             android:background="@drawable/bg_tab" />

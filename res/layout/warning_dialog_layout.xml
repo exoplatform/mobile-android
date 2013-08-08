@@ -41,7 +41,8 @@
             <ImageView
                 android:id="@+id/warning_image"
                 android:layout_width="@dimen/unreadable_file_size"
-                android:layout_height="@dimen/unreadable_file_size" />
+                android:layout_height="@dimen/unreadable_file_size" 
+                android:contentDescription="@string/ImageDesc"/>
 
             <TextView
                 android:id="@+id/warning_content"

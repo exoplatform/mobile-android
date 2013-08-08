@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
             android:layout_marginBottom="@dimen/margin_xs"
+            android:contentDescription="@string/ImageDesc"
             android:src="@drawable/separator_dark"/>
 
     <RelativeLayout
@@ -43,7 +44,6 @@
             android:id="@+id/welcome_txt_or"
             android:layout_width="@dimen/welcome_or_txt_width"
             android:layout_height="@dimen/welcome_btn_height"
-            android:layout_below="@id/welcome_separator_img"
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:paddingBottom="@dimen/welcome_btn_pBottom"
@@ -59,7 +59,6 @@
             style="@style/ShadowTxtStyle"
             android:layout_width="@dimen/welcome_btn_width"
             android:layout_height="@dimen/welcome_btn_height"
-            android:layout_below="@id/welcome_separator_img"
             android:layout_toLeftOf="@id/welcome_txt_or"
             android:textSize="@dimen/text_size_xlarge"
             android:textStyle="bold"
@@ -76,7 +75,6 @@
             style="@style/ShadowTxtStyle"
             android:layout_width="@dimen/welcome_btn_width"
             android:layout_height="@dimen/welcome_btn_height"
-            android:layout_below="@id/welcome_separator_img"
             android:layout_toRightOf="@id/welcome_txt_or"
             android:textStyle="bold"
             android:textSize="@dimen/text_size_xlarge"

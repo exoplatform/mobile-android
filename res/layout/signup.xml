@@ -11,8 +11,7 @@
             style="@style/SignUpBlueHeaderStyle"
             android:text="@string/GetStarted"/>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:id="@+id/fragment_panel"
+    <FrameLayout android:id="@+id/fragment_panel"
                  android:layout_width="@dimen/signup_frame_width"
                  android:layout_height="wrap_content"
                  android:layout_gravity="center_horizontal"
