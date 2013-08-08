@@ -43,7 +43,7 @@ public class SignUpController {
 
   private HttpResponse mResponse;
 
-  private SignUpWarningDialog dialog;
+  private SignUpWarningDialog mWarningDialog;
 
   /* Sign Up messages */
   private String signUpMess;
@@ -59,6 +59,8 @@ public class SignUpController {
   private String maxUsersMess;
 
   private String OkMess;
+
+  private String serverNotAvailableMess;
 
   private static final String TAG = "eXoSignUpController";
 
@@ -82,7 +84,7 @@ public class SignUpController {
       }
 
     } else {
-      new ConnectionErrorDialog(mContext).show();
+      new SignUpWarningDialog(mContext, warningTitle, serverNotAvailableMess, OkMess).show();
     }
   }
 
@@ -92,9 +94,10 @@ public class SignUpController {
     invalidMess  = mResource.getString(R.string.InvalidSignUp);
     OkMess       = mResource.getString(R.string.OK);
 
-    wrongEmailDomainMess = mResource.getString(R.string.WrongEmailDomain);
-    accountExistsMess    = mResource.getString(R.string.AccountExists);
-    maxUsersMess         = mResource.getString(R.string.MaxUsers);
+    wrongEmailDomainMess   = mResource.getString(R.string.WrongEmailDomain);
+    accountExistsMess      = mResource.getString(R.string.AccountExists);
+    maxUsersMess           = mResource.getString(R.string.MaxUsers);
+    serverNotAvailableMess = mResource.getString(R.string.ServerNotAvailable);
   }
 
   public class SignUpTask extends AsyncTask<Void, Void, Integer> {
@@ -120,7 +123,8 @@ public class SignUpController {
         return ExoConnectionUtils.SIGNUP_INVALID;
       } catch (IOException e) {
         Log.i(TAG, "IOException");
-        return ExoConnectionUtils.SIGNUP_INVALID;
+        /* can not contact server, probably down or wrong address */
+        return ExoConnectionUtils.SIGNUP_SERVER_NAV;
       }
     }
 
@@ -130,28 +134,28 @@ public class SignUpController {
       View.OnClickListener closeDialog = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          dialog.dismiss();
+          mWarningDialog.dismiss();
         }
       };
 
       switch (result) {
         case ExoConnectionUtils.SIGNUP_INVALID:
-          dialog = new SignUpWarningDialog(mContext, warningTitle, invalidMess, OkMess);
-          dialog.getOkButton().setOnClickListener(closeDialog);
-          dialog.show();
+          mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, invalidMess, OkMess);
+          mWarningDialog.getOkButton().setOnClickListener(closeDialog);
+          mWarningDialog.show();
           break;
         case ExoConnectionUtils.SIGNUP_WRONG_DOMAIN:
-          dialog = new SignUpWarningDialog(mContext, warningTitle, wrongEmailDomainMess, OkMess);
-          dialog.getOkButton().setOnClickListener(closeDialog);
-          dialog.show();
+          mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, wrongEmailDomainMess, OkMess);
+          mWarningDialog.getOkButton().setOnClickListener(closeDialog);
+          mWarningDialog.show();
           break;
         case ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS:
-          dialog = new SignUpWarningDialog(mContext, warningTitle, accountExistsMess, OkMess);
-          dialog.show();
-          dialog.getOkButton().setOnClickListener(new Button.OnClickListener() {
+          mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, accountExistsMess, OkMess);
+          mWarningDialog.show();
+          mWarningDialog.getOkButton().setOnClickListener(new Button.OnClickListener() {
 
             public void onClick(View view) {
-              dialog.dismiss();
+              mWarningDialog.dismiss();
               // fires up activity for log in screen
               Intent next = new Intent(mContext, SignInActivity.class);
               next.putExtra(ExoConstants.EXO_EMAIL, mEmail);
@@ -159,10 +163,15 @@ public class SignUpController {
             }
           });
           break;
+        case ExoConnectionUtils.SIGNUP_SERVER_NAV:
+          mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, serverNotAvailableMess, OkMess);
+          mWarningDialog.getOkButton().setOnClickListener(closeDialog);
+          mWarningDialog.show();
+          break;
         case ExoConnectionUtils.SIGNUP_MAX_USERS:
-          dialog = new SignUpWarningDialog(mContext, warningTitle, maxUsersMess, OkMess);
-          dialog.getOkButton().setOnClickListener(closeDialog);
-          dialog.show();
+          mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, maxUsersMess, OkMess);
+          mWarningDialog.getOkButton().setOnClickListener(closeDialog);
+          mWarningDialog.show();
           new CreatingMarketoTask().execute();
           break;
         case ExoConnectionUtils.SIGNUP_OK:

@@ -176,9 +176,11 @@ public class SignInController {
         ExoDocumentUtils.setRepositoryHomeUrl(mUsername, mDomain);
         return ExoConnectionUtils.checkPlatformRespose(mResponse);
       } catch(HttpHostConnectException e) {
-        return ExoConnectionUtils.SIGNIN_SERVER_NOT_AVAILABLE;
+        Log.i(TAG, "HttpHostConnectException");
+        return ExoConnectionUtils.SIGNIN_SERVER_NAV;
       } catch (IOException e) {
-        return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
+        Log.i(TAG, "IOException");
+        return ExoConnectionUtils.SIGNIN_SERVER_NAV;
       }
     }
 
@@ -191,7 +193,7 @@ public class SignInController {
           mDialog.show();
           break;
 
-        case ExoConnectionUtils.SIGNIN_SERVER_NOT_AVAILABLE:
+        case ExoConnectionUtils.SIGNIN_SERVER_NAV:
           mDialog = new WarningDialog(mContext, warningTitle, serverNotAvailable, okString);
           mDialog.show();
           break;

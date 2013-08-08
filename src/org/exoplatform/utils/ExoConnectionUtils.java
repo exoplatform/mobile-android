@@ -63,18 +63,24 @@ public class ExoConnectionUtils {
   /** an account already exists for this email */
   public static final int         SIGNUP_ACCOUNT_EXISTS    = 13;
 
+  /** can not connect server, probably down or wrong address */
+  public static final int         SIGNUP_SERVER_NAV        = 14;
+
+  /** maximum number of users for the tenant has been reached */
+  public static final int         SIGNUP_MAX_USERS         = 15;
+
+
   public static final int         SIGNIN_OK                = 20;
 
   public static final int         SIGNIN_INVALID           = 21;
 
   public static final int         SIGNIN_NO_ACCOUNT        = 22;
 
+  /** cloud can not find tenant for this email */
   public static final int         SIGNIN_NO_TENANT_FOR_EMAIL  = 23;
 
-  public static final int         SIGNIN_SERVER_NOT_AVAILABLE = 24;
-
-  public static final int         SIGNUP_MAX_USERS         = 25;
-
+  /** like SIGNUP_SERVER_NAV */
+  public static final int         SIGNIN_SERVER_NAV       = 24;
 
   public static final String      HTTP                     = "http://";
 
@@ -304,7 +310,6 @@ public class ExoConnectionUtils {
 
     try {
       String result   = getPLFStream(response);
-      Log.i(TAG, "result of request: " + result);
       JSONObject json = (JSONObject) JSONValue.parse(result);
       results[0]      = json.get(ExoConstants.USERNAME).toString();
       results[1]      = json.get(ExoConstants.TENANT).toString();
@@ -325,6 +330,7 @@ public class ExoConnectionUtils {
           .replace("\n", "").replace("\r", "").replace("\r\n", "")
           .equalsIgnoreCase("true");
     } catch (IOException e) {
+      Log.i(TAG, "IOException");
       return false;
     }
   }
