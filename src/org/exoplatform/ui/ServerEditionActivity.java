@@ -6,18 +6,23 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import org.exoplatform.R;
 import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 
 /**
@@ -189,12 +194,8 @@ public class ServerEditionActivity extends Activity {
       public void onClick(View view) {
         Log.i(TAG, "onUpdateServer");
 
-        ServerObjInfo serverObj = mServerObj.clone();
-        serverObj.serverUrl  = mServerUrlEditTxt.getText().toString();
-        serverObj.serverName = mServerNameEditTxt.getText().toString();
-        serverObj.username   = mUserEditTxt.getText().toString();
-        serverObj.password   = mPassEditTxt.getText().toString();
-        mSettingController.onUpdate(serverObj, mServerIdx);
+        if (!checkServerUrl(view)) return;
+        mSettingController.onUpdate(retrieveInput(), mServerIdx);
 
         returnToSetting();
       }
@@ -208,16 +209,45 @@ public class ServerEditionActivity extends Activity {
       public void onClick(View view) {
         Log.i(TAG, "onAddServer");
 
-        ServerObjInfo serverObj = new ServerObjInfo();
-        serverObj.serverUrl  = mServerUrlEditTxt.getText().toString();
-        serverObj.serverName = mServerNameEditTxt.getText().toString();
-        serverObj.username   = mUserEditTxt.getText().toString();
-        serverObj.password   = mPassEditTxt.getText().toString();
-        mSettingController.onAdd(serverObj);
+        if (!checkServerUrl(view)) return;
+        mSettingController.onAdd(retrieveInput());
 
         returnToSetting();
       }
     };
+  }
+
+  private boolean checkServerUrl(View view) {
+    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+    if (inputMethodManager!= null) inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+    String url = mServerUrlEditTxt.getText().toString();
+    if (!url.startsWith(ExoConstants.HTTP_PROTOCOL)) url = ExoConstants.HTTP_PROTOCOL + "://" + url;
+    if (!ExoConnectionUtils.validateUrl(url)) {
+
+      if (inputMethodManager == null)
+        Toast.makeText(ServerEditionActivity.this, R.string.ServerInvalid, Toast.LENGTH_SHORT).show();
+      else
+        new Handler().postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            Toast.makeText(ServerEditionActivity.this, R.string.ServerInvalid, Toast.LENGTH_SHORT).show();
+          }
+        }, 500);
+
+      return false;
+    }
+
+    return true;
+  }
+
+  private ServerObjInfo retrieveInput() {
+    ServerObjInfo serverObj = new ServerObjInfo();
+    serverObj.serverUrl  = mServerUrlEditTxt.getText().toString();
+    serverObj.serverName = mServerNameEditTxt.getText().toString();
+    serverObj.username   = mUserEditTxt.getText().toString();
+    serverObj.password   = mPassEditTxt.getText().toString();
+    return serverObj;
   }
 
 }

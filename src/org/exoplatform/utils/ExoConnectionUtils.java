@@ -3,8 +3,11 @@ package org.exoplatform.utils;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.util.Log;
+import android.util.Patterns;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
@@ -448,4 +451,7 @@ public class ExoConnectionUtils {
     }
   }
 
+  public static boolean validateUrl(String url) {
+    return Patterns.WEB_URL.matcher(url).matches();
+  }
 }
