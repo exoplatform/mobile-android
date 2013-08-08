@@ -114,7 +114,7 @@ public class SignUpController {
       try {
         mResponse = ExoConnectionUtils.makeCloudSignUpRequest(mEmail);
         // response 400 - invalid format for email address - do not handle
-        return ExoConnectionUtils.checkSignUpResponse(mResponse);
+        return ExoConnectionUtils.checkSignUpResponse(mResponse, mEmail);
       } catch (UnsupportedEncodingException e) {
         Log.i(TAG, "UnsupportedEncodingException");
         return ExoConnectionUtils.SIGNUP_INVALID;

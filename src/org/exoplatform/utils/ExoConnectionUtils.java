@@ -69,6 +69,7 @@ public class ExoConnectionUtils {
   /** maximum number of users for the tenant has been reached */
   public static final int         SIGNUP_MAX_USERS         = 15;
 
+  private static final String     SIGNUP_MAX_USERS_MSG     = "The request to create or join a workspace from ";
 
   public static final int         SIGNIN_OK                = 20;
 
@@ -278,9 +279,9 @@ public class ExoConnectionUtils {
     return httpClient.execute(httpPost);
   }
 
-  public static int checkSignUpResponse(HttpResponse response) {
+  public static int checkSignUpResponse(HttpResponse response, String email) {
     int statusCode = response.getStatusLine().getStatusCode();
-    Log.i(TAG, "statusCode: " + statusCode);
+    String message = getPLFStream(response);
     /* code 309 */
     if (statusCode == ExoConstants.UNKNOWN) {
       if (response.getLastHeader("Location").getValue().contains("tryagain.jsp"))
@@ -289,7 +290,8 @@ public class ExoConnectionUtils {
     }
     /* code 202 */  // TODO: check CLDINT-1197 if any change to response code
     else if (statusCode == HttpStatus.SC_ACCEPTED
-        || statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
+        || (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR
+            && message!= null && message.startsWith(SIGNUP_MAX_USERS_MSG + email)))
       return ExoConnectionUtils.SIGNUP_MAX_USERS;
 
     if (statusCode != HttpStatus.SC_OK)
