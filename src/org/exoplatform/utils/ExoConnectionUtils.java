@@ -3,8 +3,6 @@ package org.exoplatform.utils;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.util.Log;
 import android.util.Patterns;
@@ -276,14 +274,16 @@ public class ExoConnectionUtils {
 
   public static int checkSignUpResponse(HttpResponse response) {
     int statusCode = response.getStatusLine().getStatusCode();
+    Log.i(TAG, "statusCode: " + statusCode);
     /* code 309 */
     if (statusCode == ExoConstants.UNKNOWN) {
       if (response.getLastHeader("Location").getValue().contains("tryagain.jsp"))
         return ExoConnectionUtils.SIGNUP_WRONG_DOMAIN;
       else return ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS;
     }
-    /* code 202 */
-    else if (statusCode == HttpStatus.SC_ACCEPTED)
+    /* code 202 */  // TODO: check CLDINT-1197 if any change to response code
+    else if (statusCode == HttpStatus.SC_ACCEPTED
+        || statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
       return ExoConnectionUtils.SIGNUP_MAX_USERS;
 
     if (statusCode != HttpStatus.SC_OK)

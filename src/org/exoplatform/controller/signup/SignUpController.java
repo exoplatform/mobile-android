@@ -153,7 +153,7 @@ public class SignUpController {
             public void onClick(View view) {
               dialog.dismiss();
               // fires up activity for log in screen
-              Intent next = new Intent(mSignUpActivity, SignInActivity.class);
+              Intent next = new Intent(mContext, SignInActivity.class);
               next.putExtra(ExoConstants.EXO_EMAIL, mEmail);
               mContext.startActivity(next);
             }

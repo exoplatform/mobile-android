@@ -57,6 +57,8 @@ public class ServerEditionActivity extends Activity {
 
   private SettingController mSettingController;
 
+  private Handler mHandler = new Handler();
+
   private static final String TAG = "eXoServerEditionActivity";
 
   public void onCreate(Bundle savedInstanceState) {
@@ -228,7 +230,7 @@ public class ServerEditionActivity extends Activity {
       if (inputMethodManager == null)
         Toast.makeText(ServerEditionActivity.this, R.string.ServerInvalid, Toast.LENGTH_SHORT).show();
       else
-        new Handler().postDelayed(new Runnable() {
+        mHandler.postDelayed(new Runnable() {
           @Override
           public void run() {
             Toast.makeText(ServerEditionActivity.this, R.string.ServerInvalid, Toast.LENGTH_SHORT).show();

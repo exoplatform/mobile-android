@@ -1,14 +1,9 @@
 package org.exoplatform.controller.setting;
 
 import java.util.ArrayList;
-import java.util.Date;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -23,7 +18,6 @@ import org.exoplatform.widget.ServerItemLayout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.view.View;
 import android.view.View.OnClickListener;
