@@ -83,7 +83,9 @@ public class ExoConnectionUtils {
   /** like SIGNUP_SERVER_NAV */
   public static final int         SIGNIN_SERVER_NAV       = 24;
 
-  public static final String      HTTP                     = "http://";
+  public static final String      HTTP                    = "http://";
+
+  public static final String      HTTPS                   = "https://";
 
   /** eXo cloud workspace url */
   public static final String      EXO_CLOUD_WS_DOMAIN      = "wks-acc.exoplatform.org";
@@ -192,8 +194,7 @@ public class ExoConnectionUtils {
       httpClient = initHttpClient();
     }
 
-    HttpResponse response = httpClient.execute(httpGet);
-    return response;
+    return httpClient.execute(httpGet);
   }
 
   // Get input stream from url

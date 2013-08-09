@@ -224,7 +224,8 @@ public class ServerEditionActivity extends Activity {
     if (inputMethodManager!= null) inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
     String url = mServerUrlEditTxt.getText().toString();
-    if (!url.startsWith(ExoConstants.HTTP_PROTOCOL)) url = ExoConnectionUtils.HTTP + url;
+    if (!url.startsWith(ExoConnectionUtils.HTTP) && !url.startsWith(ExoConnectionUtils.HTTPS))
+      url = ExoConnectionUtils.HTTP + url;
     if (!ExoConnectionUtils.validateUrl(url)) {
 
       if (inputMethodManager == null)
@@ -240,6 +241,7 @@ public class ServerEditionActivity extends Activity {
       return false;
     }
 
+    mServerUrlEditTxt.setText(url);
     return true;
   }
 
