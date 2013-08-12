@@ -177,7 +177,7 @@
   <string name="SigningUp">Signing up &#8230;</string>
   <string name="InvalidSignUp">A problem occurs with the sign up process</string>
   <string name="WrongEmailDomain">Email Domain for this account is not correct</string>
-  <string name="AccountExists">An account already exist for this email, you will be redirect to the login screen.</string>
+  <string name="AccountExists">An account already exists for this email, you will be redirected to the login screen.</string>
   <string name="CheckYourMailInbox">Check your email inbox to complete your registration.</string>
   <string name="ThanksForInterest">Thank you for your interest</string>
   <string name="MaxUsers">Impossible to create a new account. The maximum number of users has been reached for your intranet, please contact your administrator.</string>
