@@ -259,8 +259,8 @@ public class ExoConnectionUtils {
    */
   private static boolean hasNameAndDomain(String aEmailAddress) {
     String[] tokens = aEmailAddress.split("@");
-    return tokens.length == 2 && tokens[0].trim().length() > 0 && tokens[1].trim().length() > 0
-        && tokens[1].split("\\.").length > 1;
+    return tokens.length == 2 && tokens[0].trim().length() > 0 && tokens[1].trim().length() > 3
+        && tokens[1].split("\\.").length > 1 && tokens[1].split("\\.")[1].length() > 1;
   }
 
   /**
