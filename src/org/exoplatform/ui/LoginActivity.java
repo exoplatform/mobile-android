@@ -320,5 +320,9 @@ public class LoginActivity extends Activity implements OnClickListener, AdapterV
     }
   }
 
-
+  @Override
+  public void onBackPressed() {
+    setResult(RESULT_CANCELED);
+    finish();
+  }
 }

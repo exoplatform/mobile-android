@@ -13,6 +13,7 @@ import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.HomeActivity;
+import org.exoplatform.ui.LaunchActivity;
 import org.exoplatform.utils.*;
 import org.exoplatform.utils.image.FileCache;
 import org.exoplatform.widget.ConnectionErrorDialog;
@@ -246,10 +247,18 @@ public class LoginController {
 
         /* Checking platform version */
         if (isCompliant) {
+
           Intent next = new Intent(mContext, HomeActivity.class);
           next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           mContext.startActivity(next);
+
+          /* start from Launch activity */
+          if (mCurrentActivity instanceof LaunchActivity) {
+            mCurrentActivity.overridePendingTransition(0, 0);
+          }
+
           if (mSetting.isAutoLoginEnabled()) mCurrentActivity.finish();
+
         } else {
           mWarningDialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
           mWarningDialog.show();

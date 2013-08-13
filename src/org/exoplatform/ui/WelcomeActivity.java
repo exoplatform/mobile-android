@@ -49,12 +49,7 @@ public class WelcomeActivity extends FragmentActivity {
   public  void onCreate(Bundle savedInstanceState) {
     requestScreenOrientation();
     mSetting = AccountSetting.getInstance();
-
-    LaunchController launchController = new LaunchController(this);
-    launchController.redirect();
-
     super.onCreate(savedInstanceState);
-
     init();
   }
 
@@ -154,6 +149,12 @@ public class WelcomeActivity extends FragmentActivity {
 
     Intent next = new Intent(this, SignInActivity.class);
     startActivity(next);
+  }
+
+  @Override
+  public void onBackPressed() {
+    setResult(RESULT_CANCELED);
+    finish();
   }
 
   /**

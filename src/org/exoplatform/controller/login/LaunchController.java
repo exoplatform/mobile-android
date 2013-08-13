@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -111,20 +112,26 @@ public class LaunchController {
   }
 
   /**
-   * Performs logging or redirect to log in screen if necessary
+   * Performs log-in or redirect to log in screen if necessary
    */
   public void redirect() {
     Log.i(TAG, "redirect: " + mSetting.getCurrentServer());
+    /* no server configured - redirect to Welcome screen */
     if (mSetting.getCurrentServer() == null) {
-      Log.i(TAG, "current server null");
+      Intent next = new Intent(mCurrentActivity, WelcomeActivity.class);
+      mCurrentActivity.startActivityForResult(next, 0);
+      mCurrentActivity.overridePendingTransition(0, 0);
       return ;
     }
+
     if (mSetting.isAutoLoginEnabled()) {
+      mCurrentActivity.setContentView(R.layout.launch);
       new LoginController(mCurrentActivity, mSetting.getUsername(), mSetting.getPassword(), false);
     }
     else {
-      mContext.startActivity(new Intent(mContext, LoginActivity.class));
-      mCurrentActivity.finish();
+      Intent next = new Intent(mContext, LoginActivity.class);
+      mCurrentActivity.startActivityForResult(next, 0);
+      mCurrentActivity.overridePendingTransition(0, 0);
     }
   }
 

@@ -21,18 +21,16 @@
     <!-- Application Information -->
     <application android:allowBackup="true" android:icon="@drawable/application_icon" android:label="eXo 2.4.0" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
 
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.WelcomeActivity">
-
+        <!-- First Activity of the Application -->
+        <activity android:name=".ui.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity>
 
-        <!-- First Activity of the Application -->
+        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.WelcomeActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.LoginActivity" android:windowSoftInputMode="stateUnchanged|adjustPan">
-
             <!-- custom URL scheme -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
