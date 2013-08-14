@@ -173,7 +173,7 @@
   <string name="EmailSignUp">Enter your email address and Sign up:</string>
   <string name="Email">email address</string>
   <string name="CreateAccount">Create your account</string>
-  <string name="InvalidEmail">Please enter a valid email address</string>
+  <string name="InvalidEmail">Please input a valid email address</string>
   <string name="SigningUp">Signing up &#8230;</string>
   <string name="InvalidSignUp">A problem occurs with the sign up process</string>
   <string name="WrongEmailDomain">Email Domain for this account is not correct</string>
