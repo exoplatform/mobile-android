@@ -45,6 +45,8 @@ public class ExoConnectionUtils {
 
   public static final int         LOGIN_INCOMPATIBLE       = 5;
 
+  public static final int         LOGIN_SERVER_RESUMING    = 6;
+
   // Default connection and socket timeout of 60 seconds. Tweak to taste.
   private static final int        SOCKET_OPERATION_TIMEOUT = 30 * 1000;
 
@@ -82,6 +84,17 @@ public class ExoConnectionUtils {
 
   /** like SIGNUP_SERVER_NAV */
   public static final int         SIGNIN_SERVER_NAV       = 24;
+
+  public static final int         SIGNIN_SERVER_ONLINE    = 25;
+
+  public static final int         SIGNIN_SERVER_SUSPENDED = 26;
+
+  /**=== Tenant status ===*/
+  public static final String      ONLINE                  = "ONLINE";
+
+  public static final String      STOPPED                 = "STOPPED";
+
+
 
   public static final String      HTTP                    = "http://";
 
@@ -236,7 +249,6 @@ public class ExoConnectionUtils {
     AccountSetting.getInstance().cookiesList = getCookieList(cookiesStore);
 
     return response;
-
   }
 
   /**
@@ -338,6 +350,38 @@ public class ExoConnectionUtils {
     }
   }
 
+  public static int requestTenantStatus(String tenant) {
+    String url = HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/status/" + tenant;
+    try {
+      HttpResponse response = getRequestResponse(url);
+      /* 404 - tenant does not exist */
+      int statusCode = response.getStatusLine().getStatusCode();
+      Log.d(TAG, "status code:" + statusCode);
+      if (statusCode == HttpStatus.SC_NOT_FOUND) return SIGNIN_NO_TENANT_FOR_EMAIL;
+      if (statusCode != HttpStatus.SC_OK) return SIGNIN_SERVER_NAV;
+
+      /* 200 */
+      if (response.getEntity() != null) {
+        String tenantStatus = convertStreamToString(response.getEntity().getContent())
+            .replace("\n", "").replace("\r", "").replace("\r\n", "");
+        Log.d(TAG, "tenant status: " + tenantStatus);
+        if (tenantStatus.equalsIgnoreCase(ONLINE)) return SIGNIN_SERVER_ONLINE;
+        else if (tenantStatus.equalsIgnoreCase(STOPPED)) {
+          /* make simple request to restore server */
+          Log.i(TAG, "request: " + HTTP + tenant + "." + EXO_CLOUD_WS_DOMAIN);
+          return SIGNIN_SERVER_SUSPENDED;
+        }
+
+        return LOGIN_SERVER_RESUMING;
+      }
+
+      return SIGNIN_INVALID;
+    } catch (IOException e) {
+      Log.d(TAG, "IOException");
+      return SIGNIN_SERVER_NAV;
+    }
+  }
+
   /**
    * Create marketo lead
    */
@@ -360,15 +404,18 @@ public class ExoConnectionUtils {
    */
   public static int checkPlatformRespose(HttpResponse response) {
     int statusCode = response.getStatusLine().getStatusCode();
+    Log.d(TAG, "status code: " + statusCode);
     if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
       return LOGIN_SUSCESS;
     } else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
       return LOGIN_UNAUTHORIZED;
     } else if (statusCode == HttpStatus.SC_NOT_FOUND) {
       return LOGIN_INVALID;
+    } else if (statusCode == ExoConstants.UNKNOWN) {
+      /* 309 code - server is resuming */
+      return LOGIN_SERVER_RESUMING;
     } else
       return LOGIN_FAILED;
-
   }
 
   // get input stream from URL without authentication

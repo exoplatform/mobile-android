@@ -190,6 +190,7 @@
     <string name="NoAccountExists">Pas de compte associé à cet email, veuillez vérifier votre email ou vous inscrire.</string>
     <string name="NoTenantForEmail">Impossible de trouver un tenant pour cet email, veuillez vérifier votre email</string>
     <string name="DefaultServer">Mon Intranet</string>
+    <string name="ServerResuming">On est en train de résumer le serveur, veuillez essayer dans quelques minutes.</string>
 
 
     <!-- On Premise -->

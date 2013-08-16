@@ -79,6 +79,8 @@ public class SignInController {
 
   private String invalidCredentials;
 
+  private String serverResuming;
+
   private static final String TAG = "eXoSignInController";
 
   public SignInController(Context context, String email, String password) {
@@ -121,6 +123,7 @@ public class SignInController {
     mobileNotCompilant = mResource.getString(R.string.CompliantMessage);
     strServerInvalid = mResource.getString(R.string.ServerInvalid);
     strServerUnreachable = mResource.getString(R.string.ServerUnreachable);
+    serverResuming = mResource.getString(R.string.ServerResuming);
     okString = mResource.getString(R.string.OK);
   }
 
@@ -158,12 +161,23 @@ public class SignInController {
           mDomain   = ExoConnectionUtils.HTTP + mTenant + "."
               + ExoConnectionUtils.EXO_CLOUD_WS_DOMAIN;
 
+          int status = ExoConnectionUtils.requestTenantStatus(mTenant);
+          Log.i(TAG, "status: " + status);
+          if (status == ExoConnectionUtils.LOGIN_SERVER_RESUMING)
+            return ExoConnectionUtils.LOGIN_SERVER_RESUMING;
+          else if (status == ExoConnectionUtils.SIGNIN_SERVER_SUSPENDED) {
+            /* stimulate a sign up request to force restoring server */
+            ExoConnectionUtils.makeCloudSignUpRequest(mEmail);
+            return ExoConnectionUtils.LOGIN_SERVER_RESUMING;
+          }
+
           if (!ExoConnectionUtils.requestAccountExistsForUser(mUsername, mTenant))
             return ExoConnectionUtils.SIGNIN_NO_ACCOUNT;
         }
 
         mDomain = !mDomain.startsWith(ExoConnectionUtils.HTTP)
             ? ExoConnectionUtils.HTTP + mDomain: mDomain;
+
         String versionUrl = mDomain + ExoConstants.DOMAIN_PLATFORM_VERSION;
         if (!URLAnalyzer.isValidUrl(versionUrl)) return ExoConnectionUtils.LOGIN_INVALID;
 
@@ -205,6 +219,11 @@ public class SignInController {
 
         case ExoConnectionUtils.LOGIN_INCOMPATIBLE:
           mDialog = new WarningDialog(mContext, warningTitle, mobileNotCompilant, okString);
+          mDialog.show();
+          break;
+
+        case ExoConnectionUtils.LOGIN_SERVER_RESUMING:
+          mDialog = new WarningDialog(mContext, warningTitle, serverResuming, okString);
           mDialog.show();
           break;
 

@@ -190,6 +190,7 @@
   <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
   <string name="NoTenantForEmail">Impossible to find tenant for this email, please check your email</string>
   <string name="DefaultServer">My Intranet</string>
+  <string name="ServerResuming">We are restoring your intranet, please retry in few minutes.</string>
 
 
   <!-- On Premise -->
