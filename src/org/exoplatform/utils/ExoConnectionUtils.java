@@ -328,8 +328,7 @@ public class ExoConnectionUtils {
       JSONObject json = (JSONObject) JSONValue.parse(result);
       results[0]      = json.get(ExoConstants.USERNAME).toString();
       results[1]      = json.get(ExoConstants.TENANT).toString();
-      Log.i(TAG, "user:   " + results[0]);
-      Log.i(TAG, "tenant: " + results[1]);
+      Log.d(TAG, "user:   " + results[0] + " - tenant: " + results[1]);
       return results;
     } catch (RuntimeException e) {
       return null;
@@ -368,7 +367,6 @@ public class ExoConnectionUtils {
         if (tenantStatus.equalsIgnoreCase(ONLINE)) return SIGNIN_SERVER_ONLINE;
         else if (tenantStatus.equalsIgnoreCase(STOPPED)) {
           /* make simple request to restore server */
-          Log.i(TAG, "request: " + HTTP + tenant + "." + EXO_CLOUD_WS_DOMAIN);
           return SIGNIN_SERVER_SUSPENDED;
         }
 
