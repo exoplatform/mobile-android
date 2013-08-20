@@ -23,6 +23,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+/**
+ * Screen for activity details
+ */
 public class SocialDetailActivity extends MyActionBar implements OnClickListener {
   public LinearLayout                startScreen;
 

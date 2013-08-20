@@ -1,5 +1,7 @@
 package org.exoplatform.ui;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 

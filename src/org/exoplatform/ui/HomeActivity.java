@@ -1,7 +1,9 @@
 package org.exoplatform.ui;
 
+import android.graphics.Bitmap;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.AsyncImageView;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 /**
- * Represents the home screen
+ * Represents the home screen with dashboard
  */
 public class HomeActivity extends MyActionBar {
 
@@ -68,7 +70,7 @@ public class HomeActivity extends MyActionBar {
 
   public static HomeActivity  homeActivity;
 
-  private static final String TAG   = "eXoHomeActivity";
+  private static final String TAG = "eXo____HomeActivity____";
 
   private AccountSetting      mSetting;
 
@@ -161,7 +163,6 @@ public class HomeActivity extends MyActionBar {
     homeUserAvatar.setVisibility(View.GONE);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
-    setInfo();
   }
 
   private void setInfo() {
@@ -202,7 +203,8 @@ public class HomeActivity extends MyActionBar {
     if (list == null) {
       return;
     }
-    HomeSocialItem socialItem = null;
+
+    HomeSocialItem socialItem;
     viewFlipper.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
     /*

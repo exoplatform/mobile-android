@@ -1,5 +1,6 @@
 package org.exoplatform.controller.home;
 
+import android.util.Log;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   
   protected ActivityService<RestActivity> activityService;
 
+  private static final String TAG = "eXo____SocialLoadTask____";
+
   public SocialLoadTask(Context context, LoaderActionBarItem loader) {
     mContext = context;
     loaderItem = loader;
@@ -90,6 +93,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
    *   If set, the task will add more activities to the current stream.
    */
   public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
+
     try {
       ArrayList<SocialActivityInfo> listActivity = new ArrayList<SocialActivityInfo>();
       int loadSize = params[0];

@@ -3,6 +3,9 @@ package org.exoplatform.widget;
 import java.net.URLConnection;
 import java.util.Locale;
 
+import android.graphics.Bitmap;
+import android.util.Log;
+import greendroid.widget.AsyncImageView;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
@@ -25,6 +28,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * Represents the layout for activity details
+ */
 public class SocialActivityStreamItem extends LinearLayout {
   private static final String FONT_COLOR          = "#696969";
 
@@ -66,6 +72,8 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private Resources           resource;
 
+  private static final String TAG = "eXo____SocialActivityStreamItem____";
+
   public SocialActivityStreamItem(Context context, AttributeSet attrs) {
     super(context, attrs);
 
@@ -73,6 +81,7 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   public SocialActivityStreamItem(Context context, SocialActivityInfo info, boolean is) {
     super(context);
+
     mContext = context;
     resource = mContext.getResources();
     activityInfo = info;
@@ -98,7 +107,6 @@ public class SocialActivityStreamItem extends LinearLayout {
   }
 
   public void initCommonInfo() {
-
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl != null) {
       BitmapFactory.Options options = new BitmapFactory.Options();

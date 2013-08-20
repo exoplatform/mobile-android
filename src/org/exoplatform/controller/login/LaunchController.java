@@ -118,6 +118,7 @@ public class LaunchController {
     Log.i(TAG, "redirect: " + mSetting.getCurrentServer());
     /* no server configured - redirect to Welcome screen */
     if (mSetting.getCurrentServer() == null) {
+      Log.i(TAG, "to welcome");
       Intent next = new Intent(mCurrentActivity, WelcomeActivity.class);
       mCurrentActivity.startActivityForResult(next, 0);
       mCurrentActivity.overridePendingTransition(0, 0);
@@ -125,10 +126,12 @@ public class LaunchController {
     }
 
     if (mSetting.isAutoLoginEnabled()) {
+      Log.i(TAG, "starting to log-in");
       mCurrentActivity.setContentView(R.layout.launch);
       new LoginController(mCurrentActivity, mSetting.getUsername(), mSetting.getPassword(), false);
     }
     else {
+      Log.i(TAG, "to login");
       Intent next = new Intent(mContext, LoginActivity.class);
       mCurrentActivity.startActivityForResult(next, 0);
       mCurrentActivity.overridePendingTransition(0, 0);
