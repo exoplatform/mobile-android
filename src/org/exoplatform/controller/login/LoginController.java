@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.View;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.conn.HttpHostConnectException;
@@ -14,20 +15,19 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.LaunchActivity;
+import org.exoplatform.ui.LoginActivity;
 import org.exoplatform.utils.*;
-import org.exoplatform.utils.image.FileCache;
-import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 
 /**
- * Performs login
+ * Performs login operation
+ * can be launched from LoginActivity or LaunchActivity
  */
 public class LoginController {
 
@@ -46,6 +46,20 @@ public class LoginController {
 
   private LoginTask          mLoadTask;
 
+  private Resources          mResource;
+
+  /** the activity that launches this controller */
+  private Activity           mCurrentActivity;
+
+  /** indicate that this controlelr is launched from Launch activity */
+  private boolean            mIsLaunchFromLaunchActivity;
+
+  /** the warning dialog that shows error */
+  private WarningDialog      mWarningDialog;
+
+  private LoginWaitingDialog mProgressDialog;
+
+  /**===  Dialog Messages  ===*/
   private String             strSigning;
 
   private String             blankError;
@@ -64,46 +78,50 @@ public class LoginController {
 
   private String             okString;
 
-  private WarningDialog      mWarningDialog;
+  private String             redirectToLogin;
 
-  private LoginWaitingDialog mProgressDialog;
-
-  private boolean            mIsShowingDialog;
-
-  private Resources          resource;
-
-  private Activity           mCurrentActivity;
+  private String             loginWarningMsg;
 
   private static final String TAG = "eXoLoginController";
 
-  public LoginController(Activity context, String user, String pass, boolean isShowingDialog) {
+  public LoginController(Activity context, String user, String pass) {
     SettingUtils.setDefaultLanguage(context);
     mContext = context;
     mCurrentActivity = context;
-    resource = mContext.getResources();
+    mResource = mContext.getResources();
     mNewUserName = user;
     mNewPassword = pass;
     mSetting     = AccountSetting.getInstance();
     mDomain  = mSetting.getDomainName();
-    mIsShowingDialog = isShowingDialog;
+    mIsLaunchFromLaunchActivity = (mCurrentActivity instanceof LaunchActivity);
 
     getLanguage();
     if (checkLogin()) onLoad();
-    else {
-      if (isShowingDialog) {
-        mWarningDialog = new WarningDialog(mContext, titleString, blankError, okString);
-        mWarningDialog.show();
-      }
-    }
+    else showWarningDialog(blankError, redirectToLogin, okString);
+  }
+
+  /**
+   * Show warning dialog depending on what activity launches this controller
+   *
+   * @param msg               warning message
+   * @param okStringForLaunch text in the button
+   * @param defaultOkString   default text in the button
+   */
+  private void showWarningDialog(String msg, String okStringForLaunch, String defaultOkString) {
+    mWarningDialog = mIsLaunchFromLaunchActivity ?
+      new LoginWarningDialog(mContext, loginWarningMsg, msg, okStringForLaunch) :
+      new WarningDialog(mContext, titleString, msg, defaultOkString);
+
+    mWarningDialog.show();
   }
 
   private boolean checkLogin() {
     if (mNewUserName == null || mNewUserName.length() == 0) {
-      blankError = resource.getString(R.string.NoUsernameEnter);
+      blankError = mResource.getString(R.string.NoUsernameEnter);
     } else if (mNewPassword == null || mNewPassword.length() == 0) {
-      blankError = resource.getString(R.string.NoPasswordEnter);
+      blankError = mResource.getString(R.string.NoPasswordEnter);
     } else if (mDomain == null || mDomain.length() == 0) {
-      blankError = resource.getString(R.string.NoServerSelected);
+      blankError = mResource.getString(R.string.NoServerSelected);
     } else return true;
 
     return false;
@@ -114,9 +132,8 @@ public class LoginController {
       if (mLoadTask == null || mLoadTask.getStatus() == LoginTask.Status.FINISHED) {
         mLoadTask = (LoginTask) new LoginTask().execute();
       }
-    } else {
-      new ConnectionErrorDialog(mContext).show();
     }
+    else showWarningDialog(strNetworkConnectionFailed, redirectToLogin, okString);
   }
 
   public void onCancelLoad() {
@@ -127,15 +144,16 @@ public class LoginController {
   }
 
   private void getLanguage() {
-    strSigning = resource.getString(R.string.SigningIn);
-    strNetworkConnectionFailed = resource.getString(R.string.ConnectionError);
-    strUserNamePasswordFailed = resource.getString(R.string.UserNamePasswordFailed);
-    mobileNotCompilant = resource.getString(R.string.CompliantMessage);
-    strServerInvalid = resource.getString(R.string.ServerInvalid);
-    strServerUnreachable = resource.getString(R.string.ServerUnreachable);
-    titleString = resource.getString(R.string.Warning);
-    okString = resource.getString(R.string.OK);
-
+    strSigning = mResource.getString(R.string.SigningIn);
+    strNetworkConnectionFailed = mResource.getString(R.string.ConnectionError);
+    strUserNamePasswordFailed = mResource.getString(R.string.UserNamePasswordFailed);
+    mobileNotCompilant = mResource.getString(R.string.CompliantMessage);
+    strServerInvalid = mResource.getString(R.string.ServerInvalid);
+    strServerUnreachable = mResource.getString(R.string.ServerUnreachable);
+    titleString = mResource.getString(R.string.Warning);
+    okString = mResource.getString(R.string.OK);
+    redirectToLogin = mResource.getString(R.string.RedirectToLogin);
+    loginWarningMsg = mResource.getString(R.string.LoginWarningMsg);
   }
 
   public class LoginTask extends AsyncTask<Void, Void, Integer> {
@@ -148,7 +166,7 @@ public class LoginController {
 
     @Override
     public void onPreExecute() {
-      if (mIsShowingDialog) {
+      if (!mIsLaunchFromLaunchActivity) {
         mProgressDialog = new LoginWaitingDialog(mContext, null, strSigning);
         mProgressDialog.show();
       }
@@ -176,110 +194,122 @@ public class LoginController {
 
     @Override
     public void onPostExecute(Integer result) {
-      if (result == ExoConnectionUtils.LOGIN_INCOMPATIBLE) {
-        mWarningDialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
-        mWarningDialog.show();
-      } else if (result == ExoConnectionUtils.LOGIN_SUSCESS) {
-        /* Set social and document settings */
-        StringBuilder builder = new StringBuilder(mDomain)
-            .append("_").append(mNewUserName).append("_");
-        mSetting.socialKey = builder.toString() + ExoConstants.SETTING_SOCIAL_FILTER;
-        mSetting.socialKeyIndex = builder.toString() + ExoConstants.SETTING_SOCIAL_FILTER_INDEX;
-        mSetting.documentKey = builder.toString() + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
+      Log.d(TAG, "onPostExecute - login result: " + result);
+      String dialogMsg = "";
 
-        /**
-         * Login can only be done with existing server
-         * but there's case when user inputs new username changes or
-         * new password, we need to persist both
-         */
-        boolean needToSave = false;
-        ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+      switch (result) {
+        case ExoConnectionUtils.LOGIN_INCOMPATIBLE:
+          dialogMsg = mobileNotCompilant;
+          break;
 
-        if ( !mNewUserName.equals(mSetting.getUsername()) ) {    // new username - new credential
-          Log.i(TAG, "new user: " + mNewUserName);
-          ServerObjInfo newServer = mSetting.getCurrentServer().clone();
-          newServer.username   = mNewUserName;
-          newServer.password   = mNewPassword;
-          newServer.isRememberEnabled  = true;
-          newServer.isAutoLoginEnabled = true;
+        case ExoConnectionUtils.LOGIN_SUSCESS:
+          /* Set social and document settings */
+          StringBuilder builder = new StringBuilder(mDomain)
+              .append("_").append(mNewUserName).append("_");
+          mSetting.socialKey = builder.toString() + ExoConstants.SETTING_SOCIAL_FILTER;
+          mSetting.socialKeyIndex = builder.toString() + ExoConstants.SETTING_SOCIAL_FILTER_INDEX;
+          mSetting.documentKey = builder.toString() + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
 
-          if (mSetting.getUsername().equals("")) {
-            // Override old server
-            Log.i(TAG, "override old server");
-            mSetting.getCurrentServer().username = mNewUserName;
-            mSetting.getCurrentServer().password = mNewPassword;
-            needToSave = true;
-          }
-          else {
-            // Add a new server
-            // Add only if no same server exist
-            int duplicatedIdx = serverList.indexOf(newServer);
-            if (duplicatedIdx > -1) {
-              Log.i(TAG, "duplicated server: " + duplicatedIdx);
-              mSetting.setDomainIndex(String.valueOf(duplicatedIdx));
-              mSetting.setCurrentServer(newServer);
-              needToSave = false;
-            }
-            else {
-              // no duplicated, add server
-              Log.i(TAG, "no duplicated");
-              serverList.add(newServer);
-              // set current selected server to the new server
-              mSetting.setDomainIndex(String.valueOf(serverList.size() - 1));
-              mSetting.setCurrentServer(newServer);
+          /**
+           * Login can only be done with existing server
+           * but there's case when user inputs new username changes or
+           * new password, we need to persist both
+           */
+          boolean needToSave = false;
+          ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+
+          if ( !mNewUserName.equals(mSetting.getUsername()) ) {    // new username - new credential
+            Log.i(TAG, "new user: " + mNewUserName);
+            ServerObjInfo newServer = mSetting.getCurrentServer().clone();
+            newServer.username   = mNewUserName;
+            newServer.password   = mNewPassword;
+            newServer.isRememberEnabled  = true;
+            newServer.isAutoLoginEnabled = true;
+
+            if (mSetting.getUsername().equals("")) {
+              // Override old server
+              Log.i(TAG, "override old server");
+              mSetting.getCurrentServer().username = mNewUserName;
+              mSetting.getCurrentServer().password = mNewPassword;
               needToSave = true;
             }
+            else {
+              // Add a new server, only if no same server exist
+              int duplicatedIdx = serverList.indexOf(newServer);
+              if (duplicatedIdx > -1) {
+                Log.i(TAG, "duplicated server: " + duplicatedIdx);
+                mSetting.setDomainIndex(String.valueOf(duplicatedIdx));
+                mSetting.setCurrentServer(newServer);
+                needToSave = false;
+              }
+              else {
+                // no duplicated, add server
+                Log.i(TAG, "no duplicated");
+                serverList.add(newServer);
+                // set current selected server to the new server
+                mSetting.setDomainIndex(String.valueOf(serverList.size() - 1));
+                mSetting.setCurrentServer(newServer);
+                needToSave = true;
+              }
+
+            }
 
           }
-
-        }
-        else {
-          // same user, but password might change
-          if ( !mSetting.getPassword().equals(mNewPassword) ) {
-            Log.i(TAG, "password changes");
-            needToSave = true;
-            mSetting.getCurrentServer().password = mNewPassword;
-          }
-        }
-
-        // Save config
-        if (needToSave) SettingUtils.persistServerSetting(mContext);
-
-        /* Checking platform version */
-        if (isCompliant) {
-
-          Intent next = new Intent(mContext, HomeActivity.class);
-          next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          mContext.startActivity(next);
-
-          /* start from Launch activity */
-          if (mCurrentActivity instanceof LaunchActivity) {
-            mCurrentActivity.overridePendingTransition(0, 0);
+          else {
+            // same user, but password might change
+            if ( !mSetting.getPassword().equals(mNewPassword) ) {
+              Log.i(TAG, "password changes");
+              needToSave = true;
+              mSetting.getCurrentServer().password = mNewPassword;
+            }
           }
 
-          if (mSetting.isAutoLoginEnabled()) mCurrentActivity.finish();
+          // Save config
+          if (needToSave) SettingUtils.persistServerSetting(mContext);
 
-        } else {
-          mWarningDialog = new WarningDialog(mContext, titleString, mobileNotCompilant, okString);
-          mWarningDialog.show();
-        }
+          /* Checking platform version */
+          if (isCompliant) {
 
-      } else if (result == ExoConnectionUtils.LOGIN_UNAUTHORIZED) {
-        mWarningDialog = new WarningDialog(mContext, titleString, strUserNamePasswordFailed, okString);
-        mWarningDialog.show();
-      } else if (result == ExoConnectionUtils.LOGIN_INVALID) {
-        mWarningDialog = new WarningDialog(mContext, titleString, strServerInvalid, okString);
-        mWarningDialog.show();
-      } else if (result == ExoConnectionUtils.LOGIN_FAILED) {
-        mWarningDialog = new WarningDialog(mContext, titleString, strServerUnreachable, okString);
-        mWarningDialog.show();
-      } else {
-        mWarningDialog = new WarningDialog(mContext, titleString, strNetworkConnectionFailed, okString);
-        mWarningDialog.show();
+            Intent next = new Intent(mContext, HomeActivity.class);
+            next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(next);
+
+            /* start from Launch activity */
+            if (mCurrentActivity instanceof LaunchActivity) {
+              mCurrentActivity.overridePendingTransition(0, 0);
+            }
+
+            if (mSetting.isAutoLoginEnabled()) mCurrentActivity.finish();
+
+          } else {
+            dialogMsg = mobileNotCompilant;
+            break;
+          }
+
+          /* login successfully */
+          if (!mIsLaunchFromLaunchActivity) mProgressDialog.dismiss();
+          return ;
+
+        case ExoConnectionUtils.LOGIN_UNAUTHORIZED:
+          dialogMsg = strUserNamePasswordFailed;
+          break;
+
+        case ExoConnectionUtils.LOGIN_INVALID:
+          dialogMsg = strServerInvalid;
+          break;
+
+        case ExoConnectionUtils.LOGIN_FAILED:
+          dialogMsg = strServerUnreachable;
+          break;
+
+        default:
+          dialogMsg = strNetworkConnectionFailed;
+          break;
       }
-      if (mIsShowingDialog) mProgressDialog.dismiss();
-    }
 
+      showWarningDialog(dialogMsg, redirectToLogin, okString);
+      if (!mIsLaunchFromLaunchActivity) mProgressDialog.dismiss();
+    }
   }
 
   private class LoginWaitingDialog extends WaitingDialog {
@@ -293,7 +323,30 @@ public class LoginController {
       super.onBackPressed();
       onCancelLoad();
     }
+  }
 
+
+  /**
+   * A version of Warning dialog that redirect user to login screen if click on Ok
+   */
+  private class LoginWarningDialog extends WarningDialog {
+
+    public LoginWarningDialog(Context context, String titleString, String contentString, String okString) {
+      super(context, titleString, contentString, okString);
+      getWindow().getAttributes().windowAnimations = R.style.Animations_Window;
+    }
+
+    @Override
+    public void onClick(View view) {
+      if (view.equals(okButton)) {
+        dismiss();
+
+        /* redirect to login screen */
+        Intent next = new Intent(mCurrentActivity, LoginActivity.class);
+        mContext.startActivity(next);
+        mCurrentActivity.finish(); /* don't come back to Launch */
+      }
+    }
   }
 
 }

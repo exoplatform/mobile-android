@@ -128,7 +128,7 @@ public class LaunchController {
     if (mSetting.isAutoLoginEnabled()) {
       Log.i(TAG, "starting to log-in");
       mCurrentActivity.setContentView(R.layout.launch);
-      new LoginController(mCurrentActivity, mSetting.getUsername(), mSetting.getPassword(), false);
+      new LoginController(mCurrentActivity, mSetting.getUsername(), mSetting.getPassword());
     }
     else {
       Log.i(TAG, "to login");

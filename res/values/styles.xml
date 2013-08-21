@@ -226,4 +226,9 @@
         <item name="android:textColorHint">#999999</item>
     </style>
 
+    <style name="Animations" />
+    <style name="Animations.Window">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
+    </style>
+
 </resources>

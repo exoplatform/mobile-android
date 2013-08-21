@@ -221,6 +221,10 @@
 
     <string name="ImageDesc">description de l\'image</string>
 
+    <!-- Launch -->
+    <string name="RedirectToLogin">Ok, laissez-moi re-eassayer</string>
+    <string name="LoginWarningMsg">On essaie de vous connecter mais un problem se produit:</string>
+
     <string-array name="SocialTabs">
     <item>Fil d\'actualités</item>
     <item>Mes Contacts</item>

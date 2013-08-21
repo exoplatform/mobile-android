@@ -272,7 +272,7 @@ public class LoginActivity extends Activity implements OnClickListener, AdapterV
   private void onLogin() {
     username = mUserEditTxt.getText().toString();
     password = mPassEditTxt.getText().toString();
-    new LoginController(this, username, password, true);
+    new LoginController(this, username, password);
   }
 
   public void changeLanguage() {
