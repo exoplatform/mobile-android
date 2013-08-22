@@ -87,16 +87,20 @@
         <!-- Connect to on premise button -->
         <Button
                 android:id="@+id/signin_connect_on_premises_btn"
-                style="@style/SignUpBlueBtnStyle"
+                android:layout_height="60dp"
+                android:layout_width="wrap_content"
                 android:layout_below="@id/signin_edit_txt_pass"
                 android:layout_toRightOf="@id/signin_or_txt"
                 android:text="@string/ConnectOnPremise"
-                android:paddingBottom="15dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/margin_xs"
-                android:paddingRight="5dp"
-                android:paddingLeft="5dp"
-                android:onClick="connectToOnPremise"/>
+                android:paddingRight="7dp"
+                android:paddingLeft="7dp"
+                android:background="@drawable/btn_white"
+                android:textColor="#5A5A5A"
+                android:textSize="@dimen/text_size_small"
+                android:gravity="center"
+                android:onClick="connectToOnPremise" />
 
     </RelativeLayout>
 
