@@ -15,7 +15,7 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.LaunchActivity;
-import org.exoplatform.ui.LoginActivity;
+import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.utils.*;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;

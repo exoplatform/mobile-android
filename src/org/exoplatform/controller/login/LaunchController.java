@@ -5,7 +5,6 @@ import android.content.Intent;
 import greendroid.util.Config;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import org.exoplatform.R;
@@ -13,7 +12,7 @@ import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.ui.LoginActivity;
+import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.WelcomeActivity;
 import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.ExoConstants;

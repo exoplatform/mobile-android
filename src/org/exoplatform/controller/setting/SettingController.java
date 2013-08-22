@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Intent;
 import android.util.Log;
+import android.view.animation.AlphaAnimation;
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -235,8 +236,13 @@ public class SettingController {
     serverItem.serverName.setText(serverObj.serverName);
     serverItem.serverUrl.setText(serverObj.serverUrl);
 
-    if (Integer.valueOf(mSetting.getDomainIndex()) == serverIdx)
+    if (Integer.valueOf(mSetting.getDomainIndex()) == serverIdx) {
       serverItem.serverImageView.setVisibility(View.VISIBLE);
+      AlphaAnimation alpha = new AlphaAnimation(0.3F, 0.3F);
+      alpha.setDuration(0);     // Make animation instant
+      alpha.setFillAfter(true); // Tell it to persist after the animation ends
+      serverItem.layout.startAnimation(alpha);
+    }
     else
       serverItem.serverImageView.setVisibility(View.INVISIBLE);
     final int pos = serverIdx;

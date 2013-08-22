@@ -1,8 +1,12 @@
-package org.exoplatform.ui;
+package org.exoplatform.ui.login;
 
 
 import android.content.SharedPreferences;
 import android.view.*;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.*;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
@@ -11,6 +15,7 @@ import org.exoplatform.controller.login.ServerAdapter;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.ui.SettingActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
@@ -32,39 +37,28 @@ import java.util.Date;
 
 /**
  * Represents screen for authentication
+ * The screen contains 2 panels: an account panel allows user to enter credentials
+ * and a server panel to select a server to connect to.
+ *
+ * It also contain 2 buttons to switch between panels
  */
-public class LoginActivity extends Activity implements OnClickListener, AdapterView.OnItemClickListener {
+public class LoginActivity extends Activity implements
+    AccountPanel.ViewListener,
+    OnClickListener {
 
+  private AccountSetting    mSetting;
+
+  private Resources         mResources;
+
+  /**=== Components ===**/
   private ImageView         mAccountBtn;
 
   private ImageView         mServerBtn;
 
-  private Button            mLogInBtn;
+  private ServerPanel       mServerPanel;
 
-  private EditText          mUserEditTxt;
+  private AccountPanel      mAccountPanel;
 
-  private EditText          mPassEditTxt;
-
-  /** list view that contains list of servers */
-  private ListView          mServerListView;
-
-  private String            strSignIn;
-
-  private String            settingText;
-
-  private String            userNameHint;
-
-  private String            passWordHint;
-
-  private String            username;
-
-  private String            password;
-
-  private LinearLayout      mServerPanel;
-
-  private LinearLayout      mAccountPanel;
-
-  private AccountSetting    mSetting;
 
   /** Default is set to show account panel */
   private String            mPanelMode     = ACCOUNT_PANEL;
@@ -73,13 +67,19 @@ public class LoginActivity extends Activity implements OnClickListener, AdapterV
 
   public static final String SERVER_PANEL  = "SERVER_PANEL";
 
+
+  /**=== Constants ===**/
+  public static final String PANEL_MODE    = "PANEL_MODE";
+
   private static final String TAG = "eXoLoginActivity";
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.login);
-    mSetting = AccountSetting.getInstance();
+    mResources = getResources();
+    mSetting   = AccountSetting.getInstance();
+    initSubViews();
 
     /* launch app from custom url - need to init setting */
     boolean isLaunchedFromUrl = (getIntent().getData() != null);
@@ -88,104 +88,76 @@ public class LoginActivity extends Activity implements OnClickListener, AdapterV
       setUpUserAndServerFromUrl();
     }
 
-    initSubViews();
+    /* restore previous saved state */
+    if (savedInstanceState != null) {
+      mPanelMode = savedInstanceState.getString(PANEL_MODE);
+      mAccountPanel.onRestoreState(savedInstanceState);
+    }
   }
 
+  /**
+   * Any changes in state should be updated here
+   */
   @Override
   protected void onResume() {
-    Log.i(TAG, "onResume");
     super.onResume();
     SettingUtils.setDefaultLanguage(this);
-    username = mUserEditTxt.getText().toString();
-    password = mPassEditTxt.getText().toString();
-    initSubViews();
-    setInformation();
+    onChangeLanguage();
+    initState();
   }
 
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    setContentView(R.layout.login);
-    username = mUserEditTxt.getText().toString();
-    password = mPassEditTxt.getText().toString();
-    initSubViews();
-  }
 
   private void initSubViews() {
-    Log.i(TAG, "initSubViews");
     /* init account panel */
-    mAccountPanel = (LinearLayout) findViewById(R.id.login_account_panel);
-    mUserEditTxt  = (EditText) mAccountPanel.findViewById(R.id.EditText_UserName);
-    mPassEditTxt  = (EditText) mAccountPanel.findViewById(R.id.EditText_Password);
-    mLogInBtn     = (Button) mAccountPanel.findViewById(R.id.Button_Login);
-    mLogInBtn.setOnClickListener(this);
+    mAccountPanel = (AccountPanel) findViewById(R.id.login_account_panel);
+    mAccountPanel.setViewListener(this);
+
+    /* init server panel */
+    mServerPanel = (ServerPanel) findViewById(R.id.login_server_panel);
 
     /* init button */
     mAccountBtn   = (ImageView) findViewById(R.id.login_account_btn);
     mAccountBtn.setOnClickListener(this);
     mServerBtn    = (ImageView) findViewById(R.id.login_server_btn);
     mServerBtn.setOnClickListener(this);
-
-    /* init server panel */
-    mServerPanel = (LinearLayout) findViewById(R.id.login_server_panel);
-    mServerListView = (ListView) mServerPanel.findViewById(R.id.ListView_Servers);
-    mServerListView.setCacheColorHint(Color.TRANSPARENT);
-    mServerListView.setFadingEdgeLength(0);
-    mServerListView.setDivider(null);
-    mServerListView.setDividerHeight(1);
-
-    mServerListView.setOnItemClickListener(this);
-    mServerListView.setAdapter(new ServerAdapter(this));
-
-    switchPanel(mPanelMode);
-    setInformation();
   }
 
+  private void initState() {
+    switchPanel(mPanelMode);
 
+    /* update new server list */
+    mServerPanel.repopulateServerList();
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle saveState) {
+    saveState.putString(PANEL_MODE, mPanelMode);
+
+    mAccountPanel.onSaveState(saveState);
+  }
+
+  /**
+   * Switch between 2 panel mode
+   *
+   * @param panel
+   */
   private void switchPanel(String panel) {
     mPanelMode = panel;
 
     if (mPanelMode.equals(ACCOUNT_PANEL)) {
       Log.i(TAG, "switch to account panel");
-      mAccountPanel.setVisibility(View.VISIBLE);
-      mServerPanel.setVisibility(View.INVISIBLE);
-      mServerListView.setVisibility(View.INVISIBLE);
+      mAccountPanel.turnOn();
+      mServerPanel.turnOff();
       mAccountBtn.setSelected(true);
       mServerBtn.setSelected(false);
-
-      Log.i(TAG, "server: " + mSetting.getCurrentServer());
-      Log.i(TAG, "remember me: " + mSetting.isRememberMeEnabled());
-      if (mSetting.getCurrentServer()!=null) Log.i(TAG, "server: " + mSetting.getCurrentServer().serverUrl);
-      Log.i(TAG, "user: " + mSetting.getUsername());
-      if (mSetting.getCurrentServer() != null) {
-        mUserEditTxt.setText(mSetting.isRememberMeEnabled() ? mSetting.getUsername(): username);
-        mPassEditTxt.setText(mSetting.isRememberMeEnabled() ? mSetting.getPassword(): password);
-      }
     }
     else {
       Log.i(TAG, "switch to server panel");
-      mAccountPanel.setVisibility(View.INVISIBLE);
-      mServerPanel.setVisibility(View.VISIBLE);
-      mServerListView.setVisibility(View.VISIBLE);
+      mAccountPanel.turnOff();
+      mServerPanel.turnOn();
       mAccountBtn.setSelected(false);
       mServerBtn.setSelected(true);
     }
-  }
-
-  @Override
-  public void onItemClick(AdapterView<?> parent, View rowView, int position, long id) {
-    int selectedIdx = Integer.valueOf(mSetting.getDomainIndex());
-    int firstVisiblePosition = parent.getFirstVisiblePosition();
-    if ((firstVisiblePosition <= selectedIdx) && (selectedIdx <= parent.getLastVisiblePosition()))
-      parent.getChildAt(selectedIdx - firstVisiblePosition)
-          .findViewById(R.id.ImageView_Checked)
-          .setBackgroundResource(R.drawable.authenticate_checkmark_off);
-
-    rowView.findViewById(R.id.ImageView_Checked)
-        .setBackgroundResource(R.drawable.authenticate_checkmark_on);
-    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
-    mSetting.setDomainIndex(String.valueOf(position));
-    mSetting.setCurrentServer(serverList.get(position));
   }
 
   /**
@@ -251,42 +223,15 @@ public class LoginActivity extends Activity implements OnClickListener, AdapterV
     mSetting.setCurrentServer(serverList.get(serverIdx));
   }
 
-  /**
-   * Retrieve username and password from input field or from account setting
-   */
-  private void setInformation() {
-    changeLanguage();
-    mUserEditTxt.setHint(userNameHint);
-    mUserEditTxt.setText( (username==null || username.equals(""))
-        && mSetting.isRememberMeEnabled()
-        ? mSetting.getUsername(): username);
-
-    mPassEditTxt.setHint(passWordHint);
-    mPassEditTxt.setText( (password==null || password.equals(""))
-        && mSetting.isRememberMeEnabled()
-        ? mSetting.getPassword():password);
-
-    mLogInBtn.setText(strSignIn);
-  }
-
-  private void onLogin() {
-    username = mUserEditTxt.getText().toString();
-    password = mPassEditTxt.getText().toString();
-    new LoginController(this, username, password);
-  }
-
-  public void changeLanguage() {
-    Resources resource = getResources();
-    strSignIn = resource.getString(R.string.SignInButton);
-    settingText = resource.getString(R.string.Settings);
-    userNameHint = resource.getString(R.string.UserNameCellTitle);
-    passWordHint = resource.getString(R.string.PasswordCellTitle);
+  public void onChangeLanguage() {
+    mAccountPanel.onChangeLanguage();
   }
 
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     menu.clear();
-    menu.add(0, 1, 0, settingText).setIcon(R.drawable.optionsettingsbutton);
+    menu.add(0, 1, 0, mResources.getString(R.string.Settings))
+        .setIcon(R.drawable.optionsettingsbutton);
     return true;
   }
 
@@ -303,14 +248,12 @@ public class LoginActivity extends Activity implements OnClickListener, AdapterV
 
   @Override
   public void onClick(View view) {
-    if (view.equals(mLogInBtn))   onLogin();
     if (view.equals(mServerBtn))  switchPanel(SERVER_PANEL);
     if (view.equals(mAccountBtn)) switchPanel(ACCOUNT_PANEL);
   }
 
   @Override
   protected void onPause(){
-    Log.i(TAG, "onPause");
     super.onPause();
 
     if (!mSetting.getDomainIndex().equals("-1")) {
@@ -325,4 +268,16 @@ public class LoginActivity extends Activity implements OnClickListener, AdapterV
     setResult(RESULT_CANCELED);
     finish();
   }
+
+  @Override
+  public void onClickLogin(String username, String password) {
+    if (mSetting.getCurrentServer() == null) {
+      Toast toast = Toast.makeText(this, R.string.NoServerSelected, Toast.LENGTH_LONG);
+      toast.setGravity(Gravity.CENTER, 0, 0);
+      toast.show();
+      return ;
+    }
+    new LoginController(this, username, password);
+  }
+
 }

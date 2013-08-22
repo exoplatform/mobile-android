@@ -1,9 +1,7 @@
 package org.exoplatform.ui;
 
-import android.graphics.Bitmap;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
-import greendroid.widget.AsyncImageView;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
@@ -14,6 +12,7 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
