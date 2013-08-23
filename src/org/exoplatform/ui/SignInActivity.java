@@ -39,9 +39,6 @@ public class SignInActivity extends Activity {
 
     setContentView(R.layout.signin);
 
-    ViewGroup vg = (ViewGroup) findViewById(R.id.signin_layout);
-    AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BOLD), vg);
-
     mLoginBtn = (Button) findViewById(R.id.signin_login_btn);
     mLoginBtn.setEnabled(false);
 

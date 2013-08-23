@@ -37,10 +37,6 @@ public class SignInOnPremiseActivity extends Activity {
 
     setContentView(R.layout.onpremise);
 
-    ViewGroup vg = (ViewGroup) findViewById(R.id.onpremise_layout);
-    AssetUtils.setTypeFace(
-        AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BOLD), vg);
-
     mLoginBtn = (Button) findViewById(R.id.onpremise_login_btn);
     mLoginBtn.setEnabled(false);
 

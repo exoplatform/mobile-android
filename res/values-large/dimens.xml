@@ -32,6 +32,7 @@
 
     <!-- text size -->
     <dimen name="text_size_smallest">13sp</dimen>
+    <dimen name="text_size_smaller">16sp</dimen>
     <dimen name="text_size_small">20sp</dimen>
     <dimen name="text_size_medium">24sp</dimen>
     <dimen name="text_size_large">28sp</dimen>
@@ -63,5 +64,7 @@
     <dimen name="margin_xl">60dp</dimen>
     <dimen name="margin_xxl">90dp</dimen>
 
+    <!-- sign in -->
+    <dimen name="signin_login_btn_width">150dp</dimen>
 
 </resources>

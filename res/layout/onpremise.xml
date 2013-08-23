@@ -23,7 +23,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_s"
-                    android:paddingBottom="@dimen/margin_m"
+                    android:paddingBottom="@dimen/margin_l"
                     android:background="@drawable/bg_rect_rounded_corner">
 
         <!-- Enter url text -->
@@ -131,7 +131,14 @@
         <!-- Log In button -->
         <Button
                 android:id="@+id/onpremise_login_btn"
-                style="@style/SignUpBlueBtnStyle"
+                android:layout_height="60dp"
+                android:layout_width="@dimen/signin_login_btn_width"
+                android:background="@drawable/btn_blue"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:gravity="center"
                 android:layout_below="@id/onpremise_pass_edit_txt"
                 android:layout_centerHorizontal="true"
                 android:text="@string/LogIn"
