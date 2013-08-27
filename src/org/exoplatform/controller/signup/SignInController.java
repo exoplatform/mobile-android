@@ -145,6 +145,7 @@ public class SignInController {
     public void onPreExecute() {
       mProgressDialog = new SignInWaitingDialog(mContext, null, signInMess);
       mProgressDialog.show();
+      ExoConnectionUtils.loggingOut();
     }
 
     @Override

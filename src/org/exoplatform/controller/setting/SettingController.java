@@ -9,7 +9,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.ui.ServerEditionActivity;
+import org.exoplatform.ui.setting.ServerEditionActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.ServerConfigurationUtils;

@@ -3,37 +3,26 @@ package org.exoplatform.ui.login;
 
 import android.content.SharedPreferences;
 import android.view.*;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.*;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.LaunchController;
 import org.exoplatform.controller.login.LoginController;
-import org.exoplatform.controller.login.ServerAdapter;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.ui.SettingActivity;
+import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Represents screen for authentication

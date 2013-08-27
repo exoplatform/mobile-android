@@ -16,7 +16,9 @@
         android:layout_marginBottom="5dp"
         android:padding="5dp"
         android:contentDescription="@string/ImageDesc"
-        android:src="@drawable/exo_logo_large" />
+        android:src="@drawable/exo_logo_large" >
+        <requestFocus/>
+    </ImageView>
 
     <RelativeLayout
         android:id="@+id/login_frame"

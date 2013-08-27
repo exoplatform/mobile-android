@@ -218,6 +218,9 @@
     <string name="ServerName">Nom du serveur</string>
     <string name="ServerUrl">Url du serveur</string>
     <string name="StartCloudSignUpAssistant">Lancer l\'assistant de l\'inscription</string>
+    <string name="ServerAdded">Serveur ajouté</string>
+    <string name="ServerUpdated">Serveur mise à jour</string>
+    <string name="ServerDeleted">Serveur supprimé</string>
 
     <string name="ImageDesc">description de l\'image</string>
 

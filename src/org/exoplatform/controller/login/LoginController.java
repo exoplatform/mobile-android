@@ -156,6 +156,7 @@ public class LoginController {
     loginWarningMsg = mResource.getString(R.string.LoginWarningMsg);
   }
 
+
   public class LoginTask extends AsyncTask<Void, Void, Integer> {
 
     private HttpResponse response;
@@ -170,6 +171,7 @@ public class LoginController {
         mProgressDialog = new LoginWaitingDialog(mContext, null, strSigning);
         mProgressDialog.show();
       }
+      ExoConnectionUtils.loggingOut();
     }
 
     @Override

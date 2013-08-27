@@ -1,9 +1,10 @@
-package org.exoplatform.ui;
+package org.exoplatform.ui.setting;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +12,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,8 +25,10 @@ import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This screen is used to add new server or modify existing server<br/>
@@ -55,9 +60,24 @@ public class ServerEditionActivity extends Activity {
 
   private AccountSetting    mSetting;
 
+  private Resources     mResources;
+
+
   private SettingController mSettingController;
 
   private Handler mHandler = new Handler();
+
+  private Animation     mEnabledAnim;
+
+  private Animation     mDisabledAnim;
+
+  /**=== Constants ===**/
+  public static final String  SETTING_OPERATION  = "SETTING_OPERATION";
+
+  public static final int     SETTING_ADD        = 0;
+  public static final int     SETTING_UPDATE     = 1;
+  public static final int     SETTING_DELETE     = 2;
+  public static final String  SERVER_IDX         = "SERVER_IDX";
 
   private static final String TAG = "eXoServerEditionActivity";
 
@@ -65,6 +85,9 @@ public class ServerEditionActivity extends Activity {
     requestScreenOrientation();
     super.onCreate(savedInstanceState);
     setContentView(R.layout.server_edition);
+
+    initAnimations();
+    mResources = getResources();
 
     // we use extra passed along with Intent to specify: add server or modify one
     mTitleTxt = (TextView) findViewById(R.id.server_setting_title_txt);
@@ -78,17 +101,19 @@ public class ServerEditionActivity extends Activity {
 
     /* allowing to click on OK only if server name and server url are inputted */
     mOkBtn.setEnabled(false);
+    mOkBtn.startAnimation(mDisabledAnim);
     TextWatcher watcher = onServerNameOrServerUrlChanged();
     mServerNameEditTxt.addTextChangedListener(watcher);
     mServerUrlEditTxt.addTextChangedListener(watcher);
     mPassEditTxt.setTypeface(Typeface.SANS_SERIF);
 
     /* change the title */
-    mIntent  = getIntent();
+    mIntent    = getIntent();
     mServerObj = mIntent.getParcelableExtra(ExoConstants.EXO_SERVER_OBJ);
     mServerIdx = ServerSettingHelper.getInstance().getServerInfoList().indexOf(mServerObj);
-    mSetting = AccountSetting.getInstance();
+    mSetting   = AccountSetting.getInstance();
     mIsAddingServer = mIntent.getBooleanExtra(ExoConstants.SETTING_ADDING_SERVER, true);
+
     if (mIsAddingServer) initAddingServer();
     else initModifyingServer();
   }
@@ -121,6 +146,16 @@ public class ServerEditionActivity extends Activity {
     }
   }
 
+  private void initAnimations() {
+    mEnabledAnim = new AlphaAnimation(1.0f, 1.0f);
+    mEnabledAnim.setDuration(0);
+    mEnabledAnim.setFillAfter(true);
+
+    mDisabledAnim = new AlphaAnimation(0.4f, 0.4f);
+    mDisabledAnim.setDuration(0);
+    mDisabledAnim.setFillAfter(true);
+  }
+
   private TextWatcher onServerNameOrServerUrlChanged() {
     return new TextWatcher() {
       @Override
@@ -134,10 +169,13 @@ public class ServerEditionActivity extends Activity {
 
         if (name.isEmpty() || url.isEmpty()) {
           mOkBtn.setEnabled(false);
+          mOkBtn.startAnimation(mDisabledAnim);
           return;
         }
 
         mOkBtn.setEnabled(true);
+        mOkBtn.startAnimation(mEnabledAnim);
+
         if (mIsAddingServer) mOkBtn.setOnClickListener(onAddServer());
         else mOkBtn.setOnClickListener(onUpdateServer());
       }
@@ -170,11 +208,13 @@ public class ServerEditionActivity extends Activity {
   /**
    * Return to setting screen
    */
-  private void returnToSetting() {
+  private void returnToSetting(int operation, int serverIdx) {
     Intent next = new Intent(this, SettingActivity.class);
-    next.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    next.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
     next.putExtra(ExoConstants.SETTING_TYPE,
         mIntent.getIntExtra(ExoConstants.SETTING_TYPE, SettingActivity.GLOBAL_TYPE));
+    next.putExtra(SETTING_OPERATION, operation);
+    next.putExtra(SERVER_IDX, serverIdx);
     startActivity(next);
   }
 
@@ -184,8 +224,16 @@ public class ServerEditionActivity extends Activity {
       public void onClick(View view) {
         Log.i(TAG, "onDeleteServer");
 
-        mSettingController.onDelete(mServerIdx);
-        returnToSetting();
+        int selectedServerIndex = Integer.parseInt(mSetting.getDomainIndex());
+        if (mServerIdx < selectedServerIndex)
+          mSetting.setDomainIndex(String.valueOf(selectedServerIndex - 1));
+
+        List<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList();
+        listServer.remove(mServerIdx);
+        onSave();
+        Toast.makeText(ServerEditionActivity.this,
+            mResources.getString(R.string.ServerDeleted), Toast.LENGTH_SHORT).show();
+        returnToSetting(SETTING_DELETE, mServerIdx);
       }
     };
   }
@@ -197,9 +245,24 @@ public class ServerEditionActivity extends Activity {
         Log.i(TAG, "onUpdateServer");
 
         if (!checkServerUrl(view)) return;
-        mSettingController.onUpdate(retrieveInput(), mServerIdx);
+        ServerObjInfo myServerObj = retrieveInput();
+        if (!isServerValid(myServerObj)) return ;
 
-        returnToSetting();
+        List<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList();
+        /* check whether server is duplicated with other server */
+        int serverIdx = listServer.indexOf(myServerObj);
+        if ((serverIdx != mServerIdx) && (serverIdx != -1)) {
+          Toast.makeText(ServerEditionActivity.this, mResources.getString(R.string.WarningServerUrlAndUserAlreadyExist)
+              , Toast.LENGTH_SHORT).show();
+          return ;
+        }
+
+        listServer.remove(mServerIdx);
+        listServer.add(mServerIdx, myServerObj);
+        onSave();
+        Toast.makeText(ServerEditionActivity.this,
+            mResources.getString(R.string.ServerUpdated), Toast.LENGTH_SHORT).show();
+        returnToSetting(SETTING_UPDATE, mServerIdx);
       }
     };
   }
@@ -212,9 +275,21 @@ public class ServerEditionActivity extends Activity {
         Log.i(TAG, "onAddServer");
 
         if (!checkServerUrl(view)) return;
-        mSettingController.onAdd(retrieveInput());
+        ServerObjInfo myServerObj = retrieveInput();
+        if (!isServerValid(myServerObj)) return ;
 
-        returnToSetting();
+        List<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList();
+        if (listServer.contains(myServerObj)) {
+          Toast.makeText(ServerEditionActivity.this,
+              mResources.getString(R.string.WarningServerUrlAndUserAlreadyExist), Toast.LENGTH_SHORT).show();
+          return ;
+        }
+
+        listServer.add(myServerObj);
+        onSave();
+        Toast.makeText(ServerEditionActivity.this,
+            mResources.getString(R.string.ServerAdded), Toast.LENGTH_SHORT).show();
+        returnToSetting(SETTING_ADD, listServer.size() - 1);
       }
     };
   }
@@ -243,6 +318,43 @@ public class ServerEditionActivity extends Activity {
 
     mServerUrlEditTxt.setText(url);
     return true;
+  }
+
+  /**
+   * Check whether server information is valid
+   *
+   * @param myServerObj
+   * @return
+   */
+  private boolean isServerValid(ServerObjInfo myServerObj) {
+    if (myServerObj.serverName.length() == 0 || myServerObj.serverUrl.length() == 0) {
+      Toast.makeText(this, mResources.getString(R.string.WarningServerNameIsEmpty), Toast.LENGTH_SHORT).show();
+      return false;
+    }
+
+    URLAnalyzer urlAnanyzer = new URLAnalyzer();
+    myServerObj.serverUrl = urlAnanyzer.parserURL(myServerObj.serverUrl);
+
+    if (ExoDocumentUtils.isContainSpecialChar(myServerObj.serverName,
+        ExoConstants.SPECIAL_CHAR_NAME_SET)
+        || ExoDocumentUtils.isContainSpecialChar(myServerObj.serverUrl,
+        ExoConstants.SPECIAL_CHAR_URL_SET)) {
+
+      Toast.makeText(this, mResources.getString(R.string.SpecialCharacters), Toast.LENGTH_SHORT).show();
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Make change to shared perf and generate xml file
+   */
+  private void onSave() {
+    Log.i(TAG, "onSave");
+    ArrayList<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList();
+    ServerConfigurationUtils.generateXmlFileWithServerList(this,
+        listServer, ExoConstants.EXO_SERVER_SETTING_FILE, "");
+    ServerSettingHelper.getInstance().setServerInfoList(listServer);
   }
 
   private ServerObjInfo retrieveInput() {

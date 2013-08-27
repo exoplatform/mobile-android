@@ -11,6 +11,8 @@
         android:layout_height="wrap_content" >
 
         <!-- Login Setting -->
+
+        <!-- Login title -->
         <TextView
                 android:id="@+id/setting_login_title_txt"
                 android:layout_width="fill_parent"
@@ -33,6 +35,7 @@
                 android:background="@drawable/serversectionseparator"
                 android:contentDescription="@string/Settings" />
 
+        <!-- Remember me and Autologin setting -->
         <RelativeLayout
             android:id="@+id/setting_login_layout"
             android:layout_width="fill_parent"

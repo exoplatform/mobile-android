@@ -30,7 +30,7 @@
         </activity>
 
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.WelcomeActivity"/>
-        <activity android:name=".ui.login.LoginActivity" android:windowSoftInputMode="adjustResize">
+        <activity android:name=".ui.login.LoginActivity" android:windowSoftInputMode="adjustResize|stateHidden">
             <!-- custom URL scheme -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -40,7 +40,10 @@
             </intent-filter>
         </activity>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.HomeActivity"/>
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SettingActivity"/> 
+
+        <activity android:name=".ui.setting.SettingActivity"/>
+        <activity android:name=".ui.setting.ServerEditionActivity"/>
+
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DocumentActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DocumentActionDialog"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DashboardActivity"/>
@@ -54,7 +57,6 @@
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignUpActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignInActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignInOnPremiseActivity"/>
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.ServerEditionActivity"/>
     </application>
 
 </manifest>

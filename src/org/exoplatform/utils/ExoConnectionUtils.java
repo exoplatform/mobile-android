@@ -23,6 +23,7 @@ import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.singleton.SocialServiceHelper;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -507,5 +508,17 @@ public class ExoConnectionUtils {
 
   public static boolean validateUrl(String url) {
     return Patterns.WEB_URL.matcher(url).matches();
+  }
+
+  public static void loggingOut() {
+    if (ExoConnectionUtils.httpClient != null) {
+      ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
+      ExoConnectionUtils.httpClient = null;
+    }
+
+    AccountSetting.getInstance().cookiesList = null;
+
+    /* Clear all social service data */
+    SocialServiceHelper.getInstance().clearData();
   }
 }

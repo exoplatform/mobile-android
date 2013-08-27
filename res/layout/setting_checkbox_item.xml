@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<org.exoplatform.ui.setting.CheckBox
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/file_item_background_shape"
+        android:paddingLeft="10dp">
+
+    <TextView
+            android:id="@+id/checkbox_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:padding="4dp"
+            android:text="@string/RememberMe"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    <ImageView
+            android:id="@+id/checkbox_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/authenticate_checkmark_off"
+            android:contentDescription="@string/Settings" />
+
+</org.exoplatform.ui.setting.CheckBox>

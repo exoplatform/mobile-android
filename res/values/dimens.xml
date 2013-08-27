@@ -66,4 +66,8 @@
     <!-- sign in -->
     <dimen name="signin_login_btn_width">80dp</dimen>
 
+    <!-- setting -->
+    <dimen name="title_txt_size">16sp</dimen>
+    <dimen name="label_txt_size">14sp</dimen>
+
 </resources>

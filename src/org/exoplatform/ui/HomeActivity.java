@@ -13,6 +13,7 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.ui.login.LoginActivity;
+import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -26,7 +27,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -253,15 +253,11 @@ public class HomeActivity extends MyActionBar {
     }
 
     AccountSetting.getInstance().cookiesList = null;
-    /*
-     * Clear all social service data
-     */
+
+    /* Clear all social service data */
     SocialServiceHelper.getInstance().clearData();
     homeController.finishService();
     homeActivity = null;
-    Log.i(TAG, "remember me:" + mSetting.isRememberMeEnabled());
-    Log.i(TAG, "auto login:" + mSetting.isAutoLoginEnabled());
-
     redirectToLogIn();
   }
 
