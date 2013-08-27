@@ -122,7 +122,7 @@
     <!-- Signup:  edit text with background drawable -->
     <style name="SignUpEditTxtStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_height">42dp</item>
         <item name="android:gravity">center|left</item> <!-- center text vertically and left -->
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColorHint">#B3B3B3</item>
@@ -164,11 +164,12 @@
     <style name="SignUpAlertTxtStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/text_size_smallest</item>
+        <item name="android:textSize">12dp</item>
         <item name="android:drawableLeft">@drawable/icon_warning</item>
         <item name="android:visibility">invisible</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:drawablePadding">5dp</item>
+        <item name="android:gravity">bottom</item>
     </style>
 
     <!-- Signup: blue header -->

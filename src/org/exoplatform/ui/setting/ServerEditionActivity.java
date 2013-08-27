@@ -14,14 +14,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.exoplatform.R;
-import org.exoplatform.controller.setting.SettingController;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -35,8 +33,6 @@ import java.util.List;
  *
  */
 public class ServerEditionActivity extends Activity {
-
-  private Intent   mIntent;
 
   private TextView mTitleTxt;
 
@@ -54,22 +50,21 @@ public class ServerEditionActivity extends Activity {
 
   private boolean  mIsAddingServer;
 
-  private ServerObjInfo mServerObj;
+  private ServerObjInfo    mServerObj;
 
-  private int           mServerIdx;
+  private int              mServerIdx;
 
-  private AccountSetting    mSetting;
+  private Intent           mIntent;
 
-  private Resources     mResources;
+  private AccountSetting   mSetting;
 
+  private Resources        mResources;
 
-  private SettingController mSettingController;
+  private Handler          mHandler = new Handler();
 
-  private Handler mHandler = new Handler();
+  private Animation        mEnabledAnim;
 
-  private Animation     mEnabledAnim;
-
-  private Animation     mDisabledAnim;
+  private Animation        mDisabledAnim;
 
   /**=== Constants ===**/
   public static final String  SETTING_OPERATION  = "SETTING_OPERATION";
@@ -91,7 +86,6 @@ public class ServerEditionActivity extends Activity {
 
     // we use extra passed along with Intent to specify: add server or modify one
     mTitleTxt = (TextView) findViewById(R.id.server_setting_title_txt);
-    mSettingController = SettingController.getInstance();
     mServerNameEditTxt = (EditText) findViewById(R.id.server_setting_server_name_edit_txt);
     mServerUrlEditTxt  = (EditText) findViewById(R.id.server_setting_server_url_edit_txt);
     mUserEditTxt       = (EditText) findViewById(R.id.server_setting_user_edit_txt);

@@ -51,7 +51,7 @@ public class LoginController {
   /** the activity that launches this controller */
   private Activity           mCurrentActivity;
 
-  /** indicate that this controlelr is launched from Launch activity */
+  /** indicate that this controller is launched from Launch activity */
   private boolean            mIsLaunchFromLaunchActivity;
 
   /** the warning dialog that shows error */
