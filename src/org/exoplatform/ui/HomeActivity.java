@@ -1,5 +1,6 @@
 package org.exoplatform.ui;
 
+import android.util.Log;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
@@ -184,9 +185,12 @@ public class HomeActivity extends MyActionBar {
   }
 
   private void startSocialService(LoaderActionBarItem loader) {
+    Log.i(TAG, "startSocialService");
+
+    /** if soc activity service is null then loads all soc services */
     if (SocialServiceHelper.getInstance().activityService == null) {
       homeController.launchNewsService();
-    }else {
+    } else {
       homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
     }
   }

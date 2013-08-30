@@ -376,10 +376,9 @@ public class LoginProxy implements
           /** Duplicate server */
           ServerObjInfo duplicatedServer = serverList.get(duplicatedIdx);
           serverIdx  = duplicatedIdx;
-
           /** Check password */
           if (!duplicatedServer.password.equals(newServerObj.password)) {
-            newServerObj.password = duplicatedServer.password;
+            duplicatedServer.password = newServerObj.password;
             needToSave = true;
           }
         }

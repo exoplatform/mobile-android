@@ -1,5 +1,6 @@
 package org.exoplatform.controller.home;
 
+import android.util.Log;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.net.MalformedURLException;
@@ -55,6 +56,9 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
 
   private LoaderActionBarItem           loaderItem;
 
+  private static final String TAG = "eXo____SocialServiceLoadTask____";
+
+
   public SocialServiceLoadTask(Context context,
                                HomeController controller,
                                LoaderActionBarItem loader) {
@@ -75,16 +79,21 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
   @Override
   public void onPreExecute() {
     loaderItem.setLoading(true);
-
   }
 
   @SuppressWarnings({ "deprecation", "unchecked" })
   @Override
   public String[] doInBackground(Void... params) {
+    Log.i(TAG, "accessing social service");
+
     try {
       String userName = AccountSetting.getInstance().getUsername();
       String password = AccountSetting.getInstance().getPassword();
       URL url = new URL(SocialActivityUtil.getDomain());
+
+      Log.i(TAG, "userName: " + userName);
+      Log.i(TAG, "url: " + url.toString());
+
       SocialClientContext.setProtocol(url.getProtocol());
       SocialClientContext.setHost(url.getHost());
       SocialClientContext.setPort(url.getPort());
@@ -110,10 +119,13 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
 
       return profileArray;
     } catch (SocialClientLibException e) {
+      Log.d(TAG, "SocialClientLibException: " + e.getLocalizedMessage());
       return null;
     } catch (RuntimeException e) {
+      Log.d(TAG, "RuntimeException: " + e.getLocalizedMessage());
       return null;
     } catch (MalformedURLException e) {
+      Log.d(TAG, "MalformedURLException: " + e.getLocalizedMessage());
       return null;
     }
   }

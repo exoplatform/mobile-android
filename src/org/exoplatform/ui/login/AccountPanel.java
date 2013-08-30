@@ -136,7 +136,6 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
   private void changeStateOfLoginBtn() {
     boolean isCredentialsEntered = !mUserEditTxt.getText().toString().isEmpty()
         && !mPassEditTxt.getText().toString().isEmpty();
-    Log.i(TAG, "isCredentialsEntered: " + isCredentialsEntered);
     mLoginBtn.setEnabled(isCredentialsEntered);
   }
 

@@ -80,6 +80,12 @@ public class HomeController {
     }
   }
 
+  /**
+   * Load a number of activities with specific type
+   *
+   * @param number
+   * @param type
+   */
   public void onLoad(int number, int type) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {

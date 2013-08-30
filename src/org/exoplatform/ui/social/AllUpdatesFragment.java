@@ -96,17 +96,17 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
 
   public class AllUpdateLoadTask extends SocialLoadTask {
 
-	    public AllUpdateLoadTask(Context context, LoaderActionBarItem loader) {
-	      super(context, loader);
-	    }
+	  public AllUpdateLoadTask(Context context, LoaderActionBarItem loader) {
+	    super(context, loader);
+	  }
 
-	    @Override
-	    public void setResult(ArrayList<SocialActivityInfo> result) {
-	    	setActivityList(result);
-	    	setListAdapter();
-	    	listview.getAutoLoadProgressBar().setVisibility(View.GONE);
-	    	super.setResult(result);
-	    }
+	  @Override
+	  public void setResult(ArrayList<SocialActivityInfo> result) {
+	  	setActivityList(result);
+	  	setListAdapter();
+	  	listview.getAutoLoadProgressBar().setVisibility(View.GONE);
+	  	super.setResult(result);
+	  }
 
 		@Override
 		protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
@@ -118,5 +118,5 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
 			return SocialServiceHelper.getInstance().socialInfoList;
 		}
 
-	  }
+	}
 }
