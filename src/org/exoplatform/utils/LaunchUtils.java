@@ -1,4 +1,4 @@
-package org.exoplatform.controller.login;
+package org.exoplatform.utils;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,7 +33,7 @@ import android.util.Log;
  * if account is configured and auto-login disabled, login screen shows up
  * if account is configured and auto-login enabled, home screen shows up
  */
-public class LaunchController {
+public class LaunchUtils {
 
   private Context                  mContext;
 
@@ -45,7 +45,7 @@ public class LaunchController {
 
   private static final String TAG = "eXoLaunchController";
 
-  public LaunchController(Activity context) {
+  public LaunchUtils(Activity context) {
     mContext = context;
     mCurrentActivity = context;
     mSharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
@@ -77,10 +77,8 @@ public class LaunchController {
     ServerSettingHelper.getInstance().setServerInfoList(_serverList);
 
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
-    Log.i(TAG, "selectedServerIdx: " + selectedServerIdx);
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
     mSetting.setCurrentServer((selectedServerIdx == -1) ? null : _serverList.get(selectedServerIdx));
-    Log.i(TAG, "current server: " + mSetting.getCurrentServer());
   }
 
 
@@ -90,7 +88,6 @@ public class LaunchController {
    * @param oldConfigFile
    */
   private void setOldServerList(String oldConfigFile) {
-    Log.i(TAG, "set old server list");
     ArrayList<ServerObjInfo> _serverList =
         ServerConfigurationUtils.getServerListFromOldConfigFile(oldConfigFile);
     ServerSettingHelper.getInstance().setServerInfoList(_serverList);
@@ -108,33 +105,6 @@ public class LaunchController {
         SettingUtils.persistServerSetting(mContext);
       }
     }).start();
-  }
-
-  /**
-   * Performs log-in or redirect to log in screen if necessary
-   */
-  public void redirect() {
-    Log.i(TAG, "redirect: " + mSetting.getCurrentServer());
-    /* no server configured - redirect to Welcome screen */
-    if (mSetting.getCurrentServer() == null) {
-      Log.i(TAG, "to welcome");
-      Intent next = new Intent(mCurrentActivity, WelcomeActivity.class);
-      mCurrentActivity.startActivityForResult(next, 0);
-      mCurrentActivity.overridePendingTransition(0, 0);
-      return ;
-    }
-
-    if (mSetting.isAutoLoginEnabled()) {
-      Log.i(TAG, "starting to log-in");
-      mCurrentActivity.setContentView(R.layout.launch);
-      new LoginController(mCurrentActivity, mSetting.getUsername(), mSetting.getPassword());
-    }
-    else {
-      Log.i(TAG, "to login");
-      Intent next = new Intent(mContext, LoginActivity.class);
-      mCurrentActivity.startActivityForResult(next, 0);
-      mCurrentActivity.overridePendingTransition(0, 0);
-    }
   }
 
   /**

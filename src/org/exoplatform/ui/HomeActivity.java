@@ -149,7 +149,11 @@ public class HomeActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-    onFinish();
+    setResult(RESULT_CANCELED);
+    onLoggingOut();
+
+    super.onBackPressed();
+
     // new LogoutDialog(HomeActivity.this, homeController).show();
   }
 
@@ -235,7 +239,8 @@ public class HomeActivity extends MyActionBar {
       }
       break;
     case 1:       // click on log out
-      onFinish();
+      onLoggingOut();
+      redirectToLogIn();
       break;
     }
     return true;
@@ -243,10 +248,9 @@ public class HomeActivity extends MyActionBar {
   }
 
   /**
-   * On logging out
-   *
+   * Cleaning up necessary data to log out
    */
-  private void onFinish() {
+  private void onLoggingOut() {
     if (ExoConnectionUtils.httpClient != null) {
       ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
       ExoConnectionUtils.httpClient = null;
@@ -258,14 +262,13 @@ public class HomeActivity extends MyActionBar {
     SocialServiceHelper.getInstance().clearData();
     homeController.finishService();
     homeActivity = null;
-    redirectToLogIn();
   }
 
   private void redirectToLogIn() {
     Intent next = new Intent(this, LoginActivity.class);
     next.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     startActivity(next);
-    finish();
+    finish();  /* do not come back to home - since it's logged out */
   }
 
   public void onNewsClick(View view) {

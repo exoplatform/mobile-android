@@ -227,6 +227,8 @@
   <!-- Launch -->
   <string name="RedirectToLogin">Ok, let me log in again</string>
   <string name="LoginWarningMsg">We try to log you in but an error occurs:</string>
+  <string name="TryAgain">Ok, let me try again later</string>
+
 
     <string-array name="SocialTabs">
     <item>All Updates</item>

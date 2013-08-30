@@ -227,6 +227,8 @@
     <!-- Launch -->
     <string name="RedirectToLogin">Ok, laissez-moi re-eassayer</string>
     <string name="LoginWarningMsg">On essaie de vous connecter mais un problem se produit:</string>
+    <string name="TryAgain">Ok, laissez-moi re-eassayer plus tard</string>
+
 
     <string-array name="SocialTabs">
     <item>Fil d\'actualités</item>

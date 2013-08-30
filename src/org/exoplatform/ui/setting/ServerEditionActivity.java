@@ -156,8 +156,6 @@ public class ServerEditionActivity extends Activity {
       public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
 
       public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        Log.i(TAG, "onServerNameOrServerUrlChanged");
-
         String name = mServerNameEditTxt.getText().toString();
         String url  = mServerUrlEditTxt.getText().toString();
 
@@ -216,7 +214,6 @@ public class ServerEditionActivity extends Activity {
     return new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Log.i(TAG, "onDeleteServer");
 
         int selectedServerIndex = Integer.parseInt(mSetting.getDomainIndex());
         if (mServerIdx < selectedServerIndex)
@@ -236,7 +233,6 @@ public class ServerEditionActivity extends Activity {
     return new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Log.i(TAG, "onUpdateServer");
 
         if (!checkServerUrl(view)) return;
         ServerObjInfo myServerObj = retrieveInput();
@@ -266,7 +262,6 @@ public class ServerEditionActivity extends Activity {
 
       @Override
       public void onClick(View view) {
-        Log.i(TAG, "onAddServer");
 
         if (!checkServerUrl(view)) return;
         ServerObjInfo myServerObj = retrieveInput();
@@ -344,7 +339,6 @@ public class ServerEditionActivity extends Activity {
    * Make change to shared perf and generate xml file
    */
   private void onSave() {
-    Log.i(TAG, "onSave");
     ArrayList<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList();
     ServerConfigurationUtils.generateXmlFileWithServerList(this,
         listServer, ExoConstants.EXO_SERVER_SETTING_FILE, "");

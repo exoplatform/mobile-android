@@ -15,7 +15,7 @@ public class WarningDialog extends Dialog implements android.view.View.OnClickLi
 
   private TextView contentView;
 
-  protected Button okButton;
+  protected Button   okButton;
 
   public WarningDialog(Context context, String titleString, String contentString, String okString) {
     super(context);

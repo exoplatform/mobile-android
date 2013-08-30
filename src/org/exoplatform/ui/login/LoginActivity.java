@@ -5,11 +5,11 @@ import android.content.SharedPreferences;
 import android.view.*;
 import android.widget.*;
 import org.exoplatform.R;
-import org.exoplatform.controller.login.LaunchController;
-import org.exoplatform.controller.login.LoginController;
+import org.exoplatform.utils.LaunchUtils;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SettingUtils;
@@ -33,7 +33,8 @@ import java.util.ArrayList;
  */
 public class LoginActivity extends Activity implements
     AccountPanel.ViewListener,
-    OnClickListener {
+    OnClickListener,
+    LoginProxy.ProxyListener {
 
   private AccountSetting    mSetting;
 
@@ -48,6 +49,7 @@ public class LoginActivity extends Activity implements
 
   private AccountPanel      mAccountPanel;
 
+  private LoginProxy        mLoginProxy;
 
   /** Default is set to show account panel */
   private String            mPanelMode     = ACCOUNT_PANEL;
@@ -73,7 +75,7 @@ public class LoginActivity extends Activity implements
     /* launch app from custom url - need to init setting */
     boolean isLaunchedFromUrl = (getIntent().getData() != null);
     if (isLaunchedFromUrl) {
-      new LaunchController(this);
+      new LaunchUtils(this);
       setUpUserAndServerFromUrl();
     }
 
@@ -266,7 +268,23 @@ public class LoginActivity extends Activity implements
       toast.show();
       return ;
     }
-    new LoginController(this, username, password);
+
+    /** performs login */
+    Bundle loginData = new Bundle();
+    loginData.putString(LoginProxy.USERNAME, username);
+    loginData.putString(LoginProxy.PASSWORD, password);
+    loginData.putString(LoginProxy.DOMAIN  , mSetting.getDomainName());
+
+    mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EXISTING_ACCOUNT, loginData);
+    mLoginProxy.setListener(this);
+    mLoginProxy.performLogin();
   }
 
+  @Override
+  public void onLoginFinished(boolean result) {
+    if (!result) return ;
+    Intent next = new Intent(this, HomeActivity.class);
+    //next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(next);
+  }
 }

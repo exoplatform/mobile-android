@@ -65,7 +65,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   }
 
   @Override
-  public void onPreExecute() {	
+  public void onPreExecute() {
     if (loaderItem != null)
       loaderItem.setLoading(true);
   }
@@ -93,7 +93,6 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
    *   If set, the task will add more activities to the current stream.
    */
   public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
-
     try {
       ArrayList<SocialActivityInfo> listActivity = new ArrayList<SocialActivityInfo>();
       int loadSize = params[0];
@@ -142,10 +141,13 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
           listActivity.add(streamInfo);
         }
       }
+
       return listActivity;
     } catch (SocialClientLibException e) {
+      Log.d(TAG, "SocialClientLibException");
       return null;
     } catch (RuntimeException e) {
+      Log.d(TAG, "RuntimeException: " + e.getLocalizedMessage());
       return null;
     }
   }

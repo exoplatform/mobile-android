@@ -49,7 +49,7 @@ public class ExoConnectionUtils {
   public static final int         LOGIN_SERVER_RESUMING    = 6;
 
   // Default connection and socket timeout of 60 seconds. Tweak to taste.
-  private static final int        SOCKET_OPERATION_TIMEOUT = 30 * 1000;
+  public static final int         SOCKET_OPERATION_TIMEOUT  = 30 * 1000;
 
   public static DefaultHttpClient httpClient;
 
@@ -90,6 +90,10 @@ public class ExoConnectionUtils {
 
   public static final int         SIGNIN_SERVER_SUSPENDED = 26;
 
+  public static final int         SIGNIN_CONNECTION_ERR   = 27;
+
+  public  static final int        TENANT_OK               = 30;
+
   /**=== Tenant status ===*/
   public static final String      ONLINE                  = "ONLINE";
 
@@ -113,7 +117,7 @@ public class ExoConnectionUtils {
 
 
 
-  /*
+  /**
    * Check mobile network and wireless status
    */
   public static boolean isNetworkAvailableExt(Context paramContext) {
@@ -282,6 +286,7 @@ public class ExoConnectionUtils {
    * @param email
    */
   public static HttpResponse makeCloudSignUpRequest(String email) throws IOException {
+    Log.d(TAG, "make cloud sign up request with " + email);
     if (httpClient == null) {
       httpClient = initHttpClient();
     }
@@ -315,6 +320,13 @@ public class ExoConnectionUtils {
     return ExoConnectionUtils.SIGNUP_OK;
   }
 
+  /**
+   * Request tenant and username for an email
+   *
+   * @param email
+   * @return
+   * @throws IOException
+   */
   public static HttpResponse requestTenantForEmail(String email) throws IOException {
     return getRequestResponse(HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/usermailinfo/" + email);
   }
@@ -332,15 +344,24 @@ public class ExoConnectionUtils {
       Log.d(TAG, "user:   " + results[0] + " - tenant: " + results[1]);
       return results;
     } catch (RuntimeException e) {
+      Log.d(TAG, "RuntimeException: " + e.getLocalizedMessage());
       return null;
     }
   }
 
+  /**
+   * Requesting if username exists within a cloud server
+   *
+   * @param user
+   * @param tenant
+   * @return
+   */
   public static boolean requestAccountExistsForUser(String user, String tenant) {
     String url = HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/isuserexist/" + tenant + "/" + user;
     try {
       HttpResponse response = getRequestResponse(url);
       if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) return false;
+
       return convertStreamToString(response.getEntity().getContent())
           .replace("\n", "").replace("\r", "").replace("\r\n", "")
           .equalsIgnoreCase("true");
@@ -350,33 +371,36 @@ public class ExoConnectionUtils {
     }
   }
 
+  /**
+   * Check status of tenant
+   *
+   * @param tenant
+   * @return
+   */
   public static int requestTenantStatus(String tenant) {
     String url = HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/status/" + tenant;
     try {
       HttpResponse response = getRequestResponse(url);
-      /* 404 - tenant does not exist */
+      /** 404 - tenant does not exist */
       int statusCode = response.getStatusLine().getStatusCode();
-      Log.d(TAG, "status code:" + statusCode);
       if (statusCode == HttpStatus.SC_NOT_FOUND) return SIGNIN_NO_TENANT_FOR_EMAIL;
-      if (statusCode != HttpStatus.SC_OK) return SIGNIN_SERVER_NAV;
+      if (statusCode != HttpStatus.SC_OK)        return SIGNIN_SERVER_NAV;
 
-      /* 200 */
+      /** 200 - tenant exists - check status */
       if (response.getEntity() != null) {
         String tenantStatus = convertStreamToString(response.getEntity().getContent())
             .replace("\n", "").replace("\r", "").replace("\r\n", "");
+
         Log.d(TAG, "tenant status: " + tenantStatus);
-        if (tenantStatus.equalsIgnoreCase(ONLINE)) return SIGNIN_SERVER_ONLINE;
-        else if (tenantStatus.equalsIgnoreCase(STOPPED)) {
-          /* make simple request to restore server */
-          return SIGNIN_SERVER_SUSPENDED;
-        }
+        if      (tenantStatus.equalsIgnoreCase(ONLINE))  return SIGNIN_SERVER_ONLINE;
+        else if (tenantStatus.equalsIgnoreCase(STOPPED)) return SIGNIN_SERVER_SUSPENDED;
 
         return LOGIN_SERVER_RESUMING;
       }
 
       return SIGNIN_INVALID;
     } catch (IOException e) {
-      Log.d(TAG, "IOException");
+      Log.d(TAG, "IOException: " + e.getLocalizedMessage());
       return SIGNIN_SERVER_NAV;
     }
   }
@@ -403,7 +427,6 @@ public class ExoConnectionUtils {
    */
   public static int checkPlatformRespose(HttpResponse response) {
     int statusCode = response.getStatusLine().getStatusCode();
-    Log.d(TAG, "status code: " + statusCode);
     if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
       return LOGIN_SUSCESS;
     } else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
@@ -510,6 +533,9 @@ public class ExoConnectionUtils {
     return Patterns.WEB_URL.matcher(url).matches();
   }
 
+  /**
+   * Clean up connection data to log out
+   */
   public static void loggingOut() {
     if (ExoConnectionUtils.httpClient != null) {
       ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
@@ -518,7 +544,7 @@ public class ExoConnectionUtils {
 
     AccountSetting.getInstance().cookiesList = null;
 
-    /* Clear all social service data */
+    /** Clear all social service data */
     SocialServiceHelper.getInstance().clearData();
   }
 }

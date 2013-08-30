@@ -1,22 +1,21 @@
 package org.exoplatform.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import org.exoplatform.R;
-import org.exoplatform.controller.signup.SignInController;
+import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.utils.*;
 
-public class SignInOnPremiseActivity extends Activity {
+public class SignInOnPremiseActivity extends Activity implements LoginProxy.ProxyListener {
 
   private Button   mLoginBtn;
 
@@ -28,7 +27,10 @@ public class SignInOnPremiseActivity extends Activity {
 
   private TextView mAlertTxt;
 
-  private static final String TAG = "eXoSignInOnPremiseActivity";
+  private LoginProxy mLoginProxy;
+
+  private static final String TAG = "eXo____SignInOnPremiseActivity____";
+
 
   public void onCreate(Bundle savedInstanceState) {
     if (!WelcomeActivity.mIsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -62,19 +64,35 @@ public class SignInOnPremiseActivity extends Activity {
     return new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Log.i(TAG, "click on log in");
-
         String url      = mUrlTxt.getText().toString();
         String user     = mUserTxt.getText().toString();
         String pass     = mPassTxt.getText().toString();
 
+        if (!url.startsWith(ExoConnectionUtils.HTTP)) url = ExoConnectionUtils.HTTP + url;
         makeRequestSigningIn(url, user, pass);
       }
     };
   }
 
   private void makeRequestSigningIn(String url, String user, String pass) {
-    new SignInController(this, url, user, pass);
+    Log.d(TAG, "sign in: " + user + " - url: " + url);
+
+    Bundle loginData = new Bundle();
+    loginData.putString(LoginProxy.USERNAME, user);
+    loginData.putString(LoginProxy.PASSWORD, pass);
+    loginData.putString(LoginProxy.DOMAIN,   url);
+
+    mLoginProxy = new LoginProxy(this, LoginProxy.WITH_USERNAME, loginData);
+    mLoginProxy.setListener(this);
+    mLoginProxy.performLogin();
+  }
+
+  @Override
+  public void onLoginFinished(boolean result) {
+    if (!result) return ;
+    Intent next = new Intent(this, HomeActivity.class);
+    //next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(next);
   }
 
   private TextWatcher onAnyInputChanged() {
@@ -89,7 +107,7 @@ public class SignInOnPremiseActivity extends Activity {
         String user  = mUserTxt.getText().toString();
         String pass  = mPassTxt.getText().toString();
 
-        /* check password and email is inputted */
+        /** check password and email is inputted */
         if (url.isEmpty() || user.isEmpty() || pass.isEmpty()) {
           mLoginBtn.setEnabled(false);
           return ;

@@ -9,18 +9,17 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import org.exoplatform.R;
-import org.exoplatform.controller.signup.SignInController;
+import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 
-public class SignInActivity extends Activity {
+public class SignInActivity extends Activity implements LoginProxy.ProxyListener {
 
   private Button   mLoginBtn;
 
@@ -29,6 +28,8 @@ public class SignInActivity extends Activity {
   private EditText mPassTxt;
 
   private TextView mAlertTxt;
+
+  private LoginProxy mLoginProxy;
 
   private static final String TAG = "eXoSignInActivity";
 
@@ -83,9 +84,24 @@ public class SignInActivity extends Activity {
   private void makeRequestSigningIn(String email, String password) {
     Log.i(TAG, "makeRequestSigningIn");
 
-    new SignInController(this, email, password);
+    //new SignInController(this, email, password);
+
+    Bundle loginData = new Bundle();
+    loginData.putString(LoginProxy.EMAIL, email);
+    loginData.putString(LoginProxy.PASSWORD, password);
+    mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EMAIL, loginData);
+    mLoginProxy.setListener(this);
+    //mLoginProxy.performLogin();  // do not call perform login when logging in by email
   }
 
+
+  @Override
+  public void onLoginFinished(boolean result) {
+    if (!result) return ;
+    Intent next = new Intent(this, HomeActivity.class);
+    //next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(next);
+  }
 
   private TextWatcher onEmailOrPasswordChanged() {
     return new TextWatcher() {
