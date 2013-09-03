@@ -367,7 +367,8 @@ public class LoginProxy implements
             serverIdx  = serverList.size() - 1;
           }
           else {
-            sameUrlServer = newServerObj;
+            serverList.remove(idx);
+            serverList.add(idx, newServerObj);
             serverIdx  = idx;
           }
           needToSave = true;
