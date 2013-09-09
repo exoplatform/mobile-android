@@ -106,7 +106,7 @@ public class ExoConnectionUtils {
   public static final String      HTTPS                   = "https://";
 
   /** eXo cloud workspace url */
-  public static final String      EXO_CLOUD_WS_DOMAIN      = "netstg.exoplatform.org";  //  "wks-acc.exoplatform.org";
+  public static final String      EXO_CLOUD_WS_DOMAIN      = "exoplatform.net";  // "wks-acc.exoplatform.org"; // "netstg.exoplatform.org";
 
   /** eXo cloud base service url */
   public static final String      SERVICE_BASE_URL         = "/rest/cloud-admin/cloudworkspaces/tenant-service";
@@ -300,6 +300,7 @@ public class ExoConnectionUtils {
 
   public static int checkSignUpResponse(HttpResponse response, String email) {
     int statusCode = response.getStatusLine().getStatusCode();
+    Log.d(TAG, "status: " + statusCode);
     String message = getPLFStream(response);
     /* code 309 */
     if (statusCode == ExoConstants.UNKNOWN) {
@@ -314,7 +315,7 @@ public class ExoConnectionUtils {
       return ExoConnectionUtils.SIGNUP_MAX_USERS;
 
     if (statusCode != HttpStatus.SC_OK)
-      return ExoConnectionUtils.SIGNUP_INVALID;
+      return ExoConnectionUtils.SIGNUP_SERVER_NAV;
 
     /* code 200 */
     return ExoConnectionUtils.SIGNUP_OK;
@@ -366,7 +367,7 @@ public class ExoConnectionUtils {
           .replace("\n", "").replace("\r", "").replace("\r\n", "")
           .equalsIgnoreCase("true");
     } catch (IOException e) {
-      Log.i(TAG, "IOException");
+      Log.d(TAG, "IOException: " + e.getLocalizedMessage());
       return false;
     }
   }
@@ -398,7 +399,7 @@ public class ExoConnectionUtils {
         return LOGIN_SERVER_RESUMING;
       }
 
-      return SIGNIN_INVALID;
+      return SIGNIN_SERVER_NAV;
     } catch (IOException e) {
       Log.d(TAG, "IOException: " + e.getLocalizedMessage());
       return SIGNIN_SERVER_NAV;
@@ -409,9 +410,13 @@ public class ExoConnectionUtils {
    * Create marketo lead
    */
   public static HttpResponse requestCreatingMarketo(String email) throws IOException {
+    int idx1 = email.indexOf("@");
+    int idx2 = email.lastIndexOf(".");
+    String tenant = (idx1 > 0 && idx2 > 2) ? email.substring(idx1 + 1, idx2) : "";
     HttpPost httpPost = new HttpPost(HTTP + MARKETO_URL);
     List<NameValuePair> requestParameters = new ArrayList<NameValuePair>(1);
     requestParameters.add(new BasicNameValuePair("Email", email));
+    requestParameters.add(new BasicNameValuePair("eXo_Cloud_Tenant_Name_c", tenant));
     requestParameters.add(new BasicNameValuePair("lpId" , "1967"));
     requestParameters.add(new BasicNameValuePair("subId", "46"));
     requestParameters.add(new BasicNameValuePair("munchkinId", "577-PCT-880"));

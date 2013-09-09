@@ -117,10 +117,10 @@ public class SignUpController {
         return ExoConnectionUtils.checkSignUpResponse(mResponse, mEmail);
       } catch (UnsupportedEncodingException e) {
         Log.i(TAG, "UnsupportedEncodingException");
-        return ExoConnectionUtils.SIGNUP_INVALID;
+        return ExoConnectionUtils.SIGNUP_SERVER_NAV;
       } catch (ClientProtocolException e) {
         Log.i(TAG, "ClientProtocolException");
-        return ExoConnectionUtils.SIGNUP_INVALID;
+        return ExoConnectionUtils.SIGNUP_SERVER_NAV;
       } catch (IOException e) {
         Log.i(TAG, "IOException");
         /* can not contact server, probably down or wrong address */

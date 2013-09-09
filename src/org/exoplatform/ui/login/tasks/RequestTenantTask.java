@@ -3,12 +3,13 @@ package org.exoplatform.ui.login.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.exoplatform.utils.ExoConnectionUtils;
 
 import java.io.IOException;
 
 /**
- *
+ * Request tenant for a given email address
  */
 public class RequestTenantTask extends AsyncTask<String, Void, Integer> {
 
@@ -24,8 +25,19 @@ public class RequestTenantTask extends AsyncTask<String, Void, Integer> {
     String email = params[0];
     try {
       HttpResponse response  = ExoConnectionUtils.requestTenantForEmail(email);
+      int responseCode = response.getStatusLine().getStatusCode();
+      Log.d(TAG, "status: " + responseCode);
       mResult = ExoConnectionUtils.checkRequestTenant(response);
-      if (mResult == null) return ExoConnectionUtils.SIGNIN_NO_TENANT_FOR_EMAIL;
+
+      /** check error */
+      if (mResult == null) {
+        if (responseCode == HttpStatus.SC_SERVICE_UNAVAILABLE
+            || responseCode == HttpStatus.SC_NOT_FOUND)
+          return ExoConnectionUtils.SIGNIN_SERVER_NAV;
+
+        return ExoConnectionUtils.SIGNIN_NO_TENANT_FOR_EMAIL;
+      }
+
       return ExoConnectionUtils.TENANT_OK;
     }
     catch (IOException e) {
@@ -35,7 +47,6 @@ public class RequestTenantTask extends AsyncTask<String, Void, Integer> {
   }
 
   public void onPostExecute(Integer result) {
-    Log.i(TAG, "result: " + result);
     if (mListener != null) mListener.onRequestingTenantFinished(result, mResult);
   }
 

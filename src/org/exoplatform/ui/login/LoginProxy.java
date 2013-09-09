@@ -127,6 +127,7 @@ public class LoginProxy implements
         mNewPassword = loginData.getString(PASSWORD);
         mDomain      = loginData.getString(DOMAIN);
         mTenant      = getTenant(mDomain);
+        // TODO: if this is a cloud server with invalid url, should raise a warning
         mEmail       = mNewUserName + "@" + mTenant + ".com";
         mWarningDialog = new LoginWarningDialog(mContext);
 
@@ -194,14 +195,21 @@ public class LoginProxy implements
   }
 
   /**
-   * Figure out which tenant based on url of server
+   * Figure out tenant based on url of server  <br/>
+   * Url of cloud server must be in the form of http://<tenant>.<exo_cloud_domain>  <br/>
+   * For example: http://exoplatform.wks-acc.exoplatform.org
+   *
    */
   private String getTenant(String domain) {
-    int idx = domain.indexOf(ExoConnectionUtils.EXO_CLOUD_WS_DOMAIN);
-    if (idx == -1) return null;
-    return domain.startsWith(ExoConnectionUtils.HTTP)
-        ? domain.substring(ExoConnectionUtils.HTTP.length(), idx - 1)
-        : domain.substring(0, idx - 1);
+    /** strip off http */
+    String cloudDomain = domain.startsWith(ExoConnectionUtils.HTTP) ?
+        domain.substring(ExoConnectionUtils.HTTP.length()) : domain;
+    int idx = cloudDomain.indexOf(ExoConnectionUtils.EXO_CLOUD_WS_DOMAIN);
+    if (idx <= 1) return null;
+    String tenant = cloudDomain.substring(0, idx);
+    if (!tenant.endsWith(".")) return null;        // raise an exception at this point for invalid cloud server format
+    tenant = tenant.substring(0, tenant.length() - 1);
+    return (tenant.contains(".")) ? null : tenant;
   }
 
 
@@ -287,7 +295,7 @@ public class LoginProxy implements
         break;
 
       case ExoConnectionUtils.SIGNIN_NO_TENANT_FOR_EMAIL:
-        mWarningDialog.setMessage(mResource.getString(R.string.NoTenantForEmail)).show();
+        mWarningDialog.setMessage(mResource.getString(R.string.NoAccountExists)).show();
         break;
 
       case ExoConnectionUtils.SIGNIN_NO_ACCOUNT:
@@ -299,23 +307,15 @@ public class LoginProxy implements
         break;
 
       case ExoConnectionUtils.LOGIN_UNAUTHORIZED:
-        mWarningDialog.setMessage(mResource.getString(R.string.UserNamePasswordFailed)).show();
-        break;
-
-      case ExoConnectionUtils.LOGIN_INVALID:
-        mWarningDialog.setMessage(mResource.getString(R.string.ServerInvalid)).show();
-        break;
-
-      case ExoConnectionUtils.LOGIN_FAILED:
-        mWarningDialog.setMessage(mResource.getString(R.string.ServerUnreachable)).show();
+        mWarningDialog.setMessage(mResource.getString(R.string.InvalidCredentials)).show();
         break;
 
       case ExoConnectionUtils.SIGNIN_CONNECTION_ERR:
-        mWarningDialog.setMessage(mResource.getString(R.string.ConnectionError)).show();
+        mWarningDialog.setMessage(mResource.getString(R.string.ServerNotAvailable)).show();
         break;
 
       default:
-        mWarningDialog.setMessage(mResource.getString(R.string.ConnectionError)).show();
+        mWarningDialog.setMessage(mResource.getString(R.string.ServerNotAvailable)).show();
         break;
 
       /** Login successfully - save data */
