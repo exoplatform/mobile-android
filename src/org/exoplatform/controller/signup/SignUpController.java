@@ -123,7 +123,7 @@ public class SignUpController {
         return ExoConnectionUtils.SIGNUP_SERVER_NAV;
       } catch (IOException e) {
         Log.i(TAG, "IOException");
-        /* can not contact server, probably down or wrong address */
+        /** can not contact server, probably down or wrong address */
         return ExoConnectionUtils.SIGNUP_SERVER_NAV;
       }
     }

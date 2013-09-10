@@ -416,7 +416,7 @@ public class ExoConnectionUtils {
     HttpPost httpPost = new HttpPost(HTTP + MARKETO_URL);
     List<NameValuePair> requestParameters = new ArrayList<NameValuePair>(1);
     requestParameters.add(new BasicNameValuePair("Email", email));
-    requestParameters.add(new BasicNameValuePair("eXo_Cloud_Tenant_Name_c", tenant));
+    requestParameters.add(new BasicNameValuePair("eXo_Cloud_Tenant_Name__c", tenant));
     requestParameters.add(new BasicNameValuePair("lpId" , "1967"));
     requestParameters.add(new BasicNameValuePair("subId", "46"));
     requestParameters.add(new BasicNameValuePair("munchkinId", "577-PCT-880"));
