@@ -4,7 +4,7 @@
   <string name="SignInButton">Connexion</string>
   <string name="SignInButton_In">à</string>
   <string name="SignInInformation">Connexion</string>
-  <string name="SigningIn">Connexion en cours&#8230;</string>
+  <string name="SigningIn">Connexion en cours...</string>
   <string name="NoServerSelected">Sélectionnez un serveur</string>
   <string name="NoUsernameEnter">Entrez votre nom d\'utilisateur</string>
   <string name="NoPasswordEnter">Entrez votre mot de passe</string>
@@ -57,10 +57,10 @@
   <string name="Me">Moi</string>
   <string name="MessageFrom">Message de</string>
   <string name="ShowMore">Plus</string>
-  <string name="LoadingData">Chargement des données&#8230;</string>
-  <string name="LoadingImage">Chargement de l\'image&#8230;</string>
-  <string name="SendingData">Données en cours d\'envoi&#8230;</string>
-  <string name="YourComment">Votre commentaire&#8230;</string>
+  <string name="LoadingData">Chargement des données...</string>
+  <string name="LoadingImage">Chargement de l\'image...</string>
+  <string name="SendingData">Données en cours d\'envoi...</string>
+  <string name="YourComment">Votre commentaire...</string>
   <string name="Comment">Commenter</string>
   <string name="StatusUpdate">Envoyer</string>
   <string name="PostTo">A</string>
@@ -160,8 +160,8 @@
   <string name="FileNotFound">Fichier introuvable.</string>
   <string name="FileNotSupported">Le format de ce fichier n\'est pas supporté.</string>
   <string name="CompatibleFileSuggest">Souhaitez-vous ouvrir ce fichier avec une application installée sur votre terminal ?</string>
-  <string name="OpenIn">Ouvrir avec &#8230;</string>
-  <string name="DownloadingFile">Téléchargement du fichier&#8230;</string>
+  <string name="OpenIn">Ouvrir avec ...</string>
+  <string name="DownloadingFile">Téléchargement du fichier...</string>
   <string name="MemoryWarning">Mémoire indisponible ou insuffisante.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Mémoriser mon filtre</string>
