@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_rect_rounded_corner"
+                android:padding="@dimen/margin_s">
+
+    <TextView
+        android:id="@+id/signup_thanks_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/ThanksForInterest"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
+        android:textColor="#5A5A5A"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/separator_light"/>
+
+    <ImageView
+        android:id="@+id/signup_ok_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signup_thanks_txt"
+        android:src="@drawable/icon_check"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp" 
+        android:contentDescription="@string/ImageDesc"/>
+
+    <TextView
+        android:id="@+id/signup_check_mail_txt"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/signup_ok_img"
+        android:text="@string/CheckYourMailInbox"
+        android:textColor="#686868"
+        android:textSize="@dimen/text_size_small"
+        android:paddingBottom="@dimen/margin_m"/>
+
+</RelativeLayout>

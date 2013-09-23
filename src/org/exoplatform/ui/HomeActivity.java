@@ -1,5 +1,6 @@
 package org.exoplatform.ui;
 
+import android.util.Log;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
@@ -12,6 +13,8 @@ import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.ui.login.LoginActivity;
+import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -25,7 +28,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,10 +37,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+/**
+ * Represents the home screen with dashboard
+ */
 public class HomeActivity extends MyActionBar {
-  private static final String SERVER_SETTING_HELPER = "SERVER_SETTING_HELPER";
-
-  private static final String ACCOUNT_SETTING       = "ACCOUNT_SETTING";
 
   private TextView            activityButton;
 
@@ -68,6 +70,10 @@ public class HomeActivity extends MyActionBar {
 
   public static HomeActivity  homeActivity;
 
+  private static final String TAG = "eXo____HomeActivity____";
+
+  private AccountSetting      mSetting;
+
   @Override
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);
@@ -79,13 +85,16 @@ public class HomeActivity extends MyActionBar {
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     addActionBarItem();
     getActionBar().getItem(1).setDrawable(R.drawable.action_bar_logout_button);
+
+    mSetting = AccountSetting.getInstance();
+
     homeActivity = this;
     if (bundle != null) {
-      AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
-      AccountSetting.getInstance().setInstance(accountSetting);
-      ServerSettingHelper settingHelper = bundle.getParcelable(SERVER_SETTING_HELPER);
+      mSetting = bundle.getParcelable(ExoConstants.ACCOUNT_SETTING);
+      if (mSetting == null) mSetting = AccountSetting.getInstance();
+      ServerSettingHelper settingHelper = bundle.getParcelable(ExoConstants.SERVER_SETTING_HELPER);
       ServerSettingHelper.getInstance().setInstance(settingHelper);
-      ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
+      ArrayList<String> cookieList = mSetting.cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
     loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
@@ -96,9 +105,8 @@ public class HomeActivity extends MyActionBar {
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putParcelable(SERVER_SETTING_HELPER, ServerSettingHelper.getInstance());
-    outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
-
+    outState.putParcelable(ExoConstants.SERVER_SETTING_HELPER, ServerSettingHelper.getInstance());
+    outState.putParcelable(ExoConstants.ACCOUNT_SETTING, mSetting);
   }
 
   @Override
@@ -134,7 +142,7 @@ public class HomeActivity extends MyActionBar {
 
     if (selectedItemIndex == 1) {
       Intent next = new Intent(HomeActivity.this, SettingActivity.class);
-      next.putExtra(ExoConstants.SETTING_TYPE, 1);
+      next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.PERSONAL_TYPE);
       startActivity(next);
     }
     return false;
@@ -142,7 +150,11 @@ public class HomeActivity extends MyActionBar {
 
   @Override
   public void onBackPressed() {
-    onFinish();
+    setResult(RESULT_CANCELED);
+    onLoggingOut();
+
+    super.onBackPressed();
+
     // new LogoutDialog(HomeActivity.this, homeController).show();
   }
 
@@ -155,7 +167,6 @@ public class HomeActivity extends MyActionBar {
     homeUserAvatar.setVisibility(View.GONE);
     homeUserName = (TextView) findViewById(R.id.home_textview_name);
     viewFlipper = (ViewFlipper) findViewById(R.id.home_social_flipper);
-    setInfo();
   }
 
   private void setInfo() {
@@ -174,9 +185,12 @@ public class HomeActivity extends MyActionBar {
   }
 
   private void startSocialService(LoaderActionBarItem loader) {
+    Log.i(TAG, "startSocialService");
+
+    /** if soc activity service is null then loads all soc services */
     if (SocialServiceHelper.getInstance().activityService == null) {
       homeController.launchNewsService();
-    }else {
+    } else {
       homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
     }
   }
@@ -196,7 +210,8 @@ public class HomeActivity extends MyActionBar {
     if (list == null) {
       return;
     }
-    HomeSocialItem socialItem = null;
+
+    HomeSocialItem socialItem;
     viewFlipper.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
     /*
@@ -217,9 +232,9 @@ public class HomeActivity extends MyActionBar {
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
-    case -1:
+    case -1:      // click on home
       break;
-    case 0:
+    case 0:       // click on refresh button
       loaderItem = (LoaderActionBarItem) item;
       if (SocialServiceHelper.getInstance().activityService == null) {
         homeController.launchNewsService();
@@ -227,28 +242,37 @@ public class HomeActivity extends MyActionBar {
         homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
       }
       break;
-    case 1:
-      onFinish();
+    case 1:       // click on log out
+      onLoggingOut();
+      redirectToLogIn();
       break;
     }
     return true;
 
   }
 
-  private void onFinish() {
+  /**
+   * Cleaning up necessary data to log out
+   */
+  private void onLoggingOut() {
     if (ExoConnectionUtils.httpClient != null) {
       ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
       ExoConnectionUtils.httpClient = null;
     }
 
     AccountSetting.getInstance().cookiesList = null;
-    /*
-     * Clear all social service data
-     */
+
+    /* Clear all social service data */
     SocialServiceHelper.getInstance().clearData();
     homeController.finishService();
     homeActivity = null;
-    finish();
+  }
+
+  private void redirectToLogIn() {
+    Intent next = new Intent(this, LoginActivity.class);
+    next.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    startActivity(next);
+    finish();  /* do not come back to home - since it's logged out */
   }
 
   public void onNewsClick(View view) {

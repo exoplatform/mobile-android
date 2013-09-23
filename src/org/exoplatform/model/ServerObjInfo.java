@@ -20,21 +20,41 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
- * 12, 2011
+ * Describe a server configuration, containing url to connect to server and
+ * credentials.
+ *
+ * A server object information is identified by a pair of server's url and username
  */
 public class ServerObjInfo implements Parcelable {
 
-  public String  _strServerName; // Name of server
+  /** Describe the server; if nothing specified, use authority of url */
+  public String  serverName;
 
-  public String  _strServerUrl; // URL of server
+  /** url of server, contains the protocol (http:// ) */
+  public String  serverUrl;
 
-  public boolean _bSystemServer; // Is default server
+  /** username */
+  public String  username;
+
+  /** unencrypted password */
+  public String  password;
+
+  /**
+   * Whether remember me is enabled on this credential
+   * by default remember me is set to true
+   */
+  public boolean isRememberEnabled;
+
+  /** Whether autologin is enabled */
+  public boolean isAutoLoginEnabled;
 
   public ServerObjInfo() {
-    _strServerName = "";
-    _strServerUrl = "";
-    _bSystemServer = false;
+    serverName = "";
+    serverUrl  = "";
+    username   = "";
+    password   = "";
+    isRememberEnabled  = true;
+    isAutoLoginEnabled = true;
   }
 
   private ServerObjInfo(Parcel in) {
@@ -52,9 +72,12 @@ public class ServerObjInfo implements Parcelable {
                                                                 };
 
   private void readFromParcel(Parcel in) {
-    _strServerName = in.readString();
-    _strServerUrl = in.readString();
-    _bSystemServer = (Boolean) in.readValue(null);
+    serverName = in.readString();
+    serverUrl  = in.readString();
+    username   = in.readString();
+    password   = in.readString();
+    isRememberEnabled  = in.readByte() == 1;
+    isAutoLoginEnabled = in.readByte() == 1;
   }
 
   @Override
@@ -64,9 +87,36 @@ public class ServerObjInfo implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
-    dest.writeString(_strServerName);
-    dest.writeString(_strServerUrl);
-    dest.writeValue(_bSystemServer);
+    dest.writeString(serverName);
+    dest.writeString(serverUrl);
+    dest.writeString(username);
+    dest.writeString(password);
+    dest.writeByte((byte) (isRememberEnabled  ? 1 : 0));
+    dest.writeByte((byte) (isAutoLoginEnabled ? 1 : 0));
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof  ServerObjInfo)) return false;
+    ServerObjInfo _server = (ServerObjInfo) obj;
+    if (_server.serverUrl.equals(serverUrl) && _server.username.equals(username)) return true;
+    return false;
+  }
+
+  /** clones this instance */
+  public ServerObjInfo clone() {
+    ServerObjInfo _server = new ServerObjInfo();
+    _server.serverUrl  = serverUrl;
+    _server.serverName = serverName;
+    _server.username   = username;
+    _server.password   = password;
+    _server.isAutoLoginEnabled = isAutoLoginEnabled;
+    _server.isRememberEnabled  = isRememberEnabled;
+    return _server;
+  }
+
+  @Override
+  public int hashCode() {
+    return (serverUrl + username).hashCode();
+  }
 }

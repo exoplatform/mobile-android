@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_rect_rounded_corner"
+                android:paddingBottom="@dimen/margin_l">
+
+    <!-- Enter your email text -->
+    <TextView
+            android:id="@+id/signup_email_txt"
+            style="@style/SignUpHeadingTxtStyle"
+            android:text="@string/EmailSignUp" />
+
+    <!-- Invisible alert text -->
+    <TextView
+            android:id="@+id/signup_alert_txt"
+            style="@style/SignUpAlertTxtStyle"
+            android:layout_below="@id/signup_email_txt"
+            android:text="@string/InvalidEmail"
+            android:layout_marginLeft="@dimen/margin_xs"
+            android:layout_marginBottom="8dp" />
+
+    <!-- Edit email text -->
+    <EditText
+            android:id="@+id/signup_email_edit_txt"
+            style="@style/SignUpEditTxtStyle"
+            android:layout_below="@id/signup_alert_txt"
+            android:hint="@string/Email"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/form_email"
+            android:layout_marginBottom="25dp"/>
+
+    <Button
+            android:id="@+id/signup_create_acc_btn"
+            style="@style/SignUpBlueBtnStyle"
+            android:layout_below="@id/signup_email_edit_txt"
+            android:layout_centerHorizontal="true"
+            android:text="@string/CreateAccount"/>
+
+</RelativeLayout>

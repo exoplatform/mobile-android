@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#DCDCDCDC"
+    android:fadingEdge="none" >
+
+    <LinearLayout
+        android:id="@+id/setting_layout"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <!-- Login Setting -->
+
+        <!-- Login title -->
+        <TextView
+                android:id="@+id/setting_login_title_txt"
+                style="@style/ServerSettingTitleTextStyle"
+                android:text="@string/LoginTitle" />
+
+        <!--<include layout="@layout/separator_line" /> !-->
+
+
+        <!-- Remember me checkbox -->
+        <include layout="@layout/setting_checkbox_item" android:id="@+id/setting_remember_me_ckb" />
+
+        <!-- Auto-login checkbox -->
+        <include layout="@layout/setting_checkbox_item" android:id="@+id/setting_autologin_ckb" />
+
+        <!--<include layout="@layout/separator_line" /> -->
+
+
+        <!-- Language Settings -->
+
+        <!-- Language title -->
+        <TextView
+            android:id="@+id/setting_language_title"
+            style="@style/ServerSettingTitleTextStyle"
+            android:text="@string/Language" />
+
+        <!--<include layout="@layout/separator_line" />-->
+
+
+        <!-- English checkbox -->
+        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_en_ckb" />
+
+        <!-- French checkbox -->
+        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_fr_ckb" />
+
+        <!--<include layout="@layout/separator_line" /> -->
+
+
+
+        <!-- Social Settings -->
+
+        <!-- Social title -->
+        <TextView
+                android:id="@+id/setting_social_title"
+                style="@style/ServerSettingTitleTextStyle"
+                android:text="@string/SocialSettingTitle" />
+
+        <!--<include layout="@layout/separator_line" />-->
+
+
+        <!-- Remember my filter checkbox -->
+        <include layout="@layout/setting_checkbox_item" android:id="@+id/setting_remember_filter_ckb" />
+
+        <!--<include layout="@layout/separator_line" />-->
+
+
+
+        <!-- Document Settings -->
+
+        <!-- Document title -->
+        <TextView
+                android:id="@+id/setting_document_title"
+                style="@style/ServerSettingTitleTextStyle"
+                android:text="@string/DocumentSettingTitle" />
+
+        <!--<include layout="@layout/separator_line" android:id="@+id/setting_document_separator_1" /> -->
+
+
+        <!-- Document show private drive checkbox -->
+        <include layout="@layout/setting_checkbox_item" android:id="@+id/setting_private_drive_ckb" />
+
+        <!--<include layout="@layout/separator_line" android:id="@+id/setting_document_separator_2" /> -->
+
+
+        <!-- Server List Settings -->
+        <!-- Server title -->
+        <TextView
+                android:id="@+id/setting_server_title"
+                style="@style/ServerSettingTitleTextStyle"
+                android:text="@string/Server" />
+
+        <!--<include layout="@layout/separator_line" />-->
+
+
+        <!-- List of servers -->
+        <org.exoplatform.ui.setting.ServerList
+                android:id="@+id/setting_list_server"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:orientation="vertical" />
+
+        <!-- Add server button -->
+        <Button
+                android:id="@+id/setting_modify_server_btn"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="-2dp"
+                android:layout_marginRight="-2dp"
+                android:background="@drawable/file_item_background_shape"
+                android:textSize="@dimen/label_txt_size"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:text="@string/AddAServer" />
+
+        <!--<include layout="@layout/separator_line" />-->
+
+
+        <!-- eXo section -->
+        <!-- eXo title -->
+        <TextView
+                android:id="@+id/setting_exo_title"
+                style="@style/ServerSettingTitleTextStyle"
+                android:text="@string/EXO" />
+
+        <!--<include layout="@layout/separator_line" />-->
+
+
+        <!-- Start cloud sign up button -->
+        <Button
+                android:id="@+id/setting_start_cloud_signup_btn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:textColor="#000000"
+                android:textSize="@dimen/label_txt_size"
+                android:textStyle="bold"
+                android:text="@string/StartCloudSignUpAssistant"
+                android:background="@drawable/file_item_background_shape"
+                android:gravity="center"/>
+
+        <!--<include layout="@layout/separator_line" />-->
+
+
+        <!-- Application information -->
+        <!-- Title -->
+        <TextView
+                android:id="@+id/setting_app_info_title"
+                style="@style/ServerSettingTitleTextStyle"
+                android:text="@string/ApplicationInformation" />
+
+        <!--<include layout="@layout/separator_line" />-->
+
+        <!-- Server Edition Info -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/settingcellstreachablebackground"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:id="@+id/setting_server_edition_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:gravity="center_vertical"
+                android:padding="4dp"
+                android:textColor="#000000"
+                android:textSize="@dimen/label_txt_size"
+                android:textStyle="bold"
+                android:text="@string/ServerEdition"/>
+
+            <TextView
+                android:id="@+id/setting_server_edition_value_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:padding="4dp"
+                android:textColor="#000000"
+                android:textSize="@dimen/label_txt_size"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- Server Version Info -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/settingcellstreachablebackground"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:id="@+id/setting_server_version_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:gravity="center_vertical"
+                android:padding="4dp"
+                android:textColor="#000000"
+                android:textSize="@dimen/label_txt_size"
+                android:textStyle="bold"
+                android:text="@string/ServerVersion"/>
+
+            <TextView
+                android:id="@+id/setting_server_version_value_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:padding="4dp"
+                android:textColor="#000000"
+                android:textSize="@dimen/label_txt_size"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- Application Version Info -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/settingcellstreachablebackground"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:id="@+id/setting_app_version_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:gravity="center_vertical"
+                android:padding="4dp"
+                android:textColor="#000000"
+                android:textSize="@dimen/label_txt_size"
+                android:textStyle="bold"
+                android:text="@string/ApplicationVersion"/>
+
+            <TextView
+                android:id="@+id/setting_app_version_value_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:textColor="#000000"
+                android:textSize="@dimen/label_txt_size"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <!--<include layout="@layout/separator_line" />-->
+
+    </LinearLayout>
+
+</ScrollView>

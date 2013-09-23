@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.exoplatform</groupId>
-    <artifactId>exo.parent</artifactId>
-    <version>8.1</version>
-    <relativePath/>
+    <artifactId>maven-parent-pom</artifactId>
+    <version>11</version>
+    <relativePath />
   </parent>
   <groupId>org.exoplatform.mobile.platform</groupId>
   <artifactId>exo-mobile-android</artifactId>
-  <version>2.3</version>
+  <version>2.4.0</version>
   <packaging>apk</packaging>
   <name>eXo Mobile Android</name>
   <description>eXo Mobile Android projects.</description>
@@ -28,7 +28,7 @@
     <!-- Default version of SDK to use -->
     <android.sdk.platform>9</android.sdk.platform>
     <!-- Maven Plugins -->
-    <maven-android-plugin.plugin-version>3.0.0</maven-android-plugin.plugin-version>
+    <maven-android-plugin.plugin-version>3.6.0</maven-android-plugin.plugin-version>
     <!-- Java version -->
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
@@ -105,9 +105,7 @@
   	  <artifactId>annotations</artifactId>
   	  <version>${android.annotations.version}</version>
     </dependency>
-    
   </dependencies>
-  
   
   <build>
     <pluginManagement>
@@ -163,6 +161,7 @@
             <jvmArgument>-XX:MaxPermSize=256M</jvmArgument>
           </dexJvmArguments>
           <extractDuplicates>true</extractDuplicates>
+          <sdk><platform>9</platform></sdk>
         </configuration>
         <extensions>true</extensions>
         <executions>

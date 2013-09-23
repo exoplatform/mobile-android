@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/onpremise_layout"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/welcome_bg_repeat">
+
+    <TextView
+            android:id="@+id/onpremise_title_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="?attr/gdActionBarTitleColor"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            android:text="@string/OnPremise"
+            android:background="@drawable/action_bar_background_repeate"/>
+
+    <RelativeLayout android:layout_width="@dimen/signup_frame_width"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_s"
+                    android:paddingBottom="@dimen/margin_l"
+                    android:background="@drawable/bg_rect_rounded_corner">
+
+        <!-- Enter url text -->
+        <TextView
+                android:id="@+id/onpremise_url_txt"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/onpremise_label_height"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="@dimen/onpremise_url_txt_mTop"
+                android:layout_marginBottom="@dimen/margin_xs"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="#5A5A5A"
+                android:singleLine="true"
+                android:paddingTop="5dp"
+                android:paddingBottom="0dp"
+                android:paddingRight="3dp"
+                android:background="@drawable/label_stretchable"
+                android:paddingLeft="@dimen/onpremise_label_txt_padding_left"
+                android:gravity="left"
+                android:text="@string/EnterUrl"/>
+
+        <!-- 1 text -->
+        <TextView
+                android:id="@+id/onpremise_1_txt"
+                android:layout_width="@dimen/signup_image_radius"
+                android:layout_height="@dimen/signup_image_radius"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/bg_number"
+                android:text="@string/Number1"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/white"/>
+
+        <!-- Edit url text -->
+        <EditText
+                android:id="@+id/onpremise_url_edit_txt"
+                style="@style/SignUpEditTxtStyle"
+                android:layout_below="@id/onpremise_url_txt"
+                android:hint="@string/YourIntranetHint"
+                android:inputType="textUri"
+                android:background="@drawable/form_link"
+                android:layout_marginBottom="15dp"/>
+
+        <!-- Enter credential text -->
+        <TextView
+                android:id="@+id/onpremise_login_txt"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/onpremise_label_height"
+                android:layout_below="@id/onpremise_url_edit_txt"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="@dimen/onpremise_login_txt_mTop"
+                android:layout_marginBottom="@dimen/margin_xs"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="#5A5A5A"
+                android:singleLine="true"
+                android:paddingTop="5dp"
+                android:paddingBottom="0dp"
+                android:paddingRight="3dp"
+                android:background="@drawable/label_stretchable"
+                android:paddingLeft="@dimen/onpremise_label_txt_padding_left"
+                android:gravity="left"
+                android:text="@string/EnterLogin" />
+
+        <!-- 2 text -->
+        <TextView
+                android:id="@+id/onpremise_2_txt"
+                android:layout_width="@dimen/signup_image_radius"
+                android:layout_height="@dimen/signup_image_radius"
+                android:layout_below="@id/onpremise_url_edit_txt"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/bg_number"
+                android:text="@string/Number2"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/white"/>
+
+        <!-- Edit username text -->
+        <EditText
+                android:id="@+id/onpremise_user_edit_txt"
+                style="@style/SignUpEditTxtStyle"
+                android:layout_below="@id/onpremise_login_txt"
+                android:hint="@string/UserNameHint"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/form_user"
+                android:layout_marginBottom="10dp"/>
+
+        <!-- Edit password text -->
+        <EditText
+                android:id="@+id/onpremise_pass_edit_txt"
+                style="@style/SignUpEditTxtStyle"
+                android:layout_below="@id/onpremise_user_edit_txt"
+                android:hint="@string/PasswordHint"
+                android:inputType="textPassword"
+                android:background="@drawable/form_lock"
+                android:layout_marginBottom="15dp"/>
+
+        <!-- Log In button -->
+        <Button
+                android:id="@+id/onpremise_login_btn"
+                android:layout_height="60dp"
+                android:layout_width="@dimen/signin_login_btn_width"
+                android:background="@drawable/btn_blue"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:gravity="center"
+                android:layout_below="@id/onpremise_pass_edit_txt"
+                android:layout_centerHorizontal="true"
+                android:text="@string/LogIn"
+                android:paddingBottom="15dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

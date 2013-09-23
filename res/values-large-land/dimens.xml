@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- welcome -->
+    <dimen name="margin_xxs">5dp</dimen>
+    <dimen name="margin_xs">10dp</dimen>
+    <dimen name="margin_s">15dp</dimen>
+    <dimen name="margin_m">20dp</dimen>
+    <dimen name="margin_l">30dp</dimen>
+    <dimen name="margin_xl">40dp</dimen>
+    <dimen name="margin_xxl">60dp</dimen>
+
+</resources>

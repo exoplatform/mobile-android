@@ -86,6 +86,7 @@
   <string name="WarningServerNameIsEmpty">Le nom du serveur ou son URL ne peuvent être vide. Veuillez les renseigner.</string>
   <string name="WarningServerNameIsExist">Ce nom de serveur figure déjà sur votre liste.</string>
   <string name="WarningServerUrlIsExist">L\'URL de ce serveur figure déjà sur votre liste.</string>
+  <string name="WarningServerUrlAndUserAlreadyExist">Cette combinaison de l\'url du serveur et du nom d\'utilisateur exist déja dans votre liste</string>
   <string name="DetailsNotAvaiable">Les détails de cette activité ne sont pas disponibles</string>
   <string name="ErrorOnComment">Vous ne pouvez pas commenter cette activité.</string>
   <string name="CannotLoadMoreActivities">Impossible de charger les anciennes activités. La liste est en cours de rafraichissement.</string>
@@ -149,7 +150,87 @@
   <string name="MemoryWarning">Mémoire indisponible ou insuffisante.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Mémoriser mon filtre</string>
-  <string-array name="SocialTabs">
+
+    <!-- Welcome screen -->
+    <string name="Slogan">Your social intranet, anywhere, anytime!</string>
+    <string name="title_template_step">étape</string>
+    <string name="SignUp">S\'inscrire</string>
+    <string name="LogIn">Log In</string>
+    <string name="SkipStep">ou sauter cette étape</string>
+    <string name="Or">ou</string>
+
+    <string name="SliderDesc1">Activity streams</string>
+    <string name="SliderDesc2">Comments and likes</string>
+    <string name="SliderDesc3">Personal dashboards</string>
+    <string name="SliderDesc4">Files management</string>
+    <string name="YourSocialIntranet">Your social intranet</string>
+    <string name="Anywhere">anywhere</string>
+    <string name="Anytime">anytime</string>
+    <string name="SwipeToSee">Swipe to see what you can do!</string>
+
+    <!-- Sign up -->
+    <string name="GetStarted">Démarrage</string>
+    <string name="EmailSignUp">Entrez votre adresse de mail et vous inscrire:</string>
+    <string name="Email">adresse de mail</string>
+    <string name="CreateAccount">Créer votre compte</string>
+    <string name="InvalidEmail">Veuillez entrer une adresse d\'email correcte</string>
+    <string name="SigningUp">Inscription en cours &#8230;</string>
+    <string name="InvalidSignUp">Un problème survient durant l\'inscription</string>
+    <string name="WrongEmailDomain">Le domaine de cet email n\'est pas correct</string>
+    <string name="AccountExists">Un compte existe déjà pour cet email</string>
+    <string name="CheckYourMailInbox">Vérifiez votre boîte de réception pour compléter l\'inscription.</string>
+    <string name="ThanksForInterest">Merci pour votre intérêt</string>
+    <string name="MaxUsers">Impossible de créer un nouveau compte. Le nombre maximal d\'utilisateur a été dépassé, veuillez contacter votre administrateur.</string>
+
+    <!-- Sign In -->
+    <string name="EmailSignIn">Entrez votre credential et logger:</string>
+    <string name="ConnectOnPremise">Se connecter à une installation sur site</string>
+    <string name="ServerNotAvailable">Impossible de se connecter à votre intranet, veuillez vérifier son URL ou contacter votre administrateur.</string>
+    <string name="InvalidCredentials">Impossible de se connecter, veuillez vérifier votre nom d\'utilisateur et votre mot de passe.</string>
+    <string name="NoAccountExists">Pas de compte associé à cet email, veuillez vérifier votre email ou vous inscrire.</string>
+    <string name="NoTenantForEmail">Impossible de trouver un tenant pour cet email, veuillez vérifier votre email</string>
+    <string name="DefaultServer">Mon Intranet</string>
+    <string name="ServerResuming">On est en train de résumer le serveur, veuillez essayer dans quelques minutes.</string>
+
+
+    <!-- On Premise -->
+    <string name="OnPremise">Sur site</string>
+    <string name="EnterUrl">Entrez l\'url de votre intranet</string>
+    <string name="EnterLogin">Entrez votre credential et logger</string>
+    <string name="YourIntranetHint">http://www.monentreprise.com/intranet</string>
+    <string name="PasswordHint">mot de passe</string>
+    <string name="UserNameHint">nom d\'utilisateur</string>
+    <string name="Number1">1</string>
+    <string name="Number2">2</string>
+
+    <!-- Setting -->
+    <string name="RememberMe">Mémoriser mon login</string>
+    <string name="Autologin">Connexion automatique</string>
+    <string name="LoginTitle">LOGIN</string>
+    <string name="EXO">EXO</string>
+
+    <!-- Server edition -->
+    <string name="AddServer">Nouveau serveur</string>
+    <string name="ModifyServer">Modifier serveur</string>
+    <string name="OptionalHint">Optionnel</string>
+    <string name="RequiredHint">Obligatoire</string>
+    <string name="YourCredentials">Votre credential</string>
+    <string name="ServerName">Nom du serveur</string>
+    <string name="ServerUrl">Url du serveur</string>
+    <string name="StartCloudSignUpAssistant">Lancer l\'assistant de l\'inscription</string>
+    <string name="ServerAdded">Serveur ajouté</string>
+    <string name="ServerUpdated">Serveur mise à jour</string>
+    <string name="ServerDeleted">Serveur supprimé</string>
+
+    <string name="ImageDesc">description de l\'image</string>
+
+    <!-- Launch -->
+    <string name="RedirectToLogin">Ok, laissez-moi re-eassayer</string>
+    <string name="LoginWarningMsg">On essaie de vous connecter mais un problem se produit:</string>
+    <string name="TryAgain">Ok, laissez-moi re-eassayer plus tard</string>
+
+
+    <string-array name="SocialTabs">
     <item>Fil d\'actualités</item>
     <item>Mes Contacts</item>
     <item>Mes Espaces</item>
