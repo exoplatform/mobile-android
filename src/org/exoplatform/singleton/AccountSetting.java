@@ -4,28 +4,24 @@ import java.util.ArrayList;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import org.exoplatform.model.ServerObjInfo;
 
-/*
- * This class is for manage all the account information
- * 
+/**
+ * Represents as temporary instance of SharedPref, which
+ * is used to manage all the account information
+ *
+ * Changes in account setting will be populated to SharedPref only when
+ * user logs in successfully or launching app using custom URL scheme
  */
 public class AccountSetting implements Parcelable {
 
   private static AccountSetting accountSetting = new AccountSetting();
 
-  private String                userName;
-
-  private String                password;
-
-  /*
-   * checked server url
-   */
-  private String                domainName;
-
-  /*
-   * the index of checked server
+  /**
+   * The index of checked server, in case no server selected, index = -1
    */
   private String                domainIndex;
+
 
   /*
    * SETTING_SOCIAL_FILTER
@@ -44,9 +40,11 @@ public class AccountSetting implements Parcelable {
 
   public ArrayList<String>      cookiesList;
 
-  private AccountSetting() {
+  /** current server */
+  private ServerObjInfo         mCurrentServer;
 
-  }
+
+  private AccountSetting() { }
 
   public static AccountSetting getInstance() {
     return accountSetting;
@@ -56,32 +54,52 @@ public class AccountSetting implements Parcelable {
     accountSetting = instance;
   }
 
-  public String getUsername() {
-    return userName;
+  public ServerObjInfo getCurrentServer() {
+    return mCurrentServer;
   }
 
-  public void setUsername(String name) {
-    userName = name;
+  public void setCurrentServer(ServerObjInfo server) {
+    mCurrentServer = server;
+  }
+
+  public String getUsername() {
+    return (mCurrentServer!=null) ? mCurrentServer.username : "";
   }
 
   public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String pwd) {
-    password = pwd;
+    return (mCurrentServer!=null) ? mCurrentServer.password : "";
   }
 
   public String getDomainName() {
-    return domainName;
+    return (mCurrentServer!=null) ? mCurrentServer.serverUrl: "";
   }
 
-  public void setDomainName(String url) {
-    domainName = url;
+  public String getServerName() {
+    return (mCurrentServer!=null) ? mCurrentServer.serverName: "";
+  }
+
+  /**
+   * Whether auto-login is enabled or not
+   * if no server defined then disable auto-login
+   *
+   * @return
+   */
+  public boolean isAutoLoginEnabled() {
+    return (mCurrentServer!=null) ? mCurrentServer.isAutoLoginEnabled : false;
+  }
+
+  /**
+   * Whether remember-me is enabled or not
+   * if no server defined then disable remember-me
+   *
+   * @return
+   */
+  public boolean isRememberMeEnabled() {
+    return (mCurrentServer!=null) ? mCurrentServer.isRememberEnabled : false;
   }
 
   public String getDomainIndex() {
-    return domainIndex;
+    return (domainIndex == null) ? "-1": domainIndex;
   }
 
   public void setDomainIndex(String index) {
@@ -93,11 +111,9 @@ public class AccountSetting implements Parcelable {
   }
 
   public void readFromParcel(Parcel in) {
-    userName = in.readString();
-    password = in.readString();
-    domainName = in.readString();
-    domainIndex = in.readString();
-    cookiesList = new ArrayList<String>();
+    domainIndex    = in.readString();
+    mCurrentServer = in.readParcelable(ServerObjInfo.class.getClassLoader());
+    cookiesList    = new ArrayList<String>();
     in.readStringList(cookiesList);
 
   }
@@ -127,10 +143,8 @@ public class AccountSetting implements Parcelable {
    */
   @Override
   public void writeToParcel(Parcel par, int flags) {
-    par.writeString(userName);
-    par.writeString(password);
-    par.writeString(domainName);
     par.writeString(domainIndex);
+    par.writeParcelable(mCurrentServer, flags);
     par.writeStringList(cookiesList);
   }
 

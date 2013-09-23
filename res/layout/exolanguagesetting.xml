@@ -7,7 +7,8 @@
         android:id="@+id/ImageView_Navigationbar"
         android:layout_width="fill_parent"
         android:layout_height="40dip"
-        android:background="#4E4E4E" />
+        android:background="#4E4E4E" 
+        android:contentDescription="@string/ImageDesc"/>
 
     <TextView
         android:id="@+id/TextView_Title"

@@ -1,5 +1,6 @@
 package org.exoplatform.controller.home;
 
+import android.util.Log;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   
   protected ActivityService<RestActivity> activityService;
 
+  private static final String TAG = "eXo____SocialLoadTask____";
+
   public SocialLoadTask(Context context, LoaderActionBarItem loader) {
     mContext = context;
     loaderItem = loader;
@@ -62,7 +65,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   }
 
   @Override
-  public void onPreExecute() {	
+  public void onPreExecute() {
     if (loaderItem != null)
       loaderItem.setLoading(true);
   }
@@ -90,6 +93,8 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
    *   If set, the task will add more activities to the current stream.
    */
   public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
+    Log.i(TAG, "load social activities - number: " + params[0] + " - type: " + params[1]);
+
     try {
       ArrayList<SocialActivityInfo> listActivity = new ArrayList<SocialActivityInfo>();
       int loadSize = params[0];
@@ -138,10 +143,13 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
           listActivity.add(streamInfo);
         }
       }
+
       return listActivity;
     } catch (SocialClientLibException e) {
+      Log.d(TAG, "SocialClientLibException: " + e.getLocalizedMessage());
       return null;
     } catch (RuntimeException e) {
+      Log.d(TAG, "RuntimeException: " + e.getLocalizedMessage());
       return null;
     }
   }

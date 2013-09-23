@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <!-- eXo logo -->
+    <ImageView
+            android:id="@+id/welcome_exo_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_m"
+            android:layout_marginBottom="@dimen/margin_m"
+            android:contentDescription="@string/ImageDesc"
+            android:src="@drawable/logo"/>
+
+
+    <!-- Your social intranet text -->
+    <TextView
+            android:id="@+id/welcome_social_intranet_txt"
+            style="@style/WelcomeSloganTxtStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcome_exo_logo"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin_xs"
+            android:text="@string/YourSocialIntranet"/>
+
+    <!-- Anywhere, anytime section -->
+    <LinearLayout
+            android:id="@+id/welcome_text_section"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/welcome_social_intranet_txt">
+
+        <!-- Anywhere text -->
+        <TextView
+            android:id="@+id/welcome_anywhere_txt"
+            style="@style/WelcomeSloganTxtStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_m"
+            android:text="@string/Anywhere"
+            android:drawableLeft="@drawable/icon_place"
+            android:drawablePadding="@dimen/margin_xxs"/>
+
+        <!-- Anytime text -->
+        <TextView
+            android:id="@+id/welcome_anytime_txt"
+            style="@style/WelcomeSloganTxtStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Anytime"
+            android:drawableLeft="@drawable/icon_clock"
+            android:drawablePadding="@dimen/margin_xxs"/>
+
+    </LinearLayout>
+
+    <!-- Swipe to see text -->
+    <TextView
+            android:id="@+id/welcome_swipe_txt"
+            style="@style/ShadowTxtStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcome_text_section"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_xl"
+            android:layout_marginBottom="@dimen/margin_xs"
+            android:text="@string/SwipeToSee"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            android:textColor="@color/gray"
+            android:drawableLeft="@drawable/arrow"
+            android:drawablePadding="@dimen/margin_xxs"/>
+
+</RelativeLayout>

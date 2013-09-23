@@ -21,5 +21,6 @@
 
 	<color name="action_bar_tint">#C0C0C0</color>
 	<color name="accent_1">#b1b1b1b1</color>
-    
+
+    <color name="gray">#FFB6B7BB</color>
 </resources>

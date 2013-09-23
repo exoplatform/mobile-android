@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/signin_layout"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/welcome_bg_repeat">
+
+    <TextView
+            style="@style/SignUpBlueHeaderStyle"
+            android:text="@string/GetStarted" />
+
+    <RelativeLayout android:layout_width="@dimen/signup_frame_width"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_s"
+                    android:paddingBottom="@dimen/margin_l"
+                    android:background="@drawable/bg_rect_rounded_corner">
+
+        <!-- Enter credential text -->
+        <TextView
+                android:id="@+id/signin_email_txt"
+                style="@style/SignUpHeadingTxtStyle"
+                android:gravity="center"
+                android:text="@string/EmailSignIn"
+                android:layout_marginBottom="15dp"/>
+
+
+        <!-- Invisible alert text -->
+        <TextView
+                android:id="@+id/signin_alert_txt"
+                style="@style/SignUpAlertTxtStyle"
+                android:layout_below="@id/signin_email_txt"
+                android:layout_centerHorizontal="true"
+                android:text="@string/InvalidEmail"
+                android:layout_marginLeft="@dimen/margin_s"
+                android:layout_marginBottom="7dp" />
+
+        <!-- Edit email -->
+        <EditText
+                android:id="@+id/signin_edit_txt_email"
+                style="@style/SignUpEditTxtStyle"
+                android:layout_below="@id/signin_alert_txt"
+                android:hint="@string/Email"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/form_email"
+                android:layout_marginBottom="15dp"/>
+
+        <!-- Edit password -->
+        <EditText
+                android:id="@+id/signin_edit_txt_pass"
+                style="@style/SignUpEditTxtStyle"
+                android:layout_below="@id/signin_edit_txt_email"
+                android:hint="@string/PasswordHint"
+                android:inputType="textPassword"
+                android:background="@drawable/form_lock"
+                android:layout_marginBottom="15dp"/>
+
+        <!-- Log In button -->
+        <Button
+                android:id="@+id/signin_login_btn"
+                android:layout_height="60dp"
+                android:layout_width="@dimen/signin_login_btn_width"
+                android:background="@drawable/btn_blue"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_small"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:layout_below="@id/signin_edit_txt_pass"
+                android:layout_alignParentLeft="true"
+                android:text="@string/LogIn"
+                android:layout_marginLeft="10dp"/>
+
+        <!-- Or text -->
+        <TextView
+                android:id="@+id/signin_or_txt"
+                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_below="@id/signin_edit_txt_pass"
+                android:layout_toRightOf="@id/signin_login_btn"
+                android:text="@string/Or"
+                android:textColor="#5A5A5A"
+                android:textSize="@dimen/text_size_medium"
+                android:singleLine="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingTop="15dp"
+                android:gravity="center"
+                android:layout_marginBottom="15dp"/>
+
+        <!-- Connect to on premise button -->
+        <Button
+                android:id="@+id/signin_connect_on_premises_btn"
+                android:layout_height="60dp"
+                android:layout_width="wrap_content"
+                android:layout_below="@id/signin_edit_txt_pass"
+                android:layout_toRightOf="@id/signin_or_txt"
+                android:text="@string/ConnectOnPremise"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:paddingRight="7dp"
+                android:paddingLeft="7dp"
+                android:background="@drawable/btn_white"
+                android:textColor="#333333"
+                android:textSize="@dimen/text_size_smaller"
+                android:gravity="center"
+                android:onClick="connectToOnPremise" />
+
+    </RelativeLayout>
+
+</LinearLayout>

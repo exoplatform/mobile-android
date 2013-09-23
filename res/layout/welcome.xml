@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/welcome_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/welcome_bg_repeat"
+        android:paddingBottom="@dimen/margin_xs">
+
+    <!-- Circle page indicator -->
+    <org.exoplatform.ui.CirclePageIndicator
+            android:id="@+id/circle_page_indicator"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/margin_xs"
+            android:layout_marginTop="@dimen/margin_xs"/>
+
+    <!-- Screen-shot slider -->
+    <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"/>
+
+    <!-- Separator -->
+    <ImageView
+            android:id="@+id/welcome_separator_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:layout_marginBottom="@dimen/margin_xs"
+            android:contentDescription="@string/ImageDesc"
+            android:src="@drawable/separator_dark"/>
+
+    <RelativeLayout
+            android:id="@+id/welcome_button_section"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+    <!-- Or text -->
+    <TextView
+            android:id="@+id/welcome_txt_or"
+            android:layout_width="@dimen/welcome_or_txt_width"
+            android:layout_height="@dimen/welcome_btn_height"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:paddingBottom="@dimen/welcome_btn_pBottom"
+            android:background="@drawable/circle"
+            android:text="@string/Or"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"/>
+
+    <!-- Sign up button -->
+    <Button
+            android:id="@+id/welcome_btn_signup"
+            style="@style/ShadowTxtStyle"
+            android:layout_width="@dimen/welcome_btn_width"
+            android:layout_height="@dimen/welcome_btn_height"
+            android:layout_toLeftOf="@id/welcome_txt_or"
+            android:textSize="@dimen/text_size_xlarge"
+            android:textStyle="bold"
+            android:text="@string/SignUp"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:paddingBottom="@dimen/welcome_btn_pBottom"
+            android:background="@drawable/btn_blue_half"
+            android:onClick="redirectToSignUp"/>
+
+    <!-- Log in button -->
+    <Button
+            android:id="@+id/welcome_btn_login"
+            style="@style/ShadowTxtStyle"
+            android:layout_width="@dimen/welcome_btn_width"
+            android:layout_height="@dimen/welcome_btn_height"
+            android:layout_toRightOf="@id/welcome_txt_or"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_xlarge"
+            android:text="@string/LogIn"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:paddingBottom="@dimen/welcome_btn_pBottom"
+            android:background="@drawable/btn_black_half"
+            android:onClick="redirectToSignIn"/>
+
+    <!-- Skip it for now text -->
+    <TextView
+            android:id="@+id/welcome_txt_skipStep"
+            style="@style/ShadowTxtStyle"
+            android:layout_width="@dimen/welcome_skip_txt_width"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcome_btn_login"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_xs"
+            android:gravity="center"
+            android:text="@string/SkipStep"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_size_small"
+            android:clickable="true"
+            android:onClick="redirectToLogIn"
+            android:background="@drawable/rect_rounded_corner"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

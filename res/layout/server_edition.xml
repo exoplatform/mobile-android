@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#DCDCDCDC">
+
+    <TextView
+            android:id="@+id/server_setting_title_txt"
+            style="@style/SignUpBlueHeaderStyle"
+            android:layout_marginBottom="15dp"/>
+
+    <TableLayout style="@style/ServerSettingTableStyle"
+                 android:layout_marginBottom="10dp">
+
+        <!-- 1st row -->
+        <TableRow
+                style="@style/ServerSettingTableFirstRowStyle">
+
+            <TextView
+                    android:id="@+id/server_setting_server_name_txt"
+                    style="@style/ServerSettingTextViewStyle"
+                    android:text="@string/ServerName"/>
+
+            <EditText
+                    android:id="@+id/server_setting_server_name_edit_txt"
+                    style="@style/ServerSettingEditTextStyle"
+                    android:hint="@string/RequiredHint"/>
+
+        </TableRow>
+
+        <!-- 2nd row -->
+        <TableRow
+                style="@style/ServerSettingTableRowStyle">
+
+        <TextView
+                android:id="@+id/server_setting_server_url_txt"
+                style="@style/ServerSettingTextViewStyle"
+                android:text="@string/ServerUrl"/>
+
+        <EditText
+                android:id="@+id/server_setting_server_url_edit_txt"
+                style="@style/ServerSettingEditTextStyle"
+                android:inputType="textUri"
+                android:hint="@string/RequiredHint"/>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#535353"
+        android:textSize="@dimen/title_txt_size"
+        android:textStyle="bold"
+        android:text="@string/YourCredentials"/>
+
+    <TableLayout style="@style/ServerSettingTableStyle"
+                 android:layout_marginBottom="20dp">
+
+    <TableRow
+            style="@style/ServerSettingTableFirstRowStyle">
+
+        <!-- 3rd row -->
+        <TextView
+                android:id="@+id/server_setting_user_txt"
+                style="@style/ServerSettingTextViewStyle"
+                android:text="@string/UserNameCellTitle"/>
+
+        <EditText
+                android:id="@+id/server_setting_user_edit_txt"
+                style="@style/ServerSettingEditTextStyle"
+                android:hint="@string/OptionalHint"/>
+
+    </TableRow>
+
+    <TableRow
+            style="@style/ServerSettingTableRowStyle">
+
+        <!-- 4th row -->
+        <TextView
+                android:id="@+id/server_setting_pass_txt"
+                style="@style/ServerSettingTextViewStyle"
+                android:text="@string/PasswordCellTitle"/>
+
+        <EditText
+                android:id="@+id/server_setting_pass_edit_txt"
+                style="@style/ServerSettingEditTextStyle"
+                android:inputType="textPassword"
+                android:hint="@string/OptionalHint"/>
+
+    </TableRow>
+
+    </TableLayout>
+
+    <Button
+            android:id="@+id/server_setting_ok_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/OK"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/cancel_button_background_shape"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="2.0"
+            android:shadowRadius="1.0"
+            android:textColor="#ffffff"/>
+
+    <Button
+            android:id="@+id/server_setting_delete_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/Delete"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="@drawable/send_button_background_shape"
+            android:shadowColor="#888888"
+            android:shadowDx="1.0"
+            android:shadowDy="2.0"
+            android:shadowRadius="1.0"/>
+
+</LinearLayout>

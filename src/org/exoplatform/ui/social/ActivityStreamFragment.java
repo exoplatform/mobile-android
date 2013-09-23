@@ -2,6 +2,7 @@ package org.exoplatform.ui.social;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
@@ -57,8 +58,10 @@ public abstract class ActivityStreamFragment extends Fragment {
 	   * This fragment's ListView ID
 	   */
 	  protected int						fragment_list_view_id;
-	  
-	  /**
+
+    private static final String TAG = "eXo____ActivityStreamFragment____";
+
+  /**
 	   * Returns whether the current stream's activity list is empty.
 	   */
 	  public abstract boolean isEmpty();

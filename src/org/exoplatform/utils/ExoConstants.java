@@ -158,4 +158,38 @@ public class ExoConstants {
 
   public static final String DOCUMENT_GENERAL_DRIVER               = "general";
 
+  public static final String USERNAME                              = "username";
+
+  public static final String TENANT                                = "tenant";
+
+  /* Http response status */
+  public static final int    UNKNOWN                               = 309;
+
+  /* Server setting */
+  public static final String SETTING_ADDING_SERVER                 = "SETTING_ADDING_SERVER";
+
+  public static final String EXO_MASTER_PASSWORD                   = "EXO_MASTER_PASSWORD";
+
+  public static final String EXO_SERVER_SETTING_FILE               = "ServerList.xml";
+
+  public static final String EXO_OLD_SERVER_SETTING_FILE           = "DefaultServerList.xml";
+
+  public static final String EXO_SERVER_OBJ                        = "EXO_SERVER_OBJ";
+
+  /* eXo URL scheme */
+  public static final String EXO_URL_USERNAME                      = "username";
+
+  public static final String EXO_URL_SERVER                        = "serverUrl";
+
+  public static final String EXO_REMEMBER_ME                       = "rememberMe";
+
+  public static final String EXO_AUTOLOGIN                         = "autoLogin";
+
+  /** Account setting */
+  public static final String ACCOUNT_SETTING                       = "ACCOUNT_SETTING";
+
+  public static final String SERVER_SETTING_HELPER                 = "SERVER_SETTING_HELPER";
+
+  /** email used for sign in */
+  public static final String EXO_EMAIL                             = "EXO_EMAIL";
 }

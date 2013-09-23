@@ -14,14 +14,14 @@
 ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
-*/
+*/
+
 -->
 
 <resources>
 
     <dimen name="thumbnail_size">50dp</dimen>
     <dimen name="thumbnail_radius">6dp</dimen>
-    <dimen name="text_size_small">14sp</dimen>
     <dimen name="image_radius">4dp</dimen>
     <dimen name="home_profile_avatar_size">38dp</dimen>
     <dimen name="social_liked_avatar_size">29dp</dimen>
@@ -29,5 +29,45 @@
     <dimen name="social_liked_list_item_height">85dp</dimen>
     <dimen name="social_avatar_size">43dp</dimen>
     <dimen name="unreadable_file_size">75dp</dimen>
+
+    <!-- text size -->
+    <dimen name="text_size_smallest">9sp</dimen>
+    <dimen name="text_size_smaller">10sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_xlarge">20sp</dimen>
+
+    <!-- sign up form -->
+    <dimen name="signup_frame_width">290dp</dimen>
+    <dimen name="signup_image_radius">35dp</dimen>
+
+    <!-- on premise -->
+    <dimen name="onpremise_label_txt_padding_left">35dp</dimen>
+    <dimen name="onpremise_label_height">28dp</dimen>
+    <dimen name="onpremise_url_txt_mTop">15dp</dimen>
+    <dimen name="onpremise_login_txt_mTop">5dp</dimen>
+
+    <!-- welcome -->
+    <dimen name="welcome_skip_txt_width">150dp</dimen>
+    <dimen name="welcome_btn_height">42dp</dimen>
+    <dimen name="welcome_btn_width">120dp</dimen>
+    <dimen name="welcome_or_txt_width">26dp</dimen>
+    <dimen name="welcome_btn_pBottom">7dp</dimen>
+
+    <dimen name="margin_xxs">5dp</dimen>
+    <dimen name="margin_xs">10dp</dimen>
+    <dimen name="margin_s">15dp</dimen>
+    <dimen name="margin_m">20dp</dimen>
+    <dimen name="margin_l">30dp</dimen>
+    <dimen name="margin_xl">40dp</dimen>
+    <dimen name="margin_xxl">60dp</dimen>
+
+    <!-- sign in -->
+    <dimen name="signin_login_btn_width">80dp</dimen>
+
+    <!-- setting -->
+    <dimen name="title_txt_size">16sp</dimen>
+    <dimen name="label_txt_size">14sp</dimen>
 
 </resources>

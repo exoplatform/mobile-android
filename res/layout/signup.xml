@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/signup_layout"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/welcome_bg_repeat">
+
+    <TextView
+            style="@style/SignUpBlueHeaderStyle"
+            android:text="@string/GetStarted"/>
+
+    <FrameLayout android:id="@+id/fragment_panel"
+                 android:layout_width="@dimen/signup_frame_width"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_horizontal"
+                 android:layout_marginTop="@dimen/margin_s"/>
+
+</LinearLayout>

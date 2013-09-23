@@ -16,6 +16,7 @@
  */
 package org.exoplatform.controller.home;
 
+import android.util.Log;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
@@ -44,6 +45,9 @@ public class HomeController {
   private SocialLoadTask        mLoadTask;
 
   public LoaderActionBarItem    loader;
+
+  private static final String TAG = "eXo____HomeController____";
+
 
   public HomeController(Context context, LoaderActionBarItem loaderItem) {
     mContext = context;
@@ -76,19 +80,27 @@ public class HomeController {
     }
   }
 
+  /**
+   * Load a number of activities with specific type
+   *
+   * @param number
+   * @param type
+   */
   public void onLoad(int number, int type) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
         mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, loader) {
-			@Override
-			protected ArrayList<SocialActivityInfo> getSocialActivityList() {
-				return SocialServiceHelper.getInstance().socialInfoList;
-			}
-			@Override
-			protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
-				return activityService.getFeedActivityStream(identity, params);
-			}
-		}.execute(number, type);
+
+          @Override
+          protected ArrayList<SocialActivityInfo> getSocialActivityList() {
+            return SocialServiceHelper.getInstance().socialInfoList;
+          }
+
+          @Override
+          protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
+            return activityService.getFeedActivityStream(identity, params);
+          }
+        }.execute(number, type);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();

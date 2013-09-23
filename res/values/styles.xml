@@ -100,4 +100,153 @@
         <item name="android:background">@null</item>
     </style>
 
+    <!-- Welcome: slogan text -->
+    <style name="WelcomeSloganTxtStyle">
+        <item name="android:textSize">@dimen/text_size_xlarge</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:shadowColor">#7F000000</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">1.5</item>
+    </style>
+
+    <style name="ShadowTxtStyle">
+        <item name="android:shadowColor">#7F000000</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">1.5</item>
+    </style>
+
+
+    <!-- Signup:  edit text with background drawable -->
+    <style name="SignUpEditTxtStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">42dp</item>
+        <item name="android:gravity">center|left</item> <!-- center text vertically and left -->
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColorHint">#B3B3B3</item>
+        <item name="android:paddingLeft">60dp</item> <!-- push text behind the icon -->
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+
+    <!-- Signup:  heading text -->
+    <style name="SignUpHeadingTxtStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <!-- android:gravity - change gravity depending on alignment of text -->
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">#5A5A5A</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@drawable/separator_light</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <!-- Signup:  blue button -->
+    <style name="SignUpBlueBtnStyle">
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:background">@drawable/btn_blue</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Signup: alert text -->
+    <style name="SignUpAlertTxtStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:drawableLeft">@drawable/icon_warning</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:gravity">bottom</item>
+    </style>
+
+    <!-- Signup: blue header -->
+    <style name="SignUpBlueHeaderStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">?attr/gdActionBarTitleColor</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/action_bar_background_repeate</item>
+    </style>
+
+    <!-- Server setting: table style -->
+    <style name="ServerSettingTableStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+
+    <style name="ServerSettingTableFirstRowStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:layout_marginLeft">3dp</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="ServerSettingTableRowStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="ServerSettingTextViewStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:textSize">@dimen/label_txt_size</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ServerSettingEditTextStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:textSize">@dimen/label_txt_size</item>
+        <item name="android:textColorHint">#999999</item>
+    </style>
+
+    <!-- Settings -->
+    <style name="ServerSettingTitleTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">14dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">2.0</item>
+        <item name="android:shadowRadius">1.0</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">@dimen/title_txt_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="Animations" />
+    <style name="Animations.Window">
+        <item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
+    </style>
+
+
 </resources>

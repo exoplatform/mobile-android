@@ -83,6 +83,9 @@ public class SocialTabsActivity extends MyActionBar {
 
   public static SocialTabsActivity     instance;
 
+  private static final String TAG = "eXo____SocialTabsActivity____";
+
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

@@ -39,13 +39,16 @@ import android.os.Environment;
 import android.util.Log;
 import android.util.Xml;
 
+/**
+ * Help to deal with writing and reading from xml config file
+ */
 public class ServerConfigurationUtils {
 
   public static String version;
 
-  public ServerConfigurationUtils(Context context) {
+  private static final String TAG = "eXoServerConfig";
 
-  }
+  public ServerConfigurationUtils(Context context) { }
 
   // Constructor
 
@@ -68,6 +71,7 @@ public class ServerConfigurationUtils {
   }
 
   // Get app's current version, create DefaultServerList.xml if needed
+  @Deprecated
   public static String getAppVersion(Context _context) {
 
       boolean mExternalStorageAvailable = false;
@@ -143,6 +147,7 @@ public class ServerConfigurationUtils {
   }
 
   // Get default server list
+  @Deprecated
   public static ArrayList<ServerObjInfo> getDefaultServerList(Context _context) {
 
     ArrayList<ServerObjInfo> arrServerList = getServerListWithFileName("");
@@ -164,12 +169,12 @@ public class ServerConfigurationUtils {
             for (int i = 0; i < parser.getAttributeCount(); i++) {
               String attribute = parser.getAttributeName(i).toLowerCase(Locale.US);
               if (attribute.equalsIgnoreCase("name")) {
-                serverObj._strServerName = parser.getAttributeValue(i);
+                serverObj.serverName = parser.getAttributeValue(i);
               } else if (attribute.equalsIgnoreCase("serverURL")) {
-                serverObj._strServerUrl = parser.getAttributeValue(i);
+                serverObj.serverUrl = parser.getAttributeValue(i);
               }
             }
-            serverObj._bSystemServer = true;
+            //serverObj._bSystemServer = true;
             arrServerList.add(serverObj);
           }
 
@@ -229,6 +234,7 @@ public class ServerConfigurationUtils {
   }
 
   // Get added/deleted servers
+  @Deprecated
   public static ArrayList<ServerObjInfo> getServerListWithFileName(String name) {
 
     ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
@@ -265,12 +271,8 @@ public class ServerConfigurationUtils {
             Element itemElement = (Element) itemNode;
 
             ServerObjInfo serverObj = new ServerObjInfo();
-            serverObj._strServerName = itemElement.getAttribute("name");
-            serverObj._strServerUrl = itemElement.getAttribute("serverURL");
-            serverObj._bSystemServer = false;
-            if (name.equalsIgnoreCase("DefaultServerList.xml"))
-              serverObj._bSystemServer = true;
-
+            serverObj.serverName = itemElement.getAttribute("name");
+            serverObj.serverUrl  = itemElement.getAttribute("serverURL");
             arrServerList.add(serverObj);
           }
         }
@@ -290,7 +292,164 @@ public class ServerConfigurationUtils {
     return arrServerList;
   }
 
+
+  /**
+   * Retrieve server list from XML config file
+   *
+   * @param context
+   * @param fileName
+   * @return
+   */
+  public static ArrayList<ServerObjInfo> getServerListFromFile(Context context, String fileName) {
+    Log.i(TAG, "getServerListFromFile: " + fileName);
+
+    ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
+
+    try {
+      FileInputStream fis = context.openFileInput(fileName);
+      DocumentBuilderFactory doc_build_fact = DocumentBuilderFactory.newInstance();
+      DocumentBuilder doc_builder           = doc_build_fact.newDocumentBuilder();
+      Document obj_doc                      = doc_builder.parse(fis);
+
+      if (null != obj_doc) {
+        org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+        NodeList obj_nod_list = feed.getElementsByTagName("server");
+
+        for (int i = 0; i < obj_nod_list.getLength(); i++) {
+          Node itemNode = obj_nod_list.item(i);
+          if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+            Element itemElement = (Element) itemNode;
+
+            ServerObjInfo serverObj  = new ServerObjInfo();
+            serverObj.serverName     = itemElement.getAttribute("name");
+            serverObj.serverUrl      = itemElement.getAttribute(ExoConstants.EXO_URL_SERVER);
+            serverObj.username       = itemElement.getAttribute(ExoConstants.EXO_URL_USERNAME);
+            serverObj.password       =
+                SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD, itemElement.getAttribute("password"));
+            serverObj.isRememberEnabled  = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
+            serverObj.isAutoLoginEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
+            arrServerList.add(serverObj);
+          }
+        }
+      }
+
+    } catch (FileNotFoundException e) {
+      Log.i(TAG, "File not found");
+      return arrServerList;
+    } catch (IOException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("IOException", "getServerListWithFileName");
+      return arrServerList;
+    } catch (ParserConfigurationException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("ParserConfigurationException", "getServerListWithFileName");
+      return arrServerList;
+    } catch (SAXException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("SAXException", "getServerListWithFileName");
+      return arrServerList;
+    } catch (Exception e) {
+      Log.e("Exception", "getServerListWithFileName - decryption exception - " + e.getLocalizedMessage());
+      return arrServerList;
+    }
+
+    return arrServerList;
+  }
+
+  /**
+   * Check whether new config file for app exists
+   *
+   * @param context
+   * @return
+   */
+  public static boolean newAppConfigExists(Context context) {
+    return context.getFileStreamPath(ExoConstants.EXO_SERVER_SETTING_FILE).exists();
+  }
+
+  /**
+   * Check if previous config file exists
+   *
+   * @param context
+   * @return
+   */
+  public static String checkPreviousAppConfig(Context context) {
+    /* check external storage available */
+    String state = Environment.getExternalStorageState();
+    File oldConfig;
+    if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state) || Environment.MEDIA_MOUNTED.equals(state)) {
+      oldConfig = new File(Environment.getExternalStorageDirectory().getPath() +
+          "/eXo/" + ExoConstants.EXO_OLD_SERVER_SETTING_FILE);
+    }
+    else {
+      oldConfig = new File(context.getDir("eXo", Context.MODE_WORLD_READABLE).getPath()
+        + "/" + ExoConstants.EXO_OLD_SERVER_SETTING_FILE);
+    }
+
+    if (oldConfig.exists()) return oldConfig.getAbsolutePath();
+    return null;
+  }
+
+  /**
+   * Retrieve server list from XML config file
+   *
+   * @param fileName
+   * @return
+   */
+  public static ArrayList<ServerObjInfo> getServerListFromOldConfigFile(String fileName) {
+    Log.i(TAG, "getServerListFromOldConfigFile: " + fileName);
+
+    ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
+    File file = new File(fileName);
+    try {
+      FileInputStream fis = new FileInputStream(file);
+      DocumentBuilderFactory doc_build_fact = DocumentBuilderFactory.newInstance();
+      DocumentBuilder doc_builder           = doc_build_fact.newDocumentBuilder();
+      Document obj_doc                      = doc_builder.parse(fis);
+
+      if (null != obj_doc) {
+        org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+        NodeList obj_nod_list = feed.getElementsByTagName("server");
+
+        for (int i = 0; i < obj_nod_list.getLength(); i++) {
+          Node itemNode = obj_nod_list.item(i);
+          if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+            Element itemElement = (Element) itemNode;
+
+            ServerObjInfo serverObj  = new ServerObjInfo();
+            serverObj.serverName     = itemElement.getAttribute("name");
+            serverObj.serverUrl      = itemElement.getAttribute("serverURL");
+            Log.i(TAG, "server: " + serverObj.serverName + " - url: " + serverObj.serverUrl);
+            if (serverObj.serverUrl != null)
+              if (!serverObj.serverUrl.equals("")) arrServerList.add(serverObj);
+          }
+        }
+      }
+      fis.close();
+
+      if (file.delete()) Log.i(TAG, "delete old config file");
+      else Log.e("Error", "Can not delete old config file: " + fileName);
+    } catch (FileNotFoundException e) {
+      Log.i(TAG, "File not found");
+      return null;
+    } catch (IOException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("IOException", "getServerListFromOldConfigFile");
+    } catch (ParserConfigurationException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("ParserConfigurationException", "getServerListFromOldConfigFile");
+    } catch (SAXException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e("SAXException", "getServerListFromOldConfigFile");
+    } catch (Exception e) {
+      Log.e("Exception", "getServerListFromOldConfigFile - decryption exception");
+      e.printStackTrace();
+    }
+
+    return arrServerList;
+  }
+
   // Create user configuration file: deleted & added servers
+  @Deprecated
   public static boolean createXmlDataWithServerList(ArrayList<ServerObjInfo> objList,
                                                     String fileName,
                                                     String appVersion) {
@@ -315,7 +474,7 @@ public class ServerConfigurationUtils {
 
       // Write <?xml declaration with encoding (if encoding not null) and
       // standalone flag (if standalone not null)
-      serializer.startDocument(null, Boolean.valueOf(true));
+      serializer.startDocument(null, Boolean.TRUE);
 
       // set indentation option
       // serializer.setFeature(name,
@@ -335,8 +494,8 @@ public class ServerConfigurationUtils {
       for (int i = 0; i < objList.size(); i++) {
         ServerObjInfo serverObj = objList.get(i);
         serializer.startTag(null, "server");
-        serializer.attribute(null, "name", serverObj._strServerName);
-        serializer.attribute(null, "serverURL", serverObj._strServerUrl);
+        serializer.attribute(null, "name", serverObj.serverName);
+        serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj.serverUrl);
         serializer.endTag(null, "server");
       }
 
@@ -358,4 +517,81 @@ public class ServerConfigurationUtils {
 
   }
 
+
+  /**
+   * Create XML config file from server list
+   *
+   * @param context
+   * @param objList
+   * @param fileName
+   * @param appVersion
+   * @return
+   */
+  public static boolean generateXmlFileWithServerList(Context context, ArrayList<ServerObjInfo> objList,
+                                                    String fileName,
+                                                    String appVersion) {
+    Log.i(TAG, "generateXmlFileWithServerList: " + fileName);
+
+    try {
+      FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+      // we create a XmlSerializer in order to write xml data
+      XmlSerializer serializer = Xml.newSerializer();
+      // we set the FileOutputStream as output for the serializer, using UTF-8 encoding
+      serializer.setOutput(fos, "UTF-8");
+
+      // Write <?xml declaration with encoding (if encoding not null) and
+      // standalone flag (if standalone not null)
+      serializer.startDocument(null, Boolean.TRUE);
+
+      // set indentation option
+      // serializer.setFeature(name,
+      // state)("http://xmlpull.org/v1/doc/features.htmlindent-output", true);
+
+      // start a tag called "root"
+      serializer.startTag(null, "xml").startTag(null, "version");
+        serializer.attribute(null, "number", appVersion);
+        serializer.endTag(null, "version");
+      //}
+
+      serializer.startTag(null, "Servers");
+
+      // i indent code just to have a view similar to xml-tree
+      for (int i = 0; i < objList.size(); i++) {
+        ServerObjInfo serverObj = objList.get(i);
+        serializer.startTag(null, "server");
+        serializer.attribute(null, "name", serverObj.serverName);
+        serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj.serverUrl);
+        serializer.attribute(null, ExoConstants.EXO_URL_USERNAME, serverObj.username);
+
+        /* encrypt password */
+        try {
+          serializer.attribute(null, "password",
+              SimpleCrypto.encrypt(ExoConstants.EXO_MASTER_PASSWORD, serverObj.password));
+        } catch (Exception e) {
+          Log.i(TAG, "error while encrypting: " + e.getLocalizedMessage());
+          serializer.attribute(null, "password", serverObj.password);
+        }
+
+        serializer.attribute(null, ExoConstants.EXO_REMEMBER_ME, String.valueOf(serverObj.isRememberEnabled));
+        serializer.attribute(null, ExoConstants.EXO_AUTOLOGIN, String.valueOf(serverObj.isAutoLoginEnabled));
+        serializer.endTag(null, "server");
+      }
+
+      serializer.endTag(null, "Servers");
+      serializer.endTag(null, "xml");
+      serializer.endDocument();
+
+      // write xml data into the FileOutputStream
+      serializer.flush();
+      // finally we close the file stream
+
+      fos.close();
+      return true;
+
+    } catch (FileNotFoundException e) {
+      return false;
+    } catch (IOException e) {
+      return false;
+    }
+  }
 }

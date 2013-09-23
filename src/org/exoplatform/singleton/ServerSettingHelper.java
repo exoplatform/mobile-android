@@ -1,17 +1,17 @@
 package org.exoplatform.singleton;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.exoplatform.model.ServerObjInfo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/*
- * This class for storing the list of server url and the index of the selected 
- *  which is used for adding/repairing/deleting function in setting   
+/**
+ * Used for storing the list of server url and the index of the selected
+ * which is used for adding/repairing/deleting function in setting
  */
-
 public class ServerSettingHelper implements Parcelable {
 
   // The application version number
@@ -22,8 +22,8 @@ public class ServerSettingHelper implements Parcelable {
 
   private String                     serverEdition;
 
-  // List of server url
-  private ArrayList<ServerObjInfo>   serverInfoList;
+  /** List of server url */
+  private ArrayList<ServerObjInfo> serverInfoList;
 
   private static ServerSettingHelper helper = new ServerSettingHelper();
 

@@ -1,29 +1,29 @@
 package org.exoplatform.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
+import android.util.Log;
+import android.util.Patterns;
+import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.singleton.SocialServiceHelper;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -46,14 +46,78 @@ public class ExoConnectionUtils {
 
   public static final int         LOGIN_INCOMPATIBLE       = 5;
 
+  public static final int         LOGIN_SERVER_RESUMING    = 6;
+
   // Default connection and socket timeout of 60 seconds. Tweak to taste.
-  private static final int        SOCKET_OPERATION_TIMEOUT = 30 * 1000;
+  public static final int         SOCKET_OPERATION_TIMEOUT  = 30 * 1000;
 
   public static DefaultHttpClient httpClient;
 
   public static CookieStore       cookiesStore;
 
-  /*
+  public static final int         SIGNUP_OK                = 10;
+
+  /** internal server problem, strange response status code */
+  public static final int         SIGNUP_INVALID           = 11;
+
+  /** domain for the email is invalid, such as gmail, yahoo ... */
+  public static final int         SIGNUP_WRONG_DOMAIN      = 12;
+
+  /** an account already exists for this email */
+  public static final int         SIGNUP_ACCOUNT_EXISTS    = 13;
+
+  /** can not connect server, probably down or wrong address */
+  public static final int         SIGNUP_SERVER_NAV        = 14;
+
+  /** maximum number of users for the tenant has been reached */
+  public static final int         SIGNUP_MAX_USERS         = 15;
+
+  private static final String     SIGNUP_MAX_USERS_MSG     = "The request to create or join a workspace from ";
+
+  public static final int         SIGNIN_OK                = 20;
+
+  public static final int         SIGNIN_INVALID           = 21;
+
+  public static final int         SIGNIN_NO_ACCOUNT        = 22;
+
+  /** cloud can not find tenant for this email */
+  public static final int         SIGNIN_NO_TENANT_FOR_EMAIL  = 23;
+
+  /** like SIGNUP_SERVER_NAV */
+  public static final int         SIGNIN_SERVER_NAV       = 24;
+
+  public static final int         SIGNIN_SERVER_ONLINE    = 25;
+
+  public static final int         SIGNIN_SERVER_SUSPENDED = 26;
+
+  public static final int         SIGNIN_CONNECTION_ERR   = 27;
+
+  public  static final int        TENANT_OK               = 30;
+
+  /**=== Tenant status ===*/
+  public static final String      ONLINE                  = "ONLINE";
+
+  public static final String      STOPPED                 = "STOPPED";
+
+
+
+  public static final String      HTTP                    = "http://";
+
+  public static final String      HTTPS                   = "https://";
+
+  /** eXo cloud workspace url */
+  public static final String      EXO_CLOUD_WS_DOMAIN      = "exoplatform.net";  // "wks-acc.exoplatform.org"; // "netstg.exoplatform.org";
+
+  /** eXo cloud base service url */
+  public static final String      SERVICE_BASE_URL         = "/rest/cloud-admin/cloudworkspaces/tenant-service";
+
+  public static final String      MARKETO_URL              = "learn.exoplatform.com/index.php/leadCapture/save";
+
+  private static final String     TAG                      = "ExoConnectionUtils";
+
+
+
+  /**
    * Check mobile network and wireless status
    */
   public static boolean isNetworkAvailableExt(Context paramContext) {
@@ -148,8 +212,7 @@ public class ExoConnectionUtils {
       httpClient = initHttpClient();
     }
 
-    HttpResponse response = httpClient.execute(httpGet);
-    return response;
+    return httpClient.execute(httpGet);
   }
 
   // Get input stream from url
@@ -175,7 +238,6 @@ public class ExoConnectionUtils {
   /*
    * Get response from platform url
    */
-
   public static HttpResponse getPlatformResponse(String username,
                                                  String password,
                                                  String strUrlRequest) throws IOException {
@@ -192,13 +254,182 @@ public class ExoConnectionUtils {
     AccountSetting.getInstance().cookiesList = getCookieList(cookiesStore);
 
     return response;
-
   }
 
-  /*
+  /**
+   * Validate email according rules of eXo cloud
+   */
+  public static boolean validateEmail(String aEmailAddress) {
+    if (aEmailAddress == null) return false;
+    boolean result = true;
+    if (!hasNameAndDomain(aEmailAddress)) {
+      result = false;
+    }
+    return result;
+  }
+
+  /**
+   * Check whether the email has username and domain
+   *
+   * @param aEmailAddress
+   * @return
+   */
+  private static boolean hasNameAndDomain(String aEmailAddress) {
+    String[] tokens = aEmailAddress.split("@");
+    return tokens.length == 2 && tokens[0].trim().length() > 0 && tokens[1].trim().length() > 3
+        && tokens[1].split("\\.").length > 1 && tokens[1].split("\\.")[1].length() > 1;
+  }
+
+  /**
+   * Make a Sign up request to eXo cloud
+   *
+   * @param email
+   */
+  public static HttpResponse makeCloudSignUpRequest(String email) throws IOException {
+    Log.d(TAG, "make cloud sign up request with " + email);
+    if (httpClient == null) {
+      httpClient = initHttpClient();
+    }
+
+    HttpPost httpPost = new HttpPost(HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/signup");
+    List<NameValuePair> requestParameters = new ArrayList<NameValuePair>(1);
+    requestParameters.add(new BasicNameValuePair("user-mail", email));
+    httpPost.setEntity(new UrlEncodedFormEntity(requestParameters));
+    return httpClient.execute(httpPost);
+  }
+
+  public static int checkSignUpResponse(HttpResponse response, String email) {
+    int statusCode = response.getStatusLine().getStatusCode();
+    Log.d(TAG, "status: " + statusCode);
+    String message = getPLFStream(response);
+    /* code 309 */
+    if (statusCode == ExoConstants.UNKNOWN) {
+      if (response.getLastHeader("Location").getValue().contains("tryagain.jsp"))
+        return ExoConnectionUtils.SIGNUP_WRONG_DOMAIN;
+      else return ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS;
+    }
+    /* code 202 */  // TODO: check CLDINT-1197 if any change to response code
+    else if (statusCode == HttpStatus.SC_ACCEPTED
+        || (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR
+            && message!= null && message.startsWith(SIGNUP_MAX_USERS_MSG + email)))
+      return ExoConnectionUtils.SIGNUP_MAX_USERS;
+
+    if (statusCode != HttpStatus.SC_OK)
+      return ExoConnectionUtils.SIGNUP_SERVER_NAV;
+
+    /* code 200 */
+    return ExoConnectionUtils.SIGNUP_OK;
+  }
+
+  /**
+   * Request tenant and username for an email
+   *
+   * @param email
+   * @return
+   * @throws IOException
+   */
+  public static HttpResponse requestTenantForEmail(String email) throws IOException {
+    return getRequestResponse(HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/usermailinfo/" + email);
+  }
+
+  public static String[] checkRequestTenant(HttpResponse response) {
+
+    String[] results = new String[2];
+    if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) return null;
+
+    try {
+      String result   = getPLFStream(response);
+      JSONObject json = (JSONObject) JSONValue.parse(result);
+      results[0]      = json.get(ExoConstants.USERNAME).toString();
+      results[1]      = json.get(ExoConstants.TENANT).toString();
+      Log.d(TAG, "user:   " + results[0] + " - tenant: " + results[1]);
+      return results;
+    } catch (RuntimeException e) {
+      Log.d(TAG, "RuntimeException: " + e.getLocalizedMessage());
+      return null;
+    }
+  }
+
+  /**
+   * Requesting if username exists within a cloud server
+   *
+   * @param user
+   * @param tenant
+   * @return
+   */
+  public static boolean requestAccountExistsForUser(String user, String tenant) {
+    String url = HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/isuserexist/" + tenant + "/" + user;
+    try {
+      HttpResponse response = getRequestResponse(url);
+      if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) return false;
+
+      return convertStreamToString(response.getEntity().getContent())
+          .replace("\n", "").replace("\r", "").replace("\r\n", "")
+          .equalsIgnoreCase("true");
+    } catch (IOException e) {
+      Log.d(TAG, "IOException: " + e.getLocalizedMessage());
+      return false;
+    }
+  }
+
+  /**
+   * Check status of tenant
+   *
+   * @param tenant
+   * @return
+   */
+  public static int requestTenantStatus(String tenant) {
+    String url = HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/status/" + tenant;
+    try {
+      HttpResponse response = getRequestResponse(url);
+      /** 404 - tenant does not exist */
+      int statusCode = response.getStatusLine().getStatusCode();
+      if (statusCode == HttpStatus.SC_NOT_FOUND) return SIGNIN_NO_TENANT_FOR_EMAIL;
+      if (statusCode != HttpStatus.SC_OK)        return SIGNIN_SERVER_NAV;
+
+      /** 200 - tenant exists - check status */
+      if (response.getEntity() != null) {
+        String tenantStatus = convertStreamToString(response.getEntity().getContent())
+            .replace("\n", "").replace("\r", "").replace("\r\n", "");
+
+        Log.d(TAG, "tenant status: " + tenantStatus);
+        if      (tenantStatus.equalsIgnoreCase(ONLINE))  return SIGNIN_SERVER_ONLINE;
+        else if (tenantStatus.equalsIgnoreCase(STOPPED)) return SIGNIN_SERVER_SUSPENDED;
+
+        return LOGIN_SERVER_RESUMING;
+      }
+
+      return SIGNIN_SERVER_NAV;
+    } catch (IOException e) {
+      Log.d(TAG, "IOException: " + e.getLocalizedMessage());
+      return SIGNIN_SERVER_NAV;
+    }
+  }
+
+  /**
+   * Create marketo lead
+   */
+  public static HttpResponse requestCreatingMarketo(String email) throws IOException {
+    int idx1 = email.indexOf("@");
+    int idx2 = email.lastIndexOf(".");
+    String tenant = (idx1 > 0 && idx2 > 2) ? email.substring(idx1 + 1, idx2) : "";
+    HttpPost httpPost = new HttpPost(HTTP + MARKETO_URL);
+    List<NameValuePair> requestParameters = new ArrayList<NameValuePair>(1);
+    requestParameters.add(new BasicNameValuePair("Email", email));
+    requestParameters.add(new BasicNameValuePair("eXo_Cloud_Tenant_Name__c", tenant));
+    requestParameters.add(new BasicNameValuePair("lpId" , "1967"));
+    requestParameters.add(new BasicNameValuePair("subId", "46"));
+    requestParameters.add(new BasicNameValuePair("munchkinId", "577-PCT-880"));
+    requestParameters.add(new BasicNameValuePair("formid", "1167"));
+    requestParameters.add(new BasicNameValuePair("returnLPId", "-1"));
+    httpPost.setEntity(new UrlEncodedFormEntity(requestParameters));
+    return httpClient.execute(httpPost);
+  }
+
+
+  /**
    * Checking the response status code
    */
-
   public static int checkPlatformRespose(HttpResponse response) {
     int statusCode = response.getStatusLine().getStatusCode();
     if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
@@ -207,9 +438,11 @@ public class ExoConnectionUtils {
       return LOGIN_UNAUTHORIZED;
     } else if (statusCode == HttpStatus.SC_NOT_FOUND) {
       return LOGIN_INVALID;
+    } else if (statusCode == ExoConstants.UNKNOWN) {
+      /* 309 code - server is resuming */
+      return LOGIN_SERVER_RESUMING;
     } else
       return LOGIN_FAILED;
-
   }
 
   // get input stream from URL without authentication
@@ -301,4 +534,22 @@ public class ExoConnectionUtils {
     }
   }
 
+  public static boolean validateUrl(String url) {
+    return Patterns.WEB_URL.matcher(url).matches();
+  }
+
+  /**
+   * Clean up connection data to log out
+   */
+  public static void loggingOut() {
+    if (ExoConnectionUtils.httpClient != null) {
+      ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
+      ExoConnectionUtils.httpClient = null;
+    }
+
+    AccountSetting.getInstance().cookiesList = null;
+
+    /** Clear all social service data */
+    SocialServiceHelper.getInstance().clearData();
+  }
 }
