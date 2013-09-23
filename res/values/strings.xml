@@ -225,9 +225,8 @@
   <string name="ImageDesc">image description</string>
 
   <!-- Launch -->
-  <string name="RedirectToLogin">Ok, let me log in again</string>
-  <string name="LoginWarningMsg">We try to log you in but an error occurs:</string>
-  <string name="TryAgain">Ok, let me try again later</string>
+  <string name="RedirectToLogin">Try again</string>
+  <string name="LoginWarningMsg">Connection error</string>
 
 
     <string-array name="SocialTabs">
