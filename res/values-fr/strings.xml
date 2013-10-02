@@ -150,9 +150,9 @@
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Mémoriser mon filtre</string>
   <string-array name="SocialTabs">
-    <item>Fil d\'actualités</item>
-    <item>Mes Contacts</item>
-    <item>Mes Espaces</item>
-    <item>Mon Statut</item>
+    <item id="AllUpdates">Fil d\'actualités</item>
+    <item id="MyConnections">Mes Contacts</item>
+    <item id="MySpaces">Mes Espaces</item>
+    <item id="MyStatus">Mon Statut</item>
   </string-array>
 </resources>
