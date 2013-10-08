@@ -8,9 +8,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import org.exoplatform.R;
 import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.utils.*;
@@ -69,10 +71,19 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
         String pass     = mPassTxt.getText().toString();
 
         if (!url.startsWith(ExoConnectionUtils.HTTP)) url = ExoConnectionUtils.HTTP + url;
+        if (ExoConnectionUtils.urlHasWrongTenant(url)) {
+          InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+          if (inputMethodManager!= null) inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+          Toast.makeText(SignInOnPremiseActivity.this, R.string.ServerInvalid, Toast.LENGTH_SHORT).show();
+          return ;
+        }
+
         makeRequestSigningIn(url, user, pass);
       }
     };
   }
+
 
   private void makeRequestSigningIn(String url, String user, String pass) {
     Log.d(TAG, "sign in: " + user + " - url: " + url);

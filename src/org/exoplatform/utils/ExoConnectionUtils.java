@@ -2,6 +2,7 @@ package org.exoplatform.utils;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.util.Log;
@@ -115,7 +116,8 @@ public class ExoConnectionUtils {
 
   private static final String     TAG                      = "ExoConnectionUtils";
 
-
+  public static final String[]    WRONG_CLOUD_URLS         = new String[] {
+      "http://exoplatform.net", "http://wks-acc.exoplatform.org", "http://netstg.exoplatform.org" };
 
   /**
    * Check mobile network and wireless status
@@ -536,6 +538,11 @@ public class ExoConnectionUtils {
 
   public static boolean validateUrl(String url) {
     return Patterns.WEB_URL.matcher(url).matches();
+  }
+
+  public static boolean urlHasWrongTenant(String url) {
+    return Arrays.asList(WRONG_CLOUD_URLS).contains(
+        !url.startsWith(ExoConnectionUtils.HTTP) ? ExoConnectionUtils.HTTP + url : url);
   }
 
   /**
