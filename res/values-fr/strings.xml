@@ -45,7 +45,7 @@
   <string name="Send">Envoyer</string>
   <string name="Paste">Coller</string>
   <string name="Cancel">Annuler</string>
-  <string name="OK">OK</string>
+  <string name="OK">Valider</string>
   <string name="Remove">Supprimer</string>
   <string name="Documents">Documents</string>
   <string name="Dashboard">Apps</string>
@@ -168,11 +168,11 @@
 
     <!-- Welcome screen -->
   <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Step</string>
+  <string name="title_template_step">Etape</string>
   <string name="SignUp">Sign Up</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
-  <string name="Or">or</string>
+  <string name="Or">ou</string>
 
   <string name="SliderDesc1">Activity streams</string>
   <string name="SliderDesc2">Comments and likes</string>
@@ -189,7 +189,7 @@
   <string name="Email">email address</string>
   <string name="CreateAccount">Create your account</string>
   <string name="InvalidEmail">Please input a valid email address</string>
-  <string name="SigningUp">Signing up &#8230;</string>
+  <string name="SigningUp">Signing up …</string>
   <string name="InvalidSignUp">A problem occurs with the sign up process</string>
   <string name="WrongEmailDomain">Email Domain for this account is not correct</string>
   <string name="AccountExists">An account already exists for this email, you will be redirected to the login screen.</string>
@@ -215,14 +215,14 @@
   <string name="YourIntranetHint">http://www.mycompany.com</string>
   <string name="PasswordHint">password</string>
   <string name="UserNameHint">username</string>
-  <string name="Number1">1</string>
-  <string name="Number2">2</string>
 
     <!-- Setting -->
     <string name="RememberMe">Mémoriser mon login</string>
     <string name="Autologin">Connexion automatique</string>
     <string name="LoginTitle">LOGIN</string>
     <string name="EXO">EXO</string>
+  <string name="Number1">1</string>
+  <string name="Number2">2</string>
 
     <!-- Server edition -->
     <string name="OptionalHint">Optionnel</string>
