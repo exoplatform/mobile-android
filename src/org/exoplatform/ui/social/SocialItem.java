@@ -3,6 +3,7 @@ package org.exoplatform.ui.social;
 import java.net.URLConnection;
 import java.util.Locale;
 
+import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
@@ -25,6 +26,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * Represents activity item on activity stream
+ */
 public class SocialItem {
   private static final String FONT_COLOR          = "#696969";
 
@@ -64,6 +68,8 @@ public class SocialItem {
 
   private Resources           resource;
 
+  private static final String TAG = "eXo____SocialItem____";
+
   public SocialItem(Context context,
                     StandardArrayAdapter.ViewHolder holder,
                     SocialActivityInfo info,
@@ -86,7 +92,6 @@ public class SocialItem {
     typeImageView = holder.typeImageView;
     textViewTime = holder.textViewTime;
     attachStubView = holder.attachStubView;
-
   }
 
   public void initCommonInfo() {
@@ -94,7 +99,7 @@ public class SocialItem {
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl != null) {
       BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inSampleSize = 2;
+      options.inSampleSize = 4;
       imageViewAvatar.setOptions(options);
       imageViewAvatar.setUrl(avatarUrl);
     }
@@ -128,9 +133,7 @@ public class SocialItem {
       textViewMessage.setMaxLines(100);
       textViewTempMessage.setMaxLines(100);
       textViewCommnet.setMaxLines(100);
-
     }
-
   }
 
   private void setViewByType(int typeId) {

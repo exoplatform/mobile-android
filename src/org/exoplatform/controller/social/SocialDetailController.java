@@ -1,5 +1,6 @@
 package org.exoplatform.controller.social;
 
+import android.graphics.BitmapFactory;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
@@ -117,6 +118,11 @@ public class SocialDetailController {
         SocialCommentInfo comment = commentList.get(i);
         CommentItemLayout commentItem = new CommentItemLayout(mContext);
         String avatarUrl = comment.getImageUrl();
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+        commentItem.comAvatarImage.setOptions(options);
+
         if (avatarUrl == null) {
           commentItem.comAvatarImage.setImageResource(ExoConstants.DEFAULT_AVATAR);
         } else
@@ -192,6 +198,9 @@ public class SocialDetailController {
     ShaderImageView likedAvatar;
     for (int i = 0; i < maxChild; i++) {
       likedAvatar = new ShaderImageView(mContext, true);
+      BitmapFactory.Options options = new BitmapFactory.Options();
+      options.inSampleSize = 4;
+      likedAvatar.setOptions(options);
       likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
       likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);
       likedLayoutWrap.addView(likedAvatar, params);

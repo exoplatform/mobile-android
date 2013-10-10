@@ -110,7 +110,7 @@ public class SocialActivityStreamItem extends LinearLayout {
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl != null) {
       BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inSampleSize = 2;
+      options.inSampleSize = 4;
       imageViewAvatar.setOptions(options);
       imageViewAvatar.setUrl(avatarUrl);
     }
@@ -131,7 +131,8 @@ public class SocialActivityStreamItem extends LinearLayout {
 
   private void setDetailView() {
     if (isDetail) {
-      imageViewAvatar.setBorderColor(AVATAR_BORDER_COLOR);
+      // enable this cause unexpected behavior on ShaderImage
+      //imageViewAvatar.setBorderColor(AVATAR_BORDER_COLOR);
       contentLayoutWrap.setBackgroundDrawable(null);
       contentLayoutWrap.setPadding(5, -2, 5, 5);
       buttonComment.setVisibility(View.GONE);
@@ -141,9 +142,7 @@ public class SocialActivityStreamItem extends LinearLayout {
       textViewMessage.setMaxLines(100);
       textViewTempMessage.setMaxLines(100);
       textViewCommnet.setMaxLines(100);
-
     }
-
   }
 
   private void setViewByType(int typeId) {
