@@ -48,7 +48,7 @@
   <string name="OK">Valider</string>
   <string name="Remove">Supprimer</string>
   <string name="Documents">Documents</string>
-  <string name="Dashboard">Apps</string>
+  <string name="Dashboard">Applications</string>
   <string name="Settings">Réglages</string>
   <string name="GadgetsCannotBeRetrieved">Les données des gadgets ne peuvent pas être récupérées.</string>
   <string name="ActivityStream">Nouvelles</string>
@@ -176,7 +176,7 @@
 
   <string name="SliderDesc1">Activity streams</string>
   <string name="SliderDesc2">Comments and likes</string>
-  <string name="SliderDesc3">Personal dashboards</string>
+  <string name="SliderDesc3">Tableaux de bord personnels</string>
   <string name="SliderDesc4">Files management</string>
   <string name="YourSocialIntranet">Your social intranet</string>
   <string name="Anywhere">anywhere</string>
@@ -199,7 +199,7 @@
 
     <!-- Sign In -->
   <string name="EmailSignIn">Enter your credentials and Login:</string>
-  <string name="ConnectOnPremise">Connect to an On Premise Installation</string>
+  <string name="ConnectOnPremise">Connectez-vous à une Installation sur Site</string>
   <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
   <string name="InvalidCredentials">Impossible to connect, check your username and password.</string>
   <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
@@ -217,14 +217,16 @@
   <string name="UserNameHint">username</string>
 
     <!-- Setting -->
-    <string name="RememberMe">Mémoriser mon login</string>
-    <string name="Autologin">Connexion automatique</string>
+  <string name="RememberMe">Remember Me</string>
+  <string name="Autologin">Auto login</string>
     <string name="LoginTitle">LOGIN</string>
     <string name="EXO">EXO</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
     <!-- Server edition -->
+    <string name="AddServer">Nouveau Serveur</string>
+    <string name="ModifyServer">Modifier le Serveur</string>
     <string name="OptionalHint">Optionnel</string>
     <string name="RequiredHint">Requis</string>
     <string name="YourCredentials">Vos identifiants</string>
@@ -233,12 +235,12 @@
     <string name="StartCloudSignUpAssistant">Lancer l\'assistant de configuration</string>
     <string name="ServerAdded">Serveur ajouté</string>
     <string name="ServerUpdated">Serveur mis à jour</string>
-    <string name="ServerDeleted">Serveur supprimé</string>
+  <string name="ServerDeleted">Server deleted</string>
 
     <string name="ImageDesc">description de l\'image</string>
 
     <!-- Launch -->
-    <string name="RedirectToLogin">OK</string>
+  <string name="RedirectToLogin">Try again</string>
     <string name="LoginWarningMsg">La connexion a échoué</string>
 
   <string-array name="SocialTabs">
