@@ -199,7 +199,6 @@
     <string name="DefaultServer">My Intranet</string>
     <string name="ServerResuming">We are restoring your intranet, please retry in few minutes.</string>
 
-
     <!-- On Premise -->
     <string name="OnPremise">On Premise</string>
     <string name="EnterUrl">Enter URL of your intranet</string>
@@ -216,16 +215,18 @@
     <string name="Number1">1</string>
     <string name="Number2">2</string>
 
-    <!-- Server edition -->
-    <string name="OptionalHint">Optional</string>
-    <string name="RequiredHint">Erforderlich</string>
-    <string name="YourCredentials">Ihre Anmeldeinformationen</string>
-    <string name="ServerName">Server Namen</string>
-    <string name="ServerUrl">Server Url</string>
-    <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
-    <string name="ServerAdded">Server hinzugefügt</string>
-    <string name="ServerUpdated">Server aktualisiert</string>
-    <string name="ServerDeleted">Server gelöscht</string>
+  <!-- Server edition -->
+  <string name="AddServer">Neuer Server</string>
+  <string name="ModifyServer">Server ändern</string>
+  <string name="OptionalHint">Optional</string>
+  <string name="RequiredHint">Erforderlich</string>
+  <string name="YourCredentials">Ihre Anmeldeinformationen</string>
+  <string name="ServerName">Server Namen</string>
+  <string name="ServerUrl">Server Url</string>
+  <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
+  <string name="ServerAdded">Server hinzugefügt</string>
+  <string name="ServerUpdated">Server aktualisiert</string>
+  <string name="ServerDeleted">Server gelöscht</string>
 
     <string name="ImageDesc">image description</string>
 
