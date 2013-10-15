@@ -142,7 +142,8 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
         HomeActivity.homeActivity.setProfileInfo(result);
       }
 
-      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
+      /** Load activities for view flipper */
+      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
 
     } else {
       loaderItem.setLoading(false);

@@ -3,9 +3,7 @@ package org.exoplatform.widget;
 import java.net.URLConnection;
 import java.util.Locale;
 
-import android.graphics.Bitmap;
 import android.util.Log;
-import greendroid.widget.AsyncImageView;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
@@ -111,6 +109,8 @@ public class SocialActivityStreamItem extends LinearLayout {
     if (avatarUrl != null) {
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inSampleSize = 4;
+      options.inPurgeable  = true;
+      options.inInputShareable = true;
       imageViewAvatar.setOptions(options);
       imageViewAvatar.setUrl(avatarUrl);
     }

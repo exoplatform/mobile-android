@@ -40,6 +40,8 @@ public class HomeSocialItem extends LinearLayout {
 
   private static final String FONT_COLOR = "#FFFFFF";
 
+  private Context             mContext;
+
   private TextView            textViewName;
 
   private TextView            textViewMessage;
@@ -57,10 +59,12 @@ public class HomeSocialItem extends LinearLayout {
 
   public HomeSocialItem(Context context) {
     super(context);
+    mContext = context;
   }
   
   public HomeSocialItem(Context context, SocialActivityInfo info) {
     super(context);
+    mContext = context;
     userName = info.getUserName();
     resource = context.getResources();
     activityInfo = info;
@@ -73,6 +77,8 @@ public class HomeSocialItem extends LinearLayout {
 
     BitmapFactory.Options options = new BitmapFactory.Options();
     options.inSampleSize = 4;
+    options.inPurgeable  = true;
+    options.inInputShareable = true;
     activtyAvatar.setOptions(options);
     activtyAvatar.setUrl(info.getImageUrl());
 
@@ -80,8 +86,8 @@ public class HomeSocialItem extends LinearLayout {
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
     int imageId = SocialActivityUtil.getActivityTypeId(info.getType());
     setViewByType(imageId);
-
   }
+
 
   private void setViewByType(int typeId) {
     switch (typeId) {

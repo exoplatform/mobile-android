@@ -185,14 +185,11 @@ public class HomeActivity extends MyActionBar {
   }
 
   private void startSocialService(LoaderActionBarItem loader) {
-    Log.i(TAG, "startSocialService");
-
     /** if soc activity service is null then loads all soc services */
-    if (SocialServiceHelper.getInstance().activityService == null) {
+    if (SocialServiceHelper.getInstance().activityService == null)
       homeController.launchNewsService();
-    } else {
+    else
       homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
-    }
   }
 
   public void setProfileInfo(String[] profile) {
@@ -207,9 +204,7 @@ public class HomeActivity extends MyActionBar {
    * Set Social Information and start animation
    */
   public void setSocialInfo(ArrayList<SocialActivityInfo> list) {
-    if (list == null) {
-      return;
-    }
+    if (list == null) return ;
 
     HomeSocialItem socialItem;
     viewFlipper.removeAllViews();

@@ -121,6 +121,8 @@ public class SocialDetailController {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 4;
+        options.inPurgeable  = true;
+        options.inInputShareable = true;
         commentItem.comAvatarImage.setOptions(options);
 
         if (avatarUrl == null) {
@@ -200,6 +202,8 @@ public class SocialDetailController {
       likedAvatar = new ShaderImageView(mContext, true);
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inSampleSize = 4;
+      options.inPurgeable  = true;
+      options.inInputShareable = true;
       likedAvatar.setOptions(options);
       likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
       likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);

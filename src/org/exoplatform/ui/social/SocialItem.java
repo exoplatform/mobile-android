@@ -100,6 +100,8 @@ public class SocialItem {
     if (avatarUrl != null) {
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inSampleSize = 4;
+      options.inPurgeable  = true;
+      options.inInputShareable = true;
       imageViewAvatar.setOptions(options);
       imageViewAvatar.setUrl(avatarUrl);
     }
