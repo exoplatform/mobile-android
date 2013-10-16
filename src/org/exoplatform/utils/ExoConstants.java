@@ -58,7 +58,7 @@ public class ExoConstants {
 
   public static final int    REQUEST_ADD_PHOTO                     = 8;
 
-  public static final String PHOTO_ALBUM_IMAGE_TYPE                = "image/*";                                                   ;
+  public static final String PHOTO_ALBUM_IMAGE_TYPE                = "image/*";
 
   public static final String HTTP_PROTOCOL                         = "http";
 

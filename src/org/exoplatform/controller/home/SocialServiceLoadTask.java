@@ -38,7 +38,14 @@ import android.os.AsyncTask;
  * Initialize SocialServiceHelper with these objects.
  */
 public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
+
   private Context                       mContext;
+
+  private ActivityService<RestActivity> mActivityService;
+
+  private IdentityService<RestIdentity> mIdentityService;
+
+  private String                        mUserIdentity;
 
   private String                        okString;
 
@@ -47,12 +54,6 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
   private String                        contentString;
 
   private HomeController                homeController;
-
-  private ActivityService<RestActivity> activityService;
-
-  private IdentityService<RestIdentity> identityService;
-
-  private String                        userIdentity;
 
   private LoaderActionBarItem           loaderItem;
 
@@ -107,10 +108,10 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
       SocialClientContext.setRestVersion(versionService.getLatest());
       clientServiceFactory = ClientServiceFactoryHelper.getClientServiceFactory();
 
-      activityService = clientServiceFactory.createActivityService();
-      identityService = clientServiceFactory.createIdentityService();
-      userIdentity = identityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
-      RestIdentity restIdent = identityService.getIdentity(ExoConstants.ACTIVITY_ORGANIZATION,
+      mActivityService = clientServiceFactory.createActivityService();
+      mIdentityService = clientServiceFactory.createIdentityService();
+      mUserIdentity    = mIdentityService.getIdentityId(ExoConstants.ACTIVITY_ORGANIZATION, userName);
+      RestIdentity restIdent = mIdentityService.getIdentity(ExoConstants.ACTIVITY_ORGANIZATION,
                                                            userName);
       RestProfile profile = restIdent.getProfile();
       String[] profileArray = new String[2];
@@ -134,9 +135,9 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
   public void onPostExecute(String[] result) {
 
     if (result != null) {
-      SocialServiceHelper.getInstance().userIdentity = userIdentity;
-      SocialServiceHelper.getInstance().activityService = activityService;
-      SocialServiceHelper.getInstance().identityService = identityService;
+      SocialServiceHelper.getInstance().userIdentity    = mUserIdentity;
+      SocialServiceHelper.getInstance().activityService = mActivityService;
+      SocialServiceHelper.getInstance().identityService = mIdentityService;
       SocialServiceHelper.getInstance().userProfile = result;
       if (HomeActivity.homeActivity != null) {
         HomeActivity.homeActivity.setProfileInfo(result);

@@ -67,6 +67,10 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
     setListAdapter();
   }
 
+  public void setListAdapter() {
+    super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList);
+  }
+
   @Override
   public void onDestroy() {
     super.onDestroy();
@@ -81,10 +85,6 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
   @Override
   public SocialLoadTask getThisLoadTask() {
   	return new AllUpdateLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
-  }
-
-  public void setListAdapter() {
-	  super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList);
   }
 
   @Override

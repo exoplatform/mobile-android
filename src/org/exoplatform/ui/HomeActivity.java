@@ -128,6 +128,16 @@ public class HomeActivity extends MyActionBar {
   }
 
   @Override
+  protected void onPause() {
+    super.onPause();
+
+    Log.i(TAG, "onPause");
+    viewFlipper.removeAllViews();
+    getGDApplication().getImageCache().flush();
+    System.gc();
+  }
+
+  @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     menu.clear();
     menu.add(0, 1, 0, getResources().getString(R.string.Settings))
@@ -207,7 +217,7 @@ public class HomeActivity extends MyActionBar {
     if (list == null) return ;
 
     HomeSocialItem socialItem;
-    viewFlipper.removeAllViews();
+    //viewFlipper.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
     /*
      * Display maximum 10 activities
@@ -317,7 +327,6 @@ public class HomeActivity extends MyActionBar {
     newsTitle = resource.getString(R.string.ActivityStream);
     documentTitle = resource.getString(R.string.Documents);
     appsTitle = resource.getString(R.string.Dashboard);
-
   }
 
 }

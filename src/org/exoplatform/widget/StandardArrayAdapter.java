@@ -1,5 +1,7 @@
 package org.exoplatform.widget;
 
+import android.util.Log;
+import android.widget.*;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
@@ -30,11 +32,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
@@ -48,6 +45,8 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   private LikeLoadTask                        mLoadTask;
 
+  private static final String TAG = "eXo____StandardArrayAdapter____";
+
   public StandardArrayAdapter(Context context, ArrayList<SocialActivityInfo> items) {
     super(context, R.layout.activitybrowserviewcell, items);
     mContext = context;
@@ -57,6 +56,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   @Override
   public View getView(final int position, View convertView, ViewGroup parent) {
+    Log.i(TAG, "getView - pos: " + position + " - parent: " + parent);
     final SocialActivityInfo actInfo = items.get(position);
 
     if (convertView == null) {
