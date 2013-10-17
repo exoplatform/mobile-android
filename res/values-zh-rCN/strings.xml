@@ -158,21 +158,21 @@
   </string-array>
 
   <!-- Welcome screen -->
-  <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Step</string>
-  <string name="SignUp">Sign Up</string>
+  <string name="Slogan">随时随地进入您的社交圈子。</string>
+  <string name="title_template_step">步骤</string>
+  <string name="SignUp">注册</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
-  <string name="Or">or</string>
+  <string name="Or">或</string>
 
-  <string name="SliderDesc1">Activity streams</string>
-  <string name="SliderDesc2">Comments and likes</string>
+  <string name="SliderDesc1">活动流</string>
+  <string name="SliderDesc2">评论和感兴趣的</string>
   <string name="SliderDesc3">Personal dashboards</string>
   <string name="SliderDesc4">Files management</string>
   <string name="YourSocialIntranet">Your social intranet</string>
   <string name="Anywhere">anywhere</string>
   <string name="Anytime">anytime</string>
-  <string name="SwipeToSee">Swipe to learn more</string>
+  <string name="SwipeToSee">点击了解更多</string>
 
   <!-- Sign up -->
   <string name="GetStarted">Get Started</string>
