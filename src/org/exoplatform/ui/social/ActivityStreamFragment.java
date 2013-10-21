@@ -174,7 +174,7 @@ public abstract class ActivityStreamFragment extends Fragment {
 		    	  ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().getSocialListForTab(currentTab);
 		    	  mLoadTask = getThisLoadTask();
 
-            Log.i(TAG, "flush cache");
+            Log.d(TAG, "loading more data - flush image cache");
             ((SocialTabsActivity) getActivity()).getGDApplication().getImageCache().flush();
             System.gc();
 

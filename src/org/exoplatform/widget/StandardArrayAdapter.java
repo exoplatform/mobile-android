@@ -56,7 +56,6 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   @Override
   public View getView(final int position, View convertView, ViewGroup parent) {
-    Log.i(TAG, "getView - pos: " + position + " - parent: " + parent);
     final SocialActivityInfo actInfo = items.get(position);
 
     if (convertView == null) {

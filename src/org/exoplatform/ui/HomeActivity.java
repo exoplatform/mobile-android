@@ -131,7 +131,6 @@ public class HomeActivity extends MyActionBar {
   protected void onPause() {
     super.onPause();
 
-    Log.i(TAG, "onPause");
     viewFlipper.removeAllViews();
     getGDApplication().getImageCache().flush();
     System.gc();
