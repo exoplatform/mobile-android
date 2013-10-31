@@ -17,6 +17,7 @@
   <string name="AccountPasswordInvalid">Spaces are not allowed in the password</string>
   <string name="Connected">Connected</string>
   <string name="LastLoginDate">Last login</string>
+  <string name="ServerInvalid">Endereço do servidor inválido</string>
   <string name="ServerUnreachable">Endereço do servidor é inacessível</string>
   <string name="UserNameCellTitle">Nome do usuário</string>
   <string name="PasswordCellTitle">Senha</string>
@@ -99,6 +100,7 @@
   <string name="WarningServerNameIsExist">Este nome de servidor já existe na sua lista</string>
   <string name="WarningServerUrlIsExist">Este servidor URL já existe na sua lista</string>
   <string name="WarningServerAlreadyExists">This account already exists in your list</string>
+  <string name="WarningServerUrlAndUserAlreadyExist">Esta combinação de URL do servidor e nome de usuário já existe na sua lista</string>
   <string name="DetailsNotAvaiable">Detalhes das notícias não estão disponíveis</string>
   <string name="ErrorOnComment">Você não pode comentar esta atividade.</string>
   <string name="CannotLoadMoreActivities">Não é possível carregar antigas atividades. A lista está sendo atualizada.</string>
@@ -161,6 +163,12 @@
   <string name="MemoryWarning">A memória não está disponível ou não tem espaço livre suficiente.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Lembrar meu filtro</string>
+  <string-array name="SocialTabs">
+    <item id="AllUpdates">Todas as atualizações</item>
+    <item id="MyConnections">Minhas conexões</item>
+    <item id="MySpaces">Meus Espaços</item>
+    <item id="MyStatus">Meu Status</item>
+  </string-array>
 
   <!-- Welcome screen -->
   <string name="Slogan">Your social intranet, anywhere, anytime!</string>
@@ -237,11 +245,5 @@
   <string name="RedirectToLogin">Try again</string>
   <string name="LoginWarningMsg">Connection error</string>
 
-  <string-array name="SocialTabs">
-    <item id="AllUpdates">Todas as atualizações</item>
-    <item id="MyConnections">Minhas conexões</item>
-    <item id="MySpaces">Meus Espaços</item>
-    <item id="MyStatus">Meu Status</item>
-  </string-array>
 
 </resources>
