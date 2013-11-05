@@ -22,10 +22,10 @@
   <string name="NameOfTheServer">Name of the server</string>
   <string name="URLOfTheSerVer">URL of the server</string>
   <string name="CannotEditServer">The server can not be modified or deleted. It is currently in use. </string>
-  <string name="English">Inglés</string>
+  <string name="English">English</string>
   <string name="French">Francés</string>
   <string name="CompliantMessage">We cannot connect to a compatible Platform version at this URL, please contact your administrator.</string>
-  <string name="Delete">Borrar</string>
+  <string name="Delete">Delete</string>
   <string name="Copy">Copiar</string>
   <string name="Move">Cortar</string>
   <string name="Rename">Renombrar</string>
@@ -77,7 +77,7 @@
   <string name="PhotoLibrary">Photo Library </string>
   <string name="SelectedPhoto">Selected Image</string>
   <string name="AttachedPhoto">Attached Photo</string>
-  <string name="Warning">Aviso</string>
+  <string name="Warning">Warning</string>
   <string name="PostError">Error while posting an activity.</string>
   <string name="ErrorOnLike">You can not like this activity.</string>
   <string name="ConnectionError">The network can not be reached.</string>
