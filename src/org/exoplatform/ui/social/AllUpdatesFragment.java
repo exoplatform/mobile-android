@@ -29,10 +29,10 @@ import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import org.exoplatform.ui.HomeActivity;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
