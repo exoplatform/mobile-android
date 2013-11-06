@@ -16,6 +16,8 @@
  */
 package org.exoplatform.widget;
 
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.utils.SocialActivityUtil;
@@ -29,12 +31,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
+ * Represents sliding Item on Home screen
+ *
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com May
  * 22, 2012
  */
 public class HomeSocialItem extends LinearLayout {
 
   private static final String FONT_COLOR = "#FFFFFF";
+
+  private Context             mContext;
 
   private TextView            textViewName;
 
@@ -48,12 +54,17 @@ public class HomeSocialItem extends LinearLayout {
 
   private SocialActivityInfo  activityInfo;
 
+  private static final String TAG = "eXo____HomeSocialItem____";
+
+
   public HomeSocialItem(Context context) {
     super(context);
+    mContext = context;
   }
   
   public HomeSocialItem(Context context, SocialActivityInfo info) {
     super(context);
+    mContext = context;
     userName = info.getUserName();
     resource = context.getResources();
     activityInfo = info;
@@ -63,14 +74,20 @@ public class HomeSocialItem extends LinearLayout {
     activtyAvatar.setDefaultImageResource(R.drawable.default_avatar);
     textViewName = (TextView) view.findViewById(R.id.home_activity_name_txt);
     textViewMessage = (TextView) view.findViewById(R.id.home_activity_message_txt);
+
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inSampleSize = 4;
+    options.inPurgeable  = true;
+    options.inInputShareable = true;
+    activtyAvatar.setOptions(options);
     activtyAvatar.setUrl(info.getImageUrl());
 
     textViewName.setText(Html.fromHtml(userName));
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
     int imageId = SocialActivityUtil.getActivityTypeId(info.getType());
     setViewByType(imageId);
-
   }
+
 
   private void setViewByType(int typeId) {
     switch (typeId) {

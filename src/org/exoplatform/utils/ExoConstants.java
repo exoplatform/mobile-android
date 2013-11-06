@@ -42,7 +42,7 @@ public class ExoConstants {
 
   public static final int    COMPOSE_COMMENT_TYPE                  = 1;
 
-  public static final int    NUMBER_OF_ACTIVITY                    = 100;
+  public static final int    NUMBER_OF_ACTIVITY                    = 50;
 
   public static final int    NUMBER_OF_MORE_ACTIVITY               = 20;
 
@@ -58,7 +58,7 @@ public class ExoConstants {
 
   public static final int    REQUEST_ADD_PHOTO                     = 8;
 
-  public static final String PHOTO_ALBUM_IMAGE_TYPE                = "image/*";                                                   ;
+  public static final String PHOTO_ALBUM_IMAGE_TYPE                = "image/*";
 
   public static final String HTTP_PROTOCOL                         = "http";
 
