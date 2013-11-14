@@ -16,7 +16,7 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.widget.LoaderActionBarItem;
+//import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
@@ -79,7 +79,8 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
   
   @Override
   public SocialLoadTask getThisLoadTask() {
-  	return new MyConnectionLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+  	//return new MyConnectionLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+    return new MyConnectionLoadTask(getActivity());
   }
 
   public void setListAdapter() {
@@ -88,8 +89,14 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
 
   public class MyConnectionLoadTask extends SocialLoadTask {
 
+    /**
     public MyConnectionLoadTask(Context context, LoaderActionBarItem loader) {
       super(context, loader);
+    }
+    **/
+
+    public MyConnectionLoadTask(Context context) {
+      super(context);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package org.exoplatform.controller.social;
 
 import android.graphics.BitmapFactory;
-import greendroid.widget.LoaderActionBarItem;
+//import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -73,6 +73,7 @@ public class SocialDetailController {
     activityId = SocialDetailHelper.getInstance().getActivityId();
   }
 
+  /**
   public void onLoad(LoaderActionBarItem loader, boolean isLikeAction, int postion) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialDetailLoadTask.Status.FINISHED) {
@@ -82,6 +83,7 @@ public class SocialDetailController {
       new ConnectionErrorDialog(mContext).show();
     }
   }
+   **/
 
   public void onCancelLoad() {
     onCancelLikeLoad();
@@ -91,6 +93,7 @@ public class SocialDetailController {
     }
   }
 
+  /**
   public void onLikeLoad(LoaderActionBarItem loader, String id, int position) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLikeLoadTask == null || mLikeLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
@@ -100,6 +103,7 @@ public class SocialDetailController {
       new ConnectionErrorDialog(mContext).show();
     }
   }
+   **/
 
   public void onCancelLikeLoad() {
     if (mLikeLoadTask != null && mLikeLoadTask.getStatus() == LikeLoadTask.Status.RUNNING) {
@@ -236,8 +240,10 @@ public class SocialDetailController {
   /*
    * When user click on like button, only update the liker part UI
    */
+  /**
   public void onLikePress(LoaderActionBarItem loader, int pos) {
     onLikeLoad(loader, activityId, pos);
   }
+   **/
 
 }

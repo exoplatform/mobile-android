@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 import org.exoplatform.R;
@@ -18,7 +19,7 @@ public class SignUpActivity extends FragmentActivity {
     if (!WelcomeActivity.mIsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     super.onCreate(savedInstanceState);
-
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.signup);
 
     getSupportFragmentManager()

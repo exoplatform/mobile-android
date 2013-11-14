@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/menu_refresh"
+          android:orderInCategory="0"
+          android:title="@string/Refresh"
+          android:icon="@drawable/ic_action_refresh"
+          app:showAsAction="always" />
+
+    <item android:id="@+id/menu_settings"
+          android:title="@string/Settings"
+          android:orderInCategory="90"
+          app:showAsAction="ifRoom|collapseActionView" />
+
+    <item android:id="@+id/menu_sign_out"
+          android:title="@string/SignOut"
+          android:orderInCategory="91"
+          app:showAsAction="collapseActionView" />
+
+</menu>

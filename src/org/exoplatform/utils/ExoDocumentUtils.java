@@ -1,6 +1,6 @@
 package org.exoplatform.utils;
 
-import greendroid.util.Config;
+//import greendroid.util.Config;
 
 import java.io.File;
 import java.io.IOException;
@@ -427,7 +427,7 @@ public class ExoDocumentUtils {
               Element itemElement = (Element) itemNode;
               ExoFile file = new ExoFile();
               file.name = itemElement.getAttribute("name");
-              if (Config.GD_INFO_LOGS_ENABLED)
+              //if (Config.GD_INFO_LOGS_ENABLED)
                 Log.i(" Public file name", file.name);
               file.workspaceName = itemElement.getAttribute("workspaceName");
               file.driveName = file.name;

@@ -2,8 +2,9 @@ package org.exoplatform.ui;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import greendroid.util.Config;
-import greendroid.widget.ActionBarItem;
+import android.support.v7.app.ActionBarActivity;
+//import greendroid.util.Config;
+//import greendroid.widget.ActionBarItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.MyActionBar;
+//import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -36,7 +37,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class DocumentActivity extends MyActionBar {
+public class DocumentActivity
+    //extends MyActionBar {
+    extends ActionBarActivity {
+
   // add photo
   public static final int        ACTION_ADD_PHOTO = 0;
 
@@ -92,10 +96,14 @@ public class DocumentActivity extends MyActionBar {
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);
 
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.exofilesview);
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    //setTheme(R.style.Theme_eXo);
+
+    setTitle(getString(R.string.Documents));
+    //setActionBarContentView(R.layout.exofilesview);
+    setContentView(R.layout.exofilesview);
+
+    //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+
     _documentActivityInstance = this;
     init();
 
@@ -136,6 +144,7 @@ public class DocumentActivity extends MyActionBar {
 
   }
 
+  /**    TODO - replace
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
 
@@ -162,25 +171,27 @@ public class DocumentActivity extends MyActionBar {
     }
     return true;
   }
+   **/
 
+  // TODO
   public void addOrRemoveFileActionButton() {
     /*
      * If at the document level or driver level, make the action bar button
      * invisible
      */
     if (_fileForCurrentActionBar == null) {
-      getActionBar().removeItem(0);
+      //getActionBar().removeItem(0);
     } else {
       if (_fileForCurrentActionBar.name == null) {
-        getActionBar().removeItem(0);
+        //getActionBar().removeItem(0);
       } else if ("".equals(_fileForCurrentActionBar.name)
           || "".equals(_fileForCurrentActionBar.path)) {
-        getActionBar().removeItem(0);
+        //getActionBar().removeItem(0);
       } else {
-        if (getActionBar().getItem(0) == null) {
-          addActionBarItem();
-          getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
-        }
+        //if (getActionBar().getItem(0) == null) {
+          //addActionBarItem();
+          //getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
+        //}
       }
     }
   }
@@ -245,7 +256,7 @@ public class DocumentActivity extends MyActionBar {
   public void onLoad(String source, String destination, int action) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
-        if (Config.GD_INFO_LOGS_ENABLED)
+        //if (Config.GD_INFO_LOGS_ENABLED)
           Log.i("DocumentLoadTask", "onLoad");
         mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this, source, destination, action).execute();
       }
@@ -256,7 +267,7 @@ public class DocumentActivity extends MyActionBar {
 
   public void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == DocumentLoadTask.Status.RUNNING) {
-      if (Config.GD_INFO_LOGS_ENABLED)
+      //if (Config.GD_INFO_LOGS_ENABLED)
         Log.i("DocumentLoadTask", "onCancelLoad");
       mLoadTask.cancel(true);
       mLoadTask = null;

@@ -22,11 +22,11 @@
     <!-- SNAPSHOTS must be deployed in our private repository -->
     <exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
     <!-- Runtimes -->
-    <com.google.android.version>2.3.1</com.google.android.version>
+    <com.google.android.version>4.2.2_r2</com.google.android.version>
     <!-- Libraries -->
     <commons-lang.version>2.4</commons-lang.version>
     <!-- Default version of SDK to use -->
-    <android.sdk.platform>9</android.sdk.platform>
+    <android.sdk.platform>17</android.sdk.platform>
     <!-- Maven Plugins -->
     <maven-android-plugin.plugin-version>3.6.0</maven-android-plugin.plugin-version>
     <!-- Java version -->
@@ -35,10 +35,12 @@
     <version.release.plugin>2.2.1</version.release.plugin>
 	<version.buildnumber.plugin>1.0</version.buildnumber.plugin>
 	<android.support.version>r6</android.support.version>
+	<android.supportv4.version>19.0.0</android.supportv4.version>
+	<android.supportv7.version>19</android.supportv7.version>
 	<android.annotations.version>4.1.1.4</android.annotations.version>
 	<exo.social.client.version>1.0.0-alpha4-SNAPSHOT</exo.social.client.version>
 	<slf4j-android.version>1.6.1-RC1</slf4j-android.version>
-	<greendroid.version>67aa3ed</greendroid.version>
+	<!--<greendroid.version>67aa3ed</greendroid.version> -->
   </properties>
   
    <!-- Profiles definition for Android build -->
@@ -70,7 +72,7 @@
     </dependency>
     <!-- Dependency With Android -->
     <dependency>
-      <groupId>com.google.android</groupId>
+      <groupId>android</groupId>
       <artifactId>android</artifactId>
       <version>${com.google.android.version}</version>
       <scope>provided</scope>
@@ -88,22 +90,46 @@
       <scope>compile</scope>
     </dependency>
     <!-- Dependency With Greendroid library for Android -->
+    <!--
     <dependency>
       <groupId>com.greendroid</groupId>
       <artifactId>greendroid</artifactId>
       <version>${greendroid.version}</version>
       <type>apklib</type>
     </dependency>
+    -->
+    <!--
     <dependency>
   	  <groupId>com.google.android</groupId>
   	  <artifactId>support-v4</artifactId>
   	  <version>${android.support.version}</version>
     </dependency>
+    -->
+
+    <dependency>
+      <groupId>android.support</groupId>
+      <artifactId>compatibility-v4</artifactId>
+      <version>${android.supportv4.version}</version>
+    </dependency>
+
     <!-- Dependency with android annotations -->
     <dependency>
   	  <groupId>com.google.android</groupId>
   	  <artifactId>annotations</artifactId>
   	  <version>${android.annotations.version}</version>
+    </dependency>
+    <!-- Dependency with android support v7 -->
+    <dependency>
+      <groupId>android.support</groupId>
+      <artifactId>compatibility-v7-appcompat</artifactId>
+      <version>${android.supportv7.version}</version>
+      <type>apklib</type>
+    </dependency>
+    <dependency>
+      <groupId>android.support</groupId>
+      <artifactId>compatibility-v7-appcompat</artifactId>
+      <version>${android.supportv7.version}</version>
+      <type>jar</type>
     </dependency>
   </dependencies>
   
@@ -161,7 +187,7 @@
             <jvmArgument>-XX:MaxPermSize=256M</jvmArgument>
           </dexJvmArguments>
           <extractDuplicates>true</extractDuplicates>
-          <sdk><platform>9</platform></sdk>
+          <sdk><platform>17</platform></sdk>
         </configuration>
         <extensions>true</extensions>
         <executions>

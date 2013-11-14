@@ -126,7 +126,7 @@ public class RetangleImageView extends ImageView {
       // Draw the output_bitmap to image view
       canvas.drawBitmap(output_bitmap, 0, 0, null);
     } catch (OutOfMemoryError e) {
-      if (greendroid.util.Config.GD_ERROR_LOGS_ENABLED)
+      //if (greendroid.util.Config.GD_ERROR_LOGS_ENABLED)
         Log.e("RetangleImageView", e.getMessage());
     }
   }

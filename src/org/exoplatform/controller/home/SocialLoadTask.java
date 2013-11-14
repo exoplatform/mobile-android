@@ -1,7 +1,7 @@
 package org.exoplatform.controller.home;
 
 import android.util.Log;
-import greendroid.widget.LoaderActionBarItem;
+//import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
@@ -39,7 +39,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   private String              contentString;
 
-  private LoaderActionBarItem loaderItem;
+  //private LoaderActionBarItem loaderItem;
 
   private int                 feedType = 0;
   
@@ -47,12 +47,15 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   
   protected ActivityService<RestActivity> activityService;
 
+  private AsyncTaskListener mListener;
+
   private static final String TAG = "eXo____SocialLoadTask____";
 
-  public SocialLoadTask(Context context, LoaderActionBarItem loader) {
+  public SocialLoadTask(Context context) {
+      //, LoaderActionBarItem loader) {
     mContext = context;
-    loaderItem = loader;
-    changeLanguage();
+    // loaderItem = loader;
+    //changeLanguage();
     activityService = SocialServiceHelper.getInstance().activityService;
   }
 
@@ -64,22 +67,20 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   }
 
-  @Override
-  public void onPreExecute() {
-    if (loaderItem != null)
-      loaderItem.setLoading(true);
-  }
-  
+
   /**
    * Get the list of RestActivity from the Social REST service.
+   *
    * @param identity The RestIdentity of the user.
    * @param params The parameters to send to the REST service.
    * @return The list of RestActivity.
    * @throws SocialClientLibException
    */
   protected abstract RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException;
+
   /**
    * Get the list of SocialActivity for the current stream.
+   *
    * @return the list of SocialActivityInfo.
    */
   protected abstract ArrayList<SocialActivityInfo> getSocialActivityList();
@@ -156,24 +157,44 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   @Override
   public void onPostExecute(ArrayList<SocialActivityInfo> result) {
+
+    if (mListener != null) mListener.onLoadingSocialActivitiesFinished(result);
+
+    /** Propagate to setResult on child */
+    if (result != null) setResult(result);
+
+    /**
     if (result != null) {
       setResult(result);
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
-    if (loaderItem != null)
-      loaderItem.setLoading(false);
+    **/
+
+    //if (loaderItem != null) loaderItem.setLoading(false);
   }
 
   public void setResult(ArrayList<SocialActivityInfo> result) {
+    Log.i(TAG, "setResult");
+
     /** load activities for view flipper in home */
-    if (feedType == HomeController.FLIPPER_VIEW && HomeActivity.homeActivity != null)
-      HomeActivity.homeActivity.setSocialInfo(result);
+    //if (feedType == HomeController.FLIPPER_VIEW && HomeActivity.homeActivity != null)
+    //  HomeActivity.homeActivity.setSocialInfo(result);
 
     if (isLoadingMoreActivities) {
   	  SocialTabsActivity.instance.number_of_activity += result.size();
   	  isLoadingMoreActivities = false;
     }
+  }
+
+
+  public void setListener(AsyncTaskListener listener) {
+    mListener = listener;
+  }
+
+  public interface AsyncTaskListener {
+
+    void onLoadingSocialActivitiesFinished(ArrayList<SocialActivityInfo> result);
   }
 }

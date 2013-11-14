@@ -1,6 +1,6 @@
 package org.exoplatform.utils;
 
-import greendroid.util.Config;
+//import greendroid.util.Config;
 
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
@@ -365,7 +365,7 @@ public class SocialActivityUtil {
           textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
       } catch (Exception e) {
-        if (Config.GD_ERROR_LOGS_ENABLED)
+        //if (Config.GD_ERROR_LOGS_ENABLED)
           Log.e("Exception", "LinkMovementMethod error!");
       }
     }

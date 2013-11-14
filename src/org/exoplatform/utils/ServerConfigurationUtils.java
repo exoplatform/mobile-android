@@ -7,8 +7,6 @@
 
 package org.exoplatform.utils;
 
-import greendroid.util.Config;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -192,7 +190,7 @@ public class ServerConfigurationUtils {
 
       }
     } catch (XmlPullParserException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("XmlPullParserException", "Cannot parse XML");
     }
 
@@ -279,13 +277,13 @@ public class ServerConfigurationUtils {
       }
 
     } catch (IOException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("IOException", "getServerListWithFileName");
     } catch (ParserConfigurationException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("ParserConfigurationException", "getServerListWithFileName");
     } catch (SAXException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("SAXException", "getServerListWithFileName");
     }
 
@@ -337,15 +335,15 @@ public class ServerConfigurationUtils {
       Log.i(TAG, "File not found");
       return arrServerList;
     } catch (IOException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("IOException", "getServerListWithFileName");
       return arrServerList;
     } catch (ParserConfigurationException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("ParserConfigurationException", "getServerListWithFileName");
       return arrServerList;
     } catch (SAXException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("SAXException", "getServerListWithFileName");
       return arrServerList;
     } catch (Exception e) {
@@ -432,13 +430,13 @@ public class ServerConfigurationUtils {
       Log.i(TAG, "File not found");
       return null;
     } catch (IOException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("IOException", "getServerListFromOldConfigFile");
     } catch (ParserConfigurationException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("ParserConfigurationException", "getServerListFromOldConfigFile");
     } catch (SAXException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("SAXException", "getServerListFromOldConfigFile");
     } catch (Exception e) {
       Log.e("Exception", "getServerListFromOldConfigFile - decryption exception");

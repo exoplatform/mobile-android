@@ -70,4 +70,6 @@
     <dimen name="title_txt_size">16sp</dimen>
     <dimen name="label_txt_size">14sp</dimen>
 
+    <dimen name="action_button_min_width">56dp</dimen>
+
 </resources>

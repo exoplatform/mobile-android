@@ -1,7 +1,7 @@
 package org.exoplatform.controller.home;
 
 import android.util.Log;
-import greendroid.widget.LoaderActionBarItem;
+//import greendroid.widget.LoaderActionBarItem;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,18 +55,22 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
 
   private HomeController                homeController;
 
-  private LoaderActionBarItem           loaderItem;
+  //private LoaderActionBarItem           loaderItem;
+
+  private AsyncTaskListener mListener;
+
 
   private static final String TAG = "eXo____SocialServiceLoadTask____";
 
 
-  public SocialServiceLoadTask(Context context,
-                               HomeController controller,
-                               LoaderActionBarItem loader) {
+  public SocialServiceLoadTask(Context context
+                               //, HomeController controller,
+                               //LoaderActionBarItem loader) {
+  ) {
     mContext = context;
-    homeController = controller;
-    loaderItem = loader;
-    changeLanguage();
+    //homeController = controller;
+    //loaderItem = loader;
+    //changeLanguage();
   }
 
   private void changeLanguage() {
@@ -79,7 +83,7 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
 
   @Override
   public void onPreExecute() {
-    loaderItem.setLoading(true);
+    //loaderItem.setLoading(true);
   }
 
   @SuppressWarnings({ "deprecation", "unchecked" })
@@ -139,17 +143,40 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
       SocialServiceHelper.getInstance().activityService = mActivityService;
       SocialServiceHelper.getInstance().identityService = mIdentityService;
       SocialServiceHelper.getInstance().userProfile = result;
+
+      /**
       if (HomeActivity.homeActivity != null) {
         HomeActivity.homeActivity.setProfileInfo(result);
       }
+      **/
 
       /** Load activities for view flipper */
-      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
+      //homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
 
-    } else {
-      loaderItem.setLoading(false);
-      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
-      dialog.show();
+    //} else {
+      //loaderItem.setLoading(false);
+      //WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+      //dialog.show();
     }
+
+    if (mListener != null) mListener.onLoadingSocialServiceFinished(result);
+  }
+
+  /**
+  @Override
+  public void onPostExecute(Integer result) {
+    Log.d(TAG, "onPostExecute - login result: " + result);
+
+    if (mListener != null) mListener.onLoadingSocialServiceFinished(result);
+  }
+  **/
+
+  public void setListener(AsyncTaskListener listener) {
+    mListener = listener;
+  }
+
+  public interface AsyncTaskListener {
+
+    void onLoadingSocialServiceFinished(String[] result);
   }
 }

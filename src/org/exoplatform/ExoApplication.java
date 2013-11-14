@@ -15,12 +15,13 @@
  */
 package org.exoplatform;
 
-import greendroid.app.GDApplication;
+//import greendroid.app.GDApplication;
 
 import org.exoplatform.ui.HomeActivity;
 
 import android.content.Intent;
 import android.net.Uri;
+import org.exoplatform.utils.GDApplication;
 
 public class ExoApplication extends GDApplication {
   private String appUrl = "http://github.com/cyrilmottier/GreenDroid";

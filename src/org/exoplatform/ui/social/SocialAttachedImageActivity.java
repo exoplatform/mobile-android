@@ -1,17 +1,20 @@
 package org.exoplatform.ui.social;
 
-import greendroid.widget.ActionBarItem;
+//import greendroid.widget.ActionBarItem;
 
+import android.support.v7.app.ActionBarActivity;
 import org.exoplatform.R;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.image.SocialImageLoader;
-import org.exoplatform.widget.MyActionBar;
+//import org.exoplatform.widget.MyActionBar;
 
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.ImageView;
 
-public class SocialAttachedImageActivity extends MyActionBar {
+public class SocialAttachedImageActivity
+    extends ActionBarActivity {
+    //extends MyActionBar {
   private ImageView imageView;
 
   private String    imageUrl;
@@ -21,7 +24,10 @@ public class SocialAttachedImageActivity extends MyActionBar {
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.social_attached_image_layout);
+
+    //setActionBarContentView(R.layout.social_attached_image_layout);
+    setContentView(R.layout.social_attached_image_layout);
+
     if (savedInstanceState != null)
       finish();
     else {
@@ -46,6 +52,8 @@ public class SocialAttachedImageActivity extends MyActionBar {
     return name;
   }
 
+
+  /**   TODO replace
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
@@ -63,6 +71,7 @@ public class SocialAttachedImageActivity extends MyActionBar {
     }
     return true;
   }
+   **/
 
   @Override
   public void onBackPressed() {

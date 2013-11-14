@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/login_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/login_background"
     android:orientation="vertical" >
 
@@ -30,14 +30,14 @@
         <!-- Account panel -->
         <org.exoplatform.ui.login.AccountPanel
             android:id="@+id/login_account_panel"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/login_server_btn"
             android:layout_marginTop="-4dp"
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -47,7 +47,7 @@
 
                 <EditText
                     android:id="@+id/EditText_UserName"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
@@ -63,7 +63,7 @@
 
                 <EditText
                     android:id="@+id/EditText_Password"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
@@ -82,7 +82,7 @@
             <!-- Login button -->
             <Button
                 android:id="@+id/Button_Login"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_xs"
                 android:layout_marginLeft="24dp"
@@ -99,7 +99,7 @@
         <!-- Server panel -->
         <org.exoplatform.ui.login.ServerPanel
             android:id="@+id/login_server_panel"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="239dp"
             android:layout_below="@+id/login_server_btn"
             android:layout_marginLeft="10dp"
@@ -110,7 +110,7 @@
 
             <ListView
                 android:id="@+id/ListView_Servers"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 android:layout_marginLeft="@dimen/margin_xxs"

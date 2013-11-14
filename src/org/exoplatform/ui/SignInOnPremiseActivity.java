@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,7 +39,7 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
     if (!WelcomeActivity.mIsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     super.onCreate(savedInstanceState);
-
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.onpremise);
 
     mLoginBtn = (Button) findViewById(R.id.onpremise_login_btn);

@@ -1,11 +1,12 @@
 package org.exoplatform.ui;
 
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
-import greendroid.widget.LoaderActionBarItem;
+//import greendroid.widget.ActionBarItem;
+//import greendroid.widget.ActionBarItem.Type;
+//import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
+import android.support.v7.app.ActionBarActivity;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.social.SocialDetailActivity;
@@ -15,7 +16,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.CompatibleFileOpenDialog;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.MyActionBar;
+//import org.exoplatform.widget.MyActionBar;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -31,7 +32,10 @@ import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class WebViewActivity extends MyActionBar {
+public class WebViewActivity
+    //extends MyActionBar {
+    extends ActionBarActivity {
+
   private static final String ACCOUNT_SETTING = "account_setting";
 
   private WebViewLoadTask     mLoadTask;
@@ -44,15 +48,19 @@ public class WebViewActivity extends MyActionBar {
 
   private String              contentType;
 
-  private LoaderActionBarItem loaderItem;
+  //private LoaderActionBarItem loaderItem;
 
   public void onCreate(Bundle icicle) {
 
     super.onCreate(icicle);    
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setActionBarContentView(R.layout.webview);
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    addActionBarItem(Type.Refresh, R.id.action_bar_refresh);
+
+    //setActionBarContentView(R.layout.webview);
+    setContentView(R.layout.webview);
+
+    //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    //addActionBarItem(Type.Refresh, R.id.action_bar_refresh);
+
     /*
      * restore the previous state
      */
@@ -106,27 +114,29 @@ public class WebViewActivity extends MyActionBar {
       public void onProgressChanged(WebView view, int progress) {
         setTitle(getResources().getString(R.string.LoadingData));
         activity.setProgress(progress * 100);
-        ActionBarItem item = getActionBar().getItem(0);
-        if (item instanceof LoaderActionBarItem) {
-          loaderItem = (LoaderActionBarItem) item;
-        }
-        if (loaderItem != null) {
-          loaderItem.setLoading(true);
-        }
-        if (progress == 100) {
-          setTitle(_titlebar);
-          getActionBar().removeItem(0);
-          if (contentType != null) {
-            addActionBarItem();
-            getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
-          }
 
-        }
+        //ActionBarItem item = getActionBar().getItem(0);
+        //if (item instanceof LoaderActionBarItem) {
+        //  loaderItem = (LoaderActionBarItem) item;
+        //}
+        //if (loaderItem != null) {
+        //  loaderItem.setLoading(true);
+        //}
+        //if (progress == 100) {
+        //  setTitle(_titlebar);
+        //  getActionBar().removeItem(0);
+        //  if (contentType != null) {
+        //    addActionBarItem();
+        //    getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
+        //  }
+
+        //}
 
       }
 
     });
-    _wvGadget.setWebViewClient(new NewsWebviewClient());
+
+  _wvGadget.setWebViewClient(new NewsWebviewClient());
     onLoad();
 
   }
@@ -146,6 +156,7 @@ public class WebViewActivity extends MyActionBar {
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
   }
 
+  /**   TODO replace
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 
     switch (position) {
@@ -180,6 +191,7 @@ public class WebViewActivity extends MyActionBar {
 
     return true;
   }
+   **/
 
   private void setupCookies(String url) {
     CookieSyncManager.createInstance(this);
@@ -228,8 +240,8 @@ public class WebViewActivity extends MyActionBar {
     @Override
     protected void onPreExecute() {
       setTitle(getResources().getString(R.string.LoadingData));
-      loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-      loaderItem.setLoading(true);
+      //loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+      //loaderItem.setLoading(true);
     }
 
     @Override
@@ -244,7 +256,7 @@ public class WebViewActivity extends MyActionBar {
       if (result) {
         _wvGadget.loadUrl(_url);
       } else {
-        getActionBar().removeItem(0);
+        //getActionBar().removeItem(0);
         finish();
       }
 

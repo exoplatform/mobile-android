@@ -1,6 +1,6 @@
 package org.exoplatform.controller.social;
 
-import greendroid.widget.LoaderActionBarItem;
+//import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -38,11 +38,11 @@ import android.view.View;
 public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
   private RestActivity                 selectedRestActivity;
 
-  private LinkedList<SocialLikeInfo>   likeLinkedList    = new LinkedList<SocialLikeInfo>();
+  private LinkedList<SocialLikeInfo>   mLikeLinkedList    = new LinkedList<SocialLikeInfo>();
 
-  private ArrayList<SocialCommentInfo> socialCommentList = new ArrayList<SocialCommentInfo>();
+  private ArrayList<SocialCommentInfo> mSocialCommentList = new ArrayList<SocialCommentInfo>();
 
-  private LoaderActionBarItem          loaderItem;
+  //private LoaderActionBarItem          loaderItem;
 
   private Context                      mContext;
 
@@ -58,30 +58,28 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   private String                       activityType;
 
-  private SocialActivityInfo           streamInfo;
+  private SocialActivityInfo           mActivityInfo;
 
   private boolean                      hasContent        = false;
 
   private boolean                      isLikeAction      = false;
 
-  private int                          currentPosition;
+  private int                          mActivityPosition;
+
+  private AsyncTaskListener  mListener;
 
   public SocialDetailLoadTask(Context context,
-                              SocialDetailController controller,
-                              LoaderActionBarItem loader,
+                              //SocialDetailController controller,
+                              //LoaderActionBarItem loader,
                               int pos) {
     mContext = context;
-    detailController = controller;
-    loaderItem = loader;
-    currentPosition = pos;
+    //detailController = controller;
+    //loaderItem = loader;
+    mActivityPosition = pos;
     changeLanguage();
 
   }
 
-  @Override
-  public void onPreExecute() {
-    loaderItem.setLoading(true);
-  }
 
   @Override
   public Integer doInBackground(Boolean... params) {
@@ -98,20 +96,20 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       selectedRestActivity = activityService.get(activityId, queryParams);
       SocialDetailHelper.getInstance().setLiked(false);
 
-      streamInfo = new SocialActivityInfo();
+      mActivityInfo = new SocialActivityInfo();
       RestProfile restProfile = selectedRestActivity.getPosterIdentity().getProfile();
-      streamInfo.setActivityId(selectedRestActivity.getId());
-      streamInfo.setImageUrl(restProfile.getAvatarUrl());
-      streamInfo.setUserName(restProfile.getFullName());
-      streamInfo.setTitle(selectedRestActivity.getTitle());
-      streamInfo.setBody(selectedRestActivity.getBody());
-      streamInfo.setPostedTime(selectedRestActivity.getPostedTime());
-      streamInfo.setLikeNumber(selectedRestActivity.getTotalNumberOfLikes());
-      streamInfo.setCommentNumber(selectedRestActivity.getTotalNumberOfComments());
+      mActivityInfo.setActivityId(selectedRestActivity.getId());
+      mActivityInfo.setImageUrl(restProfile.getAvatarUrl());
+      mActivityInfo.setUserName(restProfile.getFullName());
+      mActivityInfo.setTitle(selectedRestActivity.getTitle());
+      mActivityInfo.setBody(selectedRestActivity.getBody());
+      mActivityInfo.setPostedTime(selectedRestActivity.getPostedTime());
+      mActivityInfo.setLikeNumber(selectedRestActivity.getTotalNumberOfLikes());
+      mActivityInfo.setCommentNumber(selectedRestActivity.getTotalNumberOfComments());
       activityType = selectedRestActivity.getType();
-      streamInfo.setType(activityType);
-      streamInfo.restActivityStream = selectedRestActivity.getActivityStream();
-      streamInfo.templateParams = selectedRestActivity.getTemplateParams();
+      mActivityInfo.setType(activityType);
+      mActivityInfo.restActivityStream = selectedRestActivity.getActivityStream();
+      mActivityInfo.templateParams = selectedRestActivity.getTemplateParams();
 
       List<RestIdentity> likeList = selectedRestActivity.getAvailableLikes();
       List<RestComment> commentList = selectedRestActivity.getAvailableComments();
@@ -123,12 +121,12 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
           String identity = like.getId();
           if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().userIdentity)) {
             socialLike.setLikeName(youText);
-            likeLinkedList.addFirst(socialLike);
+            mLikeLinkedList.addFirst(socialLike);
             SocialDetailHelper.getInstance().setLiked(true);
           } else {
             String likeName = like.getProfile().getFullName();
             socialLike.setLikeName(likeName);
-            likeLinkedList.add(socialLike);
+            mLikeLinkedList.add(socialLike);
           }
 
         }
@@ -146,7 +144,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
           socialComment.setCommentTitle(comment.getText());
           socialComment.setPostedTime(comment.getPostedTime());
 
-          socialCommentList.add(socialComment);
+          mSocialCommentList.add(socialComment);
         }
       }
 
@@ -160,51 +158,35 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   @Override
   public void onPostExecute(Integer result) {
-    SocialDetailsWarningDialog dialog;
-    if (result == 1) {
-      hasContent = true;
-      detailController.setComponentInfo(streamInfo);
-      detailController.createCommentList(socialCommentList);
-      detailController.setLikeInfoText(likeLinkedList);
-      detailController.setLikedInfo(likeLinkedList);
-      if (isLikeAction) {
-        if (SocialTabsActivity.instance != null) {
-          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
-          switch (tabId) {
-          case SocialTabsActivity.ALL_UPDATES:
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                      true,
-                                                      currentPosition);
-            break;
-          case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                         true,
-                                                         currentPosition);
-            break;
-          case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
-            break;
-          case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
-            break;
-          }
-        }
-      }
-    } else {
-      dialog = new SocialDetailsWarningDialog(mContext,
-                                              titleString,
-                                              detailsErrorStr,
-                                              okString,
-                                              hasContent);
-      dialog.show();
-    }
-    loaderItem.setLoading(false);
-    SocialDetailActivity.socialDetailActivity.startScreen.setVisibility(View.GONE);
 
+    if (mListener != null) mListener.onLoadingActivityFinished(result, mActivityInfo, mSocialCommentList, mLikeLinkedList);
+
+    if (result == 1 && isLikeAction && SocialTabsActivity.instance != null) {
+
+      int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+      switch (tabId) {
+        case SocialTabsActivity.ALL_UPDATES:
+          AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+              true,
+              mActivityPosition);
+          break;
+        case SocialTabsActivity.MY_CONNECTIONS:
+          MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+              true,
+              mActivityPosition);
+          break;
+        case SocialTabsActivity.MY_SPACES:
+          MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+              true,
+              mActivityPosition);
+          break;
+        case SocialTabsActivity.MY_STATUS:
+          MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+              true,
+              mActivityPosition);
+          break;
+      }
+    }
   }
 
   private void changeLanguage() {
@@ -216,4 +198,15 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   }
 
+
+  public void setListener(AsyncTaskListener listener) {
+    mListener = listener;
+  }
+
+  public interface AsyncTaskListener {
+
+    void onLoadingActivityFinished(int result, SocialActivityInfo activityInfo,
+                                   ArrayList<SocialCommentInfo> socialCommentList,
+                                   LinkedList<SocialLikeInfo> likeLinkedList);
+  }
 }

@@ -17,7 +17,7 @@
 package org.exoplatform.widget;
 
 import android.graphics.*;
-import greendroid.widget.AsyncImageView;
+//import greendroid.widget.AsyncImageView;
 
 import org.exoplatform.R;
 
@@ -30,6 +30,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.animation.AnimationUtils;
+import org.exoplatform.utils.AsyncImageView;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun

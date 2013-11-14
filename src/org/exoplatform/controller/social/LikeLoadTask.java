@@ -16,12 +16,14 @@
  */
 package org.exoplatform.controller.social;
 
-import greendroid.widget.LoaderActionBarItem;
+//import greendroid.widget.LoaderActionBarItem;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.exoplatform.R;
+import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
@@ -60,26 +62,28 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
 
   private String                 detailsErrorStr;
 
-  private SocialDetailController detailController;
+  //private SocialDetailController detailController;
 
-  private LoaderActionBarItem    loaderItem;
+  //private LoaderActionBarItem    loaderItem;
 
   private int                    currentPosition;
 
+  private AsyncTaskListener mListener;
+
   public LikeLoadTask(Context context,
-                      SocialDetailController controller,
-                      LoaderActionBarItem loader,
+                      //SocialDetailController controller,
+                      //LoaderActionBarItem loader,
                       int pos) {
     mContext = context;
-    detailController = controller;
-    loaderItem = loader;
+    //detailController = controller;
+    //loaderItem = loader;
     currentPosition = pos;
     changeLanguage();
   }
 
   @Override
   protected void onPreExecute() {
-    loaderItem.setLoading(true);
+    //loaderItem.setLoading(true);
   }
 
   @Override
@@ -89,7 +93,7 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
       boolean liked = SocialDetailHelper.getInstance().getLiked();
       RestActivity activity = SocialServiceHelper.getInstance().activityService.get(activityId);
 
-      if (liked == true) {
+      if (liked) {
         SocialServiceHelper.getInstance().activityService.unlike(activity);
         SocialDetailHelper.getInstance().setLiked(false);
       } else {
@@ -131,15 +135,21 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
 
   @Override
   protected void onCancelled() {
-    loaderItem.setLoading(false);
+    //loaderItem.setLoading(false);
   }
 
   @Override
   protected void onPostExecute(LinkedList<SocialLikeInfo> result) {
+
+    if (mListener != null) mListener.onLoadingLikeListFinished(result);
+
+    /**
     if (result != null) {
       detailController.setLikedState();
       detailController.setLikeInfoText(result);
       detailController.setLikedInfo(result);
+
+
       if (SocialTabsActivity.instance != null) {
         int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
         switch (tabId) {
@@ -173,7 +183,9 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
                                                                          false);
       dialog.show();
     }
-    loaderItem.setLoading(false);
+     **/
+
+    //loaderItem.setLoading(false);
   }
 
   private void changeLanguage() {
@@ -185,4 +197,13 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
 
   }
 
+
+  public void setListener(AsyncTaskListener listener) {
+    mListener = listener;
+  }
+
+  public interface AsyncTaskListener {
+
+    void onLoadingLikeListFinished(LinkedList<SocialLikeInfo> result);
+  }
 }

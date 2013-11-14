@@ -16,19 +16,25 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
-import greendroid.widget.LoaderActionBarItem;
+import android.support.v7.app.ActionBarActivity;
+//import greendroid.widget.ActionBarItem;
+//import greendroid.widget.ActionBarItem.Type;
+//import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import org.exoplatform.R;
+import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
+import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.MyActionBar;
+//import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,12 +44,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import org.exoplatform.widget.WarningDialog;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
  * 23, 2012
  */
-public class SocialTabsActivity extends MyActionBar {
+public class SocialTabsActivity
+    //extends MyActionBar {
+    extends ActionBarActivity
+    implements SocialLoadTask.AsyncTaskListener  {
 
   public static final int              ALL_UPDATES             = 0;
 
@@ -71,7 +81,7 @@ public class SocialTabsActivity extends MyActionBar {
 
   public ArrayList<SocialActivityInfo> socialList;
 
-  public LoaderActionBarItem           loaderItem;
+  //public LoaderActionBarItem           loaderItem;
 
   public int                           number_of_activity;
 
@@ -83,6 +93,8 @@ public class SocialTabsActivity extends MyActionBar {
 
   public static SocialTabsActivity     instance;
 
+  private Menu mOptionsMenu;
+
   private static final String TAG = "eXo____SocialTabsActivity____";
 
 
@@ -90,14 +102,17 @@ public class SocialTabsActivity extends MyActionBar {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    setActionBarContentView(R.layout.social_activity_tabs);
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    addActionBarItem(Type.Refresh);
-    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
-    addActionBarItem();
-    getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
-    String title = getString(R.string.ActivityStream);
-    setTitle(title);
+
+    //setActionBarContentView(R.layout.social_activity_tabs);
+    setContentView(R.layout.social_activity_tabs);
+
+    //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    //addActionBarItem(Type.Refresh);
+    //getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
+    //addActionBarItem();
+    //getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
+
+    setTitle(getString(R.string.ActivityStream));
 
     if (savedInstanceState != null) {
       number_of_activity = savedInstanceState.getInt(NUMBER_OF_ACTIVITY);
@@ -113,7 +128,7 @@ public class SocialTabsActivity extends MyActionBar {
       number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
     }
 
-    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+    //loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
 
     TAB_NAMES = getResources().getStringArray(R.array.SocialTabs);
     mPager = (ViewPager) findViewById(R.id.pager);
@@ -129,6 +144,79 @@ public class SocialTabsActivity extends MyActionBar {
       mPager.setCurrentItem(savedIndex);
     }
   }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    Log.i(TAG, "onCreateOptionsMenu");
+    getMenuInflater().inflate(R.menu.social, menu);
+    mOptionsMenu = menu;
+    menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_indeterminate_progress);
+    return true;
+  }
+
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+
+      /** Click on Refresh */
+      case R.id.menu_refresh:
+
+        int tabId = mPager.getCurrentItem();
+        switch (tabId) {
+
+          case ALL_UPDATES:
+            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+            break;
+
+          case MY_CONNECTIONS:
+            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+            break;
+
+          case MY_SPACES:
+            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+            break;
+
+          case MY_STATUS:
+            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+            break;
+        }
+        return true;
+
+      case R.id.menu_settings:
+        redirectToSetting();
+        break;
+
+      case R.id.menu_add:
+        redirectToComposeMessage();
+        return true;
+    }
+
+    return super.onOptionsItemSelected(item);
+  }
+
+
+  /**
+   * Change state of refresh icon on action bar
+   *
+   * @param refreshing
+   */
+  public void setRefreshActionButtonState(boolean refreshing) {
+    Log.i(TAG, "setRefreshActionButtonState: " + refreshing);
+
+    if (mOptionsMenu == null) return ;
+    final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_refresh);
+    Log.i(TAG, "setRefreshActionButtonState - refreshItem: " + refreshItem);
+    if (refreshItem == null) return ;
+
+    //boolean currentState = refreshItem.getActionView() != null;
+
+    if (refreshing)
+      refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+    else
+      refreshItem.setActionView(null);
+  }
+
 
   @Override
   protected void onSaveInstanceState(Bundle outState) {
@@ -162,6 +250,34 @@ public class SocialTabsActivity extends MyActionBar {
     instance = null;
   }
 
+  @Override
+  public void onLoadingSocialActivitiesFinished(ArrayList<SocialActivityInfo> result) {
+    Log.i(TAG, "onLoadingSocialActivitiesFinished");
+    setRefreshActionButtonState(false);
+
+    if (result == null) {
+      WarningDialog dialog = new WarningDialog(this, getString(R.string.OK),
+          getString(R.string.Warning), getString(R.string.LoadingDataError));
+      dialog.show();
+      return ;
+    }
+  }
+
+  private void redirectToSetting() {
+    Intent next = new Intent(this, SettingActivity.class);
+    next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.PERSONAL_TYPE);
+    startActivity(next);
+  }
+
+
+  private void redirectToComposeMessage() {
+    Intent intent = new Intent(this, ComposeMessageActivity.class);
+    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_POST_TYPE);
+    startActivity(intent);
+  }
+
+  /** TODO replace
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
@@ -199,7 +315,9 @@ public class SocialTabsActivity extends MyActionBar {
     return true;
 
   }
+  **/
 
+  /**===  FragmentPager Adapter for tabs  ===**/
   private class SocialTabsAdapter extends FragmentPagerAdapter {
 
     public SocialTabsAdapter(FragmentManager fm) {
@@ -209,20 +327,26 @@ public class SocialTabsActivity extends MyActionBar {
     @Override
     public Fragment getItem(int position) {
       ActivityStreamFragment fragment = null;
+
       switch (position) {
-      case ALL_UPDATES:
-        fragment = AllUpdatesFragment.getInstance();
-        break;
-      case MY_CONNECTIONS:
-        fragment = MyConnectionsFragment.getInstance();
-        break;
-      case MY_SPACES:
-        fragment = MySpacesFragment.getInstance();
-        break;
-      case MY_STATUS:
-        fragment = MyStatusFragment.getInstance();
-        break;
+
+        case ALL_UPDATES:
+          fragment = AllUpdatesFragment.getInstance();
+          break;
+
+        case MY_CONNECTIONS:
+          fragment = MyConnectionsFragment.getInstance();
+          break;
+
+        case MY_SPACES:
+          fragment = MySpacesFragment.getInstance();
+          break;
+
+        case MY_STATUS:
+          fragment = MyStatusFragment.getInstance();
+          break;
       }
+
       return fragment;
     }
 

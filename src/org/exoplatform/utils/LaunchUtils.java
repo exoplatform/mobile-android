@@ -2,7 +2,7 @@ package org.exoplatform.utils;
 
 import android.app.Activity;
 import android.content.Intent;
-import greendroid.util.Config;
+//import greendroid.util.Config;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -115,7 +115,7 @@ public class LaunchUtils {
       String appVer = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
       ServerSettingHelper.getInstance().setApplicationVersion(appVer);
     } catch (NameNotFoundException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
+      //if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("NameNotFoundException", "Error of getting package information!");
     }
   }

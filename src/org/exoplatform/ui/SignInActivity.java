@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +38,7 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
     if (!WelcomeActivity.mIsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     super.onCreate(savedInstanceState);
-
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.signin);
 
     mLoginBtn = (Button) findViewById(R.id.signin_login_btn);

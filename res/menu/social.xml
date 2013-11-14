@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/menu_refresh"
+          android:title="@string/Refresh"
+          android:icon="@drawable/ic_action_refresh"
+          android:orderInCategory="0"
+          app:showAsAction="always" />
+
+    <item android:id="@+id/menu_add"
+          android:icon="@drawable/ic_action_new"
+          android:title="@string/Add"
+          android:orderInCategory="1"
+          app:showAsAction="ifRoom|collapseActionView" />
+
+    <item android:id="@+id/menu_settings"
+          android:orderInCategory="90"
+          android:title="@string/Settings"
+          app:showAsAction="ifRoom|collapseActionView" />
+
+</menu>

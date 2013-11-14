@@ -1,6 +1,6 @@
 package org.exoplatform.controller.dashboard;
 
-import greendroid.image.ImageProcessor;
+//import greendroid.image.ImageProcessor;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ImageProcessor;
 import org.exoplatform.widget.ShaderImageView;
 
 import android.content.Context;
@@ -167,5 +168,6 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
     mContext.startActivity(intent);
 
   }
+
 
 }

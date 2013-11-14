@@ -228,6 +228,11 @@
   <string name="RedirectToLogin">Try again</string>
   <string name="LoginWarningMsg">Connection error</string>
 
+  <!-- Action bar -->
+  <string name="Add">Add</string>
+  <string name="Refresh">Refresh</string>
+  <string name="SignOut">Sign Out</string>
+
 
     <string-array name="SocialTabs">
     <item>All Updates</item>

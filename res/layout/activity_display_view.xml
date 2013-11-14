@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Activity details layout-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="#DCDCDCDC"
         android:orientation="vertical" >
 
         <ScrollView
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:fadingEdge="none"
             android:fillViewport="true" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
 
                     <LinearLayout
                         android:id="@+id/social_detail_wrap_layout"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:background="#F8F8F8F8"
@@ -41,7 +41,7 @@
 
                     <RelativeLayout
                         android:id="@+id/detail_likers_layout_warpper"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-16dip"
                         android:background="@drawable/detail_likers_background_selector"
@@ -55,7 +55,7 @@
                         <TextView
                             android:id="@+id/textView_Like_Count"
                             style="@style/textview_like"
-                            android:layout_width="fill_parent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:layout_marginLeft="5dip"
@@ -99,7 +99,7 @@
 
                 <!--
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -110,7 +110,7 @@
 
                 <ViewStub
                     android:id="@+id/comment_details_empty_stub"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
@@ -121,7 +121,7 @@
 
                 <LinearLayout
                     android:id="@+id/activity_display_comment_wrap"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="2dp" >
@@ -131,7 +131,7 @@
 
         <EditText
             android:id="@+id/editText_Comment"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-7dp"
             android:background="@drawable/comment_textfield_background"
@@ -143,8 +143,8 @@
 
     <LinearLayout
         android:id="@+id/details_start_screen"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:background="#DCDCDC" >
     </LinearLayout>

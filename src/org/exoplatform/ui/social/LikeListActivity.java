@@ -16,14 +16,15 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.widget.ActionBarItem;
+import android.support.v7.app.ActionBarActivity;
+//import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.MyActionBar;
+//import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.ShaderImageView;
 
 import android.content.Context;
@@ -41,7 +42,9 @@ import android.widget.TextView;
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
  * 4, 2012
  */
-public class LikeListActivity extends MyActionBar {
+public class LikeListActivity
+    extends ActionBarActivity {
+    //extends MyActionBar {
 
   /*
    * This class for displaying the liker list information include avatar and
@@ -57,7 +60,11 @@ public class LikeListActivity extends MyActionBar {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setActionBarContentView(R.layout.like_list_activity_layout);
+
+    setContentView(R.layout.like_list_activity_layout);
+    //setActionBarContentView(R.layout.like_list_activity_layout);
+
+
     /*
      * Get liker list from intent extra
      */
@@ -98,6 +105,7 @@ public class LikeListActivity extends MyActionBar {
     });
   }
 
+  /** TODO - replace this function
   @Override
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
@@ -119,6 +127,7 @@ public class LikeListActivity extends MyActionBar {
 
     return true;
   }
+  **/
 
   /*
    * The adapter for liker grid
