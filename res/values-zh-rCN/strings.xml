@@ -117,7 +117,7 @@
   <string name="UpdatedATask">刚更新任务：</string>
   <string name="DocumentRenameTitle">重命名文件夹</string>
   <string name="DocumentRenameContent">请输入一个新的名称：</string>
-  <string name="DocumentCreateTitle">Create Folder</string>
+  <string name="DocumentCreateTitle">创建文件夹</string>
   <string name="DocumentCreateContent">输入文件夹的名称：</string>
   <string name="DocumentCannotDelete">无法删除此文件。</string>
   <string name="DocumentCopyPasteError">粘贴时出错。</string>
@@ -152,8 +152,8 @@
   <string name="SocialSettingContent">记住此选项</string>
   <string-array name="SocialTabs">
     <item id="AllUpdates">所有更新</item>
-    <item id="MyConnections">My Connections</item>
-    <item id="MySpaces">My Spaces</item>
+    <item id="MyConnections">我的联系人</item>
+    <item id="MySpaces">我的空间</item>
     <item id="MyStatus">我的状态</item>
   </string-array>
 
