@@ -3,19 +3,28 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/menu_refresh"
-          android:orderInCategory="0"
           android:title="@string/Refresh"
           android:icon="@drawable/ic_action_refresh"
+          android:orderInCategory="0"
           app:showAsAction="always" />
 
-    <item android:id="@+id/menu_settings"
-          android:title="@string/Settings"
+    <item android:id="@+id/menu_overflow"
+          android:title="@string/Overflow"
+          android:icon="@drawable/ic_action_overflow"
           android:orderInCategory="90"
-          app:showAsAction="ifRoom|collapseActionView" />
+          app:showAsAction="always">
 
-    <item android:id="@+id/menu_sign_out"
-          android:title="@string/SignOut"
-          android:orderInCategory="91"
-          app:showAsAction="collapseActionView" />
+        <menu>
+            <item android:id="@+id/menu_settings"
+                  android:title="@string/Settings"
+                  android:orderInCategory="91"
+                  app:showAsAction="ifRoom" />
 
+            <item android:id="@+id/menu_sign_out"
+                  android:title="@string/SignOut"
+                  android:orderInCategory="92"
+                  app:showAsAction="ifRoom" />
+
+        </menu>
+    </item>
 </menu>

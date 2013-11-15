@@ -6,11 +6,6 @@
               android:layout_height="match_parent"
               android:background="#DCDCDCDC">
 
-    <TextView
-            android:id="@+id/server_setting_title_txt"
-            style="@style/SignUpBlueHeaderStyle"
-            android:layout_marginBottom="15dp"/>
-
     <TableLayout style="@style/ServerSettingTableStyle"
                  android:layout_marginBottom="10dp">
 

@@ -5,6 +5,7 @@
               android:layout_height="match_parent"
               android:background="#1e1e1e">
 
+    <!--
     <ImageView
             android:id="@+id/launch_action_bar_img"
             android:layout_width="match_parent"
@@ -12,10 +13,10 @@
             android:contentDescription="@string/ImageDesc"
             android:scaleType="fitXY"
             android:src="@drawable/action_bar_background_repeate"/>
+    -->
 
     <ImageView
             android:id="@+id/launch_profile_img"
-            android:layout_below="@id/launch_action_bar_img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"

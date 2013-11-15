@@ -232,6 +232,7 @@
   <string name="Add">Add</string>
   <string name="Refresh">Refresh</string>
   <string name="SignOut">Sign Out</string>
+  <string name="Overflow">Overflow</string>
 
 
     <string-array name="SocialTabs">

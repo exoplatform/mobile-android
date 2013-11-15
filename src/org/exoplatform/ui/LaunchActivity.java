@@ -1,22 +1,24 @@
 package org.exoplatform.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Menu;
 import android.view.Window;
+
 import org.exoplatform.R;
 import org.exoplatform.utils.LaunchUtils;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.ui.login.LoginWarningDialog;
-import org.exoplatform.widget.WarningDialog;
 
 /**
  * Lightweight activity acts as entry point to the application
  */
-public class LaunchActivity extends Activity implements LoginProxy.ProxyListener {
+public class LaunchActivity extends ActionBarActivity implements LoginProxy.ProxyListener {
 
   private static final String TAG = "eXoLaunchActivity";
 
@@ -24,22 +26,28 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
 
   private LoginProxy     mLoginProxy;
 
-  private Resources      mResources;
-
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     new LaunchUtils(this);
     mSetting   = AccountSetting.getInstance();
-    mResources = getResources();
 
     redirect();
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    Log.i(TAG, "onCreateOptionsMenu");
+    getMenuInflater().inflate(R.menu.home, menu);
+    //mOptionsMenu = menu;
+    menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_indeterminate_progress);
+    return true;
   }
 
   public void redirect() {
     /** no account configured - redirect to Welcome screen */
     if (mSetting.getCurrentServer() == null) {
-      requestWindowFeature(Window.FEATURE_NO_TITLE);
+      //requestWindowFeature(Window.FEATURE_NO_TITLE);
       Intent next = new Intent(this, WelcomeActivity.class);
       startActivityForResult(next, 0);
       overridePendingTransition(0, 0);
@@ -61,8 +69,8 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
 
       /** if some errors raise up, we'll redirect to login screen */
       mLoginProxy.getWarningDialog()
-          .setTitle(mResources.getString(R.string.LoginWarningMsg))
-          .setButtonText(mResources.getString(R.string.RedirectToLogin))
+          .setTitle(getString(R.string.LoginWarningMsg))
+          .setButtonText(getString(R.string.RedirectToLogin))
           .setViewListener(new LoginWarningDialog.ViewListener() {
             @Override
             public void onClickOk(LoginWarningDialog dialog) {

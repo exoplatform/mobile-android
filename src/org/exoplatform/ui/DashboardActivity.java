@@ -1,5 +1,6 @@
 package org.exoplatform.ui;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 //import greendroid.widget.ActionBarItem;
 //import greendroid.widget.ActionBarItem.Type;
@@ -7,12 +8,19 @@ import android.support.v7.app.ActionBarActivity;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import org.exoplatform.R;
 import org.exoplatform.controller.dashboard.DashboardItemAdapter;
 import org.exoplatform.controller.dashboard.DashboardLoadTask;
 import org.exoplatform.model.GadgetInfo;
+import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.ConnectionErrorDialog;
 //import org.exoplatform.widget.MyActionBar;
 
@@ -25,23 +33,37 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import org.exoplatform.widget.WarningDialog;
 
-public class DashboardActivity
-    extends ActionBarActivity {
+public class DashboardActivity extends ActionBarActivity implements DashboardLoadTask.AsyncTaskListener {
     //extends MyActionBar {
+
+  /**=== Result of loading dashboard ===*/
+  public static final int         RESULT_OK      = 1;
+
+  public static final int         RESULT_ERROR   = 0;
+
+  public static final int         RESULT_TIMEOUT = -1;
+
+
   private static final String     ACCOUNT_SETTING = "account_setting";
 
   private ListView                listView;
 
   private View                    empty_stub;
 
-  private String                  title;
+  //private String                  title;
 
-  private String                  dashboardEmptyString;
-
-  public static DashboardActivity dashboardActivity;
+  private Menu mOptionsMenu;
 
   private DashboardLoadTask       mLoadTask;
+
+
+  private static final String TAG = "eXo____DashboardActivity____";
+
+
+  //public static DashboardActivity dashboardActivity;
+
 
   //private LoaderActionBarItem     loaderItem;
 
@@ -52,9 +74,6 @@ public class DashboardActivity
     setTitle(getString(R.string.Dashboard));
     //setActionBarContentView(R.layout.dashboard_layout);
     setContentView(R.layout.dashboard_layout);
-
-    changeLanguage();
-    dashboardActivity = this;
 
     //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     //addActionBarItem(Type.Refresh);
@@ -75,6 +94,64 @@ public class DashboardActivity
     //loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
 
     //onLoad(loaderItem);
+    startLoadingApps();
+  }
+
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    Log.i(TAG, "onCreateOptionsMenu");
+    getMenuInflater().inflate(R.menu.home, menu);
+    mOptionsMenu = menu;
+    menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_indeterminate_progress);
+    menu.findItem(R.id.menu_sign_out).setVisible(false);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_refresh:
+        startLoadingApps();
+        return true;
+
+      case R.id.menu_settings:
+        redirectToSetting();
+        break;
+
+    }
+
+    return super.onOptionsItemSelected(item);
+  }
+
+
+  /**
+   * Change state of refresh icon on action bar
+   *
+   * @param refreshing
+   */
+  public void setRefreshActionButtonState(boolean refreshing) {
+    Log.i(TAG, "setRefreshActionButtonState: " + refreshing);
+
+    if (mOptionsMenu == null) return ;
+    final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_refresh);
+    Log.i(TAG, "setRefreshActionButtonState - refreshItem: " + refreshItem);
+    if (refreshItem == null) return ;
+
+    //boolean currentState = refreshItem.getActionView() != null;
+
+    if (refreshing)
+      refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+    else {
+      refreshItem.setActionView(null);
+      //supportInvalidateOptionsMenu();
+    }
+  }
+
+  private void redirectToSetting() {
+    Intent next = new Intent(this, SettingActivity.class);
+    next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.PERSONAL_TYPE);
+    startActivity(next);
   }
 
   @Override
@@ -95,6 +172,51 @@ public class DashboardActivity
     }
   }
   **/
+
+  // replace onLoad()
+  public void startLoadingApps() {
+    if (!ExoConnectionUtils.isNetworkAvailableExt(this)) {
+      new ConnectionErrorDialog(this).show();
+      return ;
+    }
+
+    if (mLoadTask == null || mLoadTask.getStatus() == DashboardLoadTask.Status.FINISHED) {
+      setRefreshActionButtonState(true);
+      mLoadTask = new DashboardLoadTask();
+      mLoadTask.setListener(this);
+      mLoadTask.execute();
+    }
+  }
+
+  @Override
+  public void onLoadingAppsFinished(int result, int dashboardSize,
+                                    ArrayList<GadgetInfo> gadgetInfos, String dashboardError) {
+    setRefreshActionButtonState(false);
+
+    if (result == RESULT_OK) {
+      if (dashboardSize == 0)  setEmptyView(View.VISIBLE);
+      else {
+        if (gadgetInfos.size() > 0) {
+          setAdapter(gadgetInfos);
+          setEmptyView(View.GONE);
+        } else
+          setEmptyView(View.VISIBLE);
+      }
+
+    } else if (result == RESULT_ERROR) {
+      setEmptyView(View.VISIBLE);
+
+      new WarningDialog(this, getString(R.string.Warning), getString(R.string.GadgetsCannotBeRetrieved),
+          getString(R.string.OK)).show();
+    } else if (result == RESULT_TIMEOUT) {
+      new ConnTimeOutDialog(this, getString(R.string.Warning), getString(R.string.OK)).show();
+    }
+
+    if (dashboardError.length() > 0) {
+      new WarningDialog(this, getString(R.string.Warning),
+          "Apps: " + dashboardError + getString(R.string.GadgetsCannotBeRetrieved), getString(R.string.OK)).show();
+    }
+  }
 
   public void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == DashboardLoadTask.Status.RUNNING) {
@@ -120,7 +242,7 @@ public class DashboardActivity
     ImageView emptyImage = (ImageView) empty_stub.findViewById(R.id.empty_image);
     emptyImage.setBackgroundResource(R.drawable.icon_for_no_gadgets);
     TextView emptyStatus = (TextView) empty_stub.findViewById(R.id.empty_status);
-    emptyStatus.setText(dashboardEmptyString);
+    emptyStatus.setText(getString(R.string.EmptyDashboard));
   }
 
   /**
@@ -154,13 +276,6 @@ public class DashboardActivity
   public void onBackPressed() {
     onCancelLoad();
     finish();
-  }
-
-  private void changeLanguage() {
-    Resources resource = getResources();
-    title = resource.getString(R.string.Dashboard);
-    setTitle(title);
-    dashboardEmptyString = resource.getString(R.string.EmptyDashboard);
   }
 
 }

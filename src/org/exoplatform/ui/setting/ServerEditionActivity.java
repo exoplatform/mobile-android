@@ -34,8 +34,6 @@ import java.util.List;
  */
 public class ServerEditionActivity extends Activity {
 
-  private TextView mTitleTxt;
-
   private EditText mServerNameEditTxt;
 
   private EditText mServerUrlEditTxt;
@@ -85,7 +83,6 @@ public class ServerEditionActivity extends Activity {
     mResources = getResources();
 
     // we use extra passed along with Intent to specify: add server or modify one
-    mTitleTxt = (TextView) findViewById(R.id.server_setting_title_txt);
     mServerNameEditTxt = (EditText) findViewById(R.id.server_setting_server_name_edit_txt);
     mServerUrlEditTxt  = (EditText) findViewById(R.id.server_setting_server_url_edit_txt);
     mUserEditTxt       = (EditText) findViewById(R.id.server_setting_user_edit_txt);
@@ -101,7 +98,7 @@ public class ServerEditionActivity extends Activity {
     mServerUrlEditTxt.addTextChangedListener(watcher);
     mPassEditTxt.setTypeface(Typeface.SANS_SERIF);
 
-    /* change the title */
+    /** change the title */
     mIntent    = getIntent();
     mServerObj = mIntent.getParcelableExtra(ExoConstants.EXO_SERVER_OBJ);
     mServerIdx = ServerSettingHelper.getInstance().getServerInfoList().indexOf(mServerObj);
@@ -180,14 +177,14 @@ public class ServerEditionActivity extends Activity {
   private void initAddingServer() {
     Log.i(TAG, "initAddingServer");
 
-    mTitleTxt.setText(R.string.AddServer);
+    setTitle(R.string.AddServer);
     mDeleteBtn.setVisibility(View.INVISIBLE);
   }
 
   private void initModifyingServer() {
     Log.i(TAG, "initModifyingServer");
 
-    mTitleTxt.setText(R.string.ModifyServer);
+    setTitle(R.string.ModifyServer);
     mDeleteBtn.setVisibility(View.VISIBLE);
     mDeleteBtn.setOnClickListener(onDeleteServer());
 
