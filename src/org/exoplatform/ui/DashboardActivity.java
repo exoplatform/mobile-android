@@ -85,6 +85,7 @@ public class DashboardActivity extends ActionBarActivity implements DashboardLoa
     listView.setScrollbarFadingEnabled(true);
     listView.setDivider(null);
     // listView.setDividerHeight(-1);
+
     if (bundle != null) {
       AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
       AccountSetting.getInstance().setInstance(accountSetting);
@@ -214,7 +215,8 @@ public class DashboardActivity extends ActionBarActivity implements DashboardLoa
 
     if (dashboardError.length() > 0) {
       new WarningDialog(this, getString(R.string.Warning),
-          "Apps: " + dashboardError + getString(R.string.GadgetsCannotBeRetrieved), getString(R.string.OK)).show();
+          "Apps: " + dashboardError + getString(R.string.GadgetsCannotBeRetrieved),
+          getString(R.string.OK)).show();
     }
   }
 

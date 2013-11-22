@@ -192,4 +192,13 @@ public class ExoConstants {
 
   /** email used for sign in */
   public static final String EXO_EMAIL                             = "EXO_EMAIL";
+
+  /** preference for document view - list or grid */
+  public static final String EXO_DOCUMENT_VIEW                     = "EXO_DOCUMENT_VIEW";
+
+  public static final int    VIEW_AS_LIST                          = 0;
+
+  public static final int    VIEW_AS_GRID                          = 1;
+
+
 }

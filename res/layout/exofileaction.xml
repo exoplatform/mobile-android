@@ -1,43 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="220dip"
-    android:layout_height="wrap_content"
-    android:background="#ffffff" >
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:background="#ffffff" >
 
     <RelativeLayout
         android:id="@+id/Navigation_Bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dip" >
+        android:background="@color/action_bar_blue">
 
         <TextView
             android:id="@+id/TextView_Title"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:maxLines="1"
-            android:shadowColor="#888888"
-            android:shadowDx="1.0"
-            android:shadowDy="2.0"
-            android:shadowRadius="1.0"
-            android:textColor="#000000"
+            android:gravity="left"
+            android:text="@string/Add"
+            android:textColor="#ffffff"
             android:textSize="18sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" />
 
-    <ImageView
-        android:id="@+id/ImageView_Separator"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/Navigation_Bar"
-        android:layout_marginTop="05dip"
-        android:contentDescription="@string/ImageDesc"
-        android:background="@drawable/serversectionseparator" />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/ListView0_FileAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ImageView_Separator" />
+        android:layout_below="@id/Navigation_Bar" />
 
 </RelativeLayout>

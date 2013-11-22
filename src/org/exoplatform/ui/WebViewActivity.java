@@ -7,6 +7,9 @@ package org.exoplatform.ui;
 import java.util.ArrayList;
 
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.social.SocialDetailActivity;
@@ -32,9 +35,11 @@ import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class WebViewActivity
+/**
+ * The web view to show gadget
+ */
+public class WebViewActivity extends ActionBarActivity {
     //extends MyActionBar {
-    extends ActionBarActivity {
 
   private static final String ACCOUNT_SETTING = "account_setting";
 
@@ -48,12 +53,17 @@ public class WebViewActivity
 
   private String              contentType;
 
+  private Menu                mOptionsMenu;
+
   //private LoaderActionBarItem loaderItem;
 
-  public void onCreate(Bundle icicle) {
+  private static final String TAG = "eXo____WebViewActivity____";
 
-    super.onCreate(icicle);    
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+  public void onCreate(Bundle savedData) {
+
+    super.onCreate(savedData);
+    //requestWindowFeature(Window.FEATURE_NO_TITLE);
 
     //setActionBarContentView(R.layout.webview);
     setContentView(R.layout.webview);
@@ -61,14 +71,12 @@ public class WebViewActivity
     //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     //addActionBarItem(Type.Refresh, R.id.action_bar_refresh);
 
-    /*
-     * restore the previous state
-     */
-    if (icicle != null) {
-      _url = icicle.getString(ExoConstants.WEB_VIEW_URL);
-      _titlebar = icicle.getString(ExoConstants.WEB_VIEW_TITLE);
-      contentType = icicle.getString(ExoConstants.WEB_VIEW_MIME_TYPE);
-      AccountSetting accountSetting = icicle.getParcelable(ACCOUNT_SETTING);
+    /** Restore the previous state */
+    if (savedData != null) {
+      _url        = savedData.getString(ExoConstants.WEB_VIEW_URL);
+      _titlebar   = savedData.getString(ExoConstants.WEB_VIEW_TITLE);
+      contentType = savedData.getString(ExoConstants.WEB_VIEW_MIME_TYPE);
+      AccountSetting accountSetting = savedData.getParcelable(ACCOUNT_SETTING);
       AccountSetting.getInstance().setInstance(accountSetting);
       ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
@@ -81,12 +89,11 @@ public class WebViewActivity
 
     setupCookies(_url);
     _wvGadget = (WebView) findViewById(R.id.WebView);
-    /*
-     * Ensure we can clear Webview cache and set no cache when loading data.
-     */
+    /** Ensure we can clear Webview cache and set no cache when loading data */
     _wvGadget.clearCache(true);
     _wvGadget.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     _wvGadget.getSettings().setSupportZoom(true);
+
     if (getIntent().getStringExtra(ExoConstants.WEB_VIEW_ALLOW_JS) != null) {
       boolean allowJS = Boolean.parseBoolean( getIntent().getStringExtra(ExoConstants.WEB_VIEW_ALLOW_JS) );
       setJavascript(allowJS);  
@@ -100,7 +107,8 @@ public class WebViewActivity
     _wvGadget.getSettings().setLoadsImagesAutomatically(true);
     _wvGadget.addJavascriptInterface(this, "MainScreen");
     _wvGadget.getSettings().setBuiltInZoomControls(true);
-    /*
+
+    /**
      * the method for controlling the layout of html. SINGLE_COLUMN moves all
      * content into one column that is the width of the view.
      */
@@ -108,6 +116,7 @@ public class WebViewActivity
     _wvGadget.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
     _wvGadget.getSettings().setUseWideViewPort(false);
     }
+
     final Activity activity = this;
 
     _wvGadget.setWebChromeClient(new WebChromeClient() {
@@ -122,22 +131,21 @@ public class WebViewActivity
         //if (loaderItem != null) {
         //  loaderItem.setLoading(true);
         //}
-        //if (progress == 100) {
-        //  setTitle(_titlebar);
-        //  getActionBar().removeItem(0);
-        //  if (contentType != null) {
-        //    addActionBarItem();
-        //    getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
-        //  }
+        if (progress == 100) {
+          setTitle(_titlebar);
+          //getActionBar().removeItem(0);
+          //if (contentType != null) {
+          //  addActionBarItem();
+          //  getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
+          //}
 
-        //}
-
+        }
       }
 
     });
 
   _wvGadget.setWebViewClient(new NewsWebviewClient());
-    onLoad();
+    startLoadingWebView();
 
   }
 
@@ -193,6 +201,54 @@ public class WebViewActivity
   }
    **/
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    Log.i(TAG, "onCreateOptionsMenu");
+    getMenuInflater().inflate(R.menu.home, menu);
+    mOptionsMenu = menu;
+    menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_indeterminate_progress);
+    menu.findItem(R.id.menu_sign_out).setVisible(false);
+    menu.findItem(R.id.menu_settings).setVisible(false);
+    menu.findItem(R.id.menu_overflow).setVisible(false);
+
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_refresh:
+        startLoadingWebView();
+        return true;
+
+    }
+
+    return super.onOptionsItemSelected(item);
+  }
+
+  /**
+   * Change state of refresh icon on action bar
+   *
+   * @param refreshing
+   */
+  public void setRefreshActionButtonState(boolean refreshing) {
+    Log.i(TAG, "setRefreshActionButtonState: " + refreshing);
+
+    if (mOptionsMenu == null) return ;
+    final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_refresh);
+    Log.i(TAG, "setRefreshActionButtonState - refreshItem: " + refreshItem);
+    if (refreshItem == null) return ;
+
+    //boolean currentState = refreshItem.getActionView() != null;
+
+    if (refreshing)
+      refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+    else {
+      refreshItem.setActionView(null);
+      //supportInvalidateOptionsMenu();
+    }
+  }
+
   private void setupCookies(String url) {
     CookieSyncManager.createInstance(this);
     ArrayList<String> cookies = AccountSetting.getInstance().cookiesList;
@@ -200,13 +256,11 @@ public class WebViewActivity
       CookieManager.getInstance().setCookie(url, strCookie);
     }
     CookieSyncManager.getInstance().sync();
-
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
-
   }
 
   @Override
@@ -218,15 +272,16 @@ public class WebViewActivity
       finish();
   }
 
-  private void onLoad() {
-    if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
-      if (mLoadTask == null || mLoadTask.getStatus() == WebViewLoadTask.Status.FINISHED) {
-        mLoadTask = (WebViewLoadTask) new WebViewLoadTask().execute();
-      }
-    } else {
+  private void startLoadingWebView() {
+    if (!ExoConnectionUtils.isNetworkAvailableExt(this)) {
       new ConnectionErrorDialog(this).show();
+      return ;
     }
 
+    if (mLoadTask == null || mLoadTask.getStatus() == WebViewLoadTask.Status.FINISHED) {
+      setRefreshActionButtonState(true);
+      mLoadTask = (WebViewLoadTask) new WebViewLoadTask().execute();
+    }
   }
 
   private void onCancelLoad() {
@@ -237,6 +292,7 @@ public class WebViewActivity
   }
 
   private class WebViewLoadTask extends AsyncTask<Void, Void, Boolean> {
+
     @Override
     protected void onPreExecute() {
       setTitle(getResources().getString(R.string.LoadingData));
@@ -253,15 +309,14 @@ public class WebViewActivity
 
     @Override
     protected void onPostExecute(Boolean result) {
+      setRefreshActionButtonState(false);
       if (result) {
         _wvGadget.loadUrl(_url);
       } else {
         //getActionBar().removeItem(0);
         finish();
       }
-
     }
-
   }
 
   private class NewsWebviewClient extends WebViewClient {

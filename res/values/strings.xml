@@ -230,6 +230,7 @@
 
   <!-- Action bar -->
   <string name="Add">Add</string>
+  <string name="View">View</string>
   <string name="Refresh">Refresh</string>
   <string name="SignOut">Sign Out</string>
   <string name="Overflow">Overflow</string>

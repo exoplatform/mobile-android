@@ -29,24 +29,23 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class SelectedImageActivity
-    extends ActionBarActivity
-    //extends MyActionBar
-    implements OnClickListener {
+/**
+ * Represents the screen to select or edit an image<br/>
+ *
+ * Can be started from document screen for selecting an image<br/>
+ */
+public class SelectedImageActivity extends ActionBarActivity implements OnClickListener {
+  //extends MyActionBar
 
   private static final int SCALE_WIDTH  = 1024;
 
   private static final int SCALE_HEIGHT = 860;
 
-  private static final int SELECT_MODE  = 2;
-
-  private static final int EDIT_MODE    = 1;
-
   private ImageView        imageView;
 
   private Button           okButton;
 
-  private Button           removeButton;
+  private Button           mCancelBtn;
 
   private String           filePath     = null;
 
@@ -62,17 +61,26 @@ public class SelectedImageActivity
 
   private String           title;
 
-  private int              modeId;
+  /** works in 2 mode: selecting 0 or editing image 1 */
+  private int              mMode;
+
+  private static final int SELECT_MODE  = 2;      // Default mode
+
+  private static final int EDIT_MODE    = 1;
 
   private Uri              mImageUri;
 
   private DisplayImageTask mLoadTask;
 
+  private static final String TAG = "eXo____SelectedImageActivity____";
+
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo);
+
+    //requestWindowFeature(Window.FEATURE_NO_TITLE);
+    //setTheme(R.style.Theme_eXo);
 
     //setActionBarContentView(R.layout.social_selected_image_layout);
     setContentView(R.layout.social_selected_image_layout);
@@ -80,9 +88,9 @@ public class SelectedImageActivity
     if (savedInstanceState != null)
       finish();
     else {
-      modeId = getIntent().getIntExtra(ExoConstants.SELECTED_IMAGE_MODE, 0);
+      mMode = getIntent().getIntExtra(ExoConstants.SELECTED_IMAGE_MODE, 0);
       init();
-      onLoad(modeId);
+      onLoad(mMode);
     }
   }
 
@@ -94,7 +102,7 @@ public class SelectedImageActivity
 
     setContentView(R.layout.social_selected_image_layout);
     init();
-    onLoad(modeId);
+    onLoad(mMode);
   }
 
   private void init() {
@@ -104,24 +112,20 @@ public class SelectedImageActivity
     okButton.setText(okText);
     okButton.setOnClickListener(this);
     imageView = (ImageView) findViewById(R.id.social_selected_image);
-    removeButton = (Button) findViewById(R.id.social_selected_image_remove_button);
-    if (modeId == EDIT_MODE) {
-      removeButton.setText(removeText);
-    } else {
-      removeButton.setText(cancelText);
-    }
 
-    removeButton.setOnClickListener(this);
-
+    mCancelBtn = (Button) findViewById(R.id.social_selected_image_remove_button);
+    mCancelBtn.setText(mMode == EDIT_MODE ? getString(R.string.Remove) : getString(R.string.Cancel));
+    mCancelBtn.setOnClickListener(this);
   }
 
   private void onLoad(int id) {
-    if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
-      if (mLoadTask == null || mLoadTask.getStatus() == DisplayImageTask.Status.FINISHED) {
-        mLoadTask = (DisplayImageTask) new DisplayImageTask().execute(id);
-      }
-    } else {
+    if (!ExoConnectionUtils.isNetworkAvailableExt(this)) {
       new ConnectionErrorDialog(this).show();
+      return ;
+    }
+
+    if (mLoadTask == null || mLoadTask.getStatus() == DisplayImageTask.Status.FINISHED) {
+      mLoadTask = (DisplayImageTask) new DisplayImageTask().execute(id);
     }
   }
 
@@ -154,50 +158,53 @@ public class SelectedImageActivity
   }
    **/
 
+
   @Override
   public void onBackPressed() {
     onCancelLoad();
-    if (modeId == SELECT_MODE) {
+    if (mMode == SELECT_MODE) {
       backToGallery();
     }
     finish();
   }
 
   public void onClick(View view) {
+
     if (view.equals(okButton)) {
       if (filePath != null) {
+        /**
         if (DocumentActivity._documentActivityInstance != null) {
           DocumentActivity._documentActivityInstance._sdcard_temp_dir = filePath;
           DocumentActivity._documentActivityInstance.uploadFile();
         } else
           ComposeMessageActivity.addImageToMessage(file);
+         **/
       }
 
     }
 
-    if (view.equals(removeButton)) {
-      if (modeId == EDIT_MODE) {
-        ComposeMessageActivity.removeImageFromMessage();
-      }
-      if (modeId == SELECT_MODE) {
-        backToGallery();
-      }
+    /** Click on Cancel or Remove */
+    if (view.equals(mCancelBtn)) {
+      if (mMode == EDIT_MODE)   ComposeMessageActivity.removeImageFromMessage();
+      if (mMode == SELECT_MODE) backToGallery();
     }
+
     finish();
-
   }
 
   private void backToGallery() {
     Intent intent = new Intent(Intent.ACTION_PICK);
     intent.setType(ExoConstants.PHOTO_ALBUM_IMAGE_TYPE);
-    if (DocumentActivity._documentActivityInstance != null) {
-      DocumentActivity._documentActivityInstance.startActivityForResult(intent,
-                                                                        ExoConstants.REQUEST_ADD_PHOTO);
 
-    } else if (ComposeMessageActivity.composeMessageActivity != null) {
-      ComposeMessageActivity.composeMessageActivity.startActivityForResult(intent,
-                                                                           ExoConstants.REQUEST_ADD_PHOTO);
+    /**
+    if (DocumentActivity._documentActivityInstance != null) {
+      DocumentActivity._documentActivityInstance.startActivityForResult(intent, ExoConstants.REQUEST_ADD_PHOTO);
+
     }
+    else if (ComposeMessageActivity.composeMessageActivity != null) {
+      ComposeMessageActivity.composeMessageActivity.startActivityForResult(intent, ExoConstants.REQUEST_ADD_PHOTO);
+    }
+     **/
   }
 
   private void onChangeLanguage() {
@@ -211,12 +218,20 @@ public class SelectedImageActivity
   }
 
   private class DisplayImageTask extends AsyncTask<Integer, Void, Bitmap> {
-    private SeclectImageWaitingDialog _progressDialog;
+    private WaitingDialog mProgressDialog;
 
     @Override
     public void onPreExecute() {
-      _progressDialog = new SeclectImageWaitingDialog(SelectedImageActivity.this, null, loadingData);
-      _progressDialog.show();
+      mProgressDialog = new WaitingDialog(SelectedImageActivity.this, null, loadingData) {
+
+        @Override
+        public void onBackPressed() {
+          super.onBackPressed();
+          onCancelLoad();
+        }
+
+      };
+      mProgressDialog.show();
     }
 
     @Override
@@ -230,19 +245,17 @@ public class SelectedImageActivity
           filePath = PhotoUtils.getFileFromUri(mImageUri, SelectedImageActivity.this);
         } else {
           // get the full image url and download it to sdcard
-          String scheme = mImageUri.getScheme();
-          String path = mImageUri.getPath();
-          StringBuffer buffer = new StringBuffer(scheme);
-          buffer.append("://");
-          buffer.append(host);
-          buffer.append(path);
+          StringBuffer buffer = new StringBuffer(mImageUri.getScheme()).append("://")
+              .append(host).append(mImageUri.getPath());
           Log.i("PHOTO_PICKER", "Image mImageUri getHost(): " + buffer.toString());
           String fileName = mImageUri.getLastPathSegment();
           filePath = PhotoUtils.downloadFile(buffer.toString(), fileName);
         }
 
-      } else
+      } else {
         filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
+      }
+
       try {
         Log.i("PHOTO_PICKER", "Image File Path: " + filePath);
         file = new File(filePath);
@@ -260,21 +273,7 @@ public class SelectedImageActivity
       } else {
         okButton.setClickable(false);
       }
-      _progressDialog.dismiss();
-    }
-
-  }
-
-  private class SeclectImageWaitingDialog extends WaitingDialog {
-
-    public SeclectImageWaitingDialog(Context context, String titleString, String contentString) {
-      super(context, titleString, contentString);
-    }
-
-    @Override
-    public void onBackPressed() {
-      super.onBackPressed();
-      onCancelLoad();
+      mProgressDialog.dismiss();
     }
 
   }

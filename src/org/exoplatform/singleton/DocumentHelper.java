@@ -38,15 +38,10 @@ public class DocumentHelper implements Parcelable {
 
   public String                 repository     = null;
 
-  /*
-   * The dictionary for mapping between parent folder and its child files
-   */
+  /** The dictionary mapping between parent folder and its child files */
   public Bundle                 childFilesMap;
 
-  /*
-   * The dictionary for mapping between the current selected file and its parent
-   */
-
+  /** The dictionary mapping between the current selected file and its parent */
   public Bundle                 currentFileMap;
 
   private DocumentHelper() {

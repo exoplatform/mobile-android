@@ -2,6 +2,7 @@ package org.exoplatform.controller.document;
 
 import java.util.ArrayList;
 
+import android.util.TypedValue;
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.DocumentHelper;
@@ -21,22 +22,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DocumentAdapter extends BaseAdapter {
-  private ArrayList<ExoFile>  _documentList;
+  private ArrayList<ExoFile>  mDocumentList;
 
-  private DocumentActivity    _mContext;
+  private DocumentActivity    mContext;
 
-  public DocumentActionDialog _documentActionDialog;
+  public DocumentActionDialog mActionDialog;
 
   public DocumentAdapter(DocumentActivity context, ArrayList<ExoFile> list) {
-
-    _mContext = context;
-    _documentList = list;
-
+    mContext      = context;
+    mDocumentList = list;
   }
 
   @Override
   public int getCount() {
-    return _documentList.size();
+    return mDocumentList.size();
   }
 
   @Override
@@ -53,50 +52,57 @@ public class DocumentAdapter extends BaseAdapter {
   public View getView(int position, View convertView, ViewGroup parent) {
 
     final int pos = position;
-    LayoutInflater inflater = (LayoutInflater) _mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     // View rowView = inflater.inflate(R.layout.fileitem, parent, false);
 
-    final ExoFile myFile = _documentList.get(pos);
+    final ExoFile myFile = mDocumentList.get(pos);
 
+    /** view is tab with text */
     if ("".equals(myFile.name) && "".equals(myFile.path)) {
       convertView = inflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
+
       if (myFile.driveName.equals(ExoConstants.DOCUMENT_PERSONAL_DRIVER))
-        textViewTabTitle.setText(_mContext.getResources().getString(R.string.Personal));
+        textViewTabTitle.setText(mContext.getString(R.string.Personal));
       else if (myFile.driveName.equals(ExoConstants.DOCUMENT_GROUP_DRIVER))
-        textViewTabTitle.setText(_mContext.getResources().getString(R.string.Group));
+        textViewTabTitle.setText(mContext.getString(R.string.Group));
       else if (myFile.driveName.equals(ExoConstants.DOCUMENT_GENERAL_DRIVER))
-        textViewTabTitle.setText(_mContext.getResources().getString(R.string.General));
-      return (convertView);
-    } else {
+        textViewTabTitle.setText(mContext.getString(R.string.General));
+
+      return convertView;
+
+    }
+    /** view is a folder */
+    else {
+
       convertView = inflater.inflate(R.layout.fileitem, parent, false);
 
-      Button btnAction = (Button) convertView.findViewById(R.id.Button_FileAction);
-      ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
-      TextView lb = (TextView) convertView.findViewById(R.id.label);
+      Button btnAction = (Button)    convertView.findViewById(R.id.Button_FileAction);
+      ImageView icon   = (ImageView) convertView.findViewById(R.id.icon);
+      TextView lb      = (TextView)  convertView.findViewById(R.id.label);
       lb.setText(myFile.name);
+      lb.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
-      final ExoFile file = DocumentActivity._documentActivityInstance._fileForCurrentActionBar;
+
+      final ExoFile file = mContext._fileForCurrentActionBar;
       if ("".equals(myFile.currentFolder)) {
-        /*
-         * If current folder is null, make the action button is invisible
-         */
-        btnAction.setVisibility(View.INVISIBLE);
 
+        /** If current folder is null, make the action button is invisible */
+        btnAction.setVisibility(View.INVISIBLE);
       }
 
       if (position == 0) {
-        if (_documentList.size() == 1)
+        if (mDocumentList.size() == 1)
           convertView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
         else {
           convertView.setBackgroundResource(R.drawable.dashboard_top_background_shape);
         }
       } else {
-        if (position + 1 == _documentList.size())
+        if (position + 1 == mDocumentList.size())
           convertView.setBackgroundResource(R.drawable.dasboard_bottom_background_shape);
         else {
-          ExoFile previousItem = _documentList.get(position - 1);
-          ExoFile nextItem = _documentList.get(position + 1);
+          ExoFile previousItem = mDocumentList.get(position - 1);
+          ExoFile nextItem = mDocumentList.get(position + 1);
 
           if ("".equals(previousItem.name) && "".equals(previousItem.path)
               && "".equals(nextItem.name) && "".equals(nextItem.path)) {
@@ -113,9 +119,7 @@ public class DocumentAdapter extends BaseAdapter {
 
       if (!myFile.isFolder) {
         btnAction.setVisibility(View.VISIBLE);
-
         icon.setImageResource(ExoDocumentUtils.getIconFromType(myFile.nodeType));
-
       } else {
         icon.setImageResource(R.drawable.documenticonforfolder);
       }
@@ -124,24 +128,19 @@ public class DocumentAdapter extends BaseAdapter {
 
         public void onClick(View v) {
 
+          /** Open file or folder using appropriate app */
           if (!myFile.isFolder) {
-            /*
-             * Open file with compatible application
-             */
             if (ExoDocumentUtils.isFileReadable(myFile.nodeType)) {
-              ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
+              ExoDocumentUtils.fileOpen(mContext, myFile.nodeType, myFile.path, myFile.name);
             } else {
-              new UnreadableFileDialog(_mContext, null).show();
+              new UnreadableFileDialog(mContext, null).show();
             }
           } else {
-            DocumentActivity._documentActivityInstance._fileForCurrentActionBar = myFile;
-            /*
-             * Put the selected file and its parent to mapping dictionary
-             */
+            mContext._fileForCurrentActionBar = myFile;
+
+            /** Put the selected file and its parent to mapping dictionary */
             DocumentHelper.getInstance().currentFileMap.putParcelable(myFile.path, file);
-            DocumentActivity._documentActivityInstance.onLoad(myFile.path,
-                                                              null,
-                                                              DocumentActivity.ACTION_DEFAULT);
+            mContext.startLoadingDocuments(myFile.path, null, DocumentActivity.ACTION_DEFAULT);
           }
         }
       });
@@ -149,14 +148,13 @@ public class DocumentAdapter extends BaseAdapter {
       btnAction.setOnClickListener(new View.OnClickListener() {
 
         public void onClick(View v) {
-          ExoFile file = _documentList.get(pos);
-          _documentActionDialog = new DocumentActionDialog(_mContext, file, false);
-          _documentActionDialog.myFile = file;
-          _documentActionDialog._documentActionAdapter.setSelectedFile(file);
-          _documentActionDialog._documentActionAdapter.notifyDataSetChanged();
-          _documentActionDialog.setTileForDialog(file.name);
-          _documentActionDialog.show();
-
+          ExoFile file = mDocumentList.get(pos);
+          mActionDialog = new DocumentActionDialog(mContext, file, false);
+          mActionDialog.myFile = file;
+          mActionDialog._documentActionAdapter.setSelectedFile(file);
+          mActionDialog._documentActionAdapter.notifyDataSetChanged();
+          mActionDialog.setTileForDialog(file.name);
+          mActionDialog.show();
         }
       });
       return convertView;

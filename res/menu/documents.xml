@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_refresh"
-          android:title="@string/Refresh"
-          android:icon="@drawable/ic_action_refresh"
+    <item android:id="@+id/menu_view"
+          android:title="@string/View"
+          android:icon="@drawable/ic_action_view_as_list"
           android:orderInCategory="0"
           app:showAsAction="always" />
 
     <item android:id="@+id/menu_add"
-          android:icon="@drawable/ic_action_new_message"
+          android:icon="@drawable/ic_action_new"
           android:title="@string/Add"
           android:orderInCategory="1"
           app:showAsAction="always" />
@@ -21,8 +21,14 @@
           app:showAsAction="always">
 
         <menu>
-            <item android:id="@+id/menu_settings"
+
+            <item android:id="@+id/menu_refresh"
                   android:orderInCategory="91"
+                  android:title="@string/Refresh"
+                  app:showAsAction="ifRoom" />
+
+            <item android:id="@+id/menu_settings"
+                  android:orderInCategory="92"
                   android:title="@string/Settings"
                   app:showAsAction="ifRoom" />
 

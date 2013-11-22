@@ -131,6 +131,18 @@
       <version>${android.supportv7.version}</version>
       <type>jar</type>
     </dependency>
+      <dependency>
+          <groupId>android.support</groupId>
+          <artifactId>compatibility-v7</artifactId>
+          <version>19.0.0</version>
+          <type>apklib</type>
+      </dependency>
+      <dependency>
+          <groupId>android.support</groupId>
+          <artifactId>compatibility-v7</artifactId>
+          <version>19.0.0</version>
+          <type>jar</type>
+      </dependency>
   </dependencies>
   
   <build>

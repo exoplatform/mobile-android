@@ -25,7 +25,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   public ExoFile                               _selectedFile;
 
-  private DocumentActivity                     _mContext;
+  private DocumentActivity                     mContext;
 
   private DocumentActionDialog                 _delegate;
 
@@ -35,12 +35,10 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   private DocumentExtendDialog                 extendDialog;
 
-  public DocumentActionAdapter(DocumentActivity context,
-                               DocumentActionDialog parent,
-                               ExoFile file,
-                               boolean isActionBar) {
+  public DocumentActionAdapter(DocumentActivity context, DocumentActionDialog parent,
+                               ExoFile file, boolean isActionBar) {
 
-    _mContext = context;
+    mContext = context;
     _delegate = parent;
     _selectedFile = file;
     changeLanguage(isActionBar);
@@ -53,13 +51,13 @@ public class DocumentActionAdapter extends BaseAdapter {
   }
 
   public void initCamera() {
-    _mContext.takePicture();
+    mContext.takePicture();
   }
 
   public View getView(int position, View convertView, ViewGroup parent) {
 
     final int pos = position;
-    LayoutInflater inflater = (LayoutInflater) _mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View rowView = inflater.inflate(R.layout.fileactionitem, parent, false);
     rowView.setOnClickListener(new View.OnClickListener() {
 
@@ -68,75 +66,68 @@ public class DocumentActionAdapter extends BaseAdapter {
         _delegate.dismiss();
 
         switch (pos) {
-        case DocumentActivity.ACTION_ADD_PHOTO:
-          new AddPhotoDialog(_mContext, _delegate).show();
-          break;
-        case DocumentActivity.ACTION_COPY:
-          DocumentHelper.getInstance()._fileCopied = _selectedFile;
-          DocumentHelper.getInstance()._fileMoved = new ExoFile();
-          break;
 
-        case DocumentActivity.ACTION_MOVE:
-          DocumentHelper.getInstance()._fileMoved = _selectedFile;
-          DocumentHelper.getInstance()._fileCopied = new ExoFile();
-          break;
+          case DocumentActivity.ACTION_ADD_PHOTO:
+            new AddPhotoDialog(mContext, _delegate).show();
+            break;
 
-        case DocumentActivity.ACTION_PASTE:
-          ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
-          if (!"".equals(_fileCopied.path)) {
-            String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
-            String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
+          case DocumentActivity.ACTION_COPY:
+            DocumentHelper.getInstance()._fileCopied = _selectedFile;
+            DocumentHelper.getInstance()._fileMoved = new ExoFile();
+            break;
 
-            DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path,
-                                                              destinationUrl,
-                                                              DocumentActivity.ACTION_COPY);
+          case DocumentActivity.ACTION_MOVE:
+            DocumentHelper.getInstance()._fileMoved = _selectedFile;
+            DocumentHelper.getInstance()._fileCopied = new ExoFile();
+            break;
 
-          }
-          ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
-          if (!"".equals(_fileMoved.path)) {
-            String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
-            String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
+          case DocumentActivity.ACTION_PASTE:
+            ExoFile _fileCopied = DocumentHelper.getInstance()._fileCopied;
 
-            DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
-                                                              destinationUrl,
-                                                              DocumentActivity.ACTION_MOVE);
-          }
-          DocumentHelper.getInstance()._fileCopied = new ExoFile();
-          DocumentHelper.getInstance()._fileMoved = new ExoFile();
+            if (!"".equals(_fileCopied.path)) {
+              String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
+              String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-          break;
-        case DocumentActivity.ACTION_DELETE:
-          String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+              mContext.startLoadingDocuments(_fileCopied.path, destinationUrl, DocumentActivity.ACTION_COPY);
+            }
 
-          if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder) && _selectedFile.isFolder) {
-            DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
-          }
+            ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
+            if (!"".equals(_fileMoved.path)) {
+              String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
+              String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-          DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
-                                                            _selectedFile.path,
-                                                            DocumentActivity.ACTION_DELETE);
+              mContext.startLoadingDocuments(_fileMoved.path, destinationUrl, DocumentActivity.ACTION_MOVE);
+            }
 
-          break;
-        case DocumentActivity.ACTION_RENAME:
-          extendDialog = new DocumentExtendDialog(_mContext,
-                                                  _selectedFile,
-                                                  DocumentActivity.ACTION_RENAME);
-          extendDialog.show();
+            DocumentHelper.getInstance()._fileCopied = new ExoFile();
+            DocumentHelper.getInstance()._fileMoved = new ExoFile();
+            break;
 
-          break;
-        case DocumentActivity.ACTION_CREATE:
-          extendDialog = new DocumentExtendDialog(_mContext,
-                                                  _selectedFile,
-                                                  DocumentActivity.ACTION_CREATE);
+          case DocumentActivity.ACTION_DELETE:
+            String currentFolder = mContext._fileForCurrentActionBar.currentFolder;
 
-          extendDialog.show();
-          break;
-        case DocumentActivity.ACTION_OPEN_IN:
-          ExoDocumentUtils.fileOpen(_mContext,
-                                    _selectedFile.nodeType,
-                                    _selectedFile.path,
-                                    _selectedFile.name);
-          break;
+            if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder) && _selectedFile.isFolder) {
+              mContext._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(mContext._fileForCurrentActionBar.path);
+            }
+
+            mContext.startLoadingDocuments(_selectedFile.path, _selectedFile.path,
+                DocumentActivity.ACTION_DELETE);
+            break;
+
+          case DocumentActivity.ACTION_RENAME:
+            extendDialog = new DocumentExtendDialog(mContext, _selectedFile, DocumentActivity.ACTION_RENAME);
+            extendDialog.show();
+            break;
+
+          case DocumentActivity.ACTION_CREATE:
+            extendDialog = new DocumentExtendDialog(mContext, _selectedFile, DocumentActivity.ACTION_CREATE);
+            extendDialog.show();
+            break;
+
+          case DocumentActivity.ACTION_OPEN_IN:
+            ExoDocumentUtils.fileOpen(mContext, _selectedFile.nodeType,
+                _selectedFile.path, _selectedFile.name);
+            break;
 
         }
 
@@ -188,7 +179,6 @@ public class DocumentActionAdapter extends BaseAdapter {
   }
 
   public long getItemId(int position) {
-
     return position;
   }
 
@@ -204,7 +194,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   // Set language
   public void changeLanguage(boolean isAct) {
-    Resources resource = _mContext.getResources();
+    Resources resource = mContext.getResources();
 
     String strAddAPhoto = resource.getString(R.string.AddAPhoto);
     String strCopy = resource.getString(R.string.Copy);
@@ -224,6 +214,7 @@ public class DocumentActionAdapter extends BaseAdapter {
         new DocumentActionDescription(strRename, R.drawable.documentactionpopuprenameicon),
         new DocumentActionDescription(strCreateFolder, R.drawable.documentactionpopupaddfoldericon),
         new DocumentActionDescription(strOpenIn, R.drawable.documenticonforfolder) };
+
     int size = fileActions.length;
     int maxChildren = 0;
     if (isAct) {

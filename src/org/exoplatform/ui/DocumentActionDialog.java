@@ -9,7 +9,9 @@ import android.view.Window;
 import android.widget.ListView;
 import android.widget.TextView;
 
-//File action list
+/**
+ * Action menu pops out from Add icon on action bar
+ */
 public class DocumentActionDialog extends Dialog {
 
   private ListView             _listViewFileAction;   // List of
@@ -40,7 +42,6 @@ public class DocumentActionDialog extends Dialog {
     init();
 
     setTileForDialog(myFile.name);
-
   }
 
   public void setTileForDialog(String title) {

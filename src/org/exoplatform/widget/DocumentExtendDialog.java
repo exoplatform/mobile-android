@@ -92,19 +92,19 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
       if ((folderName != null) && (folderName.length() > 0)) {
 
         if (actionId == DocumentActivity.ACTION_RENAME) {
-          if (DocumentActivity._documentActivityInstance._fileForCurrentActionBar != null) {
-            String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+          if (DocumentActivity.instance._fileForCurrentActionBar != null) {
+            String currentFolder = DocumentActivity.instance._fileForCurrentActionBar.currentFolder;
             String destinationUrl = ExoDocumentUtils.getParentUrl(selectedFile.path) + "/"
                 + folderName;
             if (currentFolder.equalsIgnoreCase(selectedFile.currentFolder)) {
-              DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
+              DocumentActivity.instance._fileForCurrentActionBar.name = folderName;
               currentFolder = ExoDocumentUtils.getParentUrl(currentFolder) + "/" + folderName;
-              DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
+              DocumentActivity.instance._fileForCurrentActionBar.currentFolder = currentFolder;
             }
             if (URLAnalyzer.isUrlValid(destinationUrl)) {
-              DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
-                                                                destinationUrl,
-                                                                DocumentActivity.ACTION_RENAME);
+              DocumentActivity.instance.startLoadingDocuments(selectedFile.path,
+                                                              destinationUrl,
+                                                              DocumentActivity.ACTION_RENAME);
             } else {
               Toast toast = Toast.makeText(mContext, inputNameURLInvalid, Toast.LENGTH_SHORT);
               toast.setGravity(Gravity.CENTER, 0, 0);
@@ -116,9 +116,8 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
         } else {
           String desUrl = selectedFile.path + "/" + folderName;
           if (URLAnalyzer.isUrlValid(desUrl)) {
-            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
-                                                              desUrl,
-                                                              DocumentActivity.ACTION_CREATE);
+            DocumentActivity.instance.startLoadingDocuments(selectedFile.path, desUrl,
+                                                            DocumentActivity.ACTION_CREATE);
           } else {
             Toast toast = Toast.makeText(mContext, inputNameURLInvalid, Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);

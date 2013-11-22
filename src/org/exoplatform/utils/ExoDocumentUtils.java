@@ -143,7 +143,7 @@ public class ExoDocumentUtils {
       return;
     }
 
-    if (fileType != null && (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE))) {
+    if (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE)) {
       Intent intent = new Intent(context, WebViewActivity.class);
       intent.putExtra(ExoConstants.WEB_VIEW_URL, filePath);
       intent.putExtra(ExoConstants.WEB_VIEW_TITLE, fileName);

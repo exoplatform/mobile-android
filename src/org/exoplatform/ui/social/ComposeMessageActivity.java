@@ -39,10 +39,8 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 
-public class ComposeMessageActivity
+public class ComposeMessageActivity extends ActionBarActivity implements View.OnClickListener {
     //extends MyActionBar
-    extends ActionBarActivity
-    implements View.OnClickListener {
 
   private PostWaitingDialog            _progressDialog;
 
@@ -227,8 +225,7 @@ public class ComposeMessageActivity
       fileAttachWrap.addView(image, params);
     } catch (IOException e) {
       //if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("Exception", "Error when adding image to message!");
-
+      Log.e("Exception", "Error when adding image to message!");
     }
 
   }
