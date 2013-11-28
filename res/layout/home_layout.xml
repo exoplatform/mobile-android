@@ -2,18 +2,18 @@
 <!-- Home screen -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/MainLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/home_profile_bg"
             android:gravity="center"
@@ -31,7 +31,7 @@
             <TextView
                 android:id="@+id/home_textview_name"
                 style="@style/textview_home"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
                 android:gravity="center_vertical"
@@ -41,22 +41,22 @@
 
         <org.exoplatform.widget.HomeLinearLayout
             android:id="@+id/home_linearlayout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="#1e1e1e"
             android:orientation="vertical" >
 
             <LinearLayout
                 android:id="@+id/one"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:baselineAligned="false"
                 android:orientation="horizontal" >
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/home_item_background_shape"
                     android:gravity="center"
@@ -70,8 +70,8 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/home_item_background_shape"
                     android:gravity="center"
@@ -87,15 +87,15 @@
 
             <LinearLayout
                 android:id="@+id/two"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:baselineAligned="false"
                 android:orientation="horizontal" >
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/home_item_background_shape"
                     android:gravity="center"
@@ -110,8 +110,8 @@
 
                 <LinearLayout
                     android:id="@+id/addition_layout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:layout_weight="1"
                     android:gravity="center" >
@@ -121,17 +121,18 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:gravity="center" >
+        android:gravity="center"
+        android:background="@android:color/black">
 
         <ViewFlipper
             android:id="@+id/home_social_flipper"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:flipInterval="6000"
             android:gravity="center_vertical"
-            android:onClick="onNewsClick" >
+            android:onClick="onNewsClick">
         </ViewFlipper>
     </LinearLayout>
 

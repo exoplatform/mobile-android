@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_copy"
+          android:title="@string/Copy"
+          android:icon="@drawable/ic_action_copy" />
+
+    <item android:id="@+id/menu_cut"
+          android:title="@string/Move"
+          android:icon="@drawable/ic_action_cut" />
+
+    <item android:id="@+id/menu_paste"
+          android:title="@string/Paste"
+          android:icon="@drawable/ic_action_paste" />
+
+    <item android:id="@+id/menu_delete"
+          android:title="@string/Delete"
+          android:icon="@drawable/ic_action_remove" />
+
+    <item android:id="@+id/menu_rename"
+          android:title="@string/Rename"
+          android:icon="@drawable/documentactionpopuprenameicon" />
+
+</menu>

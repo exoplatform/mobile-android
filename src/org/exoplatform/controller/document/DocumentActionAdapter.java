@@ -21,28 +21,31 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * Adapter for menu action of file
+ */
 public class DocumentActionAdapter extends BaseAdapter {
 
-  public ExoFile                               _selectedFile;
+  public  ExoFile                               _selectedFile;
 
   private DocumentActivity                     mContext;
 
   private DocumentActionDialog                 _delegate;
 
-  private DocumentActionDescription[]          fileActions = null;
-
-  private ArrayList<DocumentActionDescription> fileActionList;
+  private ArrayList<DocumentActionDescription> mFileActionList;
 
   private DocumentExtendDialog                 extendDialog;
 
-  public DocumentActionAdapter(DocumentActivity context, DocumentActionDialog parent,
+  public  DocumentActionAdapter(DocumentActivity context, DocumentActionDialog parent,
                                ExoFile file, boolean isActionBar) {
 
     mContext = context;
     _delegate = parent;
     _selectedFile = file;
-    changeLanguage(isActionBar);
+    mFileActionList = new ArrayList<DocumentActionDescription>();
+    //changeLanguage(isActionBar);
 
+    initComponents(isActionBar);
   }
 
   public void setSelectedFile(ExoFile file) {
@@ -58,7 +61,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
     final int pos = position;
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    View rowView = inflater.inflate(R.layout.fileactionitem, parent, false);
+    View rowView = inflater.inflate(R.layout.file_menu_item, parent, false);
     rowView.setOnClickListener(new View.OnClickListener() {
 
       public void onClick(View v) {
@@ -135,9 +138,8 @@ public class DocumentActionAdapter extends BaseAdapter {
 
     });
 
-    bindView(rowView, fileActionList.get(position), position);
+    bindView(rowView, mFileActionList.get(position), position);
     return (rowView);
-
   }
 
   private void bindView(View view, DocumentActionDescription fileAction, int position) {
@@ -145,7 +147,8 @@ public class DocumentActionAdapter extends BaseAdapter {
     label.setText(fileAction.actionName);
     ImageView icon = (ImageView) view.findViewById(R.id.icon);
     icon.setImageResource(fileAction.imageID);
-    /*
+
+    /**
      * Disable action view if it can not be removed || position ==
      * DocumentActivity.ACTION_COPY
      */
@@ -189,10 +192,11 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   public int getCount() {
 
-    return fileActionList.size();
+    return mFileActionList.size();
   }
 
   // Set language
+  /**
   public void changeLanguage(boolean isAct) {
     Resources resource = mContext.getResources();
 
@@ -216,7 +220,7 @@ public class DocumentActionAdapter extends BaseAdapter {
         new DocumentActionDescription(strOpenIn, R.drawable.documenticonforfolder) };
 
     int size = fileActions.length;
-    int maxChildren = 0;
+    int maxChildren;
     if (isAct) {
       maxChildren = size - 1;
     } else {
@@ -231,4 +235,33 @@ public class DocumentActionAdapter extends BaseAdapter {
     }
 
   }
+   **/
+
+  private void initComponents(boolean isActionBar) {
+    Resources resource = mContext.getResources();
+
+    DocumentActionDescription[] addNewActions = new DocumentActionDescription[] {
+        new DocumentActionDescription(resource.getString(R.string.AddAPhoto), R.drawable.ic_action_camera),
+        new DocumentActionDescription(resource.getString(R.string.CreateFolder), R.drawable.documentactionpopupaddfoldericon)
+    };
+
+    DocumentActionDescription[] normalActions = new DocumentActionDescription[] {
+        new DocumentActionDescription(resource.getString(R.string.Copy),      R.drawable.ic_action_copy),
+        new DocumentActionDescription(resource.getString(R.string.Move),      R.drawable.ic_action_cut),
+        new DocumentActionDescription(resource.getString(R.string.Paste),     R.drawable.ic_action_paste),
+        new DocumentActionDescription(resource.getString(R.string.Delete),    R.drawable.ic_action_remove),
+        new DocumentActionDescription(resource.getString(R.string.Rename),    R.drawable.ic_action_edit),       // old icon : documentactionpopuprenameicon
+        new DocumentActionDescription(resource.getString(R.string.OpenIn),    R.drawable.ic_action_collection)  // old icon: documenticonforfolder
+    };
+
+    DocumentActionDescription[] fileActions = isActionBar ? addNewActions : normalActions;
+
+    for (int i = 0; i < fileActions.length; i++) {
+      mFileActionList.add(fileActions[i]);
+    }
+
+    /** Remove open in action in case of folder */
+    if (!isActionBar && _selectedFile.isFolder) mFileActionList.remove(5);
+  }
+
 }

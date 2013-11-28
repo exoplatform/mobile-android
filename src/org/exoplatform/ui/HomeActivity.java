@@ -41,8 +41,7 @@ import android.widget.ViewFlipper;
 /**
  * Represents the home screen with dashboard
  */
-public class HomeActivity
-    extends ActionBarActivity
+public class HomeActivity extends ActionBarActivity
     implements SocialServiceLoadTask.AsyncTaskListener,
     SocialLoadTask.AsyncTaskListener {
     // extends MyActionBar {

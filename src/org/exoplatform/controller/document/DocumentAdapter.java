@@ -2,7 +2,9 @@ package org.exoplatform.controller.document;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import android.util.TypedValue;
+import android.widget.Toast;
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.DocumentHelper;
@@ -27,6 +29,9 @@ public class DocumentAdapter extends BaseAdapter {
   private DocumentActivity    mContext;
 
   public DocumentActionDialog mActionDialog;
+
+  private static final String TAG = "eXo____DocumentAdapter____";
+
 
   public DocumentAdapter(DocumentActivity context, ArrayList<ExoFile> list) {
     mContext      = context;
@@ -77,7 +82,7 @@ public class DocumentAdapter extends BaseAdapter {
 
       convertView = inflater.inflate(R.layout.fileitem, parent, false);
 
-      Button btnAction = (Button)    convertView.findViewById(R.id.Button_FileAction);
+      //Button btnAction = (Button)    convertView.findViewById(R.id.Button_FileAction);
       ImageView icon   = (ImageView) convertView.findViewById(R.id.icon);
       TextView lb      = (TextView)  convertView.findViewById(R.id.label);
       lb.setText(myFile.name);
@@ -88,7 +93,7 @@ public class DocumentAdapter extends BaseAdapter {
       if ("".equals(myFile.currentFolder)) {
 
         /** If current folder is null, make the action button is invisible */
-        btnAction.setVisibility(View.INVISIBLE);
+        //btnAction.setVisibility(View.INVISIBLE);
       }
 
       if (position == 0) {
@@ -118,7 +123,7 @@ public class DocumentAdapter extends BaseAdapter {
       }
 
       if (!myFile.isFolder) {
-        btnAction.setVisibility(View.VISIBLE);
+        //btnAction.setVisibility(View.VISIBLE);
         icon.setImageResource(ExoDocumentUtils.getIconFromType(myFile.nodeType));
       } else {
         icon.setImageResource(R.drawable.documenticonforfolder);
@@ -138,6 +143,12 @@ public class DocumentAdapter extends BaseAdapter {
           } else {
             mContext._fileForCurrentActionBar = myFile;
 
+            Log.i(TAG, "click on folder - myFile.path: " + myFile.path);
+            Log.i(TAG, "myFile.name: " + myFile.name);
+            Log.i(TAG, "myFile.currentFolder: " + myFile.currentFolder);
+            Log.i(TAG, "Current action bar folder - file.name: " + file.name);
+            Log.i(TAG, "file.path: " + file.path);
+
             /** Put the selected file and its parent to mapping dictionary */
             DocumentHelper.getInstance().currentFileMap.putParcelable(myFile.path, file);
             mContext.startLoadingDocuments(myFile.path, null, DocumentActivity.ACTION_DEFAULT);
@@ -145,6 +156,26 @@ public class DocumentAdapter extends BaseAdapter {
         }
       });
 
+      if (!"".equals(myFile.currentFolder) || !myFile.isFolder) {
+
+        /** If current folder is null, then file is in root folder, then action button invisible */
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+
+          public boolean onLongClick(View view) {
+            ExoFile file = mDocumentList.get(pos);
+            mActionDialog = new DocumentActionDialog(mContext, file, false);
+            mActionDialog.myFile = file;
+            mActionDialog._documentActionAdapter.setSelectedFile(file);
+            mActionDialog._documentActionAdapter.notifyDataSetChanged();
+            mActionDialog.setTileForDialog(file.name);
+            mActionDialog.show();
+            return true;
+          }
+        });
+      }
+
+
+      /**
       btnAction.setOnClickListener(new View.OnClickListener() {
 
         public void onClick(View v) {
@@ -157,7 +188,10 @@ public class DocumentAdapter extends BaseAdapter {
           mActionDialog.show();
         }
       });
+       **/
+
       return convertView;
     }
   }
+
 }

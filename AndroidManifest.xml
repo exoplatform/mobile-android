@@ -44,16 +44,35 @@
         <activity android:name=".ui.setting.SettingActivity" />
         <activity android:name=".ui.setting.ServerEditionActivity"/>
 
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DocumentActivity"/>
+        <activity android:name=".ui.social.SocialTabsActivity"
+                  android:configChanges="keyboardHidden|orientation"
+                  android:theme="@style/Theme.PageIndicatorDefaults"
+                  android:parentActivityName=".ui.HomeActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                       android:value=".ui.HomeActivity" />
+        </activity>
+
+        <activity android:name=".ui.DocumentActivity"
+                  android:configChanges="keyboardHidden|orientation"
+                  android:parentActivityName=".ui.HomeActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                       android:value=".ui.HomeActivity" />
+        </activity>
+
+        <activity android:name=".ui.DashboardActivity"
+                  android:configChanges="keyboardHidden|orientation"
+                  android:parentActivityName=".ui.HomeActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                       android:value=".ui.HomeActivity" />
+        </activity>
+
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DocumentActionDialog"/>
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DashboardActivity"/>
         <activity android:configChanges="orientation" android:name=".ui.WebViewActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialDetailActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.ComposeMessageActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SelectedImageActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialAttachedImageActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.LikeListActivity"/>
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialTabsActivity" android:theme="@style/Theme.PageIndicatorDefaults"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignUpActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignInActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignInOnPremiseActivity"/>

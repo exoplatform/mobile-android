@@ -31,7 +31,7 @@ public class DocumentActionDialog extends Dialog {
     super(context);
 
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.exofileaction);
+    setContentView(R.layout.file_menu);
 
     setCanceledOnTouchOutside(true);
 

@@ -75,6 +75,8 @@ public class ExoDocumentUtils {
 
   public static final String OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
 
+  private static final String TAG = "eXo____ExoDocumentUtils____";
+
 
   public static boolean isEnoughMemory(int fileSize) {
     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -295,86 +297,90 @@ public class ExoDocumentUtils {
 
   // Get file array from URL
   public static ArrayList<ExoFile> getPersonalDriveContent(Context context, ExoFile file) throws IOException {
+    Log.i(TAG, "getPersonalDriveContent");
     SharedPreferences prefs = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
     ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
     String domain = AccountSetting.getInstance().getDomainName();
-    HttpResponse response = null;
-    String urlStr = null;
-    /*
-     * Put the current folder and its child list to mapping dictionary
-     */
-    if (DocumentHelper.getInstance().childFilesMap == null) {
-      DocumentHelper.getInstance().childFilesMap = new Bundle();
-    }
+    HttpResponse response;
+    String urlStr;
+    DocumentHelper helper = DocumentHelper.getInstance();
 
+    /** Put the current folder and its child list to mapping dictionary */
+    if (helper.childFilesMap == null) helper.childFilesMap = new Bundle();
+
+    Log.i(TAG, "file.name: " + file.name);
+    Log.i(TAG, "file.path: " + file.path);
+    Log.i(TAG, "file.currentFolder: " + file.currentFolder);
+
+    /** Root folder */
     if ("".equals(file.name) && "".equals(file.path)) {
-      // personal driver
-      ArrayList<ExoFile> fileList = new ArrayList<ExoFile>();
+
+      /** Retrieve files in Personal driver */
+      ArrayList<ExoFile> fileList;
       StringBuffer buffer = new StringBuffer();
-      buffer.append(domain);
-      buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
-      buffer.append(ExoConstants.DOCUMENT_PERSONAL_DRIVER);
-      buffer.append(ExoConstants.DOCUMENT_PERSONAL_DRIVER_SHOW_PRIVATE);
-      buffer.append(isShowHidden);
+      buffer.append(domain).append(ExoConstants.DOCUMENT_DRIVE_PATH_REST)
+          .append(ExoConstants.DOCUMENT_PERSONAL_DRIVER)
+          .append(ExoConstants.DOCUMENT_PERSONAL_DRIVER_SHOW_PRIVATE).append(isShowHidden);
       urlStr = buffer.toString();
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       fileList = getDrives(response);
+
       if (fileList != null && fileList.size() > 0) {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_PERSONAL_DRIVER));
         arrFilesTmp.addAll(fileList);
       }
-      // general driver
-      buffer = new StringBuffer();
-      buffer.append(domain);
-      buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
-      buffer.append(ExoConstants.DOCUMENT_GENERAL_DRIVER);
+
+      /** Retrieve files in General driver */
+      buffer = new StringBuffer().append(domain).append(ExoConstants.DOCUMENT_DRIVE_PATH_REST)
+          .append(ExoConstants.DOCUMENT_GENERAL_DRIVER);
       urlStr = buffer.toString();
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       fileList = getDrives(response);
+
       if (fileList != null && fileList.size() > 0) {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GENERAL_DRIVER));
         arrFilesTmp.addAll(fileList);
       }
 
-      // group driver
+      /** Retrieve files in Group driver */
       buffer = new StringBuffer();
-      buffer.append(domain);
-      buffer.append(ExoConstants.DOCUMENT_DRIVE_PATH_REST);
-      buffer.append(ExoConstants.DOCUMENT_GROUP_DRIVER);
+      buffer.append(domain).append(ExoConstants.DOCUMENT_DRIVE_PATH_REST)
+          .append(ExoConstants.DOCUMENT_GROUP_DRIVER);
       urlStr = buffer.toString();
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       fileList = getDrives(response);
+
       if (fileList != null && fileList.size() > 0) {
         arrFilesTmp.add(new ExoFile(ExoConstants.DOCUMENT_GROUP_DRIVER));
         arrFilesTmp.addAll(fileList);
       }
 
-      // push information to map
-      if (DocumentHelper.getInstance().childFilesMap.containsKey(ExoConstants.DOCUMENT_JCR_PATH)) {
-        DocumentHelper.getInstance().childFilesMap.remove(ExoConstants.DOCUMENT_JCR_PATH);
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH,
-                                                                          arrFilesTmp);
+      /** put information to map - remove if exists already */
+      if (helper.childFilesMap.containsKey(ExoConstants.DOCUMENT_JCR_PATH)) {
+        helper.childFilesMap.remove(ExoConstants.DOCUMENT_JCR_PATH);
+        helper.childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
       } else {
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH,
-                                                                          arrFilesTmp);
+        helper.childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
       }
 
-    } else {
+    }
+    else {
+      /** not root folder */
       urlStr = getDriverUrl(file);
       urlStr = URLAnalyzer.encodeUrl(urlStr);
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       arrFilesTmp.addAll(getContentOfFolder(response, file));
-      if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
-        DocumentHelper.getInstance().childFilesMap.remove(file.path);
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
+
+      if (helper.childFilesMap.containsKey(file.path)) {
+        helper.childFilesMap.remove(file.path);
+        helper.childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
       } else
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
+        helper.childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
 
     }
 
     return arrFilesTmp;
-
   }
 
   public static String fullURLofFile(String workSpaceName, String url) {

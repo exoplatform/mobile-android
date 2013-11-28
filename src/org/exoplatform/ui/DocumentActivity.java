@@ -2,9 +2,9 @@ package org.exoplatform.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 //import greendroid.util.Config;
 //import greendroid.widget.ActionBarItem;
@@ -108,7 +108,6 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
 
   public ExoFile                 _fileForCurrentActionBar;
 
-
   public DocumentAdapter         mDocumentAdapter;
 
   private DocumentLoadTask       mLoadTask;
@@ -156,6 +155,8 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
 
     mRootView = (ViewGroup) getLayoutInflater().inflate(R.layout.exofilesview, null, false);
     setContentView(mRootView);
+
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     //setTheme(R.style.Theme_eXo);
     //setActionBarContentView(R.layout.exofilesview);
@@ -263,8 +264,11 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
 
-      case R.id.menu_view:
+      case android.R.id.home:
+        NavUtils.navigateUpFromSameTask(this);
+        return true;
 
+      case R.id.menu_view:
         mViewMode = mViewMode == ExoConstants.VIEW_AS_LIST ? ExoConstants.VIEW_AS_GRID
             : ExoConstants.VIEW_AS_LIST;
 
@@ -343,7 +347,7 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
     if (result == DocumentLoadTask.RESULT_OK) {
 
       mDocumentList = documentList;
-      setDocumentAdapter(true);
+      switchViewMode(true);
     }
     else if (result == DocumentLoadTask.RESULT_ERROR) {
 
@@ -432,7 +436,11 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
    */
   @Override
   public void onBackPressed() {
+    Log.i(TAG, "onBackPressed");
     onCancelLoad();
+
+    Log.i(TAG, "_fileForCurrentActionBar.name: " + _fileForCurrentActionBar.name);
+    Log.i(TAG, "_fileForCurrentActionBar.path: " + _fileForCurrentActionBar.path);
 
     /** root folder */
     if (_fileForCurrentActionBar.name.equals("")) {
@@ -442,12 +450,12 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
     }
 
     /** Set animation for list view when press back button */
-    if (mDocumentListView != null)
-      mDocumentListView.setAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_left_to_right));
+    //if (mDocumentListView != null)
+    //mDocumentListView.setAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_left_to_right));
 
     /** Reset the document list */
     mDocumentList = getCurrentDocumentList();
-    setDocumentAdapter(true);
+    switchViewMode(true);
   }
 
 
@@ -456,9 +464,13 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
     ArrayList<ExoFile> documentList;
     DocumentHelper helper = DocumentHelper.getInstance();
 
+    Log.i(TAG, "getCurrentDocumentList");
+    Log.i(TAG, "_fileForCurrentActionBar.currentFolder: " + _fileForCurrentActionBar.currentFolder);
+
+    /** parent is root folder */
     if ("".equals(_fileForCurrentActionBar.currentFolder)) {
       _fileForCurrentActionBar = new ExoFile();
-      parent       = helper.currentFileMap.getParcelable("");
+      //parent       = helper.currentFileMap.getParcelable("");
       return helper.childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH);
     }
 
@@ -466,7 +478,14 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
     helper.currentFileMap.remove(_fileForCurrentActionBar.path);
     _fileForCurrentActionBar = parent;
 
-    if ("".equals(parent.name)) {
+    if (parent != null) {
+      Log.i(TAG, "parent.name: " + parent.name);
+      Log.i(TAG, "parent.path: " + parent.path);
+    }
+    else
+      Log.i(TAG, "parent is null");
+
+    if (parent == null || "".equals(parent.name)) {
       documentList = helper.childFilesMap.getParcelableArrayList("");
     } else {
       documentList = helper.childFilesMap.getParcelableArrayList(parent.path);
@@ -481,27 +500,30 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
   }
 
 
-  public void setDocumentAdapter(boolean forceReloadView) {
+  private void switchViewMode(boolean forceReloadView) {
     if ("".equals(_fileForCurrentActionBar.name)) {
-      setTitle(getResources().getString(R.string.Documents));
+      setTitle(getString(R.string.Documents));
     } else {
       setTitle(_fileForCurrentActionBar.name);
     }
 
     setEmptyView(mDocumentList.size() == 0 ? View.VISIBLE : View.GONE);
-    if (mDocumentList.size() > 0) switchViewMode(forceReloadView);
-  }
 
+    /** remove the last child to populate new view */
+    View lastChild = mRootView.getChildAt(mRootView.getChildCount() - 1);
+    if (lastChild instanceof ScrollView || lastChild instanceof ListView) {
+      mRootView.removeView(lastChild);
+    }
 
-  private void switchViewMode(boolean forceReloadView) {
-    if      (mViewMode == ExoConstants.VIEW_AS_LIST) switchDocumentToListView(forceReloadView);
-    else if (mViewMode == ExoConstants.VIEW_AS_GRID) switchDocumentToGridView(forceReloadView);
+    if (mDocumentList.size() > 0) {
+      if      (mViewMode == ExoConstants.VIEW_AS_LIST) switchDocumentToListView(forceReloadView);
+      else if (mViewMode == ExoConstants.VIEW_AS_GRID) switchDocumentToGridView(forceReloadView);
+    }
   }
 
 
   private void switchDocumentToListView(boolean forceReloadView) {
-    Log.i(TAG, "switchDocumentToListView");
-    mRootView.removeViewAt(mRootView.getChildCount() - 1);
+    Log.i(TAG, "switchDocumentToListView: " + forceReloadView);
 
     /** Replace current grid view by old list view */
     if (mDocumentListView != null && !forceReloadView) {
@@ -529,12 +551,12 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
         R.anim.anim_right_to_left));
 
     //addOrRemoveFileActionButton();
+
   }
 
 
   private void switchDocumentToGridView(boolean forceReloadView) {
-    Log.i(TAG, "switchDocumentToGridView");
-    mRootView.removeViewAt(mRootView.getChildCount() - 1);
+    Log.i(TAG, "switchDocumentToGridView: " + forceReloadView);
 
     /** Replace current list view by old grid view */
     if (mDocumentGridView != null && !forceReloadView) {
@@ -552,14 +574,8 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
     GridLayout gridLayout = new GridLayout(this);
     gridLayout.setUseDefaultMargins(true);
     gridLayout.setAlignmentMode(ALIGN_BOUNDS);
-
-    Configuration configuration = getResources().getConfiguration();
-    if ((configuration.orientation == Configuration.ORIENTATION_PORTRAIT)) {
-      gridLayout.setColumnOrderPreserved(false);
-    } else {
-      gridLayout.setRowOrderPreserved(false);
-    }
-
+    gridLayout.setPadding(0, 0, 5, 0);
+    gridLayout.setColumnOrderPreserved(false);
     gridLayout.setColumnCount(2);
     gridLayout.setRowCount(Math.round(mDocumentList.size() / 2) + 1);
 
@@ -582,7 +598,7 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
       if ("".equals(file.name) && "".equals(file.path)) {
         continue;
       }
-      /** view is a folder */
+      /** view is a folder or file */
       else {
 
         documentView = inflater.inflate(R.layout.file_item, gridLayout, false);
@@ -595,14 +611,7 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
         lb.setEllipsize(TextUtils.TruncateAt.END);
         lb.setMaxLines(2);
 
-        //final ExoFile file = _fileForCurrentActionBar;
-        if ("".equals(file.currentFolder)) {
-
-          /** If current folder is null, make the action button is invisible */
-          //btnAction.setVisibility(View.INVISIBLE);
-        }
-
-        documentView.setBackgroundResource(R.drawable.dasboard_bottom_background_shape);
+        documentView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
 
         /**
         if (i == 0) {
@@ -639,7 +648,8 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
           icon.setImageResource(R.drawable.documenticonforfolder);
         }
 
-        final ExoFile _file = file;
+        final ExoFile _file  = file;
+        final ExoFile parent = _fileForCurrentActionBar;
 
         documentView.setOnClickListener(new View.OnClickListener() {
 
@@ -656,11 +666,29 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
               _fileForCurrentActionBar = _file;
 
               /** Put the selected file and its parent to mapping dictionary */
-              DocumentHelper.getInstance().currentFileMap.putParcelable(_file.path, _file);
+              DocumentHelper.getInstance().currentFileMap.putParcelable(_file.path, parent);
               DocumentActivity.this.startLoadingDocuments(_file.path, null, DocumentActivity.ACTION_DEFAULT);
             }
           }
         });
+
+
+        if (!"".equals(file.currentFolder) || !file.isFolder) {
+
+          /** If current folder is null, then file is in root folder, then action button invisible */
+          documentView.setOnLongClickListener(new View.OnLongClickListener() {
+
+            public boolean onLongClick(View view) {
+              DocumentActionDialog actionDialog = new DocumentActionDialog(DocumentActivity.this, _file, false);
+              actionDialog.myFile = _file;
+              actionDialog._documentActionAdapter.setSelectedFile(_file);
+              actionDialog._documentActionAdapter.notifyDataSetChanged();
+              actionDialog.setTileForDialog(_file.name);
+              actionDialog.show();
+              return true;
+            }
+          });
+        }
 
         /**
          btnAction.setOnClickListener(new View.OnClickListener() {

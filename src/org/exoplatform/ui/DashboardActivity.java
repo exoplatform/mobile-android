@@ -1,6 +1,7 @@
 package org.exoplatform.ui;
 
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 //import greendroid.widget.ActionBarItem;
 //import greendroid.widget.ActionBarItem.Type;
@@ -74,6 +75,7 @@ public class DashboardActivity extends ActionBarActivity implements DashboardLoa
     setTitle(getString(R.string.Dashboard));
     //setActionBarContentView(R.layout.dashboard_layout);
     setContentView(R.layout.dashboard_layout);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     //addActionBarItem(Type.Refresh);
@@ -112,6 +114,11 @@ public class DashboardActivity extends ActionBarActivity implements DashboardLoa
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
+
+      case android.R.id.home:
+        NavUtils.navigateUpFromSameTask(this);
+        return true;
+
       case R.id.menu_refresh:
         startLoadingApps();
         return true;

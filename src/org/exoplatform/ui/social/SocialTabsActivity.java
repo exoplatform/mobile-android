@@ -16,6 +16,7 @@
  */
 package org.exoplatform.ui.social;
 
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 //import greendroid.widget.ActionBarItem;
 //import greendroid.widget.ActionBarItem.Type;
@@ -105,6 +106,7 @@ public class SocialTabsActivity
 
     //setActionBarContentView(R.layout.social_activity_tabs);
     setContentView(R.layout.social_activity_tabs);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     //addActionBarItem(Type.Refresh);
@@ -157,7 +159,12 @@ public class SocialTabsActivity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
+
     switch (item.getItemId()) {
+
+      case android.R.id.home:
+        NavUtils.navigateUpFromSameTask(this);
+        return true;
 
       /** Click on Refresh */
       case R.id.menu_refresh:

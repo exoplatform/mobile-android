@@ -5,15 +5,31 @@ import android.os.Parcelable;
 
 public class ExoFile implements Parcelable {
 
-  public String  path;         // File's jcr url
+  /**
+   * JCR url of the file <br/>
+   * Root folder or folders contained in root has this value empty
+   */
+  public String  path;
 
-  public boolean isFolder;     // Is folder
+  /**
+   * Indicate whether the item is file or folder
+   */
+  public boolean isFolder;
 
   public boolean canRemove;
 
+  /**
+   * Name of the file / folder <br/>
+   * Root folder has this value empty
+   */
   public String  name;         // name of the file/folder
 
-  public String  currentFolder; // the path of file
+  /**
+   * The folder that contains the item, if the item is a folder then
+   * it's the same as name <br/>
+   * Root folder or folders contained in root has this value empty
+   */
+  public String  currentFolder;
 
   public String  driveName;    // drive name of file
 
