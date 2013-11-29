@@ -32,7 +32,7 @@
   <string name="CreateFolder">Klasör Oluştur</string>
   <string name="Send">Gönder</string>
   <string name="Paste">Yapıştır</string>
-  <string name="Cancel">İptal</string>
+  <string name="Cancel">#{word.cancel}</string>
   <string name="OK">Tamam</string>
   <string name="Remove">Kaldır</string>
   <string name="Documents">Belgeler</string>
