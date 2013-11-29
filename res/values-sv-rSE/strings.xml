@@ -32,7 +32,7 @@
   <string name="CreateFolder">Skapa mapp</string>
   <string name="Send">Skicka</string>
   <string name="Paste">Klistra in</string>
-  <string name="Cancel">Avbryt</string>
+  <string name="Cancel">#{word.cancel}</string>
   <string name="OK">Ok</string>
   <string name="Remove">Ta bort</string>
   <string name="Documents">Dokument</string>
