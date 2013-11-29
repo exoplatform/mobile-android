@@ -32,7 +32,7 @@
   <string name="CreateFolder">انشاء مجلّد</string>
   <string name="Send">إرسال</string>
   <string name="Paste">ألصق</string>
-  <string name="Cancel">الغاء</string>
+  <string name="Cancel">#{word.cancel}</string>
   <string name="OK">موافق</string>
   <string name="Remove">حذف</string>
   <string name="Documents">وثائق</string>
