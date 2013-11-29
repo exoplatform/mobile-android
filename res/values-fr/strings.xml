@@ -44,7 +44,7 @@
   <string name="CreateFolder">Nouveau Dossier</string>
   <string name="Send">Envoyer</string>
   <string name="Paste">Coller</string>
-  <string name="Cancel">Annuler</string>
+  <string name="Cancel">#{word.cancel}</string>
   <string name="OK">Valider</string>
   <string name="Remove">Supprimer</string>
   <string name="Documents">Documents</string>
