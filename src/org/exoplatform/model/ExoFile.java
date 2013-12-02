@@ -20,9 +20,9 @@ public class ExoFile implements Parcelable {
 
   /**
    * Name of the file / folder <br/>
-   * Root folder has this value empty
+   * Only Root folder has this value empty
    */
-  public String  name;         // name of the file/folder
+  public String  name;
 
   /**
    * The folder that contains the item, if the item is a folder then

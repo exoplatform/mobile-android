@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
@@ -33,6 +34,8 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
   private EditText mPassEditTxt;
 
   private Button   mLoginBtn;
+
+  private ImageView mSettingBtn;
 
   /**=== Constants ===**/
   public static final String USERNAME      = "USERNAME";
@@ -70,6 +73,9 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
 
     mLoginBtn     = (Button) findViewById(R.id.Button_Login);
     mLoginBtn.setOnClickListener(this);
+
+    mSettingBtn   = (ImageView) findViewById(R.id.Button_Setting);
+    mSettingBtn.setOnClickListener(this);
   }
 
 
@@ -131,6 +137,9 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
           mPassEditTxt.getText().toString());
     }
 
+    if (view.equals(mSettingBtn)) {
+      mViewListener.onClickSettings();
+    }
   }
 
   private void changeStateOfLoginBtn() {
@@ -152,10 +161,12 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
 
   private ViewListener mViewListener;
 
-  /* interface to listen to view event */
+  /** interface to listen to view event */
   public interface ViewListener {
 
     void onClickLogin(String username, String password);
+
+    void onClickSettings();
   }
 
   public void setViewListener(ViewListener l) {

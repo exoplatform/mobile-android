@@ -31,9 +31,7 @@ import java.util.ArrayList;
  *
  * It also contain 2 buttons to switch between panels
  */
-public class LoginActivity extends Activity implements
-    AccountPanel.ViewListener,
-    OnClickListener,
+public class LoginActivity extends Activity implements AccountPanel.ViewListener, OnClickListener,
     LoginProxy.ProxyListener {
 
   private AccountSetting    mSetting;
@@ -62,7 +60,8 @@ public class LoginActivity extends Activity implements
   /**=== Constants ===**/
   public static final String PANEL_MODE    = "PANEL_MODE";
 
-  private static final String TAG = "eXoLoginActivity";
+  private static final String TAG = "eXo____LoginActivity____";
+
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -244,7 +243,7 @@ public class LoginActivity extends Activity implements
   }
 
   @Override
-  protected void onPause(){
+  protected void onPause() {
     super.onPause();
 
     if (!mSetting.getDomainIndex().equals("-1")) {
@@ -278,6 +277,14 @@ public class LoginActivity extends Activity implements
     mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EXISTING_ACCOUNT, loginData);
     mLoginProxy.setListener(this);
     mLoginProxy.performLogin();
+  }
+
+
+  @Override
+  public void onClickSettings() {
+    Intent next = new Intent(this, SettingActivity.class);
+    next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.GLOBAL_TYPE);
+    startActivity(next);
   }
 
   @Override

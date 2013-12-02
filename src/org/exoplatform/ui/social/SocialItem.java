@@ -168,7 +168,7 @@ public class SocialItem {
         if (docLink != null) {
           String docName = activityInfo.templateParams.get("DOCNAME");
           String url = domain + docLink;
-          /** get mimetype from url */
+          /** get mime type from url */
           String mimeTypeExtension = URLConnection.guessContentTypeFromName(url);
           displayAttachImage(url, docName, null, mimeTypeExtension, false);
         }

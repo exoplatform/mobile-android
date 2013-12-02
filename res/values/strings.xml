@@ -235,6 +235,7 @@
   <string name="SignOut">Sign Out</string>
   <string name="Overflow">Overflow</string>
 
+  <string name="AllUpdates">All Updates</string>
 
     <string-array name="SocialTabs">
     <item>All Updates</item>

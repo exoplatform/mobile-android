@@ -16,7 +16,11 @@
  */
 package org.exoplatform.ui.social;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 //import greendroid.widget.ActionBarItem;
 //import greendroid.widget.ActionBarItem.Type;
@@ -27,6 +31,8 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.SpinnerAdapter;
 import org.exoplatform.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
@@ -51,10 +57,7 @@ import org.exoplatform.widget.WarningDialog;
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
  * 23, 2012
  */
-public class SocialTabsActivity
-    //extends MyActionBar {
-    extends ActionBarActivity
-    implements SocialLoadTask.AsyncTaskListener  {
+public class SocialTabsActivity extends ActionBarActivity implements SocialLoadTask.AsyncTaskListener  {
 
   public static final int              ALL_UPDATES             = 0;
 
@@ -80,6 +83,12 @@ public class SocialTabsActivity
 
   private static final String          DOCUMENT_HELPER         = "document_helper";
 
+  private static final String          CURRENT_FM         = "CURRENT_FM";
+
+  private static final String          REFRESH_STATE         = "REFRESH_STATE";
+
+
+
   public ArrayList<SocialActivityInfo> socialList;
 
   //public LoaderActionBarItem           loaderItem;
@@ -96,17 +105,28 @@ public class SocialTabsActivity
 
   private Menu mOptionsMenu;
 
+  /** Keep state for refresh icon during orientation */
+  private boolean mIsRefreshing;
+
+  /** Store the Id of current fragment shown */
+  private int    mCurrentFragment = -1;
+
+  private static boolean mIsTablet;
+
+  private static String[] SOCIAL_TABS = null;
+
   private static final String TAG = "eXo____SocialTabsActivity____";
 
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    detectScreenSize();
     super.onCreate(savedInstanceState);
     instance = this;
 
+    SOCIAL_TABS = getResources().getStringArray(R.array.SocialTabs);
+
     //setActionBarContentView(R.layout.social_activity_tabs);
-    setContentView(R.layout.social_activity_tabs);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     //addActionBarItem(Type.Refresh);
@@ -114,11 +134,12 @@ public class SocialTabsActivity
     //addActionBarItem();
     //getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
 
-    setTitle(getString(R.string.ActivityStream));
 
     if (savedInstanceState != null) {
       number_of_activity = savedInstanceState.getInt(NUMBER_OF_ACTIVITY);
       number_of_more_activity = savedInstanceState.getInt(NUMBER_OF_MORE_ACTIVITY);
+      mCurrentFragment   = savedInstanceState.getInt(CURRENT_FM, -1);
+      mIsRefreshing      = savedInstanceState.getBoolean(REFRESH_STATE, true);
       AccountSetting accountSetting = savedInstanceState.getParcelable(ACCOUNT_SETTING);
       AccountSetting.getInstance().setInstance(accountSetting);
       ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
@@ -132,12 +153,117 @@ public class SocialTabsActivity
 
     //loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
 
-    TAB_NAMES = getResources().getStringArray(R.array.SocialTabs);
-    mPager = (ViewPager) findViewById(R.id.pager);
-    mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
-    mAdapter = new SocialTabsAdapter(getSupportFragmentManager());
-    mPager.setAdapter(mAdapter);
-    mIndicator.setViewPager(mPager);
+    Log.i(TAG, "isTablet: " + mIsTablet);
+    if (!mIsTablet) {
+      /** phone */
+      setContentView(R.layout.social_activity_tabs);
+      setTitle(getString(R.string.ActivityStream));
+
+      TAB_NAMES  = getResources().getStringArray(R.array.SocialTabs);
+      mPager     = (ViewPager) findViewById(R.id.pager);
+      mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
+      mAdapter   = new SocialTabsAdapter(getSupportFragmentManager());
+      mPager.setAdapter(mAdapter);
+      mIndicator.setViewPager(mPager);
+    }
+    else {
+      /** tablet */
+      setContentView(R.layout.social_activity_tabs_tablet);
+      getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+      SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.SocialTabs,
+          android.R.layout.simple_spinner_dropdown_item);
+
+      final ActionBar actionBar = getSupportActionBar();
+      actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+      actionBar.setListNavigationCallbacks(mSpinnerAdapter, new ActionBar.OnNavigationListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(int position, long itemId) {
+          Log.i(TAG, "onNavigationItemSelected: " + position);
+
+          if (position == mCurrentFragment) return true;
+
+          ActivityStreamFragment activityStreamFragment = null;
+
+          switch (position) {
+
+            case ALL_UPDATES:
+              activityStreamFragment = AllUpdatesFragment.getInstance();
+              break;
+
+            case MY_CONNECTIONS:
+              activityStreamFragment = MyConnectionsFragment.getInstance();
+              break;
+
+            case MY_SPACES:
+              activityStreamFragment = MySpacesFragment.getInstance();
+              break;
+
+            case MY_STATUS:
+              activityStreamFragment = MyStatusFragment.getInstance();
+              break;
+          }
+
+          Log.i(TAG, "mCurrentFragment: " + mCurrentFragment);
+          if (mCurrentFragment > -1)
+          Log.i(TAG, "tag: " + SOCIAL_TABS[mCurrentFragment]);
+
+          FragmentManager fragmentManager = getSupportFragmentManager();
+          FragmentTransaction ft = fragmentManager.beginTransaction();
+
+          if (mCurrentFragment == -1) {
+            /** first run */
+            Log.i(TAG, "first run, add the fragment");
+            ft.add(R.id.streams_container, activityStreamFragment, SOCIAL_TABS[position]);
+          }
+          else {
+            /** not first run */
+
+            Fragment fragment = fragmentManager.findFragmentByTag(SOCIAL_TABS[mCurrentFragment]);
+            if (fragment != null) {
+              Log.i(TAG, "hide current fragment: " + fragment.getTag());
+              ft.hide(fragment);
+            }
+
+            Log.i(TAG, "find requested fragment");
+            /** find requested fragment */
+            fragment = fragmentManager.findFragmentByTag(SOCIAL_TABS[position]);
+            if (fragment != null) {
+              Log.i(TAG, "show current fragment: " + fragment.getTag());
+              ft.show(fragment);
+            }
+            else {
+              /** fragment not added yet, add it */
+              Log.i(TAG, "fragment not added yet, add it");
+              ft.add(R.id.streams_container, activityStreamFragment, SOCIAL_TABS[position]);
+            }
+          }
+
+          ft.commit();
+
+          mCurrentFragment = position;
+
+          return true;
+        }
+      });
+
+    }
+
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    if (mCurrentFragment != -1) {
+      FragmentManager fragmentManager = getSupportFragmentManager();
+      FragmentTransaction ft = fragmentManager.beginTransaction();
+
+      for (String fragmentName : SOCIAL_TABS) {
+        if (fragmentName.equals(SOCIAL_TABS[mCurrentFragment])) continue;
+        Fragment fragment = fragmentManager.findFragmentByTag(fragmentName);
+        if (fragment != null) ft.hide(fragment);
+      }
+
+      ft.commit();
+    }
 
     prefs = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     isSocialFilterEnable = prefs.getBoolean(AccountSetting.getInstance().socialKey, false);
@@ -147,12 +273,44 @@ public class SocialTabsActivity
     }
   }
 
+
+  /**
+   * Force screen orientation for small and medium size devices
+   */
+  private void detectScreenSize() {
+
+    int size = getResources().getConfiguration().screenLayout
+        & Configuration.SCREENLAYOUT_SIZE_MASK;
+
+    switch (size) {
+      case Configuration.SCREENLAYOUT_SIZE_NORMAL:  // 320x470 dp units
+        Log.i(TAG, "normal");
+        mIsTablet = false;
+        break;
+      case Configuration.SCREENLAYOUT_SIZE_SMALL:   // 320x426 dp units
+        Log.i(TAG, "small");
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        mIsTablet = false;
+        break;
+      case Configuration.SCREENLAYOUT_SIZE_LARGE:   // 480x640 dp units
+        Log.i(TAG, "large");
+        mIsTablet = true;
+        break;
+      case Configuration.SCREENLAYOUT_SIZE_XLARGE:  // 720x960 dp units
+        Log.i(TAG, "xlarge");
+        mIsTablet = true;
+        break;
+      default:
+        break;
+    }
+  }
+
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     Log.i(TAG, "onCreateOptionsMenu");
     getMenuInflater().inflate(R.menu.social, menu);
     mOptionsMenu = menu;
-    menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_indeterminate_progress);
+    if (mIsRefreshing) menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_indeterminate_progress);
     return true;
   }
 
@@ -226,12 +384,15 @@ public class SocialTabsActivity
 
 
   @Override
-  protected void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-    outState.putInt(NUMBER_OF_ACTIVITY, number_of_activity);
-    outState.putInt(NUMBER_OF_MORE_ACTIVITY, number_of_more_activity);
-    outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
-    outState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
+  protected void onSaveInstanceState(Bundle savedState) {
+    super.onSaveInstanceState(savedState);
+    Log.i(TAG, "save state");
+    savedState.putInt(NUMBER_OF_ACTIVITY, number_of_activity);
+    savedState.putInt(NUMBER_OF_MORE_ACTIVITY, number_of_more_activity);
+    savedState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
+    savedState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
+    savedState.putInt(CURRENT_FM, mCurrentFragment);
+    savedState.putBoolean(REFRESH_STATE, false);
   }
 
   @Override
@@ -244,7 +405,6 @@ public class SocialTabsActivity
   protected void onDestroy() {
     super.onDestroy();
     finishFragment();
-
   }
 
   private void finishFragment() {

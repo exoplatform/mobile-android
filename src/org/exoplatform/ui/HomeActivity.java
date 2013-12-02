@@ -41,8 +41,7 @@ import android.widget.ViewFlipper;
 /**
  * Represents the home screen with dashboard
  */
-public class HomeActivity extends ActionBarActivity
-    implements SocialServiceLoadTask.AsyncTaskListener,
+public class HomeActivity extends ActionBarActivity implements SocialServiceLoadTask.AsyncTaskListener,
     SocialLoadTask.AsyncTaskListener {
     // extends MyActionBar {
 
@@ -209,6 +208,7 @@ public class HomeActivity extends ActionBarActivity
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
+
       case R.id.menu_refresh:
         startLoadingSocialData();
         return true;

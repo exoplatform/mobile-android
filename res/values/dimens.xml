@@ -72,4 +72,7 @@
 
     <dimen name="action_button_min_width">56dp</dimen>
 
+    <!-- login -->
+    <dimen name="login_frame_width">340dp</dimen>
+
 </resources>

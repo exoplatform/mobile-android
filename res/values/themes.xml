@@ -16,19 +16,40 @@
 
     <style name="Theme.eXo" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/eXoActionBar</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView</item>
 
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/eXoActionBar</item>
+        <item name="dropDownListViewStyle">@style/DropDownListView</item>
     </style>
 
     <!-- ActionBar styles -->
     <style name="eXoActionBar"
            parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/action_bar_blue</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
 
         <!-- Support library compatibility -->
         <item name="background">@color/action_bar_blue</item>
+        <item name="textColor">@android:color/white</item>
+        <item name="titleTextStyle">@style/MyActionBarTitleText</item>
     </style>
+
+    <!-- ActionBar title text -->
+    <style name="MyActionBarTitleText"
+           parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
+        <!-- The textColor property is backward compatible with the Support Library -->
+    </style>
+
+    <!-- Style for Spinner on Action Bar -->
+    <style name="DropDownListView" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
+        <item name="android:background">@color/action_bar_blue</item>
+
+        <item name="background">@color/action_bar_blue</item>
+    </style>
+
 
     <style name="Theme.eXo_signout" parent="@style/Theme.eXo">
         <item name="gdActionBarBackground">@color/action_bar_tint</item>

@@ -65,4 +65,7 @@
     <!-- sign in -->
     <dimen name="signin_login_btn_width">200dp</dimen>
 
+    <!-- login -->
+    <dimen name="login_frame_width">580dp</dimen>
+
 </resources>
