@@ -197,7 +197,7 @@
   <string name="OnPremise">On Premise</string>
   <string name="EnterUrl">Enter URL of your intranet</string>
   <string name="EnterLogin">Enter your credentials and Login</string>
-  <string name="YourIntranetHint">http://www.mycompany.com/intranet</string>
+  <string name="YourIntranetHint">http://www.mycompany.com</string>
   <string name="PasswordHint">password</string>
   <string name="UserNameHint">username</string>
   <string name="Number1">1</string>
