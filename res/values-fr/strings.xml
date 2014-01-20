@@ -217,8 +217,8 @@
   <string name="UserNameHint">username</string>
 
     <!-- Setting -->
-  <string name="RememberMe">Remember Me</string>
-  <string name="Autologin">Auto login</string>
+  <string name="RememberMe">Mémoriser mon login</string>
+  <string name="Autologin">Connexion automatique</string>
     <string name="LoginTitle">LOGIN</string>
     <string name="EXO">EXO</string>
   <string name="Number1">1</string>
@@ -235,12 +235,12 @@
     <string name="StartCloudSignUpAssistant">Lancer l\'assistant de configuration</string>
     <string name="ServerAdded">Serveur ajouté</string>
     <string name="ServerUpdated">Serveur mis à jour</string>
-  <string name="ServerDeleted">Server deleted</string>
+  <string name="ServerDeleted">Serveur supprimé</string>
 
     <string name="ImageDesc">description de l\'image</string>
 
     <!-- Launch -->
-  <string name="RedirectToLogin">Try again</string>
+  <string name="RedirectToLogin">OK</string>
     <string name="LoginWarningMsg">La connexion a échoué</string>
 
   <string-array name="SocialTabs">
