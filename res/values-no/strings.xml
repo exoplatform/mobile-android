@@ -163,7 +163,7 @@
   <string name="SignUp">Registrer deg</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
-  <string name="Or">or</string>
+  <string name="Or">eller</string>
 
   <string name="SliderDesc1">Activity streams</string>
   <string name="SliderDesc2">Comments and likes</string>
