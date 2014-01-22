@@ -353,36 +353,41 @@ public class SocialItem implements OnClickListener {
 		 * Use SocialImageLoader to get and display attached image.
 		 */
 
-		 if (fileType != null && fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
-			 if (SocialDetailHelper.getInstance().socialImageLoader == null) {
-				 SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
-			 }
-			 SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage, isLinkType);
-		 } else {
-			 attachImage.setImageResource(ExoDocumentUtils.getIconFromType(fileType));
-		 }
-		 if (isDetail) {
-			 /*
-			  * Open file with compatible application
-			  */
-			 attachImage.setOnClickListener(new OnClickListener() {
+		if (fileType != null && fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
+			if (SocialDetailHelper.getInstance().socialImageLoader == null) {
+				SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
+			}
+			SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage, isLinkType);
+		} else {
+			attachImage.setImageResource(ExoDocumentUtils.getIconFromType(fileType));
+		}
+		if (isDetail) {
+			/*
+			 * Open file with compatible application
+			 */
+			attachImage.setOnClickListener(new OnClickListener() {
 
-				 @Override
-				 public void onClick(View v) {
+				@Override
+				public void onClick(View v) {
 
-					 ExoDocumentUtils.fileOpen(mContext, fileType, url, fileName);
-				 }
-			 });
-		 }
+					ExoDocumentUtils.fileOpen(mContext, fileType, url, fileName);
+				}
+			});
+		}
 
 	}
 
 
 	@Override
 	public void onClick(View v) {
-		Intent next = new Intent(mContext, ProfileActivity.class);
-		next.putExtra(UserProfile.USER_ID, activityInfo.getUserId());
-		mContext.startActivity(next);
+		if(!"SPACE_ACTIVITY".equals(activityInfo.getType())){
+			Intent next = new Intent(mContext, ProfileActivity.class);
+			next.putExtra(UserProfile.USER_ID, activityInfo.getUserId());
+			mContext.startActivity(next);
+		} else {
+			return;
+		}
+		
 	}
 
 }

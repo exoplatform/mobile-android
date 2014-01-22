@@ -42,6 +42,7 @@ public class ProfileActivity extends MyActionBar implements OnTouchListener{
 
 	LinearLayout homeView;
 	LinearLayout btnView;
+	LinearLayout activityView;
 	RelativeLayout statusView;
 	TextView fullName;
 	TextView jobTitle;
@@ -70,7 +71,9 @@ public class ProfileActivity extends MyActionBar implements OnTouchListener{
 		getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
 		homeView = (LinearLayout) findViewById(R.id.profileView);
 		btnView = (LinearLayout) findViewById(R.id.btnLayout);
+		activityView = (LinearLayout) findViewById(R.id.activityLayout);
 		statusView = (RelativeLayout) findViewById(R.id.statusLayout);
+		
 		homeView.setVisibility(View.GONE);
 		fullName = (TextView) findViewById(R.id.displayName);
 		jobTitle = (TextView) findViewById(R.id.jobTitle);
@@ -263,13 +266,11 @@ public class ProfileActivity extends MyActionBar implements OnTouchListener{
 			jobTitle.setText(profile.getJobTitle());
 			avatar.setUrl(AccountSetting.getInstance().getDomainName() + profile.getAvatarUrl());
 			avatar.setVisibility(View.VISIBLE);
-			if(profile.getLastActivity() != null){
+			if(profile.getLastActivity() != null && !profile.getLastActivity().isEmpty()){
 				lastActivity.setText(Html.fromHtml(profile.getLastActivity()),TextView.BufferType.SPANNABLE);
-				lastActivity.setVisibility(View.VISIBLE);
-				lastActivityLb.setVisibility(View.VISIBLE);
+				activityView.setVisibility(View.VISIBLE);
 			} else {
-				lastActivity.setVisibility(View.GONE);
-				lastActivityLb.setVisibility(View.GONE);
+				activityView.setVisibility(View.GONE);
 			}
 			if(profile.getEmail() == null) {
 				e_mail.setVisibility(View.GONE);  

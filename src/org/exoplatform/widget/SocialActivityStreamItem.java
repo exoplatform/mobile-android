@@ -359,27 +359,27 @@ public class SocialActivityStreamItem extends LinearLayout implements OnTouchLis
 		 * Use SocialImageLoader to get and display attached image.
 		 */
 
-		 if (fileType != null && fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
-			 if (SocialDetailHelper.getInstance().socialImageLoader == null) {
-				 SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
-			 }
-			 SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage, isLinkType);
-		 } else {
-			 attachImage.setImageResource(ExoDocumentUtils.getIconFromType(fileType));
-		 }
-		 if (isDetail) {
-			 /*
-			  * Open file with compatible application
-			  */
-			 attachImage.setOnClickListener(new OnClickListener() {
+		if (fileType != null && fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
+			if (SocialDetailHelper.getInstance().socialImageLoader == null) {
+				SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
+			}
+			SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage, isLinkType);
+		} else {
+			attachImage.setImageResource(ExoDocumentUtils.getIconFromType(fileType));
+		}
+		if (isDetail) {
+			/*
+			 * Open file with compatible application
+			 */
+			attachImage.setOnClickListener(new OnClickListener() {
 
-				 @Override
-				 public void onClick(View v) {
+				@Override
+				public void onClick(View v) {
 
-					 ExoDocumentUtils.fileOpen(mContext, fileType, url, fileName);
-				 }
-			 });
-		 }
+					ExoDocumentUtils.fileOpen(mContext, fileType, url, fileName);
+				}
+			});
+		}
 
 	}
 
@@ -393,10 +393,12 @@ public class SocialActivityStreamItem extends LinearLayout implements OnTouchLis
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		Intent next = new Intent(mContext, ProfileActivity.class);
-		if(userId != null)
-			next.putExtra(UserProfile.USER_ID, userId);
-		mContext.startActivity(next);
+		if(!"SPACE_ACTIVITY".equals(activityInfo.getType())){
+			Intent next = new Intent(mContext, ProfileActivity.class);
+			if(userId != null)
+				next.putExtra(UserProfile.USER_ID, userId);
+			mContext.startActivity(next);
+		}
 		return false;
 	}
 }
