@@ -21,15 +21,20 @@ import greendroid.widget.ActionBarItem;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
+import org.exoplatform.controller.profile.UserProfile;
 import org.exoplatform.model.SocialLikeInfo;
+import org.exoplatform.ui.ProfileActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.ShaderImageView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -164,17 +169,29 @@ public class LikeListActivity extends MyActionBar {
       }
       viewHolder.imageView.setDefaultImageResource(R.drawable.default_avatar);
       viewHolder.imageView.setUrl(likeList.get(position).likedImageUrl);
+      viewHolder.imageView.setOnTouchListener(viewHolder);
+      
       viewHolder.textView.setText(likeList.get(position).getLikeName());
-
+      viewHolder.textView.setOnTouchListener(viewHolder);
+      viewHolder.userId = (likeList.get(position).getLikeId());
       return convertView;
     }
 
   }
 
-  private class ViewHolder {
+  private class ViewHolder implements OnTouchListener{
     public ShaderImageView imageView;
 
     public TextView        textView;
+    public String userId  ;
+    
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		Intent next = new Intent(v.getContext(), ProfileActivity.class);
+		next.putExtra(UserProfile.USER_ID, userId);
+		v.getContext().startActivity(next);
+		return false;
+	}
   }
 
 }

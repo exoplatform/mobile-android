@@ -91,9 +91,6 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
       String password = AccountSetting.getInstance().getPassword();
       URL url = new URL(SocialActivityUtil.getDomain());
 
-      Log.i(TAG, "userName: " + userName);
-      Log.i(TAG, "url: " + url.toString());
-
       SocialClientContext.setProtocol(url.getProtocol());
       SocialClientContext.setHost(url.getHost());
       SocialClientContext.setPort(url.getPort());

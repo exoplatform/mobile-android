@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#DCDCDCDC"
+    android:padding="@dimen/profile_padding_default"
+    android:fadingEdge="none">
+
+    <LinearLayout
+        android:id="@+id/profileView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/informationLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <org.exoplatform.widget.ShaderImageView
+                android:id="@+id/displayImage"
+                android:layout_width="@dimen/profile_avatar_size"
+                android:layout_height="@dimen/profile_avatar_size"
+                android:layout_gravity="left"
+                android:contentDescription="@string/contentDescription"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_avatar" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/profile_padding_default"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/displayName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Name"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/jobTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Job Tile"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/emailTo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="exoplatform.com"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/actionLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/profile_padding_default"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/btnLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/profile_padding_default"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/editBtn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/profile_button_h_size"
+                    android:background="@drawable/label_stretchable"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/editBtn" />
+
+                <Button
+                    android:id="@+id/connectBtn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/profile_button_h_size"
+                    android:background="@drawable/label_stretchable"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/connectBtn" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/activityLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/profile_padding_default"
+                android:background="@drawable/label_stretchable"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/lastActivityLb"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lastActivityLb"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/lastActivity"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No activity"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/statusLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/profile_padding_default">
+
+                <TextView
+                    android:id="@+id/con_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/connectStt"
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/update_connectBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/profile_button_h_size"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/label_stretchable"
+                    android:text="@string/connectSttLb" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/phoneLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/profile_button_h_size"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/phoneNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="@string/Phone"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="00000000000"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/skypeLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/profile_button_h_size"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/skypeName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="@string/Skype"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/skypeid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="skypeid"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

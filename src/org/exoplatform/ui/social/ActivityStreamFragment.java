@@ -2,7 +2,6 @@ package org.exoplatform.ui.social;
 
 import java.util.ArrayList;
 
-import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;

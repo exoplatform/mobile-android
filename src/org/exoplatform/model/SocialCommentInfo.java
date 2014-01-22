@@ -9,6 +9,7 @@ public class SocialCommentInfo {
   private String commentName;
 
   private String commentTitle;
+  private String commentUserId;
 
   private long   postedTime;
 
@@ -55,5 +56,13 @@ public class SocialCommentInfo {
   public long getPostedTime() {
     return postedTime;
   }
+
+public String getCommentUserId() {
+	return commentUserId;
+}
+
+public void setCommentUserId(String commentUserId) {
+	this.commentUserId = commentUserId;
+}
 
 }

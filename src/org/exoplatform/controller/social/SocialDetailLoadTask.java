@@ -99,6 +99,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       SocialDetailHelper.getInstance().setLiked(false);
 
       streamInfo = new SocialActivityInfo();
+      streamInfo.setUserId(selectedRestActivity.getPosterIdentity().getRemoteId());
       RestProfile restProfile = selectedRestActivity.getPosterIdentity().getProfile();
       streamInfo.setActivityId(selectedRestActivity.getId());
       streamInfo.setImageUrl(restProfile.getAvatarUrl());
@@ -120,6 +121,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
           RestProfile likeProfile = like.getProfile();
           SocialLikeInfo socialLike = new SocialLikeInfo();
           socialLike.likedImageUrl = likeProfile.getAvatarUrl();
+          socialLike.setLikeID(like.getRemoteId());
           String identity = like.getId();
           if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().userIdentity)) {
             socialLike.setLikeName(youText);
@@ -138,7 +140,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
         for (RestComment comment : commentList) {
           SocialCommentInfo socialComment = new SocialCommentInfo();
           RestIdentity restId = comment.getPosterIdentity();
-
+          socialComment.setCommentUserId(restId.getRemoteId());
           RestProfile profile = restId.getProfile();
           socialComment.setCommentId(restId.getId());
           socialComment.setCommentName(profile.getFullName());

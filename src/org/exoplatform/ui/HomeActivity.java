@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.controller.home.HomeController;
+import org.exoplatform.controller.profile.UserProfile;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -30,7 +31,9 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
@@ -40,7 +43,7 @@ import android.widget.ViewFlipper;
 /**
  * Represents the home screen with dashboard
  */
-public class HomeActivity extends MyActionBar {
+public class HomeActivity extends MyActionBar implements OnTouchListener{
 
   private TextView            activityButton;
 
@@ -201,6 +204,8 @@ public class HomeActivity extends MyActionBar {
     homeUserName.setText(profile[1]);
     homeUserName.setAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_right_to_left));
     homeUserAvatar.setVisibility(View.VISIBLE);
+    homeUserAvatar.setOnTouchListener(this);
+    homeUserName.setOnTouchListener(this);
   }
 
   /*
@@ -323,6 +328,13 @@ public class HomeActivity extends MyActionBar {
     documentTitle = resource.getString(R.string.Documents);
     appsTitle = resource.getString(R.string.Dashboard);
 
+  }
+  @Override
+  public boolean onTouch(View v, MotionEvent event) {
+  	Intent next = new Intent(this, ProfileActivity.class);
+  	next.putExtra(UserProfile.USER_ID, AccountSetting.getInstance().getUsername());
+    startActivity(next);
+  	return false;
   }
 
 }

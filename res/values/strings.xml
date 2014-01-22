@@ -228,6 +228,17 @@
   <string name="RedirectToLogin">Try again</string>
   <string name="LoginWarningMsg">Connection error</string>
 
+  <!--  Profile -->
+  <string name="Profile">User Profile</string>
+  <string name="contentDescription">User Avatar</string>
+  <string name="lastActivityLb">said:</string>
+  <string name="editBtn">Edit your profile</string>
+  <string name="connectBtn">Connection requests</string>
+  <string name="connectStt">Relationship status</string>
+  <string name="connectSttLb">Connected</string>
+  <string name="disconnectSttLb">Disconnected</string>
+  <string name="Skype">Skype:</string>
+  <string name="Phone">Mobile:</string>
 
     <string-array name="SocialTabs">
     <item>All Updates</item>

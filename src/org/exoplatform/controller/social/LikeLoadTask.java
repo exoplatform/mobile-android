@@ -110,6 +110,7 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
           RestProfile likeProfile = like.getProfile();
           SocialLikeInfo socialLike = new SocialLikeInfo();
           socialLike.likedImageUrl = likeProfile.getAvatarUrl();
+          socialLike.setLikeID(like.getRemoteId());
           String identity = like.getId();
           if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().userIdentity)) {
             socialLike.setLikeName(youText);

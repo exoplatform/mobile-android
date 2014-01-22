@@ -93,8 +93,6 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
    *   If set, the task will add more activities to the current stream.
    */
   public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
-    Log.i(TAG, "load social activities - number: " + params[0] + " - type: " + params[1]);
-
     try {
       ArrayList<SocialActivityInfo> listActivity = new ArrayList<SocialActivityInfo>();
       int loadSize = params[0];
@@ -129,6 +127,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
           RestActivity act = activityList.get(i);
           streamInfo = new SocialActivityInfo();
           profile = act.getPosterIdentity().getProfile();
+          streamInfo.setUserId(act.getPosterIdentity().getRemoteId());
           streamInfo.restActivityStream = act.getActivityStream();
           streamInfo.setActivityId(act.getId());
           streamInfo.setImageUrl(profile.getAvatarUrl());

@@ -128,6 +128,7 @@ public class SocialDetailController {
         SocialActivityUtil.setTextLinkfy(commentItem.comTextViewMessage);
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
                                                                                  comment.getPostedTime()));
+        commentItem.userId=comment.getCommentUserId(); 
         commentLayoutWrap.addView(commentItem, params);
 
       }

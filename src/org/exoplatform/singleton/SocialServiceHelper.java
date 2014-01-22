@@ -36,13 +36,14 @@ public class SocialServiceHelper {
 
   public String[]                      userProfile;
 
-  private static SocialServiceHelper   serviceHelper = new SocialServiceHelper();
+  private static SocialServiceHelper   serviceHelper;
 
   private SocialServiceHelper() {
 
   }
 
   public static SocialServiceHelper getInstance() {
+	  if(serviceHelper == null) serviceHelper = new SocialServiceHelper();
     return serviceHelper;
   }
   

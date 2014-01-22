@@ -69,5 +69,10 @@
     <!-- setting -->
     <dimen name="title_txt_size">16sp</dimen>
     <dimen name="label_txt_size">14sp</dimen>
+    <!-- profile -->
+    <dimen name="profile_avatar_size">100dp</dimen>
+    <dimen name="profile_button_h_size">40dp</dimen>
+    <dimen name="profile_padding_default">10dp</dimen>
+    
 
 </resources>
