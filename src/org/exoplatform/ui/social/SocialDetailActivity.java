@@ -4,7 +4,7 @@ import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;

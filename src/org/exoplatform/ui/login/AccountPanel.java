@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.singleton.AccountSetting;
 
 /**

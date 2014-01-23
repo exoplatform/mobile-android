@@ -21,7 +21,7 @@ import greendroid.widget.LoaderActionBarItem;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;

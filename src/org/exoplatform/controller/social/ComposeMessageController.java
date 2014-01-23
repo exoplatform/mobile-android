@@ -2,7 +2,7 @@ package org.exoplatform.controller.social;
 
 import java.io.File;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;

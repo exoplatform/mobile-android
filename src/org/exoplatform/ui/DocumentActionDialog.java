@@ -1,6 +1,6 @@
 package org.exoplatform.ui;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.controller.document.DocumentActionAdapter;
 import org.exoplatform.model.ExoFile;
 

@@ -3,7 +3,7 @@ package org.exoplatform.widget;
 import java.net.URLConnection;
 import java.util.Locale;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.controller.profile.UserProfile;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;

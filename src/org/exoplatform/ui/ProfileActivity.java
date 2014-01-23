@@ -5,7 +5,7 @@ import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.controller.dashboard.DashboardLoadTask;
 import org.exoplatform.controller.profile.ProfileLoadTask;
 import org.exoplatform.controller.profile.UserProfile;

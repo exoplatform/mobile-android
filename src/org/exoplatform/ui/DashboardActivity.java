@@ -6,7 +6,7 @@ import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.controller.dashboard.DashboardItemAdapter;
 import org.exoplatform.controller.dashboard.DashboardLoadTask;
 import org.exoplatform.model.GadgetInfo;

@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import greendroid.widget.ActionBarItem;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.WelcomeActivity;

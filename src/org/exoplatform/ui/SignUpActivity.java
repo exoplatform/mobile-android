@@ -7,7 +7,7 @@ import android.text.Html;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.utils.AssetUtils;
 
 public class SignUpActivity extends FragmentActivity {

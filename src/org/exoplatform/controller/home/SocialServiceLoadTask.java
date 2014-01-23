@@ -6,7 +6,7 @@ import greendroid.widget.LoaderActionBarItem;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;

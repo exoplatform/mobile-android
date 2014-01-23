@@ -2,7 +2,7 @@ package org.exoplatform.controller.document;
 
 import java.util.ArrayList;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;

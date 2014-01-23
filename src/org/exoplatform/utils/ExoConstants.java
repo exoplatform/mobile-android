@@ -1,6 +1,6 @@
 package org.exoplatform.utils;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 
 public class ExoConstants {
 

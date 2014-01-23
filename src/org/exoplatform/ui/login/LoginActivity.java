@@ -4,7 +4,7 @@ package org.exoplatform.ui.login;
 import android.content.SharedPreferences;
 import android.view.*;
 import android.widget.*;
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.utils.LaunchUtils;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;

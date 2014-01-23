@@ -7,7 +7,7 @@ import greendroid.util.Config;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;

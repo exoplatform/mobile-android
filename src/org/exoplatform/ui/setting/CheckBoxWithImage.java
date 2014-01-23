@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 
 /**
  * A check contains a head image

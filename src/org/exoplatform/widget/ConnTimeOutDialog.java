@@ -16,7 +16,7 @@
  */
 package org.exoplatform.widget;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 
 import android.app.Dialog;
 import android.content.Context;

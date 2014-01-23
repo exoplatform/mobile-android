@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.model.DashboardItem;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.singleton.AccountSetting;

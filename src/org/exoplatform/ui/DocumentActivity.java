@@ -8,7 +8,7 @@ import greendroid.widget.ActionBarItem;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentLoadTask;
 import org.exoplatform.model.ExoFile;

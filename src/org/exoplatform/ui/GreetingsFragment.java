@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 
 public class GreetingsFragment extends Fragment {
 

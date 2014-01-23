@@ -2,7 +2,7 @@ package org.exoplatform.ui.social;
 
 import greendroid.widget.ActionBarItem;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.image.SocialImageLoader;
 import org.exoplatform.widget.MyActionBar;

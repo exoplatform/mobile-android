@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
 import org.exoplatform.model.SocialLikeInfo;

@@ -1,6 +1,6 @@
 package org.exoplatform.widget;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.controller.profile.UserProfile;
 import org.exoplatform.ui.ProfileActivity;
 

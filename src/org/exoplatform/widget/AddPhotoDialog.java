@@ -1,6 +1,6 @@
 package org.exoplatform.widget;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.controller.social.ComposeMessageController;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.utils.ExoConstants;

@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.Locale;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;

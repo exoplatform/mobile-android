@@ -20,7 +20,7 @@ import greendroid.widget.ActionBarItem;
 
 import java.util.ArrayList;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.controller.profile.UserProfile;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.ui.ProfileActivity;
