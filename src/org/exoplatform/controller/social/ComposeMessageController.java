@@ -165,7 +165,7 @@ public class ComposeMessageController {
         }
 
         if (SocialTabsActivity.instance != null) {
-          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+          int tabId = SocialTabsActivity.instance.getTabId();
           switch (tabId) {
           case SocialTabsActivity.ALL_UPDATES:
             AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,

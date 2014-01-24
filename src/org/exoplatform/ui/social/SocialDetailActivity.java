@@ -2,6 +2,8 @@ package org.exoplatform.ui.social;
 
 import android.graphics.BitmapFactory;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 //import greendroid.widget.ActionBarItem;
 //import greendroid.widget.ActionBarItem.Type;
@@ -9,8 +11,11 @@ import android.support.v7.app.ActionBarActivity;
 
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import org.exoplatform.R;
 import org.exoplatform.controller.social.LikeLoadTask;
 import org.exoplatform.controller.social.SocialDetailController;
@@ -50,10 +55,8 @@ import java.util.LinkedList;
 /**
  * Screen for activity details
  */
-public class SocialDetailActivity
-    //extends MyActionBar
-    extends ActionBarActivity
-    implements OnClickListener, SocialDetailLoadTask.AsyncTaskListener, LikeLoadTask.AsyncTaskListener {
+public class SocialDetailActivity extends ActionBarActivity implements OnClickListener,
+    SocialDetailLoadTask.AsyncTaskListener, LikeLoadTask.AsyncTaskListener, Refreshable {
 
   public LinearLayout                startScreen;
 
@@ -93,6 +96,8 @@ public class SocialDetailActivity
 
   private Menu mOptionsMenu;
 
+  private SocialDetailFragment mDetailsFragment;
+
   private static final String TAG = "eXo____SocialDetailActivity____";
 
 
@@ -101,21 +106,31 @@ public class SocialDetailActivity
     super.onCreate(savedInstanceState);
 
     //setActionBarContentView(R.layout.activity_display_view);
-    setContentView(R.layout.activity_display_view);
+    //setContentView(R.layout.activity_display_view);
+
+
+    setContentView(R.layout.activity_details);
 
     //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     //addActionBarItem(Type.Refresh);
     //getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
 
-
     socialDetailActivity = this;
     mActivityPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, mActivityPosition);
     changeLanguage();
+
+    /**
     if (savedInstanceState != null)
       finish();
     else
       initComponent();
+     **/
 
+    mDetailsFragment = new SocialDetailFragment(mActivityPosition);
+    mDetailsFragment.setRefreshListener(this);
+    getSupportFragmentManager().beginTransaction()
+        .add(R.id.activity_details_layout, mDetailsFragment)
+        .commit();
   }
 
   private void initComponent() {
@@ -135,12 +150,14 @@ public class SocialDetailActivity
     likeButton.setOnClickListener(this);
     likedFrame = (RelativeLayout) findViewById(R.id.detail_likers_layout_warpper);
     likedFrame.setOnClickListener(this);
-    //onLoad();
 
     startLoadingActivityData();
   }
 
 
+  public void onLoad() {
+
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -157,7 +174,7 @@ public class SocialDetailActivity
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_refresh:
-        startLoadingActivityData();
+        mDetailsFragment.startLoadingActivityData();
         return true;
 
       case R.id.menu_settings:
@@ -191,14 +208,6 @@ public class SocialDetailActivity
     }
   }
 
-  public void onLoad() {
-    //detailController = new SocialDetailController(this, commentLayoutWrap, mLikedLayout,
-    //                                              likeButton, contentDetailLayout, textView_Like_Count);
-
-    //loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-
-    //detailController.onLoad(loaderItem, false, currentPosition);
-  }
 
   // replace onLoad of SocialDetailController
   public void startLoadingActivityData() {
@@ -328,7 +337,6 @@ public class SocialDetailActivity
   /*
    * The liker information image view
    */
-
   public void setLikedInfo() {
     textView_Like_Count.setText(SocialActivityUtil.getComment(this, mLikeList));
 
@@ -369,6 +377,7 @@ public class SocialDetailActivity
       mLikedLayout.addView(likedAvatar, params);
     }
   }
+
 
   @Override
   public void finish() {

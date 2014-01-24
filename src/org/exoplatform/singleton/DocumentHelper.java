@@ -47,7 +47,8 @@ public class DocumentHelper implements Parcelable {
   /**
    * The dictionary mapping between the current selected folder, or folder in action bar
    * and its parent <br/>
-   * Key is current folder's path and value is its parent folder
+   * Key is current folder's path and value is its parent folder <br/>
+   * Used for the purpose of back to parent
    */
   public Bundle                 currentFileMap;
 

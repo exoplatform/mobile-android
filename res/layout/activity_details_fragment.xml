@@ -28,7 +28,7 @@
                     android:orientation="vertical" >
 
                     <LinearLayout
-                        android:id="@+id/social_detail_wrap_layout"
+                        android:id="@+id/details_activity_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -39,34 +39,38 @@
                         android:paddingTop="5dp">
                     </LinearLayout>
 
+                    <!-- Section that displays people like this -->
                     <RelativeLayout
-                        android:id="@+id/detail_likers_layout_warpper"
+                        android:id="@+id/details_people_like_this_section"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-16dip"
                         android:background="@drawable/detail_likers_background_selector"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingBottom="2dp"
+                        android:paddingBottom="10dp"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:paddingTop="5dp" >
+                        android:paddingTop="15dp"
+                        android:clickable="true">
 
+                        <!-- Displays number of people like this -->
                         <TextView
-                            android:id="@+id/textView_Like_Count"
+                            android:id="@+id/details_like_count_txt"
                             style="@style/textview_like"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="5dip"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
                             android:padding="3dp" />
 
+                        <!-- Displays avatar of people like this -->
                         <LinearLayout
-                            android:id="@+id/social_detail_like_wrap"
+                            android:id="@+id/details_people_like_this_avatar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/textView_Like_Count"
+                            android:layout_below="@id/details_like_count_txt"
                             android:layout_marginLeft="3dp"
                             android:orientation="horizontal" >
                         </LinearLayout>
@@ -75,14 +79,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_alignRight="@id/social_detail_wrap_layout"
-                            android:layout_below="@id/textView_Like_Count"
+                            android:layout_alignRight="@id/details_people_like_this_avatar"
+                            android:layout_below="@id/details_like_count_txt"
                             android:layout_marginRight="5dp"
                             android:gravity="center_vertical"
                             android:orientation="horizontal" >
 
                             <Button
-                                android:id="@+id/like_button"
+                                android:id="@+id/details_like_btn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="3dp"
@@ -97,19 +101,8 @@
                     </RelativeLayout>
                 </LinearLayout>
 
-                <!--
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/activity_detail_like_comment_separator" >
-                </LinearLayout>
-                -->
-
                 <ViewStub
-                    android:id="@+id/comment_details_empty_stub"
+                    android:id="@+id/details_empty_comment"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
@@ -119,8 +112,9 @@
                     android:layout="@layout/empty_screen"
                     android:visibility="gone" />
 
+                <!-- Displays the list of comment -->
                 <LinearLayout
-                    android:id="@+id/activity_display_comment_wrap"
+                    android:id="@+id/details_comment_list_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -131,7 +125,7 @@
 
         <!-- Add comment edit txt -->
         <EditText
-            android:id="@+id/editText_Comment"
+            android:id="@+id/details_add_comment_edit_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-7dp"
@@ -146,8 +140,14 @@
         android:id="@+id/details_start_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:background="#DCDCDC" >
+        android:orientation="vertical"
+        android:background="#DCDCDC"
+        android:gravity="center">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
 </RelativeLayout>

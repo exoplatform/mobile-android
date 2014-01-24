@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
@@ -66,18 +67,17 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   private int                          mActivityPosition;
 
-  private AsyncTaskListener  mListener;
+  private AsyncTaskListener            mListener;
 
-  public SocialDetailLoadTask(Context context,
-                              //SocialDetailController controller,
-                              //LoaderActionBarItem loader,
-                              int pos) {
-    mContext = context;
-    //detailController = controller;
-    //loaderItem = loader;
+
+  private static final String TAG = "eXo____SocialDetailLoadTask____";
+
+
+  public SocialDetailLoadTask(Context context, int pos) {
+    Log.i(TAG, "SocialDetailLoadTask - pos: " + pos);
+    mContext          = context;
     mActivityPosition = pos;
     changeLanguage();
-
   }
 
 
@@ -90,9 +90,10 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
       String activityId = SocialDetailHelper.getInstance().getActivityId();
       QueryParams queryParams = new QueryParamsImpl();
-      queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(ExoConstants.NUMBER_OF_LIKES_PARAM));
-      queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(ExoConstants.NUMBER_OF_COMMENTS_PARAM));
-      queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
+      queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(ExoConstants.NUMBER_OF_LIKES_PARAM))
+          .append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(ExoConstants.NUMBER_OF_COMMENTS_PARAM))
+          .append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
+
       selectedRestActivity = activityService.get(activityId, queryParams);
       SocialDetailHelper.getInstance().setLiked(false);
 
@@ -150,8 +151,10 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
       return 1;
     } catch (SocialClientLibException e) {
+      Log.d(TAG, "SocialClientLibException: " + e.getLocalizedMessage());
       return 0;
     } catch (RuntimeException re) {
+      Log.d(TAG, "RuntimeException: " + re.getLocalizedMessage());
       return -1;
     }
   }
@@ -161,32 +164,31 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
     if (mListener != null) mListener.onLoadingActivityFinished(result, mActivityInfo, mSocialCommentList, mLikeLinkedList);
 
+    /**
     if (result == 1 && isLikeAction && SocialTabsActivity.instance != null) {
 
       int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
       switch (tabId) {
+
         case SocialTabsActivity.ALL_UPDATES:
-          AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-              true,
-              mActivityPosition);
+          AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, mActivityPosition);
           break;
+
         case SocialTabsActivity.MY_CONNECTIONS:
-          MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-              true,
-              mActivityPosition);
+          MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, mActivityPosition);
           break;
+
         case SocialTabsActivity.MY_SPACES:
-          MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-              true,
-              mActivityPosition);
+          MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, mActivityPosition);
           break;
+
         case SocialTabsActivity.MY_STATUS:
-          MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-              true,
-              mActivityPosition);
+          MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, mActivityPosition);
           break;
       }
     }
+     **/
+
   }
 
   private void changeLanguage() {

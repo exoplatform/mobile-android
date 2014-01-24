@@ -2,13 +2,16 @@ package org.exoplatform.model;
 
 public class DocumentActionDescription extends Object {
 
+  public int    actionId;
+
   public String actionName;
 
   public int    imageID;
 
-  public DocumentActionDescription(String name, int image) {
+  public DocumentActionDescription(int id, String name, int image) {
+    actionId   = id;
     actionName = name;
-    imageID = image;
+    imageID    = image;
   }
 
   public String getActionName() {

@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/streams_container"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="#DCDCDCDC">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#DCDCDCDC"
+              android:orientation="horizontal"
+              android:weightSum="5"
+              android:baselineAligned="true">
 
-</FrameLayout>
+    <FrameLayout
+            android:id="@+id/streams_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5" />
+
+    <View
+            android:id="@+id/streams_shadow"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/shadow_left"
+            android:visibility="gone" />
+
+    <FrameLayout
+            android:id="@+id/activity_detail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+</LinearLayout>

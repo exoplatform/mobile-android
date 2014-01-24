@@ -45,7 +45,6 @@
         <activity android:name=".ui.setting.ServerEditionActivity"/>
 
         <activity android:name=".ui.social.SocialTabsActivity"
-                  android:configChanges="keyboardHidden|orientation"
                   android:theme="@style/Theme.PageIndicatorDefaults"
                   android:parentActivityName=".ui.HomeActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"

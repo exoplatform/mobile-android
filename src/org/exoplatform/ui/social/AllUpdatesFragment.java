@@ -34,6 +34,7 @@ import org.exoplatform.social.client.api.service.QueryParams;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import org.exoplatform.widget.StandardArrayAdapter;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
@@ -71,7 +72,7 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
   }
 
   public void setListAdapter() {
-    super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList);
+    super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList, WIDE_MODE);
   }
 
   @Override
@@ -101,12 +102,6 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
 
   public class AllUpdateLoadTask extends SocialLoadTask {
 
-    /**
-	  public AllUpdateLoadTask(Context context, LoaderActionBarItem loader) {
-	    super(context, loader);
-	  }
-     **/
-
     public AllUpdateLoadTask(Context context) {
       super(context);
     }
@@ -117,14 +112,17 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
       Log.i(TAG, "setResult");
 	  	setActivityList(result);
 	  	setListAdapter();
-	  	listview.getAutoLoadProgressBar().setVisibility(View.GONE);
+	  	mActivityListView.getAutoLoadProgressBar().setVisibility(View.GONE);
+      mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
 	  	super.setResult(result);
 	  }
+
 
 		@Override
 		protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
 			return activityService.getFeedActivityStream(identity, params);
 		}
+
 
 		@Override
 		protected ArrayList<SocialActivityInfo> getSocialActivityList() {

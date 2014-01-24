@@ -96,13 +96,13 @@ public class WebViewActivity extends ActionBarActivity {
 
     if (getIntent().getStringExtra(ExoConstants.WEB_VIEW_ALLOW_JS) != null) {
       boolean allowJS = Boolean.parseBoolean( getIntent().getStringExtra(ExoConstants.WEB_VIEW_ALLOW_JS) );
-      setJavascript(allowJS);  
+      setJavascript(allowJS);
     }
     else {
       // Disable JS by default 
-      setJavascript(false);  
+      setJavascript(false);
     }
-    
+
     _wvGadget.getSettings().setPluginsEnabled(true);
     _wvGadget.getSettings().setLoadsImagesAutomatically(true);
     _wvGadget.addJavascriptInterface(this, "MainScreen");
@@ -113,8 +113,8 @@ public class WebViewActivity extends ActionBarActivity {
      * content into one column that is the width of the view.
      */
     if (contentType != null && contentType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
-    _wvGadget.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
-    _wvGadget.getSettings().setUseWideViewPort(false);
+      _wvGadget.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+      _wvGadget.getSettings().setUseWideViewPort(false);
     }
 
     final Activity activity = this;
@@ -144,7 +144,7 @@ public class WebViewActivity extends ActionBarActivity {
 
     });
 
-  _wvGadget.setWebViewClient(new NewsWebviewClient());
+    _wvGadget.setWebViewClient(new NewsWebviewClient());
     startLoadingWebView();
 
   }
@@ -206,7 +206,7 @@ public class WebViewActivity extends ActionBarActivity {
     Log.i(TAG, "onCreateOptionsMenu");
     getMenuInflater().inflate(R.menu.home, menu);
     mOptionsMenu = menu;
-    menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_indeterminate_progress);
+    if (isLoading()) menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_indeterminate_progress);
     menu.findItem(R.id.menu_sign_out).setVisible(false);
     menu.findItem(R.id.menu_settings).setVisible(false);
     menu.findItem(R.id.menu_overflow).setVisible(false);
@@ -291,6 +291,16 @@ public class WebViewActivity extends ActionBarActivity {
     }
   }
 
+  private boolean isLoading() {
+    if (mLoadTask == null) return false;
+
+    if (mLoadTask.getStatus() == WebViewLoadTask.Status.RUNNING) {
+      return true;
+    }
+
+    return false;
+  }
+
   private class WebViewLoadTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
@@ -304,18 +314,19 @@ public class WebViewActivity extends ActionBarActivity {
     protected Boolean doInBackground(Void... params) {
       setupCookies(_url);
       return true;
-
     }
 
     @Override
     protected void onPostExecute(Boolean result) {
-      setRefreshActionButtonState(false);
+      Log.i(TAG, "onPostExecute");
       if (result) {
         _wvGadget.loadUrl(_url);
       } else {
         //getActionBar().removeItem(0);
         finish();
       }
+
+      setRefreshActionButtonState(false);
     }
   }
 

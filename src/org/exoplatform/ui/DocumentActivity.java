@@ -114,13 +114,13 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
 
   private WaitingDialog          mProgressDialog;
 
-  private ArrayList<ExoFile>    mDocumentList;
+  private ArrayList<ExoFile>     mDocumentList;
 
-  private Menu                  mOptionsMenu;
+  private Menu                   mOptionsMenu;
 
-  private SharedPreferences     mSharedPreference;
+  private SharedPreferences      mSharedPreference;
 
-  private ViewGroup                  mRootView;
+  private ViewGroup              mRootView;
 
   /** list view of document list */
   private ListView               mDocumentListView;
@@ -129,22 +129,22 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
   private ScrollView             mDocumentGridView;
 
   /** view mode for documents: list or grid */
-  private int                   mViewMode;
+  private int                    mViewMode;
 
   /**=== DATA FOR AsyncTask ===*/
-  public static final String DOC_SOURCE      = "DOC_SOURCE";
+  public static final String     DOC_SOURCE              = "DOC_SOURCE";
 
-  public static final String DOC_DESTINATION = "DOC_DESTINATION";
+  public static final String     DOC_DESTINATION         = "DOC_DESTINATION";
 
-  public static final String ACTION_ID       = "ACTION_ID";
+  public static final String     ACTION_ID               = "ACTION_ID";
 
-  public static final String CURRENT_ACTION_BAR_FILE = "CURRENT_ACTION_BAR_FILE";
+  public static final String     CURRENT_ACTION_BAR_FILE = "CURRENT_ACTION_BAR_FILE";
 
-  public static final String CURRENT_MENU_FILE = "CURRENT_MENU_FILE";
+  public static final String     CURRENT_MENU_FILE       = "CURRENT_MENU_FILE";
 
-  public static final String SDCARD_DIR      = "SDCARD_DIR";
+  public static final String     SDCARD_DIR              = "SDCARD_DIR";
 
-  private static final String TAG = "eXo____DocumentActivity____";
+  private static final String    TAG = "eXo____DocumentActivity____";
 
 
   @Override
@@ -281,6 +281,8 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
 
       case R.id.menu_add:
         /** Open up Add menu */
+        if ("".equals(_fileForCurrentActionBar.name)) return true;
+
         mDocumentAdapter.mActionDialog = new DocumentActionDialog(this, _fileForCurrentActionBar, true);
         mDocumentAdapter.mActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrentActionBar);
         mDocumentAdapter.mActionDialog._documentActionAdapter.notifyDataSetChanged();
@@ -290,7 +292,7 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
         break;
 
       case R.id.menu_refresh:
-        startLoadingDocuments(mDocumentAdapter.mActionDialog.myFile.path, null, ACTION_DEFAULT);
+        startLoadingDocuments(_fileForCurrentActionBar.path, null, ACTION_DEFAULT);
         return true;
 
       case R.id.menu_settings:
@@ -304,6 +306,14 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
 
 
   public void startLoadingDocuments(String source, String destination, int action) {
+    Log.i(TAG, "startLoadingDocuments - source : " + source + " - dest : " + destination);
+    Log.i(TAG, "startLoadingDocuments - action : " + action);
+
+    if (_fileForCurrentActionBar != null) {
+      Log.i(TAG, "startLoadingDocuments - file for action bar folder : " + _fileForCurrentActionBar.currentFolder);
+      Log.i(TAG, "startLoadingDocuments - file for action bar name : " + _fileForCurrentActionBar.name);
+    }
+
     if (!ExoConnectionUtils.isNetworkAvailableExt(this)) {
       new ConnectionErrorDialog(this).show();
       return ;

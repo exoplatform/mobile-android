@@ -2,6 +2,7 @@ package org.exoplatform.ui.social;
 
 import java.util.ArrayList;
 
+import android.widget.AbsListView;
 import org.exoplatform.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
@@ -28,23 +29,23 @@ import android.widget.Toast;
 
 public abstract class ActivityStreamFragment extends Fragment {
 
-  protected SectionListView          listview;
+  protected SectionListView          mActivityListView;
 
   protected View                     emptyStubView;
 
-  protected StandardArrayAdapter     arrayAdapter;
+  protected StandardArrayAdapter     mActivityListAdapter;
 
   protected SectionListAdapter       sectionAdapter;
 
   protected int                      firstIndex;
 
-  protected SocialLoadTask			 mLoadTask;
+  protected SocialLoadTask			     mLoadTask;
 
   protected int                      currentPosition = 0;
 
-  public int                        actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
+  public int                         actNumbers      = ExoConstants.NUMBER_OF_ACTIVITY;
 
-  protected boolean				    isLoadingMoreActivities = false;
+  protected boolean				           isLoadingMoreActivities = false;
 
   /**
    * This fragment's layout resource
@@ -60,6 +61,13 @@ public abstract class ActivityStreamFragment extends Fragment {
    * This fragment's ListView ID
    */
   protected int						fragment_list_view_id;
+
+  /** runs in narrow or wide mode */
+  private int                                 mMode = 1;
+
+  public static final int                     WIDE_MODE   = 1;
+
+  public static final int                     NARROW_MODE = 2;
 
   private static final String TAG = "eXo____ActivityStreamFragment____";
 
@@ -108,12 +116,16 @@ public abstract class ActivityStreamFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(fragment_layout, container, false);
-    listview = (SectionListView) view.findViewById(fragment_list_view_id);
-    listview.setDivider(null);
-    listview.setDividerHeight(0);
-    listview.setFadingEdgeLength(0);
-    listview.setCacheColorHint(Color.TRANSPARENT);
-    listview.setParentFragment(this);
+
+    mActivityListView = (SectionListView) view.findViewById(fragment_list_view_id);
+    mActivityListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+    mActivityListView.setSelector(R.drawable.list_item_selector);
+    mActivityListView.setDivider(null);
+    mActivityListView.setDividerHeight(0);
+    mActivityListView.setFadingEdgeLength(0);
+    mActivityListView.setCacheColorHint(Color.TRANSPARENT);
+    mActivityListView.setParentFragment(this);
+
     emptyStubView = ((ViewStub) view.findViewById(fragment_empty_view_id)).inflate();
     ImageView emptyImage = (ImageView) emptyStubView.findViewById(R.id.empty_image);
     emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
@@ -175,7 +187,7 @@ public abstract class ActivityStreamFragment extends Fragment {
   public void onLoadMore(int numberOfActivities, int currentPos, int firstVisible) {
     if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       if (mLoadTask == null || mLoadTask.getStatus() == Status.FINISHED) {
-        int currentTab = SocialTabsActivity.instance.mPager.getCurrentItem();
+        int currentTab = SocialTabsActivity.instance != null ? SocialTabsActivity.instance.getTabId() : 0;
         int lastActivity = 0;
         ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().getSocialListForTab(currentTab);
         mLoadTask = getThisLoadTask();
@@ -183,7 +195,7 @@ public abstract class ActivityStreamFragment extends Fragment {
         Log.d(TAG, "loading more data - flush image cache");
         // TODO
         //((SocialTabsActivity) getActivity()).getGDApplication().getImageCache().flush();
-        System.gc();
+        // System.gc();
 
         if (list != null) { // if we can identify the last activity, we load the previous/older ones
           lastActivity = list.size()-1;
@@ -203,7 +215,7 @@ public abstract class ActivityStreamFragment extends Fragment {
   }
 
 
-  private void onCancelLoad() {
+  public void onCancelLoad() {
     if (isLoading()) {
       mLoadTask.cancel(true);
       mLoadTask = null;
@@ -218,45 +230,79 @@ public abstract class ActivityStreamFragment extends Fragment {
   public int getPosition() {
     return currentPosition;
   }
+
   /**
    * Set the array adapter with the content of the given list.
    * Create a section adapter from the new array adapter.
    * @param activityList The list of activities that the list adapter uses.
+   * @param mode         The display mode of list view
    */
-  public void setListAdapter(ArrayList<SocialActivityInfo> activityList) {
+  public void setListAdapter(ArrayList<SocialActivityInfo> activityList, int mode) {
     if (activityList == null || activityList.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);
       return;
     }
     emptyStubView.setVisibility(View.GONE);
 
-    arrayAdapter = new StandardArrayAdapter(getActivity(), activityList);
-    sectionAdapter = new SectionListAdapter(getActivity(),
-        getActivity().getLayoutInflater(),
-        arrayAdapter);
-    listview.setAdapter(sectionAdapter);
-	        /*
-	         * Hide the section header if it's the first item of the list
-	         */
+    mActivityListAdapter = new StandardArrayAdapter(getActivity(), activityList);
+    mActivityListAdapter.setMode(mode);
+    sectionAdapter = new SectionListAdapter(getActivity(), getActivity().getLayoutInflater(), mActivityListAdapter);
+    mActivityListView.setAdapter(sectionAdapter);
+
+	  /** Hide the section header if it's the first item of the list */
     sectionAdapter.makeSectionInvisibleIfFirstInList(firstIndex);
 
-	        /*
-	         * Keep the current position when the listview is refreshed or more activities are loaded
-	         */
+	  /** Keep the current position when the listView is refreshed or more activities are loaded */
     int h = 0;
     if (isLoadingMoreActivities)
-      h = listview.getHeight()-listview.getAutoLoadProgressBar().getHeight();
-    listview.setSelectionFromTop(currentPosition, h);
+      h = mActivityListView.getHeight()-mActivityListView.getAutoLoadProgressBar().getHeight();
+    mActivityListView.setSelectionFromTop(currentPosition, h);
   }
+
+
+  /**
+   * Switch to different display mode
+   */
+  public void switchMode(int mode, boolean forceReloadView) {
+
+    if (mode == mMode) return;
+    if (!forceReloadView) {
+      mMode = mode;
+      return ;
+    }
+
+    mMode = mode;
+    ArrayList<SocialActivityInfo> activityList = SocialServiceHelper.getInstance().socialInfoList;
+    if (activityList == null || activityList.size() == 0) {
+      emptyStubView.setVisibility(View.VISIBLE);
+      return;
+    }
+    emptyStubView.setVisibility(View.GONE);
+
+    mActivityListAdapter = new StandardArrayAdapter(getActivity(), activityList);
+    mActivityListAdapter.setMode(mode);
+    sectionAdapter = new SectionListAdapter(getActivity(), getActivity().getLayoutInflater(), mActivityListAdapter);
+    mActivityListView.setAdapter(sectionAdapter);
+
+    /** Hide the section header if it's the first item of the list */
+    sectionAdapter.makeSectionInvisibleIfFirstInList(firstIndex);
+
+    /** Keep the current position when the listView is refreshed or more activities are loaded */
+    int h = 0;
+    if (isLoadingMoreActivities)
+      h = mActivityListView.getHeight()-mActivityListView.getAutoLoadProgressBar().getHeight();
+    mActivityListView.setSelectionFromTop(currentPosition, h);
+  }
+
+
 
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-		    /*
-		     * Store the current first visible position of listview
-		     */
-    if (listview != null) {
-      firstIndex = listview.getFirstVisiblePosition();
+
+		/** Store the current first visible position of list view */
+    if (mActivityListView != null) {
+      firstIndex = mActivityListView.getFirstVisiblePosition();
     }
   }
 }

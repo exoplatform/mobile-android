@@ -82,23 +82,18 @@ public class SocialActivityUtil {
 
   public static String getComment(Context context, LinkedList<SocialLikeInfo> socialLikeList) {
     Resources resource = context.getResources();
-    String nolike = resource.getString(R.string.NoLike);
-    String peoplesLiked = resource.getString(R.string.PeoplesLikedThis);
-    String peopleLiked = resource.getString(R.string.PeopleLikedThis);
     StringBuffer buffer = new StringBuffer();
     int count = socialLikeList.size();
     if (count == 0) {
-      buffer.append(nolike);
-    } else if (count == 1) {
-      buffer.append(count);
-      buffer.append(" ");
-      buffer.append(peopleLiked);
-
-    } else {
-      buffer.append(count);
-      buffer.append(" ");
-      buffer.append(peoplesLiked);
+      buffer.append(resource.getString(R.string.NoLike));
     }
+    else if (count == 1) {
+      buffer.append(count).append(" ").append(resource.getString(R.string.PeopleLikedThis));
+    }
+    else {
+      buffer.append(count).append(" ").append(resource.getString(R.string.PeoplesLikedThis));
+    }
+
     return buffer.toString();
   }
 

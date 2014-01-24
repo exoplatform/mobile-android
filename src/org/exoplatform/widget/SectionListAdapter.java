@@ -1,5 +1,6 @@
 package org.exoplatform.widget;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -312,6 +313,14 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
     } else if (linkedListener != null) {
       linkedListener.onItemClick(parent, view, getLinkedPosition(position), id);
     }
+  }
+
+  public int getSectionPosFromActivityPos(int activityPos) {
+    for (int idx : itemPositions.keySet()) {
+      if (activityPos == itemPositions.get(idx)) return idx;
+    }
+
+    return -1;
   }
 
   public void setOnItemClickListener(final OnItemClickListener linkedListener) {

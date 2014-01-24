@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialLikeInfo;
@@ -69,6 +70,9 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
   private int                    currentPosition;
 
   private AsyncTaskListener mListener;
+
+  private static final String TAG = "eXo____LikeLoadTask____";
+
 
   public LikeLoadTask(Context context,
                       //SocialDetailController controller,
@@ -127,8 +131,10 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
 
         }
       }
+
       return likeLinkedList;
     } catch (SocialClientLibException e) {
+      Log.d(TAG, "SocialClientLibException: " + e.getLocalizedMessage());
       return null;
     }
   }
@@ -143,47 +149,48 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
 
     if (mListener != null) mListener.onLoadingLikeListFinished(result);
 
-    /**
     if (result != null) {
-      detailController.setLikedState();
-      detailController.setLikeInfoText(result);
-      detailController.setLikedInfo(result);
-
+      //detailController.setLikedState();
+      //detailController.setLikeInfoText(result);
+      //detailController.setLikedInfo(result);
 
       if (SocialTabsActivity.instance != null) {
-        int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+        int tabId = SocialTabsActivity.instance.getTabId();
+
         switch (tabId) {
-        case SocialTabsActivity.ALL_UPDATES:
-          AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
-          break;
-        case SocialTabsActivity.MY_CONNECTIONS:
-          MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                       true,
-                                                       currentPosition);
-          break;
-        case SocialTabsActivity.MY_SPACES:
-          MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                  true,
-                                                  currentPosition);
-          break;
-        case SocialTabsActivity.MY_STATUS:
-          MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                  true,
-                                                  currentPosition);
-          break;
+          case SocialTabsActivity.ALL_UPDATES:
+            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                true,
+                currentPosition);
+            break;
+
+          case SocialTabsActivity.MY_CONNECTIONS:
+            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                true,
+                currentPosition);
+            break;
+
+          case SocialTabsActivity.MY_SPACES:
+            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                true,
+                currentPosition);
+            break;
+
+          case SocialTabsActivity.MY_STATUS:
+            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                true,
+                currentPosition);
+            break;
         }
       }
     } else {
       SocialDetailsWarningDialog dialog = new SocialDetailsWarningDialog(mContext,
-                                                                         titleString,
-                                                                         detailsErrorStr,
-                                                                         okString,
-                                                                         false);
+          titleString,
+          detailsErrorStr,
+          okString,
+          false);
       dialog.show();
     }
-     **/
 
     //loaderItem.setLoading(false);
   }

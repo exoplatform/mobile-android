@@ -31,13 +31,22 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SpinnerAdapter;
 import org.exoplatform.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
+import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -51,13 +60,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import org.exoplatform.widget.SectionListAdapter;
+import org.exoplatform.widget.StandardArrayAdapter;
 import org.exoplatform.widget.WarningDialog;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
  * 23, 2012
  */
-public class SocialTabsActivity extends ActionBarActivity implements SocialLoadTask.AsyncTaskListener  {
+public class SocialTabsActivity extends ActionBarActivity implements SocialLoadTask.AsyncTaskListener,
+    Refreshable, StandardArrayAdapter.OnItemClickListener {
 
   public static final int              ALL_UPDATES             = 0;
 
@@ -87,6 +99,8 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
   private static final String          REFRESH_STATE         = "REFRESH_STATE";
 
+  private static final String          DETAILS_FM              = "DETAILS_FM";
+
 
 
   public ArrayList<SocialActivityInfo> socialList;
@@ -111,9 +125,13 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
   /** Store the Id of current fragment shown */
   private int    mCurrentFragment = -1;
 
-  private static boolean mIsTablet;
+  public static boolean mIsTablet;
 
   private static String[] SOCIAL_TABS = null;
+
+  private SocialDetailFragment         mDetailFragment;
+
+  private ActivityStreamFragment       mListFragment;
 
   private static final String TAG = "eXo____SocialTabsActivity____";
 
@@ -168,97 +186,22 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
     }
     else {
       /** tablet */
-      setContentView(R.layout.social_activity_tabs_tablet);
-      getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-      SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.SocialTabs,
-          android.R.layout.simple_spinner_dropdown_item);
-
-      final ActionBar actionBar = getSupportActionBar();
-      actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-      actionBar.setListNavigationCallbacks(mSpinnerAdapter, new ActionBar.OnNavigationListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(int position, long itemId) {
-          Log.i(TAG, "onNavigationItemSelected: " + position);
-
-          if (position == mCurrentFragment) return true;
-
-          ActivityStreamFragment activityStreamFragment = null;
-
-          switch (position) {
-
-            case ALL_UPDATES:
-              activityStreamFragment = AllUpdatesFragment.getInstance();
-              break;
-
-            case MY_CONNECTIONS:
-              activityStreamFragment = MyConnectionsFragment.getInstance();
-              break;
-
-            case MY_SPACES:
-              activityStreamFragment = MySpacesFragment.getInstance();
-              break;
-
-            case MY_STATUS:
-              activityStreamFragment = MyStatusFragment.getInstance();
-              break;
-          }
-
-          Log.i(TAG, "mCurrentFragment: " + mCurrentFragment);
-          if (mCurrentFragment > -1)
-          Log.i(TAG, "tag: " + SOCIAL_TABS[mCurrentFragment]);
-
-          FragmentManager fragmentManager = getSupportFragmentManager();
-          FragmentTransaction ft = fragmentManager.beginTransaction();
-
-          if (mCurrentFragment == -1) {
-            /** first run */
-            Log.i(TAG, "first run, add the fragment");
-            ft.add(R.id.streams_container, activityStreamFragment, SOCIAL_TABS[position]);
-          }
-          else {
-            /** not first run */
-
-            Fragment fragment = fragmentManager.findFragmentByTag(SOCIAL_TABS[mCurrentFragment]);
-            if (fragment != null) {
-              Log.i(TAG, "hide current fragment: " + fragment.getTag());
-              ft.hide(fragment);
-            }
-
-            Log.i(TAG, "find requested fragment");
-            /** find requested fragment */
-            fragment = fragmentManager.findFragmentByTag(SOCIAL_TABS[position]);
-            if (fragment != null) {
-              Log.i(TAG, "show current fragment: " + fragment.getTag());
-              ft.show(fragment);
-            }
-            else {
-              /** fragment not added yet, add it */
-              Log.i(TAG, "fragment not added yet, add it");
-              ft.add(R.id.streams_container, activityStreamFragment, SOCIAL_TABS[position]);
-            }
-          }
-
-          ft.commit();
-
-          mCurrentFragment = position;
-
-          return true;
-        }
-      });
-
+      initSubViewsForTablet();
     }
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    /** hide all other fragments except current one */
     if (mCurrentFragment != -1) {
       FragmentManager fragmentManager = getSupportFragmentManager();
       FragmentTransaction ft = fragmentManager.beginTransaction();
 
       for (String fragmentName : SOCIAL_TABS) {
-        if (fragmentName.equals(SOCIAL_TABS[mCurrentFragment])) continue;
         Fragment fragment = fragmentManager.findFragmentByTag(fragmentName);
+        if (fragmentName.equals(SOCIAL_TABS[mCurrentFragment])) {
+          mListFragment = (ActivityStreamFragment) fragment;
+          continue;
+        }
         if (fragment != null) ft.hide(fragment);
       }
 
@@ -271,6 +214,102 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
       int savedIndex = prefs.getInt(AccountSetting.getInstance().socialKeyIndex, ALL_UPDATES);
       mPager.setCurrentItem(savedIndex);
     }
+  }
+
+
+  private void initSubViewsForTablet() {
+    setContentView(R.layout.social_activity_tabs_tablet);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+    SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.SocialTabs,
+        android.R.layout.simple_spinner_dropdown_item);
+
+    final ActionBar actionBar = getSupportActionBar();
+    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+    actionBar.setListNavigationCallbacks(mSpinnerAdapter, new ActionBar.OnNavigationListener() {
+
+      @Override
+      public boolean onNavigationItemSelected(int position, long itemId) {
+        Log.i(TAG, "onNavigationItemSelected - position: " + position + " - current fragment: " + mCurrentFragment);
+
+        if (position == mCurrentFragment) {
+
+          /** in case of orientation switch, need to set up listener */
+          if (mListFragment.mActivityListAdapter != null) {
+            mListFragment.mActivityListAdapter.setOnItemClickListener(SocialTabsActivity.this);
+          }
+          return true;
+        }
+
+        ActivityStreamFragment activityStreamFragment = null;
+
+        switch (position) {
+
+          case ALL_UPDATES:
+            activityStreamFragment = AllUpdatesFragment.getInstance();
+            break;
+
+          case MY_CONNECTIONS:
+            activityStreamFragment = MyConnectionsFragment.getInstance();
+            break;
+
+          case MY_SPACES:
+            activityStreamFragment = MySpacesFragment.getInstance();
+            break;
+
+          case MY_STATUS:
+            activityStreamFragment = MyStatusFragment.getInstance();
+            break;
+        }
+
+        Log.i(TAG, "mCurrentFragment: " + mCurrentFragment);
+        if (mCurrentFragment > -1)
+          Log.i(TAG, "tag: " + SOCIAL_TABS[mCurrentFragment]);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+
+        if (mCurrentFragment == -1) {
+          /** first run */
+          Log.i(TAG, "first run, add the fragment");
+          ft.add(R.id.streams_container, activityStreamFragment, SOCIAL_TABS[position]);
+          mListFragment = activityStreamFragment;
+        }
+        else {
+          /** not first run */
+
+          Fragment fragment = fragmentManager.findFragmentByTag(SOCIAL_TABS[mCurrentFragment]);
+          if (fragment != null) {
+            Log.i(TAG, "hide current fragment: " + fragment.getTag());
+            ft.hide(fragment);
+          }
+
+          Log.i(TAG, "find requested fragment");
+          /** find requested fragment */
+          fragment = fragmentManager.findFragmentByTag(SOCIAL_TABS[position]);
+          if (fragment != null) {
+            Log.i(TAG, "show current fragment: " + fragment.getTag());
+            ft.show(fragment);
+            mListFragment = (ActivityStreamFragment) fragment;
+          }
+          else {
+            /** fragment not added yet, add it */
+            Log.i(TAG, "fragment not added yet, add it");
+            ft.add(R.id.streams_container, activityStreamFragment, SOCIAL_TABS[position]);
+            mListFragment = activityStreamFragment;
+          }
+        }
+
+        ft.commit();
+        mCurrentFragment = position;
+        if (mListFragment.mActivityListAdapter != null) {
+          mListFragment.mActivityListAdapter.setOnItemClickListener(SocialTabsActivity.this);
+        }
+
+        return true;
+      }
+    });
+
   }
 
 
@@ -289,7 +328,6 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
         break;
       case Configuration.SCREENLAYOUT_SIZE_SMALL:   // 320x426 dp units
         Log.i(TAG, "small");
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mIsTablet = false;
         break;
       case Configuration.SCREENLAYOUT_SIZE_LARGE:   // 480x640 dp units
@@ -305,15 +343,27 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
     }
   }
 
+
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     Log.i(TAG, "onCreateOptionsMenu");
+
     getMenuInflater().inflate(R.menu.social, menu);
     mOptionsMenu = menu;
     if (mIsRefreshing) menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_indeterminate_progress);
+
+    /** Double pane */
+    if (mDetailFragment != null) {
+      menu.findItem(R.id.menu_add).setVisible(false);
+    }
+
     return true;
   }
 
+
+  public int getCurrentFragment() {
+    return mCurrentFragment;
+  }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
@@ -326,8 +376,10 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
       /** Click on Refresh */
       case R.id.menu_refresh:
+        Log.i(TAG, "click on refresh - tablet : " + mIsTablet);
 
-        int tabId = mPager.getCurrentItem();
+        /** on tablet we don't have pager */
+        int tabId = !mIsTablet ? mPager.getCurrentItem() : mCurrentFragment;
         switch (tabId) {
 
           case ALL_UPDATES:
@@ -347,6 +399,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
             break;
         }
         return true;
+
 
       case R.id.menu_settings:
         redirectToSetting();
@@ -393,12 +446,44 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
     savedState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
     savedState.putInt(CURRENT_FM, mCurrentFragment);
     savedState.putBoolean(REFRESH_STATE, false);
+
+    /** at orientation switch, terminate network call */
+    if (mListFragment != null) {
+      mListFragment.onCancelLoad();
+    }
+    if (mDetailFragment != null) {
+      mDetailFragment.onCancelLoad();
+      mDetailFragment = null;
+    }
   }
 
   @Override
   public void onBackPressed() {
-    super.onBackPressed();
-    finishFragment();
+
+    /** Single pane */
+    if (mDetailFragment == null) {
+      super.onBackPressed();
+      finishFragment();
+    }
+    /** Double pane */
+    else {
+
+      /** remove the details fragment */
+      FragmentManager fragmentManager = getSupportFragmentManager();
+      Fragment detailFragment = fragmentManager.findFragmentByTag(DETAILS_FM);
+      fragmentManager.beginTransaction().remove(detailFragment).commit();
+      mDetailFragment = null;
+
+      /** Make the list fragment takes up whole screen */
+      findViewById(R.id.streams_container).setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 5.0f));
+      findViewById(R.id.activity_detail).setVisibility(View.GONE);
+      findViewById(R.id.streams_shadow).setVisibility(View.GONE);
+
+      /** Reload list fragment */
+      mListFragment.switchMode(ActivityStreamFragment.WIDE_MODE, true);
+      mListFragment.mActivityListAdapter.setOnItemClickListener(this);
+      mListFragment.mActivityListView.setSelection(mListFragment.mActivityListView.getFirstVisibleItemPos());
+    }
   }
 
   @Override
@@ -409,7 +494,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
   private void finishFragment() {
     if (isSocialFilterEnable) {
-      int tabId = mPager.getCurrentItem();
+      int tabId = getTabId();
       Editor editor = prefs.edit();
       editor.putInt(AccountSetting.getInstance().socialKeyIndex, tabId);
       editor.commit();
@@ -442,6 +527,80 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
     intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_POST_TYPE);
     startActivity(intent);
+  }
+
+
+  /**
+   * Click on activity in stream to open up detail view
+   *
+   * @param activityInfo
+   * @param position
+   */
+  @Override
+  public void onClickActivityItem(View socialItemView, SocialActivityInfo activityInfo, int position) {
+
+    Log.i(TAG, "onClickActivityItem - position : " + position);
+    String activityId = activityInfo.getActivityId();
+    SocialDetailHelper.getInstance().setActivityId(activityId);
+    SocialDetailHelper.getInstance().setAttachedImageUrl(activityInfo.getAttachedImageUrl());
+
+    if (mIsTablet && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+      /** Stop current network if any */
+      if (mDetailFragment != null) mDetailFragment.onCancelLoad();
+
+      /** reset the whole list */
+      mListFragment.switchMode(ActivityStreamFragment.NARROW_MODE, true);
+
+      /** highlight the selected item */
+      int idx = mListFragment.sectionAdapter.getSectionPosFromActivityPos(position);
+      mListFragment.mActivityListView.setSelection(idx == -1 ? 0 : idx);
+      mListFragment.mActivityListView.setItemChecked(idx, true);
+      mListFragment.mActivityListAdapter.setOnItemClickListener(this);
+
+      /** Show the container for activity detail */
+      if (mDetailFragment == null) {
+        View streamContainer = findViewById(R.id.streams_container);
+        streamContainer.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2.0f));
+        streamContainer.setAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_right_to_left));
+
+        View activityDetailContainer = findViewById(R.id.activity_detail);
+        activityDetailContainer.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 3.0f));
+        activityDetailContainer.setVisibility(View.VISIBLE);
+
+        /** Show the shadow */
+        findViewById(R.id.streams_shadow).setVisibility(View.VISIBLE);
+      }
+
+      /** Add the SocialDetailFragment */
+      mDetailFragment = new SocialDetailFragment(position);
+      mDetailFragment.setRefreshListener(this);
+
+      getSupportFragmentManager().beginTransaction().replace(R.id.activity_detail, mDetailFragment, DETAILS_FM).commit();
+
+      /** Change action bar */
+      supportInvalidateOptionsMenu();
+    }
+    else {
+
+      if (mListFragment != null) {
+        Log.i(TAG, "list fragment not null");
+        int idx = mListFragment.sectionAdapter.getSectionPosFromActivityPos(position);
+        mListFragment.mActivityListView.setItemChecked(idx, true);
+      }
+
+      /** fire up activity details */
+      Intent intent = new Intent(this, SocialDetailActivity.class);
+      intent.putExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, position);
+      intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+      startActivity(intent);
+    }
+  }
+
+
+  public int getTabId() {
+    return !SocialTabsActivity.mIsTablet ? SocialTabsActivity.instance.mPager.getCurrentItem() :
+        SocialTabsActivity.instance.getCurrentFragment();
   }
 
   /** TODO replace

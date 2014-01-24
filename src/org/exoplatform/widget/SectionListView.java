@@ -2,6 +2,7 @@ package org.exoplatform.widget;
 
 import java.security.InvalidParameterException;
 
+import android.util.Log;
 import org.exoplatform.ui.social.ActivityStreamFragment;
 import org.exoplatform.utils.ExoConstants;
 
@@ -28,18 +29,29 @@ public class SectionListView extends ListView implements OnScrollListener {
    * The view that contains the fixed section header
    */
   private View transparentView;
+
   /**
    * The Fragment that holds this list view
    */
   private ActivityStreamFragment parentFragment;
+
   /**
    * The progress bar in the footer
    */
   private ProgressBar autoLoadProgress;
+
   /**
    * A flag that indicates whether the user has scrolled to reach the current position in the list
    */
   private boolean hasScrolled;
+
+  /**
+   * Store the first visible item pos when scrolling
+   */
+  private int     mFirstVisibleItemPos;
+
+  private static final String TAG = "eXo____SectionListView____";
+
 
   public SectionListView(final Context context, final AttributeSet attrs, final int defStyle) {
     super(context, attrs, defStyle);
@@ -86,8 +98,7 @@ public class SectionListView extends ListView implements OnScrollListener {
       ((FrameLayout) parent).removeView(transparentView);
     }
     transparentView = ((SectionListAdapter) adapter).getTransparentSectionView();
-    final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT,
-                                                                     LayoutParams.WRAP_CONTENT);
+    final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
     ((FrameLayout) parent).addView(transparentView, lp);
     if (adapter.isEmpty()) {
       transparentView.setVisibility(View.INVISIBLE);
@@ -107,6 +118,8 @@ public class SectionListView extends ListView implements OnScrollListener {
                        final int firstVisibleItem,
                        final int visibleItemCount,
                        final int totalItemCount) {
+    mFirstVisibleItemPos = firstVisibleItem;
+
 	  ListAdapter a = getAdapter();
 	  SectionListAdapter adapter = null; 
 	  if (a instanceof HeaderViewListAdapter)
@@ -127,6 +140,8 @@ public class SectionListView extends ListView implements OnScrollListener {
       hasScrolled = false;
     }
   }
+
+  public int getFirstVisibleItemPos() {  return mFirstVisibleItemPos; }
   
   public ProgressBar getAutoLoadProgressBar() {
 	  return autoLoadProgress;

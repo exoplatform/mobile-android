@@ -32,6 +32,7 @@ import org.exoplatform.social.client.api.service.QueryParams;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import org.exoplatform.widget.StandardArrayAdapter;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
@@ -83,7 +84,7 @@ public class MyStatusFragment extends ActivityStreamFragment {
   }
 
   public void setListAdapter() {
-	  super.setListAdapter(SocialServiceHelper.getInstance().myStatusList);
+	  super.setListAdapter(SocialServiceHelper.getInstance().myStatusList, WIDE_MODE);
   }
   
   @Override
@@ -110,8 +111,9 @@ public class MyStatusFragment extends ActivityStreamFragment {
     public void setResult(ArrayList<SocialActivityInfo> result) {
     	setActivityList(result);
     	setListAdapter();
-    	listview.getAutoLoadProgressBar().setVisibility(View.GONE);
-    	super.setResult(result);
+    	mActivityListView.getAutoLoadProgressBar().setVisibility(View.GONE);
+      mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
+      super.setResult(result);
     }
 
 	@Override

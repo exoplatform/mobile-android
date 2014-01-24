@@ -12,6 +12,7 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.ui.social.ActivityStreamFragment;
 import org.exoplatform.ui.social.AllUpdatesFragment;
 import org.exoplatform.ui.social.ComposeMessageActivity;
 import org.exoplatform.ui.social.MyConnectionsFragment;
@@ -35,35 +36,50 @@ import android.view.ViewStub;
 
 /**
  * Adapter for activity item in activity stream
- *
  */
 public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
-  private final ArrayList<SocialActivityInfo> items;
+  private final ArrayList<SocialActivityInfo> mListActivities;
 
   private Context                             mContext;
-
-  private LayoutInflater                      mInflater;
 
   private ViewHolder                          holder = null;
 
   private LikeLoadTask                        mLoadTask;
 
+  private OnItemClickListener                 mListener;
+
+  /** runs in narrow or wide mode */
+  private int                                 mMode = ActivityStreamFragment.WIDE_MODE;
+
+
   private static final String TAG = "eXo____StandardArrayAdapter____";
+
 
   public StandardArrayAdapter(Context context, ArrayList<SocialActivityInfo> items) {
     super(context, R.layout.activitybrowserviewcell, items);
-    mContext = context;
-    this.items = items;
-    mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    mContext        = context;
+    mListActivities = items;
+  }
+
+
+  public ArrayList<SocialActivityInfo> getListOfActivities() {
+    return mListActivities;
+  }
+
+
+  public void setOnItemClickListener(OnItemClickListener listener) {
+    mListener = listener;
   }
 
   @Override
   public View getView(final int position, View convertView, ViewGroup parent) {
-    final SocialActivityInfo actInfo = items.get(position);
+    final SocialActivityInfo actInfo = mListActivities.get(position);
 
     if (convertView == null) {
-      convertView = mInflater.inflate(R.layout.activitybrowserviewcell, null);
+      convertView = ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+          .inflate(R.layout.activitybrowserviewcell, null);
+
       holder = new ViewHolder();
       holder.imageViewAvatar = (ShaderImageView) convertView.findViewById(R.id.imageView_Avatar);
       holder.imageViewAvatar.setDefaultImageResource(R.drawable.default_avatar);
@@ -78,6 +94,8 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
       holder.typeImageView = (ImageView) convertView.findViewById(R.id.activity_image_type);
       holder.textViewTime = (TextView) convertView.findViewById(R.id.textView_Time);
       holder.attachStubView = ((ViewStub) convertView.findViewById(R.id.attached_image_stub_activity)).inflate();
+      holder.bottomSection  = (RelativeLayout) convertView.findViewById(R.id.activity_item_bottom_section);
+      if (mMode == ActivityStreamFragment.NARROW_MODE) holder.bottomSection.setVisibility(View.GONE);
       convertView.setTag(holder);
     } else {
       holder = (ViewHolder) convertView.getTag();
@@ -87,6 +105,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     socialItem.initCommonInfo();
 
     /** Click on content to open activity detail */
+    /**
     holder.contentLayoutWrap.setOnClickListener(new OnClickListener() {
 
       public void onClick(View v) {
@@ -97,6 +116,15 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
         intent.putExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, position);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         mContext.startActivity(intent);
+      }
+    });
+     **/
+
+    final View view = convertView;
+    holder.contentLayoutWrap.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mListener != null) mListener.onClickActivityItem(view, actInfo, position);
       }
     });
 
@@ -130,6 +158,16 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     return convertView;
   }
 
+
+  public int getMode() {
+    return mMode;
+  }
+
+  public void setMode(int mode) {
+    mMode = mode;
+  }
+
+  /** Click on button like */
   private void onLikeLoad(SocialActivityInfo info, int position) {
     if (mLoadTask == null || mLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
       //mLoadTask = (LikeLoadTask) new LikeLoadTask(SocialTabsActivity.instance.loaderItem, position).execute(info);
@@ -159,8 +197,13 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     public TextView        textViewTime;
 
     public View            attachStubView;
+
+    public RelativeLayout  bottomSection;
   }
 
+  /**
+   * Execute like and unlike
+   */
   private class LikeLoadTask extends AsyncTask<SocialActivityInfo, Void, Boolean> {
 
     //private LoaderActionBarItem loaderItem;
@@ -207,57 +250,52 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     protected void onPostExecute(Boolean result) {
       //loaderItem.setLoading(false);
       if (result) {
-        if (SocialTabsActivity.instance != null) {
-          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
-          switch (tabId) {
-          case SocialTabsActivity.ALL_UPDATES:
 
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                      true,
-                                                      currentPosition);
-            if (AllUpdatesFragment.instance.isLoading())
-              holder.buttonLike.setClickable(false);
-            else
-              holder.buttonLike.setClickable(true);
-            break;
-          case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                         true,
-                                                         currentPosition);
-            if (MyConnectionsFragment.instance.isLoading())
-              holder.buttonLike.setClickable(false);
-            else
-              holder.buttonLike.setClickable(true);
-            break;
-          case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
-            if (MySpacesFragment.instance.isLoading())
-              holder.buttonLike.setClickable(false);
-            else
-              holder.buttonLike.setClickable(true);
-            break;
-          case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
-            if (MyStatusFragment.instance.isLoading())
-              holder.buttonLike.setClickable(false);
-            else
-              holder.buttonLike.setClickable(true);
-            break;
+        /** reload activity stream */
+        if (SocialTabsActivity.instance != null) {
+          int tabId = SocialTabsActivity.instance.getTabId();
+
+          switch (tabId) {
+
+            case SocialTabsActivity.ALL_UPDATES:
+              AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+              if   (AllUpdatesFragment.instance.isLoading()) holder.buttonLike.setClickable(false);
+              else holder.buttonLike.setClickable(true);
+              break;
+
+            case SocialTabsActivity.MY_CONNECTIONS:
+              MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+              if   (MyConnectionsFragment.instance.isLoading()) holder.buttonLike.setClickable(false);
+              else holder.buttonLike.setClickable(true);
+              break;
+
+            case SocialTabsActivity.MY_SPACES:
+              MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+              if   (MySpacesFragment.instance.isLoading()) holder.buttonLike.setClickable(false);
+              else holder.buttonLike.setClickable(true);
+              break;
+
+            case SocialTabsActivity.MY_STATUS:
+              MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+              if   (MyStatusFragment.instance.isLoading()) holder.buttonLike.setClickable(false);
+              else holder.buttonLike.setClickable(true);
+              break;
           }
         }
       } else {
         WarningDialog dialog = new WarningDialog(mContext,
-                                                 mContext.getString(R.string.Warning),
-                                                 mContext.getString(R.string.ErrorOnLike),
-                                                 mContext.getString(R.string.OK));
+            mContext.getString(R.string.Warning),
+            mContext.getString(R.string.ErrorOnLike),
+            mContext.getString(R.string.OK));
         dialog.show();
       }
     }
 
   }
 
+
+  public interface OnItemClickListener {
+
+    void onClickActivityItem(View socialItemView ,SocialActivityInfo activityInfo, int position);
+  }
 }

@@ -30,7 +30,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   private DocumentActivity                     mContext;
 
-  private DocumentActionDialog                 _delegate;
+  private DocumentActionDialog                 mParentDialog;
 
   private ArrayList<DocumentActionDescription> mFileActionList;
 
@@ -40,7 +40,7 @@ public class DocumentActionAdapter extends BaseAdapter {
                                ExoFile file, boolean isActionBar) {
 
     mContext = context;
-    _delegate = parent;
+    mParentDialog = parent;
     _selectedFile = file;
     mFileActionList = new ArrayList<DocumentActionDescription>();
     //changeLanguage(isActionBar);
@@ -49,7 +49,6 @@ public class DocumentActionAdapter extends BaseAdapter {
   }
 
   public void setSelectedFile(ExoFile file) {
-
     _selectedFile = file;
   }
 
@@ -59,19 +58,19 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   public View getView(int position, View convertView, ViewGroup parent) {
 
-    final int pos = position;
+    final int actionId = mFileActionList.get(position).actionId;
     LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View rowView = inflater.inflate(R.layout.file_menu_item, parent, false);
     rowView.setOnClickListener(new View.OnClickListener() {
 
       public void onClick(View v) {
 
-        _delegate.dismiss();
+        mParentDialog.dismiss();
 
-        switch (pos) {
+        switch (actionId) {
 
           case DocumentActivity.ACTION_ADD_PHOTO:
-            new AddPhotoDialog(mContext, _delegate).show();
+            new AddPhotoDialog(mContext, mParentDialog).show();
             break;
 
           case DocumentActivity.ACTION_COPY:
@@ -138,40 +137,48 @@ public class DocumentActionAdapter extends BaseAdapter {
 
     });
 
-    bindView(rowView, mFileActionList.get(position), position);
+    bindView(rowView, mFileActionList.get(position), actionId);
     return (rowView);
   }
 
-  private void bindView(View view, DocumentActionDescription fileAction, int position) {
+  private void bindView(View view, DocumentActionDescription fileAction, int actionId) {
     TextView label = (TextView) view.findViewById(R.id.label);
     label.setText(fileAction.actionName);
     ImageView icon = (ImageView) view.findViewById(R.id.icon);
     icon.setImageResource(fileAction.imageID);
 
     /**
-     * Disable action view if it can not be removed || position ==
-     * DocumentActivity.ACTION_COPY
+     * Disable action view if it can not be removed || actionId == DocumentActivity.ACTION_COPY
      */
-    if (!_selectedFile.canRemove
-        && (position == DocumentActivity.ACTION_MOVE || position == DocumentActivity.ACTION_DELETE
-            || position == DocumentActivity.ACTION_RENAME || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path))))) {
+    if (!_selectedFile.canRemove &&
+        (actionId == DocumentActivity.ACTION_MOVE || actionId == DocumentActivity.ACTION_DELETE
+          || actionId == DocumentActivity.ACTION_RENAME
+          || (actionId == DocumentActivity.ACTION_PASTE
+              && ("".equals(DocumentHelper.getInstance()._fileCopied.path)
+                && "".equals(DocumentHelper.getInstance()._fileMoved.path))
+             )
+        )
+      ) {
       label.setTextColor(android.graphics.Color.GRAY);
       view.setEnabled(false);
       return;
     }
 
     if (_selectedFile.isFolder) {
-      if (position == DocumentActivity.ACTION_OPEN_IN
-          || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path)))) {
+      if (actionId == DocumentActivity.ACTION_OPEN_IN
+          || (actionId == DocumentActivity.ACTION_PASTE
+                && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path))
+             )
+          ) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
       }
     } else {
-      if (position == DocumentActivity.ACTION_ADD_PHOTO
-          || position == DocumentActivity.ACTION_PASTE
-          || position == DocumentActivity.ACTION_RENAME
-          || position == DocumentActivity.ACTION_CREATE) {
+      if (actionId == DocumentActivity.ACTION_ADD_PHOTO
+          || actionId == DocumentActivity.ACTION_PASTE
+          || actionId == DocumentActivity.ACTION_RENAME
+          || actionId == DocumentActivity.ACTION_CREATE) {
 
         label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
@@ -186,72 +193,29 @@ public class DocumentActionAdapter extends BaseAdapter {
   }
 
   public Object getItem(int position) {
-
     return position;
   }
 
   public int getCount() {
-
     return mFileActionList.size();
   }
 
-  // Set language
-  /**
-  public void changeLanguage(boolean isAct) {
-    Resources resource = mContext.getResources();
-
-    String strAddAPhoto = resource.getString(R.string.AddAPhoto);
-    String strCopy = resource.getString(R.string.Copy);
-    String strMove = resource.getString(R.string.Move);
-    String strDelete = resource.getString(R.string.Delete);
-    String strRename = resource.getString(R.string.Rename);
-    String strPaste = resource.getString(R.string.Paste);
-    String strCreateFolder = resource.getString(R.string.CreateFolder);
-    String strOpenIn = resource.getString(R.string.OpenIn);
-
-    fileActions = new DocumentActionDescription[] {
-        new DocumentActionDescription(strAddAPhoto, R.drawable.documentactionpopupphotoicon),
-        new DocumentActionDescription(strCopy, R.drawable.documentactionpopupcopyicon),
-        new DocumentActionDescription(strMove, R.drawable.documentactionpopupcuticon),
-        new DocumentActionDescription(strPaste, R.drawable.documentactionpopuppasteicon),
-        new DocumentActionDescription(strDelete, R.drawable.documentactionpopupdeleteicon),
-        new DocumentActionDescription(strRename, R.drawable.documentactionpopuprenameicon),
-        new DocumentActionDescription(strCreateFolder, R.drawable.documentactionpopupaddfoldericon),
-        new DocumentActionDescription(strOpenIn, R.drawable.documenticonforfolder) };
-
-    int size = fileActions.length;
-    int maxChildren;
-    if (isAct) {
-      maxChildren = size - 1;
-    } else {
-      if (_selectedFile.isFolder) {
-        maxChildren = size - 1;
-      } else
-        maxChildren = size;
-    }
-    fileActionList = new ArrayList<DocumentActionDescription>();
-    for (int i = 0; i < maxChildren; i++) {
-      fileActionList.add(fileActions[i]);
-    }
-
-  }
-   **/
 
   private void initComponents(boolean isActionBar) {
     Resources resource = mContext.getResources();
 
     DocumentActionDescription[] addNewActions = new DocumentActionDescription[] {
-        new DocumentActionDescription(resource.getString(R.string.AddAPhoto), R.drawable.ic_action_camera),
-        new DocumentActionDescription(resource.getString(R.string.CreateFolder), R.drawable.documentactionpopupaddfoldericon)
+        new DocumentActionDescription(DocumentActivity.ACTION_ADD_PHOTO, resource.getString(R.string.AddAPhoto), R.drawable.ic_action_camera),
+        new DocumentActionDescription(DocumentActivity.ACTION_CREATE,    resource.getString(R.string.CreateFolder), R.drawable.documentactionpopupaddfoldericon)
     };
 
     DocumentActionDescription[] normalActions = new DocumentActionDescription[] {
-        new DocumentActionDescription(resource.getString(R.string.Copy),      R.drawable.ic_action_copy),
-        new DocumentActionDescription(resource.getString(R.string.Move),      R.drawable.ic_action_cut),
-        new DocumentActionDescription(resource.getString(R.string.Paste),     R.drawable.ic_action_paste),
-        new DocumentActionDescription(resource.getString(R.string.Delete),    R.drawable.ic_action_remove),
-        new DocumentActionDescription(resource.getString(R.string.Rename),    R.drawable.ic_action_edit),       // old icon : documentactionpopuprenameicon
-        new DocumentActionDescription(resource.getString(R.string.OpenIn),    R.drawable.ic_action_collection)  // old icon: documenticonforfolder
+        new DocumentActionDescription(DocumentActivity.ACTION_COPY,    resource.getString(R.string.Copy),   R.drawable.ic_action_copy),
+        new DocumentActionDescription(DocumentActivity.ACTION_MOVE,    resource.getString(R.string.Move),   R.drawable.ic_action_cut),
+        new DocumentActionDescription(DocumentActivity.ACTION_PASTE,   resource.getString(R.string.Paste),  R.drawable.ic_action_paste),
+        new DocumentActionDescription(DocumentActivity.ACTION_DELETE,  resource.getString(R.string.Delete), R.drawable.ic_action_remove),
+        new DocumentActionDescription(DocumentActivity.ACTION_RENAME,  resource.getString(R.string.Rename), R.drawable.ic_action_edit),       // old icon : documentactionpopuprenameicon
+        new DocumentActionDescription(DocumentActivity.ACTION_OPEN_IN, resource.getString(R.string.OpenIn), R.drawable.ic_action_collection)  // old icon: documenticonforfolder
     };
 
     DocumentActionDescription[] fileActions = isActionBar ? addNewActions : normalActions;

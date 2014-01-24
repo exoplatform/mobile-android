@@ -172,13 +172,12 @@ public class SelectedImageActivity extends ActionBarActivity implements OnClickL
 
     if (view.equals(okButton)) {
       if (filePath != null) {
-        /**
-        if (DocumentActivity._documentActivityInstance != null) {
-          DocumentActivity._documentActivityInstance._sdcard_temp_dir = filePath;
-          DocumentActivity._documentActivityInstance.uploadFile();
-        } else
+        if (DocumentActivity.instance != null) {
+          DocumentActivity.instance._sdcard_temp_dir = filePath;
+          DocumentActivity.instance.uploadFile();
+        } else {
           ComposeMessageActivity.addImageToMessage(file);
-         **/
+        }
       }
 
     }
@@ -196,15 +195,13 @@ public class SelectedImageActivity extends ActionBarActivity implements OnClickL
     Intent intent = new Intent(Intent.ACTION_PICK);
     intent.setType(ExoConstants.PHOTO_ALBUM_IMAGE_TYPE);
 
-    /**
-    if (DocumentActivity._documentActivityInstance != null) {
-      DocumentActivity._documentActivityInstance.startActivityForResult(intent, ExoConstants.REQUEST_ADD_PHOTO);
+    if (DocumentActivity.instance != null) {
+      DocumentActivity.instance.startActivityForResult(intent, ExoConstants.REQUEST_ADD_PHOTO);
 
     }
     else if (ComposeMessageActivity.composeMessageActivity != null) {
       ComposeMessageActivity.composeMessageActivity.startActivityForResult(intent, ExoConstants.REQUEST_ADD_PHOTO);
     }
-     **/
   }
 
   private void onChangeLanguage() {
