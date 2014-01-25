@@ -142,7 +142,7 @@
   <string name="Likers">Likers</string>
   <string name="NoAppFound">Приложение не найдено.</string>
   <string name="CannotOpenFile">Невозможно открыть этот файл.</string>
-  <string name="FileNotFound">File not found.</string>
+  <string name="FileNotFound">Файл не найден.</string>
   <string name="FileNotSupported">Формат файла не поддерживается.</string>
   <string name="CompatibleFileSuggest">Would you like to open in an installed application?</string>
   <string name="OpenIn">Открыть в …</string>
