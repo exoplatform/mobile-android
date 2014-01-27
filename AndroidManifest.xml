@@ -46,23 +46,23 @@
 
         <activity android:name="org.exoplatform.ui.social.SocialTabsActivity"
                   android:theme="@style/Theme.PageIndicatorDefaults"
-                  android:parentActivityName=".ui.HomeActivity">
+                  android:parentActivityName="org.exoplatform.ui.HomeActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                       android:value=".ui.HomeActivity" />
+                       android:value="org.exoplatform.ui.HomeActivity" />
         </activity>
 
         <activity android:name="org.exoplatform.ui.DocumentActivity"
                   android:configChanges="keyboardHidden|orientation"
-                  android:parentActivityName=".ui.HomeActivity">
+                  android:parentActivityName="org.exoplatform.ui.HomeActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                       android:value=".ui.HomeActivity" />
+                       android:value="org.exoplatform.ui.HomeActivity" />
         </activity>
 
         <activity android:name="org.exoplatform.ui.DashboardActivity"
                   android:configChanges="keyboardHidden|orientation"
-                  android:parentActivityName=".ui.HomeActivity">
+                  android:parentActivityName="org.exoplatform.ui.HomeActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                       android:value=".ui.HomeActivity" />
+                       android:value="org.exoplatform.ui.HomeActivity" />
         </activity>
 
         <activity android:configChanges="keyboardHidden|orientation" android:name="org.exoplatform.ui.DocumentActionDialog"/>

@@ -74,4 +74,9 @@
     <!-- login -->
     <dimen name="login_frame_width">480dp</dimen>
 
+    <!-- social tabs -->
+    <dimen name="comment_img_height">36dp</dimen>
+    <dimen name="comment_img_margin">10dp</dimen>
+
+
 </resources>

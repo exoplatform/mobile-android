@@ -21,7 +21,15 @@
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/eXoActionBar</item>
         <item name="dropDownListViewStyle">@style/DropDownListView</item>
+
+        <item name="android:spinnerDropDownItemStyle">@style/DropDownItem</item>
+
     </style>
+
+    <style name="DropDownItem" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:textAppearance">?android:attr/textAppearanceInverse</item>
+    </style>
+
 
     <!-- ActionBar styles -->
     <style name="eXoActionBar"
