@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Toast;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;

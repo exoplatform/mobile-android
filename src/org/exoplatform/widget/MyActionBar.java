@@ -12,7 +12,7 @@ import greendroid.widget.ActionBarHost;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.NormalActionBarItem;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.utils.SettingUtils;
 
 import android.annotation.SuppressLint;

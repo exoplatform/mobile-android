@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 import android.util.Log;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.controller.home.SocialServiceLoadTask;

@@ -19,7 +19,7 @@ package org.exoplatform.widget;
 import android.graphics.*;
 //import greendroid.widget.AsyncImageView;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 
 import android.content.Context;
 import android.graphics.BlurMaskFilter.Blur;

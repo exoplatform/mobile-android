@@ -28,7 +28,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 
 
 /**

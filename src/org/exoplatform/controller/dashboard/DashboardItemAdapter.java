@@ -4,7 +4,7 @@ package org.exoplatform.controller.dashboard;
 
 import java.util.ArrayList;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoConstants;

@@ -10,7 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 
 /**
  * A checkbox that has a text and a image<br/>

@@ -5,7 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 
 import java.io.File;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;

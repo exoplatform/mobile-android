@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.util.Log;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.SocialDetailHelper;

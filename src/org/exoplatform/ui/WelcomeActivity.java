@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.utils.AssetUtils;

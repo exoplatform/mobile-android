@@ -19,7 +19,7 @@ package org.exoplatform.ui.social;
 import static android.view.ViewGroup.LayoutParams.FILL_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 
 import android.content.Context;
 import android.graphics.Color;

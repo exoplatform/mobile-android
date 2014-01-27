@@ -1,6 +1,6 @@
 package org.exoplatform.ui;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.controller.document.DocumentActionAdapter;
 import org.exoplatform.model.ExoFile;
 
@@ -24,7 +24,7 @@ public class DocumentActionDialog extends Dialog {
                                                        // file
 
   public DocumentActionAdapter _documentActionAdapter;
-  
+
   // Constructor
   public DocumentActionDialog(DocumentActivity context, ExoFile file, boolean isActBar) {
 

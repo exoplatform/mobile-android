@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import android.util.Log;
 import android.widget.*;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;

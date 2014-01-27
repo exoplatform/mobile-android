@@ -18,7 +18,7 @@ package org.exoplatform.widget;
 
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.utils.SocialActivityUtil;
 

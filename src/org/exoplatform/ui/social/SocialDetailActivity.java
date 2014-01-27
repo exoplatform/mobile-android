@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.controller.social.LikeLoadTask;
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.controller.social.SocialDetailLoadTask;

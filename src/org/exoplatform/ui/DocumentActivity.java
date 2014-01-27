@@ -21,7 +21,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentLoadTask;
 import org.exoplatform.model.ExoFile;

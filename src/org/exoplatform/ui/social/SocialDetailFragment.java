@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.controller.social.LikeLoadTask;
 import org.exoplatform.controller.social.SocialDetailLoadTask;
 import org.exoplatform.model.SocialActivityInfo;

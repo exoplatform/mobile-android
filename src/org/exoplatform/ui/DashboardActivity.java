@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.controller.dashboard.DashboardItemAdapter;
 import org.exoplatform.controller.dashboard.DashboardLoadTask;
 import org.exoplatform.model.GadgetInfo;

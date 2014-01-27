@@ -1,6 +1,6 @@
 package org.exoplatform.widget;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.ui.social.ComposeMessageActivity;
 
 import android.app.Dialog;

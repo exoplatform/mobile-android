@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.os.Bundle;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;

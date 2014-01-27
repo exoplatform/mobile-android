@@ -3,7 +3,7 @@ package org.exoplatform.ui.social;
 import java.util.ArrayList;
 
 import android.widget.AbsListView;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialServiceHelper;

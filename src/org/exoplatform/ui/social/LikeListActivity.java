@@ -21,7 +21,7 @@ import android.support.v7.app.ActionBarActivity;
 
 import java.util.ArrayList;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.utils.ExoConstants;
 //import org.exoplatform.widget.MyActionBar;

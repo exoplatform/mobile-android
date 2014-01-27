@@ -14,7 +14,7 @@ import android.widget.Button;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.ui.SignInActivity;
 import org.exoplatform.ui.SignUpActivity;
 import org.exoplatform.utils.ExoConnectionUtils;

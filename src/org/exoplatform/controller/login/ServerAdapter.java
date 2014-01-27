@@ -3,7 +3,7 @@ package org.exoplatform.controller.login;
 import java.util.ArrayList;
 
 import android.util.Log;
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;

@@ -6,7 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 //import greendroid.widget.ActionBarItem;
 
-import org.exoplatform.R;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.WelcomeActivity;
