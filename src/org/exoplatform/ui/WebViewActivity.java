@@ -1,31 +1,13 @@
 package org.exoplatform.ui;
 
-//import greendroid.widget.ActionBarItem;
-//import greendroid.widget.ActionBarItem.Type;
-//import greendroid.widget.LoaderActionBarItem;
-
-import java.util.ArrayList;
-
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import org.exoplatform.poc.tabletversion.R;
-import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.ui.social.SocialDetailActivity;
-import org.exoplatform.ui.social.SocialTabsActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.widget.CompatibleFileOpenDialog;
-import org.exoplatform.widget.ConnectionErrorDialog;
-//import org.exoplatform.widget.MyActionBar;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Window;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
@@ -34,12 +16,19 @@ import android.webkit.WebSettings;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import org.exoplatform.poc.tabletversion.R;
+import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.widget.ConnectionErrorDialog;
+
+import java.util.ArrayList;
 
 /**
  * The web view to show gadget
  */
 public class WebViewActivity extends ActionBarActivity {
-    //extends MyActionBar {
 
   private static final String ACCOUNT_SETTING = "account_setting";
 
@@ -55,21 +44,14 @@ public class WebViewActivity extends ActionBarActivity {
 
   private Menu                mOptionsMenu;
 
-  //private LoaderActionBarItem loaderItem;
-
   private static final String TAG = "eXo____WebViewActivity____";
 
 
   public void onCreate(Bundle savedData) {
 
     super.onCreate(savedData);
-    //requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-    //setActionBarContentView(R.layout.webview);
     setContentView(R.layout.webview);
-
-    //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    //addActionBarItem(Type.Refresh, R.id.action_bar_refresh);
 
     /** Restore the previous state */
     if (savedData != null) {
@@ -164,42 +146,6 @@ public class WebViewActivity extends ActionBarActivity {
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
   }
 
-  /**   TODO replace
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-
-    switch (position) {
-    case -1:
-      if (DashboardActivity.dashboardActivity != null) {
-        DashboardActivity.dashboardActivity.finish();
-      }
-      if (DocumentActivity._documentActivityInstance != null) {
-        DocumentActivity._documentActivityInstance.finish();
-      }
-      if (SocialDetailActivity.socialDetailActivity != null) {
-        SocialDetailActivity.socialDetailActivity.finish();
-        if (SocialTabsActivity.instance != null) {
-          SocialTabsActivity.instance.finish();
-        }
-      }
-      finish();
-
-      break;
-
-    case 0:
-      if (item instanceof LoaderActionBarItem) {
-
-      } else {
-        new CompatibleFileOpenDialog(this, contentType, _url, _titlebar).show();
-      }
-      break;
-
-    default:
-      break;
-    }
-
-    return true;
-  }
-   **/
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -239,13 +185,10 @@ public class WebViewActivity extends ActionBarActivity {
     Log.i(TAG, "setRefreshActionButtonState - refreshItem: " + refreshItem);
     if (refreshItem == null) return ;
 
-    //boolean currentState = refreshItem.getActionView() != null;
-
     if (refreshing)
       refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
     else {
       refreshItem.setActionView(null);
-      //supportInvalidateOptionsMenu();
     }
   }
 

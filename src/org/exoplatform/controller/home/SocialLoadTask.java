@@ -1,12 +1,12 @@
 package org.exoplatform.controller.home;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.util.Log;
-//import greendroid.widget.LoaderActionBarItem;
 
-import java.util.ArrayList;
-
-import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
@@ -17,14 +17,10 @@ import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
-import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.WarningDialog;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.AsyncTask;
+import java.util.ArrayList;
 
 /**
  * The asynchronous task that loads activities from the Social REST service.
@@ -33,16 +29,8 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   private Context             mContext;
 
-  private String              okString;
-
-  private String              titleString;
-
-  private String              contentString;
-
-  //private LoaderActionBarItem loaderItem;
-
   private int                 feedType = 0;
-  
+
   private boolean				isLoadingMoreActivities = false;
   
   protected ActivityService<RestActivity> activityService;
@@ -52,19 +40,8 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   private static final String TAG = "eXo____SocialLoadTask____";
 
   public SocialLoadTask(Context context) {
-      //, LoaderActionBarItem loader) {
     mContext = context;
-    // loaderItem = loader;
-    //changeLanguage();
     activityService = SocialServiceHelper.getInstance().activityService;
-  }
-
-  private void changeLanguage() {
-    Resources resource = mContext.getResources();
-    okString = resource.getString(R.string.OK);
-    titleString = resource.getString(R.string.Warning);
-    contentString = resource.getString(R.string.LoadingDataError);
-
   }
 
 
@@ -162,25 +139,10 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
     /** Propagate to setResult on child */
     if (result != null) setResult(result);
-
-    /**
-    if (result != null) {
-      setResult(result);
-    } else {
-      WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
-      dialog.show();
-    }
-    **/
-
-    //if (loaderItem != null) loaderItem.setLoading(false);
   }
 
   public void setResult(ArrayList<SocialActivityInfo> result) {
     Log.i(TAG, "setResult");
-
-    /** load activities for view flipper in home */
-    //if (feedType == HomeController.FLIPPER_VIEW && HomeActivity.homeActivity != null)
-    //  HomeActivity.homeActivity.setSocialInfo(result);
 
     if (isLoadingMoreActivities) {
   	  SocialTabsActivity.instance.number_of_activity += result.size();

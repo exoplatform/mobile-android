@@ -1,20 +1,5 @@
 package org.exoplatform.ui.social;
 
-import android.support.v7.app.ActionBarActivity;
-//import greendroid.widget.ActionBarItem;
-
-import java.io.File;
-
-import org.exoplatform.poc.tabletversion.R;
-import org.exoplatform.ui.DocumentActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.PhotoUtils;
-import org.exoplatform.widget.ConnectionErrorDialog;
-//import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.WaitingDialog;
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -22,12 +7,22 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import org.exoplatform.poc.tabletversion.R;
+import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.widget.ConnectionErrorDialog;
+import org.exoplatform.widget.WaitingDialog;
+
+import java.io.File;
 
 /**
  * Represents the screen to select or edit an image<br/>
@@ -35,7 +30,6 @@ import android.widget.ImageView;
  * Can be started from document screen for selecting an image<br/>
  */
 public class SelectedImageActivity extends ActionBarActivity implements OnClickListener {
-  //extends MyActionBar
 
   private static final int SCALE_WIDTH  = 1024;
 
@@ -135,29 +129,6 @@ public class SelectedImageActivity extends ActionBarActivity implements OnClickL
       mLoadTask = null;
     }
   }
-
-  /** TODO - replace
-  @Override
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
-    case -1:
-      finish();
-      if (ComposeMessageActivity.composeMessageActivity != null)
-        ComposeMessageActivity.composeMessageActivity.finish();
-      if (SocialTabsActivity.instance!= null)
-        SocialTabsActivity.instance.finish();
-      if (DocumentActivity._documentActivityInstance != null) {
-        DocumentActivity._documentActivityInstance.finish();
-      }
-      break;
-
-    case 0:
-      break;
-    }
-    return true;
-  }
-   **/
-
 
   @Override
   public void onBackPressed() {

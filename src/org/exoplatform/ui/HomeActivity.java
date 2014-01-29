@@ -1,14 +1,24 @@
 package org.exoplatform.ui;
 
-import java.util.ArrayList;
-
-
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import org.exoplatform.poc.tabletversion.R;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
+
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.controller.home.SocialServiceLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
@@ -23,27 +33,18 @@ import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SettingUtils;
-import org.exoplatform.widget.*;
+import org.exoplatform.widget.ConnectionErrorDialog;
+import org.exoplatform.widget.HomeSocialItem;
+import org.exoplatform.widget.ShaderImageView;
+import org.exoplatform.widget.WarningDialog;
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.view.animation.AnimationUtils;
-import android.widget.TextView;
-import android.widget.ViewFlipper;
+import java.util.ArrayList;
 
 /**
  * Represents the home screen with dashboard
  */
 public class HomeActivity extends ActionBarActivity implements SocialServiceLoadTask.AsyncTaskListener,
     SocialLoadTask.AsyncTaskListener {
-    // extends MyActionBar {
 
   private TextView            activityButton;
 
@@ -59,8 +60,6 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
 
   private Resources           mResources;
 
-  //private HomeController      homeController;
-
   private ShaderImageView     homeUserAvatar;
 
   private TextView            homeUserName;
@@ -69,17 +68,11 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
 
   private ViewFlipper         viewFlipper;
 
-  //private LoaderActionBarItem loaderItem;
-
-  //public static HomeActivity  homeActivity;
-
   private AccountSetting      mSetting;
 
   public  SocialServiceLoadTask  mServiceLoadTask;
 
   private SocialLoadTask         mLoadTask;
-
-  //public  LoaderActionBarItem    loader;
 
   public  static final int     FLIPPER_VIEW = 10;
 
@@ -97,17 +90,8 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
 
     getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-    //setActionBarContentView(R.layout.home_layout);
-
-    //super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
-    //addActionBarItem(Type.Refresh);
-    //getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
-    //addActionBarItem();
-    //getActionBar().getItem(1).setDrawable(R.drawable.action_bar_logout_button);
-
     mSetting = AccountSetting.getInstance();
 
-    //homeActivity = this;
     if (bundle != null) {
       mSetting = bundle.getParcelable(ExoConstants.ACCOUNT_SETTING);
       if (mSetting == null) mSetting = AccountSetting.getInstance();
@@ -116,9 +100,6 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
       ArrayList<String> cookieList = mSetting.cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
-
-    //loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-    //homeController = new HomeController(this, loaderItem);
 
     init();
   }
@@ -135,13 +116,9 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
 
-    //getContentView().removeAllViews();
-    //setActionBarContentView(R.layout.home_layout);
-
     SettingUtils.setDefaultLanguage(this);
     init();
 
-    //startSocialService(loaderItem);
     startLoadingSocialData();
   }
 
@@ -151,38 +128,8 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
     SettingUtils.setDefaultLanguage(this);
     setInfo();
 
-    //startSocialService(loaderItem);
     startLoadingSocialData();
   }
-
-  /**
-   * Load a number of activities with specific type
-   *
-   * @param number
-   * @param type
-   */
-  /**
-  public void onLoad(int number, int type) {
-    if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
-      if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialLoadTask) new SocialLoadTask(this, loader) {
-
-          @Override
-          protected ArrayList<SocialActivityInfo> getSocialActivityList() {
-            return SocialServiceHelper.getInstance().socialInfoList;
-          }
-
-          @Override
-          protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
-            return activityService.getFeedActivityStream(identity, params);
-          }
-        }.execute(number, type);
-      }
-    } else {
-      new ConnectionErrorDialog(this).show();
-    }
-  }
-   **/
 
 
   @Override
@@ -190,8 +137,6 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
     super.onPause();
 
     viewFlipper.removeAllViews();
-    //getGDApplication().getImageCache().flush();
-    System.gc();
   }
 
 
@@ -239,40 +184,13 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
     Log.i(TAG, "setRefreshActionButtonState - refreshItem: " + refreshItem);
     if (refreshItem == null) return ;
 
-    //boolean currentState = refreshItem.getActionView() != null;
-
     if (refreshing)
       refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
     else {
       refreshItem.setActionView(null);
-      //supportInvalidateOptionsMenu();
     }
   }
 
-
-  /**
-   @Override
-   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-   switch (position) {
-   case -1:      // click on home
-   break;
-   case 0:       // click on refresh button
-   loaderItem = (LoaderActionBarItem) item;
-   if (SocialServiceHelper.getInstance().activityService == null) {
-   homeController.launchNewsService();
-   } else {
-   homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
-   }
-   break;
-   case 1:       // click on log out
-   onLoggingOut();
-   redirectToLogIn();
-   break;
-   }
-   return true;
-
-   }
-   **/
 
   @Override
   public void onBackPressed() {
@@ -310,20 +228,17 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
     }
   }
 
-  // replace startSocialService for naming purpose
   private void startLoadingSocialData() {
     setRefreshActionButtonState(true);
 
     // if soc activity service is null then loads all soc services
     if (SocialServiceHelper.getInstance().activityService == null)
-      startSocialServiceLoadTask(); //homeController.launchNewsService();
+      startSocialServiceLoadTask();
     else
       startSocialLoadTask(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
-      //onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
   }
 
 
-  // replace launchNewsService
   /**
    * Retrieve activity service which is entry point for further social data
    */
@@ -355,7 +270,6 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
     startSocialLoadTask(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
   }
 
-  // replace onLoad
 
   /**
    * Retrieve social activities for view flipper
@@ -403,19 +317,8 @@ public class HomeActivity extends ActionBarActivity implements SocialServiceLoad
       return ;
     }
 
-    //if (feedType == HomeController.FLIPPER_VIEW && HomeActivity.homeActivity != null)
     setSocialInfo(result);
   }
-
-  /**
-  private void startSocialService(LoaderActionBarItem loader) {
-    // if soc activity service is null then loads all soc services
-    if (SocialServiceHelper.getInstance().activityService == null)
-      launchNewsService(); //homeController.launchNewsService();
-    else
-      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
-  }
-  **/
 
 
   public void setProfileInfo(String[] profile) {

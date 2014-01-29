@@ -1,16 +1,14 @@
 package org.exoplatform.controller.social;
 
-//import greendroid.widget.LoaderActionBarItem;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.util.Log;
-import org.exoplatform.poc.tabletversion.R;
+
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
 import org.exoplatform.model.SocialLikeInfo;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
@@ -21,19 +19,11 @@ import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
-import org.exoplatform.ui.social.AllUpdatesFragment;
-import org.exoplatform.ui.social.MyConnectionsFragment;
-import org.exoplatform.ui.social.MySpacesFragment;
-import org.exoplatform.ui.social.MyStatusFragment;
-import org.exoplatform.ui.social.SocialDetailActivity;
-import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.SocialDetailsWarningDialog;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.AsyncTask;
-import android.view.View;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
@@ -42,8 +32,6 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
   private LinkedList<SocialLikeInfo>   mLikeLinkedList    = new LinkedList<SocialLikeInfo>();
 
   private ArrayList<SocialCommentInfo> mSocialCommentList = new ArrayList<SocialCommentInfo>();
-
-  //private LoaderActionBarItem          loaderItem;
 
   private Context                      mContext;
 
@@ -54,8 +42,6 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
   private String                       titleString;
 
   private String                       detailsErrorStr;
-
-  private SocialDetailController       detailController;
 
   private String                       activityType;
 
@@ -161,34 +147,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   @Override
   public void onPostExecute(Integer result) {
-
     if (mListener != null) mListener.onLoadingActivityFinished(result, mActivityInfo, mSocialCommentList, mLikeLinkedList);
-
-    /**
-    if (result == 1 && isLikeAction && SocialTabsActivity.instance != null) {
-
-      int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
-      switch (tabId) {
-
-        case SocialTabsActivity.ALL_UPDATES:
-          AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, mActivityPosition);
-          break;
-
-        case SocialTabsActivity.MY_CONNECTIONS:
-          MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, mActivityPosition);
-          break;
-
-        case SocialTabsActivity.MY_SPACES:
-          MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, mActivityPosition);
-          break;
-
-        case SocialTabsActivity.MY_STATUS:
-          MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, mActivityPosition);
-          break;
-      }
-    }
-     **/
-
   }
 
   private void changeLanguage() {

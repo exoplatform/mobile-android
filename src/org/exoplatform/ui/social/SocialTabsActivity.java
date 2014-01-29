@@ -16,33 +16,30 @@
  */
 package org.exoplatform.ui.social;
 
-import android.content.pm.ActivityInfo;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-//import greendroid.widget.ActionBarItem;
-//import greendroid.widget.ActionBarItem.Type;
-//import greendroid.widget.LoaderActionBarItem;
-
-import java.util.ArrayList;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.SpinnerAdapter;
-import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
@@ -50,19 +47,10 @@ import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-//import org.exoplatform.widget.MyActionBar;
-
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import org.exoplatform.widget.SectionListAdapter;
 import org.exoplatform.widget.StandardArrayAdapter;
 import org.exoplatform.widget.WarningDialog;
+
+import java.util.ArrayList;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
@@ -79,14 +67,6 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
   public static final int              MY_STATUS               = 3;
 
-  public ViewPager                     mPager;
-
-  private PageIndicator                mIndicator;
-
-  private SocialTabsAdapter            mAdapter;
-
-  private static String[]              TAB_NAMES;
-
   private static final String          NUMBER_OF_ACTIVITY      = "NUMBER_OF_ACTIVITY";
 
   private static final String          NUMBER_OF_MORE_ACTIVITY = "NUMBER_OF_MORE_ACTIVITY";
@@ -95,17 +75,27 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
   private static final String          DOCUMENT_HELPER         = "document_helper";
 
-  private static final String          CURRENT_FM         = "CURRENT_FM";
+  private static final String          CURRENT_FM              = "CURRENT_FM";
 
-  private static final String          REFRESH_STATE         = "REFRESH_STATE";
+  private static final String          REFRESH_STATE           = "REFRESH_STATE";
 
   private static final String          DETAILS_FM              = "DETAILS_FM";
 
 
+  private static String[]              TAB_NAMES;
 
-  public ArrayList<SocialActivityInfo> socialList;
+  public static boolean mIsTablet;
 
-  //public LoaderActionBarItem           loaderItem;
+  public static SocialTabsActivity     instance;
+
+  private static String[] SOCIAL_TABS = null;
+
+
+  public ViewPager                     mPager;
+
+  private PageIndicator                mIndicator;
+
+  private SocialTabsAdapter            mAdapter;
 
   public int                           number_of_activity;
 
@@ -115,19 +105,13 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
   private boolean                      isSocialFilterEnable    = false;
 
-  public static SocialTabsActivity     instance;
-
-  private Menu mOptionsMenu;
+  private Menu                         mOptionsMenu;
 
   /** Keep state for refresh icon during orientation */
-  private boolean mIsRefreshing;
+  private boolean                      mIsRefreshing;
 
   /** Store the Id of current fragment shown */
-  private int    mCurrentFragment = -1;
-
-  public static boolean mIsTablet;
-
-  private static String[] SOCIAL_TABS = null;
+  private int                          mCurrentFragment = -1;
 
   private SocialDetailFragment         mDetailFragment;
 
@@ -144,15 +128,6 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
     SOCIAL_TABS = getResources().getStringArray(R.array.SocialTabs);
 
-    //setActionBarContentView(R.layout.social_activity_tabs);
-
-    //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    //addActionBarItem(Type.Refresh);
-    //getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
-    //addActionBarItem();
-    //getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
-
-
     if (savedInstanceState != null) {
       number_of_activity = savedInstanceState.getInt(NUMBER_OF_ACTIVITY);
       number_of_more_activity = savedInstanceState.getInt(NUMBER_OF_MORE_ACTIVITY);
@@ -168,8 +143,6 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
       number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
       number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
     }
-
-    //loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
 
     Log.i(TAG, "isTablet: " + mIsTablet);
     if (!mIsTablet) {
@@ -427,8 +400,6 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
     Log.i(TAG, "setRefreshActionButtonState - refreshItem: " + refreshItem);
     if (refreshItem == null) return ;
 
-    //boolean currentState = refreshItem.getActionView() != null;
-
     if (refreshing)
       refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
     else
@@ -603,45 +574,6 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
         SocialTabsActivity.instance.getCurrentFragment();
   }
 
-  /** TODO replace
-  @Override
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
-
-    case -1:
-      finishFragment();
-      finish();
-      break;
-    case 0:
-      loaderItem = (LoaderActionBarItem) item;
-      int tabId = mPager.getCurrentItem();
-      switch (tabId) {
-      case ALL_UPDATES:
-        AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
-        break;
-      case MY_CONNECTIONS:
-        MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
-        break;
-      case MY_SPACES:
-        MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
-        break;
-      case MY_STATUS:
-        MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
-        break;
-      }
-      break;
-    case 1:
-      Intent intent = new Intent(this, ComposeMessageActivity.class);
-      intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-      intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_POST_TYPE);
-      startActivity(intent);
-      break;
-
-    }
-    return true;
-
-  }
-  **/
 
   /**===  FragmentPager Adapter for tabs  ===**/
   private class SocialTabsAdapter extends FragmentPagerAdapter {

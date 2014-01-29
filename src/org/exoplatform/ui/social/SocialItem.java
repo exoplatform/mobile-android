@@ -1,12 +1,19 @@
 package org.exoplatform.ui.social;
 
-import java.net.URLConnection;
-import java.util.Locale;
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.text.Html;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import android.util.Log;
-import android.widget.*;
-import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
@@ -15,13 +22,8 @@ import org.exoplatform.utils.image.SocialImageLoader;
 import org.exoplatform.widget.ShaderImageView;
 import org.exoplatform.widget.StandardArrayAdapter;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.text.Html;
-import android.view.View;
-import android.view.View.OnClickListener;
+import java.net.URLConnection;
+import java.util.Locale;
 
 /**
  * Represents activity item on activity stream

@@ -1,47 +1,34 @@
 package org.exoplatform.ui.social;
 
-import android.graphics.BitmapFactory;
-import android.os.Parcelable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
-//import greendroid.widget.ActionBarItem;
-//import greendroid.widget.ActionBarItem.Type;
-//import greendroid.widget.LoaderActionBarItem;
-
-import android.text.Html;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import org.exoplatform.poc.tabletversion.R;
-import org.exoplatform.controller.social.LikeLoadTask;
-import org.exoplatform.controller.social.SocialDetailController;
-import org.exoplatform.controller.social.SocialDetailLoadTask;
-import org.exoplatform.model.SocialActivityInfo;
-import org.exoplatform.model.SocialCommentInfo;
-import org.exoplatform.model.SocialLikeInfo;
-import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.ui.setting.SettingActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
-//import org.exoplatform.widget.MyActionBar;
-
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewStub;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.exoplatform.controller.social.LikeLoadTask;
+import org.exoplatform.controller.social.SocialDetailLoadTask;
+import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.model.SocialCommentInfo;
+import org.exoplatform.model.SocialLikeInfo;
+import org.exoplatform.poc.tabletversion.R;
+import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.ui.setting.SettingActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
@@ -51,6 +38,7 @@ import org.exoplatform.widget.SocialDetailsWarningDialog;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+
 
 /**
  * Screen for activity details
@@ -80,11 +68,7 @@ public class SocialDetailActivity extends ActionBarActivity implements OnClickLi
 
   private String                     commentEmptyString;
 
-  //private SocialDetailController     detailController;
-
   public static SocialDetailActivity socialDetailActivity;
-
-  //private LoaderActionBarItem        loaderItem;
 
   private int                        mActivityPosition;
 
@@ -105,26 +89,11 @@ public class SocialDetailActivity extends ActionBarActivity implements OnClickLi
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    //setActionBarContentView(R.layout.activity_display_view);
-    //setContentView(R.layout.activity_display_view);
-
-
     setContentView(R.layout.activity_details);
-
-    //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    //addActionBarItem(Type.Refresh);
-    //getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
 
     socialDetailActivity = this;
     mActivityPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, mActivityPosition);
     changeLanguage();
-
-    /**
-    if (savedInstanceState != null)
-      finish();
-    else
-      initComponent();
-     **/
 
     mDetailsFragment = new SocialDetailFragment(mActivityPosition);
     mDetailsFragment.setRefreshListener(this);
@@ -209,7 +178,6 @@ public class SocialDetailActivity extends ActionBarActivity implements OnClickLi
   }
 
 
-  // replace onLoad of SocialDetailController
   public void startLoadingActivityData() {
     if (!ExoConnectionUtils.isNetworkAvailableExt(this)) {
       new ConnectionErrorDialog(this).show();
@@ -322,9 +290,10 @@ public class SocialDetailActivity extends ActionBarActivity implements OnClickLi
 
   }
 
-  /*
- * Call this method when click on the liked frame
- */
+
+  /**
+   * Call this method when click on the liked frame
+   */
   public void onClickLikedFrame() {
     Intent intent = new Intent(this, LikeListActivity.class);
     /*
@@ -334,19 +303,11 @@ public class SocialDetailActivity extends ActionBarActivity implements OnClickLi
     this.startActivity(intent);
   }
 
-  /*
+  /**
    * The liker information image view
    */
   public void setLikedInfo() {
     textView_Like_Count.setText(SocialActivityUtil.getComment(this, mLikeList));
-
-    /**
-    int size = likeLinkedList.size();
-    ArrayList<SocialLikeInfo> likeList = new ArrayList<SocialLikeInfo>();
-    for (SocialLikeInfo item : likeLinkedList) {
-      likeList.add(item);
-    }
-     **/
 
     /** We only display maximum 4 likers at the detail screen */
     int maxChild = (mLikeList.size() > 4) ? 4 : mLikeList.size();
@@ -392,26 +353,6 @@ public class SocialDetailActivity extends ActionBarActivity implements OnClickLi
     finish();
   }
 
-
-  /** TODO replace
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
-    case -1:
-      if (SocialTabsActivity.instance != null) {
-        SocialTabsActivity.instance.finish();
-      }
-      finish();
-      break;
-    case 0:
-      loaderItem = (LoaderActionBarItem) item;
-      detailController.onLoad(loaderItem, false, currentPosition);
-      break;
-
-    }
-
-    return true;
-  }
-  **/
 
   @Override
   public void onClick(View view) {

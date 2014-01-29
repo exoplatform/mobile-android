@@ -1,24 +1,19 @@
 package org.exoplatform.controller.login;
 
-import java.util.ArrayList;
-
-import android.util.Log;
-import org.exoplatform.poc.tabletversion.R;
-import org.exoplatform.model.ServerObjInfo;
-import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.utils.ExoConstants;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
+
+import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.poc.tabletversion.R;
+import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
+
+import java.util.ArrayList;
 
 /**
  * Adapter for server list view

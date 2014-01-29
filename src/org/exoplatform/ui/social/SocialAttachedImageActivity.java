@@ -1,20 +1,17 @@
 package org.exoplatform.ui.social;
 
-//import greendroid.widget.ActionBarItem;
-
 import android.support.v7.app.ActionBarActivity;
-import org.exoplatform.poc.tabletversion.R;
-import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.utils.image.SocialImageLoader;
-//import org.exoplatform.widget.MyActionBar;
-
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.ImageView;
 
-public class SocialAttachedImageActivity
-    extends ActionBarActivity {
-    //extends MyActionBar {
+import org.exoplatform.poc.tabletversion.R;
+import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.utils.image.SocialImageLoader;
+
+
+public class SocialAttachedImageActivity extends ActionBarActivity {
+
   private ImageView imageView;
 
   private String    imageUrl;
@@ -25,7 +22,6 @@ public class SocialAttachedImageActivity
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
 
-    //setActionBarContentView(R.layout.social_attached_image_layout);
     setContentView(R.layout.social_attached_image_layout);
 
     if (savedInstanceState != null)
@@ -52,26 +48,6 @@ public class SocialAttachedImageActivity
     return name;
   }
 
-
-  /**   TODO replace
-  @Override
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
-    case -1:
-      finish();
-      if (SocialDetailActivity.socialDetailActivity != null) {
-        SocialDetailActivity.socialDetailActivity.finish();
-      }
-      if (SocialTabsActivity.instance != null)
-        SocialTabsActivity.instance.finish();
-      break;
-
-    case 0:
-      break;
-    }
-    return true;
-  }
-   **/
 
   @Override
   public void onBackPressed() {

@@ -1,34 +1,31 @@
 package org.exoplatform.controller.social;
 
-import android.graphics.BitmapFactory;
-//import greendroid.widget.LoaderActionBarItem;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-
-import org.exoplatform.poc.tabletversion.R;
-import org.exoplatform.model.SocialActivityInfo;
-import org.exoplatform.model.SocialCommentInfo;
-import org.exoplatform.model.SocialLikeInfo;
-import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.ui.social.LikeListActivity;
-import org.exoplatform.ui.social.SocialDetailActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.SocialActivityUtil;
-import org.exoplatform.widget.CommentItemLayout;
-import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.ShaderImageView;
-import org.exoplatform.widget.SocialActivityStreamItem;
-
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.model.SocialCommentInfo;
+import org.exoplatform.model.SocialLikeInfo;
+import org.exoplatform.poc.tabletversion.R;
+import org.exoplatform.singleton.SocialDetailHelper;
+import org.exoplatform.ui.social.LikeListActivity;
+import org.exoplatform.ui.social.SocialDetailActivity;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.widget.CommentItemLayout;
+import org.exoplatform.widget.ShaderImageView;
+import org.exoplatform.widget.SocialActivityStreamItem;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 
 public class SocialDetailController {
 
@@ -73,17 +70,6 @@ public class SocialDetailController {
     activityId = SocialDetailHelper.getInstance().getActivityId();
   }
 
-  /**
-  public void onLoad(LoaderActionBarItem loader, boolean isLikeAction, int postion) {
-    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
-      if (mLoadTask == null || mLoadTask.getStatus() == SocialDetailLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this, loader, postion).execute(isLikeAction);
-      }
-    } else {
-      new ConnectionErrorDialog(mContext).show();
-    }
-  }
-   **/
 
   public void onCancelLoad() {
     onCancelLikeLoad();
@@ -93,17 +79,6 @@ public class SocialDetailController {
     }
   }
 
-  /**
-  public void onLikeLoad(LoaderActionBarItem loader, String id, int position) {
-    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
-      if (mLikeLoadTask == null || mLikeLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
-        mLikeLoadTask = (LikeLoadTask) new LikeLoadTask(mContext, this, loader, position).execute(id);
-      }
-    } else {
-      new ConnectionErrorDialog(mContext).show();
-    }
-  }
-   **/
 
   public void onCancelLikeLoad() {
     if (mLikeLoadTask != null && mLikeLoadTask.getStatus() == LikeLoadTask.Status.RUNNING) {
@@ -168,17 +143,16 @@ public class SocialDetailController {
     contentDetailLayout.addView(item, params);
   }
 
-  /*
+  /**
    * The liker information text view
    */
   public void setLikeInfoText(LinkedList<SocialLikeInfo> likeLinkedList) {
     textView_Like_Count.setText(SocialActivityUtil.getComment(mContext, likeLinkedList));
   }
 
-  /*
+  /**
    * The liker information image view
    */
-
   public void setLikedInfo(LinkedList<SocialLikeInfo> likeLinkedList) {
     int size = likeLinkedList.size();
     likeList = new ArrayList<SocialLikeInfo>();
@@ -237,13 +211,6 @@ public class SocialDetailController {
     mContext.startActivity(intent);
   }
 
-  /*
-   * When user click on like button, only update the liker part UI
-   */
-  /**
-  public void onLikePress(LoaderActionBarItem loader, int pos) {
-    onLikeLoad(loader, activityId, pos);
-  }
-   **/
+
 
 }

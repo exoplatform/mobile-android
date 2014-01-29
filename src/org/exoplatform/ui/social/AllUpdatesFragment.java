@@ -16,14 +16,14 @@
  */
 package org.exoplatform.ui.social;
 
-//import greendroid.widget.LoaderActionBarItem;
-
-import java.util.ArrayList;
-
+import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
-import org.exoplatform.poc.tabletversion.R;
+import android.view.View;
+
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.common.RealtimeListAccess;
@@ -31,10 +31,8 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
-import org.exoplatform.widget.StandardArrayAdapter;
+import java.util.ArrayList;
+
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul

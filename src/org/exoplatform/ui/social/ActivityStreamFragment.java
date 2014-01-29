@@ -246,6 +246,7 @@ public abstract class ActivityStreamFragment extends Fragment {
 
     mActivityListAdapter = new StandardArrayAdapter(getActivity(), activityList);
     mActivityListAdapter.setMode(mode);
+    mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
     sectionAdapter = new SectionListAdapter(getActivity(), getActivity().getLayoutInflater(), mActivityListAdapter);
     mActivityListView.setAdapter(sectionAdapter);
 
@@ -295,6 +296,7 @@ public abstract class ActivityStreamFragment extends Fragment {
   }
 
 
+  public int getMode() {  return mMode; }
 
   @Override
   public void onDestroyView() {

@@ -2,9 +2,13 @@ package org.exoplatform.ui.setting;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-//import greendroid.widget.ActionBarItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
 import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.AccountSetting;
@@ -14,15 +18,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.SocialActivityUtil;
-//import org.exoplatform.widget.MyActionBar;
 
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.TextView;
 
 /**
  * Represents the setting screen<br/>

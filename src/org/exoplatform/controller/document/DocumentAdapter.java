@@ -1,12 +1,17 @@
 package org.exoplatform.controller.document;
 
-import java.util.ArrayList;
-
+import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
-import android.widget.Toast;
-import org.exoplatform.poc.tabletversion.R;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import org.exoplatform.model.ExoFile;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
@@ -14,14 +19,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.UnreadableFileDialog;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import java.util.ArrayList;
 
 public class DocumentAdapter extends BaseAdapter {
   private ArrayList<ExoFile>  mDocumentList;

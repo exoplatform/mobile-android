@@ -43,8 +43,6 @@ public class DocumentActionAdapter extends BaseAdapter {
     mParentDialog = parent;
     _selectedFile = file;
     mFileActionList = new ArrayList<DocumentActionDescription>();
-    //changeLanguage(isActionBar);
-
     initComponents(isActionBar);
   }
 

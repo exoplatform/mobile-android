@@ -1,24 +1,5 @@
 package org.exoplatform.ui.social;
 
-import android.support.v7.app.ActionBarActivity;
-//import greendroid.util.Config;
-//import greendroid.widget.ActionBarItem;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-import org.exoplatform.poc.tabletversion.R;
-import org.exoplatform.controller.social.ComposeMessageController;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.PhotoUtils;
-import org.exoplatform.utils.SettingUtils;
-import org.exoplatform.widget.AddPhotoDialog;
-//import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.PostWaitingDialog;
-import org.exoplatform.widget.RemoveAttachedPhotoDialog;
-import org.exoplatform.widget.RetangleImageView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -26,12 +7,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,8 +20,20 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 
+import org.exoplatform.controller.social.ComposeMessageController;
+import org.exoplatform.poc.tabletversion.R;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.SettingUtils;
+import org.exoplatform.widget.PostWaitingDialog;
+import org.exoplatform.widget.RemoveAttachedPhotoDialog;
+import org.exoplatform.widget.RetangleImageView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public class ComposeMessageActivity extends ActionBarActivity implements View.OnClickListener {
-    //extends MyActionBar
 
   private PostWaitingDialog            _progressDialog;
 
@@ -78,12 +71,7 @@ public class ComposeMessageActivity extends ActionBarActivity implements View.On
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // requestWindowFeature(Window.FEATURE_NO_TITLE);
-    // setTheme(R.style.Theme_eXo);
-
     setContentView(R.layout.compose_message_layout);
-    //setActionBarContentView(R.layout.compose_message_layout);
-    //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
 
     changeLanguage();
     composeMessageActivity = this;
@@ -93,8 +81,6 @@ public class ComposeMessageActivity extends ActionBarActivity implements View.On
       composeType = getIntent().getIntExtra(ExoConstants.COMPOSE_TYPE, composeType);
       if (composeType == 0) {
         setTitle(statusUpdate);
-        //addActionBarItem();
-        //getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_photo);
 
       } else {
         currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION,
@@ -130,30 +116,6 @@ public class ComposeMessageActivity extends ActionBarActivity implements View.On
 
   }
 
-  /**      TODO - replace this function
-  @Override
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
-    case -1:
-
-      if (SocialDetailActivity.socialDetailActivity != null) {
-        SocialDetailActivity.socialDetailActivity.finish();
-      }
-
-      if (SocialTabsActivity.instance != null) {
-        SocialTabsActivity.instance.finish();
-      }
-      finish();
-      break;
-
-    case 0:
-      new AddPhotoDialog(this, messageController).show();
-      break;
-    }
-
-    return true;
-  }
-  **/
 
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     super.onActivityResult(requestCode, resultCode, intent);

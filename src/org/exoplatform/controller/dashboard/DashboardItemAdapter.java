@@ -1,7 +1,5 @@
 package org.exoplatform.controller.dashboard;
 
-//import greendroid.image.ImageProcessor;
-
 import java.util.ArrayList;
 
 import org.exoplatform.poc.tabletversion.R;

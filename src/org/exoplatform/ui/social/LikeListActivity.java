@@ -16,19 +16,9 @@
  */
 package org.exoplatform.ui.social;
 
-import android.support.v7.app.ActionBarActivity;
-//import greendroid.widget.ActionBarItem;
-
-import java.util.ArrayList;
-
-import org.exoplatform.poc.tabletversion.R;
-import org.exoplatform.model.SocialLikeInfo;
-import org.exoplatform.utils.ExoConstants;
-//import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.ShaderImageView;
-
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,13 +28,19 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import org.exoplatform.model.SocialLikeInfo;
+import org.exoplatform.poc.tabletversion.R;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.widget.ShaderImageView;
+
+import java.util.ArrayList;
+
+
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
  * 4, 2012
  */
-public class LikeListActivity
-    extends ActionBarActivity {
-    //extends MyActionBar {
+public class LikeListActivity extends ActionBarActivity {
 
   /*
    * This class for displaying the liker list information include avatar and
@@ -62,8 +58,6 @@ public class LikeListActivity
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.like_list_activity_layout);
-    //setActionBarContentView(R.layout.like_list_activity_layout);
-
 
     /*
      * Get liker list from intent extra
@@ -105,29 +99,7 @@ public class LikeListActivity
     });
   }
 
-  /** TODO - replace this function
-  @Override
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
-    case -1:
-      if (SocialDetailActivity.socialDetailActivity != null) {
-        SocialDetailActivity.socialDetailActivity.finish();
-      }
-      if (SocialTabsActivity.instance != null) {
-        SocialTabsActivity.instance.finish();
-      }
 
-      finish();
-
-      break;
-
-    default:
-      break;
-    }
-
-    return true;
-  }
-  **/
 
   /*
    * The adapter for liker grid

@@ -1,30 +1,37 @@
 package org.exoplatform.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
-//import greendroid.util.Config;
-//import greendroid.widget.ActionBarItem;
-
-import java.io.File;
-import java.util.ArrayList;
-
 import android.support.v7.widget.GridLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import org.exoplatform.poc.tabletversion.R;
+import android.widget.TextView;
+
 import org.exoplatform.controller.document.DocumentAdapter;
 import org.exoplatform.controller.document.DocumentLoadTask;
 import org.exoplatform.model.ExoFile;
+import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.setting.SettingActivity;
@@ -36,29 +43,16 @@ import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.ConnectionErrorDialog;
-//import org.exoplatform.widget.MyActionBar;
-
-import android.content.Intent;
-import android.content.res.Resources;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewStub;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import org.exoplatform.widget.UnreadableFileDialog;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import static android.support.v7.widget.GridLayout.ALIGN_BOUNDS;
 
 public class DocumentActivity extends ActionBarActivity implements DocumentLoadTask.AsyncTaskListener {
-
-  //extends MyActionBar {
 
   // add photo
   public static final int        ACTION_ADD_PHOTO = 0;
@@ -92,8 +86,6 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
   private static final String    ACCOUNT_SETTING  = "account_setting";
 
   private static final String    CURRENT_FILE     = "current_file";
-
-  //public static DocumentActivity _documentActivityInstance;
 
   public static DocumentActivity instance;
 
@@ -158,11 +150,6 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    //setTheme(R.style.Theme_eXo);
-    //setActionBarContentView(R.layout.exofilesview);
-    //getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    //_documentActivityInstance = this;
-
     instance = this;
     mSharedPreference = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     /** Default view is list view */
@@ -194,8 +181,6 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
 
 
   private void init() {
-    //mDocumentListView = (ListView) findViewById(R.id.ListView_Files);
-    //mDocumentListView.setDivider(null);
     _textViewEmptyPage = (TextView) findViewById(R.id.TextView_EmptyPage);
     _textViewEmptyPage.setVisibility(View.INVISIBLE);
 
@@ -213,36 +198,6 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
     outState.putParcelable(CURRENT_FILE, _fileForCurrentActionBar);
   }
-
-
-  /**    TODO - replace
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
-
-    case -1:
-      _documentActivityInstance = null;
-      finish();
-      break;
-    case 0:
-
-      _documentAdapter._documentActionDialog = new DocumentActionDialog(this,
-                                                                        _fileForCurrentActionBar,
-                                                                        true);
-      _documentAdapter._documentActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrentActionBar);
-      _documentAdapter._documentActionDialog._documentActionAdapter.notifyDataSetChanged();
-      _documentAdapter._documentActionDialog.setTileForDialog(_fileForCurrentActionBar.name);
-      _documentAdapter._documentActionDialog.myFile = _fileForCurrentActionBar;
-      _documentAdapter._documentActionDialog.show();
-
-      break;
-    default:
-
-      break;
-
-    }
-    return true;
-  }
-   **/
 
 
   @Override
@@ -309,11 +264,6 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
     Log.i(TAG, "startLoadingDocuments - source : " + source + " - dest : " + destination);
     Log.i(TAG, "startLoadingDocuments - action : " + action);
 
-    if (_fileForCurrentActionBar != null) {
-      Log.i(TAG, "startLoadingDocuments - file for action bar folder : " + _fileForCurrentActionBar.currentFolder);
-      Log.i(TAG, "startLoadingDocuments - file for action bar name : " + _fileForCurrentActionBar.name);
-    }
-
     if (!ExoConnectionUtils.isNetworkAvailableExt(this)) {
       new ConnectionErrorDialog(this).show();
       return ;
@@ -343,7 +293,6 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
       else if (action == ACTION_ADD_PHOTO)
         requestData.putString(SDCARD_DIR, _sdcard_temp_dir);
 
-      //mLoadTask = new DocumentLoadTask(this, source, destination, action);
       mLoadTask = new DocumentLoadTask(this, requestData);
       mLoadTask.setListener(this);
       mLoadTask.execute();
