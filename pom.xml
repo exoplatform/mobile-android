@@ -35,8 +35,9 @@
     <version.release.plugin>2.2.1</version.release.plugin>
 	<version.buildnumber.plugin>1.0</version.buildnumber.plugin>
 	<android.support.version>r6</android.support.version>
-	<android.supportv4.version>19.0.0</android.supportv4.version>
-	<android.supportv7.version>19</android.supportv7.version>
+  <android.supportv4.version>19.0.1</android.supportv4.version><!-- Android Support v4 version -->
+  <android.supportv7.version>19.0.1</android.supportv7.version><!-- Android Support v7 version -->
+  <android.appcompatv7.version>19.0.1</android.appcompatv7.version><!-- Android Support v7 AppCompat lib version -->
 	<android.annotations.version>4.1.1.4</android.annotations.version>
 	<exo.social.client.version>1.0.0-alpha4-SNAPSHOT</exo.social.client.version>
 	<slf4j-android.version>1.6.1-RC1</slf4j-android.version>
@@ -122,25 +123,25 @@
     <dependency>
       <groupId>android.support</groupId>
       <artifactId>compatibility-v7-appcompat</artifactId>
-      <version>${android.supportv7.version}</version>
+      <version>${android.appcompatv7.version}</version>
       <type>apklib</type>
     </dependency>
     <dependency>
       <groupId>android.support</groupId>
       <artifactId>compatibility-v7-appcompat</artifactId>
-      <version>${android.supportv7.version}</version>
+      <version>${android.appcompatv7.version}</version>
       <type>jar</type>
     </dependency>
       <dependency>
           <groupId>android.support</groupId>
           <artifactId>compatibility-v7</artifactId>
-          <version>19.0.0</version>
+          <version>${android.supportv7.version}</version>
           <type>apklib</type>
       </dependency>
       <dependency>
           <groupId>android.support</groupId>
           <artifactId>compatibility-v7</artifactId>
-          <version>19.0.0</version>
+          <version>${android.supportv7.version}</version>
           <type>jar</type>
       </dependency>
   </dependencies>
