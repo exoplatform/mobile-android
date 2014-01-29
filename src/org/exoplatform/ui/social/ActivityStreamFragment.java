@@ -1,10 +1,11 @@
+
 package org.exoplatform.ui.social;
 
 import java.util.ArrayList;
 
-import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
+import org.exoplatform.poc.userprofiles.R;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -17,6 +18,7 @@ import android.graphics.Color;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,11 +51,13 @@ public abstract class ActivityStreamFragment extends Fragment {
 	   * This fragment's layout resource
 	   */
 	  protected int						fragment_layout;
-	  /**
+
+    /**
 	   * This fragment's empty view ID
 	   */
 	  protected int						fragment_empty_view_id;
-	  /**
+
+    /**
 	   * This fragment's ListView ID
 	   */
 	  protected int						fragment_list_view_id;
@@ -170,6 +174,11 @@ public abstract class ActivityStreamFragment extends Fragment {
 		    	  int lastActivity = 0;
 		    	  ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().getSocialListForTab(currentTab);
 		    	  mLoadTask = getThisLoadTask();
+
+            Log.d(TAG, "loading more data - flush image cache");
+            ((SocialTabsActivity) getActivity()).getGDApplication().getImageCache().flush();
+            System.gc();
+
 		    	  if (list != null) { // if we can identify the last activity, we load the previous/older ones
 		    		  lastActivity = list.size()-1;
 		    		  isLoadingMoreActivities = true;

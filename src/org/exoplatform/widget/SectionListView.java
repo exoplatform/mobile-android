@@ -121,10 +121,10 @@ public class SectionListView extends ListView implements OnScrollListener {
     // - the user has scrolled AND
     // - the user has reached the bottom of the list
     if (hasScrolled && totalItemCount > 0 && firstVisibleItem+visibleItemCount==totalItemCount) {
-		autoLoadProgress.setVisibility(View.VISIBLE);
-		parentFragment.onLoadMore(ExoConstants.NUMBER_OF_ACTIVITY, totalItemCount-1, firstVisibleItem);
-		// set back to false to avoid multiple calls to the onLoadMore(...) method
-		hasScrolled = false;
+      autoLoadProgress.setVisibility(View.VISIBLE);
+      parentFragment.onLoadMore(ExoConstants.NUMBER_OF_ACTIVITY, totalItemCount-1, firstVisibleItem);
+		  // set back to false to avoid multiple calls to the onLoadMore(...) method
+      hasScrolled = false;
     }
   }
   

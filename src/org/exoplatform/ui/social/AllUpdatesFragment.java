@@ -29,6 +29,7 @@ import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -66,6 +67,10 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
     setListAdapter();
   }
 
+  public void setListAdapter() {
+    super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList);
+  }
+
   @Override
   public void onDestroy() {
     super.onDestroy();
@@ -80,10 +85,6 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
   @Override
   public SocialLoadTask getThisLoadTask() {
   	return new AllUpdateLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
-  }
-
-  public void setListAdapter() {
-	  super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList);
   }
 
   @Override

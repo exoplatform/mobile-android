@@ -156,9 +156,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   @Override
   public void onPostExecute(ArrayList<SocialActivityInfo> result) {
     if (result != null) {
-
       setResult(result);
-
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
@@ -168,9 +166,10 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   }
 
   public void setResult(ArrayList<SocialActivityInfo> result) {
-    if (feedType == SocialTabsActivity.ALL_UPDATES && HomeActivity.homeActivity != null) {
-        HomeActivity.homeActivity.setSocialInfo(result);
-      }
+    /** load activities for view flipper in home */
+    if (feedType == HomeController.FLIPPER_VIEW && HomeActivity.homeActivity != null)
+      HomeActivity.homeActivity.setSocialInfo(result);
+
     if (isLoadingMoreActivities) {
   	  SocialTabsActivity.instance.number_of_activity += result.size();
   	  isLoadingMoreActivities = false;

@@ -38,15 +38,17 @@ import android.content.Context;
  * 17, 2012
  */
 public class HomeController {
-  private Context               mContext;
+  private Context                mContext;
 
-  public SocialServiceLoadTask mServiceLoadTask;
+  public  SocialServiceLoadTask  mServiceLoadTask;
 
-  private SocialLoadTask        mLoadTask;
+  private SocialLoadTask         mLoadTask;
 
-  public LoaderActionBarItem    loader;
+  public  LoaderActionBarItem    loader;
 
-  private static final String TAG = "eXo____HomeController____";
+  public  static final int     FLIPPER_VIEW = 10;
+
+  private static final String  TAG = "eXo____HomeController____";
 
 
   public HomeController(Context context, LoaderActionBarItem loaderItem) {
@@ -60,7 +62,6 @@ public class HomeController {
   }
 
   public void launchNewsService() {
-
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mServiceLoadTask == null
           || mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.FINISHED) {

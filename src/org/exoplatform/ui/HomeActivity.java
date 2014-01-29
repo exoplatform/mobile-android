@@ -131,6 +131,15 @@ public class HomeActivity extends MyActionBar implements OnTouchListener{
   }
 
   @Override
+  protected void onPause() {
+    super.onPause();
+
+    viewFlipper.removeAllViews();
+    getGDApplication().getImageCache().flush();
+    System.gc();
+  }
+
+  @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     menu.clear();
     menu.add(0, 1, 0, getResources().getString(R.string.Settings))
@@ -188,14 +197,11 @@ public class HomeActivity extends MyActionBar implements OnTouchListener{
   }
 
   private void startSocialService(LoaderActionBarItem loader) {
-    Log.i(TAG, "startSocialService");
-
     /** if soc activity service is null then loads all soc services */
-    if (SocialServiceHelper.getInstance().activityService == null) {
+    if (SocialServiceHelper.getInstance().activityService == null)
       homeController.launchNewsService();
-    } else {
+    else
       homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
-    }
   }
 
   public void setProfileInfo(String[] profile) {
@@ -212,12 +218,10 @@ public class HomeActivity extends MyActionBar implements OnTouchListener{
    * Set Social Information and start animation
    */
   public void setSocialInfo(ArrayList<SocialActivityInfo> list) {
-    if (list == null) {
-      return;
-    }
+    if (list == null) return ;
 
     HomeSocialItem socialItem;
-    viewFlipper.removeAllViews();
+    //viewFlipper.removeAllViews();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
     /*
      * Display maximum 10 activities
@@ -327,7 +331,6 @@ public class HomeActivity extends MyActionBar implements OnTouchListener{
     newsTitle = resource.getString(R.string.ActivityStream);
     documentTitle = resource.getString(R.string.Documents);
     appsTitle = resource.getString(R.string.Dashboard);
-
   }
   @Override
   public boolean onTouch(View v, MotionEvent event) {

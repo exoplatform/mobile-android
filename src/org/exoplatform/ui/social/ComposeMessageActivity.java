@@ -184,6 +184,8 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       composeMessageActivity.sdcard_temp_dir = filePath;
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inSampleSize = 4;
+      options.inPurgeable  = true;
+      options.inInputShareable = true;
       FileInputStream fis = new FileInputStream(file);
       Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
       fis.close();

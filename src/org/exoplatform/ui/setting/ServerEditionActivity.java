@@ -290,7 +290,7 @@ public class ServerEditionActivity extends Activity {
     String url = mServerUrlEditTxt.getText().toString();
     if (!url.startsWith(ExoConnectionUtils.HTTP) && !url.startsWith(ExoConnectionUtils.HTTPS))
       url = ExoConnectionUtils.HTTP + url;
-    if (!ExoConnectionUtils.validateUrl(url)) {
+    if (!ExoConnectionUtils.validateUrl(url) || ExoConnectionUtils.urlHasWrongTenant(url)) {
 
       if (inputMethodManager == null)
         Toast.makeText(ServerEditionActivity.this, R.string.ServerInvalid, Toast.LENGTH_SHORT).show();

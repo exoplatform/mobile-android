@@ -362,23 +362,20 @@ public class PhotoUtils {
     }
   }
 
-  /*
+  /**
    * Make radial gradient bitmap
    */
-  public static Bitmap makeRadGrad(int width, int heigh) {
-    RadialGradient gradient = new RadialGradient(width / 2,
-                                                 heigh / 2,
-                                                 width / 2,
-                                                 0x8F8F8F8F,
-                                                 0x1C1C1C1C,
-                                                 android.graphics.Shader.TileMode.CLAMP);
+  public static Bitmap makeRadGrad(int width, int height) {
+    RadialGradient gradient = new RadialGradient(width / 2, height / 2,
+                                                 width / 2, 0x8F8F8F8F,
+                                                 0x1C1C1C1C, android.graphics.Shader.TileMode.CLAMP);
     Paint p = new Paint();
     p.setDither(true);
     p.setShader(gradient);
 
-    Bitmap bitmap = Bitmap.createBitmap(width, heigh, Config.ARGB_8888);
+    Bitmap bitmap = Bitmap.createBitmap(width, height, Config.RGB_565);
     Canvas c = new Canvas(bitmap);
-    c.drawOval(new RectF(0, 0, width, heigh), p);
+    c.drawOval(new RectF(0, 0, width, height), p);
 
     return bitmap;
   }
