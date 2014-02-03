@@ -22,8 +22,8 @@
   <string name="NameOfTheServer">Имя сервера</string>
   <string name="URLOfTheSerVer">URL-адрес сервера</string>
   <string name="CannotEditServer">Сервер не может быть изменен или удален, т.к. он используется в данный момент.</string>
-  <string name="English">English</string>
-  <string name="French">French</string>
+  <string name="English">Английский</string>
+  <string name="French">Французский</string>
   <string name="CompliantMessage">Мы не можем подключиться к совместимой версии платформы на этом URL-адресе, обратитесь к администратору.</string>
   <string name="Delete">Удалить</string>
   <string name="Copy">Копировать</string>
