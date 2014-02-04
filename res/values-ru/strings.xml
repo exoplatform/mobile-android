@@ -11,7 +11,7 @@
   <string name="ServerInvalid">Недопустимый адрес сервера</string>
   <string name="ServerUnreachable">Сервер по данному адресу недоступен</string>
   <string name="UserNameCellTitle">Имя пользователя</string>
-  <string name="PasswordCellTitle">Password</string>
+  <string name="PasswordCellTitle">Пароль</string>
   <string name="Language">ЯЗЫК</string>
   <string name="Server">СЕРВЕР</string>
   <string name="ServerList">Список серверов</string>
@@ -30,7 +30,7 @@
   <string name="Move">Вырезать</string>
   <string name="Rename">Переименовать</string>
   <string name="CreateFolder">Создать папку</string>
-  <string name="Send">Send</string>
+  <string name="Send">Отправить</string>
   <string name="Paste">Вставить</string>
   <string name="Cancel">#{word.cancel}</string>
   <string name="OK">Ok</string>
@@ -77,7 +77,7 @@
   <string name="PhotoLibrary">Фотоальбом </string>
   <string name="SelectedPhoto">Выбранное изображение</string>
   <string name="AttachedPhoto">Вложенное фото</string>
-  <string name="Warning">Warning</string>
+  <string name="Warning">Предупреждение</string>
   <string name="PostError">Error while posting an activity.</string>
   <string name="ErrorOnLike">You can not like this activity.</string>
   <string name="ConnectionError">The network can not be reached.</string>
@@ -129,8 +129,8 @@
   <string name="DocumentShowPrivateDrive">Show private drive</string>
   <string name="CalendarDescription">Описание:</string>
   <string name="CalendarLocation">Расположение</string>
-  <string name="CalendarStart">Start Time:</string>
-  <string name="CalendarEnd">End Time:</string>
+  <string name="CalendarStart">Время начала:</string>
+  <string name="CalendarEnd">Время окончания:</string>
   <string name="SpecialCharacters">Special characters are not allowed.</string>
   <string name="In"> in</string>
   <string name="Space"> space</string>
@@ -159,7 +159,7 @@
 
   <!-- Welcome screen -->
   <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Step</string>
+  <string name="title_template_step">Шаг</string>
   <string name="SignUp">Sign Up</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
