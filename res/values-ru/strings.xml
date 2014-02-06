@@ -152,8 +152,8 @@
   <string name="SocialSettingContent">Запомнить мой фильтр</string>
   <string-array name="SocialTabs">
     <item id="AllUpdates">Все обновления</item>
-    <item id="MyConnections">My Connections</item>
-    <item id="MySpaces">My Spaces</item>
+    <item id="MyConnections">Мои контакты</item>
+    <item id="MySpaces">Мои области</item>
     <item id="MyStatus">Мой статус</item>
   </string-array>
 
