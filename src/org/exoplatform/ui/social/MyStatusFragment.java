@@ -16,8 +16,6 @@
  */
 package org.exoplatform.ui.social;
 
-//import greendroid.widget.LoaderActionBarItem;
-
 import java.util.ArrayList;
 
 import org.exoplatform.poc.tabletversion.R;
@@ -32,7 +30,6 @@ import org.exoplatform.social.client.api.service.QueryParams;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import org.exoplatform.widget.StandardArrayAdapter;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
@@ -84,7 +81,7 @@ public class MyStatusFragment extends ActivityStreamFragment {
   }
 
   public void setListAdapter() {
-	  super.setListAdapter(SocialServiceHelper.getInstance().myStatusList, WIDE_MODE);
+    super.setListAdapter(SocialServiceHelper.getInstance().myStatusList, ((SocialTabsActivity) getActivity()).getDisplayMode());
   }
   
   @Override
@@ -97,12 +94,6 @@ public class MyStatusFragment extends ActivityStreamFragment {
 
   public class MyStatusLoadTask extends SocialLoadTask {
 
-    /**
-    public MyStatusLoadTask(Context context, LoaderActionBarItem loader) {
-      super(context, loader);
-    }
-     **/
-
     public MyStatusLoadTask(Context context) {
       super(context);
     }
@@ -112,7 +103,8 @@ public class MyStatusFragment extends ActivityStreamFragment {
     	setActivityList(result);
     	setListAdapter();
     	mActivityListView.getAutoLoadProgressBar().setVisibility(View.GONE);
-      mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
+      if (mActivityListAdapter != null)
+        mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
       super.setResult(result);
     }
 

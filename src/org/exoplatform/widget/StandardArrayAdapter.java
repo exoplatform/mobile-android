@@ -74,6 +74,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   @Override
   public View getView(final int position, View convertView, ViewGroup parent) {
+    Log.i(TAG, "getView : " + this + " - position: " + position);
     final SocialActivityInfo actInfo = mListActivities.get(position);
 
     if (convertView == null) {
@@ -104,27 +105,14 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     SocialItem socialItem = new SocialItem(mContext, holder, actInfo, false);
     socialItem.initCommonInfo();
 
-    /** Click on content to open activity detail */
-    /**
-    holder.contentLayoutWrap.setOnClickListener(new OnClickListener() {
-
-      public void onClick(View v) {
-        String activityId = actInfo.getActivityId();
-        SocialDetailHelper.getInstance().setActivityId(activityId);
-        SocialDetailHelper.getInstance().setAttachedImageUrl(actInfo.getAttachedImageUrl());
-        Intent intent = new Intent(mContext, SocialDetailActivity.class);
-        intent.putExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, position);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        mContext.startActivity(intent);
-      }
-    });
-     **/
-
     final View view = convertView;
     holder.contentLayoutWrap.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (mListener != null) mListener.onClickActivityItem(view, actInfo, position);
+        if (mListener != null) {
+          Log.i(TAG, "click on activity item - pos: " + position + " - view : " + view);
+          mListener.onClickActivityItem(view, actInfo, position);
+        }
       }
     });
 

@@ -70,7 +70,7 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
   }
 
   public void setListAdapter() {
-    super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList, WIDE_MODE);
+    super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList, ((SocialTabsActivity) getActivity()).getDisplayMode());
   }
 
   @Override
@@ -111,7 +111,8 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
 	  	setActivityList(result);
 	  	setListAdapter();
 	  	mActivityListView.getAutoLoadProgressBar().setVisibility(View.GONE);
-      mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
+      if (mActivityListAdapter != null)
+        mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
 	  	super.setResult(result);
 	  }
 

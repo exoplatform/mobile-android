@@ -84,16 +84,10 @@ public class MySpacesFragment extends ActivityStreamFragment {
   }
 
   public void setListAdapter() {
-	  super.setListAdapter(SocialServiceHelper.getInstance().mySpacesList, WIDE_MODE);
+    super.setListAdapter(SocialServiceHelper.getInstance().mySpacesList, ((SocialTabsActivity) getActivity()).getDisplayMode());
   }
   
   public class MySpacesLoadTask extends SocialLoadTask {
-
-    /**
-    public MySpacesLoadTask(Context context, LoaderActionBarItem loader) {
-      super(context, loader);
-    }
-     **/
 
     public MySpacesLoadTask(Context context) {
       super(context);
@@ -104,7 +98,8 @@ public class MySpacesFragment extends ActivityStreamFragment {
     	setActivityList(result);
     	setListAdapter();
     	mActivityListView.getAutoLoadProgressBar().setVisibility(View.GONE);
-      mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
+      if (mActivityListAdapter != null)
+        mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
       super.setResult(result);
     }
 

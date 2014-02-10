@@ -85,16 +85,10 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
   }
 
   public void setListAdapter() {
-	  super.setListAdapter(SocialServiceHelper.getInstance().myConnectionsList, WIDE_MODE);
+    super.setListAdapter(SocialServiceHelper.getInstance().myConnectionsList, ((SocialTabsActivity) getActivity()).getDisplayMode());
   }
 
   public class MyConnectionLoadTask extends SocialLoadTask {
-
-    /**
-    public MyConnectionLoadTask(Context context, LoaderActionBarItem loader) {
-      super(context, loader);
-    }
-    **/
 
     public MyConnectionLoadTask(Context context) {
       super(context);
@@ -105,7 +99,8 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
     	setActivityList(result);
     	setListAdapter();
       mActivityListView.getAutoLoadProgressBar().setVisibility(View.GONE);
-      mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
+      if (mActivityListAdapter != null)
+        mActivityListAdapter.setOnItemClickListener((SocialTabsActivity) getActivity());
       super.setResult(result);
     }
 

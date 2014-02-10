@@ -244,7 +244,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
         if (mCurrentFragment == -1) {
           /** first run */
-          Log.i(TAG, "first run, add the fragment");
+          Log.i(TAG, "first run, add the fragment : " + SOCIAL_TABS[position]);
           ft.add(R.id.streams_container, activityStreamFragment, SOCIAL_TABS[position]);
           mListFragment = activityStreamFragment;
         }
@@ -257,7 +257,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
             ft.hide(fragment);
           }
 
-          Log.i(TAG, "find requested fragment");
+          Log.i(TAG, "find requested fragment : " + SOCIAL_TABS[position]);
           /** find requested fragment */
           fragment = fragmentManager.findFragmentByTag(SOCIAL_TABS[position]);
           if (fragment != null) {
@@ -267,7 +267,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
           }
           else {
             /** fragment not added yet, add it */
-            Log.i(TAG, "fragment not added yet, add it");
+            Log.i(TAG, "fragment not added yet, add it : " + SOCIAL_TABS[position]);
             ft.add(R.id.streams_container, activityStreamFragment, SOCIAL_TABS[position]);
             mListFragment = activityStreamFragment;
           }
@@ -316,6 +316,10 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
     }
   }
 
+
+  public int getDisplayMode() {
+    return mDetailFragment == null ? ActivityStreamFragment.WIDE_MODE : ActivityStreamFragment.NARROW_MODE;
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -510,7 +514,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
   @Override
   public void onClickActivityItem(View socialItemView, SocialActivityInfo activityInfo, int position) {
 
-    Log.i(TAG, "onClickActivityItem - position : " + position);
+    Log.i(TAG, "onClickActivityItem - position : " + position + " - view: " + socialItemView);
     String activityId = activityInfo.getActivityId();
     SocialDetailHelper.getInstance().setActivityId(activityId);
     SocialDetailHelper.getInstance().setAttachedImageUrl(activityInfo.getAttachedImageUrl());
@@ -521,7 +525,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
       if (mDetailFragment != null) mDetailFragment.onCancelLoad();
 
       /** reset the whole list */
-      mListFragment.switchMode(ActivityStreamFragment.NARROW_MODE, true);
+      mListFragment.switchMode(ActivityStreamFragment.NARROW_MODE, mDetailFragment == null);
 
       /** highlight the selected item */
       int idx = mListFragment.sectionAdapter.getSectionPosFromActivityPos(position);

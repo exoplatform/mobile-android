@@ -238,10 +238,12 @@ public abstract class ActivityStreamFragment extends Fragment {
    * @param mode         The display mode of list view
    */
   public void setListAdapter(ArrayList<SocialActivityInfo> activityList, int mode) {
+    Log.i(TAG, "set list adapter - mode : " + mode + " - current adapter : " + getTag());
     if (activityList == null || activityList.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);
       return;
     }
+    Log.i(TAG, "load new view");
     emptyStubView.setVisibility(View.GONE);
 
     mActivityListAdapter = new StandardArrayAdapter(getActivity(), activityList);
@@ -265,7 +267,7 @@ public abstract class ActivityStreamFragment extends Fragment {
    * Switch to different display mode
    */
   public void switchMode(int mode, boolean forceReloadView) {
-
+    Log.i(TAG, "switchMode - mode : " + mode + " - reloadView : " + forceReloadView);
     if (mode == mMode) return;
     if (!forceReloadView) {
       mMode = mode;
