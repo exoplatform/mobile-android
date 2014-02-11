@@ -24,6 +24,8 @@
   <string name="CannotEditServer">لا يمكن تغيير أو حذف المزوّد لأنّه حاليا قيد الاستخدام. </string>
   <string name="English">انقليزية</string>
   <string name="French">فرنسية</string>
+  <string name="German">German</string>
+  <string name="Spanish">Spanish</string>
   <string name="CompliantMessage">لا يمكننا التّواصل بمنصة متوافقة في المصدر مع هذا العنوان (URL) ، يُرجى الاتصال بالمسؤول.</string>
   <string name="Delete">حذف</string>
   <string name="Copy">نسخ</string>
