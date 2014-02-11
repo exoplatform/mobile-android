@@ -24,6 +24,8 @@
   <string name="CannotEditServer">伺服器不能修改或刪除。它當前正被使用。</string>
   <string name="English">英文</string>
   <string name="French">法文</string>
+  <string name="German">German</string>
+  <string name="Spanish">Spanish</string>
   <string name="CompliantMessage">我們不能連接到相容的平臺版本在該 URL，請與您的管理員聯繫。</string>
   <string name="Delete">刪除</string>
   <string name="Copy">複製</string>
