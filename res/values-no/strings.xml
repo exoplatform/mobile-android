@@ -24,6 +24,8 @@
   <string name="CannotEditServer">Serveren kan ikke endres eller slettes da den er i bruk. </string>
   <string name="English">Engelsk</string>
   <string name="French">Fransk</string>
+  <string name="German">German</string>
+  <string name="Spanish">Spanish</string>
   <string name="CompliantMessage">Vi kan ikke koble til en kompatibel plattformversjon på denne URL-en, vennligst kontakt systemansvarlig.</string>
   <string name="Delete">Slett</string>
   <string name="Copy">Kopier</string>
