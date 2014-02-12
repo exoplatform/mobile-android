@@ -24,8 +24,8 @@
   <string name="CannotEditServer">{crwdns6616901:0}{crwdne6616901:0}</string>
   <string name="English">{crwdns6616902:0}{crwdne6616902:0}</string>
   <string name="French">{crwdns6616903:0}{crwdne6616903:0}</string>
-  <string name="German">German</string>
-  <string name="Spanish">Spanish</string>
+  <string name="German">{crwdns6752611:0}{crwdne6752611:0}</string>
+  <string name="Spanish">{crwdns6752612:0}{crwdne6752612:0}</string>
   <string name="CompliantMessage">{crwdns6616904:0}{crwdne6616904:0}</string>
   <string name="Delete">{crwdns6616905:0}{crwdne6616905:0}</string>
   <string name="Copy">{crwdns6616906:0}{crwdne6616906:0}</string>
@@ -34,7 +34,7 @@
   <string name="CreateFolder">{crwdns6616909:0}{crwdne6616909:0}</string>
   <string name="Send">{crwdns6616910:0}{crwdne6616910:0}</string>
   <string name="Paste">{crwdns6616911:0}{crwdne6616911:0}</string>
-  <string name="Cancel">#{word.cancel}</string>
+  <string name="Cancel">{crwdns6710955:0}{word.cancel}{crwdne6710955:0}</string>
   <string name="OK">{crwdns6616913:0}{crwdne6616913:0}</string>
   <string name="Remove">{crwdns6616914:0}{crwdne6616914:0}</string>
   <string name="Documents">{crwdns6616915:0}{crwdne6616915:0}</string>
