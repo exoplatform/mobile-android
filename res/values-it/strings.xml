@@ -24,7 +24,7 @@
   <string name="CannotEditServer">Il server non può essere modificato o cancellato. È attualmente in uso. </string>
   <string name="English">Inglese</string>
   <string name="French">Francese</string>
-  <string name="German">German</string>
+  <string name="German">Tedesco</string>
   <string name="Spanish">Spanish</string>
   <string name="CompliantMessage">Non possiamo collegarci a una versione compatibile della piattaforma  con questo URL, contattare l\'amministratore.</string>
   <string name="Delete">Cancellare</string>
