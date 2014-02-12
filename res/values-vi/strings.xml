@@ -24,7 +24,7 @@
   <string name="CannotEditServer">The server can not be modified or deleted. It is currently in use. </string>
   <string name="English">Tiếng Anh</string>
   <string name="French">Tiếng Pháp</string>
-  <string name="German">German</string>
+  <string name="German">Tiếng Đức</string>
   <string name="Spanish">Spanish</string>
   <string name="CompliantMessage">We cannot connect to a compatible Platform version at this URL, please contact your administrator.</string>
   <string name="Delete">Xóa</string>
