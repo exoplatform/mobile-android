@@ -24,7 +24,7 @@
   <string name="CannotEditServer">The server can not be modified or deleted. It is currently in use. </string>
   <string name="English">英語</string>
   <string name="French">フランス語</string>
-  <string name="German">German</string>
+  <string name="German">ドイツ語</string>
   <string name="Spanish">Spanish</string>
   <string name="CompliantMessage">We cannot connect to a compatible Platform version at this URL, please contact your administrator.</string>
   <string name="Delete">削除する</string>
