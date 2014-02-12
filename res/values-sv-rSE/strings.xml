@@ -24,7 +24,7 @@
   <string name="CannotEditServer">The server can not be modified or deleted. It is currently in use. </string>
   <string name="English">Engelska</string>
   <string name="French">Franska</string>
-  <string name="German">German</string>
+  <string name="German">Tyska</string>
   <string name="Spanish">Spanish</string>
   <string name="CompliantMessage">We cannot connect to a compatible Platform version at this URL, please contact your administrator.</string>
   <string name="Delete">Ta bort</string>
