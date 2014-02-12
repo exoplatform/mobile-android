@@ -24,7 +24,7 @@
   <string name="CannotEditServer">Sunucu kullanımda olduğundan değiştirme / silme işlemi gerçekleştirilemiyor. </string>
   <string name="English">İngilizce</string>
   <string name="French">Fransızca</string>
-  <string name="German">German</string>
+  <string name="German">Almanca</string>
   <string name="Spanish">Spanish</string>
   <string name="CompliantMessage">Bu URL\'deki platforma sürüm uyuşmazlığı nedeni ile bağlanamıyoruz, lütfen sistem yöneticisine başvurun.</string>
   <string name="Delete">Sil</string>
