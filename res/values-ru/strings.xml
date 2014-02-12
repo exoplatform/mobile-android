@@ -24,7 +24,7 @@
   <string name="CannotEditServer">Сервер не может быть изменен или удален, т.к. он используется в данный момент.</string>
   <string name="English">Английский</string>
   <string name="French">Французский</string>
-  <string name="German">German</string>
+  <string name="German">Немецкий</string>
   <string name="Spanish">Spanish</string>
   <string name="CompliantMessage">Невозможно подключиться к совместимой версии платформы по этому URL-адресу, обратитесь к администратору.</string>
   <string name="Delete">Удалить</string>
