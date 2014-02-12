@@ -24,7 +24,7 @@
   <string name="CannotEditServer">服务器不能修改或删除。它当前正被使用。</string>
   <string name="English">中文</string>
   <string name="French">法语</string>
-  <string name="German">German</string>
+  <string name="German">德语</string>
   <string name="Spanish">Spanish</string>
   <string name="CompliantMessage">该网站不支持此版本平台，请联系管理人员。</string>
   <string name="Delete">删除</string>
