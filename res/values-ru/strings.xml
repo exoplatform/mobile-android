@@ -34,7 +34,7 @@
   <string name="CreateFolder">Создать папку</string>
   <string name="Send">Отправить</string>
   <string name="Paste">Вставить</string>
-  <string name="Cancel">#{word.cancel}</string>
+  <string name="Cancel">Отмена</string>
   <string name="OK">ОК</string>
   <string name="Remove">Удалить</string>
   <string name="Documents">Документы</string>
