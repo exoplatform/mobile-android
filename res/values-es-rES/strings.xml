@@ -34,7 +34,7 @@
   <string name="CreateFolder">Crear carpeta</string>
   <string name="Send">Enviar</string>
   <string name="Paste">Pegar</string>
-  <string name="Cancel">#{word.cancel}</string>
+  <string name="Cancel">Cancelar</string>
   <string name="OK">Ok</string>
   <string name="Remove">Eliminar</string>
   <string name="Documents">Documentos</string>
