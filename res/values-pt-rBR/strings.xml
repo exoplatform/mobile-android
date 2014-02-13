@@ -45,7 +45,7 @@
   <string name="CreateFolder">Criar pasta</string>
   <string name="Send">Enviar</string>
   <string name="Paste">Colar</string>
-  <string name="Cancel">#{word.cancel}</string>
+  <string name="Cancel">Cancelar</string>
   <string name="OK">OK</string>
   <string name="Remove">Remover</string>
   <string name="Documents">Documentos</string>
