@@ -34,7 +34,7 @@
   <string name="CreateFolder">Tạo Thư mục</string>
   <string name="Send">Gửi email</string>
   <string name="Paste">Dán</string>
-  <string name="Cancel">#{word.cancel}</string>
+  <string name="Cancel">Hủy bỏ</string>
   <string name="OK">Đồng ý</string>
   <string name="Remove">Loại bỏ</string>
   <string name="Documents">Tài liệu</string>
