@@ -34,7 +34,7 @@
   <string name="CreateFolder">创建文件夹</string>
   <string name="Send">发送</string>
   <string name="Paste">粘贴</string>
-  <string name="Cancel">#{word.cancel}</string>
+  <string name="Cancel">取消</string>
   <string name="OK">OK</string>
   <string name="Remove">删除</string>
   <string name="Documents">文档</string>
