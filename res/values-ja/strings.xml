@@ -34,7 +34,7 @@
   <string name="CreateFolder">#{word.save}</string>
   <string name="Send">送信</string>
   <string name="Paste">貼り付け</string>
-  <string name="Cancel">#{word.cancel}</string>
+  <string name="Cancel">キャンセル</string>
   <string name="OK">Ok</string>
   <string name="Remove">削除</string>
   <string name="Documents">ドキュメント</string>
