@@ -49,6 +49,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
 
   private CheckBoxWithImage     mFrCbx;
 
+  private CheckBoxWithImage     mDeCbx;
+
   private CheckBox              mRememberFilterCbx;
 
   private CheckBox              mPrivateDriveCbx;
@@ -122,14 +124,22 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     /** Language */
     mEnCbx = (CheckBoxWithImage) findViewById(R.id.setting_en_ckb);
     mEnCbx.setText(mResources.getString(R.string.English))
-          .setChecked(usesEnglish(), false)
           .setViewListener(this);
 
     mFrCbx = (CheckBoxWithImage) findViewById(R.id.setting_fr_ckb);
     mFrCbx.setText(mResources.getString(R.string.French));
     mFrCbx.setHeadImage(R.drawable.settingslanguagefrench)
-          .setChecked(!usesEnglish(), false)
           .setViewListener(this);
+
+    mDeCbx = (CheckBoxWithImage) findViewById(R.id.setting_de_ckb);
+    mDeCbx.setText(mResources.getString(R.string.German));
+    mDeCbx.setHeadImage(R.drawable.settingslanguagegerman)
+          .setViewListener(this);
+
+    String currentLanguage = getCurrentLanguage();
+    if (currentLanguage.equalsIgnoreCase(ExoConstants.ENGLISH_LOCALIZATION))     mEnCbx.setChecked(true, false);
+    else if (currentLanguage.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) mFrCbx.setChecked(true, false);
+    else if (currentLanguage.equalsIgnoreCase(ExoConstants.GERMAN_LOCALIZATION)) mDeCbx.setChecked(true, false);
 
     /** Social */
     mRememberFilterCbx   = (CheckBox) findViewById(R.id.setting_remember_filter_ckb);
@@ -174,16 +184,19 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     }
 
     /** update language */
-    if (!usesEnglish()) onChangeLanguage(SettingUtils.getPrefsLanguage(this));
+    if (!getCurrentLanguage().equalsIgnoreCase(ExoConstants.ENGLISH_LOCALIZATION))
+      onChangeLanguage(SettingUtils.getPrefsLanguage(this));
   }
 
-  private boolean usesEnglish() {
-    return mSharedPerf.getString(ExoConstants.EXO_PRF_LOCALIZE,
-        ExoConstants.ENGLISH_LOCALIZATION).equalsIgnoreCase(ExoConstants.ENGLISH_LOCALIZATION);
+
+  private String getCurrentLanguage() {
+    return mSharedPerf.getString(ExoConstants.EXO_PRF_LOCALIZE, ExoConstants.ENGLISH_LOCALIZATION);
   }
 
   private void onChangeLanguage(String language) {
     SettingUtils.setLocale(this, language);
+
+    getActionBar().setTitle(mResources.getString(R.string.Settings));
 
     ((TextView) findViewById(R.id.setting_login_title_txt)).setText(mResources.getString(R.string.LoginTitle));
     mRememberMeCbx.setText(mResources.getString(R.string.RememberMe));
@@ -192,6 +205,9 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     ((TextView) findViewById(R.id.setting_language_title)).setText(mResources.getString(R.string.Language));
     mEnCbx.setText(mResources.getString(R.string.English));
     mFrCbx.setText(mResources.getString(R.string.French));
+    mDeCbx.setText(mResources.getString(R.string.German));
+
+    mRememberFilterCbx.setText(mResources.getString(R.string.SocialSettingContent));
 
     ((TextView) findViewById(R.id.setting_social_title)).setText(mResources.getString(R.string.SocialSettingTitle));
     ((TextView) findViewById(R.id.setting_server_title)).setText(mResources.getString(R.string.Server));
@@ -261,12 +277,20 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     /** Change language */
     if (checkBox.equals(mEnCbx)) {
       mFrCbx.setChecked(false, false);
+      mDeCbx.setChecked(false, false);
       onChangeLanguage(ExoConstants.ENGLISH_LOCALIZATION);
     }
     else if (checkBox.equals(mFrCbx)) {
       mEnCbx.setChecked(false, false);
+      mDeCbx.setChecked(false, false);
       onChangeLanguage(ExoConstants.FRENCH_LOCALIZATION);
     }
+    else if (checkBox.equals(mDeCbx)) {
+      mEnCbx.setChecked(false, false);
+      mFrCbx.setChecked(false, false);
+      onChangeLanguage(ExoConstants.GERMAN_LOCALIZATION);
+    }
+    /** Remember Me and Auto login */
     else if (checkBox.equals(mRememberMeCbx)) {
       if (!mRememberMeCbx.isChecked()) {
         mAutoLoginCbx.setChecked(false, false);

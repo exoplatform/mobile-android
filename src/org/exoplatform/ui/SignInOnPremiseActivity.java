@@ -3,6 +3,7 @@ package org.exoplatform.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -60,6 +61,23 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
         AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mPassTxt);
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+    SettingUtils.setDefaultLanguage(this);
+    onChangeLanguage();
+  }
+
+  private void onChangeLanguage() {
+    Resources resources = getResources();
+    ((TextView) findViewById(R.id.onpremise_title_txt)).setText(resources.getString(R.string.OnPremise));
+    ((TextView) findViewById(R.id.onpremise_url_txt)).setText(resources.getString(R.string.EnterUrl));
+    ((TextView) findViewById(R.id.onpremise_login_txt)).setText(resources.getString(R.string.EnterLogin));
+    ((EditText) findViewById(R.id.onpremise_url_edit_txt)).setHint(resources.getString(R.string.YourIntranetHint));
+    ((EditText) findViewById(R.id.onpremise_user_edit_txt)).setHint(resources.getString(R.string.UserNameHint));
+    ((EditText) findViewById(R.id.onpremise_pass_edit_txt)).setHint(resources.getString(R.string.PasswordHint));
+    ((Button)   findViewById(R.id.onpremise_login_btn)).setText(resources.getString(R.string.LogIn));
+  }
 
   public View.OnClickListener onClickLogIn() {
 

@@ -3,6 +3,7 @@ package org.exoplatform.ui;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,12 +14,15 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.utils.AssetUtils;
+import org.exoplatform.utils.SettingUtils;
 
 
 /**
@@ -27,8 +31,6 @@ import org.exoplatform.utils.AssetUtils;
  * Overall time: +925ms +692ms +845ms +1s35ms
  */
 public class WelcomeActivity extends FragmentActivity {
-
-  private static final String TAG = "eXoWelcomeActivity";
 
   private ViewPager       mPager;
 
@@ -45,6 +47,9 @@ public class WelcomeActivity extends FragmentActivity {
   public  static boolean  mIsTablet;
 
   private int             mCurrentPage = 0;
+
+  private static final String TAG = "eXo____WelcomeActivity____";
+
 
   public  void onCreate(Bundle savedInstanceState) {
     requestScreenOrientation();
@@ -64,13 +69,26 @@ public class WelcomeActivity extends FragmentActivity {
     mSeparatorImg  = (ImageView) findViewById(R.id.welcome_separator_img);
     mButtonSection = (RelativeLayout) findViewById(R.id.welcome_button_section);
 
-    // Instantiate a ViewPager and a PagerAdapter.
     mPager = (ViewPager) findViewById(R.id.pager);
+
+    mCirclePageIndicator = (CirclePageIndicator) findViewById(R.id.circle_page_indicator);
+  }
+
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    SettingUtils.setDefaultLanguage(this);
+    onChangeLanguage();
+    initState();
+  }
+
+  private void initState() {
+
     mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     mPager.setAdapter(mPagerAdapter);
     mPager.setCurrentItem(mCurrentPage);
 
-    mCirclePageIndicator = (CirclePageIndicator) findViewById(R.id.circle_page_indicator);
     mCirclePageIndicator.setViewPager(mPager);
     mCirclePageIndicator.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
       @Override
@@ -79,6 +97,15 @@ public class WelcomeActivity extends FragmentActivity {
       }
     });
     mCirclePageIndicator.setCurrentItem(mCurrentPage);
+
+  }
+
+  private void onChangeLanguage() {
+    Resources resources = getResources();
+    ((TextView) findViewById(R.id.welcome_txt_or)).setText(resources.getString(R.string.Or));
+    ((TextView) findViewById(R.id.welcome_txt_skipStep)).setText(resources.getString(R.string.SkipStep));
+    ((Button) findViewById(R.id.welcome_btn_signup)).setText(resources.getString(R.string.SignUp));
+    ((Button) findViewById(R.id.welcome_btn_login)).setText(resources.getString(R.string.LogIn));
   }
 
   /**
