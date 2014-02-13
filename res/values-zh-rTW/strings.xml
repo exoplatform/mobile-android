@@ -34,7 +34,7 @@
   <string name="CreateFolder">建立資料夾</string>
   <string name="Send">發送</string>
   <string name="Paste">貼上 </string>
-  <string name="Cancel">#{word.cancel}</string>
+  <string name="Cancel">取消</string>
   <string name="OK">OK</string>
   <string name="Remove">刪除 </string>
   <string name="Documents">文件</string>
