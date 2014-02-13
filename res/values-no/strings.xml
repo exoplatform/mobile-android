@@ -34,7 +34,7 @@
   <string name="CreateFolder">Opprett mappe</string>
   <string name="Send">Send</string>
   <string name="Paste">Lim inn</string>
-  <string name="Cancel">#{word.cancel}</string>
+  <string name="Cancel">Avbryt</string>
   <string name="OK">OK</string>
   <string name="Remove">Fjern</string>
   <string name="Documents">Dokumenter</string>
