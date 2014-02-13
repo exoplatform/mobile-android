@@ -25,7 +25,7 @@
   <string name="English">İngilizce</string>
   <string name="French">Fransızca</string>
   <string name="German">Almanca</string>
-  <string name="Spanish">Spanish</string>
+  <string name="Spanish">İspanyolca</string>
   <string name="CompliantMessage">Bu URL\'deki platforma sürüm uyuşmazlığı nedeni ile bağlanamıyoruz, lütfen sistem yöneticisine başvurun.</string>
   <string name="Delete">Sil</string>
   <string name="Copy">Kopyala</string>
@@ -34,7 +34,7 @@
   <string name="CreateFolder">Klasör Oluştur</string>
   <string name="Send">Gönder</string>
   <string name="Paste">Yapıştır</string>
-  <string name="Cancel">#{word.cancel}</string>
+  <string name="Cancel">İptal</string>
   <string name="OK">Tamam</string>
   <string name="Remove">Kaldır</string>
   <string name="Documents">Belgeler</string>
