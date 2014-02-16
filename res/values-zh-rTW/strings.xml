@@ -119,7 +119,7 @@
   <string name="AddedATask">增加一項任務：</string>
   <string name="UpdatedATask">剛更新任務：</string>
   <string name="DocumentRenameTitle">重新命名資料夾</string>
-  <string name="DocumentRenameContent">請輸入一個新的名稱：</string>
+  <string name="DocumentRenameContent">輸入一個新的名稱：</string>
   <string name="DocumentCreateTitle">建立資料夾</string>
   <string name="DocumentCreateContent">輸入資料夾的名稱：</string>
   <string name="DocumentCannotDelete">無法刪除此檔案：</string>
