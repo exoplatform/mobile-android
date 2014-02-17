@@ -110,6 +110,8 @@ public class ExoConstants {
 
   public static final String GERMAN_LOCALIZATION                   = "de";
 
+  public static final String SPANISH_LOCALIZATION                  = "es";
+
   public static final String SETTING_SOCIAL_FILTER                 = "SETTING_SOCIAL_FILTER";
 
   public static final String SETTING_SOCIAL_FILTER_INDEX           = "SETTING_SOCIAL_FILTER_INDEX";

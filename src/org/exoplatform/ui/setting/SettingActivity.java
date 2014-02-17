@@ -51,6 +51,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
 
   private CheckBoxWithImage     mDeCbx;
 
+  private CheckBoxWithImage     mEsCbx;
+
   private CheckBox              mRememberFilterCbx;
 
   private CheckBox              mPrivateDriveCbx;
@@ -136,10 +138,16 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     mDeCbx.setHeadImage(R.drawable.settingslanguagegerman)
           .setViewListener(this);
 
+    mEsCbx = (CheckBoxWithImage) findViewById(R.id.setting_es_ckb);
+    mEsCbx.setText(mResources.getString(R.string.Spanish));
+    mEsCbx.setHeadImage(R.drawable.settingslanguagegerman)
+        .setViewListener(this);
+
     String currentLanguage = getCurrentLanguage();
-    if (currentLanguage.equalsIgnoreCase(ExoConstants.ENGLISH_LOCALIZATION))     mEnCbx.setChecked(true, false);
-    else if (currentLanguage.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION)) mFrCbx.setChecked(true, false);
-    else if (currentLanguage.equalsIgnoreCase(ExoConstants.GERMAN_LOCALIZATION)) mDeCbx.setChecked(true, false);
+    if (currentLanguage.equalsIgnoreCase(ExoConstants.ENGLISH_LOCALIZATION))      mEnCbx.setChecked(true, false);
+    else if (currentLanguage.equalsIgnoreCase(ExoConstants.FRENCH_LOCALIZATION))  mFrCbx.setChecked(true, false);
+    else if (currentLanguage.equalsIgnoreCase(ExoConstants.GERMAN_LOCALIZATION))  mDeCbx.setChecked(true, false);
+    else if (currentLanguage.equalsIgnoreCase(ExoConstants.SPANISH_LOCALIZATION)) mEsCbx.setChecked(true, false);
 
     /** Social */
     mRememberFilterCbx   = (CheckBox) findViewById(R.id.setting_remember_filter_ckb);
@@ -206,6 +214,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     mEnCbx.setText(mResources.getString(R.string.English));
     mFrCbx.setText(mResources.getString(R.string.French));
     mDeCbx.setText(mResources.getString(R.string.German));
+    mEsCbx.setText(mResources.getString(R.string.Spanish));
 
     mRememberFilterCbx.setText(mResources.getString(R.string.SocialSettingContent));
 
@@ -278,17 +287,26 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     if (checkBox.equals(mEnCbx)) {
       mFrCbx.setChecked(false, false);
       mDeCbx.setChecked(false, false);
+      mEsCbx.setChecked(false, false);
       onChangeLanguage(ExoConstants.ENGLISH_LOCALIZATION);
     }
     else if (checkBox.equals(mFrCbx)) {
       mEnCbx.setChecked(false, false);
       mDeCbx.setChecked(false, false);
+      mEsCbx.setChecked(false, false);
       onChangeLanguage(ExoConstants.FRENCH_LOCALIZATION);
     }
     else if (checkBox.equals(mDeCbx)) {
       mEnCbx.setChecked(false, false);
       mFrCbx.setChecked(false, false);
+      mEsCbx.setChecked(false, false);
       onChangeLanguage(ExoConstants.GERMAN_LOCALIZATION);
+    }
+    else if (checkBox.equals(mEsCbx)) {
+      mEnCbx.setChecked(false, false);
+      mFrCbx.setChecked(false, false);
+      mDeCbx.setChecked(false, false);
+      onChangeLanguage(ExoConstants.SPANISH_LOCALIZATION);
     }
     /** Remember Me and Auto login */
     else if (checkBox.equals(mRememberMeCbx)) {
