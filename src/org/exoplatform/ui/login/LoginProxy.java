@@ -270,8 +270,9 @@ public class LoginProxy implements
   }
 
   private void launchLoginTask() {
-    mDomain = !mDomain.startsWith(ExoConnectionUtils.HTTP)
+    mDomain = !(mDomain.startsWith(ExoConnectionUtils.HTTP) || mDomain.startsWith(ExoConnectionUtils.HTTPS))
         ? ExoConnectionUtils.HTTP + mDomain: mDomain;
+
     mLoginTask = new LoginTask();
     mLoginTask.setListener(this);
     mLoginTask.execute(mNewUserName, mNewPassword, mDomain);
