@@ -140,7 +140,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
 
     mEsCbx = (CheckBoxWithImage) findViewById(R.id.setting_es_ckb);
     mEsCbx.setText(mResources.getString(R.string.Spanish));
-    mEsCbx.setHeadImage(R.drawable.settingslanguagegerman)
+    mEsCbx.setHeadImage(R.drawable.settingslanguagespain)
         .setViewListener(this);
 
     String currentLanguage = getCurrentLanguage();
