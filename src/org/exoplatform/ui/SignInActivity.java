@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SettingUtils;
 
 public class SignInActivity extends Activity implements LoginProxy.ProxyListener {
 
@@ -58,6 +60,26 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
 
     mAlertTxt = (TextView) findViewById(R.id.signin_alert_txt);
     AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mAlertTxt);
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    SettingUtils.setDefaultLanguage(this);
+    onChangeLanguage();
+  }
+
+
+  private void onChangeLanguage() {
+    Resources resources = getResources();
+    ((TextView) findViewById(R.id.signin_title_txt)).setText(resources.getString(R.string.GetStarted));
+    ((TextView) findViewById(R.id.signin_email_txt)).setText(resources.getString(R.string.EmailSignIn));
+    ((TextView) findViewById(R.id.signin_alert_txt)).setText(resources.getString(R.string.InvalidEmail));
+    ((EditText) findViewById(R.id.signin_edit_txt_email)).setHint(resources.getString(R.string.Email));
+    ((EditText) findViewById(R.id.signin_edit_txt_pass)).setHint(resources.getString(R.string.PasswordHint));
+    ((TextView) findViewById(R.id.signin_or_txt)).setText(resources.getString(R.string.Or));
+    ((Button) findViewById(R.id.signin_login_btn)).setText(resources.getString(R.string.LogIn));
+    ((Button) findViewById(R.id.signin_connect_on_premises_btn)).setText(resources.getString(R.string.ConnectOnPremise));
   }
 
   public View.OnClickListener onClickLogIn() {

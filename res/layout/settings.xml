@@ -48,6 +48,13 @@
         <!-- French checkbox -->
         <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_fr_ckb" />
 
+        <!-- German checkbox -->
+        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_de_ckb" />
+
+        <!-- Spain checkbox -->
+        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_es_ckb" />
+
+
         <!--<include layout="@layout/separator_line" /> -->
 
 

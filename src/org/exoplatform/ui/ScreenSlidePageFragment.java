@@ -12,13 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.exoplatform.R;
 import org.exoplatform.utils.AssetUtils;
+import org.exoplatform.utils.SettingUtils;
 
 
 public class ScreenSlidePageFragment extends Fragment {
 
   public  static final int      NUM_PAGES      = 5;
-
-  private static final String   TAG            = "eXoScreenSlidePageFragment";
 
   public  static final int[]    SLIDER_IMGS    = {
       R.drawable.slide_activity_stream,
@@ -59,6 +58,11 @@ public class ScreenSlidePageFragment extends Fragment {
    */
   private int mPageNumber;
 
+  private TextView mSliderDesc;
+
+  private static final String TAG = "eXo____ScreenSlidePageFragment____";
+
+
   /**
    * Factory method for this fragment class. Constructs a new fragment for the given page number.
    */
@@ -76,6 +80,7 @@ public class ScreenSlidePageFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    SettingUtils.setDefaultLanguage(getActivity());
     mPageNumber = getArguments().getInt(ARG_PAGE);
   }
 
@@ -92,8 +97,8 @@ public class ScreenSlidePageFragment extends Fragment {
       ((ImageView) mRootView.findViewById(R.id.slider_img)).setImageBitmap(
           BitmapFactory.decodeResource(getResources(), sSliderImgs[index])
       );
-      ((TextView) mRootView.findViewById(R.id.slider_txt_description)).setText(
-          getResources().getText(SLIDER_DESC[index]));
+      mSliderDesc = (TextView) mRootView.findViewById(R.id.slider_txt_description);
+      mSliderDesc.setText(getResources().getString(SLIDER_DESC[index]));
     }
     else {
       // first slide
@@ -109,5 +114,13 @@ public class ScreenSlidePageFragment extends Fragment {
    */
   public int getPageNumber() {
     return mPageNumber;
+  }
+
+  public void onChangeLanguage() {
+    Log.i(TAG, "onChangeLanguage : " + mPageNumber);
+    if (mPageNumber != 0) {
+      SettingUtils.setDefaultLanguage(getActivity());
+      mSliderDesc.setText(getResources().getString(SLIDER_DESC[mPageNumber - 1]));
+    }
   }
 }

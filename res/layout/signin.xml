@@ -9,6 +9,7 @@
 
     <TextView
             style="@style/SignUpBlueHeaderStyle"
+            android:id="@+id/signin_title_txt"
             android:text="@string/GetStarted" />
 
     <RelativeLayout android:layout_width="@dimen/signup_frame_width"

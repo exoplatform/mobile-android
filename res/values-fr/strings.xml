@@ -24,6 +24,8 @@
   <string name="CannotEditServer">Ce server est actuellement utilisé, il ne peut pas être édité ou supprimé.</string>
   <string name="English">Anglais</string>
   <string name="French">Français</string>
+  <string name="German">Allemand</string>
+  <string name="Spanish">Espagnol</string>
   <string name="CompliantMessage">L\'application n\'est pas compatible avec la version de Platform à cette URL. Veuillez contacter votre administrateur.</string>
   <string name="Delete">Supprimer</string>
   <string name="Copy">Copier</string>
