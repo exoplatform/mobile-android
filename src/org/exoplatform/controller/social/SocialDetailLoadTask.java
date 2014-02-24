@@ -27,6 +27,7 @@ import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
 
 import android.content.Context;
@@ -106,6 +107,11 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       streamInfo.setTitle(selectedRestActivity.getTitle());
       streamInfo.setBody(selectedRestActivity.getBody());
       streamInfo.setPostedTime(selectedRestActivity.getPostedTime());
+
+      if (SocialActivityUtil.getPlatformVersion() >= 4.0f) {
+        streamInfo.setUpdatedTime(selectedRestActivity.getLastUpdated());
+      }
+
       streamInfo.setLikeNumber(selectedRestActivity.getTotalNumberOfLikes());
       streamInfo.setCommentNumber(selectedRestActivity.getTotalNumberOfComments());
       activityType = selectedRestActivity.getType();
