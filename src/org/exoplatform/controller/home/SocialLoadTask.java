@@ -20,6 +20,7 @@ import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
@@ -136,6 +137,11 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
           streamInfo.setTitle(act.getTitle());
           streamInfo.setBody(act.getBody());
           streamInfo.setPostedTime(act.getPostedTime());
+
+          if (SocialActivityUtil.getPlatformVersion() >= 4.0f) {
+            streamInfo.setUpdatedTime(act.getLastUpdated());
+          }
+
           streamInfo.setLikeNumber(act.getTotalNumberOfLikes());
           streamInfo.setCommentNumber(act.getTotalNumberOfComments());
           streamInfo.setType(act.getType());

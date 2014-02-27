@@ -103,7 +103,8 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
     for (int i = 0; i < count; i++) {
       final SocialActivityInfo item = (SocialActivityInfo) linkedAdapter.getItem(i);
       // a label that indicates when this activity was created (approximatively)
-      section = SocialActivityUtil.getActivityStreamHeader(mContext, item.getPostedTime());
+      section = SocialActivityUtil.getActivityStreamHeader(mContext,
+        item.getUpdatedTime() != 0 ? item.getUpdatedTime() : item.getPostedTime());
       if (!isTheSame(currentSection, section)) {
     	// we're entering a new section (activities were created at a different date)
         sectionPositions.put(currentPosition, section);

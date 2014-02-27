@@ -23,6 +23,9 @@ public class SocialActivityInfo {
 
   private long               postedTime;
 
+  /** Last update time of the activity, used for PLF 4 and above */
+  private long               updatedTime = 0;
+
   private int                nbLikes;
 
   private int                nbComments;
@@ -105,6 +108,12 @@ public class SocialActivityInfo {
 
   public long getPostedTime() {
     return postedTime;
+  }
+
+  public long getUpdatedTime() { return updatedTime; }
+
+  public void setUpdatedTime(long time) {
+    updatedTime = time;
   }
 
   public void setCommentList(List<RestComment> list) {
