@@ -277,7 +277,7 @@ public class LinePageIndicator extends View implements PageIndicator {
 
   @Override
   public void setViewPager(ViewPager viewPager) {
-    if (mViewPager == viewPager) {
+    if (viewPager.equals(mViewPager)) {
       return;
     }
     if (mViewPager != null) {

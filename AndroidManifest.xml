@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.WelcomeActivity"/>
+        <activity android:name=".ui.WelcomeActivity"/>
         <activity android:name=".ui.login.LoginActivity" android:windowSoftInputMode="adjustResize|stateHidden">
             <!-- custom URL scheme -->
             <intent-filter>
