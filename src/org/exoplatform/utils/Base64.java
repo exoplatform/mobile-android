@@ -1,4 +1,6 @@
-package org.exoplatform.utils;
+package org.exoplatform.utils;  import android.util.Log;
+
+import java.io.IOException;
 
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>
@@ -67,7 +69,7 @@ package org.exoplatform.utils;
  * @version 2.2.1
  */
 public class Base64
-{
+{ private static final String TAG = "eXo____Base64____";
     
 /* ********  P U B L I C   F I E L D S  ******** */   
     
@@ -396,8 +398,8 @@ public class Base64
      */
     private final static void usage( String msg )
     {
-        System.err.println( msg );
-        System.err.println( "Usage: java Base64 -e|-d inputfile outputfile" );
+        Log.e(TAG, msg );
+        Log.e(TAG, "Usage: java Base64 -e|-d inputfile outputfile" );
     }   // end usage
     
     
@@ -572,15 +574,15 @@ public class Base64
         }   // end try
         catch( java.io.IOException e )
         {
-            e.printStackTrace();
-            return null;
+          Log.d(TAG, "IOException : " + e.getLocalizedMessage());
+          return null;
         }   // end catch
         finally
         {
-            try{ oos.close();   } catch( Exception e ){}
-            try{ gzos.close();  } catch( Exception e ){}
-            try{ b64os.close(); } catch( Exception e ){}
-            try{ baos.close();  } catch( Exception e ){}
+            try{ oos.close();   } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+            try{ gzos.close();  } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+            try{ b64os.close(); } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+            try{ baos.close();  } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
         }   // end finally
         
         // Return value according to relevant encoding.
@@ -702,14 +704,14 @@ public class Base64
             }   // end try
             catch( java.io.IOException e )
             {
-                e.printStackTrace();
-                return null;
+              Log.d(TAG, "IOException : " + e.getLocalizedMessage());
+              return null;
             }   // end catch
             finally
             {
-                try{ gzos.close();  } catch( Exception e ){}
-                try{ b64os.close(); } catch( Exception e ){}
-                try{ baos.close();  } catch( Exception e ){}
+                try{ gzos.close();  } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+                try{ b64os.close(); } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+                try{ baos.close();  } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
             }   // end finally
 
             // Return value according to relevant encoding.
@@ -857,10 +859,10 @@ public class Base64
 
             return 3;
             }catch( Exception e){
-                System.out.println(""+source[srcOffset]+ ": " + ( DECODABET[ source[ srcOffset     ] ]  ) );
-                System.out.println(""+source[srcOffset+1]+  ": " + ( DECODABET[ source[ srcOffset + 1 ] ]  ) );
-                System.out.println(""+source[srcOffset+2]+  ": " + ( DECODABET[ source[ srcOffset + 2 ] ]  ) );
-                System.out.println(""+source[srcOffset+3]+  ": " + ( DECODABET[ source[ srcOffset + 3 ] ]  ) );
+                Log.i(TAG, ""+source[srcOffset]+ ": " + ( DECODABET[ source[ srcOffset     ] ]  ) );
+                Log.i(TAG, ""+source[srcOffset+1]+  ": " + ( DECODABET[ source[ srcOffset + 1 ] ]  ) );
+                Log.i(TAG, ""+source[srcOffset+2]+  ": " + ( DECODABET[ source[ srcOffset + 2 ] ]  ) );
+                Log.i(TAG, ""+source[srcOffset+3]+  ": " + ( DECODABET[ source[ srcOffset + 3 ] ]  ) );
                 return -1;
             }   // end catch
         }
@@ -918,7 +920,7 @@ public class Base64
             }   // end if: white space, equals sign or better
             else
             {
-                System.err.println( "Bad Base64 input character at " + i + ": " + source[i] + "(decimal)" );
+                Log.d(TAG, "Bad Base64 input character at " + i + ": " + source[i] + "(decimal)" );
                 return null;
             }   // end else: 
         }   // each input character
@@ -995,20 +997,18 @@ public class Base64
                     {
                         baos.write(buffer,0,length);
                     }   // end while: reading input
-
                     // No error? Get new bytes.
                     bytes = baos.toByteArray();
-
                 }   // end try
                 catch( java.io.IOException e )
-                {
+                {    Log.d(TAG, "IOException : " + e.getLocalizedMessage());
                     // Just return originally-decoded bytes
                 }   // end catch
                 finally
                 {
-                    try{ baos.close(); } catch( Exception e ){}
-                    try{ gzis.close(); } catch( Exception e ){}
-                    try{ bais.close(); } catch( Exception e ){}
+                    try{ baos.close(); } catch( Exception e ){ Log.d(TAG, "IOException : " + e.getLocalizedMessage()); }
+                    try{ gzis.close(); } catch( Exception e ){ Log.d(TAG, "IOException : " + e.getLocalizedMessage()); }
+                    try{ bais.close(); } catch( Exception e ){ Log.d(TAG, "IOException : " + e.getLocalizedMessage()); }
                 }   // end finally
 
             }   // end if: gzipped
@@ -1046,18 +1046,18 @@ public class Base64
         }   // end try
         catch( java.io.IOException e )
         {
-            e.printStackTrace();
-            obj = null;
+          Log.d(TAG, "IOException : " + e.getLocalizedMessage());
+          obj = null;
         }   // end catch
         catch( java.lang.ClassNotFoundException e )
         {
-            e.printStackTrace();
+            Log.d(TAG, "ClassNotFoundException : " + e.getLocalizedMessage());
             obj = null;
         }   // end catch
         finally
         {
-            try{ bais.close(); } catch( Exception e ){}
-            try{ ois.close();  } catch( Exception e ){}
+            try{ bais.close(); } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+            try{ ois.close();  } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
         }   // end finally
         
         return obj;
@@ -1092,7 +1092,7 @@ public class Base64
         }   // end catch: IOException
         finally
         {
-            try{ bos.close(); } catch( Exception e ){}
+            try{ bos.close(); } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
         }   // end finally
         
         return success;
@@ -1125,7 +1125,7 @@ public class Base64
         }   // end catch: IOException
         finally
         {
-                try{ bos.close(); } catch( Exception e ){}
+                try{ bos.close(); } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
         }   // end finally
         
         return success;
@@ -1158,7 +1158,7 @@ public class Base64
             // Check for size of file
             if( file.length() > Integer.MAX_VALUE )
             {
-                System.err.println( "File is too big for this convenience method (" + file.length() + " bytes)." );
+                Log.d(TAG, "File is too big for this convenience method (" + file.length() + " bytes)." );
                 return null;
             }   // end if: file too big for int index
             buffer = new byte[ (int)file.length() ];
@@ -1179,11 +1179,11 @@ public class Base64
         }   // end try
         catch( java.io.IOException e )
         {
-            System.err.println( "Error decoding from file " + filename );
+            Log.d(TAG, "Error decoding from file " + filename + " - IOException : " + e.getLocalizedMessage());
         }   // end catch: IOException
         finally
         {
-            try{ bis.close(); } catch( Exception e) {}
+            try{ bis.close(); } catch( Exception e) { Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
         }   // end finally
         
         return decodedData;
@@ -1227,11 +1227,11 @@ public class Base64
         }   // end try
         catch( java.io.IOException e )
         {
-            System.err.println( "Error encoding from file " + filename );
+            Log.d(TAG, "Error encoding from file " + filename + " - IOException : " + e.getLocalizedMessage());
         }   // end catch: IOException
         finally
         {
-            try{ bis.close(); } catch( Exception e) {}
+            try{ bis.close(); } catch( Exception e) { Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
         }   // end finally
         
         return encodedData;
@@ -1254,11 +1254,11 @@ public class Base64
             out.write( encoded.getBytes("US-ASCII") ); // Strict, 7-bit output.
         }   // end try
         catch( java.io.IOException ex ) {
-            ex.printStackTrace();
+            Log.d(TAG, "IOException : " + ex.getLocalizedMessage());
         }   // end catch
         finally {
             try { out.close(); }
-            catch( Exception ex ){}
+            catch( Exception ex ){ Log.d(TAG, "Exception : " + ex.getLocalizedMessage()); }
         }   // end finally    
     }   // end encodeFileToFile
 
@@ -1280,11 +1280,11 @@ public class Base64
             out.write( decoded );
         }   // end try
         catch( java.io.IOException ex ) {
-            ex.printStackTrace();
+            Log.d(TAG, "IOException : " + ex.getLocalizedMessage());
         }   // end catch
         finally {
             try { out.close(); }
-            catch( Exception ex ){}
+            catch( Exception ex ){ Log.d(TAG, "Exception : " + ex.getLocalizedMessage()); }
         }   // end finally    
     }   // end decodeFileToFile
     

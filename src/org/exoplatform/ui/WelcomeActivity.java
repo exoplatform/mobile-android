@@ -20,8 +20,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.utils.AssetUtils;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SettingUtils;
 
 
@@ -48,6 +50,8 @@ public class WelcomeActivity extends FragmentActivity {
 
   private int             mCurrentPage = 0;
 
+  private static final String CURRENT_SLIDER = "CURRENT_SLIDER";
+
   private static final String TAG = "eXo____WelcomeActivity____";
 
 
@@ -55,6 +59,11 @@ public class WelcomeActivity extends FragmentActivity {
     requestScreenOrientation();
     mSetting = AccountSetting.getInstance();
     super.onCreate(savedInstanceState);
+
+    if (savedInstanceState != null) {
+      mCurrentPage = savedInstanceState.getInt(CURRENT_SLIDER);
+    }
+
     init();
   }
 
@@ -84,7 +93,6 @@ public class WelcomeActivity extends FragmentActivity {
   }
 
   private void initState() {
-
     mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
     mPager.setAdapter(mPagerAdapter);
     mPager.setCurrentItem(mCurrentPage);
@@ -106,6 +114,11 @@ public class WelcomeActivity extends FragmentActivity {
     ((TextView) findViewById(R.id.welcome_txt_skipStep)).setText(resources.getString(R.string.SkipStep));
     ((Button) findViewById(R.id.welcome_btn_signup)).setText(resources.getString(R.string.SignUp));
     ((Button) findViewById(R.id.welcome_btn_login)).setText(resources.getString(R.string.LogIn));
+  }
+
+  public void onSaveInstanceState(Bundle savedState) {
+    super.onSaveInstanceState(savedState);
+    savedState.putInt(CURRENT_SLIDER, mCurrentPage);
   }
 
   /**
@@ -151,12 +164,6 @@ public class WelcomeActivity extends FragmentActivity {
     }
   }
 
-  @Override
-  public  void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-
-    init();
-  }
 
   public  void redirectToSignUp(View view) {
     Log.i(TAG, "redirectToSignUp");

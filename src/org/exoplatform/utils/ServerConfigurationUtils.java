@@ -441,8 +441,7 @@ public class ServerConfigurationUtils {
       if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("SAXException", "getServerListFromOldConfigFile");
     } catch (Exception e) {
-      Log.e("Exception", "getServerListFromOldConfigFile - decryption exception");
-      e.printStackTrace();
+      Log.e("Exception", "getServerListFromOldConfigFile - decryption exception : " + e.getLocalizedMessage());
     }
 
     return arrServerList;
