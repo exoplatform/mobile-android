@@ -22,10 +22,10 @@
   <string name="NameOfTheServer">Name of the server</string>
   <string name="URLOfTheSerVer">URL of the server</string>
   <string name="CannotEditServer">The server can not be modified or deleted. It is currently in use. </string>
-  <string name="English">English</string>
-  <string name="French">French</string>
-  <string name="German">German</string>
-  <string name="Spanish">Spanish</string>
+  <string name="English">Anglų</string>
+  <string name="French">Prancūzų</string>
+  <string name="German">Vokiečių</string>
+  <string name="Spanish">Ispanų</string>
   <string name="CompliantMessage">We cannot connect to a compatible Platform version at this URL, please contact your administrator.</string>
   <string name="Delete">Delete</string>
   <string name="Copy">Copy</string>
@@ -38,7 +38,7 @@
   <string name="OK">OK</string>
   <string name="Remove">Remove</string>
   <string name="Documents">Documents</string>
-  <string name="Dashboard">Apps</string>
+  <string name="Dashboard">Programos</string>
   <string name="Settings">Settings</string>
   <string name="GadgetsCannotBeRetrieved">Gadgets cannot be retrieved.</string>
   <string name="ActivityStream">News</string>
@@ -100,10 +100,10 @@
   <string name="ApplicationVersion">Application Version</string>
   <string name="EmptyFolder">The content of this folder is empty</string>
   <string name="UnreachableFileTitle">Unreadable File</string>
-  <string name="UnreachableFile">This file cannot be opened on the application</string>
+  <string name="UnreachableFile">Šis failas negali būti atidarytas programoje</string>
   <string name="EmptyDashboard">You haven\'t got any gadgets on your apps</string>
   <string name="EmptyActivity">No activities have been posted on your activity stream yet</string>
-  <string name="EmptyComment">No one has commented, be the first one</string>
+  <string name="EmptyComment">Dar niekas nekomentavo, būkite pirmi</string>
   <string name="HasEditWikiPage"> has edited the Wiki page:</string>
   <string name="HasCreatWikiPage"> has created the Wiki page:</string>
   <string name="HasPostedAnewTopic"> has posted a new topic:</string>
@@ -151,7 +151,7 @@
   <string name="DownloadingFile">Downloading file …</string>
   <string name="MemoryWarning">Memory is unavailable or doesn\'t have enough free space.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
-  <string name="SocialSettingContent">Remember my filter</string>
+  <string name="SocialSettingContent">Atsiminti mano filtrą</string>
   <string-array name="SocialTabs">
     <item id="AllUpdates">All Updates</item>
     <item id="MyConnections">My Connections</item>
