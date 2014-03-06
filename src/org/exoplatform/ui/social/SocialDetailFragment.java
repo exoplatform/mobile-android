@@ -163,6 +163,7 @@ public class SocialDetailFragment extends Fragment implements View.OnClickListen
   }
 
   public void onCancelLoad() {
+    Log.i(TAG, "onCancelLoad");
     if (mLoadTask != null && mLoadTask.getStatus() != LikeLoadTask.Status.FINISHED) {
       mLoadTask.cancel(true);
       mLoadTask = null;
@@ -241,8 +242,13 @@ public class SocialDetailFragment extends Fragment implements View.OnClickListen
   public void onLoadingActivityFinished(int result, SocialActivityInfo activityInfo,
                                         ArrayList<SocialCommentInfo> socialCommentList,
                                         LinkedList<SocialLikeInfo> likeLinkedList) {
-
+    Log.i(TAG, "onLoadingActivityFinished");
     if (mRefreshListener != null) mRefreshListener.setRefreshActionButtonState(false);
+
+    /** host activity can be restarted during network call due to change of orientation or
+     * back pressed, hence do nothing
+     */
+    if (getActivity() == null) return;
 
     if (result != 1) {
       new SocialDetailsWarningDialog(getActivity(), getString(R.string.Warning),

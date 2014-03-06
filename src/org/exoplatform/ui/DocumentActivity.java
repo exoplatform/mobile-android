@@ -141,6 +141,7 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
 
   @Override
   public void onCreate(Bundle bundle) {
+    Log.i(TAG, "onCreate");
     super.onCreate(bundle);
 
     setTitle(getString(R.string.Documents));
@@ -193,6 +194,7 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
    */
   @Override
   protected void onSaveInstanceState(Bundle outState) {
+    Log.i(TAG, "onSaveInstanceState");
     super.onSaveInstanceState(outState);
     outState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
@@ -237,6 +239,7 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
       case R.id.menu_add:
         /** Open up Add menu */
         if ("".equals(_fileForCurrentActionBar.name)) return true;
+        if (mDocumentAdapter == null) return true;
 
         mDocumentAdapter.mActionDialog = new DocumentActionDialog(this, _fileForCurrentActionBar, true);
         mDocumentAdapter.mActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrentActionBar);
@@ -572,34 +575,6 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
 
         documentView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
 
-        /**
-        if (i == 0) {
-          if (mDocumentList.size() == 1)
-            documentView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
-          else {
-            documentView.setBackgroundResource(R.drawable.dashboard_top_background_shape);
-          }
-        } else {
-
-          if (i + 1 == mDocumentList.size())
-            documentView.setBackgroundResource(R.drawable.dasboard_bottom_background_shape);
-          else {
-            ExoFile previousItem = mDocumentList.get(i - 1);
-            ExoFile nextItem = mDocumentList.get(i + 1);
-
-            if ("".equals(previousItem.name) && "".equals(previousItem.path)
-                && "".equals(nextItem.name) && "".equals(nextItem.path)) {
-              documentView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
-            } else if ("".equals(previousItem.name) && "".equals(previousItem.path)) {
-              documentView.setBackgroundResource(R.drawable.dashboard_top_background_shape);
-            } else if ("".equals(nextItem.name) && "".equals(nextItem.path))
-              documentView.setBackgroundResource(R.drawable.dasboard_bottom_background_shape);
-            else
-              documentView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
-          }
-        }
-        **/
-
         if (!file.isFolder) {
           //btnAction.setVisibility(View.VISIBLE);
           icon.setImageResource(ExoDocumentUtils.getIconFromType(file.nodeType));
@@ -649,28 +624,12 @@ public class DocumentActivity extends ActionBarActivity implements DocumentLoadT
           });
         }
 
-        /**
-         btnAction.setOnClickListener(new View.OnClickListener() {
-
-         public void onClick(View v) {
-         ExoFile file = mDocumentList.get(pos);
-         mActionDialog = new DocumentActionDialog(mContext, file, false);
-         mActionDialog.myFile = file;
-         mActionDialog._documentActionAdapter.setSelectedFile(file);
-         mActionDialog._documentActionAdapter.notifyDataSetChanged();
-         mActionDialog.setTileForDialog(file.name);
-         mActionDialog.show();
-         }
-         });
-         return convertView;
-         **/
-
       }
 
       GridLayout.Spec row  = GridLayout.spec(  (elementCount - (elementCount % 2)) / 2 );
       GridLayout.LayoutParams layoutParams = elementCount % 2 == 0 ? new GridLayout.LayoutParams(row, col0)
           : new GridLayout.LayoutParams(row, col1);
-      layoutParams.width  = halfScreenWidth - 10;
+      layoutParams.width  = halfScreenWidth - 25;
       layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics());
       elementCount++;
       gridLayout.addView(documentView, layoutParams);

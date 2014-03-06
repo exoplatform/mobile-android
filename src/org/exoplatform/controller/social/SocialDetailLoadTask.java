@@ -147,6 +147,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   @Override
   public void onPostExecute(Integer result) {
+    Log.i(TAG, "onPostExecute");
     if (mListener != null) mListener.onLoadingActivityFinished(result, mActivityInfo, mSocialCommentList, mLikeLinkedList);
   }
 
@@ -156,7 +157,6 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
     detailsErrorStr = resource.getString(R.string.DetailsNotAvaiable);
-
   }
 
 

@@ -72,15 +72,15 @@ public class SocialDetailActivity extends ActionBarActivity implements OnClickLi
 
   private int                        mActivityPosition;
 
-  private SocialDetailLoadTask mLoadTask;
+  private SocialDetailLoadTask       mLoadTask;
 
-  private LikeLoadTask mLikeLoadTask;
+  private LikeLoadTask               mLikeLoadTask;
 
   private LinkedList<SocialLikeInfo> mLikeList;
 
-  private Menu mOptionsMenu;
+  private Menu                       mOptionsMenu;
 
-  private SocialDetailFragment mDetailsFragment;
+  private SocialDetailFragment       mDetailsFragment;
 
   private static final String TAG = "eXo____SocialDetailActivity____";
 
@@ -350,6 +350,10 @@ public class SocialDetailActivity extends ActionBarActivity implements OnClickLi
 
   @Override
   public void onBackPressed() {
+    Log.i(TAG, "onBackPressed");
+
+    if (mDetailsFragment != null) mDetailsFragment.onCancelLoad();
+
     finish();
   }
 

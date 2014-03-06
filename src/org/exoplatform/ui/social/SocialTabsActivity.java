@@ -122,6 +122,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    Log.i(TAG, "onCreate");
     detectScreenSize();
     super.onCreate(savedInstanceState);
     instance = this;
@@ -166,6 +167,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
     /** hide all other fragments except current one */
     if (mCurrentFragment != -1) {
+      Log.i(TAG, "hide fragment - current FM : " + mCurrentFragment);
       FragmentManager fragmentManager = getSupportFragmentManager();
       FragmentTransaction ft = fragmentManager.beginTransaction();
 
@@ -191,6 +193,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
 
 
   private void initSubViewsForTablet() {
+    Log.i(TAG, "initSubViewsForTablet");
     setContentView(R.layout.social_activity_tabs_tablet);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -264,6 +267,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
             Log.i(TAG, "show current fragment: " + fragment.getTag());
             ft.show(fragment);
             mListFragment = (ActivityStreamFragment) fragment;
+            mListFragment.clearSelectedItem();
           }
           else {
             /** fragment not added yet, add it */
@@ -430,11 +434,13 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
       mDetailFragment.onCancelLoad();
       mDetailFragment = null;
     }
+
   }
+
 
   @Override
   public void onBackPressed() {
-
+    Log.i(TAG, "onBackPressed");
     /** Single pane */
     if (mDetailFragment == null) {
       super.onBackPressed();
@@ -442,6 +448,7 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
     }
     /** Double pane */
     else {
+      mDetailFragment.onCancelLoad();
 
       /** remove the details fragment */
       FragmentManager fragmentManager = getSupportFragmentManager();
@@ -459,6 +466,14 @@ public class SocialTabsActivity extends ActionBarActivity implements SocialLoadT
       mListFragment.mActivityListAdapter.setOnItemClickListener(this);
       mListFragment.mActivityListView.setSelection(mListFragment.mActivityListView.getFirstVisibleItemPos());
     }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    Log.i(TAG, "onResume");
+
+    if (mListFragment != null) mListFragment.clearSelectedItem();
   }
 
   @Override

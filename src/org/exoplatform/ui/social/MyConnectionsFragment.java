@@ -20,6 +20,7 @@ package org.exoplatform.ui.social;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import org.exoplatform.poc.tabletversion.R;
 import org.exoplatform.controller.home.SocialLoadTask;
 import org.exoplatform.model.SocialActivityInfo;
@@ -41,7 +42,10 @@ import org.exoplatform.widget.StandardArrayAdapter;
 public class MyConnectionsFragment extends ActivityStreamFragment {
 
   public static MyConnectionsFragment instance;
-  
+
+  private static final String TAG = "eXo____MyConnectionsFragment____";
+
+
   @Override
 	public int getThisTabId() {
 		return SocialTabsActivity.MY_CONNECTIONS;
@@ -85,6 +89,7 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
   }
 
   public void setListAdapter() {
+    Log.i(TAG, "setListAdapter");
     super.setListAdapter(SocialServiceHelper.getInstance().myConnectionsList, ((SocialTabsActivity) getActivity()).getDisplayMode());
   }
 

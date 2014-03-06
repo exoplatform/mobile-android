@@ -109,6 +109,7 @@ public abstract class ActivityStreamFragment extends Fragment {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    Log.i(TAG, "onCreate");
     super.onCreate(savedInstanceState);
     onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false, 0);
   }
@@ -162,6 +163,7 @@ public abstract class ActivityStreamFragment extends Fragment {
    * @param actNums The number of activities to load.
    */
   private void onLoad(int actNums) {
+    Log.i(TAG, "onLoad");
     if (!ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
       new ConnectionErrorDialog(getActivity()).show();
       return ;
@@ -267,7 +269,8 @@ public abstract class ActivityStreamFragment extends Fragment {
    * Switch to different display mode
    */
   public void switchMode(int mode, boolean forceReloadView) {
-    Log.i(TAG, "switchMode - mode : " + mode + " - reloadView : " + forceReloadView);
+    Log.i(TAG, "switchMode - mode : " + mode + " - reloadView : " + forceReloadView
+    + " - current tag : " + getTag());
     if (mode == mMode) return;
     if (!forceReloadView) {
       mMode = mode;
@@ -275,7 +278,9 @@ public abstract class ActivityStreamFragment extends Fragment {
     }
 
     mMode = mode;
-    ArrayList<SocialActivityInfo> activityList = SocialServiceHelper.getInstance().socialInfoList;
+    int currentTab = SocialTabsActivity.instance != null ? SocialTabsActivity.instance.getTabId() : 0;
+    ArrayList<SocialActivityInfo> activityList = SocialServiceHelper.getInstance()
+        .getSocialListForTab(currentTab);
     if (activityList == null || activityList.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);
       return;
@@ -297,6 +302,22 @@ public abstract class ActivityStreamFragment extends Fragment {
     mActivityListView.setSelectionFromTop(currentPosition, h);
   }
 
+  /**
+   * Clear the selection
+   */
+  public void clearSelectedItem() {
+    if (mActivityListView != null) {
+      Log.i(TAG, "clearSelectedItem");
+      mActivityListView.clearChoices();
+      mActivityListView.requestLayout();
+    }
+  }
+
+
+  public void onSaveInstanceState(Bundle savedState) {
+
+
+  }
 
   public int getMode() {  return mMode; }
 

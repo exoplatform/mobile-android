@@ -8,17 +8,17 @@
         android:id="@+id/Navigation_Bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:background="@color/action_bar_blue">
 
         <TextView
             android:id="@+id/TextView_Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:gravity="center"
             android:text="@string/Add"
             android:textColor="#ffffff"
             android:textSize="18sp"
-            android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp" />
 

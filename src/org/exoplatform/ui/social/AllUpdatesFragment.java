@@ -70,6 +70,7 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
   }
 
   public void setListAdapter() {
+    Log.i(TAG, "setListAdapter");
     super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList, ((SocialTabsActivity) getActivity()).getDisplayMode());
   }
 
