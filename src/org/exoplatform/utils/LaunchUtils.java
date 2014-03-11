@@ -23,6 +23,7 @@ import android.content.Intent;
 import greendroid.util.Config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 import org.exoplatform.R;
@@ -143,17 +144,19 @@ public class LaunchUtils {
    */
   private void setLocalize() {
     String strLocalize = mSharedPreference.getString(ExoConstants.EXO_PRF_LOCALIZE, "");
+
+    /** no app language */
     if (strLocalize.equals("")) {
+      String[] currentLanguagesSupported = new String[]{
+          ExoConstants.ENGLISH_LOCALIZATION,
+          ExoConstants.FRENCH_LOCALIZATION,
+          ExoConstants.GERMAN_LOCALIZATION,
+          ExoConstants.SPANISH_LOCALIZATION
+      };
 
       strLocalize = Locale.getDefault().getLanguage();
-      /*
-       * check if locale language is not French then assigned the default locale
-       * is English
-       */
-      if (!strLocalize.equals(ExoConstants.FRENCH_LOCALIZATION)) {
+      if (!Arrays.asList(currentLanguagesSupported).contains(strLocalize))
         strLocalize = ExoConstants.ENGLISH_LOCALIZATION;
-      }
-
     }
     SettingUtils.setLocale(mContext, strLocalize);
   }
