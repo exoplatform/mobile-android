@@ -34,7 +34,7 @@
     <string name="CreateFolder">Ordner erstellen</string>
     <string name="Send">Senden</string>
     <string name="Paste">Einfügen</string>
-    <string name="Cancel">#{word.cancel}</string>
+    <string name="Cancel">Abbrechen</string>
     <string name="OK">Ok</string>
     <string name="Remove">Entfernen</string>
     <string name="Documents">Dokumente</string>
