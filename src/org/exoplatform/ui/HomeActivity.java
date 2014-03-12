@@ -116,6 +116,7 @@ public class HomeActivity extends MyActionBar {
     setActionBarContentView(R.layout.home_layout);
     SettingUtils.setDefaultLanguage(this);
     init();
+    setInfo();
     startSocialService(loaderItem);
   }
 
@@ -198,7 +199,7 @@ public class HomeActivity extends MyActionBar {
     if (SocialServiceHelper.getInstance().activityService == null)
       homeController.launchNewsService();
     else
-      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
+      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
   }
 
   public void setProfileInfo(String[] profile) {
