@@ -146,10 +146,22 @@ public class SocialTabsActivity extends MyActionBar {
   }
 
   @Override
-  protected void onDestroy() {
-    super.onDestroy();
+  protected void onPause() {
+    /* to avoid issues such as https://jira.exoplatform.org/browse/MOB-1660
+     * we need to make the call to finishFragment in onPause rather than onDestroy:
+       * cf http://developer.android.com/reference/android/app/Activity.html#onDestroy%28%29
+       * Note: do not count on this method being called as a place for saving data! 
+       * For example, if an activity is editing data in a content provider, those edits should be committed in 
+       * either onPause() or onSaveInstanceState(Bundle), not here.
+     */
     finishFragment();
+    super.onPause();
+  }
 
+  @Override
+  protected void onDestroy() {
+    instance = null;
+    super.onDestroy();
   }
 
   private void finishFragment() {
@@ -159,7 +171,6 @@ public class SocialTabsActivity extends MyActionBar {
       editor.putInt(AccountSetting.getInstance().socialKeyIndex, tabId);
       editor.commit();
     }
-    instance = null;
   }
 
   @Override
