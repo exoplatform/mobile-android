@@ -210,7 +210,7 @@
   <string name="UserNameHint">username</string>
 
   <!-- Setting -->
-  <string name="RememberMe">Remember Me</string>
+  <string name="RememberMe">Recordarme</string>
   <string name="Autologin">Auto login</string>
   <string name="LoginTitle">LOGIN</string>
   <string name="EXO">EXO</string>
@@ -220,15 +220,15 @@
   <!-- Server edition -->
   <string name="AddServer">Nuevo servidor</string>
   <string name="ModifyServer">Modify Server</string>
-  <string name="OptionalHint">Optional</string>
-  <string name="RequiredHint">Required</string>
-  <string name="YourCredentials">Your credentials</string>
-  <string name="ServerName">Server Name</string>
-  <string name="ServerUrl">Server Url</string>
+  <string name="OptionalHint">Opcional</string>
+  <string name="RequiredHint">Requerido</string>
+  <string name="YourCredentials">Sus credenciales</string>
+  <string name="ServerName">Nombre del servidor</string>
+  <string name="ServerUrl">URL del servidor</string>
   <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
-  <string name="ServerAdded">Server added</string>
-  <string name="ServerUpdated">Server updated</string>
-  <string name="ServerDeleted">Server deleted</string>
+  <string name="ServerAdded">Servidor agregado</string>
+  <string name="ServerUpdated">Servidor actualizado</string>
+  <string name="ServerDeleted">Servidor eliminado</string>
 
   <string name="ImageDesc">image description</string>
 

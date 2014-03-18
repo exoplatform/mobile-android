@@ -19,8 +19,8 @@
     <string name="ModifyServerList">Die Liste ändern</string>
     <string name="ServerDetail">Serverkonfiguration</string>
     <string name="NewServer">Neuer Server</string>
-    <string name="NameOfTheServer">Name des Servers</string>
-    <string name="URLOfTheSerVer">URL des Servers</string>
+    <string name="NameOfTheServer">Server namen</string>
+    <string name="URLOfTheSerVer">Server URL</string>
     <string name="CannotEditServer"> Der Server kann weder geändert noch gelöscht werden. Es ist derzeit in Verwendung.</string>
     <string name="English">Englisch</string>
     <string name="French">Französisch</string>
@@ -210,8 +210,8 @@
     <string name="UserNameHint">username</string>
 
     <!-- Setting -->
-    <string name="RememberMe">Remember Me</string>
-    <string name="Autologin">Auto login</string>
+    <string name="RememberMe">An mich erinnern</string>
+    <string name="Autologin">Automatischer Login</string>
     <string name="LoginTitle">LOGIN</string>
     <string name="EXO">EXO</string>
     <string name="Number1">1</string>
@@ -223,12 +223,12 @@
     <string name="OptionalHint">Optional</string>
     <string name="RequiredHint">Erforderlich</string>
     <string name="YourCredentials">Ihre Anmeldeinformationen</string>
-    <string name="ServerName">Server Name</string>
+    <string name="ServerName">Server Namen</string>
     <string name="ServerUrl">Server Url</string>
     <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
-    <string name="ServerAdded">Server added</string>
-    <string name="ServerUpdated">Server updated</string>
-    <string name="ServerDeleted">Server deleted</string>
+    <string name="ServerAdded">Server hinzugefügt</string>
+    <string name="ServerUpdated">Server aktualisiert</string>
+    <string name="ServerDeleted">Server gelöscht</string>
 
     <string name="ImageDesc">image description</string>
 
