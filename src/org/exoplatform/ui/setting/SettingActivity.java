@@ -277,7 +277,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     editor.commit();
 
     ServerConfigurationUtils.generateXmlFileWithServerList(this,
-      ServerSettingHelper.getInstance().getServerInfoList(), ExoConstants.EXO_SERVER_SETTING_FILE, "");
+      ServerSettingHelper.getInstance().getServerInfoList(this), ExoConstants.EXO_SERVER_SETTING_FILE, "");
   }
 
   @Override

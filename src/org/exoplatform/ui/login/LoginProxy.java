@@ -346,7 +346,7 @@ public class LoginProxy implements
           newServerObj.password    =  mNewPassword;
         }
 
-        ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+        ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
         int duplicatedIdx = serverList.indexOf(newServerObj);
         /** No duplicate */
         if (duplicatedIdx == -1) {

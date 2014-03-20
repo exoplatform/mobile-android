@@ -107,7 +107,7 @@ public class ExoConnectionUtils {
   public static final String      HTTPS                   = "https://";
 
   /** eXo cloud workspace url */
-  public static final String      EXO_CLOUD_WS_DOMAIN      = "exoplatform.net";  // "wks-acc.exoplatform.org"; // "netstg.exoplatform.org";
+  public static final String      EXO_CLOUD_WS_DOMAIN      = "exoplatform.net"; // "wks-acc.exoplatform.org";  // "netstg.exoplatform.org";
 
   /** eXo cloud base service url */
   public static final String      SERVICE_BASE_URL         = "/rest/cloud-admin/cloudworkspaces/tenant-service";

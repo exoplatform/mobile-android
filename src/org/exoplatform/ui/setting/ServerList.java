@@ -57,7 +57,7 @@ public class ServerList extends LinearLayout {
   public void setServerList() {
     removeAllViews();
 
-    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
     LayoutParams layoutParams =
         new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     layoutParams.setMargins(0, 0, 0, -1);

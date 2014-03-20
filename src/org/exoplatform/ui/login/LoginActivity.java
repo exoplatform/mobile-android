@@ -194,7 +194,7 @@ public class LoginActivity extends Activity implements
     serverObj.serverUrl  = serverUrl;
     serverObj.username   = username;
 
-    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(this);
     String domainIdx;
     int serverIdx = serverList.indexOf(serverObj);
     if (serverIdx > -1) {

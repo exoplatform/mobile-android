@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.utils.LaunchUtils;
 import org.exoplatform.singleton.AccountSetting;
@@ -12,12 +14,15 @@ import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.ui.login.LoginWarningDialog;
 import org.exoplatform.widget.WarningDialog;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * Lightweight activity acts as entry point to the application
  */
 public class LaunchActivity extends Activity implements LoginProxy.ProxyListener {
 
-  private static final String TAG = "eXoLaunchActivity";
+  private static final String TAG = "eXo____LaunchActivity____";
 
   private AccountSetting mSetting;
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -53,12 +54,13 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
     mUserTxt.addTextChangedListener(onAnyInputChanged());
     mPassTxt.addTextChangedListener(onAnyInputChanged());
 
-    AssetUtils.setTypeFace(
-        AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mUrlTxt);
-    AssetUtils.setTypeFace(
-        AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mUserTxt);
-    AssetUtils.setTypeFace(
-        AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mPassTxt);
+    AssetUtils.setContext(this);
+    Typeface type = AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR);
+    if (type != null) {
+      AssetUtils.setTypeFace(type, mUrlTxt);
+      AssetUtils.setTypeFace(type, mUserTxt);
+      AssetUtils.setTypeFace(type, mPassTxt);
+    }
   }
 
   @Override

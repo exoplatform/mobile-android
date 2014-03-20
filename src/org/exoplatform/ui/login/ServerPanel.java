@@ -95,7 +95,7 @@ public class ServerPanel extends LinearLayout implements AdapterView.OnItemClick
     rowView.findViewById(R.id.ImageView_Checked)
            .setBackgroundResource(R.drawable.authenticate_checkmark_on);
 
-    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
     mSetting.setDomainIndex(String.valueOf(position));
     mSetting.setCurrentServer(serverList.get(position));
   }

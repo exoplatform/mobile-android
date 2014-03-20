@@ -43,8 +43,9 @@ public class AssetUtils {
    * @return
    */
   public static Typeface getCustomTypeface(String assetsPath) {
-    if (mFontMaps.get(assetsPath) == null)
+    if (mFontMaps.get(assetsPath) == null) {
       mFontMaps.put(assetsPath, Typeface.createFromAsset(mAssetManager, assetsPath));
+    }
     return mFontMaps.get(assetsPath);
   }
 

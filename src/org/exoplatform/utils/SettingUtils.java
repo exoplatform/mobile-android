@@ -76,7 +76,7 @@ public class SettingUtils {
 
     // Persist the configuration
     ServerConfigurationUtils.generateXmlFileWithServerList(context,
-        settingHelper.getServerInfoList(), ExoConstants.EXO_SERVER_SETTING_FILE, "");
+        settingHelper.getServerInfoList(context), ExoConstants.EXO_SERVER_SETTING_FILE, "");
 
     modifySharedPerf(context);
     clearDownloadRepository(context);

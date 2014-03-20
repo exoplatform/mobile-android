@@ -104,7 +104,7 @@ public class ServerEditionActivity extends Activity {
     /* change the title */
     mIntent    = getIntent();
     mServerObj = mIntent.getParcelableExtra(ExoConstants.EXO_SERVER_OBJ);
-    mServerIdx = ServerSettingHelper.getInstance().getServerInfoList().indexOf(mServerObj);
+    mServerIdx = ServerSettingHelper.getInstance().getServerInfoList(this).indexOf(mServerObj);
     mSetting   = AccountSetting.getInstance();
     mIsAddingServer = mIntent.getBooleanExtra(ExoConstants.SETTING_ADDING_SERVER, true);
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -50,16 +51,18 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
     mEmailTxt.setText(email == null? "": email);
     TextWatcher _onEmailOrPasswordChanged = onEmailOrPasswordChanged();
     mEmailTxt.addTextChangedListener(_onEmailOrPasswordChanged);
-    AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mEmailTxt);
+    AssetUtils.setContext(this);
+    Typeface type = AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR);
+    if (type != null) AssetUtils.setTypeFace(type, mEmailTxt);
     InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     mgr.showSoftInput(mEmailTxt, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
     mPassTxt = (EditText) findViewById(R.id.signin_edit_txt_pass);
     mPassTxt.addTextChangedListener(_onEmailOrPasswordChanged);
-    AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mPassTxt);
+    if (type != null) AssetUtils.setTypeFace(type, mPassTxt);
 
     mAlertTxt = (TextView) findViewById(R.id.signin_alert_txt);
-    AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR), mAlertTxt);
+    if (type != null) AssetUtils.setTypeFace(type, mAlertTxt);
   }
 
   @Override
