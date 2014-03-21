@@ -72,6 +72,9 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   private int                          currentPosition;
 
+  private static final String TAG = "eXo____ComposeMessageActivity____";
+
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -217,7 +220,6 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
     } catch (IOException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
         Log.e("Exception", "Error when adding image to message!");
-
     }
 
   }
