@@ -160,79 +160,79 @@
   </string-array>
 
   <!-- Welcome screen -->
-  <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Step</string>
-  <string name="SignUp">Sign Up</string>
-  <string name="LogIn">Log In</string>
-  <string name="SkipStep">or skip this for now</string>
-  <string name="Or">or</string>
+  <string name="Slogan">crwdns6617030:0crwdne6617030:0</string>
+  <string name="title_template_step">crwdns6617031:0crwdne6617031:0</string>
+  <string name="SignUp">crwdns6617032:0crwdne6617032:0</string>
+  <string name="LogIn">crwdns6617033:0crwdne6617033:0</string>
+  <string name="SkipStep">crwdns6617034:0crwdne6617034:0</string>
+  <string name="Or">crwdns6617035:0crwdne6617035:0</string>
 
-  <string name="SliderDesc1">Activity streams</string>
-  <string name="SliderDesc2">Comments and likes</string>
+  <string name="SliderDesc1">crwdns6617036:0crwdne6617036:0</string>
+  <string name="SliderDesc2">crwdns6617037:0crwdne6617037:0</string>
   <string name="SliderDesc3">crwdns6617038:0crwdne6617038:0</string>
-  <string name="SliderDesc4">Files management</string>
-  <string name="YourSocialIntranet">Your social intranet</string>
-  <string name="Anywhere">anywhere</string>
-  <string name="Anytime">anytime</string>
-  <string name="SwipeToSee">Swipe to learn more</string>
+  <string name="SliderDesc4">crwdns6617039:0crwdne6617039:0</string>
+  <string name="YourSocialIntranet">crwdns6617040:0crwdne6617040:0</string>
+  <string name="Anywhere">crwdns6617041:0crwdne6617041:0</string>
+  <string name="Anytime">crwdns6617042:0crwdne6617042:0</string>
+  <string name="SwipeToSee">crwdns6617043:0crwdne6617043:0</string>
 
   <!-- Sign up -->
-  <string name="GetStarted">Get Started</string>
-  <string name="EmailSignUp">Enter your email address and Sign up:</string>
-  <string name="Email">email address</string>
-  <string name="CreateAccount">Create your account</string>
-  <string name="InvalidEmail">Please input a valid email address</string>
-  <string name="SigningUp">Signing up …</string>
-  <string name="InvalidSignUp">A problem occurs with the sign up process</string>
-  <string name="WrongEmailDomain">Email Domain for this account is not correct</string>
-  <string name="AccountExists">An account already exists for this email, you will be redirected to the login screen.</string>
-  <string name="CheckYourMailInbox">Check your email to complete your registration</string>
-  <string name="ThanksForInterest">Thank you for your interest</string>
-  <string name="MaxUsers">Impossible to create a new account. The maximum number of users has been reached for your intranet, please contact your administrator.</string>
+  <string name="GetStarted">crwdns6617044:0crwdne6617044:0</string>
+  <string name="EmailSignUp">crwdns6617045:0crwdne6617045:0</string>
+  <string name="Email">crwdns6617046:0crwdne6617046:0</string>
+  <string name="CreateAccount">crwdns6617047:0crwdne6617047:0</string>
+  <string name="InvalidEmail">crwdns6617048:0crwdne6617048:0</string>
+  <string name="SigningUp">crwdns6617049:0crwdne6617049:0</string>
+  <string name="InvalidSignUp">crwdns6617050:0crwdne6617050:0</string>
+  <string name="WrongEmailDomain">crwdns6617051:0crwdne6617051:0</string>
+  <string name="AccountExists">crwdns6617052:0crwdne6617052:0</string>
+  <string name="CheckYourMailInbox">crwdns6617053:0crwdne6617053:0</string>
+  <string name="ThanksForInterest">crwdns6617054:0crwdne6617054:0</string>
+  <string name="MaxUsers">crwdns6617055:0crwdne6617055:0</string>
 
   <!-- Sign In -->
-  <string name="EmailSignIn">Enter your credentials and Login:</string>
-  <string name="ConnectOnPremise">Connect to an On Premise Installation</string>
-  <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
-  <string name="InvalidCredentials">Impossible to connect, check your username and password.</string>
-  <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
-  <string name="NoTenantForEmail">Impossible to find tenant for this email, please check your email</string>
-  <string name="DefaultServer">My Intranet</string>
-  <string name="ServerResuming">We are restoring your intranet, please retry in few minutes.</string>
+  <string name="EmailSignIn">crwdns6617056:0crwdne6617056:0</string>
+  <string name="ConnectOnPremise">crwdns6617057:0crwdne6617057:0</string>
+  <string name="ServerNotAvailable">crwdns6617058:0crwdne6617058:0</string>
+  <string name="InvalidCredentials">crwdns6617059:0crwdne6617059:0</string>
+  <string name="NoAccountExists">crwdns6617060:0crwdne6617060:0</string>
+  <string name="NoTenantForEmail">crwdns6617061:0crwdne6617061:0</string>
+  <string name="DefaultServer">crwdns6617062:0crwdne6617062:0</string>
+  <string name="ServerResuming">crwdns6617063:0crwdne6617063:0</string>
 
 
   <!-- On Premise -->
-  <string name="OnPremise">On Premise</string>
-  <string name="EnterUrl">Enter URL of your intranet</string>
-  <string name="EnterLogin">Enter your credentials and Login</string>
-  <string name="YourIntranetHint">http://www.mycompany.com/intranet</string>
-  <string name="PasswordHint">password</string>
-  <string name="UserNameHint">username</string>
+  <string name="OnPremise">crwdns6617064:0crwdne6617064:0</string>
+  <string name="EnterUrl">crwdns6617065:0crwdne6617065:0</string>
+  <string name="EnterLogin">crwdns6617066:0crwdne6617066:0</string>
+  <string name="YourIntranetHint">crwdns6617067:0crwdne6617067:0</string>
+  <string name="PasswordHint">crwdns6617068:0crwdne6617068:0</string>
+  <string name="UserNameHint">crwdns6617069:0crwdne6617069:0</string>
 
   <!-- Setting -->
-  <string name="RememberMe">Remember Me</string>
-  <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
-  <string name="EXO">EXO</string>
-  <string name="Number1">1</string>
-  <string name="Number2">2</string>
+  <string name="RememberMe">crwdns6617070:0crwdne6617070:0</string>
+  <string name="Autologin">crwdns6617071:0crwdne6617071:0</string>
+  <string name="LoginTitle">crwdns6617072:0crwdne6617072:0</string>
+  <string name="EXO">crwdns6617073:0crwdne6617073:0</string>
+  <string name="Number1">crwdns6617074:0crwdne6617074:0</string>
+  <string name="Number2">crwdns6617075:0crwdne6617075:0</string>
 
   <!-- Server edition -->
-  <string name="AddServer">New Server</string>
-  <string name="ModifyServer">Modify Server</string>
-  <string name="OptionalHint">Optional</string>
-  <string name="RequiredHint">Required</string>
-  <string name="YourCredentials">Your credentials</string>
-  <string name="ServerName">Server Name</string>
-  <string name="ServerUrl">Server Url</string>
-  <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
-  <string name="ServerAdded">Server added</string>
-  <string name="ServerUpdated">Server updated</string>
-  <string name="ServerDeleted">Server deleted</string>
+  <string name="AddServer">crwdns6617076:0crwdne6617076:0</string>
+  <string name="ModifyServer">crwdns6617077:0crwdne6617077:0</string>
+  <string name="OptionalHint">crwdns6617078:0crwdne6617078:0</string>
+  <string name="RequiredHint">crwdns6617079:0crwdne6617079:0</string>
+  <string name="YourCredentials">crwdns6617080:0crwdne6617080:0</string>
+  <string name="ServerName">crwdns6617081:0crwdne6617081:0</string>
+  <string name="ServerUrl">crwdns6617082:0crwdne6617082:0</string>
+  <string name="StartCloudSignUpAssistant">crwdns6617083:0crwdne6617083:0</string>
+  <string name="ServerAdded">crwdns6617084:0crwdne6617084:0</string>
+  <string name="ServerUpdated">crwdns6617085:0crwdne6617085:0</string>
+  <string name="ServerDeleted">crwdns6617086:0crwdne6617086:0</string>
 
-  <string name="ImageDesc">image description</string>
+  <string name="ImageDesc">crwdns6617087:0crwdne6617087:0</string>
 
   <!-- Launch -->
-  <string name="RedirectToLogin">Try again</string>
-  <string name="LoginWarningMsg">Connection error</string>
+  <string name="RedirectToLogin">crwdns6617088:0crwdne6617088:0</string>
+  <string name="LoginWarningMsg">crwdns6617089:0crwdne6617089:0</string>
 </resources>
