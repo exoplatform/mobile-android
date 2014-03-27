@@ -55,6 +55,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 //interact with server
 public class ExoConnectionUtils {
 
@@ -560,6 +562,9 @@ public class ExoConnectionUtils {
         AccountSetting.getInstance().clear();
         // Clear all social service data
         SocialServiceHelper.getInstance().clearData();
+        // Remove Crashlytics user information
+        Crashlytics.setUserName("");
+        Crashlytics.setString("ServerDomain", "");
     }
 
 }

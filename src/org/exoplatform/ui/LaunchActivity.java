@@ -30,100 +30,103 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 
+import com.crashlytics.android.Crashlytics;
+
 /**
  * Lightweight activity acts as entry point to the application
  */
 public class LaunchActivity extends Activity implements LoginProxy.ProxyListener {
 
-  private static final String TAG = "eXo____LaunchActivity____";
+    private static final String TAG = "eXo____LaunchActivity____";
 
-  private AccountSetting mSetting;
+    private AccountSetting      mSetting;
 
-  private LoginProxy     mLoginProxy;
+    private LoginProxy          mLoginProxy;
 
-  private Resources      mResources;
+    private Resources           mResources;
 
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Crashlytics.start(this);
 
-    new LaunchUtils(this);
-    mSetting   = AccountSetting.getInstance();
-    mResources = getResources();
+        new LaunchUtils(this);
+        mSetting = AccountSetting.getInstance();
+        mResources = getResources();
 
-    redirect();
-  }
-
-  public void redirect() {
-    /** no account configured - redirect to Welcome screen */
-    if (mSetting.getCurrentAccount() == null) {
-      Intent next = new Intent(this, WelcomeActivity.class);
-      startActivityForResult(next, 0);
-      overridePendingTransition(0, 0);
-      return ;
+        redirect();
     }
 
-    /** performs login */
-    if (mSetting.isAutoLoginEnabled()) {
-      setContentView(R.layout.launch);
+    public void redirect() {
+        /** no account configured - redirect to Welcome screen */
+        if (mSetting.getCurrentAccount() == null) {
+            Intent next = new Intent(this, WelcomeActivity.class);
+            startActivityForResult(next, 0);
+            overridePendingTransition(0, 0);
+            return;
+        }
 
-      Bundle loginData = new Bundle();
-      loginData.putString(LoginProxy.USERNAME, mSetting.getUsername());
-      loginData.putString(LoginProxy.PASSWORD, mSetting.getPassword());
-      loginData.putString(LoginProxy.DOMAIN,   mSetting.getDomainName());
-      loginData.putBoolean(LoginProxy.SHOW_PROGRESS, false);
-      mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EXISTING_ACCOUNT, loginData);
-      mLoginProxy.setListener(this);
+        /** performs login */
+        if (mSetting.isAutoLoginEnabled()) {
+            setContentView(R.layout.launch);
 
-      /** if some errors raise up, we'll redirect to login screen */
-      mLoginProxy.getWarningDialog()
-          .setTitle(mResources.getString(R.string.LoginWarningMsg))
-          .setButtonText(mResources.getString(R.string.RedirectToLogin))
-          .setViewListener(new LoginWarningDialog.ViewListener() {
-            @Override
-            public void onClickOk(LoginWarningDialog dialog) {
-              /** redirect to login screen */
-              Intent next = new Intent(LaunchActivity.this, LoginActivity.class);
-              startActivity(next);
-              /** don't come back to Launch */
-              finish();
-            }
-          });
+            Bundle loginData = new Bundle();
+            loginData.putString(LoginProxy.USERNAME, mSetting.getUsername());
+            loginData.putString(LoginProxy.PASSWORD, mSetting.getPassword());
+            loginData.putString(LoginProxy.DOMAIN, mSetting.getDomainName());
+            loginData.putBoolean(LoginProxy.SHOW_PROGRESS, false);
+            mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EXISTING_ACCOUNT, loginData);
+            mLoginProxy.setListener(this);
 
-      mLoginProxy.performLogin();
+            /** if some errors raise up, we'll redirect to login screen */
+            mLoginProxy.getWarningDialog()
+                       .setTitle(mResources.getString(R.string.LoginWarningMsg))
+                       .setButtonText(mResources.getString(R.string.RedirectToLogin))
+                       .setViewListener(new LoginWarningDialog.ViewListener() {
+                           @Override
+                           public void onClickOk(LoginWarningDialog dialog) {
+                               /** redirect to login screen */
+                               Intent next = new Intent(LaunchActivity.this, LoginActivity.class);
+                               startActivity(next);
+                               /** don't come back to Launch */
+                               finish();
+                           }
+                       });
 
-      return ;
-      //new LoginController(this, username, password);
+            mLoginProxy.performLogin();
+
+            return;
+            // new LoginController(this, username, password);
+        }
+
+        /** redirect to login screen */
+        Intent next = new Intent(this, LoginActivity.class);
+        startActivityForResult(next, 0);
+        overridePendingTransition(0, 0);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-    /** redirect to login screen */
-    Intent next = new Intent(this, LoginActivity.class);
-    startActivityForResult(next, 0);
-    overridePendingTransition(0, 0);
-  }
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-
-    if (requestCode == 0 && resultCode == RESULT_CANCELED) {
-      /** back pressed from child activity */
-      Intent startMain = new Intent(Intent.ACTION_MAIN);
-      startMain.addCategory(Intent.CATEGORY_HOME);
-      startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      startActivity(startMain);
-      finish();
+        if (requestCode == 0 && resultCode == RESULT_CANCELED) {
+            /** back pressed from child activity */
+            Intent startMain = new Intent(Intent.ACTION_MAIN);
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(startMain);
+            finish();
+        }
     }
-  }
 
-  @Override
-  public void onLoginFinished(boolean result) {
-    if (!result) return ;
+    @Override
+    public void onLoginFinished(boolean result) {
+        if (!result)
+            return;
 
-    /** Login ok, to Home screen!! */
-    Intent next = new Intent(this, HomeActivity.class);
-    //next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    startActivityForResult(next, 0);
-    overridePendingTransition(0, 0);
-  }
+        /** Login ok, to Home screen!! */
+        Intent next = new Intent(this, HomeActivity.class);
+        // next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivityForResult(next, 0);
+        overridePendingTransition(0, 0);
+    }
 }

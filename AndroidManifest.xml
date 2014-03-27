@@ -56,8 +56,8 @@
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignUpActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignInActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignInOnPremiseActivity"/>
-        
         <activity android:name=".accountswitcher.AccountSwitcherActivity"/>
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="b8421f485868032ad402cef01a4bd7c70263d97e"/>
     </application>
 
 </manifest>

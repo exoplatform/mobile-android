@@ -73,6 +73,7 @@
     <!-- Surefire settings (to be compatible with jacoco we should use a property and not the plugin param) -->
     <argLine>-Xmx1024m</argLine>
   </properties>
+
   <dependencies>
     <!-- Dependency With Social Client Library -->
     <dependency>
@@ -171,6 +172,13 @@
       <version>${android.test.version}</version>
       <scope>provided</scope>
     </dependency>
+
+      <!-- Dependency with Crashlytics -->
+      <dependency>
+          <groupId>com.crashlytics.android</groupId>
+          <artifactId>crashlytics</artifactId>
+          <version>1.1.13</version>
+      </dependency>
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -280,6 +288,27 @@
           </includes>
         </configuration>
       </plugin>
+
+        <!-- Crashlytics maven plugin -->
+        <plugin>
+            <groupId>com.crashlytics</groupId>
+            <artifactId>crashlytics-maven</artifactId>
+            <version>1.12.0</version>
+            <executions>
+                <execution>
+                    <id>GenerateResources</id>
+                    <goals>
+                        <goal>GenerateResources</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>CleanupResources</id>
+                    <goals>
+                        <goal>CleanupResources</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
     </plugins>
   </build>
   <!-- Profiles definition for Android build -->

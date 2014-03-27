@@ -39,6 +39,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 /**
  * A proxy contains logic relating to network operation. LoginProxy performs
  * login operation <br/>
@@ -439,6 +441,10 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener,
 
             // Save config each time to update the last login date property
             SettingUtils.persistServerSetting(mContext);
+
+            // Set Crashlytics user information
+            Crashlytics.setUserName(mNewUserName);
+            Crashlytics.setString("ServerDomain", mDomain);
             break;
         }
 
