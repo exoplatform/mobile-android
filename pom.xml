@@ -162,6 +162,9 @@
           </dexJvmArguments>
           <extractDuplicates>true</extractDuplicates>
           <sdk><platform>9</platform></sdk>
+          <sign>
+            <debug>both</debug>
+          </sign>
         </configuration>
         <extensions>true</extensions>
         <executions>
