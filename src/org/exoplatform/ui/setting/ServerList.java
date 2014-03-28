@@ -83,7 +83,7 @@ public class ServerList extends LinearLayout {
         new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     layoutParams.setMargins(0, 0, 0, -1);
 
-    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList();
+    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
 
     switch (operation) {
       case ServerEditionActivity.SETTING_ADD:

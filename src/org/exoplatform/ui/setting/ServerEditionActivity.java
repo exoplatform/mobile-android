@@ -219,7 +219,7 @@ public class ServerEditionActivity extends Activity {
         if (mServerIdx < selectedServerIndex)
           mSetting.setDomainIndex(String.valueOf(selectedServerIndex - 1));
 
-        List<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList();
+        List<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList(ServerEditionActivity.this);
         listServer.remove(mServerIdx);
         onSave();
         Toast.makeText(ServerEditionActivity.this,
@@ -238,7 +238,7 @@ public class ServerEditionActivity extends Activity {
         ServerObjInfo myServerObj = retrieveInput();
         if (!isServerValid(myServerObj)) return ;
 
-        List<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList();
+        List<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList(ServerEditionActivity.this);
         /* check whether server is duplicated with other server */
         int serverIdx = listServer.indexOf(myServerObj);
         if ((serverIdx != mServerIdx) && (serverIdx != -1)) {
@@ -267,7 +267,7 @@ public class ServerEditionActivity extends Activity {
         ServerObjInfo myServerObj = retrieveInput();
         if (!isServerValid(myServerObj)) return ;
 
-        List<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList();
+        List<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList(ServerEditionActivity.this);
         if (listServer.contains(myServerObj)) {
           Toast.makeText(ServerEditionActivity.this,
               mResources.getString(R.string.WarningServerUrlAndUserAlreadyExist), Toast.LENGTH_SHORT).show();
@@ -339,7 +339,7 @@ public class ServerEditionActivity extends Activity {
    * Make change to shared perf and generate xml file
    */
   private void onSave() {
-    ArrayList<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList();
+    ArrayList<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList(this);
     ServerConfigurationUtils.generateXmlFileWithServerList(this,
         listServer, ExoConstants.EXO_SERVER_SETTING_FILE, "");
     ServerSettingHelper.getInstance().setServerInfoList(listServer);
