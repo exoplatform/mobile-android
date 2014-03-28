@@ -161,7 +161,7 @@
 
   <!-- Welcome screen -->
   <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Step</string>
+  <string name="title_template_step">Žingsnis</string>
   <string name="SignUp">Sign Up</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
