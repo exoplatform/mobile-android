@@ -195,6 +195,8 @@ public class ExoConnectionUtils {
 
     } catch (IOException e) {
       return LOGIN_WRONG;
+    } catch (IllegalStateException ise) {
+      return LOGIN_INVALID;
     }
 
   }

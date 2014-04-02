@@ -1,15 +1,14 @@
 package org.exoplatform.singleton;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
-import android.content.Context;
 import org.exoplatform.model.ServerObjInfo;
-
-import android.os.Parcel;
-import android.os.Parcelable;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ServerConfigurationUtils;
+
+import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Used for storing the list of server url and the index of the selected
@@ -79,7 +78,11 @@ public class ServerSettingHelper implements Parcelable {
     return serverInfoList;
   }
 
-
+  @Deprecated
+  /**
+   * Use getServerInfoList(Context) instead
+   * @return the list of servers
+   */
   public ArrayList<ServerObjInfo> getServerInfoList() {
     return serverInfoList;
   }

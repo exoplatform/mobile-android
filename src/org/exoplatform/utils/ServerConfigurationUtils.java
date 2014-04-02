@@ -298,7 +298,7 @@ public class ServerConfigurationUtils {
    *
    * @param context
    * @param fileName
-   * @return
+   * @return a list of servers, or an empty list, but never null
    */
   public static ArrayList<ServerObjInfo> getServerListFromFile(Context context, String fileName) {
     Log.i(TAG, "getServerListFromFile: " + fileName);

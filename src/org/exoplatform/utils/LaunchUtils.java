@@ -78,7 +78,7 @@ public class LaunchUtils {
 
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
-    mSetting.setCurrentServer((selectedServerIdx == -1) ? null : _serverList.get(selectedServerIdx));
+    mSetting.setCurrentServer((selectedServerIdx == -1 || selectedServerIdx >= _serverList.size()) ? null : _serverList.get(selectedServerIdx));
   }
 
 
