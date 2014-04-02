@@ -19,7 +19,8 @@
 
         <ScrollView
             android:id="@+id/compose_textfield_scroll"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="fill_parent">
 
             <EditText
@@ -41,8 +42,7 @@
             <LinearLayout
                 android:id="@+id/compose_attach_file_wrap"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

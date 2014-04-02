@@ -95,7 +95,7 @@ public class RetangleImageView extends ImageView {
     _nicepatchDrawable.setBounds(0, 0, width, height);
     return _nicepatchDrawable;
   }
-  
+
   @Override
   protected void onDraw(Canvas canvas) {
     try {

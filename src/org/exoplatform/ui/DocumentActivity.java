@@ -88,6 +88,9 @@ public class DocumentActivity extends MyActionBar {
 
   public ExoFile                 _fileForCurrentActionBar;
 
+  private static final String TAG = "eXo____DocumentActivity____";
+
+
   @Override
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);

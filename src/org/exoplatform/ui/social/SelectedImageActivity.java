@@ -64,6 +64,9 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
 
   private DisplayImageTask mLoadTask;
 
+  private static final String TAG = "eXo____SelectedImageActivity____";
+
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
