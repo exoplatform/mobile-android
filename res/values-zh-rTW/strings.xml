@@ -21,7 +21,7 @@
   <string name="NewServer">新的伺服器</string>
   <string name="NameOfTheServer">伺服器的名稱</string>
   <string name="URLOfTheSerVer">伺服器的 URL</string>
-  <string name="CannotEditServer">伺服器不能修改或刪除。它當前正被使用。</string>
+  <string name="CannotEditServer">目前正在使用當中，伺服器無法進行修改或刪除。</string>
   <string name="English">英文</string>
   <string name="French">法文</string>
   <string name="German">德文</string>
@@ -69,7 +69,7 @@
   <string name="DaysAgo">天前</string>
   <string name="AboutAMonthAgo">大約一個月前</string>
   <string name="MonthsAgo">幾個月前</string>
-  <string name="InputTextWarning">請輸入一些文本。</string>
+  <string name="InputTextWarning">請輸入文字</string>
   <string name="Minute">分鐘</string>
   <string name="Minutes">分鐘</string>
   <string name="Hour">小時</string>
@@ -91,8 +91,8 @@
   <string name="WarningServerUrlIsExist">您的清單中已存在此伺服器 URL</string>
   <string name="WarningServerUrlAndUserAlreadyExist">這種組合的伺服器 URL 和使用者名稱已經存在於您的清單中</string>
   <string name="DetailsNotAvaiable">沒有可用新消息的詳細資訊</string>
-  <string name="ErrorOnComment">你不能評論這一活動。</string>
-  <string name="CannotLoadMoreActivities">無法載入舊的活動。正在刷新清單。</string>
+  <string name="ErrorOnComment">你不能評論這個活動。</string>
+  <string name="CannotLoadMoreActivities">無法載入舊的活動，清單已被更新。</string>
   <string name="LogoutTitle">登出對話方塊</string>
   <string name="LogoutContent">您要退出嗎？</string>
   <string name="ApplicationInformation">應用程式資訊</string>
@@ -113,7 +113,7 @@
   <string name="HasUpdateANewPost">已更新公告：</string>
   <string name="HasAskAnswer">已要求：</string>
   <string name="HasUpdatedQuestion">已更新問題：</string>
-  <string name="HasAnswerQuestion">已回答有關問題：</string>
+  <string name="HasAnswerQuestion">已回答相關問題：</string>
   <string name="AddedAnEvent">增加事件：</string>
   <string name="UpdatedAnEvent">剛更新的事件：</string>
   <string name="AddedATask">增加一項任務：</string>
@@ -148,9 +148,9 @@
   <string name="FileNotFound">找不到檔案</string>
   <string name="FileNotSupported">不支援的檔案格式。</string>
   <string name="CompatibleFileSuggest">你想安裝完將應用程式打開嗎？</string>
-  <string name="OpenIn">在中打開......</string>
+  <string name="OpenIn">打開中......</string>
   <string name="DownloadingFile">下載檔案...</string>
-  <string name="MemoryWarning">記憶體不可用或切斷並不具有足夠的可用空間。</string>
+  <string name="MemoryWarning">記憶體無法使用或沒有足夠的可用空間。</string>
   <string name="SocialSettingTitle">社會</string>
   <string name="SocialSettingContent">記得我的篩選器</string>
   <string-array name="SocialTabs">
