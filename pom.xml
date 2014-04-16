@@ -26,7 +26,7 @@
     <!-- Libraries -->
     <commons-lang.version>2.4</commons-lang.version>
     <!-- Default version of SDK to use -->
-    <android.sdk.platform>9</android.sdk.platform>
+    <android.sdk.platform>18</android.sdk.platform>
     <!-- Maven Plugins -->
     <maven-android-plugin.plugin-version>3.6.0</maven-android-plugin.plugin-version>
     <!-- Java version -->
@@ -39,6 +39,11 @@
 	<exo.social.client.version>1.0.0-alpha4-SNAPSHOT</exo.social.client.version>
 	<slf4j-android.version>1.6.1-RC1</slf4j-android.version>
 	<greendroid.version>67aa3ed</greendroid.version>
+	<!-- Test Dependencies  -->
+	<fest-android.version>1.0.7</fest-android.version>
+	<robolectric.version>2.2</robolectric.version>
+	<junit.version>4.8.2</junit.version>
+	<android.test.version>4.2.2_r2</android.test.version>
   </properties>
   
    <!-- Profiles definition for Android build -->
@@ -105,6 +110,31 @@
   	  <artifactId>annotations</artifactId>
   	  <version>${android.annotations.version}</version>
     </dependency>
+    <!-- Test Dependencies  -->
+    <dependency>
+      <groupId>com.squareup</groupId>
+      <artifactId>fest-android</artifactId>
+      <version>${fest-android.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.robolectric</groupId>
+        <artifactId>robolectric</artifactId>
+        <version>${robolectric.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+         <groupId>android</groupId>
+         <artifactId>android</artifactId>
+         <version>${android.test.version}</version>
+         <scope>provided</scope>
+     </dependency>
   </dependencies>
   
   <build>
@@ -161,7 +191,7 @@
             <jvmArgument>-XX:MaxPermSize=256M</jvmArgument>
           </dexJvmArguments>
           <extractDuplicates>true</extractDuplicates>
-          <sdk><platform>9</platform></sdk>
+          <sdk><platform>18</platform></sdk>
         </configuration>
         <extensions>true</extensions>
         <executions>
@@ -181,7 +211,16 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.6</version>
+          <configuration>
+              <argLine>-Xmx1024m</argLine>
+          </configuration>
+      </plugin>
     </plugins>
     <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
   </build>
 </project>
