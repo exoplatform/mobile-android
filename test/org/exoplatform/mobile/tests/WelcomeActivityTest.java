@@ -89,14 +89,14 @@ public class WelcomeActivityTest extends ExoActivityTestUtils<WelcomeActivity> {
     assertThat(pager.getAdapter()).hasCount(5); // pager shows 5 screenshots
     
     // check Log In button label
-    assertThat(btnLogin).hasText("Log In");  // test still passes if we change the string in welcome.xml...
+    assertThat(btnLogin).containsText(R.string.LogIn);
     org.junit.Assert.assertThat(res.getString(R.string.LogIn), equalTo("Log In"));
     
     // check Sign Up button label
-    assertThat(btnSignUp).hasText("Sign Up");
+    assertThat(btnSignUp).containsText(R.string.SignUp);
     org.junit.Assert.assertThat(res.getString(R.string.SignUp), equalTo("Sign Up"));
     
-    assertThat(skipTxt).hasText("or skip this for now");
+    assertThat(skipTxt).containsText(R.string.SkipStep);
     org.junit.Assert.assertThat(res.getString(R.string.SkipStep), equalTo("or skip this for now"));
     
   }
@@ -105,7 +105,7 @@ public class WelcomeActivityTest extends ExoActivityTestUtils<WelcomeActivity> {
   public void shouldRedirectToSignInScreen() {
     create();
     
-    btnLogin.performClick();
+    Robolectric.clickOn(btnLogin);
     ShadowActivity shadowActivity = shadowOf(activity);
     Intent startedIntent = shadowActivity.getNextStartedActivity();
     ShadowIntent shadowIntent = shadowOf(startedIntent);
@@ -116,7 +116,7 @@ public class WelcomeActivityTest extends ExoActivityTestUtils<WelcomeActivity> {
   public void shouldRedirectToSignUpScreen() {
     create();
     
-    btnSignUp.performClick();
+    Robolectric.clickOn(btnSignUp);
     ShadowActivity shadowActivity = shadowOf(activity);
     Intent startedIntent = shadowActivity.getNextStartedActivity();
     ShadowIntent shadowIntent = shadowOf(startedIntent);
@@ -127,7 +127,7 @@ public class WelcomeActivityTest extends ExoActivityTestUtils<WelcomeActivity> {
   public void shouldRedirectToLoginScreen() {
     create();
     
-    skipTxt.performClick();
+    Robolectric.clickOn(skipTxt);
     ShadowActivity shadowActivity = shadowOf(activity);
     Intent startedIntent = shadowActivity.getNextStartedActivity();
     ShadowIntent shadowIntent = shadowOf(startedIntent);

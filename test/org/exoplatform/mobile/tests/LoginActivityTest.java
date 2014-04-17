@@ -18,8 +18,12 @@ package org.exoplatform.mobile.tests;
 
 import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.CoreMatchers.equalTo;
+//import static org.junit.Assert.assertThat;
 
 import org.exoplatform.R;
+import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.login.AccountPanel;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.login.ServerPanel;
@@ -30,12 +34,13 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-//import static org.junit.Assert.assertThat;
+
 
 /**
  * Created by The eXo Platform SAS
@@ -97,7 +102,7 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
     assertThat(srvPanel).isInvisible();
     
     assertNotNull(loginBtn); // login button should exist and be disabled
-    assertThat(loginBtn).isNotActivated();
+    assertThat(loginBtn).isDisabled();
     
     assertNotNull(user); // username and password fields should exist
     assertNotNull(pass); // and should be empty
@@ -110,13 +115,13 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
   public void shouldDisplayPanelWhenTappingButton() {
     create();
     
-    serverBtn.performClick(); // should hide account, display server panel and select button when clicking the server button
+    Robolectric.clickOn(serverBtn); // should hide account, display server panel and select button when clicking the server button
     assertThat(srvPanel).isVisible();
     assertThat(accPanel).isInvisible();
     assertThat(serverBtn).isSelected();
     assertThat(accountBtn).isNotSelected();
     
-    accountBtn.performClick(); // should hide server, display account panel and select button when clicking the account button
+    Robolectric.clickOn(accountBtn); // should hide server, display account panel and select button when clicking the account button
     assertThat(srvPanel).isInvisible();
     assertThat(accPanel).isVisible();
     assertThat(serverBtn).isNotSelected();
@@ -136,19 +141,23 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
   
   @Test
   public void shouldPopulateServerAndUsernameWhenStartingFromUrl() {
+
+    Context ctx = Robolectric.getShadowApplication().getApplicationContext();
     
-    Intent i = new Intent(Robolectric.getShadowApplication().getApplicationContext(), LoginActivity.class);
+    Intent i = new Intent(ctx, LoginActivity.class);
     Uri uri = new Uri.Builder(). 
         scheme("exomobile").                                                          // exomobile://
         encodedAuthority(ExoConstants.EXO_URL_USERNAME+"="+TEST_USER_NAME).           // username=testuser
         appendQueryParameter(ExoConstants.EXO_URL_SERVER, TEST_SERVER_URL).build();   // ?serverUrl=http://www.test.com
-
     i.setData(uri);
-    
     createWithIntent(i);
     
     user = (EditText)activity.findViewById(R.id.EditText_UserName);
-    assertThat(user).containsText(TEST_USER_NAME);
+    assertThat(user).containsText(TEST_USER_NAME); // username text field should contain the value passed in the URL
+    ServerSettingHelper helper = ServerSettingHelper.getInstance();
+    org.junit.Assert.assertThat(helper.getServerInfoList(ctx).isEmpty(), equalTo(false));
+    ServerObjInfo srv = helper.getServerInfoList(ctx).get(0);
+    org.junit.Assert.assertThat(srv.serverUrl, equalTo(TEST_SERVER_URL)); // server URL should be that passed in the start URL
     
   }
   
