@@ -57,7 +57,7 @@ import android.widget.TextView;
  *          paristote@exoplatform.com
  * Apr 21, 2014  
  */
-//@RunWith(RobolectricTestRunner.class)
+//@RunWith(ExoRobolectricTestRunner.class)
 public class SocialTabsActivityTst extends ExoActivityTestUtils<SocialTabsActivity> {
 
   private static final String FRAGMENT_TAG = "fragment";

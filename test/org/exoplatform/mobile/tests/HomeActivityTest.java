@@ -33,14 +33,12 @@ import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.ShaderImageView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowIntent;
 
@@ -55,7 +53,7 @@ import android.widget.ViewFlipper;
  *          paristote@exoplatform.com
  * Apr 16, 2014  
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(ExoRobolectricTestRunner.class)
 public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
 
   ViewFlipper flipper;

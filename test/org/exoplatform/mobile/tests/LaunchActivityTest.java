@@ -22,15 +22,14 @@ import static org.robolectric.Robolectric.shadowOf;
 
 import org.exoplatform.ui.LaunchActivity;
 import org.exoplatform.ui.WelcomeActivity;
+
+import android.content.Intent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowIntent;
-
-import android.content.Intent;
 
 /**
  * Created by The eXo Platform SAS
@@ -38,7 +37,7 @@ import android.content.Intent;
  *          paristote@exoplatform.com
  * Apr 8, 2014  
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(ExoRobolectricTestRunner.class)
 public class LaunchActivityTest extends ExoActivityTestUtils<LaunchActivity> {
   
   @Test

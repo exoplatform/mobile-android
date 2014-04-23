@@ -32,7 +32,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 
 import android.content.Context;
 import android.content.Intent;
@@ -48,7 +47,7 @@ import android.widget.ImageView;
  *          paristote@exoplatform.com
  * Apr 10, 2014  
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(ExoRobolectricTestRunner.class)
 public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
 
   ImageView accountBtn, serverBtn;

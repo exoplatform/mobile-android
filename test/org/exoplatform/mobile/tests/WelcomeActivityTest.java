@@ -16,8 +16,8 @@
  */
 package org.exoplatform.mobile.tests;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.fest.assertions.api.ANDROID.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.robolectric.Robolectric.shadowOf;
 
 import org.exoplatform.R;
@@ -26,13 +26,6 @@ import org.exoplatform.ui.SignInActivity;
 import org.exoplatform.ui.SignUpActivity;
 import org.exoplatform.ui.WelcomeActivity;
 import org.exoplatform.ui.login.LoginActivity;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowIntent;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -40,6 +33,12 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.widget.Button;
 import android.widget.TextView;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.shadows.ShadowActivity;
+import org.robolectric.shadows.ShadowIntent;
 
 /**
  * Created by The eXo Platform SAS
@@ -47,7 +46,7 @@ import android.widget.TextView;
  *          paristote@exoplatform.com
  * Apr 8, 2014  
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(ExoRobolectricTestRunner.class)
 public class WelcomeActivityTest extends ExoActivityTestUtils<WelcomeActivity> {
 
   Resources res;
