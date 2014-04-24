@@ -12,7 +12,7 @@
   <version>2.4.2</version>
   <packaging>apk</packaging>
   <name>eXo Mobile Android</name>
-  <description>eXo Mobile Android projects.</description>
+  <description>eXo Mobile Android project.</description>
   <scm>
  	<connection>scm:git:git://github.com/exoplatform/mobile-android.git</connection>
  	<developerConnection>scm:git:git@github.com:exoplatform/mobile-android.git</developerConnection>
@@ -21,29 +21,28 @@
   <properties>
     <!-- SNAPSHOTS must be deployed in our private repository -->
     <exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
-    <!-- Runtimes -->
-    <com.google.android.version>2.3.1</com.google.android.version>
+    <!-- Android -->
+    <android.version>2.3.3</android.version>
+    <android.sdk.platform>10</android.sdk.platform><!-- max allowed to not have conflict with GreenDroid's ActionBar  -->
+    <android.support.version>r7</android.support.version><!-- March 2012 -->
+    <android.annotations.version>4.1.1.4</android.annotations.version><!-- Sept 2012  -->
     <!-- Libraries -->
     <commons-lang.version>2.4</commons-lang.version>
-    <!-- Default version of SDK to use -->
-    <android.sdk.platform>18</android.sdk.platform>
-    <!-- Maven Plugins -->
-    <maven-android-plugin.plugin-version>3.6.0</maven-android-plugin.plugin-version>
-    <!-- Java version -->
-    <maven.compiler.target>1.6</maven.compiler.target>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <version.release.plugin>2.2.1</version.release.plugin>
-	<version.buildnumber.plugin>1.0</version.buildnumber.plugin>
-	<android.support.version>r6</android.support.version>
-	<android.annotations.version>4.1.1.4</android.annotations.version>
-	<exo.social.client.version>1.0.0-alpha4-SNAPSHOT</exo.social.client.version>
-	<slf4j-android.version>1.6.1-RC1</slf4j-android.version>
-	<greendroid.version>67aa3ed</greendroid.version>
+    <exo.social.client.version>1.0.0-alpha4-SNAPSHOT</exo.social.client.version>
+    <slf4j-android.version>1.6.1-RC1</slf4j-android.version>
+    <greendroid.version>67aa3ed</greendroid.version>
 	<!-- Test Dependencies  -->
 	<fest-android.version>1.0.7</fest-android.version>
 	<robolectric.version>2.2</robolectric.version>
 	<junit.version>4.8.2</junit.version>
 	<android.test.version>4.2.2_r2</android.test.version>
+    <!-- Maven Plugins -->
+    <maven-android-plugin.plugin-version>3.7.0</maven-android-plugin.plugin-version>
+    <version.release.plugin>2.2.1</version.release.plugin>
+    <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
+    <!-- Java version -->
+    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>1.6</maven.compiler.source>
   </properties>
   
    <!-- Profiles definition for Android build -->
@@ -73,24 +72,29 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <!-- Dependency With Android -->
-    <dependency>
-      <groupId>com.google.android</groupId>
-      <artifactId>android</artifactId>
-      <version>${com.google.android.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>${commons-lang.version}</version>
-    </dependency>
     <!-- Dependency With SLF4J for Android -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-android</artifactId>
       <version>${slf4j-android.version}</version>
       <scope>compile</scope>
+    </dependency>
+    <!-- Dependency With Android -->
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>${android.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>support-v4</artifactId>
+      <version>${android.support.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>annotations</artifactId>
+      <version>${android.annotations.version}</version>
     </dependency>
     <!-- Dependency With Greendroid library for Android -->
     <dependency>
@@ -99,16 +103,24 @@
       <version>${greendroid.version}</version>
       <type>apklib</type>
     </dependency>
+    <!-- Commons  -->
     <dependency>
-  	  <groupId>com.google.android</groupId>
-  	  <artifactId>support-v4</artifactId>
-  	  <version>${android.support.version}</version>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>${commons-lang.version}</version>
     </dependency>
-    <!-- Dependency with android annotations -->
+    <!-- 
+    JCIP Annotations are only required during compilation to avoid such warnings:
+    [WARNING] /Users/paristote/.m2/repository/org/apache/httpcomponents/httpclient/4.0/httpclient-4.0.jar!org/apache/http/impl/client/AbstractHttpClient.class: 
+              org/apache/http/impl/client/AbstractHttpClient.class(org/apache/http/impl/client:AbstractHttpClient.class): 
+              warning: Cannot find annotation method 'value()' in type 'net.jcip.annotations.GuardedBy'
+    They are not needed at run-time nor in the apk, therefore the scope is 'compile'
+     -->
     <dependency>
-  	  <groupId>com.google.android</groupId>
-  	  <artifactId>annotations</artifactId>
-  	  <version>${android.annotations.version}</version>
+        <groupId>net.jcip</groupId>
+        <artifactId>jcip-annotations</artifactId>
+        <version>1.0</version>
+        <scope>compile</scope>
     </dependency>
     <!-- Test Dependencies  -->
     <dependency>
@@ -145,7 +157,10 @@
           <artifactId>android-maven-plugin</artifactId>
           <version>${maven-android-plugin.plugin-version}</version>
         </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <!-- 
+        This plugin's configuration contains Eclipse m2e settings only.
+        It has no influence on the Maven build itself.
+        -->
         <plugin>
         	<groupId>org.eclipse.m2e</groupId>
         	<artifactId>lifecycle-mapping</artifactId>
@@ -191,7 +206,7 @@
             <jvmArgument>-XX:MaxPermSize=256M</jvmArgument>
           </dexJvmArguments>
           <extractDuplicates>true</extractDuplicates>
-          <sdk><platform>18</platform></sdk>
+          <sdk><platform>${android.sdk.platform}</platform></sdk>
         </configuration>
         <extensions>true</extensions>
         <executions>

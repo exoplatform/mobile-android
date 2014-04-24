@@ -32,6 +32,7 @@ public class ExoRobolectricTestRunner extends RobolectricTestRunner {
   }
 
   public static class MavenAndroidManifest extends AndroidManifest {
+    @SuppressWarnings("deprecation")
     public MavenAndroidManifest(FsFile baseDir) {
       super(baseDir);
     }
