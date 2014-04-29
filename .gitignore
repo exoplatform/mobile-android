@@ -55,3 +55,4 @@ target/
 
 # Misc
 *.swp
+gen-external-apklibs
