@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.exoplatform</groupId>
     <artifactId>maven-parent-pom</artifactId>
-    <version>11</version>
+    <version>12</version>
     <relativePath />
   </parent>
   <groupId>org.exoplatform.mobile.platform</groupId>
