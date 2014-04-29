@@ -13,6 +13,12 @@
   <packaging>apk</packaging>
   <name>eXo Mobile Android</name>
   <description>eXo Mobile Android project.</description>
+  <licenses>
+    <license>
+      <name>GNU General Lesser Public License (LGPL) version 3.0</name>
+      <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+    </license>
+  </licenses>
   <scm>
  	<connection>scm:git:git://github.com/exoplatform/mobile-android.git</connection>
  	<developerConnection>scm:git:git@github.com:exoplatform/mobile-android.git</developerConnection>
