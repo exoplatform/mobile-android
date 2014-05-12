@@ -45,8 +45,6 @@
     <url>http://fisheye.exoplatform.org/browse/mobile/exo-mobile-android</url>
   </scm>
   <properties>
-    <!-- SNAPSHOTS must be deployed in our private repository -->
-    <exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
     <!-- Android -->
     <android.version>2.3.3</android.version>
     <android.sdk.platform>10</android.sdk.platform>
