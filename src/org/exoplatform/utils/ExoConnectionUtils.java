@@ -18,14 +18,18 @@
  */
 package org.exoplatform.utils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.util.Log;
-import android.util.Patterns;
-import org.apache.http.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -43,12 +47,15 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.ui.login.tasks.LogoutTask;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+import android.util.Patterns;
 
 //interact with server
 public class ExoConnectionUtils {
@@ -570,13 +577,13 @@ public class ExoConnectionUtils {
    */
   public static void loggingOut() {
     if (ExoConnectionUtils.httpClient != null) {
-      ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
+      new LogoutTask(ExoConnectionUtils.httpClient).execute();
       ExoConnectionUtils.httpClient = null;
     }
-
     AccountSetting.getInstance().cookiesList = null;
 
     /** Clear all social service data */
     SocialServiceHelper.getInstance().clearData();
   }
+  
 }
