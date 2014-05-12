@@ -22,8 +22,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.exoplatform</groupId>
     <artifactId>maven-parent-pom</artifactId>
+    <groupId>org.exoplatform</groupId>
     <version>12</version>
     <relativePath />
   </parent>
@@ -40,28 +40,31 @@
     </license>
   </licenses>
   <scm>
- 	<connection>scm:git:git://github.com/exoplatform/mobile-android.git</connection>
- 	<developerConnection>scm:git:git@github.com:exoplatform/mobile-android.git</developerConnection>
- 	<url>http://fisheye.exoplatform.org/browse/mobile/exo-mobile-android</url>
+    <connection>scm:git:git://github.com/exoplatform/mobile-android.git</connection>
+    <developerConnection>scm:git:git@github.com:exoplatform/mobile-android.git</developerConnection>
+    <url>http://fisheye.exoplatform.org/browse/mobile/exo-mobile-android</url>
   </scm>
   <properties>
     <!-- SNAPSHOTS must be deployed in our private repository -->
     <exo.snapshots.repo.url>http://repository.exoplatform.org/content/repositories/exo-private-snapshots</exo.snapshots.repo.url>
     <!-- Android -->
     <android.version>2.3.3</android.version>
-    <android.sdk.platform>10</android.sdk.platform><!-- max allowed to not have conflict with GreenDroid's ActionBar  -->
-    <android.support.version>r7</android.support.version><!-- March 2012 -->
-    <android.annotations.version>4.1.1.4</android.annotations.version><!-- Sept 2012  -->
+    <android.sdk.platform>10</android.sdk.platform>
+    <!-- max allowed to not have conflict with GreenDroid's ActionBar  -->
+    <android.support.version>r7</android.support.version>
+    <!-- March 2012 -->
+    <android.annotations.version>4.1.1.4</android.annotations.version>
+    <!-- Sept 2012  -->
     <!-- Libraries -->
     <commons-lang.version>2.4</commons-lang.version>
     <exo.social.client.version>1.0.0-alpha4-SNAPSHOT</exo.social.client.version>
     <slf4j-android.version>1.6.1-RC1</slf4j-android.version>
     <greendroid.version>67aa3ed</greendroid.version>
-	<!-- Test Dependencies  -->
-	<fest-android.version>1.0.7</fest-android.version>
-	<robolectric.version>2.2</robolectric.version>
-	<junit.version>4.8.2</junit.version>
-	<android.test.version>4.2.2_r2</android.test.version>
+    <!-- Test Dependencies  -->
+    <fest-android.version>1.0.7</fest-android.version>
+    <robolectric.version>2.2</robolectric.version>
+    <junit.version>4.8.2</junit.version>
+    <android.test.version>4.2.2_r2</android.test.version>
     <!-- Maven Plugins -->
     <maven-android-plugin.plugin-version>3.7.0</maven-android-plugin.plugin-version>
     <version.release.plugin>2.2.1</version.release.plugin>
@@ -70,20 +73,6 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
   </properties>
-  
-   <!-- Profiles definition for Android build -->
-  <profiles>
-    <profile>
-      <id>release</id>
-      <properties>
-        <!-- To be able to retrieve an unsigned apk
-             and use it for publication on android market  -->
-        <android.sign.debug>both</android.sign.debug>
-      </properties>
-    </profile>
-  </profiles>
-  
-  
   <dependencies>
     <!-- Dependency With Social Client Library -->
     <dependency>
@@ -93,12 +82,12 @@
       <exclusions>
         <!-- Exclusion for slf4j not compatible with android -->
         <exclusion>
-          <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
         </exclusion>
         <exclusion>
-          <groupId>org.slf4j</groupId>
           <artifactId>slf4j-log4j12</artifactId>
+          <groupId>org.slf4j</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -147,10 +136,10 @@
     They are not needed at run-time nor in the apk, therefore the scope is 'compile'
      -->
     <dependency>
-        <groupId>net.jcip</groupId>
-        <artifactId>jcip-annotations</artifactId>
-        <version>1.0</version>
-        <scope>compile</scope>
+      <groupId>net.jcip</groupId>
+      <artifactId>jcip-annotations</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
     </dependency>
     <!-- Test Dependencies  -->
     <dependency>
@@ -160,26 +149,27 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>org.robolectric</groupId>
-        <artifactId>robolectric</artifactId>
-        <version>${robolectric.version}</version>
-        <scope>test</scope>
+      <groupId>org.robolectric</groupId>
+      <artifactId>robolectric</artifactId>
+      <version>${robolectric.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-        <scope>test</scope>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-         <groupId>android</groupId>
-         <artifactId>android</artifactId>
-         <version>${android.test.version}</version>
-         <scope>provided</scope>
-     </dependency>
+      <groupId>android</groupId>
+      <artifactId>android</artifactId>
+      <version>${android.test.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
-  
   <build>
+    <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -192,35 +182,29 @@
         It has no influence on the Maven build itself.
         -->
         <plugin>
-        	<groupId>org.eclipse.m2e</groupId>
-        	<artifactId>lifecycle-mapping</artifactId>
-        	<version>1.0.0</version>
-        	<configuration>
-        		<lifecycleMappingMetadata>
-        			<pluginExecutions>
-        				<pluginExecution>
-        					<pluginExecutionFilter>
-        						<groupId>
-        							com.jayway.maven.plugins.android.generation2
-        						</groupId>
-        						<artifactId>
-        							android-maven-plugin
-        						</artifactId>
-        						<versionRange>
-        							[3.0.0-alpha-14,)
-        						</versionRange>
-        						<goals>
-        							<goal>manifest-update</goal>
-        							<goal>proguard</goal>
-        						</goals>
-        					</pluginExecutionFilter>
-        					<action>
-        						<ignore />
-        					</action>
-        				</pluginExecution>
-        			</pluginExecutions>
-        		</lifecycleMappingMetadata>
-        	</configuration>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                    <artifactId>android-maven-plugin</artifactId>
+                    <versionRange>[3.0.0-alpha-14,)</versionRange>
+                    <goals>
+                      <goal>manifest-update</goal>
+                      <goal>proguard</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -228,16 +212,6 @@
       <plugin>
         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
         <artifactId>android-maven-plugin</artifactId>
-        <configuration>
-          <dexJvmArguments>
-            <jvmArgument>-Xshare:auto</jvmArgument>
-            <jvmArgument>-Xms128M</jvmArgument>
-            <jvmArgument>-Xmx1G</jvmArgument>
-            <jvmArgument>-XX:MaxPermSize=256M</jvmArgument>
-          </dexJvmArguments>
-          <extractDuplicates>true</extractDuplicates>
-          <sdk><platform>${android.sdk.platform}</platform></sdk>
-        </configuration>
         <extensions>true</extensions>
         <executions>
           <execution>
@@ -255,17 +229,38 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <dexJvmArguments>
+            <jvmArgument>-Xshare:auto</jvmArgument>
+            <jvmArgument>-Xms128M</jvmArgument>
+            <jvmArgument>-Xmx1G</jvmArgument>
+            <jvmArgument>-XX:MaxPermSize=256M</jvmArgument>
+          </dexJvmArguments>
+          <extractDuplicates>true</extractDuplicates>
+          <sdk>
+            <platform>${android.sdk.platform}</platform>
+          </sdk>
+        </configuration>
       </plugin>
       <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.6</version>
-          <configuration>
-              <argLine>-Xmx1024m</argLine>
-          </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <argLine>-Xmx1024m</argLine>
+        </configuration>
       </plugin>
     </plugins>
-    <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>test</testSourceDirectory>
   </build>
+  <!-- Profiles definition for Android build -->
+  <profiles>
+    <profile>
+      <id>release</id>
+      <properties>
+        <!-- To be able to retrieve an unsigned apk
+             and use it for publication on android market  -->
+        <android.sign.debug>both</android.sign.debug>
+      </properties>
+    </profile>
+  </profiles>
 </project>
