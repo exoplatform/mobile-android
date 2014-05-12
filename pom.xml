@@ -206,6 +206,16 @@
             </lifecycleMappingMetadata>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <configuration>
+            <includes>
+              <include>com/exoplatform/*</include>
+              <include>org/exoplatform/*</include>
+            </includes>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
