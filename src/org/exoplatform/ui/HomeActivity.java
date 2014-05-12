@@ -18,13 +18,13 @@
  */
 package org.exoplatform.ui;
 
-import android.util.Log;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
+import org.apache.http.client.HttpClient;
 import org.exoplatform.R;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.model.SocialActivityInfo;
@@ -45,6 +45,7 @@ import org.exoplatform.widget.ShaderImageView;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -278,15 +279,7 @@ public class HomeActivity extends MyActionBar {
    * Cleaning up necessary data to log out
    */
   private void onLoggingOut() {
-    if (ExoConnectionUtils.httpClient != null) {
-      ExoConnectionUtils.httpClient.getConnectionManager().shutdown();
-      ExoConnectionUtils.httpClient = null;
-    }
-
-    AccountSetting.getInstance().cookiesList = null;
-
-    /* Clear all social service data */
-    SocialServiceHelper.getInstance().clearData();
+    ExoConnectionUtils.loggingOut();
     homeController.finishService();
     homeActivity = null;
   }
