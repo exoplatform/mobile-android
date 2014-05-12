@@ -65,9 +65,6 @@
     <robolectric.version>2.2</robolectric.version>
     <junit.version>4.8.2</junit.version>
     <android.test.version>4.2.2_r2</android.test.version>
-    <!-- Maven Plugins -->
-    <version.release.plugin>2.2.1</version.release.plugin>
-    <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
     <!-- Java version -->
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
