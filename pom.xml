@@ -262,5 +262,23 @@
         <android.sign.debug>both</android.sign.debug>
       </properties>
     </profile>
+    <!--
+    This profile executes tests coverage for UTs and ITs with Jacoco.
+    Need to be redefined here to override the parent entry which don't have -Xmx1024m
+    -->
+    <profile>
+      <id>coverage</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <argLine>-Xmx1024m ${jacoco.agent.ut.arg}</argLine>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>
