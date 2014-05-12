@@ -66,7 +66,6 @@
     <junit.version>4.8.2</junit.version>
     <android.test.version>4.2.2_r2</android.test.version>
     <!-- Maven Plugins -->
-    <maven-android-plugin.plugin-version>3.7.0</maven-android-plugin.plugin-version>
     <version.release.plugin>2.2.1</version.release.plugin>
     <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
     <!-- Java version -->
@@ -172,12 +171,7 @@
     <testSourceDirectory>test</testSourceDirectory>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-          <artifactId>android-maven-plugin</artifactId>
-          <version>${maven-android-plugin.plugin-version}</version>
-        </plugin>
-        <!-- 
+        <!--
         This plugin's configuration contains Eclipse m2e settings only.
         It has no influence on the Maven build itself.
         -->
