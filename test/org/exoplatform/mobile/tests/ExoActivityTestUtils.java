@@ -42,6 +42,7 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
   
   final String TEST_SERVER_NAME = "testserver";
   final String TEST_SERVER_URL = "http://www.test.com";
+  final String TEST_HTTPS_SERVER_URL = "https://www.test.com";
   final String TEST_WRONG_SERVER_URL = "test&%$'{}";
   final String TEST_USER_NAME = "testuser";
   final String TEST_USER_PWD = "testpwd";

@@ -63,11 +63,28 @@ public class SignInOnPremiseActivityTest extends ExoActivityTestUtils<SignInOnPr
     init();
   }
   
+  public void createAndExpectHTTPRequests() {
+    super.create();
+    Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO), getResponseOKForRequest(REQ_PLATFORM_INFO));
+    Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_JCR_USER), getResponseOKForRequest(REQ_JCR_USER));
+    init();
+  }
+  
   private void init() {
     url = (EditText)activity.findViewById(R.id.onpremise_url_edit_txt);
     username = (EditText)activity.findViewById(R.id.onpremise_user_edit_txt);
     password = (EditText)activity.findViewById(R.id.onpremise_pass_edit_txt);
     login = (Button)activity.findViewById(R.id.onpremise_login_btn);
+  }
+  
+  private void typeCorrectValues() {
+    typeValues(TEST_USER_NAME, TEST_USER_PWD, TEST_SERVER_URL);
+  }
+  
+  private void typeValues(String _user, String _pass, String _srv) {
+    url.setText(_srv);
+    username.setText(_user);
+    password.setText(_pass);
   }
   
   @Test
@@ -84,9 +101,7 @@ public class SignInOnPremiseActivityTest extends ExoActivityTestUtils<SignInOnPr
     
     create();
     
-    url.setText(TEST_SERVER_URL);
-    username.setText(TEST_USER_NAME);
-    password.setText(TEST_USER_PWD);
+    typeCorrectValues();
     
     assertThat(login).isEnabled();
     
@@ -94,13 +109,9 @@ public class SignInOnPremiseActivityTest extends ExoActivityTestUtils<SignInOnPr
   
   @Test
   public void shouldRedirectToHomeAfterSuccessfulLogin() {
-    create();
-    Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO), getResponseOKForRequest(REQ_PLATFORM_INFO));
-    Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_JCR_USER), getResponseOKForRequest(REQ_JCR_USER));
+    createAndExpectHTTPRequests();
     
-    url.setText(TEST_SERVER_URL);
-    username.setText(TEST_USER_NAME);
-    password.setText(TEST_USER_PWD);
+    typeCorrectValues();
     
     Robolectric.clickOn(login);
     
@@ -115,18 +126,77 @@ public class SignInOnPremiseActivityTest extends ExoActivityTestUtils<SignInOnPr
   
   @Test
   public void shouldFailToLoginWithIncorrectURL() {
+    // not calling createAndExpectHTTPRequests() here ensures the test will fail if incorrect data does not prevent the sign-in request
     create();
     
-    url.setText(TEST_WRONG_SERVER_URL);
-    username.setText(TEST_USER_NAME);
-    password.setText(TEST_USER_PWD);
-    
+    // test with incorrect URL format
+    typeValues(TEST_USER_NAME, TEST_USER_PWD, TEST_WRONG_SERVER_URL);
     Robolectric.clickOn(login);
     
-    // useless assertion
     // if we get here, it's because the login HTTP request was not sent, which is normal since the URL is incorrect
     // if the login request is sent, the test will fail because we didn't add any HttpResponseRules
     assertTrue(true);
+    
+    // test with empty URL
+    typeCorrectValues();    // enable login
+    typeValues(TEST_USER_NAME, TEST_USER_PWD, "");
+    assertThat(login).isDisabled();
+    
+    
+  }
+  
+  @Test
+  public void shouldFailToLoginWithIncorrectUsernameAndPassword() {
+    create();
+    
+    // test with empty password
+    typeCorrectValues();    // enable login
+    typeValues(TEST_USER_NAME, "", TEST_SERVER_URL);
+    assertThat(login).isDisabled();
+    
+    // test with empty username
+    typeCorrectValues();    // enable login
+    typeValues("", TEST_USER_PWD, TEST_SERVER_URL);
+    assertThat(login).isDisabled();
+    
+    // test with empty username and password
+    typeCorrectValues();    // enable login
+    typeValues("", "", TEST_SERVER_URL);
+    assertThat(login).isDisabled();
+  }
+  
+  @Test
+  public void shouldAcceptURLWithHTTPS() {
+    createAndExpectHTTPRequests();
+    
+    typeValues(TEST_USER_NAME, TEST_USER_PWD, TEST_HTTPS_SERVER_URL);
+    
+    Robolectric.clickOn(login);
+    
+    // After a successful login, app should redirect to the Home Activity
+    ShadowActivity sActivity = shadowOf(activity);
+    Intent homeIntent = sActivity.getNextStartedActivity();
+    ShadowIntent sIntent = shadowOf(homeIntent);
+    
+    assertThat(sIntent.getComponent().getClassName(), equalTo(HomeActivity.class.getName()));
+    
+  }
+  
+  @Test
+  public void shouldAcceptURLWithNoProtocol() {
+    createAndExpectHTTPRequests();
+    
+    typeValues(TEST_USER_NAME, TEST_USER_PWD, TEST_SERVER_NAME+".com"); // URL should be testserver.com
+    
+    Robolectric.clickOn(login);
+    
+    // After a successful login, app should redirect to the Home Activity
+    ShadowActivity sActivity = shadowOf(activity);
+    Intent homeIntent = sActivity.getNextStartedActivity();
+    ShadowIntent sIntent = shadowOf(homeIntent);
+    
+    assertThat(sIntent.getComponent().getClassName(), equalTo(HomeActivity.class.getName()));
+    
   }
 
 }
