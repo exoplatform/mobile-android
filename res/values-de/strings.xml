@@ -8,6 +8,7 @@
     <string name="NoUsernameEnter">Bitte geben Sie Ihren Benutzernamen ein</string>
     <string name="NoPasswordEnter">Bitte geben Sie Ihr Passwort ein</string>
     <string name="UserNamePasswordFailed">Ungültige Benutzername/Passwort-Kombination.</string>
+    <string name="ServerInvalid">Ungültige Serveradresse</string>
     <string name="ServerUnreachable">Serveradresse ist nicht erreichbar</string>
     <string name="UserNameCellTitle">Benutzername</string>
     <string name="PasswordCellTitle">Passwort</string>
@@ -89,6 +90,7 @@
     <string name="WarningServerNameIsEmpty">Servername oder URL darf nicht leer sein.</string>
     <string name="WarningServerNameIsExist">Dieser Servername ist in der Liste bereits vorhanden</string>
     <string name="WarningServerUrlIsExist">Diese Server-URL ist in Ihrer Liste bereits vorhanden</string>
+    <string name="WarningServerUrlAndUserAlreadyExist">Diese Kombination aus Server-URL und Benutzername ist bereits in Ihrer Liste</string>
     <string name="DetailsNotAvaiable">Details der Aktivität sind nicht verfügbar</string>
     <string name="ErrorOnComment">Sie können diese Aktivität nicht kommentieren.</string>
     <string name="CannotLoadMoreActivities">Kann ältere Aktivitäten nicht laden. Die Liste wird aktualisiert.</string>
@@ -133,6 +135,7 @@
     <string name="CalendarLocation">Ort:</string>
     <string name="CalendarStart">Startzeit:</string>
     <string name="CalendarEnd">Endzeit:</string>
+    <string name="SpecialCharacters">Sonderzeichen sind nicht erlaubt.</string>
     <string name="In"> in</string>
     <string name="Space"> Raum</string>
     <string name="Personal">Persönlich</string>
@@ -152,23 +155,23 @@
     <string name="SocialSettingTitle">SOZIAL</string>
     <string name="SocialSettingContent">An meinen Filter erinnern</string>
     <string-array name="SocialTabs">
-        <item>Alle Aktualisierungen</item>
-        <item>Meine Verbindungen</item>
-        <item>Meine Räume</item>
-        <item>Mein Status</item>
+    <item id="AllUpdates">Alle Aktualisierungen</item>
+    <item id="MyConnections">Meine Verbindungen</item>
+    <item id="MySpaces">Meine Räume</item>
+    <item id="MyStatus">Mein Status</item>
     </string-array>
 
     <!-- Welcome screen -->
     <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-    <string name="title_template_step">Step</string>
+  <string name="title_template_step">Schritt</string>
     <string name="SignUp">Sign Up</string>
     <string name="LogIn">Log In</string>
     <string name="SkipStep">or skip this for now</string>
-    <string name="Or">or</string>
+  <string name="Or">oder</string>
 
     <string name="SliderDesc1">Activity streams</string>
     <string name="SliderDesc2">Comments and likes</string>
-    <string name="SliderDesc3">Personal dashboards</string>
+  <string name="SliderDesc3">Persönliche Dashboards</string>
     <string name="SliderDesc4">Files management</string>
     <string name="YourSocialIntranet">Your social intranet</string>
     <string name="Anywhere">anywhere</string>
@@ -191,7 +194,7 @@
 
     <!-- Sign In -->
     <string name="EmailSignIn">Enter your credentials and Login:</string>
-    <string name="ConnectOnPremise">Connect to an On Premise Installation</string>
+  <string name="ConnectOnPremise">Verbinden mit einer On Premise Installation</string>
     <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
     <string name="InvalidCredentials">Impossible to connect, check your username and password.</string>
     <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
@@ -208,8 +211,8 @@
     <string name="UserNameHint">username</string>
 
     <!-- Setting -->
-    <string name="RememberMe">An mich erinnern</string>
-    <string name="Autologin">Automatischer Login</string>
+  <string name="RememberMe">Remember Me</string>
+  <string name="Autologin">Auto login</string>
     <string name="LoginTitle">LOGIN</string>
     <string name="EXO">EXO</string>
     <string name="Number1">1</string>
@@ -227,7 +230,6 @@
   <string name="ServerAdded">Server hinzugefügt</string>
   <string name="ServerUpdated">Server aktualisiert</string>
   <string name="ServerDeleted">Server gelöscht</string>
-
     <string name="ImageDesc">image description</string>
 
     <!-- Launch -->
