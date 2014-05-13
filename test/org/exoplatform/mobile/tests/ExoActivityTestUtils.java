@@ -42,6 +42,7 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
   
   final String TEST_SERVER_NAME = "testserver";
   final String TEST_SERVER_URL = "http://www.test.com";
+  final String TEST_WRONG_SERVER_URL = "test&%$'{}";
   final String TEST_USER_NAME = "testuser";
   final String TEST_USER_PWD = "testpwd";
   final String TEST_USER_IDENTITY = "testidentityid";
@@ -71,7 +72,12 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
   final String RESP_SOCIAL_ALL_UPDATES = // 2 activities
       "{\"activities\":[{\"body\":\"\",\"appId\":\"\",\"identityId\":\"f07184510a2106c6201ac1956140d95f\",\"totalNumberOfComments\":2,\"templateParams\":{},\"liked\":false,\"lastUpdated\":1398099158541,\"postedTime\":1398013281970,\"type\":\"DEFAULT_ACTIVITY\",\"posterIdentity\":{\"id\":\"7fe04a04c06313bc6121d1235b281f23\",\"providerId\":\"organization\",\"remoteId\":\"ilkay_aydemir10\",\"profile\":{\"avatarUrl\":\"http://community.exoplatform.com:80/rest/jcr/repository/social/production/soc%3Aproviders/soc%3Aorganization/soc%3Ailkay_aydemir10/soc%3Aprofile/soc%3Aavatar/?upd=1398009779213\",\"fullName\":\"ilkay Aydemir\"}},\"activityStream\":{\"title\":\"\",\"permaLink\":\"http://community.exoplatform.com:80/portal/intranet/activities/jmazziotta\",\"prettyId\":\"jmazziotta\",\"faviconUrl\":\"\",\"fullName\":\"Julie Mazziotta\",\"type\":\"organization\"},\"id\":\"8015c6b9c06313bc7bddbab957acc8b0\",\"title\":\"Are you the admin site?\",\"priority\":0.0,\"createdAt\":\"Sun Apr 20 19:01:21 +0200 2014\",\"likedByIdentities\":[],\"totalNumberOfLikes\":0,\"titleId\":\"\",\"comments\":[]},{\"body\":\"\",\"appId\":\"\",\"identityId\":\"d3c28a300a2106c658573c3c030bf9da\",\"totalNumberOfComments\":2,\"templateParams\":{},\"liked\":false,\"lastUpdated\":1398080445273,\"postedTime\":1397828057340,\"type\":\"DEFAULT_ACTIVITY\",\"posterIdentity\":{\"id\":\"51998d9b0a2106c60330eb14726dc376\",\"providerId\":\"organization\",\"remoteId\":\"patrice_lamarque\",\"profile\":{\"avatarUrl\":\"http://community.exoplatform.com:80/rest/jcr/repository/social/production/soc%3Aproviders/soc%3Aorganization/soc%3Apatrice_lamarque/soc%3Aprofile/soc%3Aavatar/?upd=1371464305999\",\"fullName\":\"Patrice Lamarque\"}},\"activityStream\":{\"title\":\"\",\"permaLink\":\"http://community.exoplatform.com:80/portal/g/:spaces:translations/translations\",\"prettyId\":\"translations\",\"faviconUrl\":\"\",\"fullName\":\"Translations\",\"type\":\"space\"},\"id\":\"750b7901c06313bc6477591b2d591ed4\",\"title\":\"<a href='/portal/intranet/profile/nguyenbaoan'>An Bao Nguyen</a> <a href='/portal/intranet/profile/tglenat'>Tristan Glenat</a> Shouldn't we move eXo Mobile Translations to <a href='http://translate.exoplatform.org/project/exo-platform/' target='_blank'>http://translate.exoplatform.org/project/exo-platform/</a> now ? It will make them easier to find for potential contributors.\",\"priority\":0.0,\"createdAt\":\"Fri Apr 18 15:34:17 +0200 2014\",\"likedByIdentities\":[],\"totalNumberOfLikes\":3,\"titleId\":\"\",\"comments\":[]}]}";
   
-
+  final int REQ_PLATFORM_INFO = 6;
+  final String RESP_PLATFORM_INFO = 
+      "{\"duration\":\"UNLIMITED\",\"platformEdition\":\"ENTERPRISE\",\"buildNumber\":null,\"productCode\":\"CWI-team-09LC0xLDA2L\",\"unlockKey\":\"aaabbbccc\",\"nbUsers\":null,\"dateOfKeyGeneration\":null,\"platformVersion\":\"4.0.4\",\"isMobileCompliant\":\"true\",\"platformBuildNumber\":\"20131225\",\"platformRevision\":\"aaabbbccc\",\"userHomeNodePath\":\"/Users/p___/ph___/phi___/philippe\",\"runningProfile\":\"all\",\"currentRepoName\":\"repository\",\"defaultWorkSpaceName\":\"collaboration\"}";
+  
+  final int REQ_JCR_USER = 7;
+  final String RESP_JCR_USER = "{}";
   
   ActivityController<A> controller;
   A activity;
@@ -171,6 +177,13 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
       m.path("rest/private/api/social/v1-alpha3/portal/activity_stream/connections.json");
       break;
 
+    case REQ_PLATFORM_INFO:
+      m.path("rest/private/platform/info");
+      break;
+      
+    case REQ_JCR_USER:
+      m.path("rest/private/jcr/repository/collaboration/Users/t___/te___/tes___/testuser");
+      break;
     }
     return m;
   }
@@ -210,6 +223,13 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
         resp.setEntity(new StringEntity(RESP_SOCIAL_MY_CONNECTIONS));
         break;
 
+      case REQ_PLATFORM_INFO:
+        resp.setEntity(new StringEntity(RESP_PLATFORM_INFO));
+        break;
+        
+      case REQ_JCR_USER:
+        resp.setEntity(new StringEntity(RESP_JCR_USER));
+        break;
       }
       
     } catch (UnsupportedEncodingException e) {
