@@ -42,9 +42,12 @@
   <scm>
     <connection>scm:git:git://github.com/exoplatform/mobile-android.git</connection>
     <developerConnection>scm:git:git@github.com:exoplatform/mobile-android.git</developerConnection>
-    <url>http://fisheye.exoplatform.org/browse/mobile/exo-mobile-android</url>
+    <url>http://fisheye.exoplatform.org/browse/mobile-android</url>
   </scm>
+
   <properties>
+    <jira.project.key>MOB</jira.project.key>
+    <jenkins.job.name>mobile-android-master-ci</jenkins.job.name>
     <!-- Android -->
     <android.version>2.3.3</android.version>
     <android.sdk.platform>10</android.sdk.platform>
