@@ -18,18 +18,23 @@ package org.exoplatform.mobile.tests;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.robolectric.Robolectric.shadowOf;
+
+import java.util.Locale;
 
 import org.exoplatform.ui.LaunchActivity;
 import org.exoplatform.ui.WelcomeActivity;
-
-import android.content.Intent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowIntent;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 
 /**
  * Created by The eXo Platform SAS
@@ -40,6 +45,21 @@ import org.robolectric.shadows.ShadowIntent;
 @RunWith(ExoRobolectricTestRunner.class)
 public class LaunchActivityTest extends ExoActivityTestUtils<LaunchActivity> {
   
+  Context ctx;
+
+  @Override
+  @Before
+  public void setup() {
+    controller = Robolectric.buildActivity(LaunchActivity.class);
+    ctx = Robolectric.application.getApplicationContext();
+  }
+
+  private void setLanguageInPreferences(Context c, String lang) {
+    SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
+    prefs.putString("exo_prf_localize", lang);
+    prefs.commit();
+  }
+
   @Test
   /**
    * Tests that on an clean launch, the app is redirected to the Welcome Activity (sign-up assistant)
@@ -56,11 +76,89 @@ public class LaunchActivityTest extends ExoActivityTestUtils<LaunchActivity> {
       assertThat(sIntent.getComponent().getClassName(), equalTo(WelcomeActivity.class.getName()));
       
   }
-
-  @Override
-  @Before
-  public void setup() {
-    controller = Robolectric.buildActivity(LaunchActivity.class);
+  
+  @Test
+  public void shouldDetectAndConfigureAppInFrench() {
+    
+    final String expectedLang = "fr";
+    Locale.setDefault(new Locale(expectedLang)); // set device language to French
+    setLanguageInPreferences(ctx, ""); // empty the language preference in the app
+        
+    create();
+    
+    String lang = ctx.getSharedPreferences("exo_preference", 0).getString("exo_prf_localize", "");
+    // French should be saved
+    assertTrue("Saved language should be French", lang.equals(expectedLang));
+  }
+  
+  @Test
+  public void shouldDetectAndConfigureAppInSpanish() {
+    
+    final String expectedLang = "es";
+    Locale.setDefault(new Locale(expectedLang)); // set device language to Spanish
+    setLanguageInPreferences(ctx, ""); // empty the language preference in the app
+    
+    create();
+    
+    String lang = ctx.getSharedPreferences("exo_preference", 0).getString("exo_prf_localize", "");
+    // Spanish should be saved
+    assertTrue("Saved language should be Spanish", lang.equals(expectedLang));
+  }
+  
+  @Test
+  public void shouldDetectAndConfigureAppInGerman() {
+    
+    final String expectedLang = "de";
+    Locale.setDefault(new Locale(expectedLang)); // set device language to German
+    setLanguageInPreferences(ctx, ""); // empty the language preference in the app
+    
+    create();
+    
+    String lang = ctx.getSharedPreferences("exo_preference", 0).getString("exo_prf_localize", "");
+    // German should be saved
+    assertTrue("Saved language should be German", lang.equals(expectedLang));
+  }
+  
+  @Test
+  public void shouldDetectAndConfigureAppInEnglish() {
+    
+    final String expectedLang = "en";
+    Locale.setDefault(new Locale(expectedLang)); // set device language to English
+    setLanguageInPreferences(ctx, ""); // empty the language preference in the app
+    
+    create();
+   
+    String lang = ctx.getSharedPreferences("exo_preference", 0).getString("exo_prf_localize", "");
+    // English should be saved
+    assertTrue("Saved language should be English", lang.equals(expectedLang));
+  }
+  
+  @Test
+  public void shouldDetectNotSupportedLanguageAndConfigureAppInEnglish() {
+    
+    final String deviceLang = "ja";
+    Locale.setDefault(new Locale(deviceLang)); // set device language to Japanese
+    setLanguageInPreferences(ctx, ""); // empty the language preference in the app
+    
+    create();
+   
+    String lang = ctx.getSharedPreferences("exo_preference", 0).getString("exo_prf_localize", "");
+    // English should be configured since Japanese is not supported
+    assertTrue("Saved language should be English", lang.equals("en"));
+  }
+  
+  @Test
+  public void shouldKeepSavedLanguage() {
+    
+    final String expectedLang = "en";
+    Locale.setDefault(new Locale("fr")); // set device language to French
+    setLanguageInPreferences(ctx, expectedLang); // set preference language to English
+    
+    create();
+   
+    String lang = ctx.getSharedPreferences("exo_preference", 0).getString("exo_prf_localize", "");
+    // English should still be configured and not replaced by French
+    assertTrue("Saved language should be English", lang.equals(expectedLang));
   }
   
 //  @Test
