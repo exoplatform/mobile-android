@@ -17,6 +17,7 @@
   <string name="AccountPasswordInvalid">Spaces are not allowed in the password</string>
   <string name="Connected">Συνδεδεμένοι</string>
   <string name="LastLoginDate">Last login</string>
+  <string name="ServerInvalid">Μη έγκυρη διεύθυνση διακομιστή</string>
   <string name="ServerUnreachable">Δεν είναι δυνατή η επικοινωνία με το διακομιστή</string>
   <string name="UserNameCellTitle">Όνομα χρήστη</string>
   <string name="PasswordCellTitle">Κωδικός πρόσβασης</string>
@@ -104,6 +105,7 @@
   <string name="WarningServerNameIsExist">Αυτό το όνομα διακομιστή υπάρχει ήδη στη λίστα σας</string>
   <string name="WarningServerUrlIsExist">Αυτή η διεύθυνση URL υπάρχει ήδη στη λίστα σας</string>
   <string name="WarningServerAlreadyExists">This account already exists in your list</string>
+  <string name="WarningServerUrlAndUserAlreadyExist">Αυτός ο συνδυασμός της διεύθυνσης URL και του ονόματος χρήστη υπάρχουν ήδη στη λίστα σας</string>
   <string name="DetailsNotAvaiable">Δεν υπάρχουν λεπτομέρειες των ειδήσεων</string>
   <string name="ErrorOnComment">Δεν μπορείτε να σχολιάσετε αυτή τη δραστηριότητα.</string>
   <string name="CannotLoadMoreActivities">Δεν μπορούν να φορτωθούν παλαιότερες δραστηριότητες. Η λίστα ανανεώνεται.</string>
@@ -226,9 +228,12 @@
   <string name="Number2">2</string>
 
   <!-- Server edition -->
+ 
+  <string name="Account">Account</string>
+  <string name="AddServer">Νέος διακομιστής</string>
+  <string name="ModifyServer">Modify Server</string>
   <string name="OptionalHint">Optional</string>
   <string name="RequiredHint">Required</string>
-  <string name="Account">Account</string>
   <string name="YourCredentials">Your credentials</string>
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
