@@ -259,7 +259,7 @@
   <!-- Profiles definition for Android build -->
   <profiles>
     <profile>
-      <id>release</id>
+      <id>exo-release</id>
       <properties>
         <!-- To be able to retrieve an unsigned apk
              and use it for publication on android market  -->
