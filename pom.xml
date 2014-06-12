@@ -69,6 +69,8 @@
     <!-- Java version -->
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
+    <!-- Upgrade must be studied - will be required to upgrade to maven 3.1+ -->
+    <version.android.plugin>3.7.0</version.android.plugin>
   </properties>
   <dependencies>
     <!-- Dependency With Social Client Library -->
