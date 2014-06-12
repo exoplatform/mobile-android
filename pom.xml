@@ -44,7 +44,6 @@
     <developerConnection>scm:git:git@github.com:exoplatform/mobile-android.git</developerConnection>
     <url>http://fisheye.exoplatform.org/browse/mobile-android</url>
   </scm>
-
   <properties>
     <jira.project.key>MOB</jira.project.key>
     <jenkins.job.name>mobile-android-master-ci</jenkins.job.name>
@@ -216,6 +215,22 @@
     </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>create-version-code</id>
+            <goals>
+              <goal>create-timestamp</goal>
+            </goals>
+            <configuration>
+              <timestampPropertyName>version.code</timestampPropertyName>
+              <timestampFormat>yyMMddHHmm</timestampFormat>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
         <artifactId>android-maven-plugin</artifactId>
         <extensions>true</extensions>
@@ -226,6 +241,9 @@
             <goals>
               <goal>manifest-update</goal>
             </goals>
+            <configuration>
+              <manifestVersionCode>${version.code}</manifestVersionCode>
+            </configuration>
           </execution>
           <execution>
             <id>alignApk</id>
