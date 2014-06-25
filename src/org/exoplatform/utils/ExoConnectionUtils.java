@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -55,7 +54,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-import android.util.Patterns;
 
 //interact with server
 public class ExoConnectionUtils {
@@ -74,7 +72,7 @@ public class ExoConnectionUtils {
 
   public static final int         LOGIN_SERVER_RESUMING    = 6;
 
-  // Default connection and socket timeout of 60 seconds. Tweak to taste.
+  // Default connection and socket timeout of 30 seconds. Tweak to taste.
   public static final int         SOCKET_OPERATION_TIMEOUT  = 30 * 1000;
 
   public static DefaultHttpClient httpClient;
@@ -140,9 +138,6 @@ public class ExoConnectionUtils {
   public static final String      MARKETO_URL              = "learn.exoplatform.com/index.php/leadCapture/save";
 
   private static final String     TAG                      = "ExoConnectionUtils";
-
-  public static final String[]    WRONG_CLOUD_URLS         = new String[] {
-      "http://exoplatform.net", "http://wks-acc.exoplatform.org", "http://netstg.exoplatform.org" };
 
   /**
    * Check mobile network and wireless status
@@ -283,30 +278,6 @@ public class ExoConnectionUtils {
     AccountSetting.getInstance().cookiesList = getCookieList(cookiesStore);
 
     return response;
-  }
-
-  /**
-   * Validate email according rules of eXo cloud
-   */
-  public static boolean validateEmail(String aEmailAddress) {
-    if (aEmailAddress == null) return false;
-    boolean result = true;
-    if (!hasNameAndDomain(aEmailAddress)) {
-      result = false;
-    }
-    return result;
-  }
-
-  /**
-   * Check whether the email has username and domain
-   *
-   * @param aEmailAddress
-   * @return
-   */
-  private static boolean hasNameAndDomain(String aEmailAddress) {
-    String[] tokens = aEmailAddress.split("@");
-    return tokens.length == 2 && tokens[0].trim().length() > 0 && tokens[1].trim().length() > 3
-        && tokens[1].split("\\.").length > 1 && tokens[1].split("\\.")[1].length() > 1;
   }
 
   /**
@@ -561,15 +532,6 @@ public class ExoConnectionUtils {
         value = keyValue[1];
       cookieStore.addCookie(new BasicClientCookie(key, value));
     }
-  }
-
-  public static boolean validateUrl(String url) {
-    return Patterns.WEB_URL.matcher(url).matches();
-  }
-
-  public static boolean urlHasWrongTenant(String url) {
-    return Arrays.asList(WRONG_CLOUD_URLS).contains(
-        !url.startsWith(ExoConnectionUtils.HTTP) ? ExoConnectionUtils.HTTP + url : url);
   }
 
   /**

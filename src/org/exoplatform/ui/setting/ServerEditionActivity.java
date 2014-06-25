@@ -18,6 +18,18 @@
  */
 package org.exoplatform.ui.setting;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.R;
+import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoUtils;
+import org.exoplatform.utils.ServerConfigurationUtils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -37,14 +49,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.exoplatform.R;
-import org.exoplatform.model.ServerObjInfo;
-import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.utils.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This screen is used to add new server or modify existing server<br/>
@@ -308,7 +312,7 @@ public class ServerEditionActivity extends Activity {
     String url = mServerUrlEditTxt.getText().toString();
     if (!url.startsWith(ExoConnectionUtils.HTTP) && !url.startsWith(ExoConnectionUtils.HTTPS))
       url = ExoConnectionUtils.HTTP + url;
-    if (!ExoConnectionUtils.validateUrl(url) || ExoConnectionUtils.urlHasWrongTenant(url)) {
+    if (!ExoUtils.isUrlValid(url) || ExoUtils.urlHasWrongTenant(url)) {
 
       if (inputMethodManager == null)
         Toast.makeText(ServerEditionActivity.this, R.string.ServerInvalid, Toast.LENGTH_SHORT).show();
@@ -334,27 +338,32 @@ public class ServerEditionActivity extends Activity {
    * @return
    */
   private boolean isServerValid(ServerObjInfo myServerObj) {
-    if (myServerObj.serverName.length() == 0 || myServerObj.serverUrl.length() == 0) {
+    boolean isValid = true;
+    
+    // neither server name, URL nor username can be empty
+    if (myServerObj.serverName == null ||       myServerObj.serverUrl == null ||       myServerObj.username == null ||
+        myServerObj.serverName.length() == 0 || myServerObj.serverUrl.length() == 0 || myServerObj.username.length() == 0) {
       Toast.makeText(this, mResources.getString(R.string.WarningServerNameIsEmpty), Toast.LENGTH_SHORT).show();
-      return false;
+      isValid = false;
     }
-
-    URLAnalyzer urlAnanyzer = new URLAnalyzer();
-    myServerObj.serverUrl = urlAnanyzer.parserURL(myServerObj.serverUrl);
-
-    if (ExoDocumentUtils.isContainSpecialChar(myServerObj.serverName,
-        ExoConstants.SPECIAL_CHAR_NAME_SET)
-        || ExoDocumentUtils.isContainSpecialChar(myServerObj.serverUrl,
-        ExoConstants.SPECIAL_CHAR_URL_SET)) {
-
+    // server name must not contain special characters
+    if (!ExoUtils.isServerNameValid(myServerObj.serverName)) {
       Toast.makeText(this, mResources.getString(R.string.SpecialCharacters), Toast.LENGTH_SHORT).show();
-      return false;
+      isValid = false;
     }
-    return true;
+    // server URL must be a valid URL
+    myServerObj.serverUrl = ExoUtils.stripUrl(myServerObj.serverUrl);
+    if (!ExoUtils.isUrlValid(myServerObj.serverUrl)) {
+      Toast.makeText(this, mResources.getString(R.string.ServerInvalid), Toast.LENGTH_SHORT).show();
+      isValid = false;
+    }
+    
+    return isValid;
   }
 
   /**
-   * Make change to shared perf and generate xml file
+   * Save the list of servers on disk, in an XML file.
+   * Keep the list in memory in ServerSettingHelper
    */
   private void onSave() {
     ArrayList<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList(this);

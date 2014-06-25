@@ -21,8 +21,8 @@ package org.exoplatform.widget;
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.utils.URLAnalyzer;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -102,7 +102,6 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
 
   }
 
-  // @Override
   public void onClick(View view) {
     if (view.equals(okButton)) {
       folderName = actionEditText.getText().toString();
@@ -119,7 +118,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
               currentFolder = ExoDocumentUtils.getParentUrl(currentFolder) + "/" + folderName;
               DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
             }
-            if (URLAnalyzer.isUrlValid(destinationUrl)) {
+            if (ExoUtils.isDocumentUrlValid(destinationUrl)) {
               DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
                                                                 destinationUrl,
                                                                 DocumentActivity.ACTION_RENAME);
@@ -133,7 +132,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
 
         } else {
           String desUrl = selectedFile.path + "/" + folderName;
-          if (URLAnalyzer.isUrlValid(desUrl)) {
+          if (ExoUtils.isDocumentUrlValid(desUrl)) {
             DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
                                                               desUrl,
                                                               DocumentActivity.ACTION_CREATE);

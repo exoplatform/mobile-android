@@ -111,7 +111,7 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
         if (!(url.startsWith(ExoConnectionUtils.HTTP) || url.startsWith(ExoConnectionUtils.HTTPS)))
           url = ExoConnectionUtils.HTTP + url;
 
-        if (ExoConnectionUtils.urlHasWrongTenant(url) || !ExoConnectionUtils.validateUrl(url)) {
+        if (ExoUtils.urlHasWrongTenant(url) || !ExoUtils.isUrlValid(url)) {
           InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
           if (inputMethodManager!= null) inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 

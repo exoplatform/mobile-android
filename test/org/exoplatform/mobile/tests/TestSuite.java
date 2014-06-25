@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({WelcomeActivityTest.class, LoginActivityTest.class, SignInOnPremiseActivityTest.class,
-                        LaunchActivityTest.class, ExoEmailsAndURLsValidationTest.class, SettingsActivityTest.class,
+                        LaunchActivityTest.class, ExoAccountInfoValidationTest.class, SettingsActivityTest.class,
                         HomeActivityTest.class})
 public class TestSuite {
 }
