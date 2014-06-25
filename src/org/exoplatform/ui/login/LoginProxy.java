@@ -18,21 +18,25 @@
  */
 package org.exoplatform.ui.login;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.util.Log;
+import java.util.ArrayList;
+
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.ui.login.tasks.CheckAccountExistsTask;
 import org.exoplatform.ui.login.tasks.CheckingTenantStatusTask;
 import org.exoplatform.ui.login.tasks.LoginTask;
 import org.exoplatform.ui.login.tasks.RequestTenantTask;
-import org.exoplatform.utils.*;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.WaitingDialog;
 
-import java.util.ArrayList;
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.util.Log;
 
 
 /**
@@ -55,7 +59,8 @@ import java.util.ArrayList;
 public class LoginProxy implements
     CheckingTenantStatusTask.AsyncTaskListener,
     RequestTenantTask.AsyncTaskListener,
-    LoginTask.AsyncTaskListener {
+    LoginTask.AsyncTaskListener,
+    CheckAccountExistsTask.AsyncTaskListener {
 
 
   /***=== Data ===***/
@@ -260,13 +265,27 @@ public class LoginProxy implements
 
     /** cloud server - check email existence */
     if (mTenant != null && mLaunchMode == WITH_EMAIL) {
-      if (!ExoConnectionUtils.requestAccountExistsForUser(mNewUserName, mTenant)) {
-        finish(ExoConnectionUtils.SIGNIN_NO_ACCOUNT);
-        return ;
-      }
+      
+      CheckAccountExistsTask accountExists = new CheckAccountExistsTask();
+      accountExists.setListener(this);
+      accountExists.execute(mNewUserName, mTenant);
+      
+      return;
+      
     }
-
+    
     launchLoginTask();
+
+  }
+  
+  @Override
+  public void onCheckAccountExistsFinished(boolean accountExists) {
+    
+    if (accountExists)
+      launchLoginTask();
+    else
+      finish(ExoConnectionUtils.SIGNIN_NO_ACCOUNT);
+    
   }
 
   private void launchLoginTask() {
@@ -368,28 +387,9 @@ public class LoginProxy implements
         int duplicatedIdx = serverList.indexOf(newServerObj);
         /** No duplicate */
         if (duplicatedIdx == -1) {
-
-          /** check same url-server */
-          ServerObjInfo sameUrlServer = null;
-          int idx = 0;
-          for (ServerObjInfo serverObj : serverList) {
-            if (serverObj.serverUrl.equals(mDomain) && serverObj.username.equals("")) {
-              sameUrlServer = serverObj;
-              break;
-            }
-            idx++;
-          }
-
-          if (sameUrlServer == null) {
-            serverList.add(newServerObj);
-            serverIdx  = serverList.size() - 1;
-          }
-          else {
-            serverList.remove(idx);
-            serverList.add(idx, newServerObj);
-            serverIdx  = idx;
-          }
           needToSave = true;
+          serverList.add(newServerObj);
+          serverIdx = serverList.size()-1;
         }
         else {
           /** Duplicate server */
@@ -459,4 +459,5 @@ public class LoginProxy implements
 
     void onLoginFinished(boolean result);
   }
+
 }

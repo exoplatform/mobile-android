@@ -18,6 +18,11 @@
  */
 package org.exoplatform.ui;
 
+import org.exoplatform.R;
+import org.exoplatform.controller.signup.SignUpController;
+import org.exoplatform.utils.ExoUtils;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,10 +36,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import org.exoplatform.R;
-import org.exoplatform.controller.signup.SignUpController;
-import org.exoplatform.utils.ExoConnectionUtils;
 
+@SuppressLint("ValidFragment")
 public class CreationAccountFragment extends Fragment {
 
   private SignUpActivity mSignUpActivity;
@@ -49,6 +52,10 @@ public class CreationAccountFragment extends Fragment {
 
   private static final String TAG = "CreationAccountFragment";
 
+  public CreationAccountFragment() {
+    
+  }
+  
   public CreationAccountFragment(SignUpActivity context) {
     mSignUpActivity = context;
     mContext = context;
@@ -75,7 +82,7 @@ public class CreationAccountFragment extends Fragment {
         Log.i(TAG, "createAccount");
 
         String email = mEmailEditTxt.getText().toString();
-        if (!ExoConnectionUtils.validateEmail(email)) showAlertMessage();
+        if (!ExoUtils.isEmailValid(email)) showAlertMessage();
         else makeRequestCreatingAccount(email);
       }
     };

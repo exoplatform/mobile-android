@@ -22,10 +22,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Describe a server configuration, containing url to connect to server and
- * credentials.
- *
- * A server object information is identified by a pair of server's url and username
+ * Describe an Account configuration, containing the URL to connect to the server and credentials.
+ * A server object information is identified by the combination: server name - server url - username
  */
 public class ServerObjInfo implements Parcelable {
 
@@ -97,11 +95,15 @@ public class ServerObjInfo implements Parcelable {
     dest.writeByte((byte) (isAutoLoginEnabled ? 1 : 0));
   }
 
+  /**
+   * Compares this ServerObjInfo with the one given.<br/>
+   * Returns true if server name and server URL and username are identical.
+   */
   @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof  ServerObjInfo)) return false;
     ServerObjInfo _server = (ServerObjInfo) obj;
-    if (_server.serverUrl.equals(serverUrl) && _server.username.equals(username)) return true;
+    if (_server.serverName.equals(serverName) && _server.serverUrl.equals(serverUrl) && _server.username.equals(username)) return true;
     return false;
   }
 
