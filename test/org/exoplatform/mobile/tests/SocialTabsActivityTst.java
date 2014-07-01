@@ -172,8 +172,8 @@ public class SocialTabsActivityTst extends ExoActivityTestUtils<SocialTabsActivi
     createWithBundle(createBundleWithDefaultSettings());
     init();
     
-    HomeController c = new HomeController(activity, activity.loaderItem);
-    c.launchNewsService();
+    HomeController c = new HomeController(activity);
+    c.launchNewsService(activity.loaderItem);
     
     fragment = AllUpdatesFragment.getInstance();
     
