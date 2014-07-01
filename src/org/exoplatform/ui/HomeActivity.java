@@ -24,7 +24,6 @@ import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
 
-import org.apache.http.client.HttpClient;
 import org.exoplatform.R;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.model.SocialActivityInfo;
@@ -45,7 +44,6 @@ import org.exoplatform.widget.ShaderImageView;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +52,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 /**
@@ -92,19 +91,18 @@ public class HomeActivity extends MyActionBar {
   private static final String TAG = "eXo____HomeActivity____";
 
   private AccountSetting      mSetting;
+  
+  private boolean             mShowAccountSwitcherButton = false;
 
   @Override
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.home_layout);
-
+    
+    // only set the type of action bar here, the buttons are initialized in onResume
     super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
-    addActionBarItem(Type.Refresh);
-    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
-    addActionBarItem();
-    getActionBar().getItem(1).setDrawable(R.drawable.action_bar_logout_button);
-
+    
     mSetting = AccountSetting.getInstance();
 
     homeActivity = this;
@@ -116,9 +114,25 @@ public class HomeActivity extends MyActionBar {
       ArrayList<String> cookieList = mSetting.cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
-    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-    homeController = new HomeController(this, loaderItem);
+
+    homeController = new HomeController(this);
     init();
+  }
+  
+  private void initActionBar() {
+	  
+	    addActionBarItem(Type.Refresh);
+	    super.getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
+	    // display the account switcher button only if 2+ accounts are configured 
+	    if (ServerSettingHelper.getInstance().getServerInfoList(this).size() >= 2) {
+	    	addActionBarItem();
+	    	super.getActionBar().getItem(1).setDrawable(R.drawable.action_switch_accounts);
+	    	mShowAccountSwitcherButton = true;
+	    }
+	    addActionBarItem();
+	    super.getActionBar().getItem(mShowAccountSwitcherButton ? 2 : 1).setDrawable(R.drawable.action_bar_logout_button);
+	    
+	    loaderItem = (LoaderActionBarItem) super.getActionBar().getItem(0);
   }
 
   @Override
@@ -142,6 +156,7 @@ public class HomeActivity extends MyActionBar {
   @Override
   protected void onResume() {
     super.onResume();
+    initActionBar();
     SettingUtils.setDefaultLanguage(this);
     setInfo();
     startSocialService(loaderItem);
@@ -216,7 +231,7 @@ public class HomeActivity extends MyActionBar {
   private void startSocialService(LoaderActionBarItem loader) {
     /** if soc activity service is null then loads all soc services */
     if (SocialServiceHelper.getInstance().activityService == null)
-      homeController.launchNewsService();
+      homeController.launchNewsService(loader);
     else
       homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
   }
@@ -261,15 +276,25 @@ public class HomeActivity extends MyActionBar {
     case 0:       // click on refresh button
       loaderItem = (LoaderActionBarItem) item;
       if (SocialServiceHelper.getInstance().activityService == null) {
-        homeController.launchNewsService();
+        homeController.launchNewsService(loaderItem);
       } else {
         homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
       }
       break;
-    case 1:       // click on log out
-      onLoggingOut();
-      redirectToLogIn();
+    case 1: // open the account switcher or sign-out
+    	if (mShowAccountSwitcherButton) {
+    		// TODO open the account switcher
+    		Toast.makeText(this, "Open the account switcher", Toast.LENGTH_SHORT).show();
+    	} else {
+    		onLoggingOut();
+    	    redirectToLogIn();
+    	}
       break;
+    case 2: // sign-out only if the account switcher button is displayed
+    	if (mShowAccountSwitcherButton) {
+    		onLoggingOut();
+    	    redirectToLogIn();
+    	}
     }
     return true;
 

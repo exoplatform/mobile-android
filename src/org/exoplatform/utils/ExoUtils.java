@@ -114,7 +114,7 @@ public class ExoUtils {
    * @return true if no special characters are found, false otherwise.
    */
   public static boolean isServerNameValid(String serverName) {
-    return (serverName == null) ? false : ExoDocumentUtils.isContainSpecialChar(serverName, ExoConstants.SPECIAL_CHAR_NAME_SET);
+    return (serverName == null) ? false : !ExoDocumentUtils.isContainSpecialChar(serverName, ExoConstants.SPECIAL_CHAR_NAME_SET);
   }
   
   /**

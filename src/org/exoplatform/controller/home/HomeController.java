@@ -46,16 +46,15 @@ public class HomeController {
 
   private SocialLoadTask         mLoadTask;
 
-  public  LoaderActionBarItem    loader;
+  private  LoaderActionBarItem    loader;
 
   public  static final int     FLIPPER_VIEW = 10;
 
   private static final String  TAG = "eXo____HomeController____";
 
 
-  public HomeController(Context context, LoaderActionBarItem loaderItem) {
+  public HomeController(Context context) {
     mContext = context;
-    loader = loaderItem;
   }
 
   public void finishService() {
@@ -63,7 +62,8 @@ public class HomeController {
     onCancelLoad();
   }
 
-  public void launchNewsService() {
+  public void launchNewsService(LoaderActionBarItem loaderItem) {
+	  loader = loaderItem;
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mServiceLoadTask == null
           || mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.FINISHED) {
