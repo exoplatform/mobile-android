@@ -154,21 +154,10 @@ public class ExoUtils {
      */
     public static boolean urlHasWrongTenant(String url) {
         return (url == null) ? false : // false if url is null
-                            (Arrays.asList(WRONG_CLOUD_URLS).contains( // true
-                                                                       // if the
-                                                                       // given
-                                                                       // url is
-                                                                       // in the
-                                                                       // list
-                            !url.startsWith("http://") ? "http://" + url : url) // add
-                                                                                // http://
-                                                                                // to
-                                                                                // the
-                                                                                // url
-                                                                                // if
-                                                                                // it's
-                                                                                // missing
-                            );
+                            // true if the given url is in the list
+                            (Arrays.asList(WRONG_CLOUD_URLS).contains(
+                            // add http:// to the url if it's missing
+                            !url.startsWith("http://") ? "http://" + url : url));
     }
 
 }
