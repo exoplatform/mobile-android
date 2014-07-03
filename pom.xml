@@ -60,7 +60,6 @@
     <exo.social.client.version>1.0.0-SNAPSHOT</exo.social.client.version>
     <slf4j-android.version>1.6.1-RC1</slf4j-android.version>
     <greendroid.version>67aa3ed</greendroid.version>
-    <android.maven.plugin.version>3.8.0</android.maven.plugin.version>
     <!-- Test Dependencies  -->
     <fest-android.version>1.0.7</fest-android.version>
     <robolectric.version>2.2</robolectric.version>
@@ -69,8 +68,7 @@
     <!-- Java version -->
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
-    <!-- Upgrade must be studied - will be required to upgrade to maven 3.1+ -->
-    <version.android.plugin>3.7.0</version.android.plugin>
+    <version.android.plugin>3.8.0</version.android.plugin>
     <!-- Surefire settings (to be compatible with jacoco we should use a property and not the plugin param) -->
     <argLine>-Xmx1024m</argLine>
   </properties>
@@ -234,7 +232,6 @@
       <plugin>
         <groupId>com.jayway.maven.plugins.android.generation2</groupId>
         <artifactId>android-maven-plugin</artifactId>
-        <version>${android.maven.plugin.version}</version>
         <extensions>true</extensions>
         <executions>
           <execution>
