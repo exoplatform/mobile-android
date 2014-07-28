@@ -51,7 +51,7 @@
     <android.version>2.3.3</android.version>
     <android.sdk.platform>10</android.sdk.platform>
     <!-- max allowed to not have conflict with GreenDroid's ActionBar  -->
-    <android.support.version>r7</android.support.version>
+    <android.support.version>20.0.0</android.support.version>
     <!-- March 2012 -->
     <android.annotations.version>4.1.1.4</android.annotations.version>
     <!-- Sept 2012  -->
@@ -105,14 +105,25 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.android</groupId>
-      <artifactId>support-v4</artifactId>
+      <groupId>android.support</groupId>
+      <artifactId>compatibility-v4</artifactId>
       <version>${android.support.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.android</groupId>
       <artifactId>annotations</artifactId>
       <version>${android.annotations.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android.gms</groupId>
+      <artifactId>google-play-services</artifactId>
+      <version>18.0.0</version>
+      <type>apklib</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android.gms</groupId>
+      <artifactId>google-play-services</artifactId>
+      <version>18.0.0</version>
     </dependency>
     <!-- Dependency With Greendroid library for Android -->
     <dependency>

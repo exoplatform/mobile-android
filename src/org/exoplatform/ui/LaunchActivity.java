@@ -18,22 +18,26 @@
  */
 package org.exoplatform.ui;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
+import java.io.IOException;
+
 import org.exoplatform.R;
-import org.exoplatform.utils.LaunchUtils;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.ui.login.LoginWarningDialog;
-import org.exoplatform.widget.WarningDialog;
+import org.exoplatform.utils.LaunchUtils;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 /**
  * Lightweight activity acts as entry point to the application
@@ -41,6 +45,9 @@ import java.io.StringWriter;
 public class LaunchActivity extends Activity implements LoginProxy.ProxyListener {
 
   private static final String TAG = "eXo____LaunchActivity____";
+  
+  private final String SENDER_ID = "820134396909";
+  private GoogleCloudMessaging gcm;
 
   private AccountSetting mSetting;
 
@@ -48,6 +55,7 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
 
   private Resources      mResources;
 
+ 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -55,7 +63,17 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
     mSetting   = AccountSetting.getInstance();
     mResources = getResources();
 
+    if (checkPlayServices()) {
+    	RegisterInBackground registerTask = new RegisterInBackground(this);
+    	registerTask.execute();
+    }
     redirect();
+  }
+  
+
+  public void onResume() {
+	  super.onResume();
+	  checkPlayServices();
   }
 
   public void redirect() {
@@ -130,5 +148,46 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
     //next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     startActivityForResult(next, 0);
     overridePendingTransition(0, 0);
+  }
+  
+  /**
+   * Check the device to make sure it has the Google Play Services APK. If
+   * it doesn't, display a dialog that allows users to download the APK from
+   * the Google Play Store or enable it in the device's system settings.
+   */
+  private boolean checkPlayServices() {
+      int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+      if (resultCode != ConnectionResult.SUCCESS) {
+          if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+              GooglePlayServicesUtil.getErrorDialog(resultCode, this, 9000).show();
+          } else {
+              Log.i(TAG, "This device is not supported.");
+              finish();
+          }
+          return false;
+      }
+      return true;
+  }
+  
+  private class RegisterInBackground extends AsyncTask<Void, Void, Void>
+  {
+	  
+	  public RegisterInBackground(Context ctx) {
+		  if (gcm == null) {
+			  gcm = GoogleCloudMessaging.getInstance(ctx);
+		  }
+	  }
+
+	@Override
+	protected Void doInBackground(Void... params) {
+		try {
+			String regId = gcm.register(SENDER_ID);
+			Log.i(TAG, "Registration ID: "+regId);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	  
   }
 }
