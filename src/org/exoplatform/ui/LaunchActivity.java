@@ -18,9 +18,9 @@
  */
 package org.exoplatform.ui;
 
-import java.io.IOException;
-
 import org.exoplatform.R;
+import org.exoplatform.notifications.GCMRegistrationTask;
+import org.exoplatform.notifications.PlatformRegistrationTask;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.login.LoginProxy;
@@ -28,16 +28,13 @@ import org.exoplatform.ui.login.LoginWarningDialog;
 import org.exoplatform.utils.LaunchUtils;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 /**
  * Lightweight activity acts as entry point to the application
@@ -45,9 +42,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 public class LaunchActivity extends Activity implements LoginProxy.ProxyListener {
 
   private static final String TAG = "eXo____LaunchActivity____";
-  
-  private final String SENDER_ID = "820134396909";
-  private GoogleCloudMessaging gcm;
 
   private AccountSetting mSetting;
 
@@ -63,9 +57,10 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
     mSetting   = AccountSetting.getInstance();
     mResources = getResources();
 
+    // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
     if (checkPlayServices()) {
-    	RegisterInBackground registerTask = new RegisterInBackground(this);
-    	registerTask.execute();
+    	GCMRegistrationTask registration = new GCMRegistrationTask(this);
+    	registration.execute();
     }
     redirect();
   }
@@ -143,7 +138,11 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
   public void onLoginFinished(boolean result) {
     if (!result) return ;
 
-    /** Login ok, to Home screen!! */
+    /** Login OK */
+    // register device in Platform
+    PlatformRegistrationTask registration = new PlatformRegistrationTask(this);
+    registration.execute();
+    // redirect Home screen
     Intent next = new Intent(this, HomeActivity.class);
     //next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     startActivityForResult(next, 0);
@@ -161,33 +160,11 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
           if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
               GooglePlayServicesUtil.getErrorDialog(resultCode, this, 9000).show();
           } else {
-              Log.i(TAG, "This device is not supported.");
+              Log.i(TAG, "This device does not support Google Cloud Messaging and therefore cannot receive push notifications.");
               finish();
           }
           return false;
       }
       return true;
-  }
-  
-  private class RegisterInBackground extends AsyncTask<Void, Void, Void>
-  {
-	  
-	  public RegisterInBackground(Context ctx) {
-		  if (gcm == null) {
-			  gcm = GoogleCloudMessaging.getInstance(ctx);
-		  }
-	  }
-
-	@Override
-	protected Void doInBackground(Void... params) {
-		try {
-			String regId = gcm.register(SENDER_ID);
-			Log.i(TAG, "Registration ID: "+regId);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	  
   }
 }

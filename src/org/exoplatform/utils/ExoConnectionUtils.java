@@ -143,6 +143,10 @@ public class ExoConnectionUtils {
 
   public static final String[]    WRONG_CLOUD_URLS         = new String[] {
       "http://exoplatform.net", "http://wks-acc.exoplatform.org", "http://netstg.exoplatform.org" };
+  
+  /** Base URL and endpoint to register a device for mobile notifications */
+  public static final String REGISTRATION_BASE_URL         = "exo-mobile-notifications";
+  public static final String REGISTRATION_ENDPOINT         = "registrations"; 
 
   /**
    * Check mobile network and wireless status

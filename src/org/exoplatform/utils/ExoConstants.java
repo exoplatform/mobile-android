@@ -214,4 +214,8 @@ public class ExoConstants {
 
   /** email used for sign in */
   public static final String EXO_EMAIL                             = "EXO_EMAIL";
+  
+  /** keys for storing registration ID and app version in shared preferences */
+  public static final String GCM_REGISTRATION_ID                  = "exo_registration_id";
+  public static final String APP_VERSION                          = "exo_app_version";
 }
