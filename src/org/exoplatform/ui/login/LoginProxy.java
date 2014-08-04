@@ -18,21 +18,25 @@
  */
 package org.exoplatform.ui.login;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.util.Log;
+import java.util.ArrayList;
+
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.notifications.PlatformRegistrationTask;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.login.tasks.CheckingTenantStatusTask;
 import org.exoplatform.ui.login.tasks.LoginTask;
 import org.exoplatform.ui.login.tasks.RequestTenantTask;
-import org.exoplatform.utils.*;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.WaitingDialog;
 
-import java.util.ArrayList;
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.util.Log;
 
 
 /**
@@ -407,6 +411,10 @@ public class LoginProxy implements
 
         /** Save config */
         if (needToSave) SettingUtils.persistServerSetting(mContext);
+        
+        // register device in Platform
+    	PlatformRegistrationTask registration = new PlatformRegistrationTask(mContext);
+    	registration.execute();
       break;
     }
 

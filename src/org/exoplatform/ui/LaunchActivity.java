@@ -20,7 +20,6 @@ package org.exoplatform.ui;
 
 import org.exoplatform.R;
 import org.exoplatform.notifications.GCMRegistrationTask;
-import org.exoplatform.notifications.PlatformRegistrationTask;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.login.LoginProxy;
@@ -139,9 +138,6 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
     if (!result) return ;
 
     /** Login OK */
-    // register device in Platform
-    PlatformRegistrationTask registration = new PlatformRegistrationTask(this);
-    registration.execute();
     // redirect Home screen
     Intent next = new Intent(this, HomeActivity.class);
     //next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

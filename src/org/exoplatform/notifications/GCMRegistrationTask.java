@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -38,10 +39,11 @@ public class GCMRegistrationTask extends AsyncTask<Void, Void, Void> {
 			// if the registration ID is not stored, we must get one from GCM
 			try {
 				registrationId = gcm.register(SENDER_ID);
+				Log.i(TAG, "Device successfully registered to Google Cloud Messaging.");
 				// Persist the registration ID - no need to register again.
                 storeRegistrationId(registrationId);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e(TAG, "Error while registering to Google Cloud Messaging.", e);
 			}
 		}
 		return null;
@@ -77,6 +79,7 @@ public class GCMRegistrationTask extends AsyncTask<Void, Void, Void> {
         if (registeredVersion != currentVersion) {
             return "";
         }
+        Log.d(TAG, "Device's registration ID retrieved from app's preferences as: "+registrationId);
         return registrationId;
     }
 
@@ -94,6 +97,7 @@ public class GCMRegistrationTask extends AsyncTask<Void, Void, Void> {
         editor.putString(ExoConstants.GCM_REGISTRATION_ID, regId);
         editor.putInt(ExoConstants.APP_VERSION, appVersion);
         editor.commit();
+        Log.d(TAG, "Device's registration ID successfully stored in app's preferences");
     }
 
 	

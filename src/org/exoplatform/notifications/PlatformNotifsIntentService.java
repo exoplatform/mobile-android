@@ -1,6 +1,7 @@
 package org.exoplatform.notifications;
 
 import org.exoplatform.R;
+import org.exoplatform.singleton.AccountSetting;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -8,12 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class PlatformNotifsIntentService extends IntentService {
 	
-	private static final String TAG = "PlatformNotifsIntentService";
+	private static final String TAG = "eXo____PlatformNotifsIntentService____";
 
 	public PlatformNotifsIntentService()
 	{
@@ -22,16 +24,24 @@ public class PlatformNotifsIntentService extends IntentService {
 	
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Bundle extras = intent.getExtras(); // should contain Hello World
+		Bundle extras = intent.getExtras(); // should contain as follows:
+		// - user    : username of the user targeted by this notification
+		// - title   : title of the notification
+		// - message : message/content of the notification
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 		String msgType = gcm.getMessageType(intent);
 		
 		if (!extras.isEmpty()) {
 			if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(msgType)) {
-				String title = extras.getString("title");
-				String message = extras.getString("message");
-				if (!"".equals(title)) {
-					sendNotification(title, message);
+				String user = extras.getString("user");
+				if (AccountSetting.getInstance().getUsername().equals(user)) { // show the notification only if the targeted user is currently logged-in
+					String title = extras.getString("title");
+					String message = extras.getString("message");
+					if (!"".equals(title)) {
+						sendNotification(title, message);
+					}
+				} else {
+					Log.i(TAG, "Notification for user '"+user+"' was dismissed.");
 				}
 			}
 		}
