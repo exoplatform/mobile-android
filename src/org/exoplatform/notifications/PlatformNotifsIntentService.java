@@ -41,7 +41,7 @@ public class PlatformNotifsIntentService extends IntentService {
 						sendNotification(title, message);
 					}
 				} else {
-					Log.i(TAG, "Notification for user '"+user+"' was dismissed.");
+					Log.i(TAG, "Notification for user '"+user+"' was ignored because he was not logged-in.");
 				}
 			}
 		}

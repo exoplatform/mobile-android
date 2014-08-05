@@ -21,7 +21,7 @@ import android.util.Log;
 
 public class PlatformRegistrationTask extends AsyncTask<Void, Void, Void> {
 	
-	private final String JSON_KEY_REGISTRATION_ID = "id";
+	private final String JSON_KEY_REGISTRATION_ID = "device_id";
 	private final String JSON_KEY_DEVICE_PLATFORM = "platform";
 	private final String JSON_KEY_USERNAME        = "username";
 	private static final String TAG = "eXo____PlatformRegistrationTask____";
