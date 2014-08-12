@@ -2,9 +2,11 @@ package org.exoplatform.notifications;
 
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.ui.LaunchActivity;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,7 +43,7 @@ public class PlatformNotifsIntentService extends IntentService {
 						sendNotification(title, message);
 					}
 				} else {
-					Log.i(TAG, "Notification for user '"+user+"' was ignored because he was not logged-in.");
+					Log.i(TAG, "Notification for user '"+user+"' was ignored because (s)he was not logged-in.");
 				}
 			}
 		}
@@ -55,11 +57,17 @@ public class PlatformNotifsIntentService extends IntentService {
     	final int NOTIFICATION_ID = 1;
         NotificationManager mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
+        
+        PendingIntent openAppIntent = PendingIntent.getActivity(getApplicationContext(), NOTIFICATION_ID, new Intent(getApplicationContext(), LaunchActivity.class), Intent.FLAG_ACTIVITY_NEW_TASK);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.application_icon)
         .setContentTitle(title)
+        .setDefaults(NotificationCompat.DEFAULT_ALL)
+        .setTicker(title)
+        .setContentIntent(openAppIntent)
+        .setAutoCancel(true)
         .setStyle(new NotificationCompat.BigTextStyle());
         if (message != null && !message.equals("")) {
         	mBuilder.setContentText(message).setStyle(new NotificationCompat.BigTextStyle().bigText(message));
