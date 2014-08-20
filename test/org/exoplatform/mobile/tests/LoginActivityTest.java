@@ -19,15 +19,21 @@ package org.exoplatform.mobile.tests;
 import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
-//import static org.junit.Assert.assertThat;
+
+
+
+import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.login.AccountPanel;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.login.ServerPanel;
+import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SettingUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,6 +61,7 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
   ServerPanel srvPanel;
   Button loginBtn;
   EditText user, pass;
+  ServerSettingHelper srvSettings;
   
   @Before
   public void setup() {
@@ -71,6 +78,25 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
   public void createWithIntent(Intent i) {
     super.createWithIntent(i);
     init();
+  }
+  
+  @Override
+  public void createWithContext(Context ctx) {
+	  super.createWithContext(ctx);
+	  init();
+  }
+  
+  public void createXAccounts(int x, Context ctx) {
+	  srvSettings = ServerSettingHelper.getInstance();
+	  ArrayList<ServerObjInfo> list = new ArrayList<ServerObjInfo>();
+	  for (int i=1; i==x; i++) {
+		  ServerObjInfo srv = getServerWithDefaultValues();
+		  srv.serverName = TEST_SERVER_NAME+"_"+i; // rename account as testserver_i
+		  srv.username = TEST_USER_NAME+"_"+i; // rename username as testuser_i
+		  list.add(srv);
+	  }
+	  srvSettings.setServerInfoList(list);
+	  SettingUtils.persistServerSetting(ctx);
   }
   
   private void init() {
@@ -94,6 +120,8 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
     assertNotNull(serverBtn);  // and should be clickable
     assertThat(accountBtn).isClickable();
     assertThat(serverBtn).isClickable();
+    assertThat(accountBtn).isVisible();
+    assertThat(serverBtn).isInvisible(); // with 0 account, the switch accounts button is invisible 
     
     assertNotNull(accPanel); // account and server panels should exist
     assertNotNull(srvPanel); // and only account panel is visible
@@ -110,9 +138,14 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
     
   }
   
-  @Test
+//  @Test
   public void shouldDisplayPanelWhenTappingButton() {
-    create();
+	  
+	Context ctx = Robolectric.getShadowApplication().getApplicationContext();
+	  
+    createXAccounts(2, ctx); // create 2 accounts
+    Intent i = new Intent(ctx, LoginActivity.class);
+    createWithIntent(i);
     
     Robolectric.clickOn(serverBtn); // should hide account, display server panel and select button when clicking the server button
     assertThat(srvPanel).isVisible();
@@ -125,6 +158,29 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
     assertThat(accPanel).isVisible();
     assertThat(serverBtn).isNotSelected();
     assertThat(accountBtn).isSelected();
+  }
+  
+  //@Test
+  public void shouldDisplaySwitchIconWhenTwoAccountsExist() {
+	  //createXAccounts(1);
+	  
+	  // switch icon and panel should be invisible
+	  assertThat(srvPanel).isInvisible();
+	  assertThat(serverBtn).isInvisible();
+	  
+	  // add one server
+	  srvSettings = ServerSettingHelper.getInstance();
+	  ServerObjInfo srv = getServerWithDefaultValues();
+	  srv.serverName = TEST_SERVER_NAME+"_new"; 
+	  srv.username = TEST_USER_NAME+"_new"; 
+	  ArrayList<ServerObjInfo> list = new ArrayList<ServerObjInfo>();
+	  list.add(srv);
+	  srvSettings.setServerInfoList(list);
+	  SettingUtils.persistServerSetting(Robolectric.getShadowApplication().getApplicationContext());
+	  
+	  // switch icon and panel should be visible
+	  assertThat(srvPanel).isVisible();
+	  assertThat(serverBtn).isVisible();
   }
   
   @Test

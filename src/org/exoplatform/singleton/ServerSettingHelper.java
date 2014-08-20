@@ -87,6 +87,12 @@ public class ServerSettingHelper implements Parcelable {
     serverInfoList = list;
   }
 
+  /**
+   * Returns the list of server objects configured in the app.<br/>
+   * If the property has not yet been set, the list is retrieved from storage lazily.
+   * @param context
+   * @return The list of server objects
+   */
   public ArrayList<ServerObjInfo> getServerInfoList(Context context) {
     if (serverInfoList == null) {
       serverInfoList =
@@ -94,6 +100,15 @@ public class ServerSettingHelper implements Parcelable {
       ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
     }
     return serverInfoList;
+  }
+  
+  /**
+   * Checks whether two or more accounts are configured on the app
+   * @param ctx
+   * @return true if two or more accounts exist, false otherwise
+   */
+  public boolean twoOrMoreAccountsExist(Context ctx) {
+	  return (getServerInfoList(ctx).size() > 1);
   }
 
   @Deprecated

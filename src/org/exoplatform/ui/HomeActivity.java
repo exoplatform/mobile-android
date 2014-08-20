@@ -92,7 +92,7 @@ public class HomeActivity extends MyActionBar {
 
   private AccountSetting      mSetting;
   
-  private boolean             mShowAccountSwitcherButton = false;
+  private boolean             mShowAccountSwitcherButton;
 
   @Override
   public void onCreate(Bundle bundle) {
@@ -119,14 +119,25 @@ public class HomeActivity extends MyActionBar {
     init();
   }
   
+  private void resetActionBarItems()
+  {
+	  final int index = 0;
+	  ActionBarItem item = super.getActionBar().getItem(index);
+	  while (item != null) {
+		  super.getActionBar().removeItem(index);
+		  item = super.getActionBar().getItem(index);
+	  }
+  }
+  
   private void initActionBar() {
-	  
+	  resetActionBarItems();
 	    addActionBarItem(Type.Refresh);
 	    super.getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
 	    // display the account switcher button only if 2+ accounts are configured 
-	    if (ServerSettingHelper.getInstance().getServerInfoList(this).size() >= 2) {
+	    mShowAccountSwitcherButton = false;
+	    if (ServerSettingHelper.getInstance().twoOrMoreAccountsExist(this)) {
 	    	addActionBarItem();
-	    	super.getActionBar().getItem(1).setDrawable(R.drawable.action_switch_accounts);
+	    	super.getActionBar().getItem(1).setDrawable(R.drawable.action_bar_switcher_icon);
 	    	mShowAccountSwitcherButton = true;
 	    }
 	    addActionBarItem();

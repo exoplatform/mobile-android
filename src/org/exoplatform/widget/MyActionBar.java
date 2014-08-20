@@ -229,6 +229,7 @@ public class MyActionBar extends FragmentActivity implements ActionBarActivity {
 
     return getActionBar().addItem(actionBarItemType, itemId);
   }
+  
 
   public FrameLayout getContentView() {
     ensureLayout();

@@ -130,8 +130,22 @@ public class LoginActivity extends Activity implements
     mServerBtn    = (ImageView) findViewById(R.id.login_server_btn);
     mServerBtn.setOnClickListener(this);
   }
+  
+  private void hideSwitchPanelIfOneAccountOnlyExists()
+  {
+	if (ServerSettingHelper.getInstance().twoOrMoreAccountsExist(this))
+	{
+		mServerBtn.setVisibility(View.VISIBLE);
+	} 
+	else 
+	{
+		mServerBtn.setVisibility(View.INVISIBLE);
+		mPanelMode = ACCOUNT_PANEL; // make sure the panel with credential fields is displayed
+	}
+  }
 
   private void initState() {
+	hideSwitchPanelIfOneAccountOnlyExists();
     switchPanel(mPanelMode);
 
     /* update new server list */

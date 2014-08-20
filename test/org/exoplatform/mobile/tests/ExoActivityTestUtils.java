@@ -31,6 +31,7 @@ import org.robolectric.util.ActivityController;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.content.Context;
 
 /**
  * Created by The eXo Platform SAS
@@ -129,6 +130,16 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
         .get();
   }
   
+  public void createWithContext(Context ctx) {
+	 activity = controller
+	   .withBaseContext(ctx)
+	   .create()
+       .start()
+       .resume()
+       .visible()
+       .get();
+  }
+  
   // UTILS
   
   /**
@@ -143,6 +154,8 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
     srv.password = TEST_USER_PWD;
     return srv;
   }
+  
+  
   
   /**
    * Creates a RequestMatcher to use in Robolectric.addHttpResponseRule() for the specified request
