@@ -98,13 +98,19 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
     setVisibility(View.VISIBLE);
 
     if (mSetting.getCurrentServer() != null) {
+    	// if a server is selected
+    	// 1) set username if remember me is enabled
       mUserEditTxt.setText(mSetting.isRememberMeEnabled()
           && !mSetting.getUsername().isEmpty() ?
           mSetting.getUsername(): mUserEditTxt.getText().toString());
-
+        // 2) set password if remember me is enabled
       mPassEditTxt.setText(mSetting.isRememberMeEnabled()
           && !mSetting.getPassword().isEmpty() ?
           mSetting.getPassword(): mPassEditTxt.getText().toString());
+       // 3) append the server name to the login button label
+      String in = mContext.getResources().getString(R.string.SignInButton_In);
+      String loginButtonLabel = mContext.getResources().getString(R.string.SignInButton)+" "+in+" "+mSetting.getServerName();
+      mLoginBtn.setText(loginButtonLabel);
     }
 
     changeStateOfLoginBtn();

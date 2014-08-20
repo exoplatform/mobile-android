@@ -130,6 +130,7 @@ public class HomeActivity extends MyActionBar {
   }
   
   private void initActionBar() {
+	  // need to reset the existing items before 
 	  resetActionBarItems();
 	    addActionBarItem(Type.Refresh);
 	    super.getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);

@@ -160,7 +160,7 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
     assertThat(accountBtn).isSelected();
   }
   
-  //@Test
+//  @Test
   public void shouldDisplaySwitchIconWhenTwoAccountsExist() {
 	  //createXAccounts(1);
 	  
