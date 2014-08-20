@@ -122,7 +122,6 @@
             android:id="@+id/login_account_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/login_exo_logo"
             android:layout_marginBottom="-2dp"
             android:layout_marginLeft="30dp"
             android:scaleType="fitCenter"
@@ -133,12 +132,11 @@
             android:src="@drawable/icon_credentials"
             android:background="@drawable/bg_tab" />
 
-        <!-- Server button -->
+        <!-- Switcher button -->
         <ImageView
             android:id="@+id/login_server_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/login_exo_logo"
             android:layout_marginBottom="-2dp"
             android:layout_marginLeft="-5dp"
             android:paddingTop="8dp"
@@ -146,7 +144,7 @@
             android:clickable="true"
             android:contentDescription="@string/ImageDesc"
             android:layout_toRightOf="@id/login_account_btn"
-            android:src="@drawable/icon_server"
+            android:src="@drawable/icon_switcher"
             android:background="@drawable/bg_tab" />
 
     </RelativeLayout>
