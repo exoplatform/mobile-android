@@ -29,6 +29,7 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.ServerConfigurationUtils;
+import org.exoplatform.utils.SettingUtils;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -297,6 +298,12 @@ public class ServerEditionActivity extends Activity {
         }
 
         listServer.add(myServerObj);
+        if (listServer.size() == 1) {
+        	// we must automatically select the new server if it's the only one in the list
+        	AccountSetting settings = AccountSetting.getInstance();
+        	settings.setCurrentServer(myServerObj);
+        	settings.setDomainIndex(String.valueOf(0));
+        }
         onSave();
         Toast.makeText(ServerEditionActivity.this,
             mResources.getString(R.string.ServerAdded), Toast.LENGTH_SHORT).show();
