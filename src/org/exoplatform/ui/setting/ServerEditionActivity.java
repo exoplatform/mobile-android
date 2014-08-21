@@ -29,7 +29,6 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.ServerConfigurationUtils;
-import org.exoplatform.utils.SettingUtils;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -97,7 +96,7 @@ public class ServerEditionActivity extends Activity {
   public static final int     SETTING_DELETE     = 2;
   public static final String  SERVER_IDX         = "SERVER_IDX";
 
-  private static final String TAG = "eXoServerEditionActivity";
+  private static final String TAG = "eXo____ServerEditionActivity____";
 
   public void onCreate(Bundle savedInstanceState) {
     requestScreenOrientation();

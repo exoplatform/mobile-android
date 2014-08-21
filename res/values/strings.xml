@@ -14,9 +14,9 @@
   <string name="UserNameCellTitle">Username</string>
   <string name="PasswordCellTitle">Password</string>
   <string name="Language">LANGUAGE</string>
-  <string name="Server">SERVER</string>
+  <string name="Server">ACCOUNTS</string>
   <string name="ServerList">Server List</string>
-  <string name="AddAServer">Add a Server</string>
+  <string name="AddAServer">New Account</string>
   <string name="ModifyServerList">Modify the List</string>
   <string name="ServerDetail">Server Configuration</string>
   <string name="NewServer">New Server</string>

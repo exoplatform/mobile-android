@@ -72,6 +72,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity>{
   
   ServerList serverList;
   
+  // now it's the New Accounts button, under the accounts list
   Button mStartCloudSignUpBtn;
   
   ServerSettingHelper srvSettings;
@@ -120,10 +121,10 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity>{
     mRememberFilterCbx   = (CheckBox) activity.findViewById(R.id.setting_remember_filter_ckb);
     
     // Assistant
-    mStartCloudSignUpBtn = (Button) activity.findViewById(R.id.setting_start_cloud_signup_btn);
+    mStartCloudSignUpBtn = (Button) activity.findViewById(R.id.setting_new_account_btn);
     
     // Server List
-    serverList = (ServerList)activity.findViewById(R.id.setting_list_server);
+    serverList = (ServerList)activity.findViewById(R.id.setting_list_accounts);
   }
 
   @Override

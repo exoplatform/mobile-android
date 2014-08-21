@@ -157,14 +157,12 @@ public class ServerList extends LinearLayout {
     serverItem.serverUrl.setText(serverObj.serverUrl);
 
     if (Integer.valueOf(mSetting.getDomainIndex()) == serverIdx) {
-      serverItem.serverImageView.setVisibility(View.VISIBLE);
       AlphaAnimation alpha = new AlphaAnimation(0.3F, 0.3F);
       alpha.setDuration(0);     // Make animation instant
       alpha.setFillAfter(true); // Tell it to persist after the animation ends
       serverItem.layout.startAnimation(alpha);
     }
-    else
-      serverItem.serverImageView.setVisibility(View.INVISIBLE);
+
     final int pos = serverIdx;
 
     /* onclick server item */

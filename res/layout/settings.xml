@@ -97,7 +97,7 @@
         <!-- Server List Settings -->
         <!-- Server title -->
         <TextView
-                android:id="@+id/setting_server_title"
+                android:id="@+id/setting_accounts_title"
                 style="@style/ServerSettingTitleTextStyle"
                 android:text="@string/Server" />
 
@@ -106,15 +106,15 @@
 
         <!-- List of servers -->
         <org.exoplatform.ui.setting.ServerList
-                android:id="@+id/setting_list_server"
+                android:id="@+id/setting_list_accounts"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
                 android:orientation="vertical" />
 
-        <!-- Add server button -->
+        <!-- Add account button -->
         <Button
-                android:id="@+id/setting_modify_server_btn"
+                android:id="@+id/setting_new_account_btn"
                 android:layout_width="fill_parent"
                 android:layout_height="48dp"
                 android:layout_marginLeft="-2dp"
@@ -125,30 +125,6 @@
                 android:textStyle="bold"
                 android:text="@string/AddAServer" />
 
-        <!--<include layout="@layout/separator_line" />-->
-
-
-        <!-- eXo section -->
-        <!-- eXo title -->
-        <TextView
-                android:id="@+id/setting_exo_title"
-                style="@style/ServerSettingTitleTextStyle"
-                android:text="@string/EXO" />
-
-        <!--<include layout="@layout/separator_line" />-->
-
-
-        <!-- Start cloud sign up button -->
-        <Button
-                android:id="@+id/setting_start_cloud_signup_btn"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:textColor="#000000"
-                android:textSize="@dimen/label_txt_size"
-                android:textStyle="bold"
-                android:text="@string/StartCloudSignUpAssistant"
-                android:background="@drawable/file_item_background_shape"
-                android:gravity="center"/>
 
         <!--<include layout="@layout/separator_line" />-->
 
