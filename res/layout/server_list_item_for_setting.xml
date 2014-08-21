@@ -32,13 +32,4 @@
             android:textSize="13sp" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/ImageView_Checked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/authenticate_checkmark_on"
-        android:contentDescription="@string/ServerDetail"
-        android:gravity="center" />
-
 </LinearLayout>

@@ -110,12 +110,11 @@
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/cancel_button_background_shape"
+            android:background="@drawable/send_button_background_shape"
             android:shadowColor="#000000"
             android:shadowDx="1.0"
             android:shadowDy="2.0"
-            android:shadowRadius="1.0"
-            android:textColor="#ffffff"/>
+            android:shadowRadius="1.0"/>
 
     <Button
             android:id="@+id/server_setting_delete_btn"
@@ -127,10 +126,11 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:background="@drawable/send_button_background_shape"
+            android:background="@drawable/cancel_button_background_shape"
             android:shadowColor="#888888"
             android:shadowDx="1.0"
             android:shadowDy="2.0"
-            android:shadowRadius="1.0"/>
+            android:shadowRadius="1.0"
+            android:textColor="#ffffff"/>
 
 </LinearLayout>
