@@ -62,6 +62,8 @@ public class LoginProxy implements
     LoginTask.AsyncTaskListener,
     CheckAccountExistsTask.AsyncTaskListener {
 
+  // connection status of the app 
+  public static boolean userIsLoggedIn;
 
   /***=== Data ===***/
   private String                mNewUserName;
@@ -159,7 +161,7 @@ public class LoginProxy implements
         break;
 
       /**
-       * Login from Sign in screen
+       * Login from Sign in or Auth screen
        */
       case WITH_EMAIL:
         mEmail          = loginData.getString(EMAIL);
@@ -316,6 +318,8 @@ public class LoginProxy implements
    */
   private void finish(int result) {
     Log.i(TAG, "PROXY FINISHED - result: " + result);
+    
+    userIsLoggedIn = false;
 
     if (mState == FINISHED) return ;
     mState = FINISHED;
@@ -404,7 +408,8 @@ public class LoginProxy implements
 
         mSetting.setCurrentServer(serverList.get(serverIdx));
         mSetting.setDomainIndex(String.valueOf(serverIdx));
-
+        userIsLoggedIn = true;
+        
         /** Save config */
         if (needToSave) SettingUtils.persistServerSetting(mContext);
       break;

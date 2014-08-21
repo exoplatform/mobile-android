@@ -19,6 +19,7 @@
 package org.exoplatform.ui.login.tasks;
 
 import org.apache.http.client.HttpClient;
+import org.exoplatform.ui.login.LoginProxy;
 
 import android.os.AsyncTask;
 
@@ -52,6 +53,7 @@ public class LogoutTask extends AsyncTask<Void, Void, Void> {
   @Override
   protected void onPostExecute(Void result) {
     httpClient = null;
+    LoginProxy.userIsLoggedIn = false;
     super.onPostExecute(result);
   }
   

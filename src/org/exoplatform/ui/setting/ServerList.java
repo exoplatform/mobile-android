@@ -28,10 +28,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.ServerItemLayout;
 
@@ -155,23 +157,21 @@ public class ServerList extends LinearLayout {
     ServerItemLayout serverItem = new ServerItemLayout(mContext);
     serverItem.serverName.setText(serverObj.serverName);
     serverItem.serverUrl.setText(serverObj.serverUrl);
+    
+    // disable this account item if it is selected AND the user is logged in 
+    final boolean isDisabled = (Integer.valueOf(mSetting.getDomainIndex()) == serverIdx && LoginProxy.userIsLoggedIn);
 
-    if (Integer.valueOf(mSetting.getDomainIndex()) == serverIdx) {
+    if (isDisabled) {
       AlphaAnimation alpha = new AlphaAnimation(0.3F, 0.3F);
       alpha.setDuration(0);     // Make animation instant
       alpha.setFillAfter(true); // Tell it to persist after the animation ends
       serverItem.layout.startAnimation(alpha);
     }
 
-    final int pos = serverIdx;
-
-    /* onclick server item */
     serverItem.layout.setOnClickListener(new OnClickListener() {
-
       @Override
       public void onClick(View v) {
-        int domainIndex = Integer.valueOf(mSetting.getDomainIndex());
-        if (domainIndex == pos) {
+        if (isDisabled) {
           String strCannotEdit = mContext.getString(R.string.CannotEditServer);
           Toast.makeText(mContext, strCannotEdit, Toast.LENGTH_SHORT).show();
           return;

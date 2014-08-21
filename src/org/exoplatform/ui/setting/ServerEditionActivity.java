@@ -237,12 +237,22 @@ public class ServerEditionActivity extends Activity {
       @Override
       public void onClick(View view) {
 
+    	// decrease the selected account domain by 1 if the deleted account is before in the list
         int selectedServerIndex = Integer.parseInt(mSetting.getDomainIndex());
         if (mServerIdx < selectedServerIndex)
           mSetting.setDomainIndex(String.valueOf(selectedServerIndex - 1));
 
         List<ServerObjInfo> listServer = ServerSettingHelper.getInstance().getServerInfoList(ServerEditionActivity.this);
         listServer.remove(mServerIdx);
+
+        // remove current account setting if the last account was just deleted
+        if (selectedServerIndex == 0) {
+        	mSetting.setCurrentServer(null);
+        	
+        } else {
+        // otherwise, check if the is only one remaining account and if yes select it
+        	autoSelectOnlyConfiguredAccount();
+        }
         onSave();
         Toast.makeText(ServerEditionActivity.this,
             mResources.getString(R.string.ServerDeleted), Toast.LENGTH_SHORT).show();
@@ -271,6 +281,12 @@ public class ServerEditionActivity extends Activity {
 
         listServer.remove(mServerIdx);
         listServer.add(mServerIdx, myServerObj);
+        if (String.valueOf(mServerIdx).equals(AccountSetting.getInstance().getDomainIndex()))
+        {
+        	// replaces the instance of the saved current server in AccountSettings by the updated server
+        	AccountSetting.getInstance().setCurrentServer(myServerObj);
+        }
+        autoSelectOnlyConfiguredAccount();
         onSave();
         Toast.makeText(ServerEditionActivity.this,
             mResources.getString(R.string.ServerUpdated), Toast.LENGTH_SHORT).show();
@@ -297,12 +313,7 @@ public class ServerEditionActivity extends Activity {
         }
 
         listServer.add(myServerObj);
-        if (listServer.size() == 1) {
-        	// we must automatically select the new server if it's the only one in the list
-        	AccountSetting settings = AccountSetting.getInstance();
-        	settings.setCurrentServer(myServerObj);
-        	settings.setDomainIndex(String.valueOf(0));
-        }
+        autoSelectOnlyConfiguredAccount();
         onSave();
         Toast.makeText(ServerEditionActivity.this,
             mResources.getString(R.string.ServerAdded), Toast.LENGTH_SHORT).show();
@@ -310,7 +321,26 @@ public class ServerEditionActivity extends Activity {
       }
     };
   }
+  
+  /**
+   * Check if only one account is currently configured in ServerSettingHelper.getServerInfoList().
+   * If yes, this server is automatically selected as AccountSetting.setCurrentServer() and AccountSetting.setDomainIndex(0).
+   */
+  private void autoSelectOnlyConfiguredAccount() {
+	List<ServerObjInfo> listAccounts = ServerSettingHelper.getInstance().getServerInfoList(ServerEditionActivity.this);
+	if (listAccounts.size() == 1) {
+		ServerObjInfo account = listAccounts.get(0);
+		AccountSetting settings = AccountSetting.getInstance();
+		settings.setCurrentServer(account);
+		settings.setDomainIndex(String.valueOf(0));
+	}
+  }
 
+  /**
+   * Check if the entered server url is correct
+   * @param view the text field that contains the url
+   * @return true if the url is valid, false otherwise
+   */
   private boolean checkServerUrl(View view) {
     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
     if (inputMethodManager!= null) inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -378,6 +408,10 @@ public class ServerEditionActivity extends Activity {
     ServerSettingHelper.getInstance().setServerInfoList(listServer);
   }
 
+  /**
+   * Puts all values from the text fields into a ServerObjInfo object
+   * @return the ServerObjInfo object with values entered by the user
+   */
   private ServerObjInfo retrieveInput() {
     ServerObjInfo serverObj = new ServerObjInfo();
     serverObj.serverUrl  = mServerUrlEditTxt.getText().toString();
