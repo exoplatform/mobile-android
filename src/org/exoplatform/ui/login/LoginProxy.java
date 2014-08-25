@@ -30,6 +30,7 @@ import org.exoplatform.ui.login.tasks.LoginTask;
 import org.exoplatform.ui.login.tasks.RequestTenantTask;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.WaitingDialog;
 
@@ -237,7 +238,6 @@ public class LoginProxy implements
     return (tenant.contains(".")) ? null : tenant;
   }
 
-
   /**
    * Actual logic of login
    */
@@ -360,7 +360,7 @@ public class LoginProxy implements
         break;
 
       /** Login successfully - save data */
-      case ExoConnectionUtils.LOGIN_SUSCESS:
+      case ExoConnectionUtils.LOGIN_SUCCESS:
 
         /* Set social and document settings */
         StringBuilder builder = new StringBuilder(mDomain)
@@ -381,7 +381,10 @@ public class LoginProxy implements
         }
         else {
           newServerObj = new ServerObjInfo();
-          newServerObj.serverName  =  mResource.getString(R.string.DefaultServer);
+          String name = mTenant;
+          if (name == null) name = getTenant(mDomain);
+          if (name == null) name = ExoUtils.getAccountNameFromURL(mDomain, mResource.getString(R.string.DefaultServer));
+          newServerObj.serverName  =  name;
           newServerObj.serverUrl   =  mDomain;
           newServerObj.username    =  mNewUserName;
           newServerObj.password    =  mNewPassword;
@@ -418,7 +421,7 @@ public class LoginProxy implements
     if (mProgressDialog != null) mProgressDialog.dismiss();
 
     /** invoke listeners */
-    if (mListener!= null) mListener.onLoginFinished(result == ExoConnectionUtils.LOGIN_SUSCESS);
+    if (mListener!= null) mListener.onLoginFinished(result == ExoConnectionUtils.LOGIN_SUCCESS);
   }
 
   public void onCancelLoad() {

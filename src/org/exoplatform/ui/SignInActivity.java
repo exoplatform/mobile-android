@@ -18,6 +18,13 @@
  */
 package org.exoplatform.ui;
 
+import org.exoplatform.R;
+import org.exoplatform.ui.login.LoginProxy;
+import org.exoplatform.utils.AssetUtils;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoUtils;
+import org.exoplatform.utils.SettingUtils;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,13 +40,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import org.exoplatform.R;
-import org.exoplatform.ui.login.LoginProxy;
-import org.exoplatform.utils.AssetUtils;
-import org.exoplatform.utils.ExoUtils;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.SettingUtils;
 
 public class SignInActivity extends Activity implements LoginProxy.ProxyListener {
 
