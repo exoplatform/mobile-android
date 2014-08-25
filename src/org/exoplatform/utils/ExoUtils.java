@@ -154,10 +154,42 @@ public class ExoUtils {
      */
     public static boolean urlHasWrongTenant(String url) {
         return (url == null) ? false : // false if url is null
-                            // true if the given url is in the list
-                            (Arrays.asList(WRONG_CLOUD_URLS).contains(
-                            // add http:// to the url if it's missing
-                            !url.startsWith("http://") ? "http://" + url : url));
+                            (Arrays.asList(WRONG_CLOUD_URLS).contains( // true
+                                                                       // if the
+                                                                       // given
+                                                                       // url is
+                                                                       // in the
+                                                                       // list
+                            !url.startsWith("http://") ? "http://" + url : url) // add
+                                                                                // http://
+                                                                                // to
+                                                                                // the
+                                                                                // url
+                                                                                // if
+                                                                                // it's
+                                                                                // missing
+                            );
+    }
+
+    public static String getAccountNameFromURL(String url, String defaultName) {
+        String finalName;
+        if (url == null || url.isEmpty())
+            finalName = defaultName;
+        else {
+            try {
+                URI theURL = new URI(url);
+                finalName = theURL.getHost();
+                int lastDot = finalName.lastIndexOf('.');
+                finalName = finalName.substring(0, lastDot);
+                int domainDot = finalName.lastIndexOf('.');
+                finalName = finalName.substring(domainDot + 1);
+            } catch (URISyntaxException e) {
+                finalName = defaultName;
+            } catch (IndexOutOfBoundsException e) {
+                finalName = defaultName;
+            }
+        }
+        return finalName;
     }
 
 }

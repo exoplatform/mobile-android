@@ -60,7 +60,7 @@ public class ExoConnectionUtils {
 
   public static final int         LOGIN_WRONG              = 0;
 
-  public static final int         LOGIN_SUSCESS            = 1;
+  public static final int         LOGIN_SUCCESS            = 1;
 
   public static final int         LOGIN_UNAUTHORIZED       = 2;
 
@@ -197,8 +197,8 @@ public class ExoConnectionUtils {
       }
       HttpResponse response = httpClient.execute(httpGet);
       int statusCode = checkPlatformRespose(response);
-      if (statusCode == LOGIN_SUSCESS) {
-        return LOGIN_SUSCESS;
+      if (statusCode == LOGIN_SUCCESS) {
+        return LOGIN_SUCCESS;
       } else {
         String username = AccountSetting.getInstance().getUsername();
         String password = AccountSetting.getInstance().getPassword();
@@ -433,7 +433,7 @@ public class ExoConnectionUtils {
   public static int checkPlatformRespose(HttpResponse response) {
     int statusCode = response.getStatusLine().getStatusCode();
     if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
-      return LOGIN_SUSCESS;
+      return LOGIN_SUCCESS;
     } else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
       return LOGIN_UNAUTHORIZED;
     } else if (statusCode == HttpStatus.SC_NOT_FOUND) {

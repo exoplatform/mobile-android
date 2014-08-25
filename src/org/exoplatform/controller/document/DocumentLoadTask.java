@@ -110,7 +110,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
        * time out, re logging in. If relogging in error, pop up a error dialog
        */
       String versionUrl = SocialActivityUtil.getDomain() + ExoConstants.DOMAIN_PLATFORM_VERSION;
-      if (ExoConnectionUtils.checkTimeout(versionUrl) != ExoConnectionUtils.LOGIN_SUSCESS)
+      if (ExoConnectionUtils.checkTimeout(versionUrl) != ExoConnectionUtils.LOGIN_SUCCESS)
         return RESULT_TIMEOUT;
 
       switch (actionID) {

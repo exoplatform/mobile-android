@@ -18,6 +18,13 @@
  */
 package org.exoplatform.ui;
 
+import org.exoplatform.R;
+import org.exoplatform.ui.login.LoginProxy;
+import org.exoplatform.utils.AssetUtils;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoUtils;
+import org.exoplatform.utils.SettingUtils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -33,9 +40,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.exoplatform.R;
-import org.exoplatform.ui.login.LoginProxy;
-import org.exoplatform.utils.*;
 
 public class SignInOnPremiseActivity extends Activity implements LoginProxy.ProxyListener {
 
@@ -115,7 +119,7 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
           InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
           if (inputMethodManager!= null) inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-          Toast.makeText(SignInOnPremiseActivity.this, R.string.ServerInvalid, Toast.LENGTH_SHORT).show();
+          Toast.makeText(SignInOnPremiseActivity.this, R.string.ServerInvalid, Toast.LENGTH_LONG).show();
           return ;
         }
 
