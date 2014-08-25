@@ -213,8 +213,6 @@
     <string name="EXO">EXO</string>
 
     <!-- Server edition -->
-    <string name="AddServer">Nouveau serveur</string>
-    <string name="ModifyServer">Modifier le serveur</string>
     <string name="OptionalHint">Optionnel</string>
     <string name="RequiredHint">Requis</string>
     <string name="YourCredentials">Vos identifiants</string>

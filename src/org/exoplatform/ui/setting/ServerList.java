@@ -106,14 +106,6 @@ public class ServerList extends LinearLayout {
     ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
 
     switch (operation) {
-      case ServerEditionActivity.SETTING_ADD:
-        serverItemLayout = initServerItem(serverList.get(serverIdx), serverIdx);
-
-        addView(serverItemLayout, serverIdx, layoutParams);
-        Animation addAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_right_to_left);
-        addAnim.setDuration(1000);
-        serverItemLayout.layout.startAnimation(addAnim);
-        break;
 
       case ServerEditionActivity.SETTING_UPDATE:
         serverItemLayout = initServerItem(serverList.get(serverIdx), serverIdx);
@@ -178,7 +170,6 @@ public class ServerList extends LinearLayout {
         }
 
         Intent next  = new Intent(mContext, ServerEditionActivity.class);
-        next.putExtra(ExoConstants.SETTING_ADDING_SERVER, false);
         next.putExtra(ExoConstants.EXO_SERVER_OBJ, serverObj);
         mContext.startActivity(next);
       }

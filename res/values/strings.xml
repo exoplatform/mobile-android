@@ -86,9 +86,9 @@
   <string name="ConnectionError">The network can not be reached.</string>
   <string name="LoadingDataError">Error while loading data.</string>
   <string name="DoNotHavePermision">You don\'t have permission for this because no SD-card is available.</string>
-  <string name="WarningServerNameIsEmpty">Server name or URL can not be empty.</string>
-  <string name="WarningServerNameIsExist">This server name already exists in your list</string>
-  <string name="WarningServerUrlIsExist">This server URL already exists in your list</string>
+  <string name="WarningServerNameIsEmpty">The account name, server and username can not be empty</string>
+  <string name="WarningServerNameIsExist">This account name already exists</string>
+  <string name="WarningServerUrlIsExist">This account URL already exists</string>
   <string name="WarningServerUrlAndUserAlreadyExist">This combination of server URL and username already exist in your list</string>
   <string name="DetailsNotAvaiable">Details of the news are not available</string>
   <string name="ErrorOnComment">You can not comment this activity.</string>
@@ -213,13 +213,12 @@
   <string name="Number2">2</string>
 
   <!-- Server edition -->
-  <string name="AddServer">New Server</string>
-  <string name="ModifyServer">Modify Server</string>
   <string name="OptionalHint">Optional</string>
   <string name="RequiredHint">Required</string>
+  <string name="Account">Account</string>
   <string name="YourCredentials">Your credentials</string>
-  <string name="ServerName">Server Name</string>
-  <string name="ServerUrl">Server Url</string>
+  <string name="ServerName">Name</string>
+  <string name="ServerUrl">Server</string>
   <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
   <string name="ServerAdded">Server added</string>
   <string name="ServerUpdated">Server updated</string>
