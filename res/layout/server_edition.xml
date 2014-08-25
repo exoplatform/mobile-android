@@ -10,6 +10,18 @@
             android:id="@+id/server_setting_title_txt"
             style="@style/SignUpBlueHeaderStyle"
             android:layout_marginBottom="15dp"/>
+    
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#535353"
+        android:textSize="@dimen/title_txt_size"
+        android:textStyle="bold"
+        android:text="@string/Account"/>
 
     <TableLayout style="@style/ServerSettingTableStyle"
                  android:layout_marginBottom="10dp">
@@ -76,7 +88,7 @@
         <EditText
                 android:id="@+id/server_setting_user_edit_txt"
                 style="@style/ServerSettingEditTextStyle"
-                android:hint="@string/OptionalHint"/>
+                android:hint="@string/RequiredHint"/>
 
     </TableRow>
 

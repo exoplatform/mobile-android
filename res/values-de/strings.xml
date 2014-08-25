@@ -218,8 +218,6 @@
     <string name="Number2">2</string>
 
     <!-- Server edition -->
-    <string name="AddServer">Neuer Server</string>
-    <string name="ModifyServer">Server ändern</string>
     <string name="OptionalHint">Optional</string>
     <string name="RequiredHint">Erforderlich</string>
     <string name="YourCredentials">Ihre Anmeldeinformationen</string>

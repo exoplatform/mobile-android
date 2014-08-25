@@ -188,7 +188,7 @@ public class ExoConstants {
   public static final int    UNKNOWN                               = 309;
 
   /* Server setting */
-  public static final String SETTING_ADDING_SERVER                 = "SETTING_ADDING_SERVER";
+//  public static final String SETTING_ADDING_SERVER                 = "SETTING_ADDING_SERVER";
 
   public static final String EXO_MASTER_PASSWORD                   = "EXO_MASTER_PASSWORD";
 
