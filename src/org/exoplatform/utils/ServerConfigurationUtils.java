@@ -64,7 +64,7 @@ public class ServerConfigurationUtils {
 
   public static String version;
 
-  private static final String TAG = "eXoServerConfig";
+  private static final String TAG = "eXo____ServerConfigUtils___";
 
   public ServerConfigurationUtils(Context context) { }
 
@@ -150,16 +150,15 @@ public class ServerConfigurationUtils {
           }
         }
 
-      } catch (ParserConfigurationException e) {
-        return "0";
-      } catch (FileNotFoundException e) {
-        return "0";
-      } catch (SAXException e) {
-        return "0";
-      } catch (IOException e) {
-        return "0";
+      } catch (Exception e) {
+        Log.e(TAG, "Exception while getting app version:" +e.getLocalizedMessage());
+      } finally {
+    	  try {
+			obj_is.close();
+		} catch (IOException e) {
+			Log.e(TAG, "Could not close file input stream.");
+		}
       }
-
 
     return "0";
   }
@@ -324,6 +323,7 @@ public class ServerConfigurationUtils {
     ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
 
     try {
+    	
       FileInputStream fis = context.openFileInput(fileName);
       DocumentBuilderFactory doc_build_fact = DocumentBuilderFactory.newInstance();
       DocumentBuilder doc_builder           = doc_build_fact.newDocumentBuilder();
@@ -342,8 +342,14 @@ public class ServerConfigurationUtils {
             serverObj.serverName     = itemElement.getAttribute("name");
             serverObj.serverUrl      = itemElement.getAttribute(ExoConstants.EXO_URL_SERVER);
             serverObj.username       = itemElement.getAttribute(ExoConstants.EXO_URL_USERNAME);
-            serverObj.password       =
-                SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD, itemElement.getAttribute("password"));
+            try {
+            	serverObj.password       =
+            			SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD, itemElement.getAttribute("password"));
+            } catch (Exception ee) {
+            	Log.e(TAG, "Could not decrypt password: " + ee.getLocalizedMessage());
+            	Log.w(TAG, "Leaving password attribute empty");
+            	serverObj.password = "";
+            }
             serverObj.isRememberEnabled  = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
             serverObj.isAutoLoginEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
             arrServerList.add(serverObj);
@@ -356,18 +362,18 @@ public class ServerConfigurationUtils {
       return arrServerList;
     } catch (IOException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("IOException", "getServerListWithFileName");
+        Log.e(TAG, "getServerListWithFileName - "+e.getLocalizedMessage());
       return arrServerList;
     } catch (ParserConfigurationException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("ParserConfigurationException", "getServerListWithFileName");
+    	  Log.e(TAG, "getServerListWithFileName - "+e.getLocalizedMessage());
       return arrServerList;
     } catch (SAXException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("SAXException", "getServerListWithFileName");
+    	  Log.e(TAG, "getServerListWithFileName - "+e.getLocalizedMessage());
       return arrServerList;
     } catch (Exception e) {
-      Log.e("Exception", "getServerListWithFileName - decryption exception - " + e.getLocalizedMessage());
+    	Log.e(TAG, "getServerListWithFileName - "+e.getLocalizedMessage());
       return arrServerList;
     }
 
@@ -550,6 +556,7 @@ public class ServerConfigurationUtils {
     Log.i(TAG, "generateXmlFileWithServerList: " + fileName);
 
     try {
+    	
       FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
       // we create a XmlSerializer in order to write xml data
       XmlSerializer serializer = Xml.newSerializer();
@@ -585,7 +592,8 @@ public class ServerConfigurationUtils {
           serializer.attribute(null, "password",
               SimpleCrypto.encrypt(ExoConstants.EXO_MASTER_PASSWORD, serverObj.password));
         } catch (Exception e) {
-          Log.i(TAG, "error while encrypting: " + e.getLocalizedMessage());
+          Log.e(TAG, "Error while encrypting password: " + e.getLocalizedMessage());
+          Log.w(TAG, "Writing password in clear");
           serializer.attribute(null, "password", serverObj.password);
         }
 
@@ -603,6 +611,7 @@ public class ServerConfigurationUtils {
       // finally we close the file stream
 
       fos.close();
+      
       return true;
 
     } catch (FileNotFoundException e) {

@@ -17,23 +17,18 @@
 package org.exoplatform.mobile.tests;
 
 import static org.fest.assertions.api.ANDROID.assertThat;
-import static org.junit.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
-
-
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
-import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.login.AccountPanel;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.login.ServerPanel;
-import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.SettingUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -86,17 +81,19 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
 	  init();
   }
   
-  public void createXAccounts(int x, Context ctx) {
-	  srvSettings = ServerSettingHelper.getInstance();
-	  ArrayList<ServerObjInfo> list = new ArrayList<ServerObjInfo>();
-	  for (int i=1; i==x; i++) {
-		  ServerObjInfo srv = getServerWithDefaultValues();
-		  srv.serverName = TEST_SERVER_NAME+"_"+i; // rename account as testserver_i
-		  srv.username = TEST_USER_NAME+"_"+i; // rename username as testuser_i
-		  list.add(srv);
+  public ArrayList<ServerObjInfo> createXAccounts(final int x) {
+	  ArrayList<ServerObjInfo> list = null;
+	  if (x > 0) {
+		  list = new ArrayList<ServerObjInfo>(x);
+		  for (int i=1; i<=x; i++) {
+			  ServerObjInfo srv = getServerWithDefaultValues();
+			  srv.serverName = TEST_SERVER_NAME+"_"+i; // rename account as testserver_i
+			  srv.username = TEST_USER_NAME+"_"+i; // rename username as testuser_i
+			  srv.serverUrl = "http://www.test-"+i+".com";
+			  list.add(srv);
+		  }
 	  }
-	  srvSettings.setServerInfoList(list);
-	  SettingUtils.persistServerSetting(ctx);
+	  return list;
   }
   
   private void init() {
@@ -138,48 +135,43 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
     
   }
   
-//  @Test
+  @Test
   public void shouldDisplayPanelWhenTappingButton() {
-	  
-	Context ctx = Robolectric.getShadowApplication().getApplicationContext();
-	  
-    createXAccounts(2, ctx); // create 2 accounts
-    Intent i = new Intent(ctx, LoginActivity.class);
-    createWithIntent(i);
+	
+	ArrayList<ServerObjInfo> list = createXAccounts(2);
+	ServerSettingHelper.getInstance().setServerInfoList(list);
+	
+    create();
     
-    Robolectric.clickOn(serverBtn); // should hide account, display server panel and select button when clicking the server button
-    assertThat(srvPanel).isVisible();
-    assertThat(accPanel).isInvisible();
-    assertThat(serverBtn).isSelected();
-    assertThat(accountBtn).isNotSelected();
+    Robolectric.clickOn(serverBtn); // tap the accounts/server button
+    assertThat(srvPanel).isVisible(); // should display accounts panel
+    assertThat(accPanel).isInvisible(); // should hide login panel
+    assertThat(serverBtn).isSelected(); // account switcher button should be selected
+    assertThat(accountBtn).isNotSelected(); // login panel button should not be selected
     
-    Robolectric.clickOn(accountBtn); // should hide server, display account panel and select button when clicking the account button
-    assertThat(srvPanel).isInvisible();
-    assertThat(accPanel).isVisible();
-    assertThat(serverBtn).isNotSelected();
-    assertThat(accountBtn).isSelected();
+    Robolectric.clickOn(accountBtn); // tap the login panel button
+    assertThat(srvPanel).isInvisible(); // should hide servers/accounts panel
+    assertThat(accPanel).isVisible(); // should display login panel
+    assertThat(serverBtn).isNotSelected(); // account switcher button should not be selected
+    assertThat(accountBtn).isSelected(); // login panel button should be selected
   }
   
-//  @Test
-  public void shouldDisplaySwitchIconWhenTwoAccountsExist() {
-	  //createXAccounts(1);
+  @Test
+  public void shouldDisplaySwitchIconWhenAddingSecondAccount() {
 	  
-	  // switch icon and panel should be invisible
-	  assertThat(srvPanel).isInvisible();
+	  // create only 1 account
+	  ServerSettingHelper.getInstance().setServerInfoList(createXAccounts(1));
+		
+	  create();
+	  
+	  // switch button should be invisible
 	  assertThat(serverBtn).isInvisible();
 	  
-	  // add one server
-	  srvSettings = ServerSettingHelper.getInstance();
-	  ServerObjInfo srv = getServerWithDefaultValues();
-	  srv.serverName = TEST_SERVER_NAME+"_new"; 
-	  srv.username = TEST_USER_NAME+"_new"; 
-	  ArrayList<ServerObjInfo> list = new ArrayList<ServerObjInfo>();
-	  list.add(srv);
-	  srvSettings.setServerInfoList(list);
-	  SettingUtils.persistServerSetting(Robolectric.getShadowApplication().getApplicationContext());
+	  // create a 2nd account
+	  ServerSettingHelper.getInstance().setServerInfoList(createXAccounts(2));
 	  
-	  // switch icon and panel should be visible
-	  assertThat(srvPanel).isVisible();
+	  // switch button should be visible after the activity is resumed
+	  controller.pause().resume();
 	  assertThat(serverBtn).isVisible();
   }
   

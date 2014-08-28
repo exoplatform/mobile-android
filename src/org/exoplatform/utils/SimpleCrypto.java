@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2009 Ferenc Hechler - ferenc_hechler@users.sourceforge.net
- * http://www.androidsnippets.org/snippets/39/index.html
+ * http://www.androidsnippets.com/encryptdecrypt-strings
  */
 
 package org.exoplatform.utils;

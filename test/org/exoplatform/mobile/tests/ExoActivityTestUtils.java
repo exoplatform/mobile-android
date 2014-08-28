@@ -17,20 +17,26 @@
 package org.exoplatform.mobile.tests;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import org.apache.http.ProtocolVersion;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHttpResponse;
 import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.utils.ServerConfigurationUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.robolectric.shadows.ShadowLog;
 import org.robolectric.tester.org.apache.http.FakeHttpLayer.RequestMatcherBuilder;
 import org.robolectric.tester.org.apache.http.RequestMatcher;
 import org.robolectric.util.ActivityController;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.content.Context;
 
 /**
@@ -40,6 +46,8 @@ import android.content.Context;
  * Apr 15, 2014  
  */
 public abstract class ExoActivityTestUtils<A extends Activity> {
+	
+	final String TAG_TEST = "eXo____Test____";
   
   final String TEST_SERVER_NAME = "testserver";
   final String TEST_SERVER_URL = "http://www.test.com";
@@ -142,6 +150,9 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
   
   // UTILS
   
+  public void enableLog() { ShadowLog.stream = System.out; }
+  public void disableLog() { ShadowLog.stream = null; }
+  
   /**
    * Creates a Server Object with the default name, URL, username and password
    * @return a ServerObjInfo object
@@ -155,7 +166,59 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
     return srv;
   }
   
+  /**
+   * Sets the default language in the app's preferences
+   * @param c the app's Context
+   * @param lang the language
+   */
+  public void setLanguageInPreferences(Context c, String lang) {
+    SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
+    prefs.putString("exo_prf_localize", lang);
+    prefs.commit();
+  }
+
+  /**
+   * Sets the default server/account in the app's preferences
+   * @param c the app's Context
+   * @param server the default server
+   */
+  public void setDefaultServerInPreferences(Context c, ServerObjInfo server) {
+	  ArrayList<ServerObjInfo> serversList = new ArrayList<ServerObjInfo>(1);
+	  serversList.add(server);
+	  
+	  ServerConfigurationUtils.generateXmlFileWithServerList(c, serversList, "ServerList.xml", "");
+	  ServerSettingHelper.getInstance().setServerInfoList(serversList);
+	  
+	  SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
+	  prefs.putString("exo_prf_domain_index", "0");
+	  prefs.commit();
+  }
   
+  /**
+   * Deletes all accounts in the app's preferences
+   * @param c the app's context
+   */
+  public void deleteAllAccounts(Context c) {
+    ServerConfigurationUtils.generateXmlFileWithServerList(c, new ArrayList<ServerObjInfo>(), "ServerList.xml", "");
+    ServerSettingHelper.getInstance().setServerInfoList(new ArrayList<ServerObjInfo>());
+    
+    SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
+    prefs.remove("exo_prf_domain_index");
+    prefs.commit();
+  }
+  
+  /**
+   * Adds the servers in the app's preferences but does not select any of them
+   * @param c
+   * @param servers the list of ServerObjInfo to add
+   */
+  public void addServersInPreferences(Context c, ArrayList<ServerObjInfo> servers) {
+	  if (servers != null && servers.size()>0) {
+		  Log.i(TAG_TEST, "Saving "+servers.size()+" accounts.");
+		  ServerConfigurationUtils.generateXmlFileWithServerList(c, servers, "ServerList.xml", "");
+		  ServerSettingHelper.getInstance().setServerInfoList(servers);
+	  }
+  }
   
   /**
    * Creates a RequestMatcher to use in Robolectric.addHttpResponseRule() for the specified request

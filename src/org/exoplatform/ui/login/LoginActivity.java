@@ -80,7 +80,7 @@ public class LoginActivity extends Activity implements
   /**=== Constants ===**/
   public static final String PANEL_MODE    = "PANEL_MODE";
 
-  private static final String TAG = "eXoLoginActivity";
+  private static final String TAG = "eXo____LoginActivity____";
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

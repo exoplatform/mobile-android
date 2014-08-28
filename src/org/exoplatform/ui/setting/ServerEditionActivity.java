@@ -25,7 +25,6 @@ import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.ServerConfigurationUtils;
@@ -37,21 +36,19 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * This screen is used to add new server or modify existing server<br/>
+ * This screen is used to delete or modify an existing account
  *
  */
 public class ServerEditionActivity extends Activity {
@@ -80,7 +77,7 @@ public class ServerEditionActivity extends Activity {
 
   private Resources        mResources;
 
-  private Handler          mHandler = new Handler();
+//  private Handler          mHandler = new Handler(); TODO
 
   private Animation        mEnabledAnim;
 
@@ -234,12 +231,11 @@ public class ServerEditionActivity extends Activity {
         listServer.remove(mServerIdx);
 
         // remove current account setting if the last account was just deleted
-        if (selectedServerIndex == 0) {
+        if (listServer.isEmpty()) {
         	mSetting.setCurrentServer(null);
-        	
         } else {
-        // otherwise, check if the is only one remaining account and if yes select it
-        	autoSelectOnlyConfiguredAccount();
+        // otherwise, check if there is only one remaining account and if yes select it
+        	autoSelectLastAccount();
         }
         onSave();
         Toast.makeText(ServerEditionActivity.this,
@@ -254,7 +250,7 @@ public class ServerEditionActivity extends Activity {
       @Override
       public void onClick(View view) {
 
-        if (!checkServerUrl(view)) return;
+        //if (!checkServerUrl(view)) return;
         ServerObjInfo myServerObj = retrieveInput();
         if (!isServerValid(myServerObj)) return ;
 
@@ -262,8 +258,8 @@ public class ServerEditionActivity extends Activity {
         /* check whether server is duplicated with other server */
         int serverIdx = listServer.indexOf(myServerObj);
         if ((serverIdx != mServerIdx) && (serverIdx != -1)) {
-          Toast.makeText(ServerEditionActivity.this, mResources.getString(R.string.WarningServerUrlAndUserAlreadyExist)
-              , Toast.LENGTH_SHORT).show();
+          Toast.makeText(ServerEditionActivity.this, mResources.getString(R.string.WarningServerAlreadyExists)
+              , Toast.LENGTH_LONG).show();
           return ;
         }
 
@@ -274,7 +270,7 @@ public class ServerEditionActivity extends Activity {
         	// replaces the instance of the saved current server in AccountSettings by the updated server
         	AccountSetting.getInstance().setCurrentServer(myServerObj);
         }
-        autoSelectOnlyConfiguredAccount();
+        autoSelectLastAccount();
         onSave();
         Toast.makeText(ServerEditionActivity.this,
             mResources.getString(R.string.ServerUpdated), Toast.LENGTH_SHORT).show();
@@ -287,49 +283,52 @@ public class ServerEditionActivity extends Activity {
    * Check if only one account is currently configured in ServerSettingHelper.getServerInfoList().
    * If yes, this server is automatically selected as AccountSetting.setCurrentServer() and AccountSetting.setDomainIndex(0).
    */
-  private void autoSelectOnlyConfiguredAccount() {
-	List<ServerObjInfo> listAccounts = ServerSettingHelper.getInstance().getServerInfoList(ServerEditionActivity.this);
-	if (listAccounts.size() == 1) {
-		ServerObjInfo account = listAccounts.get(0);
-		AccountSetting settings = AccountSetting.getInstance();
-		settings.setCurrentServer(account);
-		settings.setDomainIndex(String.valueOf(0));
-	}
+  private void autoSelectLastAccount() {
+  	List<ServerObjInfo> listAccounts = ServerSettingHelper.getInstance().getServerInfoList(ServerEditionActivity.this);
+  	if (listAccounts.size() == 1) {
+  		ServerObjInfo account = listAccounts.get(0);
+  		AccountSetting settings = AccountSetting.getInstance();
+  		settings.setCurrentServer(account);
+  		settings.setDomainIndex(String.valueOf(0));
+  		Log.i(TAG, "Last account selected: "+account.serverName);
+  	}
   }
 
+//  TODO
+//  /**
+//   * Check if the entered server url is correct
+//   * @param view the text field that contains the url
+//   * @return true if the url is valid, false otherwise
+//   */
+//  private boolean checkServerUrl(View view) {
+//    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+//    if (inputMethodManager!= null) inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//
+//    String url = mServerUrlEditTxt.getText().toString();
+//    if (!url.startsWith(ExoConnectionUtils.HTTP) && !url.startsWith(ExoConnectionUtils.HTTPS))
+//      url = ExoConnectionUtils.HTTP + url;
+//    
+//    if (!ExoUtils.isUrlValid(url) || ExoUtils.isURLForbidden(url)) {
+//
+//      if (inputMethodManager == null)
+//        Toast.makeText(ServerEditionActivity.this, R.string.AccountServerInvalid, Toast.LENGTH_LONG).show();
+//      else
+//        mHandler.postDelayed(new Runnable() {
+//          @Override
+//          public void run() {
+//            Toast.makeText(ServerEditionActivity.this, R.string.AccountServerInvalid, Toast.LENGTH_LONG).show();
+//          }
+//        }, 500);
+//
+//      return false;
+//    }
+//
+//    mServerUrlEditTxt.setText(url);
+//    return true;
+//  }
+
   /**
-   * Check if the entered server url is correct
-   * @param view the text field that contains the url
-   * @return true if the url is valid, false otherwise
-   */
-  private boolean checkServerUrl(View view) {
-    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-    if (inputMethodManager!= null) inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-    String url = mServerUrlEditTxt.getText().toString();
-    if (!url.startsWith(ExoConnectionUtils.HTTP) && !url.startsWith(ExoConnectionUtils.HTTPS))
-      url = ExoConnectionUtils.HTTP + url;
-    if (!ExoUtils.isUrlValid(url) || ExoUtils.urlHasWrongTenant(url)) {
-
-      if (inputMethodManager == null)
-        Toast.makeText(ServerEditionActivity.this, R.string.ServerInvalid, Toast.LENGTH_LONG).show();
-      else
-        mHandler.postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            Toast.makeText(ServerEditionActivity.this, R.string.ServerInvalid, Toast.LENGTH_LONG).show();
-          }
-        }, 500);
-
-      return false;
-    }
-
-    mServerUrlEditTxt.setText(url);
-    return true;
-  }
-
-  /**
-   * Check whether server information is valid
+   * Check whether account information is valid
    *
    * @param myServerObj
    * @return
@@ -337,22 +336,41 @@ public class ServerEditionActivity extends Activity {
   private boolean isServerValid(ServerObjInfo myServerObj) {
     boolean isValid = true;
     
-    // neither server name, URL nor username can be empty
-    if (myServerObj.serverName == null ||       myServerObj.serverUrl == null ||       myServerObj.username == null ||
-        myServerObj.serverName.length() == 0 || myServerObj.serverUrl.length() == 0 || myServerObj.username.length() == 0) {
+    // Account name and server are mandatory
+    if (myServerObj.serverName          == null || myServerObj.serverUrl          == null || 
+        myServerObj.serverName.length() == 0    || myServerObj.serverUrl.length() == 0) {
       Toast.makeText(this, mResources.getString(R.string.WarningServerNameIsEmpty), Toast.LENGTH_LONG).show();
       isValid = false;
     }
-    // server name must not contain special characters
+    // Account name must not contain special characters
     if (!ExoUtils.isServerNameValid(myServerObj.serverName)) {
-      Toast.makeText(this, mResources.getString(R.string.SpecialCharacters), Toast.LENGTH_LONG).show();
+      Toast.makeText(this, mResources.getString(R.string.AccountNameInvalid), Toast.LENGTH_LONG).show();
       isValid = false;
     }
-    // server URL must be a valid URL
+    // Account server URL must be a valid URL
     myServerObj.serverUrl = ExoUtils.stripUrl(myServerObj.serverUrl);
     if (!ExoUtils.isUrlValid(myServerObj.serverUrl)) {
-      Toast.makeText(this, mResources.getString(R.string.ServerInvalid), Toast.LENGTH_LONG).show();
+      Toast.makeText(this, mResources.getString(R.string.AccountServerInvalid), Toast.LENGTH_LONG).show();
       isValid = false;
+    }
+    // Account server URL cannot be a forbidden URL
+    if (ExoUtils.isURLForbidden(myServerObj.serverUrl)) {
+      Toast.makeText(this, mResources.getString(R.string.AccountServerForbidden), Toast.LENGTH_LONG).show();
+      isValid = false;
+    }
+    // Only alphanumeric characters and - _ . are allowed in the username (optional)
+    if (myServerObj.username != null && myServerObj.username.length() > 0) {
+      if (!ExoUtils.isUsernameValid(myServerObj.username)) {
+        Toast.makeText(this, mResources.getString(R.string.AccountUsernameInvalid), Toast.LENGTH_LONG).show();
+        isValid = false;
+      }
+    }
+    // No space is allowed in the password
+    if (myServerObj.password != null && myServerObj.password.length() > 0) {
+      if (myServerObj.password.indexOf(" ") >= 0) {
+        Toast.makeText(this, mResources.getString(R.string.AccountPasswordInvalid), Toast.LENGTH_LONG).show();
+        isValid = false;
+      }
     }
     
     return isValid;

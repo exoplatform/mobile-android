@@ -17,15 +17,17 @@
 package org.exoplatform.mobile.tests;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.robolectric.Robolectric.shadowOf;
 
 import java.util.Locale;
 
+import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.ui.LaunchActivity;
 import org.exoplatform.ui.WelcomeActivity;
+import org.exoplatform.ui.login.LoginActivity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +37,6 @@ import org.robolectric.shadows.ShadowIntent;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
 /**
  * Created by The eXo Platform SAS
@@ -55,15 +56,9 @@ public class LaunchActivityTest extends ExoActivityTestUtils<LaunchActivity> {
     ctx = Robolectric.application.getApplicationContext();
   }
 
-  private void setLanguageInPreferences(Context c, String lang) {
-    SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
-    prefs.putString("exo_prf_localize", lang);
-    prefs.commit();
-  }
-
   @Test
   /**
-   * Tests that on an clean launch, the app is redirected to the Welcome Activity (sign-up assistant)
+   * Tests that on a clean launch, the app is redirected to the Welcome Activity (sign-up assistant)
    * @throws Exception
    */
   public void shouldRedirectToWelcomeScreen() throws Exception 
@@ -199,26 +194,24 @@ public class LaunchActivityTest extends ExoActivityTestUtils<LaunchActivity> {
     }
   }
   
-//  @Test
-//  public void shouldRedirectToLoginScreen() throws Exception 
-//  {
-//    ServerObjInfo srv = new ServerObjInfo();
-//    srv.serverName = "testserver";
-//    srv.serverUrl = "http://test.com";
-//    srv.username = "testuser";
-//    srv.password = "testpwd";
-//    srv.isAutoLoginEnabled = false;
-//    srv.isRememberEnabled = false;
-//    AccountSetting settings = AccountSetting.getInstance();
-//    settings.setCurrentServer(srv);
-//     
-//     create();
-//      
-//      ShadowActivity sActivity = shadowOf(activity);
-//      Intent loginIntent = sActivity.getNextStartedActivity();
-//      ShadowIntent sIntent = shadowOf(loginIntent);
-//      
-//      assertThat(sIntent.getComponent().getClassName(), equalTo(LoginActivity.class.getName()));
-//  }
+  @Test
+  public void shouldRedirectToLoginScreen() throws Exception 
+  {
+	  
+	  ServerObjInfo srv = getServerWithDefaultValues();
+      srv.isAutoLoginEnabled = false;
+      srv.isRememberEnabled = false;
+	  
+	  setDefaultServerInPreferences(ctx, srv);
+	  
+	  create();
+	  
+      ShadowActivity sActivity = shadowOf(activity);
+      Intent loginIntent = sActivity.getNextStartedActivity();
+      ShadowIntent sIntent = shadowOf(loginIntent);
+      
+      assertThat(sIntent.getComponent().getClassName(), equalTo(LoginActivity.class.getName()));
+      
+  }
   
 }

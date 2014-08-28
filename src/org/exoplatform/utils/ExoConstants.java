@@ -159,7 +159,7 @@ public class ExoConstants {
   public static final String DOMAIN_PLATFORM_VERSION               = "/rest/private/platform/info";
 
   public static final String IMAGE_TYPE                            = "image/png";
-
+  
   public static final String SPECIAL_CHAR_NAME_SET                 = "[\\[\\]\\/\\&\\~\\?\\*\\|\\<\\>\\\"\\;\\:\\+\\\\]";
 
   public static final String SPECIAL_CHAR_URL_SET                  = "[\\[\\]\\&\\~\\?\\*\\|\\<\\>\\\"\\;\\+\\\\]";
@@ -188,7 +188,6 @@ public class ExoConstants {
   public static final int    UNKNOWN                               = 309;
 
   /* Server setting */
-//  public static final String SETTING_ADDING_SERVER                 = "SETTING_ADDING_SERVER";
 
   public static final String EXO_MASTER_PASSWORD                   = "EXO_MASTER_PASSWORD";
 
@@ -214,4 +213,9 @@ public class ExoConstants {
 
   /** email used for sign in */
   public static final String EXO_EMAIL                             = "EXO_EMAIL";
+  
+  /** Allowed in account name : alphanumeric chars and spaces */
+  public static final String ALLOWED_ACCOUNT_NAME_CHARSET          = "^([a-zA-Z0-9]|\\s)+$";
+  /** Allowed in account username : alphanumeric chars, underscore (_), hyphen (-) and dot (.) */
+  public static final String ALLOWED_ACCOUNT_USERNAME_CHARSET      = "^([a-zA-Z0-9_-]|\\.)+$";
 }

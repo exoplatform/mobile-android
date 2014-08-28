@@ -115,11 +115,17 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
         if (!(url.startsWith(ExoConnectionUtils.HTTP) || url.startsWith(ExoConnectionUtils.HTTPS)))
           url = ExoConnectionUtils.HTTP + url;
 
-        if (ExoUtils.urlHasWrongTenant(url) || !ExoUtils.isUrlValid(url)) {
+        if (ExoUtils.isURLForbidden(url)) {
           InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
           if (inputMethodManager!= null) inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-          Toast.makeText(SignInOnPremiseActivity.this, R.string.ServerInvalid, Toast.LENGTH_LONG).show();
+          Toast.makeText(SignInOnPremiseActivity.this, R.string.AccountServerForbidden, Toast.LENGTH_LONG).show();
+          return ;
+        } else if (!ExoUtils.isUrlValid(url)) {
+          InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+          if (inputMethodManager!= null) inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+          Toast.makeText(SignInOnPremiseActivity.this, R.string.AccountServerInvalid, Toast.LENGTH_LONG).show();
           return ;
         }
 
