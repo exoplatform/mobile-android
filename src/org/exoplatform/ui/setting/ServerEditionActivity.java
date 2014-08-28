@@ -238,7 +238,7 @@ public class ServerEditionActivity extends Activity {
         	mSetting.setCurrentServer(null);
         	
         } else {
-        // otherwise, check if the is only one remaining account and if yes select it
+        // otherwise, check if there is only one remaining account and if yes select it
         	autoSelectOnlyConfiguredAccount();
         }
         onSave();

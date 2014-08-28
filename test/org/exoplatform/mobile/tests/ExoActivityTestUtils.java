@@ -23,6 +23,7 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHttpResponse;
 import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -182,6 +183,7 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
 	  serversList.add(server);
 	  
 	  ServerConfigurationUtils.generateXmlFileWithServerList(c, serversList, "ServerList.xml", "");
+	  ServerSettingHelper.getInstance().setServerInfoList(serversList);
 	  
 	  SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
 	  prefs.putString("exo_prf_domain_index", "0");
