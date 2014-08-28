@@ -18,27 +18,19 @@
  */
 package org.exoplatform.utils;
 
-import android.app.Activity;
-import android.content.Intent;
 import greendroid.util.Config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.ui.login.LoginActivity;
-import org.exoplatform.ui.WelcomeActivity;
-import org.exoplatform.utils.AssetUtils;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ServerConfigurationUtils;
-import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.image.SocialImageLoader;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -60,13 +52,10 @@ public class LaunchUtils {
 
   private AccountSetting           mSetting;
 
-  private Activity                 mCurrentActivity;
-
   private static final String TAG = "eXoLaunchController";
 
   public LaunchUtils(Activity context) {
     mContext = context;
-    mCurrentActivity = context;
     mSharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     mSetting = AccountSetting.getInstance();
 
