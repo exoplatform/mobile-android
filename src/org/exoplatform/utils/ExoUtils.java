@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import org.apache.http.ParseException;
 
@@ -110,26 +111,91 @@ public class ExoUtils {
         return sUrl;
     }
 
+    // /**
+    // * Verifies that a server name doesn't contain any special characters.
+    // *
+    // * @param serverName the server name to verify
+    // * @return true if no special characters are found, false otherwise.
+    // */
+    // public static boolean isServerNameValid(String serverName) {
+    // return (serverName == null) ? false
+    // : !ExoDocumentUtils.isContainSpecialChar(serverName,
+    // ExoConstants.SPECIAL_CHAR_NAME_SET);
+    // }
+
+    // /**
+    // * Check whether a given URL is forbidden or not.<br/>
+    // * URL cannot be one of "http://exoplatform.net",
+    // * "http://wks-acc.exoplatform.org", "http://netstg.exoplatform.org"
+    // *
+    // * @param url the URL to check
+    // * @return true if the URL is forbidden, false otherwise
+    // */
+    // public static boolean urlHasWrongTenant(String url) {
+    // return (url == null) ? false : // false if url is null
+    // (Arrays.asList(WRONG_CLOUD_URLS).contains( // true
+    // // if the
+    // // given
+    // // url is
+    // // in the
+    // // list
+    // !url.startsWith("http://") ? "http://" + url : url) // add
+    // // http://
+    // // to
+    // // the
+    // // url
+    // // if
+    // // it's
+    // // missing
+    // );
+    // }
+
+    // public static String getAccountNameFromURL(String url, String
+    // defaultName) {
+    // String finalName;
+    // if (url == null || url.isEmpty())
+    // finalName = defaultName;
+    // else {
+    // try {
+    // URI theURL = new URI(url);
+    // finalName = theURL.getHost();
+    // int lastDot = finalName.lastIndexOf('.');
+    // finalName = finalName.substring(0, lastDot);
+    // int domainDot = finalName.lastIndexOf('.');
+    // finalName = finalName.substring(domainDot + 1);
+    // } catch (URISyntaxException e) {
+    // finalName = defaultName;
+    // } catch (IndexOutOfBoundsException e) {
+    // finalName = defaultName;
+    // }
+    // }
+    // return finalName;
+    // }
+    // return sUrl;
+    // }
+
     /**
-     * Verifies that a server name doesn't contain any special characters.
+     * Verifies that an account name contains allowed characters only.
      * 
      * @param serverName the server name to verify
-     * @return true if no special characters are found, false otherwise.
+     * @return true if only allowed characters are found, false otherwise.
      */
     public static boolean isServerNameValid(String serverName) {
         return (serverName == null) ? false
-                                   : !ExoDocumentUtils.isContainSpecialChar(serverName,
-                                                                            ExoConstants.SPECIAL_CHAR_NAME_SET);
+                                   : Pattern.matches(ExoConstants.ALLOWED_ACCOUNT_NAME_CHARSET,
+                                                     serverName);
     }
 
     /**
-     * TODO Validate a username.
+     * Verifies that an account username contains allowed characters only.
      * 
-     * @param username
-     * @return
+     * @param username the username to verify
+     * @return true if only allowed characters are found, false otherwise.
      */
     public static boolean isUsernameValid(String username) {
-        return false;
+        return (username == null) ? false
+                                 : Pattern.matches(ExoConstants.ALLOWED_ACCOUNT_USERNAME_CHARSET,
+                                                   username);
     }
 
     /**
@@ -152,7 +218,7 @@ public class ExoUtils {
      * @param url the URL to check
      * @return true if the URL is forbidden, false otherwise
      */
-    public static boolean urlHasWrongTenant(String url) {
+    public static boolean isURLForbidden(String url) {
         return (url == null) ? false : // false if url is null
                             (Arrays.asList(WRONG_CLOUD_URLS).contains( // true
                                                                        // if the

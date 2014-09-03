@@ -9,7 +9,12 @@
   <string name="NoUsernameEnter">Please enter your username</string>
   <string name="NoPasswordEnter">Please enter your password</string>
   <string name="UserNamePasswordFailed">Invalid username/password combination.</string>
-  <string name="ServerInvalid">Invalid server address</string>
+  <string name="SpecialCharacters">Special characters are not allowed.</string>
+  <string name="AccountNameInvalid">Only alpha-numeric characters and spaces are allowed in the account name</string>
+  <string name="AccountServerInvalid">Invalid account server address</string>
+  <string name="AccountServerForbidden">This Server URL is not allowed</string>
+  <string name="AccountUsernameInvalid">Only alpha-numeric characters, hyphens, underscores and dots are allowed in the username</string>
+  <string name="AccountPasswordInvalid">Spaces are not allowed in the password</string>
   <string name="ServerUnreachable">Server address is unreachable</string>
   <string name="UserNameCellTitle">Username</string>
   <string name="PasswordCellTitle">Password</string>
@@ -86,10 +91,10 @@
   <string name="ConnectionError">The network can not be reached.</string>
   <string name="LoadingDataError">Error while loading data.</string>
   <string name="DoNotHavePermision">You don\'t have permission for this because no SD-card is available.</string>
-  <string name="WarningServerNameIsEmpty">The account name, server and username can not be empty</string>
-  <string name="WarningServerNameIsExist">This account name already exists</string>
-  <string name="WarningServerUrlIsExist">This account URL already exists</string>
-  <string name="WarningServerUrlAndUserAlreadyExist">This combination of server URL and username already exist in your list</string>
+  <string name="WarningServerNameIsEmpty">The account name and server can not be empty</string>
+  <string name="WarningServerNameIsExist">An account with this name already exists</string>
+  <string name="WarningServerUrlIsExist">An account with this server already exists</string>
+  <string name="WarningServerAlreadyExists">This account already exists in your list</string>
   <string name="DetailsNotAvaiable">Details of the news are not available</string>
   <string name="ErrorOnComment">You can not comment this activity.</string>
   <string name="CannotLoadMoreActivities">Cannot load older activities. The list is being refreshed.</string>
@@ -134,7 +139,6 @@
   <string name="CalendarLocation">Location:</string>
   <string name="CalendarStart">Start Time:</string>
   <string name="CalendarEnd">End Time:</string>
-  <string name="SpecialCharacters">Special characters are not allowed.</string>
   <string name="In"> in</string>
   <string name="Space"> space</string>
   <string name="Personal">Personal</string>

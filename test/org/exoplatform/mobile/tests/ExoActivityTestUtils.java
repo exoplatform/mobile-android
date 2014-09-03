@@ -27,6 +27,7 @@ import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.robolectric.shadows.ShadowLog;
 import org.robolectric.tester.org.apache.http.FakeHttpLayer.RequestMatcherBuilder;
 import org.robolectric.tester.org.apache.http.RequestMatcher;
 import org.robolectric.util.ActivityController;
@@ -149,6 +150,9 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
   
   // UTILS
   
+  public void enableLog() { ShadowLog.stream = System.out; }
+  public void disableLog() { ShadowLog.stream = null; }
+  
   /**
    * Creates a Server Object with the default name, URL, username and password
    * @return a ServerObjInfo object
@@ -191,14 +195,28 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
   }
   
   /**
-   * 
+   * Deletes all accounts in the app's preferences
+   * @param c the app's context
+   */
+  public void deleteAllAccounts(Context c) {
+    ServerConfigurationUtils.generateXmlFileWithServerList(c, new ArrayList<ServerObjInfo>(), "ServerList.xml", "");
+    ServerSettingHelper.getInstance().setServerInfoList(new ArrayList<ServerObjInfo>());
+    
+    SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
+    prefs.remove("exo_prf_domain_index");
+    prefs.commit();
+  }
+  
+  /**
+   * Adds the servers in the app's preferences but does not select any of them
    * @param c
-   * @param servers
+   * @param servers the list of ServerObjInfo to add
    */
   public void addServersInPreferences(Context c, ArrayList<ServerObjInfo> servers) {
 	  if (servers != null && servers.size()>0) {
 		  Log.i(TAG_TEST, "Saving "+servers.size()+" accounts.");
 		  ServerConfigurationUtils.generateXmlFileWithServerList(c, servers, "ServerList.xml", "");
+		  ServerSettingHelper.getInstance().setServerInfoList(servers);
 	  }
   }
   

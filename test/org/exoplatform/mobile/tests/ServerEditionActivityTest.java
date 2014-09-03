@@ -19,18 +19,26 @@ package org.exoplatform.mobile.tests;
 import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.setting.ServerEditionActivity;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.shadows.ShadowToast;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -48,6 +56,14 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
 	@Before
 	public void setup() {
 		controller = Robolectric.buildActivity(ServerEditionActivity.class);
+	}
+	
+	@Override
+	@After
+	public void teardown() {
+	  Context ctx = Robolectric.application.getApplicationContext();
+	  deleteAllAccounts(ctx);
+	  super.teardown();
 	}
 	
 	/**
@@ -99,9 +115,10 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
 	
 	@Test
 	public void verifyEditOneAccount() {
+	  
 		createWithDefaultServer();
 		Context ctx = Robolectric.application.getApplicationContext();
-		final String newName = TEST_SERVER_NAME+"_new";
+		final String newName = TEST_SERVER_NAME+" new";
 		final String newURL  = TEST_SERVER_URL+".fr";
 		final String newUser = TEST_USER_NAME+"_new";
 		final String newPass = TEST_USER_PWD+"_new";
@@ -116,6 +133,8 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
 		Robolectric.clickOn(mOkBtn);
 		
 		assertThat("Only 1 server should exist", ServerSettingHelper.getInstance().getServerInfoList(ctx).size(), equalTo(1));
+		assertTrue("Should have displayed toast ServerUpdated but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
+		           ShadowToast.showedToast(ctx.getResources().getString(R.string.ServerUpdated)));
 		
 		ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
 		
@@ -135,18 +154,142 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
 		Robolectric.clickOn(mDeleteBtn);
 		
 		assertThat("Server should have been deleted", ServerSettingHelper.getInstance().getServerInfoList(ctx).size(), equalTo(0));
+		assertTrue("Should have displayed toast ServerDeleted but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
+		           ShadowToast.showedToast(ctx.getResources().getString(R.string.ServerDeleted)));
 	}
 	
-//	@Test
-	public void verifyCreateAndEditFailWithIncorrectAccountInfo() {
+	@Test
+	public void verifyEditAccountFailsWithIncorrectAccountName() {
 		createWithDefaultServer();
-		// TODO
+		Context ctx = Robolectric.application.getApplicationContext();
+		
+		final String newInvalidAccountName = TEST_SERVER_NAME+" ** new";
+		
+		mServerNameEditTxt.setText(newInvalidAccountName);
+		
+		Robolectric.clickOn(mOkBtn);
+		
+		ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+    
+    assertThat("Account name should NOT have been modified", srv.serverName, equalTo(TEST_SERVER_NAME));
+    assertTrue("Should have displayed toast AccountNameInvalid but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
+               ShadowToast.showedToast(ctx.getResources().getString(R.string.AccountNameInvalid)));
 	}
 	
-//	@Test
+	@Test
+  public void verifyEditAccountFailsWithIncorrectAccountServer() {
+    createWithDefaultServer();
+    Context ctx = Robolectric.application.getApplicationContext();
+    
+    final String newInvalidAccountServer = TEST_WRONG_SERVER_URL;
+    
+    mServerUrlEditTxt.setText(newInvalidAccountServer);
+    
+    Robolectric.clickOn(mOkBtn);
+    
+    ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+    
+    assertThat("Account Server URL should NOT have been modified", srv.serverUrl, equalTo(TEST_SERVER_URL));
+    assertTrue("Should have displayed toast AccountServerInvalid but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
+               ShadowToast.showedToast(ctx.getResources().getString(R.string.AccountServerInvalid)));
+  }
+	
+	@Test
+  public void verifyEditAccountFailsWithForbiddenAccountServer() {
+    createWithDefaultServer();
+    Context ctx = Robolectric.application.getApplicationContext();
+    
+    final String newForbiddenAccountServer = "http://exoplatform.net";
+    
+    mServerUrlEditTxt.setText(newForbiddenAccountServer);
+    
+    Robolectric.clickOn(mOkBtn);
+    
+    ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+    
+    assertThat("Account Server URL should NOT have been modified", srv.serverUrl, equalTo(TEST_SERVER_URL));
+    assertTrue("Should have displayed toast AccountServerForbidden but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
+               ShadowToast.showedToast(ctx.getResources().getString(R.string.AccountServerForbidden)));
+  }
+	
+	@Test
+  public void verifyEditAccountFailsWithIncorrectAccountUserName() {
+    createWithDefaultServer();
+    Context ctx = Robolectric.application.getApplicationContext();
+    
+    final String newInvalidUsername = TEST_USER_NAME+" ** new";
+    
+    mUserEditTxt.setText(newInvalidUsername);
+    
+    Robolectric.clickOn(mOkBtn);
+    
+    ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+    
+    assertThat("Account username should NOT have been modified", srv.username, equalTo(TEST_USER_NAME));
+    assertTrue("Should have displayed toast AccountUsernameInvalid but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
+               ShadowToast.showedToast(ctx.getResources().getString(R.string.AccountUsernameInvalid)));
+  }
+	
+	@Test
+  public void verifyEditAccountFailsWithIncorrectAccountPassword() {
+    createWithDefaultServer();
+    Context ctx = Robolectric.application.getApplicationContext();
+    
+    final String newInvalidPassword = TEST_USER_PWD+" ** new";
+    
+    mPassEditTxt.setText(newInvalidPassword);
+    
+    Robolectric.clickOn(mOkBtn);
+    
+    ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+    
+    assertThat("Account password should NOT have been modified", srv.password, equalTo(TEST_USER_PWD));
+    assertTrue("Should have displayed toast AccountPasswordInvalid but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
+               ShadowToast.showedToast(ctx.getResources().getString(R.string.AccountPasswordInvalid)));
+  }
+	
+	@Test
 	public void verifyAccountIsSelectedWhenOnlyOneExists() {
-		createWithDefaultServer();
-		// TODO
+	  Context ctx = Robolectric.application.getApplicationContext();
+	  
+	  enableLog();
+	  
+	  // Create 2 accounts
+    thisServer = getServerWithDefaultValues();
+    thisServer.serverName = TEST_SERVER_NAME+" one";
+    thisServer.serverUrl = TEST_SERVER_URL+".net";
+    
+    ServerObjInfo acc2 = getServerWithDefaultValues();
+    acc2.serverName = TEST_SERVER_NAME+" two";
+    acc2.serverUrl = TEST_SERVER_URL+".org";
+    
+    ArrayList<ServerObjInfo> servers = new ArrayList<ServerObjInfo>(2);
+    servers.add(thisServer);
+    servers.add(acc2);
+    addServersInPreferences(ctx, servers);
+    
+    // Select the 1st account
+    SharedPreferences.Editor prefs = ctx.getSharedPreferences("exo_preference", 0).edit();
+    prefs.putString("exo_prf_domain_index", "0");
+    prefs.commit();
+    
+    // Start activity with thisServer (the 1st account)
+    Intent i = new Intent(ctx, ServerEditionActivity.class);
+    i.putExtra("EXO_SERVER_OBJ", thisServer);
+    super.createWithIntent(i);
+    init();
+    
+    // Delete the current account (the 1st)
+    Robolectric.clickOn(mDeleteBtn);
+    
+    ServerObjInfo remainingAcc = AccountSetting.getInstance().getCurrentServer();
+    
+    Log.d(TAG_TEST, remainingAcc.serverName);
+    Log.d(TAG_TEST, acc2.serverName);
+    
+    assertTrue("The 2nd account should have been selected automatically when the 1st was deleted", acc2.equals(remainingAcc));
+    
+    disableLog();
 	}
 	
 }

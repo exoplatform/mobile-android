@@ -347,7 +347,7 @@ public class ServerConfigurationUtils {
             			SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD, itemElement.getAttribute("password"));
             } catch (Exception ee) {
             	Log.e(TAG, "Could not decrypt password: " + ee.getLocalizedMessage());
-            	Log.e(TAG, "Using empty password");
+            	Log.w(TAG, "Leaving password attribute empty");
             	serverObj.password = "";
             }
             serverObj.isRememberEnabled  = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
@@ -592,7 +592,8 @@ public class ServerConfigurationUtils {
           serializer.attribute(null, "password",
               SimpleCrypto.encrypt(ExoConstants.EXO_MASTER_PASSWORD, serverObj.password));
         } catch (Exception e) {
-          Log.i(TAG, "Error while encrypting password: " + e.getLocalizedMessage());
+          Log.e(TAG, "Error while encrypting password: " + e.getLocalizedMessage());
+          Log.w(TAG, "Writing password in clear");
           serializer.attribute(null, "password", serverObj.password);
         }
 
