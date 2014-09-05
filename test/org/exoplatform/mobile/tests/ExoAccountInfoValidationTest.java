@@ -22,7 +22,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.utils.ExoUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -216,15 +216,15 @@ public class ExoAccountInfoValidationTest {
   @Test
   public void testAccountsAreEqual() {
     
-    ServerObjInfo account1 = new ServerObjInfo();
-    ServerObjInfo account2 = new ServerObjInfo();
+    ExoAccount account1 = new ExoAccount();
+    ExoAccount account2 = new ExoAccount();
     
     // account 1
-    account1.serverName = "test server";
+    account1.accountName = "test server";
     account1.serverUrl = "http://test-example.com";
     account1.username = "testuser";
     // account 2
-    account2.serverName = "test server";
+    account2.accountName = "test server";
     account2.serverUrl = "http://test-example.com";
     account2.username = "testuser";
     // test
@@ -255,12 +255,12 @@ public class ExoAccountInfoValidationTest {
   @Test
   public void testAccountsAreNotEqual() {
     
-    ServerObjInfo account1 = new ServerObjInfo();
-    ServerObjInfo account2 = new ServerObjInfo();
+    ExoAccount account1 = new ExoAccount();
+    ExoAccount account2 = new ExoAccount();
     
     // different server name
-    account1.serverName = "test server";
-    account2.serverName = "another test server";
+    account1.accountName = "test server";
+    account2.accountName = "another test server";
     account1.serverUrl  = "http://test-example.com";
     account2.serverUrl  = "http://test-example.com";
     account1.username   = "testuser";
@@ -268,8 +268,8 @@ public class ExoAccountInfoValidationTest {
     assertFalse("Account 1 and 2 should be different, server names are not equal", account1.equals(account2));
     
     // different server URL
-    account1.serverName = "test server";
-    account2.serverName = "test server";
+    account1.accountName = "test server";
+    account2.accountName = "test server";
     account1.serverUrl  = "http://test-example.com";
     account2.serverUrl  = "http://another-test-example.com";
     account1.username   = "testuser";
@@ -277,8 +277,8 @@ public class ExoAccountInfoValidationTest {
     assertFalse("Account 1 and 2 should be different, URLs are not equal", account1.equals(account2));
     
     // different username
-    account1.serverName = "test server";
-    account2.serverName = "test server";
+    account1.accountName = "test server";
+    account2.accountName = "test server";
     account1.serverUrl  = "http://test-example.com";
     account2.serverUrl  = "http://test-example.com";
     account1.username   = "testuser";

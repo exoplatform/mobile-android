@@ -29,6 +29,7 @@
     <dimen name="social_liked_list_item_height">85dp</dimen>
     <dimen name="social_avatar_size">43dp</dimen>
     <dimen name="unreadable_file_size">75dp</dimen>
+    <dimen name="account_list_avatar_size">100dp</dimen>
 
     <!-- text size -->
     <dimen name="text_size_smallest">9sp</dimen>

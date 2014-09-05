@@ -18,7 +18,6 @@
  */
 package org.exoplatform.controller.home;
 
-import android.util.Log;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.net.MalformedURLException;
@@ -38,14 +37,15 @@ import org.exoplatform.social.client.api.service.IdentityService;
 import org.exoplatform.social.client.api.service.VersionService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
 import org.exoplatform.ui.HomeActivity;
-import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * Load and connect the app to the Social services and objects:<br/>
@@ -159,6 +159,9 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
       SocialServiceHelper.getInstance().userProfile = result;
       if (HomeActivity.homeActivity != null) {
         HomeActivity.homeActivity.setProfileInfo(result);
+      }
+      if (AccountSetting.getInstance().shouldSaveProfileInfo(result[1], result[0])) {
+        SettingUtils.persistServerSetting(mContext);
       }
 
       /** Load activities for view flipper */

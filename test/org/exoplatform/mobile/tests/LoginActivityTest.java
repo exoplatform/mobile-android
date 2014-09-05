@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.login.AccountPanel;
 import org.exoplatform.ui.login.LoginActivity;
@@ -81,13 +81,13 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
 	  init();
   }
   
-  public ArrayList<ServerObjInfo> createXAccounts(final int x) {
-	  ArrayList<ServerObjInfo> list = null;
+  public ArrayList<ExoAccount> createXAccounts(final int x) {
+	  ArrayList<ExoAccount> list = null;
 	  if (x > 0) {
-		  list = new ArrayList<ServerObjInfo>(x);
+		  list = new ArrayList<ExoAccount>(x);
 		  for (int i=1; i<=x; i++) {
-			  ServerObjInfo srv = getServerWithDefaultValues();
-			  srv.serverName = TEST_SERVER_NAME+"_"+i; // rename account as testserver_i
+			  ExoAccount srv = getServerWithDefaultValues();
+			  srv.accountName = TEST_SERVER_NAME+"_"+i; // rename account as testserver_i
 			  srv.username = TEST_USER_NAME+"_"+i; // rename username as testuser_i
 			  srv.serverUrl = "http://www.test-"+i+".com";
 			  list.add(srv);
@@ -138,7 +138,7 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
   @Test
   public void shouldDisplayPanelWhenTappingButton() {
 	
-	ArrayList<ServerObjInfo> list = createXAccounts(2);
+	ArrayList<ExoAccount> list = createXAccounts(2);
 	ServerSettingHelper.getInstance().setServerInfoList(list);
 	
     create();
@@ -203,7 +203,7 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
     assertThat(user).containsText(TEST_USER_NAME); // username text field should contain the value passed in the URL
     ServerSettingHelper helper = ServerSettingHelper.getInstance();
     org.junit.Assert.assertThat(helper.getServerInfoList(ctx).isEmpty(), equalTo(false));
-    ServerObjInfo srv = helper.getServerInfoList(ctx).get(0);
+    ExoAccount srv = helper.getServerInfoList(ctx).get(0);
     org.junit.Assert.assertThat(srv.serverUrl, equalTo(TEST_SERVER_URL)); // server URL should be that passed in the start URL
     
   }

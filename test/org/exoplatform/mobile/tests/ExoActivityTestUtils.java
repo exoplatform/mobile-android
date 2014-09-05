@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHttpResponse;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.junit.After;
@@ -157,9 +157,9 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
    * Creates a Server Object with the default name, URL, username and password
    * @return a ServerObjInfo object
    */
-  public ServerObjInfo getServerWithDefaultValues() {
-    ServerObjInfo srv = new ServerObjInfo();
-    srv.serverName = TEST_SERVER_NAME;
+  public ExoAccount getServerWithDefaultValues() {
+    ExoAccount srv = new ExoAccount();
+    srv.accountName = TEST_SERVER_NAME;
     srv.serverUrl = TEST_SERVER_URL;
     srv.username = TEST_USER_NAME;
     srv.password = TEST_USER_PWD;
@@ -182,8 +182,8 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
    * @param c the app's Context
    * @param server the default server
    */
-  public void setDefaultServerInPreferences(Context c, ServerObjInfo server) {
-	  ArrayList<ServerObjInfo> serversList = new ArrayList<ServerObjInfo>(1);
+  public void setDefaultServerInPreferences(Context c, ExoAccount server) {
+	  ArrayList<ExoAccount> serversList = new ArrayList<ExoAccount>(1);
 	  serversList.add(server);
 	  
 	  ServerConfigurationUtils.generateXmlFileWithServerList(c, serversList, "ServerList.xml", "");
@@ -199,8 +199,8 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
    * @param c the app's context
    */
   public void deleteAllAccounts(Context c) {
-    ServerConfigurationUtils.generateXmlFileWithServerList(c, new ArrayList<ServerObjInfo>(), "ServerList.xml", "");
-    ServerSettingHelper.getInstance().setServerInfoList(new ArrayList<ServerObjInfo>());
+    ServerConfigurationUtils.generateXmlFileWithServerList(c, new ArrayList<ExoAccount>(), "ServerList.xml", "");
+    ServerSettingHelper.getInstance().setServerInfoList(new ArrayList<ExoAccount>());
     
     SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
     prefs.remove("exo_prf_domain_index");
@@ -212,7 +212,7 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
    * @param c
    * @param servers the list of ServerObjInfo to add
    */
-  public void addServersInPreferences(Context c, ArrayList<ServerObjInfo> servers) {
+  public void addServersInPreferences(Context c, ArrayList<ExoAccount> servers) {
 	  if (servers != null && servers.size()>0) {
 		  Log.i(TAG_TEST, "Saving "+servers.size()+" accounts.");
 		  ServerConfigurationUtils.generateXmlFileWithServerList(c, servers, "ServerList.xml", "");

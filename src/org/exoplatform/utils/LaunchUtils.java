@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
@@ -80,13 +80,13 @@ public class LaunchUtils {
    * Retrieve server list from config file and set it up for server setting helper
    */
   private void setServerList() {
-    ArrayList<ServerObjInfo> _serverList =
+    ArrayList<ExoAccount> _serverList =
         ServerConfigurationUtils.getServerListFromFile(mContext, ExoConstants.EXO_SERVER_SETTING_FILE);
     ServerSettingHelper.getInstance().setServerInfoList(_serverList);
 
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
-    mSetting.setCurrentServer((selectedServerIdx == -1 || selectedServerIdx >= _serverList.size()) ? null : _serverList.get(selectedServerIdx));
+    mSetting.setCurrentAccount((selectedServerIdx == -1 || selectedServerIdx >= _serverList.size()) ? null : _serverList.get(selectedServerIdx));
   }
 
 
@@ -96,13 +96,13 @@ public class LaunchUtils {
    * @param oldConfigFile
    */
   private void setOldServerList(String oldConfigFile) {
-    ArrayList<ServerObjInfo> _serverList =
+    ArrayList<ExoAccount> _serverList =
         ServerConfigurationUtils.getServerListFromOldConfigFile(oldConfigFile);
     ServerSettingHelper.getInstance().setServerInfoList(_serverList);
     if (_serverList.size() == 0) return;
     /* force app to start login screen */
     mSetting.setDomainIndex("0");
-    mSetting.setCurrentServer(_serverList.get(0));
+    mSetting.setCurrentAccount(_serverList.get(0));
     _serverList.get(0).isAutoLoginEnabled = false;
 
     /* persist the configuration */

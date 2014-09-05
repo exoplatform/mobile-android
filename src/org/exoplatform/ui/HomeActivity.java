@@ -25,6 +25,8 @@ import greendroid.widget.LoaderActionBarItem;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
+import org.exoplatform.accountswitcher.AccountSwitcherActivity;
+import org.exoplatform.accountswitcher.AccountSwitcherFragment;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -45,6 +47,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,7 +55,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 /**
@@ -92,7 +94,8 @@ public class HomeActivity extends MyActionBar {
 
   private AccountSetting      mSetting;
   
-  private boolean             mShowAccountSwitcherButton;
+  /** The account switcher button in the action bar. It is null if only 1 account exists */
+  private ActionBarItem       mAccountSwitcherBtn;
 
   @Override
   public void onCreate(Bundle bundle) {
@@ -130,19 +133,20 @@ public class HomeActivity extends MyActionBar {
   }
   
   private void initActionBar() {
-	  // need to reset the existing items before 
-	  resetActionBarItems();
+  	  // need to reset the existing items before 
+  	  resetActionBarItems();
 	    addActionBarItem(Type.Refresh);
 	    super.getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
-	    // display the account switcher button only if 2+ accounts are configured 
-	    mShowAccountSwitcherButton = false;
+	    // display the account switcher button only if 2+ accounts are configured
+	    mAccountSwitcherBtn = null;
 	    if (ServerSettingHelper.getInstance().twoOrMoreAccountsExist(this)) {
-	    	addActionBarItem();
-	    	super.getActionBar().getItem(1).setDrawable(R.drawable.action_bar_switcher_icon);
-	    	mShowAccountSwitcherButton = true;
+	    	mAccountSwitcherBtn = addActionBarItem();
+	    	mAccountSwitcherBtn.setDrawable(R.drawable.action_bar_switcher_icon);
+	    	mAccountSwitcherBtn.getItemView().setEnabled(false);
 	    }
+	    // add the logout button, position 2 if the account switcher btn exists, position 1 otherwise
 	    addActionBarItem();
-	    super.getActionBar().getItem(mShowAccountSwitcherButton ? 2 : 1).setDrawable(R.drawable.action_bar_logout_button);
+	    super.getActionBar().getItem(mAccountSwitcherBtn!=null ? 2 : 1).setDrawable(R.drawable.action_bar_logout_button);
 	    
 	    loaderItem = (LoaderActionBarItem) super.getActionBar().getItem(0);
   }
@@ -251,9 +255,11 @@ public class HomeActivity extends MyActionBar {
   public void setProfileInfo(String[] profile) {
     homeUserAvatar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_right_to_left));
     homeUserAvatar.setUrl(profile[0]);
-    homeUserName.setText(profile[1]);
+    String userAndAccount = profile[1]+" ("+mSetting.getCurrentAccount().accountName+")";
+    homeUserName.setText(userAndAccount);
     homeUserName.setAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_right_to_left));
     homeUserAvatar.setVisibility(View.VISIBLE);
+    if (mAccountSwitcherBtn!=null) mAccountSwitcherBtn.getItemView().setEnabled(true);
   }
 
   /*
@@ -293,18 +299,37 @@ public class HomeActivity extends MyActionBar {
         homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, SocialTabsActivity.ALL_UPDATES);
       }
       break;
-    case 1: // open the account switcher or sign-out
-    	if (mShowAccountSwitcherButton) {
-    		// TODO open the account switcher
-    		Toast.makeText(this, "Open the account switcher", Toast.LENGTH_SHORT).show();
-    	} else {
-    		onLoggingOut();
+    case 1: 
+    	if (mAccountSwitcherBtn != null) { // open the account switcher
+    	  if (mAccountSwitcherBtn.getItemView().isEnabled()) {
+    	  int screenLayout = getResources().getConfiguration().screenLayout;
+        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+        switch (screenLayout) {
+          case Configuration.SCREENLAYOUT_SIZE_SMALL:
+          case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+          case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
+            // for small and normal screens, start an activity
+            Log.d(TAG, "Open the account switcher fragment in an activity");
+            Intent accSwitcherIntent = new Intent(this, AccountSwitcherActivity.class);
+            startActivity(accSwitcherIntent);
+            break;
+          case Configuration.SCREENLAYOUT_SIZE_LARGE:
+          case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+            // for large+ screens, start as dialog fragment
+            Log.d(TAG, "Open the account switcher fragment in a dialog");
+            AccountSwitcherFragment df = AccountSwitcherFragment.newInstance();
+            df.show(getSupportFragmentManager(), AccountSwitcherFragment.DIALOG_TAG);
+            break;
+        }
+    	  }
+    	} else { // or sign-out (position 1 if account switcher is not displayed)
+    		  onLoggingOut();
     	    redirectToLogIn();
     	}
       break;
-    case 2: // sign-out only if the account switcher button is displayed
-    	if (mShowAccountSwitcherButton) {
-    		onLoggingOut();
+    case 2: // sign-out is at position 2 only if the account switcher button is displayed
+    	if (mAccountSwitcherBtn!=null) {
+    		  onLoggingOut();
     	    redirectToLogIn();
     	}
     }

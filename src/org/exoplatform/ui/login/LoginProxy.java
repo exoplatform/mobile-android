@@ -21,7 +21,7 @@ package org.exoplatform.ui.login;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.login.tasks.CheckAccountExistsTask;
@@ -359,7 +359,7 @@ public class LoginProxy implements
         mWarningDialog.setMessage(mResource.getString(R.string.ServerNotAvailable)).show();
         break;
 
-      /** Login successfully - save data */
+      /** Login successful - save data */
       case ExoConnectionUtils.LOGIN_SUCCESS:
 
         /* Set social and document settings */
@@ -370,51 +370,49 @@ public class LoginProxy implements
         mSetting.socialKeyIndex = builder.toString() + ExoConstants.SETTING_SOCIAL_FILTER_INDEX;
         mSetting.documentKey    = builder.toString() + ExoConstants.SETTING_DOCUMENT_SHOW_HIDDEN_FILE;
 
-        boolean needToSave = false;
-
-        ServerObjInfo newServerObj;
+        ExoAccount newAccountObj;
         int serverIdx;
         if (mLaunchMode == WITH_EXISTING_ACCOUNT) {
-          newServerObj             =  mSetting.getCurrentServer().clone();
-          newServerObj.username    =  mNewUserName;
-          newServerObj.password    =  mNewPassword;
+          newAccountObj             =  mSetting.getCurrentAccount().clone();
+          newAccountObj.username    =  mNewUserName;
+          newAccountObj.password    =  mNewPassword;
         }
         else {
-          newServerObj = new ServerObjInfo();
+          newAccountObj = new ExoAccount();
           String name = mTenant;
           if (name == null) name = getTenant(mDomain);
           if (name == null) name = ExoUtils.getAccountNameFromURL(mDomain, mResource.getString(R.string.DefaultServer));
-          newServerObj.serverName  =  name;
-          newServerObj.serverUrl   =  mDomain;
-          newServerObj.username    =  mNewUserName;
-          newServerObj.password    =  mNewPassword;
+          newAccountObj.accountName  =  name;
+          newAccountObj.serverUrl   =  mDomain;
+          newAccountObj.username    =  mNewUserName;
+          newAccountObj.password    =  mNewPassword;
         }
+        newAccountObj.lastLoginDate = System.currentTimeMillis();
 
-        ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
-        int duplicatedIdx = serverList.indexOf(newServerObj);
-        /** No duplicate */
+        ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
+        int duplicatedIdx = serverList.indexOf(newAccountObj);
+        // The account used to login is not a duplicate, it is added to the list
         if (duplicatedIdx == -1) {
-          needToSave = true;
-          serverList.add(newServerObj);
+          serverList.add(newAccountObj);
           serverIdx = serverList.size()-1;
         }
         else {
-          /** Duplicate server */
-          ServerObjInfo duplicatedServer = serverList.get(duplicatedIdx);
+          // The account already exists, its index in the list is used as the current account index
+          ExoAccount duplicatedServer = serverList.get(duplicatedIdx);
           serverIdx  = duplicatedIdx;
-          /** Check password */
-          if (!duplicatedServer.password.equals(newServerObj.password)) {
-            duplicatedServer.password = newServerObj.password;
-            needToSave = true;
+          // The password property is updated if it changed
+          if (!duplicatedServer.password.equals(newAccountObj.password)) {
+            duplicatedServer.password = newAccountObj.password;
           }
+          duplicatedServer.lastLoginDate = newAccountObj.lastLoginDate;
         }
 
-        mSetting.setCurrentServer(serverList.get(serverIdx));
+        mSetting.setCurrentAccount(serverList.get(serverIdx));
         mSetting.setDomainIndex(String.valueOf(serverIdx));
         userIsLoggedIn = true;
         
-        /** Save config */
-        if (needToSave) SettingUtils.persistServerSetting(mContext);
+        // Save config each time to update the last login date property
+        SettingUtils.persistServerSetting(mContext);
       break;
     }
 

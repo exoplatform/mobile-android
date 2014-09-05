@@ -24,7 +24,7 @@ import android.view.*;
 import android.widget.*;
 import org.exoplatform.R;
 import org.exoplatform.utils.LaunchUtils;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.HomeActivity;
@@ -221,12 +221,12 @@ public class LoginActivity extends Activity implements
     else return ;
 
     /* Add server to server list if server is new */
-    ServerObjInfo serverObj  = new ServerObjInfo();
-    serverObj.serverName = Uri.parse(serverUrl).getAuthority();
+    ExoAccount serverObj  = new ExoAccount();
+    serverObj.accountName = Uri.parse(serverUrl).getAuthority();
     serverObj.serverUrl  = serverUrl;
     serverObj.username   = username;
 
-    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(this);
+    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(this);
     String domainIdx;
     int serverIdx = serverList.indexOf(serverObj);
     if (serverIdx > -1) {
@@ -243,7 +243,7 @@ public class LoginActivity extends Activity implements
 
     // set current selected server to the new server
     mSetting.setDomainIndex(String.valueOf(domainIdx));
-    mSetting.setCurrentServer(serverList.get(serverIdx));
+    mSetting.setCurrentAccount(serverList.get(serverIdx));
   }
 
   public void onChangeLanguage() {
@@ -294,7 +294,7 @@ public class LoginActivity extends Activity implements
 
   @Override
   public void onClickLogin(String username, String password) {
-    if (mSetting.getCurrentServer() == null) {
+    if (mSetting.getCurrentAccount() == null) {
       Toast toast = Toast.makeText(this, R.string.NoServerSelected, Toast.LENGTH_LONG);
       toast.setGravity(Gravity.CENTER, 0, 0);
       toast.show();

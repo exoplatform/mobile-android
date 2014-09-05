@@ -15,6 +15,8 @@
   <string name="AccountServerForbidden">This Server URL is not allowed</string>
   <string name="AccountUsernameInvalid">Only alpha-numeric characters, hyphens, underscores and dots are allowed in the username</string>
   <string name="AccountPasswordInvalid">Spaces are not allowed in the password</string>
+  <string name="Connected">Connected</string>
+  <string name="LastLoginDate">Last login</string>
   <string name="ServerUnreachable">Server address is unreachable</string>
   <string name="UserNameCellTitle">Username</string>
   <string name="PasswordCellTitle">Password</string>
@@ -64,7 +66,7 @@
   <string name="And"> and</string>
   <string name="PeoplesLikedThis"> people liked this</string>
   <string name="PeopleLikedThis"> person liked this</string>
-  <string name="LessThanAMinute"> less than a minute</string>
+  <string name="LessThanAMinute"> less than a minute ago</string>
   <string name="AboutAMinuteAgo"> about a minute ago</string>
   <string name="About"> about</string>
   <string name="MinutesAgo"> minutes ago</string>
