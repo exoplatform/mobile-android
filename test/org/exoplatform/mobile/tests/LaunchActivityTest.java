@@ -24,7 +24,7 @@ import static org.robolectric.Robolectric.shadowOf;
 
 import java.util.Locale;
 
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.ui.LaunchActivity;
 import org.exoplatform.ui.WelcomeActivity;
 import org.exoplatform.ui.login.LoginActivity;
@@ -198,7 +198,7 @@ public class LaunchActivityTest extends ExoActivityTestUtils<LaunchActivity> {
   public void shouldRedirectToLoginScreen() throws Exception 
   {
 	  
-	  ServerObjInfo srv = getServerWithDefaultValues();
+	  ExoAccount srv = getServerWithDefaultValues();
       srv.isAutoLoginEnabled = false;
       srv.isRememberEnabled = false;
 	  

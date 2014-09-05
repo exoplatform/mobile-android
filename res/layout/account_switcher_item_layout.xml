@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        style="@style/AccountListItemHeaderStyle"
+        android:layout_marginTop="@dimen/margin_s"
+        android:padding="@dimen/margin_s">
+        
+        <TextView
+            android:id="@+id/account_name_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ACCOUNT NAME"
+            style="@style/AccountListItemHeaderNameStyle" />
+        
+        <TextView
+            android:id="@+id/account_server_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="http://community.example.com"
+            style="@style/AccountListItemHeaderServerStyle" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/AccountListItemBodyStyle"
+        android:layout_marginBottom="@dimen/margin_s"
+        android:padding="@dimen/margin_s">
+
+        <ImageView
+            android:id="@+id/account_avatar_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/default_avatar"
+            android:layout_marginRight="@dimen/margin_s"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/account_user_fullname_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User Name"
+                style="@style/AccountListItemBodyFullnameStyle" />
+
+            <TextView
+                android:id="@+id/account_username_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="username"
+                style="@style/AccountListItemBodyUsernameStyle" />
+
+            <TextView
+                android:id="@+id/account_connection_status_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Connected"
+                style="@style/AccountListItemBodyConnectionStatusStyle" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+    
+</LinearLayout>

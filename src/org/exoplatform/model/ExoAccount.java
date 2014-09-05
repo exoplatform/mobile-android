@@ -25,10 +25,10 @@ import android.os.Parcelable;
  * Describe an Account configuration, containing the URL to connect to the server and credentials.
  * A server object information is identified by the combination: server name - server url - username
  */
-public class ServerObjInfo implements Parcelable {
+public class ExoAccount implements Parcelable {
 
   /** Describe the server; if nothing specified, use authority of url */
-  public String  serverName;
+  public String  accountName;
 
   /** url of server, contains the protocol (http:// ) */
   public String  serverUrl;
@@ -38,6 +38,12 @@ public class ServerObjInfo implements Parcelable {
 
   /** unencrypted password */
   public String  password;
+  
+  public String  avatarUrl;
+  
+  public String userFullName;
+  
+  public long  lastLoginDate;
 
   /**
    * Whether remember me is enabled on this credential
@@ -48,36 +54,42 @@ public class ServerObjInfo implements Parcelable {
   /** Whether autologin is enabled */
   public boolean isAutoLoginEnabled;
 
-  public ServerObjInfo() {
-    serverName = "";
+  public ExoAccount() {
+    accountName = "";
     serverUrl  = "";
     username   = "";
     password   = "";
     isRememberEnabled  = true;
     isAutoLoginEnabled = true;
+    userFullName = "";
+    avatarUrl = "";
+    lastLoginDate = -1;
   }
 
-  private ServerObjInfo(Parcel in) {
+  private ExoAccount(Parcel in) {
     readFromParcel(in);
   }
 
-  public static final Parcelable.Creator<ServerObjInfo> CREATOR = new Parcelable.Creator<ServerObjInfo>() {
-                                                                  public ServerObjInfo createFromParcel(Parcel in) {
-                                                                    return new ServerObjInfo(in);
+  public static final Parcelable.Creator<ExoAccount> CREATOR = new Parcelable.Creator<ExoAccount>() {
+                                                                  public ExoAccount createFromParcel(Parcel in) {
+                                                                    return new ExoAccount(in);
                                                                   }
 
-                                                                  public ServerObjInfo[] newArray(int size) {
-                                                                    return new ServerObjInfo[size];
+                                                                  public ExoAccount[] newArray(int size) {
+                                                                    return new ExoAccount[size];
                                                                   }
                                                                 };
 
   private void readFromParcel(Parcel in) {
-    serverName = in.readString();
+    accountName = in.readString();
     serverUrl  = in.readString();
     username   = in.readString();
     password   = in.readString();
     isRememberEnabled  = in.readByte() == 1;
     isAutoLoginEnabled = in.readByte() == 1;
+    userFullName = in.readString();
+    avatarUrl = in.readString();
+    lastLoginDate = in.readLong();
   }
 
   @Override
@@ -87,12 +99,15 @@ public class ServerObjInfo implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
-    dest.writeString(serverName);
+    dest.writeString(accountName);
     dest.writeString(serverUrl);
     dest.writeString(username);
     dest.writeString(password);
     dest.writeByte((byte) (isRememberEnabled  ? 1 : 0));
     dest.writeByte((byte) (isAutoLoginEnabled ? 1 : 0));
+    dest.writeString(userFullName);
+    dest.writeString(avatarUrl);
+    dest.writeLong(lastLoginDate);
   }
 
   /**
@@ -101,26 +116,41 @@ public class ServerObjInfo implements Parcelable {
    */
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof  ServerObjInfo)) return false;
-    ServerObjInfo _server = (ServerObjInfo) obj;
-    if (_server.serverName.equals(serverName) && _server.serverUrl.equals(serverUrl) && _server.username.equals(username)) return true;
+    if (!(obj instanceof  ExoAccount)) return false;
+    ExoAccount _server = (ExoAccount) obj;
+    if (_server.accountName.equals(accountName) && _server.serverUrl.equals(serverUrl) && _server.username.equals(username)) return true;
     return false;
   }
 
   /** clones this instance */
-  public ServerObjInfo clone() {
-    ServerObjInfo _server = new ServerObjInfo();
-    _server.serverUrl  = serverUrl;
-    _server.serverName = serverName;
-    _server.username   = username;
-    _server.password   = password;
-    _server.isAutoLoginEnabled = isAutoLoginEnabled;
-    _server.isRememberEnabled  = isRememberEnabled;
-    return _server;
+  public ExoAccount clone() {
+    ExoAccount newAccount = new ExoAccount();
+    newAccount.serverUrl  = serverUrl;
+    newAccount.accountName = accountName;
+    newAccount.username   = username;
+    newAccount.password   = password;
+    newAccount.isAutoLoginEnabled = isAutoLoginEnabled;
+    newAccount.isRememberEnabled  = isRememberEnabled;
+    newAccount.userFullName = userFullName;
+    newAccount.avatarUrl = avatarUrl;
+    newAccount.lastLoginDate = lastLoginDate;
+    return newAccount;
   }
 
   @Override
   public int hashCode() {
     return (serverUrl + username).hashCode();
+  }
+  
+  @Override
+  public String toString() {
+    StringBuilder b = new StringBuilder("Account Details:\n");
+    b.append("* Name: ").append(accountName).append("\n");
+    b.append("* URL: ").append(serverUrl).append("\n");
+    b.append("* User: ").append(username).append("\n");
+    b.append("* Full name: ").append(userFullName).append("\n");
+    b.append("* Last login: ").append(lastLoginDate).append("\n");
+    b.append("* Avatar: ").append(avatarUrl).append("\n");
+    return b.toString();
   }
 }

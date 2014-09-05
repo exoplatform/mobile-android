@@ -55,7 +55,7 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
 
   public void redirect() {
     /** no account configured - redirect to Welcome screen */
-    if (mSetting.getCurrentServer() == null) {
+    if (mSetting.getCurrentAccount() == null) {
       Intent next = new Intent(this, WelcomeActivity.class);
       startActivityForResult(next, 0);
       overridePendingTransition(0, 0);

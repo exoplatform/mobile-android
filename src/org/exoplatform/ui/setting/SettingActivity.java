@@ -314,11 +314,11 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
       }
       else mAutoLoginCbx.enabled(true);
 
-      mSetting.getCurrentServer().isRememberEnabled  = mRememberMeCbx.isChecked();
-      mSetting.getCurrentServer().isAutoLoginEnabled = mAutoLoginCbx.isChecked();
+      mSetting.getCurrentAccount().isRememberEnabled  = mRememberMeCbx.isChecked();
+      mSetting.getCurrentAccount().isAutoLoginEnabled = mAutoLoginCbx.isChecked();
     }
     else if (checkBox.equals(mAutoLoginCbx)) {
-      mSetting.getCurrentServer().isAutoLoginEnabled = mAutoLoginCbx.isChecked();
+      mSetting.getCurrentAccount().isAutoLoginEnabled = mAutoLoginCbx.isChecked();
     }
 
   }

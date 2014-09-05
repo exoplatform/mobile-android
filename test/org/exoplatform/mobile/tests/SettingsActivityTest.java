@@ -24,7 +24,7 @@ import static org.robolectric.Robolectric.shadowOf;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.WelcomeActivity;
@@ -92,12 +92,12 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity>{
   private void initSettings() {
     // Setup and save a server
     srvSettings = ServerSettingHelper.getInstance();
-    ServerObjInfo srv = getServerWithDefaultValues();
-    ArrayList<ServerObjInfo> list = new ArrayList<ServerObjInfo>();
+    ExoAccount srv = getServerWithDefaultValues();
+    ArrayList<ExoAccount> list = new ArrayList<ExoAccount>();
     list.add(srv);
     srvSettings.setServerInfoList(list);
     SettingUtils.persistServerSetting(Robolectric.getShadowApplication().getApplicationContext());
-    AccountSetting.getInstance().setCurrentServer(srv);
+    AccountSetting.getInstance().setCurrentAccount(srv);
     AccountSetting.getInstance().setDomainIndex("0");
     
     // Set server version, edition and app version

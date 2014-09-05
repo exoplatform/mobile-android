@@ -25,7 +25,7 @@ import android.view.View;
 import android.widget.*;
 import org.exoplatform.R;
 import org.exoplatform.controller.login.ServerAdapter;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 
@@ -100,7 +100,7 @@ public class ServerPanel extends LinearLayout implements AdapterView.OnItemClick
       rowView.findViewById(R.id.ImageView_Checked)
              .setBackgroundResource(R.drawable.authenticate_checkmark_off);
       mSetting.setDomainIndex(String.valueOf(-1));
-      mSetting.setCurrentServer(null);
+      mSetting.setCurrentAccount(null);
       return ;
     }
 
@@ -113,9 +113,9 @@ public class ServerPanel extends LinearLayout implements AdapterView.OnItemClick
     rowView.findViewById(R.id.ImageView_Checked)
            .setBackgroundResource(R.drawable.authenticate_checkmark_on);
 
-    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
+    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
     mSetting.setDomainIndex(String.valueOf(position));
-    mSetting.setCurrentServer(serverList.get(position));
+    mSetting.setCurrentAccount(serverList.get(position));
   }
 
 }

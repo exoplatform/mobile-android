@@ -41,7 +41,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.exoplatform.R;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -165,9 +165,9 @@ public class ServerConfigurationUtils {
 
   // Get default server list
   @Deprecated
-  public static ArrayList<ServerObjInfo> getDefaultServerList(Context _context) {
+  public static ArrayList<ExoAccount> getDefaultServerList(Context _context) {
 
-    ArrayList<ServerObjInfo> arrServerList = getServerListWithFileName("");
+    ArrayList<ExoAccount> arrServerList = getServerListWithFileName("");
     XmlResourceParser parser = _context.getResources().getXml(R.xml.defaultconfiguaration);
 
     try {
@@ -182,11 +182,11 @@ public class ServerConfigurationUtils {
           name = parser.getName().toLowerCase(Locale.US);
 
           if (name.equalsIgnoreCase("server")) {
-            ServerObjInfo serverObj = new ServerObjInfo();
+            ExoAccount serverObj = new ExoAccount();
             for (int i = 0; i < parser.getAttributeCount(); i++) {
               String attribute = parser.getAttributeName(i).toLowerCase(Locale.US);
               if (attribute.equalsIgnoreCase("name")) {
-                serverObj.serverName = parser.getAttributeValue(i);
+                serverObj.accountName = parser.getAttributeValue(i);
               } else if (attribute.equalsIgnoreCase("serverURL")) {
                 serverObj.serverUrl = parser.getAttributeValue(i);
               }
@@ -252,9 +252,9 @@ public class ServerConfigurationUtils {
 
   // Get added/deleted servers
   @Deprecated
-  public static ArrayList<ServerObjInfo> getServerListWithFileName(String name) {
+  public static ArrayList<ExoAccount> getServerListWithFileName(String name) {
 
-    ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
+    ArrayList<ExoAccount> arrServerList = new ArrayList<ExoAccount>();
     StringBuffer pathBuffer = new StringBuffer();
     pathBuffer.append(Environment.getExternalStorageDirectory());
     pathBuffer.append("/eXo/");
@@ -287,8 +287,8 @@ public class ServerConfigurationUtils {
           if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
             Element itemElement = (Element) itemNode;
 
-            ServerObjInfo serverObj = new ServerObjInfo();
-            serverObj.serverName = itemElement.getAttribute("name");
+            ExoAccount serverObj = new ExoAccount();
+            serverObj.accountName = itemElement.getAttribute("name");
             serverObj.serverUrl  = itemElement.getAttribute("serverURL");
             arrServerList.add(serverObj);
           }
@@ -317,10 +317,10 @@ public class ServerConfigurationUtils {
    * @param fileName
    * @return a list of servers, or an empty list, but never null
    */
-  public static ArrayList<ServerObjInfo> getServerListFromFile(Context context, String fileName) {
+  public static ArrayList<ExoAccount> getServerListFromFile(Context context, String fileName) {
     Log.i(TAG, "getServerListFromFile: " + fileName);
 
-    ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
+    ArrayList<ExoAccount> arrServerList = new ArrayList<ExoAccount>();
 
     try {
     	
@@ -338,8 +338,8 @@ public class ServerConfigurationUtils {
           if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
             Element itemElement = (Element) itemNode;
 
-            ServerObjInfo serverObj  = new ServerObjInfo();
-            serverObj.serverName     = itemElement.getAttribute("name");
+            ExoAccount serverObj  = new ExoAccount();
+            serverObj.accountName     = itemElement.getAttribute("name");
             serverObj.serverUrl      = itemElement.getAttribute(ExoConstants.EXO_URL_SERVER);
             serverObj.username       = itemElement.getAttribute(ExoConstants.EXO_URL_USERNAME);
             try {
@@ -352,6 +352,14 @@ public class ServerConfigurationUtils {
             }
             serverObj.isRememberEnabled  = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
             serverObj.isAutoLoginEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
+            serverObj.userFullName = itemElement.getAttribute(ExoConstants.EXO_USER_FULLNAME);
+            try {
+              serverObj.lastLoginDate = Long.parseLong(itemElement.getAttribute(ExoConstants.EXO_LAST_LOGIN));
+            } catch (Exception ee) {
+              serverObj.lastLoginDate = -1;
+              Log.i(TAG, "Last login date unknown");
+            }
+            serverObj.avatarUrl = itemElement.getAttribute(ExoConstants.EXO_URL_AVATAR);
             arrServerList.add(serverObj);
           }
         }
@@ -419,10 +427,10 @@ public class ServerConfigurationUtils {
    * @param fileName
    * @return
    */
-  public static ArrayList<ServerObjInfo> getServerListFromOldConfigFile(String fileName) {
+  public static ArrayList<ExoAccount> getServerListFromOldConfigFile(String fileName) {
     Log.i(TAG, "getServerListFromOldConfigFile: " + fileName);
 
-    ArrayList<ServerObjInfo> arrServerList = new ArrayList<ServerObjInfo>();
+    ArrayList<ExoAccount> arrServerList = new ArrayList<ExoAccount>();
     File file = new File(fileName);
     try {
       FileInputStream fis = new FileInputStream(file);
@@ -439,10 +447,10 @@ public class ServerConfigurationUtils {
           if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
             Element itemElement = (Element) itemNode;
 
-            ServerObjInfo serverObj  = new ServerObjInfo();
-            serverObj.serverName     = itemElement.getAttribute("name");
+            ExoAccount serverObj  = new ExoAccount();
+            serverObj.accountName     = itemElement.getAttribute("name");
             serverObj.serverUrl      = itemElement.getAttribute("serverURL");
-            Log.i(TAG, "server: " + serverObj.serverName + " - url: " + serverObj.serverUrl);
+            Log.i(TAG, "server: " + serverObj.accountName + " - url: " + serverObj.serverUrl);
             if (serverObj.serverUrl != null)
               if (!serverObj.serverUrl.equals("")) arrServerList.add(serverObj);
           }
@@ -473,7 +481,7 @@ public class ServerConfigurationUtils {
 
   // Create user configuration file: deleted & added servers
   @Deprecated
-  public static boolean createXmlDataWithServerList(ArrayList<ServerObjInfo> objList,
+  public static boolean createXmlDataWithServerList(ArrayList<ExoAccount> objList,
                                                     String fileName,
                                                     String appVersion) {
     StringBuffer pathBuffer = new StringBuffer();
@@ -515,9 +523,9 @@ public class ServerConfigurationUtils {
 
       // i indent code just to have a view similar to xml-tree
       for (int i = 0; i < objList.size(); i++) {
-        ServerObjInfo serverObj = objList.get(i);
+        ExoAccount serverObj = objList.get(i);
         serializer.startTag(null, "server");
-        serializer.attribute(null, "name", serverObj.serverName);
+        serializer.attribute(null, "name", serverObj.accountName);
         serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj.serverUrl);
         serializer.endTag(null, "server");
       }
@@ -550,7 +558,7 @@ public class ServerConfigurationUtils {
    * @param appVersion
    * @return
    */
-  public static boolean generateXmlFileWithServerList(Context context, ArrayList<ServerObjInfo> objList,
+  public static boolean generateXmlFileWithServerList(Context context, ArrayList<ExoAccount> objList,
                                                     String fileName,
                                                     String appVersion) {
     Log.i(TAG, "generateXmlFileWithServerList: " + fileName);
@@ -581,9 +589,9 @@ public class ServerConfigurationUtils {
 
       // i indent code just to have a view similar to xml-tree
       for (int i = 0; i < objList.size(); i++) {
-        ServerObjInfo serverObj = objList.get(i);
+        ExoAccount serverObj = objList.get(i);
         serializer.startTag(null, "server");
-        serializer.attribute(null, "name", serverObj.serverName);
+        serializer.attribute(null, "name", serverObj.accountName);
         serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj.serverUrl);
         serializer.attribute(null, ExoConstants.EXO_URL_USERNAME, serverObj.username);
 
@@ -599,6 +607,9 @@ public class ServerConfigurationUtils {
 
         serializer.attribute(null, ExoConstants.EXO_REMEMBER_ME, String.valueOf(serverObj.isRememberEnabled));
         serializer.attribute(null, ExoConstants.EXO_AUTOLOGIN, String.valueOf(serverObj.isAutoLoginEnabled));
+        serializer.attribute(null, ExoConstants.EXO_USER_FULLNAME, serverObj.userFullName);
+        serializer.attribute(null, ExoConstants.EXO_LAST_LOGIN, String.valueOf(serverObj.lastLoginDate));
+        serializer.attribute(null, ExoConstants.EXO_URL_AVATAR, serverObj.avatarUrl);
         serializer.endTag(null, "server");
       }
 

@@ -20,9 +20,10 @@ package org.exoplatform.singleton;
 
 import java.util.ArrayList;
 
+import org.exoplatform.model.ExoAccount;
+
 import android.os.Parcel;
 import android.os.Parcelable;
-import org.exoplatform.model.ServerObjInfo;
 
 /**
  * Represents as temporary instance of SharedPref, which
@@ -59,7 +60,7 @@ public class AccountSetting implements Parcelable {
   public ArrayList<String>      cookiesList;
 
   /** current server */
-  private ServerObjInfo         mCurrentServer;
+  private ExoAccount         mCurrentAccount;
 
 
   private AccountSetting() { }
@@ -72,28 +73,49 @@ public class AccountSetting implements Parcelable {
     accountSetting = instance;
   }
 
-  public ServerObjInfo getCurrentServer() {
-    return mCurrentServer;
+  public ExoAccount getCurrentAccount() {
+    return mCurrentAccount;
   }
 
-  public void setCurrentServer(ServerObjInfo server) {
-    mCurrentServer = server;
+  public void setCurrentAccount(ExoAccount acc) {
+    mCurrentAccount = acc;
   }
 
   public String getUsername() {
-    return (mCurrentServer!=null) ? mCurrentServer.username : "";
+    return (mCurrentAccount!=null) ? mCurrentAccount.username : "";
   }
 
   public String getPassword() {
-    return (mCurrentServer!=null) ? mCurrentServer.password : "";
+    return (mCurrentAccount!=null) ? mCurrentAccount.password : "";
   }
 
   public String getDomainName() {
-    return (mCurrentServer!=null) ? mCurrentServer.serverUrl: "";
+    return (mCurrentAccount!=null) ? mCurrentAccount.serverUrl: "";
   }
 
   public String getServerName() {
-    return (mCurrentServer!=null) ? mCurrentServer.serverName: "";
+    return (mCurrentAccount!=null) ? mCurrentAccount.accountName: "";
+  }
+  
+  public String getUserFullName() {
+    return (mCurrentAccount!=null) ? mCurrentAccount.userFullName : "";
+  }
+  
+  public String getUserAvatarUrl() {
+    return (mCurrentAccount!=null) ? mCurrentAccount.avatarUrl : "";
+  }
+  
+  public boolean shouldSaveProfileInfo(String newUserFullName, String newUserAvatarUrl) {
+    boolean shouldSave = false;
+    if (!getUserFullName().equalsIgnoreCase(newUserFullName)) {
+      mCurrentAccount.userFullName = newUserFullName;
+      shouldSave = true;
+    }
+    if (!getUserAvatarUrl().equalsIgnoreCase(newUserAvatarUrl)) {
+      mCurrentAccount.avatarUrl = newUserAvatarUrl;
+      shouldSave = true;
+    }
+    return shouldSave;
   }
 
   /**
@@ -103,7 +125,7 @@ public class AccountSetting implements Parcelable {
    * @return
    */
   public boolean isAutoLoginEnabled() {
-    return (mCurrentServer!=null) ? mCurrentServer.isAutoLoginEnabled : false;
+    return (mCurrentAccount!=null) ? mCurrentAccount.isAutoLoginEnabled : false;
   }
 
   /**
@@ -113,7 +135,7 @@ public class AccountSetting implements Parcelable {
    * @return
    */
   public boolean isRememberMeEnabled() {
-    return (mCurrentServer!=null) ? mCurrentServer.isRememberEnabled : false;
+    return (mCurrentAccount!=null) ? mCurrentAccount.isRememberEnabled : false;
   }
 
   public String getDomainIndex() {
@@ -130,7 +152,7 @@ public class AccountSetting implements Parcelable {
 
   public void readFromParcel(Parcel in) {
     domainIndex    = in.readString();
-    mCurrentServer = in.readParcelable(ServerObjInfo.class.getClassLoader());
+    mCurrentAccount = in.readParcelable(ExoAccount.class.getClassLoader());
     cookiesList    = new ArrayList<String>();
     in.readStringList(cookiesList);
 
@@ -162,7 +184,7 @@ public class AccountSetting implements Parcelable {
   @Override
   public void writeToParcel(Parcel par, int flags) {
     par.writeString(domainIndex);
-    par.writeParcelable(mCurrentServer, flags);
+    par.writeParcelable(mCurrentAccount, flags);
     par.writeStringList(cookiesList);
   }
 

@@ -97,7 +97,7 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
   public void turnOn() {
     setVisibility(View.VISIBLE);
 
-    if (mSetting.getCurrentServer() != null) {
+    if (mSetting.getCurrentAccount() != null) {
     	// if a server is selected
     	// 1) set username if remember me is enabled
       mUserEditTxt.setText(mSetting.isRememberMeEnabled()

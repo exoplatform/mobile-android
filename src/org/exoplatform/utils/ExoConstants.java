@@ -205,6 +205,12 @@ public class ExoConstants {
   public static final String EXO_REMEMBER_ME                       = "rememberMe";
 
   public static final String EXO_AUTOLOGIN                         = "autoLogin";
+  
+  public static final String EXO_USER_FULLNAME                     = "userFullName";
+  
+  public static final String EXO_LAST_LOGIN                        = "lastLogin";
+  
+  public static final String EXO_URL_AVATAR                        = "userAvatarUrl";
 
   /** Account setting */
   public static final String ACCOUNT_SETTING                       = "ACCOUNT_SETTING";

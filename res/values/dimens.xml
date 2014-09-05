@@ -29,6 +29,7 @@
     <dimen name="social_liked_list_item_height">85dp</dimen>
     <dimen name="social_avatar_size">43dp</dimen>
     <dimen name="unreadable_file_size">75dp</dimen>
+    <dimen name="account_list_avatar_size">100dp</dimen>
 
     <!-- text size -->
     <dimen name="text_size_smallest">9sp</dimen>
@@ -69,5 +70,11 @@
     <!-- setting -->
     <dimen name="title_txt_size">16sp</dimen>
     <dimen name="label_txt_size">14sp</dimen>
+    
+    <!-- Account Switcher -->
+    <dimen name="AccountListItemTextBigSize">20sp</dimen>
+    <dimen name="AccountListItemTextSmallSize">16sp</dimen>
+    <dimen name="AccountListFragmentMarginTopBottom">0dp</dimen>
+    <dimen name="AccountListFragmentMarginLeftRight">10dp</dimen>
 
 </resources>

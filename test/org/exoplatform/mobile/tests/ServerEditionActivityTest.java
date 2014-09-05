@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.setting.ServerEditionActivity;
@@ -50,7 +50,7 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
 	EditText mServerNameEditTxt, mServerUrlEditTxt, mUserEditTxt, mPassEditTxt;
 	Button   mOkBtn, mDeleteBtn;
 	
-	ServerObjInfo thisServer = null;
+	ExoAccount thisServer = null;
 	
 	@Override
 	@Before
@@ -97,9 +97,9 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
 	public void verifyDefaultLayout() {
 		createWithDefaultServer();
 		
-		assertThat(mTitleTxt).containsText(thisServer.serverName);
+		assertThat(mTitleTxt).containsText(thisServer.accountName);
 		assertThat(mServerName).containsText(R.string.ServerName);
-		assertThat(mServerNameEditTxt).containsText(thisServer.serverName);
+		assertThat(mServerNameEditTxt).containsText(thisServer.accountName);
 		assertThat(mServerURL).containsText(R.string.ServerUrl);
 		assertThat(mServerUrlEditTxt).containsText(thisServer.serverUrl);
 		assertThat(mUsername).containsText(R.string.UserNameCellTitle);
@@ -136,9 +136,9 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
 		assertTrue("Should have displayed toast ServerUpdated but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
 		           ShadowToast.showedToast(ctx.getResources().getString(R.string.ServerUpdated)));
 		
-		ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+		ExoAccount srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
 		
-		assertThat("Account name should have been modified", srv.serverName, equalTo(newName));
+		assertThat("Account name should have been modified", srv.accountName, equalTo(newName));
 		assertThat("Account server should have been modified", srv.serverUrl, equalTo(newURL));
 		assertThat("Account username should have been modified", srv.username, equalTo(newUser));
 		assertThat("Account password should have been modified", srv.password, equalTo(newPass));
@@ -169,9 +169,9 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
 		
 		Robolectric.clickOn(mOkBtn);
 		
-		ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+		ExoAccount srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
     
-    assertThat("Account name should NOT have been modified", srv.serverName, equalTo(TEST_SERVER_NAME));
+    assertThat("Account name should NOT have been modified", srv.accountName, equalTo(TEST_SERVER_NAME));
     assertTrue("Should have displayed toast AccountNameInvalid but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
                ShadowToast.showedToast(ctx.getResources().getString(R.string.AccountNameInvalid)));
 	}
@@ -187,7 +187,7 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
     
     Robolectric.clickOn(mOkBtn);
     
-    ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+    ExoAccount srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
     
     assertThat("Account Server URL should NOT have been modified", srv.serverUrl, equalTo(TEST_SERVER_URL));
     assertTrue("Should have displayed toast AccountServerInvalid but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
@@ -205,7 +205,7 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
     
     Robolectric.clickOn(mOkBtn);
     
-    ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+    ExoAccount srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
     
     assertThat("Account Server URL should NOT have been modified", srv.serverUrl, equalTo(TEST_SERVER_URL));
     assertTrue("Should have displayed toast AccountServerForbidden but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
@@ -223,7 +223,7 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
     
     Robolectric.clickOn(mOkBtn);
     
-    ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+    ExoAccount srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
     
     assertThat("Account username should NOT have been modified", srv.username, equalTo(TEST_USER_NAME));
     assertTrue("Should have displayed toast AccountUsernameInvalid but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
@@ -241,7 +241,7 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
     
     Robolectric.clickOn(mOkBtn);
     
-    ServerObjInfo srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+    ExoAccount srv = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
     
     assertThat("Account password should NOT have been modified", srv.password, equalTo(TEST_USER_PWD));
     assertTrue("Should have displayed toast AccountPasswordInvalid but displayed '"+ShadowToast.getTextOfLatestToast()+"' instead.",
@@ -252,18 +252,16 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
 	public void verifyAccountIsSelectedWhenOnlyOneExists() {
 	  Context ctx = Robolectric.application.getApplicationContext();
 	  
-	  enableLog();
-	  
 	  // Create 2 accounts
     thisServer = getServerWithDefaultValues();
-    thisServer.serverName = TEST_SERVER_NAME+" one";
+    thisServer.accountName = TEST_SERVER_NAME+" one";
     thisServer.serverUrl = TEST_SERVER_URL+".net";
     
-    ServerObjInfo acc2 = getServerWithDefaultValues();
-    acc2.serverName = TEST_SERVER_NAME+" two";
+    ExoAccount acc2 = getServerWithDefaultValues();
+    acc2.accountName = TEST_SERVER_NAME+" two";
     acc2.serverUrl = TEST_SERVER_URL+".org";
     
-    ArrayList<ServerObjInfo> servers = new ArrayList<ServerObjInfo>(2);
+    ArrayList<ExoAccount> servers = new ArrayList<ExoAccount>(2);
     servers.add(thisServer);
     servers.add(acc2);
     addServersInPreferences(ctx, servers);
@@ -282,14 +280,13 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
     // Delete the current account (the 1st)
     Robolectric.clickOn(mDeleteBtn);
     
-    ServerObjInfo remainingAcc = AccountSetting.getInstance().getCurrentServer();
+    ExoAccount remainingAcc = AccountSetting.getInstance().getCurrentAccount();
     
-    Log.d(TAG_TEST, remainingAcc.serverName);
-    Log.d(TAG_TEST, acc2.serverName);
+    Log.d(TAG_TEST, remainingAcc.accountName);
+    Log.d(TAG_TEST, acc2.accountName);
     
     assertTrue("The 2nd account should have been selected automatically when the 1st was deleted", acc2.equals(remainingAcc));
-    
-    disableLog();
+
 	}
 	
 }

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHttpResponse;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.junit.After;
@@ -87,6 +87,7 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
       "{\"duration\":\"UNLIMITED\",\"platformEdition\":\"ENTERPRISE\",\"buildNumber\":null,\"productCode\":\"CWI-team-09LC0xLDA2L\",\"unlockKey\":\"aaabbbccc\",\"nbUsers\":null,\"dateOfKeyGeneration\":null,\"platformVersion\":\"4.0.4\",\"isMobileCompliant\":\"true\",\"platformBuildNumber\":\"20131225\",\"platformRevision\":\"aaabbbccc\",\"userHomeNodePath\":\"/Users/p___/ph___/phi___/philippe\",\"runningProfile\":\"all\",\"currentRepoName\":\"repository\",\"defaultWorkSpaceName\":\"collaboration\"}";
   
   final int REQ_JCR_USER = 7;
+  final int REQ_JCR_USER_2 = 8;
   final String RESP_JCR_USER = "{}";
   
   ActivityController<A> controller;
@@ -157,9 +158,9 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
    * Creates a Server Object with the default name, URL, username and password
    * @return a ServerObjInfo object
    */
-  public ServerObjInfo getServerWithDefaultValues() {
-    ServerObjInfo srv = new ServerObjInfo();
-    srv.serverName = TEST_SERVER_NAME;
+  public ExoAccount getServerWithDefaultValues() {
+    ExoAccount srv = new ExoAccount();
+    srv.accountName = TEST_SERVER_NAME;
     srv.serverUrl = TEST_SERVER_URL;
     srv.username = TEST_USER_NAME;
     srv.password = TEST_USER_PWD;
@@ -182,8 +183,8 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
    * @param c the app's Context
    * @param server the default server
    */
-  public void setDefaultServerInPreferences(Context c, ServerObjInfo server) {
-	  ArrayList<ServerObjInfo> serversList = new ArrayList<ServerObjInfo>(1);
+  public void setDefaultServerInPreferences(Context c, ExoAccount server) {
+	  ArrayList<ExoAccount> serversList = new ArrayList<ExoAccount>(1);
 	  serversList.add(server);
 	  
 	  ServerConfigurationUtils.generateXmlFileWithServerList(c, serversList, "ServerList.xml", "");
@@ -199,8 +200,8 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
    * @param c the app's context
    */
   public void deleteAllAccounts(Context c) {
-    ServerConfigurationUtils.generateXmlFileWithServerList(c, new ArrayList<ServerObjInfo>(), "ServerList.xml", "");
-    ServerSettingHelper.getInstance().setServerInfoList(new ArrayList<ServerObjInfo>());
+    ServerConfigurationUtils.generateXmlFileWithServerList(c, new ArrayList<ExoAccount>(), "ServerList.xml", "");
+    ServerSettingHelper.getInstance().setServerInfoList(new ArrayList<ExoAccount>());
     
     SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
     prefs.remove("exo_prf_domain_index");
@@ -208,16 +209,43 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
   }
   
   /**
-   * Adds the servers in the app's preferences but does not select any of them
+   * Adds the servers in the app's preferences and selects the first one
    * @param c
-   * @param servers the list of ServerObjInfo to add
+   * @param servers the list of ExoAccount objects to add
    */
-  public void addServersInPreferences(Context c, ArrayList<ServerObjInfo> servers) {
-	  if (servers != null && servers.size()>0) {
-		  Log.i(TAG_TEST, "Saving "+servers.size()+" accounts.");
-		  ServerConfigurationUtils.generateXmlFileWithServerList(c, servers, "ServerList.xml", "");
-		  ServerSettingHelper.getInstance().setServerInfoList(servers);
-	  }
+  public void addServersInPreferences(Context c, ArrayList<ExoAccount> servers) {
+	  addServersInPreferences(c, servers, 0);
+  }
+  /**
+   * Adds the servers in the app's preferences and selects the one at the given position
+   * @param c
+   * @param servers the list of ExoAccount objects to add
+   * @param posDefault the position of the server to set as selected
+   */
+  public void addServersInPreferences(Context c, ArrayList<ExoAccount> servers, int posDefault) {
+    if (servers != null && servers.size()>0) {
+      Log.i(TAG_TEST, "Saving "+servers.size()+" accounts.");
+      ServerConfigurationUtils.generateXmlFileWithServerList(c, servers, "ServerList.xml", "");
+      ServerSettingHelper.getInstance().setServerInfoList(servers);
+      if (posDefault >=0 && posDefault < servers.size()) {
+        SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
+        prefs.putString("exo_prf_domain_index", String.valueOf(posDefault));
+        prefs.commit();
+      }
+    }
+  }
+  
+  public ArrayList<ExoAccount> createXAccounts(int x) {
+    ArrayList<ExoAccount> accounts = new ArrayList<ExoAccount>(x);
+    
+    for (int i=1; i<=x; i++) {
+      ExoAccount acc = getServerWithDefaultValues();
+      acc.accountName = TEST_SERVER_NAME+" "+i;
+      acc.username = TEST_USER_NAME+"_"+i;
+      accounts.add(acc);
+    }
+
+    return accounts;
   }
   
   /**
@@ -260,6 +288,10 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
       
     case REQ_JCR_USER:
       m.path("rest/private/jcr/repository/collaboration/Users/t___/te___/tes___/testuser");
+      break;
+    
+    case REQ_JCR_USER_2:
+      m.path("rest/private/jcr/repository/collaboration/Users/t___/te___/tes___/testuser_2");
       break;
     }
     return m;
@@ -305,6 +337,7 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
         break;
         
       case REQ_JCR_USER:
+      case REQ_JCR_USER_2:
         resp.setEntity(new StringEntity(RESP_JCR_USER));
         break;
       }

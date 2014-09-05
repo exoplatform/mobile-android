@@ -30,7 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.exoplatform.R;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.login.LoginProxy;
@@ -77,7 +77,7 @@ public class ServerList extends LinearLayout {
   public void setServerList() {
     removeAllViews();
 
-    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
+    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
     LayoutParams layoutParams =
         new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     layoutParams.setMargins(0, 0, 0, -1);
@@ -103,7 +103,7 @@ public class ServerList extends LinearLayout {
         new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     layoutParams.setMargins(0, 0, 0, -1);
 
-    ArrayList<ServerObjInfo> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
+    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
 
     switch (operation) {
 
@@ -144,10 +144,10 @@ public class ServerList extends LinearLayout {
    * @param serverIdx
    * @return
    */
-  private ServerItemLayout initServerItem(ServerObjInfo _serverObj, int serverIdx) {
-    final ServerObjInfo serverObj = _serverObj;
+  private ServerItemLayout initServerItem(ExoAccount _serverObj, int serverIdx) {
+    final ExoAccount serverObj = _serverObj;
     ServerItemLayout serverItem = new ServerItemLayout(mContext);
-    serverItem.serverName.setText(serverObj.serverName);
+    serverItem.serverName.setText(serverObj.accountName);
     serverItem.serverUrl.setText(serverObj.serverUrl);
     
     // disable this account item if it is selected AND the user is logged in 

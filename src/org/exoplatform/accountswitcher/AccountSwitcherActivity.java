@@ -16,17 +16,33 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.mobile.tests;
+package org.exoplatform.accountswitcher;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.exoplatform.R;
+
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 /**
- * @author Arnaud Héritier <aheritier@exoplatform.com>
+ * Created by The eXo Platform SAS
+ * Author : Philippe Aristote
+ *          paristote@exoplatform.com
+ * Sep 3, 2014  
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({WelcomeActivityTest.class, LoginActivityTest.class, SignInOnPremiseActivityTest.class,
-                        LaunchActivityTest.class, ExoAccountInfoValidationTest.class, SettingsActivityTest.class,
-                        HomeActivityTest.class, ServerEditionActivityTest.class, AccountSwitcherTest.class})
-public class TestSuite {
+public class AccountSwitcherActivity extends FragmentActivity {
+  
+  private static final String TAG = "eXo____AccountSwitcherActivity____";
+
+  public void onCreate(Bundle savedInstanceState) {
+    
+    super.onCreate(savedInstanceState);
+    
+    setContentView(R.layout.account_switcher_activity);
+    
+    getSupportFragmentManager()
+     .beginTransaction()
+     .add(R.id.fragment_panel, AccountSwitcherFragment.newInstance(AccountSwitcherFragment.MODE_ACTIVITY), AccountSwitcherFragment.DIALOG_TAG)
+     .commit();
+  }
+  
 }

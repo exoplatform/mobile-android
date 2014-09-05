@@ -103,7 +103,7 @@ public class SocialTabsActivityTst extends ExoActivityTestUtils<SocialTabsActivi
   private Bundle createBundleWithDefaultSettings() {
     Bundle b = new Bundle();
     AccountSetting s = AccountSetting.getInstance();
-    s.setCurrentServer(getServerWithDefaultValues());
+    s.setCurrentAccount(getServerWithDefaultValues());
     s.cookiesList = new ArrayList<String>();
     b.putParcelable("account_setting", s);
     return b;

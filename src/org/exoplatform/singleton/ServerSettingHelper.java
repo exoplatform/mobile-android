@@ -20,7 +20,7 @@ package org.exoplatform.singleton;
 
 import java.util.ArrayList;
 
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ServerConfigurationUtils;
 
@@ -43,7 +43,7 @@ public class ServerSettingHelper implements Parcelable {
   private String                     serverEdition;
 
   /** List of server url */
-  private ArrayList<ServerObjInfo> serverInfoList;
+  private ArrayList<ExoAccount> serverInfoList;
 
   private static ServerSettingHelper helper = new ServerSettingHelper();
 
@@ -83,7 +83,7 @@ public class ServerSettingHelper implements Parcelable {
     return serverEdition;
   }
 
-  public void setServerInfoList(ArrayList<ServerObjInfo> list) {
+  public void setServerInfoList(ArrayList<ExoAccount> list) {
     serverInfoList = list;
   }
 
@@ -93,7 +93,7 @@ public class ServerSettingHelper implements Parcelable {
    * @param context
    * @return The list of server objects
    */
-  public ArrayList<ServerObjInfo> getServerInfoList(Context context) {
+  public ArrayList<ExoAccount> getServerInfoList(Context context) {
     if (serverInfoList == null) {
       serverInfoList =
           ServerConfigurationUtils.getServerListFromFile(context, ExoConstants.EXO_SERVER_SETTING_FILE);
@@ -116,7 +116,7 @@ public class ServerSettingHelper implements Parcelable {
    * Use getServerInfoList(Context) instead
    * @return the list of servers
    */
-  public ArrayList<ServerObjInfo> getServerInfoList() {
+  public ArrayList<ExoAccount> getServerInfoList() {
     return serverInfoList;
   }
 
@@ -138,8 +138,8 @@ public class ServerSettingHelper implements Parcelable {
     applicationVersion = in.readString();
     serverVersion = in.readString();
     serverEdition = in.readString();
-    serverInfoList = new ArrayList<ServerObjInfo>();
-    in.readList(serverInfoList, ServerObjInfo.class.getClassLoader());
+    serverInfoList = new ArrayList<ExoAccount>();
+    in.readList(serverInfoList, ExoAccount.class.getClassLoader());
   }
 
   @Override
