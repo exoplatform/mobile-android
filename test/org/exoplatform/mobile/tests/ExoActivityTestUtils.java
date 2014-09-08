@@ -220,6 +220,19 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
 	  }
   }
   
+  public ArrayList<ExoAccount> createXAccounts(int x) {
+    ArrayList<ExoAccount> accounts = new ArrayList<ExoAccount>(x);
+    
+    for (int i=1; i<=x; i++) {
+      ExoAccount acc = getServerWithDefaultValues();
+      acc.accountName = TEST_SERVER_NAME+" "+i;
+      acc.username = TEST_USER_NAME+"_"+i;
+      accounts.add(acc);
+    }
+
+    return accounts;
+  }
+  
   /**
    * Creates a RequestMatcher to use in Robolectric.addHttpResponseRule() for the specified request
    * @param req the id of the request, e.g REQ_SOCIAL_IDENTITY

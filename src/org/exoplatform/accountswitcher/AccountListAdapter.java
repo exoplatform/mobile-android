@@ -77,7 +77,7 @@ public class AccountListAdapter extends BaseAdapter {
     ViewHolder holder;
     if (convertView == null) {
       LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      convertView = inflater.inflate(R.layout.account_item_layout, parent, false);
+      convertView = inflater.inflate(R.layout.account_switcher_item_layout, parent, false);
       holder = new ViewHolder();
       holder.accountName = (TextView)convertView.findViewById(R.id.account_name_textview);
       holder.accountServerURL = (TextView)convertView.findViewById(R.id.account_server_textview);

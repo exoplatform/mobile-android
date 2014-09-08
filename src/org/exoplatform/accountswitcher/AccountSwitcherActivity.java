@@ -41,7 +41,7 @@ public class AccountSwitcherActivity extends FragmentActivity {
     
     getSupportFragmentManager()
      .beginTransaction()
-     .add(R.id.fragment_panel, AccountSwitcherFragment.newInstance())
+     .add(R.id.fragment_panel, AccountSwitcherFragment.newInstance(), AccountSwitcherFragment.DIALOG_TAG)
      .commit();
     
   }

@@ -74,5 +74,7 @@
     <!-- Account Switcher -->
     <dimen name="AccountListItemTextBigSize">20sp</dimen>
     <dimen name="AccountListItemTextSmallSize">16sp</dimen>
+    <dimen name="AccountListFragmentMarginTopBottom">30dp</dimen>
+    <dimen name="AccountListFragmentMarginLeftRight">30dp</dimen>
 
 </resources>

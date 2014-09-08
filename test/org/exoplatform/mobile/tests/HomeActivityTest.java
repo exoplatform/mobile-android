@@ -18,13 +18,18 @@ package org.exoplatform.mobile.tests;
 
 import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.robolectric.Robolectric.shadowOf;
 import greendroid.widget.ActionBar;
 
+import java.util.ArrayList;
+
 import org.exoplatform.R;
+import org.exoplatform.accountswitcher.AccountSwitcherActivity;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.ui.DashboardActivity;
@@ -40,9 +45,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
+import org.robolectric.shadows.ShadowConfiguration;
+import org.robolectric.shadows.ShadowDialog;
 import org.robolectric.shadows.ShadowIntent;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -96,19 +107,25 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
   @Override
   @After
   public void teardown() {
-    // empty to avoid call to controller.destroy()
+    deleteAllAccounts(Robolectric.application.getApplicationContext());
+    // do not call super.teardown() to avoid error
+    // HomeActivity has leaked IntentReceiver that was originally registered here. Are you missing a call to unregisterReceiver()?
   }
   
   @Test
   public void verifyDefaultLayout() {
-    
+    Context ctx = Robolectric.application.getApplicationContext();
+    setDefaultServerInPreferences(ctx, getServerWithDefaultValues());
     create();
     init();
     
-    // Adding a call to Robolectric.runUiThreadTasksIncludingDelayedTasks() just prior to the assertions ensures that the async tasks execute
-    Robolectric.runUiThreadTasksIncludingDelayedTasks();
+    final String nameAndAccount = TEST_USER_NAME+" ("+TEST_SERVER_NAME+")";
     
-    assertThat(userNameTV).containsText(TEST_USER_NAME); // text field is filled by data returned in RESP_SOCIAL_IDENTITY
+    // Ensures that the async tasks that load the social services (profile, activity stream) are executed
+    // Seems not needed anymore...
+//    Robolectric.runUiThreadTasksIncludingDelayedTasks();
+    
+    assertThat(userNameTV).containsText(nameAndAccount); // text field is filled by data returned in RESP_SOCIAL_IDENTITY
     
     
     assertThat(flipper).hasChildCount(1); // should have only 1 activity in the flipper since RESP_SOCIAL_NEWS contains just 1 activity
@@ -118,7 +135,7 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
     assertThat(appsTV).containsText(R.string.Dashboard);
     
     // because it's a greendroid actionbar, the number of items is not exposed
-    // we use a trick to verify that only 2 items are present
+    // we use a trick to verify that only 2 items are present (without account switcher)
     assertNotNull(actionBar.getItem(0)); // refresh button, must not be null
     assertNotNull(actionBar.getItem(1)); // sign-out button, must not be null
     assertNull(actionBar.getItem(2));    // ActionBar.getItem() returns null when there is no item at the given position
@@ -210,6 +227,90 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
   }
   
   @Test
+  public void shouldNotHaveAccountSwitcherButtonWithOneAccount() {
+    Context ctx = Robolectric.application.getApplicationContext();
+    setDefaultServerInPreferences(ctx, getServerWithDefaultValues());
+    create();
+    init();
+    
+    assertNull("Action Bar should contain 2 items (refresh, logout), not 3", actionBar.getItem(2));
+    assertThat(actionBar.getItem(1).getDrawable()).isEqualTo(ctx.getResources().getDrawable(R.drawable.action_bar_logout_button));
+  }
+  
+  @Test
+  public void shouldHaveAccountSwitcherButtonWithTwoAndMoreAccounts() {
+    Context ctx = Robolectric.application.getApplicationContext();
+    ArrayList<ExoAccount> accounts = createXAccounts(2);
+    addServersInPreferences(ctx, accounts);
+    create();
+    init();
+    
+    assertNotNull("Action Bar should contain 3 items (refresh, account switcher, logout)", actionBar.getItem(2));
+    assertThat(actionBar.getItem(1).getDrawable()).isEqualTo(ctx.getResources().getDrawable(R.drawable.action_bar_switcher_icon));
+    assertThat(actionBar.getItem(2).getDrawable()).isEqualTo(ctx.getResources().getDrawable(R.drawable.action_bar_logout_button));
+    
+  }
+  
+//  @Test TODO
+  public void shouldWaitSocialServiceBeforeActivatingAccountSwitcherButton() {
+
+    Context ctx = Robolectric.application.getApplicationContext();
+    ArrayList<ExoAccount> accounts = createXAccounts(2);
+    addServersInPreferences(ctx, accounts);
+    create();
+    init();
+    
+    View accSwitcherView = actionBar.getItem(1).getItemView();
+    assertThat(accSwitcherView).isDisabled();
+    
+//  Ensures that the async tasks that load the social services are executed
+//    Robolectric.runUiThreadTasksIncludingDelayedTasks();
+//    Robolectric.runBackgroundTasks();
+    
+    assertThat(accSwitcherView).isEnabled();
+  }
+  
+  @Test
+  public void shouldOpenAccountSwitcherInActivity() {
+    Context ctx = Robolectric.application.getApplicationContext();
+    ArrayList<ExoAccount> accounts = createXAccounts(2);
+    addServersInPreferences(ctx, accounts);
+    create();
+    init();
+    
+    Robolectric.clickOn(actionBar.getItem(1).getItemView()); // simulate a tap on the account switcher button
+    
+    ShadowActivity sActivity = shadowOf(activity);
+    Intent welcomeIntent = sActivity.getNextStartedActivity();
+    ShadowIntent sIntent = shadowOf(welcomeIntent);
+    
+    // On small and normal screens, the account switcher is opened as an activity (full screen)
+    assertThat(sIntent.getComponent().getClassName(), equalTo(AccountSwitcherActivity.class.getName()));
+  }
+  
+//  @Test TODO
+//  @Config(qualifiers="large")
+  public void shouldOpenAccountSwitcherInDialog() {
+    
+    Context ctx = Robolectric.application.getApplicationContext();
+    ArrayList<ExoAccount> accounts = createXAccounts(2);
+    addServersInPreferences(ctx, accounts);
+    create();
+    init();
+    
+    Robolectric.clickOn(actionBar.getItem(1).getItemView()); // simulate a tap on the account switcher button
+    
+    // On large and larger screens, the account switcher is opened as a dialog
+    Dialog accountSwitcherDialog = ShadowDialog.getLatestDialog();
+    ShadowConfiguration config = shadowOf(ctx.getResources().getConfiguration());
+    int screenLayout = config.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+    
+    assertTrue("Screen layout should be LARGE in the app's configuration", screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE);    
+    assertNotNull("Account Switcher Dialog should not be null", accountSwitcherDialog);
+
+  }
+  
+//  @Test
   public void shouldRefreshFlipper() {
     /* 
      * FIXME current impl refresh activities in the activity stream (SocialTabsActivity)
