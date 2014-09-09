@@ -27,6 +27,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({WelcomeActivityTest.class, LoginActivityTest.class, SignInOnPremiseActivityTest.class,
                         LaunchActivityTest.class, ExoAccountInfoValidationTest.class, SettingsActivityTest.class,
-                        HomeActivityTest.class, ServerEditionActivityTest.class})
+                        HomeActivityTest.class, ServerEditionActivityTest.class, AccountSwitcherTest.class})
 public class TestSuite {
 }

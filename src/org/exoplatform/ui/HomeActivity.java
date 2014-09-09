@@ -317,7 +317,7 @@ public class HomeActivity extends MyActionBar {
           case Configuration.SCREENLAYOUT_SIZE_XLARGE:
             // for large+ screens, start as dialog fragment
             Log.d(TAG, "Open the account switcher fragment in a dialog");
-            AccountSwitcherFragment df = AccountSwitcherFragment.newInstance();
+            AccountSwitcherFragment df = AccountSwitcherFragment.newInstance(AccountSwitcherFragment.MODE_DIALOG);
             df.show(getSupportFragmentManager(), AccountSwitcherFragment.DIALOG_TAG);
             break;
         }

@@ -72,6 +72,8 @@ public class LoginProxy implements
   private String                mNewPassword;
 
   private String                mTenant;
+  
+  private String                mAccountName;
 
   private String                mDomain;
 
@@ -103,18 +105,18 @@ public class LoginProxy implements
   private int                   mState                 = WORKING;
 
   public  static final int      WITH_EXISTING_ACCOUNT  = 0;
-
   public  static final int      WITH_USERNAME          = 10;
   public  static final int      WITH_EMAIL             = 11;
+  public  static final int      SWITCH_ACCOUNT         = 12;
 
   public  static final String   USERNAME               = "USERNAME";
   public  static final String   PASSWORD               = "PASSWORD";
   public  static final String   EMAIL                  = "EMAIL";
   public  static final String   DOMAIN                 = "DOMAIN";
+  public  static final String   ACCOUNT_NAME           = "ACCOUNT_NAME";
   public  static final String   SHOW_PROGRESS          = "SHOW_PROGRESS";
 
   private static final int      WORKING                = 100;
-
   private static final int      FINISHED               = 101;
 
   private static final String TAG = "eXo____LoginProxy____";
@@ -141,9 +143,14 @@ public class LoginProxy implements
    */
   private void initStates(Bundle loginData) {
 
+    mWarningDialog = new LoginWarningDialog(mContext);
+    mProgressDialog =
+        new LoginWaitingDialog(mContext, null, mResource.getString(R.string.SigningIn));
+    
     switch (mLaunchMode) {
 
       /**
+       * Login from LoginActivity screen
        * If any error happens,
        * - redirect user to Login screen if not launched from login
        * - otherwise, dismiss the dialog
@@ -155,21 +162,17 @@ public class LoginProxy implements
         mTenant      = getTenant(mDomain);
         // TODO: if this is a cloud server with invalid url, should raise a warning
         mEmail       = mNewUserName + "@" + mTenant + ".com";
-        mWarningDialog = new LoginWarningDialog(mContext);
 
         mProgressDialog =  loginData.getBoolean(SHOW_PROGRESS, true) ?
             new LoginWaitingDialog(mContext, null, mResource.getString(R.string.SigningIn)) : null;
         break;
 
       /**
-       * Login from Sign in or Auth screen
+       * Login from SignInActivity screen
        */
       case WITH_EMAIL:
         mEmail          = loginData.getString(EMAIL);
         mNewPassword    = loginData.getString(PASSWORD);
-        mWarningDialog  = new LoginWarningDialog(mContext);
-        mProgressDialog =
-            new LoginWaitingDialog(mContext, null, mResource.getString(R.string.SigningIn));
 
         if (!checkNetworkConnection()) return ;
         mProgressDialog.show();
@@ -181,7 +184,7 @@ public class LoginProxy implements
         break;
 
       /**
-       * Log in from Sign in on premise
+       * Login from SignInOnPremiseActivity screen
        */
       case WITH_USERNAME:
         mNewUserName = loginData.getString(USERNAME);
@@ -189,11 +192,15 @@ public class LoginProxy implements
         mDomain      = loginData.getString(DOMAIN);
         mTenant      = getTenant(mDomain);
         mEmail       = mNewUserName + "@" + mTenant + ".com";
-
-        mWarningDialog = new LoginWarningDialog(mContext);
-        mProgressDialog =
-            new LoginWaitingDialog(mContext, null, mResource.getString(R.string.SigningIn));
-
+        break;
+      /**
+       * Login from AccountSwitcherFragment screen
+       */
+      case SWITCH_ACCOUNT:
+        mNewUserName = loginData.getString(USERNAME);
+        mNewPassword = loginData.getString(PASSWORD);
+        mDomain      = loginData.getString(DOMAIN);
+        mAccountName = loginData.getString(ACCOUNT_NAME);
         break;
     }
 
@@ -213,7 +220,7 @@ public class LoginProxy implements
     }
 
     mNewUserName = userAndTenant[0];
-    mTenant      = userAndTenant[1];
+    mTenant = userAndTenant[1];
     mDomain      = ExoConnectionUtils.HTTP + mTenant + "."
         + ExoConnectionUtils.EXO_CLOUD_WS_DOMAIN;
 
@@ -372,7 +379,14 @@ public class LoginProxy implements
 
         ExoAccount newAccountObj;
         int serverIdx;
-        if (mLaunchMode == WITH_EXISTING_ACCOUNT) {
+        if (mLaunchMode == SWITCH_ACCOUNT) {
+          newAccountObj = new ExoAccount();
+          newAccountObj.username = mNewUserName;
+          newAccountObj.password = mNewPassword;
+          newAccountObj.serverUrl = mDomain;
+          newAccountObj.accountName = mAccountName;
+        }
+        else if (mLaunchMode == WITH_EXISTING_ACCOUNT) {
           newAccountObj             =  mSetting.getCurrentAccount().clone();
           newAccountObj.username    =  mNewUserName;
           newAccountObj.password    =  mNewPassword;
