@@ -26,7 +26,6 @@ import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.accountswitcher.AccountSwitcherActivity;
-import org.exoplatform.accountswitcher.AccountSwitcherFragment;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -47,7 +46,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -302,25 +300,8 @@ public class HomeActivity extends MyActionBar {
     case 1: 
     	if (mAccountSwitcherBtn != null) { // open the account switcher
     	  if (mAccountSwitcherBtn.getItemView().isEnabled()) {
-    	  int screenLayout = getResources().getConfiguration().screenLayout;
-        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
-        switch (screenLayout) {
-          case Configuration.SCREENLAYOUT_SIZE_SMALL:
-          case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-          case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
-            // for small and normal screens, start an activity
-            Log.d(TAG, "Open the account switcher fragment in an activity");
-            Intent accSwitcherIntent = new Intent(this, AccountSwitcherActivity.class);
-            startActivity(accSwitcherIntent);
-            break;
-          case Configuration.SCREENLAYOUT_SIZE_LARGE:
-          case Configuration.SCREENLAYOUT_SIZE_XLARGE:
-            // for large+ screens, start as dialog fragment
-            Log.d(TAG, "Open the account switcher fragment in a dialog");
-            AccountSwitcherFragment df = AccountSwitcherFragment.newInstance(AccountSwitcherFragment.MODE_DIALOG);
-            df.show(getSupportFragmentManager(), AccountSwitcherFragment.DIALOG_TAG);
-            break;
-        }
+    	    Intent accSwitcherIntent = new Intent(this, AccountSwitcherActivity.class);
+          startActivity(accSwitcherIntent);
     	  }
     	} else { // or sign-out (position 1 if account switcher is not displayed)
     		  onLoggingOut();

@@ -18,9 +18,12 @@
  */
 package org.exoplatform.ui.setting;
 
+import java.util.ArrayList;
+
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.R;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.WelcomeActivity;
@@ -107,10 +110,18 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     setActionBarContentView(R.layout.settings);
     super.getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     super.getActionBar().setTitle(mResources.getString(R.string.Settings));
+  }
+  
+  
 
+  @Override
+  protected void onResume() {
     initSubViews();
     initStates();
+    super.onResume();
   }
+
+
 
   /**
    * On returning from Server Edition Activity
@@ -135,9 +146,17 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     mRememberMeCbx.setText(mResources.getString(R.string.RememberMe))
                   .setChecked(mSetting.isRememberMeEnabled(), false)
                   .setViewListener(this);
-    mAutoLoginCbx.setText(mResources.getString(R.string.Autologin))
-                 .setChecked(mSetting.isAutoLoginEnabled(), false)
-                 .setViewListener(this);
+    if (mSetting.isRememberMeEnabled()) {
+      mAutoLoginCbx.setText(mResources.getString(R.string.Autologin))
+                   .setChecked(mSetting.isAutoLoginEnabled(), false)
+                   .setViewListener(this);
+      mAutoLoginCbx.enabled(true);
+    } else {
+      mAutoLoginCbx.setText(mResources.getString(R.string.Autologin))
+      .setChecked(false, false)
+      .setViewListener(this);
+      mAutoLoginCbx.enabled(false);
+    }
 
     /** Language */
     mEnCbx = (CheckBoxWithImage) findViewById(R.id.setting_en_ckb);
@@ -277,6 +296,15 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     ServerConfigurationUtils.generateXmlFileWithServerList(this,
       ServerSettingHelper.getInstance().getServerInfoList(this), ExoConstants.EXO_SERVER_SETTING_FILE, "");
   }
+  
+  public void updateAccountInList(ExoAccount account) {
+    ArrayList<ExoAccount> list = mServerSetting.getServerInfoList(this);
+    int index = list.indexOf(account);
+    if (index >= 0) {
+      list.remove(index);
+      list.add(index, account);
+    }
+  }
 
   @Override
   public void onClickCheckBox(CheckBox checkBox, boolean isChecked) {
@@ -316,9 +344,11 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
 
       mSetting.getCurrentAccount().isRememberEnabled  = mRememberMeCbx.isChecked();
       mSetting.getCurrentAccount().isAutoLoginEnabled = mAutoLoginCbx.isChecked();
+      updateAccountInList(mSetting.getCurrentAccount());
     }
     else if (checkBox.equals(mAutoLoginCbx)) {
       mSetting.getCurrentAccount().isAutoLoginEnabled = mAutoLoginCbx.isChecked();
+      updateAccountInList(mSetting.getCurrentAccount());
     }
 
   }
