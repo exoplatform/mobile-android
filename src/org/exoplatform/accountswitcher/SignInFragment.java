@@ -52,7 +52,7 @@ public class SignInFragment extends Fragment implements AccountSwitcherListener 
         mCurrentAccount.password = password;
         switchToAccount();
       } else {
-        Toast.makeText(getActivity(), R.string.AccountPasswordInvalid, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), R.string.NoPasswordEnter, Toast.LENGTH_LONG).show();
       }
     }
   };
@@ -99,7 +99,7 @@ public class SignInFragment extends Fragment implements AccountSwitcherListener 
    * Launches the switching procedure.
    */
   private void switchToAccount() {
-    AccountSwitcherProxy controller = new AccountSwitcherProxy(getActivity(), this);
+    AccountSwitcherProxy controller = new AccountSwitcherProxy(getActivity(), this, true);
     controller.switchToAccount(mCurrentAccount);
   }
 
@@ -115,7 +115,6 @@ public class SignInFragment extends Fragment implements AccountSwitcherListener 
 
   @Override
   public void onAccountInvalid(ExoAccount account) {
-    // TODO Auto-generated method stub
-    
+    //
   }
 }

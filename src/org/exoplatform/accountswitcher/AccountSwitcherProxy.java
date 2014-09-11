@@ -39,11 +39,14 @@ public class AccountSwitcherProxy implements LoginProxy.ProxyListener {
   
   private AccountSwitcherListener mListener;
   
+  private boolean mIgnoreRememberMe = false;
+  
   public static final String TAG = "eXo____AccountSwitcherController____";
   
-  public AccountSwitcherProxy(Context c, AccountSwitcherListener l) {
+  public AccountSwitcherProxy(Context c, AccountSwitcherListener l, boolean ignore) {
     mContext = c;
     mListener = l;
+    mIgnoreRememberMe = ignore;
   }
   
   /**
@@ -53,10 +56,19 @@ public class AccountSwitcherProxy implements LoginProxy.ProxyListener {
    * @return true if the procedure has started, false if password is missing
    */
   public void switchToAccount(ExoAccount account) {
-    if (account.serverUrl != null && !"".equals(account.serverUrl)) {
-      Log.i(TAG, "Switching to account "+account.accountName);
-      if (account.username != null  && !"".equals(account.username) && 
-          account.password != null && !"".equals(account.password)) {
+    if (account == null || account.serverUrl == null || account.serverUrl.isEmpty()) {
+        // Invalid account object
+        if (mListener != null) mListener.onAccountInvalid(account);
+    }
+    else if (account.username == null || account.username.isEmpty() ||
+             account.password == null || account.password.isEmpty() ||
+             (!mIgnoreRememberMe && !account.isRememberEnabled)) {
+        // Credentials are missing or remember me is off, we inform the fragment that is listening
+        if (mListener != null) mListener.onMissingPassword(account);
+    }
+    else {
+        Log.i(TAG, "Switching to account "+account.accountName);
+      
         // We have all information to sign-in to the selected account
         Bundle params = new Bundle();
         params.putString(LoginProxy.USERNAME, account.username);
@@ -67,13 +79,7 @@ public class AccountSwitcherProxy implements LoginProxy.ProxyListener {
         LoginProxy login = new LoginProxy(mContext, LoginProxy.SWITCH_ACCOUNT, params);
         login.setListener(this);
         login.performLogin();
-      } else {
-        // Credentials are missing, we inform the fragment that is listening
-        if (mListener != null) mListener.onMissingPassword(account);
       }
-    } else {
-      if (mListener != null) mListener.onAccountInvalid(account);
-    }
   }
 
   /**

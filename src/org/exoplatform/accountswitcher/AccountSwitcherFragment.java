@@ -106,7 +106,7 @@ public class AccountSwitcherFragment extends Fragment implements AccountSwitcher
    * @param account
    */
   private void switchToAccount(ExoAccount account) {
-    AccountSwitcherProxy controller = new AccountSwitcherProxy(getActivity(), this);
+    AccountSwitcherProxy controller = new AccountSwitcherProxy(getActivity(), this, false);
     controller.switchToAccount(account);
   }
   
