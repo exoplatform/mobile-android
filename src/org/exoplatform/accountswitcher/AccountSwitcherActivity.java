@@ -20,8 +20,10 @@ package org.exoplatform.accountswitcher;
 
 import org.exoplatform.R;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 /**
  * Created by The eXo Platform SAS
@@ -34,14 +36,26 @@ public class AccountSwitcherActivity extends FragmentActivity {
   private static final String TAG = "eXo____AccountSwitcherActivity____";
 
   public void onCreate(Bundle savedInstanceState) {
-    
     super.onCreate(savedInstanceState);
     
-    setContentView(R.layout.account_switcher_activity);
+    boolean isDialog = false;
+    // Detect the size of the screen and set a theme "Dialog" to display the activity as a dialog
+    // if the screen is LARGE or XLARGE
+    // TODO find how to set the black background translucent
+    int screenLayout = getResources().getConfiguration().screenLayout;
+    screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+    if (screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+        screenLayout == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+      setTheme(R.style.Theme_eXo_Dialog);
+      isDialog = true;
+    }
+    Log.i(TAG, "Start account switcher in mode: "+(isDialog ? "dialog" : "activity"));
     
+    setContentView(R.layout.account_switcher_activity);
+
     getSupportFragmentManager()
      .beginTransaction()
-     .add(R.id.fragment_panel, AccountSwitcherFragment.newInstance(AccountSwitcherFragment.MODE_ACTIVITY), AccountSwitcherFragment.DIALOG_TAG)
+     .add(R.id.fragment_panel, new AccountSwitcherFragment(), AccountSwitcherFragment.FRAGMENT_TAG)
      .commit();
   }
   

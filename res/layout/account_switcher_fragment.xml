@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/AccountListBackgroundColor">
+    android:background="@color/AccountListBackgroundColor"
+    android:orientation="vertical">
     
     <TextView
         android:id="@+id/account_switcher_fragment_title"
@@ -13,8 +14,6 @@
         android:id="@+id/account_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/account_switcher_fragment_title"
         android:layout_marginLeft="@dimen/AccountListFragmentMarginLeftRight"
         android:layout_marginRight="@dimen/AccountListFragmentMarginLeftRight"
         android:layout_marginTop="@dimen/AccountListFragmentMarginTopBottom"
@@ -22,4 +21,4 @@
         android:divider="@color/AccountListBackgroundColor">
     </ListView>
 
-</RelativeLayout>
+</LinearLayout>

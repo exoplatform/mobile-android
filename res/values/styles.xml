@@ -289,12 +289,22 @@
         <item name="android:textStyle">italic</item>
         <item name="android:textSize">@dimen/AccountListItemTextSmallSize</item>
     </style>
+    
+    <style name="AccountSwitcherSignInButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:background">@drawable/action_bar_item_background</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/AccountListItemTextSmallSize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:gravity">center</item>
+    </style>
 
     <!-- Animations  -->
     <style name="Animations" />
     <style name="Animations.Window">
         <item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
     </style>
-
 
 </resources>
