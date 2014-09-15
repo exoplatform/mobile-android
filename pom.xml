@@ -28,7 +28,7 @@
     <!-- Default version of SDK to use -->
     <android.sdk.platform>9</android.sdk.platform>
     <!-- Maven Plugins -->
-    <maven-android-plugin.plugin-version>3.6.0</maven-android-plugin.plugin-version>
+    <maven-android-plugin.plugin-version>3.8.0</maven-android-plugin.plugin-version>
     <!-- Java version -->
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
@@ -36,7 +36,7 @@
 	<version.buildnumber.plugin>1.0</version.buildnumber.plugin>
 	<android.support.version>r6</android.support.version>
 	<android.annotations.version>4.1.1.4</android.annotations.version>
-	<exo.social.client.version>1.0.0-alpha4-SNAPSHOT</exo.social.client.version>
+	<exo.social.client.version>1.0.0-SNAPSHOT</exo.social.client.version>
 	<slf4j-android.version>1.6.1-RC1</slf4j-android.version>
 	<greendroid.version>67aa3ed</greendroid.version>
   </properties>
@@ -65,6 +65,10 @@
         <exclusion>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
