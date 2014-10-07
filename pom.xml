@@ -76,7 +76,7 @@
     <!-- Dependency With Social Client Library -->
     <dependency>
       <groupId>org.exoplatform.social</groupId>
-      <artifactId>exo.social.client</artifactId>
+      <artifactId>social-client-java</artifactId>
       <version>${exo.social.client.version}</version>
       <exclusions>
         <!-- Exclusion for slf4j not compatible with android -->
