@@ -458,7 +458,7 @@ public class SocialActivityUtil {
     if (getPlatformVersion() >= 4.0f) {
     	// on PLF4.0 only AddTopic action creates an activity
     	actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
-    	forumLink = activityInfo.templateParams.get("TopicId");
+    	forumLink = activityInfo.templateParams.get("TopicLink");
     	forumName = activityInfo.templateParams.get("RESOURCE_BUNDLE_VALUES_PARAM");
     } else {
 	    String actType = activityInfo.templateParams.get("ActivityType");
