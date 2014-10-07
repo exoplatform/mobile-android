@@ -28,25 +28,25 @@ import org.apache.http.client.methods.HttpRequestBase;
  */
 public class WebdavMethod extends HttpRequestBase {
 
-  private String method;
+    private String method;
 
-  // Constructor for delete, create new folder, check reachability url
-  public WebdavMethod(String method, String sourceUriStr) {
-    this.method = method;
-    this.setURI(URI.create(sourceUriStr));
-  }
+    // Constructor for delete, create new folder, check reachability url
+    public WebdavMethod(String method, String sourceUriStr) {
+        this.method = method;
+        this.setURI(URI.create(sourceUriStr));
+    }
 
-  // Constructor for copy, move
-  public WebdavMethod(String method, String sourceUriStr, String destinationUriStr) {
-    this.method = method;
-    this.setURI(URI.create(sourceUriStr));
-    this.setHeader("Overwrite", "T");
-    this.setHeader("Destination", destinationUriStr);
-  }
+    // Constructor for copy, move
+    public WebdavMethod(String method, String sourceUriStr, String destinationUriStr) {
+        this.method = method;
+        this.setURI(URI.create(sourceUriStr));
+        this.setHeader("Overwrite", "T");
+        this.setHeader("Destination", destinationUriStr);
+    }
 
-  @Override
-  public String getMethod() {
-    return method;
-  }
+    @Override
+    public String getMethod() {
+        return method;
+    }
 
 }

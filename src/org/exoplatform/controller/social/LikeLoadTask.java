@@ -52,139 +52,139 @@ import android.os.AsyncTask;
  */
 public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeInfo>> {
 
-  private Context                mContext;
+    private Context                mContext;
 
-  private String                 youText;
+    private String                 youText;
 
-  private String                 okString;
+    private String                 okString;
 
-  private String                 titleString;
+    private String                 titleString;
 
-  private String                 detailsErrorStr;
+    private String                 detailsErrorStr;
 
-  private SocialDetailController detailController;
+    private SocialDetailController detailController;
 
-  private LoaderActionBarItem    loaderItem;
+    private LoaderActionBarItem    loaderItem;
 
-  private int                    currentPosition;
+    private int                    currentPosition;
 
-  public LikeLoadTask(Context context,
-                      SocialDetailController controller,
-                      LoaderActionBarItem loader,
-                      int pos) {
-    mContext = context;
-    detailController = controller;
-    loaderItem = loader;
-    currentPosition = pos;
-    changeLanguage();
-  }
-
-  @Override
-  protected void onPreExecute() {
-    loaderItem.setLoading(true);
-  }
-
-  @Override
-  protected LinkedList<SocialLikeInfo> doInBackground(String... params) {
-    try {
-      String activityId = params[0];
-      boolean liked = SocialDetailHelper.getInstance().getLiked();
-      RestActivity activity = SocialServiceHelper.getInstance().activityService.get(activityId);
-
-      if (liked == true) {
-        SocialServiceHelper.getInstance().activityService.unlike(activity);
-        SocialDetailHelper.getInstance().setLiked(false);
-      } else {
-        SocialServiceHelper.getInstance().activityService.like(activity);
-      }
-
-      LinkedList<SocialLikeInfo> likeLinkedList = new LinkedList<SocialLikeInfo>();
-
-      ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
-      QueryParams queryParams = new QueryParamsImpl();
-      queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(ExoConstants.NUMBER_OF_LIKES_PARAM));
-      // queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(ExoConstants.NUMBER_OF_COMMENTS_PARAM));
-      queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
-      RestActivity restActivity = activityService.get(activityId, queryParams);
-      List<RestIdentity> likeList = restActivity.getAvailableLikes();
-      if (likeList != null) {
-        for (RestIdentity like : likeList) {
-          RestProfile likeProfile = like.getProfile();
-          SocialLikeInfo socialLike = new SocialLikeInfo();
-          socialLike.likedImageUrl = likeProfile.getAvatarUrl();
-          String identity = like.getId();
-          if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().userIdentity)) {
-            socialLike.setLikeName(youText);
-            likeLinkedList.addFirst(socialLike);
-            SocialDetailHelper.getInstance().setLiked(true);
-          } else {
-            String likeName = like.getProfile().getFullName();
-            socialLike.setLikeName(likeName);
-            likeLinkedList.add(socialLike);
-          }
-
-        }
-      }
-      return likeLinkedList;
-    } catch (SocialClientLibException e) {
-      return null;
+    public LikeLoadTask(Context context,
+                        SocialDetailController controller,
+                        LoaderActionBarItem loader,
+                        int pos) {
+        mContext = context;
+        detailController = controller;
+        loaderItem = loader;
+        currentPosition = pos;
+        changeLanguage();
     }
-  }
 
-  @Override
-  protected void onCancelled() {
-    loaderItem.setLoading(false);
-  }
-
-  @Override
-  protected void onPostExecute(LinkedList<SocialLikeInfo> result) {
-    if (result != null) {
-      detailController.setLikedState();
-      detailController.setLikeInfoText(result);
-      detailController.setLikedInfo(result);
-      if (SocialTabsActivity.instance != null) {
-        int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
-        switch (tabId) {
-        case SocialTabsActivity.ALL_UPDATES:
-          AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
-          break;
-        case SocialTabsActivity.MY_CONNECTIONS:
-          MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                       true,
-                                                       currentPosition);
-          break;
-        case SocialTabsActivity.MY_SPACES:
-          MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                  true,
-                                                  currentPosition);
-          break;
-        case SocialTabsActivity.MY_STATUS:
-          MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                  true,
-                                                  currentPosition);
-          break;
-        }
-      }
-    } else {
-      SocialDetailsWarningDialog dialog = new SocialDetailsWarningDialog(mContext,
-                                                                         titleString,
-                                                                         detailsErrorStr,
-                                                                         okString,
-                                                                         false);
-      dialog.show();
+    @Override
+    protected void onPreExecute() {
+        loaderItem.setLoading(true);
     }
-    loaderItem.setLoading(false);
-  }
 
-  private void changeLanguage() {
-    Resources resource = mContext.getResources();
-    youText = resource.getString(R.string.You);
-    okString = resource.getString(R.string.OK);
-    titleString = resource.getString(R.string.Warning);
-    detailsErrorStr = resource.getString(R.string.DetailsNotAvaiable);
+    @Override
+    protected LinkedList<SocialLikeInfo> doInBackground(String... params) {
+        try {
+            String activityId = params[0];
+            boolean liked = SocialDetailHelper.getInstance().getLiked();
+            RestActivity activity = SocialServiceHelper.getInstance().activityService.get(activityId);
 
-  }
+            if (liked == true) {
+                SocialServiceHelper.getInstance().activityService.unlike(activity);
+                SocialDetailHelper.getInstance().setLiked(false);
+            } else {
+                SocialServiceHelper.getInstance().activityService.like(activity);
+            }
+
+            LinkedList<SocialLikeInfo> likeLinkedList = new LinkedList<SocialLikeInfo>();
+
+            ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
+            QueryParams queryParams = new QueryParamsImpl();
+            queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(ExoConstants.NUMBER_OF_LIKES_PARAM));
+            // queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(ExoConstants.NUMBER_OF_COMMENTS_PARAM));
+            queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
+            RestActivity restActivity = activityService.get(activityId, queryParams);
+            List<RestIdentity> likeList = restActivity.getAvailableLikes();
+            if (likeList != null) {
+                for (RestIdentity like : likeList) {
+                    RestProfile likeProfile = like.getProfile();
+                    SocialLikeInfo socialLike = new SocialLikeInfo();
+                    socialLike.likedImageUrl = likeProfile.getAvatarUrl();
+                    String identity = like.getId();
+                    if (identity.equalsIgnoreCase(SocialServiceHelper.getInstance().userIdentity)) {
+                        socialLike.setLikeName(youText);
+                        likeLinkedList.addFirst(socialLike);
+                        SocialDetailHelper.getInstance().setLiked(true);
+                    } else {
+                        String likeName = like.getProfile().getFullName();
+                        socialLike.setLikeName(likeName);
+                        likeLinkedList.add(socialLike);
+                    }
+
+                }
+            }
+            return likeLinkedList;
+        } catch (SocialClientLibException e) {
+            return null;
+        }
+    }
+
+    @Override
+    protected void onCancelled() {
+        loaderItem.setLoading(false);
+    }
+
+    @Override
+    protected void onPostExecute(LinkedList<SocialLikeInfo> result) {
+        if (result != null) {
+            detailController.setLikedState();
+            detailController.setLikeInfoText(result);
+            detailController.setLikedInfo(result);
+            if (SocialTabsActivity.instance != null) {
+                int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+                switch (tabId) {
+                case SocialTabsActivity.ALL_UPDATES:
+                    AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                              true,
+                                                              currentPosition);
+                    break;
+                case SocialTabsActivity.MY_CONNECTIONS:
+                    MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                                 true,
+                                                                 currentPosition);
+                    break;
+                case SocialTabsActivity.MY_SPACES:
+                    MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                            true,
+                                                            currentPosition);
+                    break;
+                case SocialTabsActivity.MY_STATUS:
+                    MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                                                            true,
+                                                            currentPosition);
+                    break;
+                }
+            }
+        } else {
+            SocialDetailsWarningDialog dialog = new SocialDetailsWarningDialog(mContext,
+                                                                               titleString,
+                                                                               detailsErrorStr,
+                                                                               okString,
+                                                                               false);
+            dialog.show();
+        }
+        loaderItem.setLoading(false);
+    }
+
+    private void changeLanguage() {
+        Resources resource = mContext.getResources();
+        youText = resource.getString(R.string.You);
+        okString = resource.getString(R.string.OK);
+        titleString = resource.getString(R.string.Warning);
+        detailsErrorStr = resource.getString(R.string.DetailsNotAvaiable);
+
+    }
 
 }

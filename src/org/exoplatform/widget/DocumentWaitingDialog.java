@@ -24,14 +24,14 @@ import android.content.Context;
 
 public class DocumentWaitingDialog extends WaitingDialog {
 
-  public DocumentWaitingDialog(Context context, String titleString, String contentString) {
-    super(context, titleString, contentString);
-  }
+    public DocumentWaitingDialog(Context context, String titleString, String contentString) {
+        super(context, titleString, contentString);
+    }
 
-  @Override
-  public void onBackPressed() {
-    super.onBackPressed();
-    DocumentActivity._documentActivityInstance.onCancelLoad();
-  }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        DocumentActivity._documentActivityInstance.onCancelLoad();
+    }
 
 }

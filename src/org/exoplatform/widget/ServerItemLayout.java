@@ -30,22 +30,22 @@ import android.widget.TextView;
 
 public class ServerItemLayout extends RelativeLayout {
 
-  public TextView  serverName;
+    public TextView     serverName;
 
-  public TextView  serverUrl;
+    public TextView     serverUrl;
 
-  public ImageView serverImageView;
+    public ImageView    serverImageView;
 
-  public LinearLayout      layout;
+    public LinearLayout layout;
 
-  public ServerItemLayout(Context context) {
-    super(context);
-    LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    View  view = inflate.inflate(R.layout.server_list_item_for_setting, this);
-    layout = (LinearLayout) view.findViewById(R.id.server_list_item_wrap);
-    serverName = (TextView) view.findViewById(R.id.TextView_ServerName);
-    serverUrl = (TextView) view.findViewById(R.id.TextView_URL);
-    serverImageView = (ImageView) view.findViewById(R.id.ImageView_Checked);
-  }
+    public ServerItemLayout(Context context) {
+        super(context);
+        LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflate.inflate(R.layout.server_list_item_for_setting, this);
+        layout = (LinearLayout) view.findViewById(R.id.server_list_item_wrap);
+        serverName = (TextView) view.findViewById(R.id.TextView_ServerName);
+        serverUrl = (TextView) view.findViewById(R.id.TextView_URL);
+        serverImageView = (ImageView) view.findViewById(R.id.ImageView_Checked);
+    }
 
 }

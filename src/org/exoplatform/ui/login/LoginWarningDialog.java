@@ -32,85 +32,89 @@ import android.widget.TextView;
  */
 public class LoginWarningDialog extends Dialog implements android.view.View.OnClickListener {
 
-  private   TextView    mTitleTxt;
+    private TextView mTitleTxt;
 
-  private   TextView    mMessageTxt;
+    private TextView mMessageTxt;
 
-  protected Button      mBtn;
+    protected Button mBtn;
 
-  private   int         mWindowsAnim = 0;
+    private int      mWindowsAnim = 0;
 
-  public LoginWarningDialog(Context context) {
-    super(context);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.login_warning_dialog_layout);
+    public LoginWarningDialog(Context context) {
+        super(context);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.login_warning_dialog_layout);
 
-    initSubViews();
-  }
-
-  public LoginWarningDialog(Context context, String titleString, String contentString, String okString) {
-    super(context);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.login_warning_dialog_layout);
-
-    initSubViews();
-
-    mTitleTxt.setText(titleString);
-    mMessageTxt.setText(contentString);
-    mBtn.setText(okString);
-  }
-
-  private void initSubViews() {
-    mTitleTxt   = (TextView) findViewById(R.id.warning_dialog_title_txt);
-    mMessageTxt = (TextView) findViewById(R.id.warning_dialog_message_txt);
-    mBtn        = (Button)   findViewById(R.id.warning_dialog_btn);
-    mBtn.setOnClickListener(this);
-  }
-
-  public LoginWarningDialog setTitle(String title) {
-    mTitleTxt.setText(title);
-    return this;
-  }
-
-  public LoginWarningDialog setMessage(String message) {
-    mMessageTxt.setText(message);
-    return this;
-  }
-
-  public LoginWarningDialog setButtonText(String text) {
-    mBtn.setText(text);
-    return this;
-  }
-
-  public LoginWarningDialog setWindowsAnimation(int anim) {
-    mWindowsAnim = anim;
-    return this;
-  }
-
-  @Override
-  public void show() {
-    getWindow().getAttributes().windowAnimations = mWindowsAnim != 0
-        ? mWindowsAnim : R.style.Animations_Window;
-    super.show();
-  }
-
-  public void onClick(View view) {
-    if (view.equals(mBtn)) {
-      dismiss();
-
-      if (mViewListener != null) mViewListener.onClickOk(this);
+        initSubViews();
     }
-  }
 
-  private ViewListener mViewListener;
+    public LoginWarningDialog(Context context,
+                              String titleString,
+                              String contentString,
+                              String okString) {
+        super(context);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.login_warning_dialog_layout);
 
-  /* interface to listen to view event */
-  public interface ViewListener {
+        initSubViews();
 
-    void onClickOk(LoginWarningDialog dialog);
-  }
+        mTitleTxt.setText(titleString);
+        mMessageTxt.setText(contentString);
+        mBtn.setText(okString);
+    }
 
-  public void setViewListener(ViewListener l) {
-    mViewListener = l;
-  }
+    private void initSubViews() {
+        mTitleTxt = (TextView) findViewById(R.id.warning_dialog_title_txt);
+        mMessageTxt = (TextView) findViewById(R.id.warning_dialog_message_txt);
+        mBtn = (Button) findViewById(R.id.warning_dialog_btn);
+        mBtn.setOnClickListener(this);
+    }
+
+    public LoginWarningDialog setTitle(String title) {
+        mTitleTxt.setText(title);
+        return this;
+    }
+
+    public LoginWarningDialog setMessage(String message) {
+        mMessageTxt.setText(message);
+        return this;
+    }
+
+    public LoginWarningDialog setButtonText(String text) {
+        mBtn.setText(text);
+        return this;
+    }
+
+    public LoginWarningDialog setWindowsAnimation(int anim) {
+        mWindowsAnim = anim;
+        return this;
+    }
+
+    @Override
+    public void show() {
+        getWindow().getAttributes().windowAnimations = mWindowsAnim != 0 ? mWindowsAnim
+                                                                        : R.style.Animations_Window;
+        super.show();
+    }
+
+    public void onClick(View view) {
+        if (view.equals(mBtn)) {
+            dismiss();
+
+            if (mViewListener != null)
+                mViewListener.onClickOk(this);
+        }
+    }
+
+    private ViewListener mViewListener;
+
+    /* interface to listen to view event */
+    public interface ViewListener {
+
+        void onClickOk(LoginWarningDialog dialog);
+    }
+
+    public void setViewListener(ViewListener l) {
+        mViewListener = l;
+    }
 }

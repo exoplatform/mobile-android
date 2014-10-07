@@ -57,217 +57,217 @@ import android.widget.ImageView;
  */
 public class SocialImageLoader {
 
-  private MemoryCache            memoryCache             = new MemoryCache();
+    private MemoryCache            memoryCache             = new MemoryCache();
 
-  private FileCache              fileCache;
+    private FileCache              fileCache;
 
-  /*
-   * The mapping between image view and image's url
-   */
-  private Map<ImageView, String> imageViews              = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
+    /*
+     * The mapping between image view and image's url
+     */
+    private Map<ImageView, String> imageViews              = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
 
-  /*
-   * Provides methods to manage termination and methods that can produce a
-   * Future for tracking progress of one or more asynchronous tasks
-   */
-  private ExecutorService        executorService;
+    /*
+     * Provides methods to manage termination and methods that can produce a
+     * Future for tracking progress of one or more asynchronous tasks
+     */
+    private ExecutorService        executorService;
 
-  // The image drawable for progress downloading
-  private final int              DOWNLOAD_PROGRESS_IMAGE = R.drawable.loading;
+    // The image drawable for progress downloading
+    private final int              DOWNLOAD_PROGRESS_IMAGE = R.drawable.loading;
 
-  // The image drawable for link type
-  private final int              UNREADABLE_LINK         = R.drawable.icon_for_unreadable_link;
+    // The image drawable for link type
+    private final int              UNREADABLE_LINK         = R.drawable.icon_for_unreadable_link;
 
-  // The image drawable for image type
-  private final int              PLACEHOLDER_IMAGE       = R.drawable.icon_for_placeholder_image;
+    // The image drawable for image type
+    private final int              PLACEHOLDER_IMAGE       = R.drawable.icon_for_placeholder_image;
 
-  private final int              REQUIRED_SIZE           = 100;
+    private final int              REQUIRED_SIZE           = 100;
 
-  private String                 username;
+    private String                 username;
 
-  private String                 password;
+    private String                 password;
 
-  public SocialImageLoader(Context context) {
-    username = AccountSetting.getInstance().getUsername();
-    password = AccountSetting.getInstance().getPassword();
-    fileCache = new FileCache(context, ExoConstants.SOCIAL_FILE_CACHE);
-    executorService = Executors.newFixedThreadPool(5);
+    public SocialImageLoader(Context context) {
+        username = AccountSetting.getInstance().getUsername();
+        password = AccountSetting.getInstance().getPassword();
+        fileCache = new FileCache(context, ExoConstants.SOCIAL_FILE_CACHE);
+        executorService = Executors.newFixedThreadPool(5);
 
-  }
-
-  public void displayImage(String url, ImageView imageView, boolean isLink) {
-    url = SocialActivityUtil.convertToThumbnail(url);
-    imageViews.put(imageView, url);
-    Bitmap bitmap = memoryCache.get(url);
-    if (bitmap != null)
-      imageView.setImageBitmap(bitmap);
-    else {
-      queuePhoto(url, imageView, isLink);
-      imageView.setImageResource(DOWNLOAD_PROGRESS_IMAGE);
     }
-  }
 
-  private void queuePhoto(String url, ImageView imageView, boolean isLink) {
-    PhotoToLoad p = new PhotoToLoad(url, imageView, isLink);
-    executorService.submit(new PhotosLoader(p));
+    public void displayImage(String url, ImageView imageView, boolean isLink) {
+        url = SocialActivityUtil.convertToThumbnail(url);
+        imageViews.put(imageView, url);
+        Bitmap bitmap = memoryCache.get(url);
+        if (bitmap != null)
+            imageView.setImageBitmap(bitmap);
+        else {
+            queuePhoto(url, imageView, isLink);
+            imageView.setImageResource(DOWNLOAD_PROGRESS_IMAGE);
+        }
+    }
 
-  }
+    private void queuePhoto(String url, ImageView imageView, boolean isLink) {
+        PhotoToLoad p = new PhotoToLoad(url, imageView, isLink);
+        executorService.submit(new PhotosLoader(p));
 
-  /*
-   * Check if this url already has file cache then decode and get bitmap else
-   * get image bitmap from url and save it to file cache
-   */
-  private Bitmap getBitmap(String url) {
-    HttpParams httpParameters = new BasicHttpParams();
-    HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
-    HttpConnectionParams.setSoTimeout(httpParameters, 10000);
-    HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-    DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-    try {
-      File f = fileCache.getFile(url);
+    }
 
-      // from SD cache
-      Bitmap b = decodeFile(f);
-      if (b != null)
-        return b;
-      else {
-        // from web
-        Bitmap bitmap = null;
-        /*
-         * Send authentication each time we execute HttpGet to avoid the step
-         * checking session time out.
-         */
-        HttpGet getRequest = new HttpGet(url);
-        StringBuilder buffer = new StringBuilder(username);
-        buffer.append(":");
-        buffer.append(password);
-        getRequest.setHeader("Authorization",
-                             "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
-        HttpResponse response = httpClient.execute(getRequest);
-        HttpEntity entity = response.getEntity();
-        if (entity != null) {
-          InputStream is = entity.getContent();
-          OutputStream os = new FileOutputStream(f);
-          PhotoUtils.copyStream(is, os);
-          os.close();
-          bitmap = decodeFile(f);
+    /*
+     * Check if this url already has file cache then decode and get bitmap else
+     * get image bitmap from url and save it to file cache
+     */
+    private Bitmap getBitmap(String url) {
+        HttpParams httpParameters = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
+        HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+        HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+        DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+        try {
+            File f = fileCache.getFile(url);
+
+            // from SD cache
+            Bitmap b = decodeFile(f);
+            if (b != null)
+                return b;
+            else {
+                // from web
+                Bitmap bitmap = null;
+                /*
+                 * Send authentication each time we execute HttpGet to avoid the
+                 * step checking session time out.
+                 */
+                HttpGet getRequest = new HttpGet(url);
+                StringBuilder buffer = new StringBuilder(username);
+                buffer.append(":");
+                buffer.append(password);
+                getRequest.setHeader("Authorization",
+                                     "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
+                HttpResponse response = httpClient.execute(getRequest);
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    InputStream is = entity.getContent();
+                    OutputStream os = new FileOutputStream(f);
+                    PhotoUtils.copyStream(is, os);
+                    os.close();
+                    bitmap = decodeFile(f);
+                }
+
+                return bitmap;
+            }
+        } catch (IOException ex) {
+            return null;
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+    }
+
+    // decodes image and scales it to reduce memory consumption
+    private Bitmap decodeFile(File f) {
+        try {
+            // decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+            // Find the correct scale value. It should be the power of 2.
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+
+            // decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {
+            return null;
         }
 
-        return bitmap;
-      }
-    } catch (IOException ex) {
-      return null;
-    } finally {
-      httpClient.getConnectionManager().shutdown();
-    }
-  }
-
-  // decodes image and scales it to reduce memory consumption
-  private Bitmap decodeFile(File f) {
-    try {
-      // decode image size
-      BitmapFactory.Options o = new BitmapFactory.Options();
-      o.inJustDecodeBounds = true;
-      BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-
-      // Find the correct scale value. It should be the power of 2.
-      int width_tmp = o.outWidth, height_tmp = o.outHeight;
-      int scale = 1;
-      while (true) {
-        if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
-          break;
-        width_tmp /= 2;
-        height_tmp /= 2;
-        scale *= 2;
-      }
-
-      // decode with inSampleSize
-      BitmapFactory.Options o2 = new BitmapFactory.Options();
-      o2.inSampleSize = scale;
-      return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-    } catch (FileNotFoundException e) {
-      return null;
     }
 
-  }
+    // Task for the queue
+    private class PhotoToLoad {
+        public String    url;
 
-  // Task for the queue
-  private class PhotoToLoad {
-    public String    url;
+        public ImageView imageView;
 
-    public ImageView imageView;
+        public boolean   isLinkType;
 
-    public boolean   isLinkType;
-
-    public PhotoToLoad(String u, ImageView i, boolean isLink) {
-      url = u;
-      imageView = i;
-      isLinkType = isLink;
-    }
-  }
-
-  class PhotosLoader implements Runnable {
-    PhotoToLoad photoToLoad;
-
-    PhotosLoader(PhotoToLoad photoToLoad) {
-      this.photoToLoad = photoToLoad;
+        public PhotoToLoad(String u, ImageView i, boolean isLink) {
+            url = u;
+            imageView = i;
+            isLinkType = isLink;
+        }
     }
 
-    @Override
-    public void run() {
-      if (imageViewReused(photoToLoad))
-        return;
-      Bitmap bmp = getBitmap(photoToLoad.url);
-      memoryCache.put(photoToLoad.url, bmp);
-      if (imageViewReused(photoToLoad))
-        return;
-      BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
-      Activity a = (Activity) photoToLoad.imageView.getContext();
-      a.runOnUiThread(bd);
-    }
-  }
+    class PhotosLoader implements Runnable {
+        PhotoToLoad photoToLoad;
 
-  boolean imageViewReused(PhotoToLoad photoToLoad) {
-    String tag = imageViews.get(photoToLoad.imageView);
-    if (tag == null || !tag.equals(photoToLoad.url))
-      return true;
-    return false;
-  }
+        PhotosLoader(PhotoToLoad photoToLoad) {
+            this.photoToLoad = photoToLoad;
+        }
 
-  // Used to display bitmap in the UI thread
-  class BitmapDisplayer implements Runnable {
-    Bitmap      bitmap;
-
-    PhotoToLoad photoToLoad;
-
-    public BitmapDisplayer(Bitmap b, PhotoToLoad p) {
-      bitmap = b;
-      photoToLoad = p;
+        @Override
+        public void run() {
+            if (imageViewReused(photoToLoad))
+                return;
+            Bitmap bmp = getBitmap(photoToLoad.url);
+            memoryCache.put(photoToLoad.url, bmp);
+            if (imageViewReused(photoToLoad))
+                return;
+            BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
+            Activity a = (Activity) photoToLoad.imageView.getContext();
+            a.runOnUiThread(bd);
+        }
     }
 
-    public void run() {
-      if (imageViewReused(photoToLoad))
-        return;
-      if (bitmap != null) {
-        photoToLoad.imageView.setImageBitmap(bitmap);
-      } else {
-        /*
-         * if can not get image bitmap from web link, we will display this
-         * instead
-         */
-        if (photoToLoad.isLinkType) {
-          photoToLoad.imageView.setImageResource(UNREADABLE_LINK);
-        } else
-          photoToLoad.imageView.setImageResource(PLACEHOLDER_IMAGE);
-
-      }
-
+    boolean imageViewReused(PhotoToLoad photoToLoad) {
+        String tag = imageViews.get(photoToLoad.imageView);
+        if (tag == null || !tag.equals(photoToLoad.url))
+            return true;
+        return false;
     }
-  }
 
-  public void clearCache() {
-    memoryCache.clear();
-    fileCache.clear();
-  }
+    // Used to display bitmap in the UI thread
+    class BitmapDisplayer implements Runnable {
+        Bitmap      bitmap;
+
+        PhotoToLoad photoToLoad;
+
+        public BitmapDisplayer(Bitmap b, PhotoToLoad p) {
+            bitmap = b;
+            photoToLoad = p;
+        }
+
+        public void run() {
+            if (imageViewReused(photoToLoad))
+                return;
+            if (bitmap != null) {
+                photoToLoad.imageView.setImageBitmap(bitmap);
+            } else {
+                /*
+                 * if can not get image bitmap from web link, we will display
+                 * this instead
+                 */
+                if (photoToLoad.isLinkType) {
+                    photoToLoad.imageView.setImageResource(UNREADABLE_LINK);
+                } else
+                    photoToLoad.imageView.setImageResource(PLACEHOLDER_IMAGE);
+
+            }
+
+        }
+    }
+
+    public void clearCache() {
+        memoryCache.clear();
+        fileCache.clear();
+    }
 
 }

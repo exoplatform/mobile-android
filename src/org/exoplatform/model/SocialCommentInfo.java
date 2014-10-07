@@ -20,58 +20,58 @@ package org.exoplatform.model;
 
 public class SocialCommentInfo {
 
-  private String commentImageUrl;
+    private String commentImageUrl;
 
-  private String commentId;
+    private String commentId;
 
-  private String commentName;
+    private String commentName;
 
-  private String commentTitle;
+    private String commentTitle;
 
-  private long   postedTime;
+    private long   postedTime;
 
-  public SocialCommentInfo() {
+    public SocialCommentInfo() {
 
-  }
+    }
 
-  public void setImageUrl(String url) {
-    commentImageUrl = url;
-  }
+    public void setImageUrl(String url) {
+        commentImageUrl = url;
+    }
 
-  public String getImageUrl() {
-    return commentImageUrl;
-  }
+    public String getImageUrl() {
+        return commentImageUrl;
+    }
 
-  public void setCommentId(String id) {
-    commentId = id;
-  }
+    public void setCommentId(String id) {
+        commentId = id;
+    }
 
-  public String getCommentId() {
-    return commentId;
-  }
+    public String getCommentId() {
+        return commentId;
+    }
 
-  public void setCommentName(String name) {
-    commentName = name;
-  }
+    public void setCommentName(String name) {
+        commentName = name;
+    }
 
-  public String getCommentName() {
-    return commentName;
-  }
+    public String getCommentName() {
+        return commentName;
+    }
 
-  public void setCommentTitle(String title) {
-    commentTitle = title;
-  }
+    public void setCommentTitle(String title) {
+        commentTitle = title;
+    }
 
-  public String getCommentTitle() {
-    return commentTitle;
-  }
+    public String getCommentTitle() {
+        return commentTitle;
+    }
 
-  public void setPostedTime(long time) {
-    postedTime = time;
-  }
+    public void setPostedTime(long time) {
+        postedTime = time;
+    }
 
-  public long getPostedTime() {
-    return postedTime;
-  }
+    public long getPostedTime() {
+        return postedTime;
+    }
 
 }

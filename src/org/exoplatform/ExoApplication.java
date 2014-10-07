@@ -26,16 +26,16 @@ import android.content.Intent;
 import android.net.Uri;
 
 public class ExoApplication extends GDApplication {
-  private String appUrl = "http://github.com/cyrilmottier/GreenDroid";
+    private String appUrl = "http://github.com/cyrilmottier/GreenDroid";
 
-  @Override
-  public Class<?> getHomeActivityClass() {
-    return HomeActivity.class;
-  }
+    @Override
+    public Class<?> getHomeActivityClass() {
+        return HomeActivity.class;
+    }
 
-  @Override
-  public Intent getMainApplicationIntent() {
-    return new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
-  }
+    @Override
+    public Intent getMainApplicationIntent() {
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
+    }
 
 }

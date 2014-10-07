@@ -29,115 +29,115 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Used for storing the list of server url and the index of the selected
- * which is used for adding/repairing/deleting function in setting
+ * Used for storing the list of server url and the index of the selected which
+ * is used for adding/repairing/deleting function in setting
  */
 public class ServerSettingHelper implements Parcelable {
 
-  // The application version number
-  private String                     applicationVersion;
+    // The application version number
+    private String                     applicationVersion;
 
-  // the server version number
-  private String                     serverVersion;
+    // the server version number
+    private String                     serverVersion;
 
-  private String                     serverEdition;
+    private String                     serverEdition;
 
-  /** List of server url */
-  private ArrayList<ServerObjInfo> serverInfoList;
+    /** List of server url */
+    private ArrayList<ServerObjInfo>   serverInfoList;
 
-  private static ServerSettingHelper helper = new ServerSettingHelper();
+    private static ServerSettingHelper helper = new ServerSettingHelper();
 
-  private ServerSettingHelper() {
+    private ServerSettingHelper() {
 
-  }
-
-  public static ServerSettingHelper getInstance() {
-    return helper;
-  }
-
-  public void setInstance(ServerSettingHelper instance) {
-    helper = instance;
-  }
-
-  public void setApplicationVersion(String version) {
-    applicationVersion = version;
-  }
-
-  public String getApplicationVersion() {
-    return applicationVersion;
-  }
-
-  public void setServerVersion(String ver) {
-    serverVersion = ver;
-  }
-
-  public String getServerVersion() {
-    return serverVersion;
-  }
-
-  public void setServerEdition(String ver) {
-    serverEdition = ver;
-  }
-
-  public String getServerEdition() {
-    return serverEdition;
-  }
-
-  public void setServerInfoList(ArrayList<ServerObjInfo> list) {
-    serverInfoList = list;
-  }
-
-  public ArrayList<ServerObjInfo> getServerInfoList(Context context) {
-    if (serverInfoList == null) {
-      serverInfoList =
-          ServerConfigurationUtils.getServerListFromFile(context, ExoConstants.EXO_SERVER_SETTING_FILE);
-      ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
     }
-    return serverInfoList;
-  }
 
-  @Deprecated
-  /**
-   * Use getServerInfoList(Context) instead
-   * @return the list of servers
-   */
-  public ArrayList<ServerObjInfo> getServerInfoList() {
-    return serverInfoList;
-  }
+    public static ServerSettingHelper getInstance() {
+        return helper;
+    }
 
-  private ServerSettingHelper(Parcel in) {
-    readFromParcel(in);
-  }
+    public void setInstance(ServerSettingHelper instance) {
+        helper = instance;
+    }
 
-  public static final Parcelable.Creator<ServerSettingHelper> CREATOR = new Parcelable.Creator<ServerSettingHelper>() {
-                                                                        public ServerSettingHelper createFromParcel(Parcel in) {
-                                                                          return new ServerSettingHelper(in);
-                                                                        }
+    public void setApplicationVersion(String version) {
+        applicationVersion = version;
+    }
 
-                                                                        public ServerSettingHelper[] newArray(int size) {
-                                                                          return new ServerSettingHelper[size];
-                                                                        }
-                                                                      };
+    public String getApplicationVersion() {
+        return applicationVersion;
+    }
 
-  private void readFromParcel(Parcel in) {
-    applicationVersion = in.readString();
-    serverVersion = in.readString();
-    serverEdition = in.readString();
-    serverInfoList = new ArrayList<ServerObjInfo>();
-    in.readList(serverInfoList, ServerObjInfo.class.getClassLoader());
-  }
+    public void setServerVersion(String ver) {
+        serverVersion = ver;
+    }
 
-  @Override
-  public int describeContents() {
-    return 0;
-  }
+    public String getServerVersion() {
+        return serverVersion;
+    }
 
-  @Override
-  public void writeToParcel(Parcel dest, int flags) {
-    dest.writeString(applicationVersion);
-    dest.writeString(serverVersion);
-    dest.writeString(serverEdition);
-    dest.writeList(serverInfoList);
-  }
+    public void setServerEdition(String ver) {
+        serverEdition = ver;
+    }
+
+    public String getServerEdition() {
+        return serverEdition;
+    }
+
+    public void setServerInfoList(ArrayList<ServerObjInfo> list) {
+        serverInfoList = list;
+    }
+
+    public ArrayList<ServerObjInfo> getServerInfoList(Context context) {
+        if (serverInfoList == null) {
+            serverInfoList = ServerConfigurationUtils.getServerListFromFile(context,
+                                                                            ExoConstants.EXO_SERVER_SETTING_FILE);
+            ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
+        }
+        return serverInfoList;
+    }
+
+    @Deprecated
+    /**
+     * Use getServerInfoList(Context) instead
+     * @return the list of servers
+     */
+    public ArrayList<ServerObjInfo> getServerInfoList() {
+        return serverInfoList;
+    }
+
+    private ServerSettingHelper(Parcel in) {
+        readFromParcel(in);
+    }
+
+    public static final Parcelable.Creator<ServerSettingHelper> CREATOR = new Parcelable.Creator<ServerSettingHelper>() {
+                                                                            public ServerSettingHelper createFromParcel(Parcel in) {
+                                                                                return new ServerSettingHelper(in);
+                                                                            }
+
+                                                                            public ServerSettingHelper[] newArray(int size) {
+                                                                                return new ServerSettingHelper[size];
+                                                                            }
+                                                                        };
+
+    private void readFromParcel(Parcel in) {
+        applicationVersion = in.readString();
+        serverVersion = in.readString();
+        serverEdition = in.readString();
+        serverInfoList = new ArrayList<ServerObjInfo>();
+        in.readList(serverInfoList, ServerObjInfo.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(applicationVersion);
+        dest.writeString(serverVersion);
+        dest.writeString(serverEdition);
+        dest.writeList(serverInfoList);
+    }
 
 }

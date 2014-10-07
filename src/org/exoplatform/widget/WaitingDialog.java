@@ -26,27 +26,27 @@ import android.view.Window;
 import android.widget.TextView;
 
 public class WaitingDialog extends Dialog {
-  private TextView contentView;
+    private TextView contentView;
 
-  public WaitingDialog(Context context, String titleString, String contentString) {
-    super(context);
-    if (titleString == null) {
-      requestWindowFeature(Window.FEATURE_NO_TITLE);
-    } else {
-      setTitle(titleString);
+    public WaitingDialog(Context context, String titleString, String contentString) {
+        super(context);
+        if (titleString == null) {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+        } else {
+            setTitle(titleString);
+        }
+        setContentView(R.layout.waiting_dialog_layout);
+        contentView = (TextView) findViewById(R.id.waiting_content);
+        contentView.setText(contentString);
     }
-    setContentView(R.layout.waiting_dialog_layout);
-    contentView = (TextView) findViewById(R.id.waiting_content);
-    contentView.setText(contentString);
-  }
 
-  @Override
-  public void onBackPressed() {
-    super.onBackPressed();
-    dismiss();
-  }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        dismiss();
+    }
 
-  public void setMessage(String message) {
-    contentView.setText(message);
-  }
+    public void setMessage(String message) {
+        contentView.setText(message);
+    }
 }

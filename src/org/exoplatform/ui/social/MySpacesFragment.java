@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 /*
-  * Copyright (C) 2003-2012 eXo Platform SAS.
+ * Copyright (C) 2003-2012 eXo Platform SAS.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -47,6 +47,7 @@ import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -57,86 +58,85 @@ import android.view.View;
  */
 public class MySpacesFragment extends ActivityStreamFragment {
 
-  public static MySpacesFragment instance;
-  
-  @Override
-	public int getThisTabId() {
-		return SocialTabsActivity.MY_SPACES;
-	}
+    public static MySpacesFragment instance;
 
-  public static MySpacesFragment getInstance() {
-    MySpacesFragment fragment = new MySpacesFragment();
-    return fragment;
-  }
+    @Override
+    public int getThisTabId() {
+        return SocialTabsActivity.MY_SPACES;
+    }
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    instance = this;
-    fragment_layout = R.layout.social_my_spaces_layout;
-    fragment_list_view_id = R.id.my_spaces_listview;
-    fragment_empty_view_id = R.id.social_my_spaces_empty_stub;
-    super.onCreate(savedInstanceState);
-  }
-
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-    setListAdapter();
-  }
-
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    instance = null;
-  }
-  public boolean isEmpty() {
-	  return (SocialServiceHelper.getInstance().mySpacesList == null
-	        || SocialServiceHelper.getInstance().mySpacesList.size() == 0);
-  }
-  
-  @Override
-  public SocialLoadTask getThisLoadTask() {
-  	return new MySpacesLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
-  }
-
-  public void setListAdapter() {
-	  super.setListAdapter(SocialServiceHelper.getInstance().mySpacesList);
-  }
-  
-  public class MySpacesLoadTask extends SocialLoadTask {
-
-    public MySpacesLoadTask(Context context, LoaderActionBarItem loader) {
-      super(context, loader);
+    public static MySpacesFragment getInstance() {
+        MySpacesFragment fragment = new MySpacesFragment();
+        return fragment;
     }
 
     @Override
-    public void setResult(ArrayList<SocialActivityInfo> result) {
-    	setActivityList(result);
-    	setListAdapter();
-    	listview.getAutoLoadProgressBar().setVisibility(View.GONE);
-    	super.setResult(result);
+    public void onCreate(Bundle savedInstanceState) {
+        instance = this;
+        fragment_layout = R.layout.social_my_spaces_layout;
+        fragment_list_view_id = R.id.my_spaces_listview;
+        fragment_empty_view_id = R.id.social_my_spaces_empty_stub;
+        super.onCreate(savedInstanceState);
     }
 
-	@Override
-	protected RealtimeListAccess<RestActivity> getRestActivityList(
-			RestIdentity identity, QueryParams params)
-			throws SocialClientLibException {
-		return activityService.getSpacesActivityStream(identity, params);
-	}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setListAdapter();
+    }
 
-	@Override
-	protected ArrayList<SocialActivityInfo> getSocialActivityList() {
-		return SocialServiceHelper.getInstance().mySpacesList;
-	}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        instance = null;
+    }
 
-  }
+    public boolean isEmpty() {
+        return (SocialServiceHelper.getInstance().mySpacesList == null || SocialServiceHelper.getInstance().mySpacesList.size() == 0);
+    }
 
-	@Override
-	public void setActivityList(ArrayList<SocialActivityInfo> list) {
-		if (!isLoadingMoreActivities)
-			SocialServiceHelper.getInstance().mySpacesList = list;
-		else
-			SocialServiceHelper.getInstance().mySpacesList.addAll(list);
-	}
+    @Override
+    public SocialLoadTask getThisLoadTask() {
+        return new MySpacesLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+    }
+
+    public void setListAdapter() {
+        super.setListAdapter(SocialServiceHelper.getInstance().mySpacesList);
+    }
+
+    public class MySpacesLoadTask extends SocialLoadTask {
+
+        public MySpacesLoadTask(Context context, LoaderActionBarItem loader) {
+            super(context, loader);
+        }
+
+        @Override
+        public void setResult(ArrayList<SocialActivityInfo> result) {
+            setActivityList(result);
+            setListAdapter();
+            listview.getAutoLoadProgressBar().setVisibility(View.GONE);
+            super.setResult(result);
+        }
+
+        @Override
+        protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity,
+                                                                       QueryParams params) throws SocialClientLibException {
+            return activityService.getSpacesActivityStream(identity, params);
+        }
+
+        @Override
+        protected ArrayList<SocialActivityInfo> getSocialActivityList() {
+            return SocialServiceHelper.getInstance().mySpacesList;
+        }
+
+    }
+
+    @Override
+    public void setActivityList(ArrayList<SocialActivityInfo> list) {
+        if (!isLoadingMoreActivities)
+            SocialServiceHelper.getInstance().mySpacesList = list;
+        else
+            SocialServiceHelper.getInstance().mySpacesList.addAll(list);
+    }
 
 }

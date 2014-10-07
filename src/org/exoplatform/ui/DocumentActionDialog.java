@@ -30,53 +30,53 @@ import android.widget.TextView;
 //File action list
 public class DocumentActionDialog extends Dialog {
 
-  private ListView             _listViewFileAction;   // List of
-                                                       // action
+    private ListView             _listViewFileAction;   // List of
+                                                         // action
 
-  private TextView             _txtvFileName;         // File's
-                                                       // name
+    private TextView             _txtvFileName;         // File's
+                                                         // name
 
-  public ExoFile               myFile;                // Current
-                                                       // file
+    public ExoFile               myFile;                // Current
+                                                         // file
 
-  public DocumentActionAdapter _documentActionAdapter;
-  
-  // Constructor
-  public DocumentActionDialog(DocumentActivity context, ExoFile file, boolean isActBar) {
+    public DocumentActionAdapter _documentActionAdapter;
 
-    super(context);
+    // Constructor
+    public DocumentActionDialog(DocumentActivity context, ExoFile file, boolean isActBar) {
 
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.exofileaction);
+        super(context);
 
-    setCanceledOnTouchOutside(true);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.exofileaction);
 
-    myFile = file;
+        setCanceledOnTouchOutside(true);
 
-    _documentActionAdapter = new DocumentActionAdapter(context, this, myFile, isActBar);
+        myFile = file;
 
-    init();
+        _documentActionAdapter = new DocumentActionAdapter(context, this, myFile, isActBar);
 
-    setTileForDialog(myFile.name);
+        init();
 
-  }
+        setTileForDialog(myFile.name);
 
-  public void setTileForDialog(String title) {
-    _txtvFileName.setText(title);
-  }
+    }
 
-  private void init() {
+    public void setTileForDialog(String title) {
+        _txtvFileName.setText(title);
+    }
 
-    _listViewFileAction = (ListView) findViewById(R.id.ListView0_FileAction);
+    private void init() {
 
-    _txtvFileName = (TextView) findViewById(R.id.TextView_Title);
+        _listViewFileAction = (ListView) findViewById(R.id.ListView0_FileAction);
 
-    setDocumentActionAdapter();
+        _txtvFileName = (TextView) findViewById(R.id.TextView_Title);
 
-  }
+        setDocumentActionAdapter();
 
-  public void setDocumentActionAdapter() {
-    _listViewFileAction.setAdapter(_documentActionAdapter);
-  }
+    }
+
+    public void setDocumentActionAdapter() {
+        _listViewFileAction.setAdapter(_documentActionAdapter);
+    }
 
 }

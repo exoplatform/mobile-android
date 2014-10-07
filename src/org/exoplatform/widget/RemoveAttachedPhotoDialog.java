@@ -28,23 +28,23 @@ import android.view.Window;
 import android.widget.Button;
 
 public class RemoveAttachedPhotoDialog extends Dialog implements android.view.View.OnClickListener {
-  private Button removePhotoButton;
+    private Button removePhotoButton;
 
-  public RemoveAttachedPhotoDialog(Context context) {
-    super(context);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setContentView(R.layout.remove_photo_dialog_layout);
-    setCanceledOnTouchOutside(true);
-    removePhotoButton = (Button) findViewById(R.id.remove_photo_remove_button);
-    removePhotoButton.setOnClickListener(this);
-  }
-
-  @Override
-  public void onClick(View view) {
-    if (view.equals(removePhotoButton)) {
-      ComposeMessageActivity.removeImageFromMessage();
+    public RemoveAttachedPhotoDialog(Context context) {
+        super(context);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.remove_photo_dialog_layout);
+        setCanceledOnTouchOutside(true);
+        removePhotoButton = (Button) findViewById(R.id.remove_photo_remove_button);
+        removePhotoButton.setOnClickListener(this);
     }
-    dismiss();
-  }
+
+    @Override
+    public void onClick(View view) {
+        if (view.equals(removePhotoButton)) {
+            ComposeMessageActivity.removeImageFromMessage();
+        }
+        dismiss();
+    }
 
 }

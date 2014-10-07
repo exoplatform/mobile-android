@@ -33,125 +33,125 @@ import android.webkit.URLUtil;
  */
 public class URLAnalyzer {
 
-  public URLAnalyzer() {
+    public URLAnalyzer() {
 
-  }
-
-  public static boolean isValidUrl(String urlStr) {
-    return URLUtil.isValidUrl(urlStr);
-  }
-
-  public static boolean isUrlValid(String str) {
-    try {
-      URL url = new URL(str.replaceAll(" ", "%20"));
-      url.toURI();
-      return true;
-    } catch (MalformedURLException e) {
-      return false;
-    } catch (URISyntaxException e) {
-      return false;
-    }
-  }
-
-  public String parserURL(String urlStr) {
-
-    if (urlStr == null || urlStr.length() == 0)
-      return "";
-
-    String url = urlStr = urlStr.toLowerCase(Locale.US);
-
-    boolean isHTTPSUrl = false;
-
-    try {
-
-      int indexOfProtocol;
-
-      indexOfProtocol = urlStr.indexOf(ExoConstants.HTTP_PROTOCOL);
-      if (indexOfProtocol == 0)
-        url = urlStr.substring(ExoConstants.HTTP_PROTOCOL.length() + 3);
-
-      indexOfProtocol = urlStr.indexOf(ExoConstants.HTTPS_PROTOCOL);
-      if (indexOfProtocol == 0) {
-        url = urlStr.substring(ExoConstants.HTTPS_PROTOCOL.length() + 3);
-        isHTTPSUrl = true;
-      }
-
-      while (url.charAt(0) == '/') {
-        if (url.length() > 1)
-          url = url.substring(1);
-        else
-          url = null;
-      }
-
-    } catch (Exception e) {
-      url = null;
     }
 
-    try {
-
-      URI uri;
-      StringBuffer urlBuffer = new StringBuffer();
-
-      if (!(isHTTPSUrl)) {
-        urlBuffer.append(ExoConstants.HTTP_PROTOCOL);
-        urlBuffer.append("://");
-        urlBuffer.append(url);
-        uri = new URI(ExoConstants.HTTP_PROTOCOL + urlBuffer.toString());
-        urlBuffer = new StringBuffer();
-        urlBuffer.append(ExoConstants.HTTP_PROTOCOL);
-        urlBuffer.append("://");
-        urlBuffer.append(uri.getHost());
-      } else {
-        urlBuffer.append(ExoConstants.HTTPS_PROTOCOL);
-        urlBuffer.append("://");
-        urlBuffer.append(url);
-        uri = new URI(ExoConstants.HTTPS_PROTOCOL + urlBuffer.toString());
-        urlBuffer = new StringBuffer();
-        urlBuffer.append(ExoConstants.HTTPS_PROTOCOL);
-        urlBuffer.append("://");
-        urlBuffer.append(uri.getHost());
-      }
-
-      int port = uri.getPort();
-      if (port > 0) {
-        urlBuffer.append(":");
-        urlBuffer.append(port);
-      }
-      url = urlBuffer.toString();
-    } catch (URISyntaxException e) {
-      if (Log.isLoggable("URISyntaxException", Log.ERROR)) {
-        String msg = e.getMessage();
-        String reason = e.getReason();
-        Log.e("URISyntaxException", msg + "  " + reason);
-
-      }
-
-      url = null;
+    public static boolean isValidUrl(String urlStr) {
+        return URLUtil.isValidUrl(urlStr);
     }
 
-    return url;
-  }
-
-  public static String encodeUrl(String urlString) {
-
-    try {
-
-      URL url = new URL(urlString);
-      URI uri = new URI(url.getProtocol(),
-                        url.getUserInfo(),
-                        url.getHost(),
-                        url.getPort(),
-                        url.getPath(),
-                        url.getQuery(),
-                        url.getRef());
-
-      return uri.toASCIIString();
-
-    } catch (MalformedURLException e) {
-      return null;
-    } catch (URISyntaxException e) {
-      return null;
+    public static boolean isUrlValid(String str) {
+        try {
+            URL url = new URL(str.replaceAll(" ", "%20"));
+            url.toURI();
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        } catch (URISyntaxException e) {
+            return false;
+        }
     }
 
-  }
+    public String parserURL(String urlStr) {
+
+        if (urlStr == null || urlStr.length() == 0)
+            return "";
+
+        String url = urlStr = urlStr.toLowerCase(Locale.US);
+
+        boolean isHTTPSUrl = false;
+
+        try {
+
+            int indexOfProtocol;
+
+            indexOfProtocol = urlStr.indexOf(ExoConstants.HTTP_PROTOCOL);
+            if (indexOfProtocol == 0)
+                url = urlStr.substring(ExoConstants.HTTP_PROTOCOL.length() + 3);
+
+            indexOfProtocol = urlStr.indexOf(ExoConstants.HTTPS_PROTOCOL);
+            if (indexOfProtocol == 0) {
+                url = urlStr.substring(ExoConstants.HTTPS_PROTOCOL.length() + 3);
+                isHTTPSUrl = true;
+            }
+
+            while (url.charAt(0) == '/') {
+                if (url.length() > 1)
+                    url = url.substring(1);
+                else
+                    url = null;
+            }
+
+        } catch (Exception e) {
+            url = null;
+        }
+
+        try {
+
+            URI uri;
+            StringBuffer urlBuffer = new StringBuffer();
+
+            if (!(isHTTPSUrl)) {
+                urlBuffer.append(ExoConstants.HTTP_PROTOCOL);
+                urlBuffer.append("://");
+                urlBuffer.append(url);
+                uri = new URI(ExoConstants.HTTP_PROTOCOL + urlBuffer.toString());
+                urlBuffer = new StringBuffer();
+                urlBuffer.append(ExoConstants.HTTP_PROTOCOL);
+                urlBuffer.append("://");
+                urlBuffer.append(uri.getHost());
+            } else {
+                urlBuffer.append(ExoConstants.HTTPS_PROTOCOL);
+                urlBuffer.append("://");
+                urlBuffer.append(url);
+                uri = new URI(ExoConstants.HTTPS_PROTOCOL + urlBuffer.toString());
+                urlBuffer = new StringBuffer();
+                urlBuffer.append(ExoConstants.HTTPS_PROTOCOL);
+                urlBuffer.append("://");
+                urlBuffer.append(uri.getHost());
+            }
+
+            int port = uri.getPort();
+            if (port > 0) {
+                urlBuffer.append(":");
+                urlBuffer.append(port);
+            }
+            url = urlBuffer.toString();
+        } catch (URISyntaxException e) {
+            if (Log.isLoggable("URISyntaxException", Log.ERROR)) {
+                String msg = e.getMessage();
+                String reason = e.getReason();
+                Log.e("URISyntaxException", msg + "  " + reason);
+
+            }
+
+            url = null;
+        }
+
+        return url;
+    }
+
+    public static String encodeUrl(String urlString) {
+
+        try {
+
+            URL url = new URL(urlString);
+            URI uri = new URI(url.getProtocol(),
+                              url.getUserInfo(),
+                              url.getHost(),
+                              url.getPort(),
+                              url.getPath(),
+                              url.getQuery(),
+                              url.getRef());
+
+            return uri.toASCIIString();
+
+        } catch (MalformedURLException e) {
+            return null;
+        } catch (URISyntaxException e) {
+            return null;
+        }
+
+    }
 }

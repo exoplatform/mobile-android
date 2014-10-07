@@ -30,92 +30,93 @@ import android.os.Parcelable;
  */
 public class DocumentHelper implements Parcelable {
 
-  private static DocumentHelper documentHelper = new DocumentHelper();
+    private static DocumentHelper documentHelper = new DocumentHelper();
 
-  private String                _urlrepositoryHome;
+    private String                _urlrepositoryHome;
 
-  public ExoFile                _fileCopied    = new ExoFile();                    ;
+    public ExoFile                _fileCopied    = new ExoFile();        ;
 
-  public ExoFile                _fileMoved     = new ExoFile();
+    public ExoFile                _fileMoved     = new ExoFile();
 
-  public String                 repository     = null;
+    public String                 repository     = null;
 
-  /*
-   * The dictionary for mapping between parent folder and its child files
-   */
-  public Bundle                 childFilesMap;
+    /*
+     * The dictionary for mapping between parent folder and its child files
+     */
+    public Bundle                 childFilesMap;
 
-  /*
-   * The dictionary for mapping between the current selected file and its parent
-   */
+    /*
+     * The dictionary for mapping between the current selected file and its
+     * parent
+     */
 
-  public Bundle                 currentFileMap;
+    public Bundle                 currentFileMap;
 
-  private DocumentHelper() {
+    private DocumentHelper() {
 
-  }
+    }
 
-  public static DocumentHelper getInstance() {
-    return documentHelper;
-  }
+    public static DocumentHelper getInstance() {
+        return documentHelper;
+    }
 
-  public void setInstance(DocumentHelper helper) {
-    documentHelper = helper;
-  }
+    public void setInstance(DocumentHelper helper) {
+        documentHelper = helper;
+    }
 
-  public void setRepositoryHomeUrl(String url) {
-    _urlrepositoryHome = url;
-  }
+    public void setRepositoryHomeUrl(String url) {
+        _urlrepositoryHome = url;
+    }
 
-  public String getRepositoryHomeUrl() {
-    return _urlrepositoryHome;
-  }
+    public String getRepositoryHomeUrl() {
+        return _urlrepositoryHome;
+    }
 
-  private DocumentHelper(Parcel in) {
-    readFromParcel(in);
-  }
+    private DocumentHelper(Parcel in) {
+        readFromParcel(in);
+    }
 
-  public static final Parcelable.Creator<DocumentHelper> CREATOR = new Parcelable.Creator<DocumentHelper>() {
-                                                                   public DocumentHelper createFromParcel(Parcel in) {
-                                                                     return new DocumentHelper(in);
-                                                                   }
+    public static final Parcelable.Creator<DocumentHelper> CREATOR = new Parcelable.Creator<DocumentHelper>() {
+                                                                       public DocumentHelper createFromParcel(Parcel in) {
+                                                                           return new DocumentHelper(in);
+                                                                       }
 
-                                                                   public DocumentHelper[] newArray(int size) {
-                                                                     return new DocumentHelper[size];
-                                                                   }
-                                                                 };
+                                                                       public DocumentHelper[] newArray(int size) {
+                                                                           return new DocumentHelper[size];
+                                                                       }
+                                                                   };
 
-  private void readFromParcel(Parcel in) {
-    _urlrepositoryHome = in.readString();
-    _fileCopied = in.readParcelable(_fileCopied.getClass().getClassLoader());
-    _fileMoved = in.readParcelable(_fileMoved.getClass().getClassLoader());
-    repository = in.readString();
-    currentFileMap = in.readBundle();
-    childFilesMap = in.readBundle();
-  }
+    private void readFromParcel(Parcel in) {
+        _urlrepositoryHome = in.readString();
+        _fileCopied = in.readParcelable(_fileCopied.getClass().getClassLoader());
+        _fileMoved = in.readParcelable(_fileMoved.getClass().getClassLoader());
+        repository = in.readString();
+        currentFileMap = in.readBundle();
+        childFilesMap = in.readBundle();
+    }
 
-  /*
-   * (non-Javadoc)
-   * @see android.os.Parcelable#describeContents()
-   */
-  @Override
-  public int describeContents() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
+    /*
+     * (non-Javadoc)
+     * @see android.os.Parcelable#describeContents()
+     */
+    @Override
+    public int describeContents() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-  /*
-   * (non-Javadoc)
-   * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
-   */
-  @Override
-  public void writeToParcel(Parcel dest, int flags) {
-    dest.writeString(_urlrepositoryHome);
-    dest.writeParcelable(_fileCopied, flags);
-    dest.writeParcelable(_fileMoved, flags);
-    dest.writeString(repository);
-    dest.writeBundle(currentFileMap);
-    dest.writeBundle(childFilesMap);
-  }
+    /*
+     * (non-Javadoc)
+     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(_urlrepositoryHome);
+        dest.writeParcelable(_fileCopied, flags);
+        dest.writeParcelable(_fileMoved, flags);
+        dest.writeString(repository);
+        dest.writeBundle(currentFileMap);
+        dest.writeBundle(childFilesMap);
+    }
 
 }

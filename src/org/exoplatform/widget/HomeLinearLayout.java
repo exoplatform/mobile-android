@@ -30,53 +30,51 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 /**
- * Custom layout for home screen
- * drawing a gradient bitmap at the center of the background
- *
- * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com May
- * 23, 2012
+ * Custom layout for home screen drawing a gradient bitmap at the center of the
+ * background Created by The eXo Platform SAS Author : eXoPlatform
+ * exo@exoplatform.com May 23, 2012
  */
 public class HomeLinearLayout extends LinearLayout {
-  private Paint paint = new Paint();
+    private Paint paint = new Paint();
 
-  public HomeLinearLayout(Context context) {
-    super(context, null);
-  }
+    public HomeLinearLayout(Context context) {
+        super(context, null);
+    }
 
-  public HomeLinearLayout(Context context, AttributeSet attrs) {
-    super(context, attrs);
-  }
+    public HomeLinearLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-  @Override
-  protected void onDraw(Canvas canvas) {
-    super.onDraw(canvas);
-    int scaledWidth = getMeasuredWidth();
-    int scaledHeight = getMeasuredHeight();
-    paint.setStyle(Style.STROKE);
-    /*
-     * Make radius gradient bitmap with height
-     */
-    Bitmap bm = PhotoUtils.makeRadGrad(getWidth(), getHeight());
-    /*
-     * Draw the gradient bitmap
-     */
-    canvas.drawBitmap(bm, 0, 0, paint);
-    paint.setDither(true);
-    paint.setAntiAlias(true);
-    /*
-     * Draw the horizontal line separator
-     */
-    paint.setColor(Color.BLACK);
-    canvas.drawLine(scaledWidth / 2, 0, scaledWidth / 2, scaledHeight, paint);
-    paint.setColor(Color.rgb(60, 60, 60));
-    canvas.drawLine(scaledWidth / 2 + 1, 0, scaledWidth / 2 + 1, scaledHeight, paint);
-    /*
-     * Draw the vertical line separator
-     */
-    paint.setColor(Color.BLACK);
-    canvas.drawLine(0, scaledHeight / 2, scaledWidth, scaledHeight / 2, paint);
-    paint.setColor(Color.rgb(51, 51, 51));
-    canvas.drawLine(0, scaledHeight / 2 + 1, scaledWidth, scaledHeight / 2 + 1, paint);
-  }
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        int scaledWidth = getMeasuredWidth();
+        int scaledHeight = getMeasuredHeight();
+        paint.setStyle(Style.STROKE);
+        /*
+         * Make radius gradient bitmap with height
+         */
+        Bitmap bm = PhotoUtils.makeRadGrad(getWidth(), getHeight());
+        /*
+         * Draw the gradient bitmap
+         */
+        canvas.drawBitmap(bm, 0, 0, paint);
+        paint.setDither(true);
+        paint.setAntiAlias(true);
+        /*
+         * Draw the horizontal line separator
+         */
+        paint.setColor(Color.BLACK);
+        canvas.drawLine(scaledWidth / 2, 0, scaledWidth / 2, scaledHeight, paint);
+        paint.setColor(Color.rgb(60, 60, 60));
+        canvas.drawLine(scaledWidth / 2 + 1, 0, scaledWidth / 2 + 1, scaledHeight, paint);
+        /*
+         * Draw the vertical line separator
+         */
+        paint.setColor(Color.BLACK);
+        canvas.drawLine(0, scaledHeight / 2, scaledWidth, scaledHeight / 2, paint);
+        paint.setColor(Color.rgb(51, 51, 51));
+        canvas.drawLine(0, scaledHeight / 2 + 1, scaledWidth, scaledHeight / 2 + 1, paint);
+    }
 
 }

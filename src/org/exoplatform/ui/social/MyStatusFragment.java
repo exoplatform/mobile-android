@@ -31,6 +31,7 @@ import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -41,85 +42,84 @@ import android.view.View;
  */
 public class MyStatusFragment extends ActivityStreamFragment {
 
-  public static MyStatusFragment instance;
-  
-  @Override
-	public int getThisTabId() {
-		return SocialTabsActivity.MY_STATUS;
-	}
+    public static MyStatusFragment instance;
 
-  public static MyStatusFragment getInstance() {
-    MyStatusFragment fragment = new MyStatusFragment();
-    return fragment;
-  }
+    @Override
+    public int getThisTabId() {
+        return SocialTabsActivity.MY_STATUS;
+    }
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    instance = this;
-    fragment_layout = R.layout.social_my_status_layout;
-    fragment_list_view_id = R.id.my_status_listview;
-    fragment_empty_view_id = R.id.social_my_status_empty_stub;
-    super.onCreate(savedInstanceState);
-  }
-
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-    setListAdapter();
-  }
-
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    instance = null;
-  }
-  public boolean isEmpty() {
-	  return (SocialServiceHelper.getInstance().myStatusList == null
-	        || SocialServiceHelper.getInstance().myStatusList.size() == 0);
-  }
-  
-  @Override
-  public SocialLoadTask getThisLoadTask() {
-  	return new MyStatusLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
-  }
-
-  public void setListAdapter() {
-	  super.setListAdapter(SocialServiceHelper.getInstance().myStatusList);
-  }
-  
-  @Override
-	public void setActivityList(ArrayList<SocialActivityInfo> list) {
-		if (!isLoadingMoreActivities)
-			SocialServiceHelper.getInstance().myStatusList = list;
-		else
-			SocialServiceHelper.getInstance().myStatusList.addAll(list);
-	}
-
-  public class MyStatusLoadTask extends SocialLoadTask {
-
-    public MyStatusLoadTask(Context context, LoaderActionBarItem loader) {
-      super(context, loader);
+    public static MyStatusFragment getInstance() {
+        MyStatusFragment fragment = new MyStatusFragment();
+        return fragment;
     }
 
     @Override
-    public void setResult(ArrayList<SocialActivityInfo> result) {
-    	setActivityList(result);
-    	setListAdapter();
-    	listview.getAutoLoadProgressBar().setVisibility(View.GONE);
-    	super.setResult(result);
+    public void onCreate(Bundle savedInstanceState) {
+        instance = this;
+        fragment_layout = R.layout.social_my_status_layout;
+        fragment_list_view_id = R.id.my_status_listview;
+        fragment_empty_view_id = R.id.social_my_status_empty_stub;
+        super.onCreate(savedInstanceState);
     }
 
-	@Override
-	protected RealtimeListAccess<RestActivity> getRestActivityList(
-			RestIdentity identity, QueryParams params)
-			throws SocialClientLibException {
-		return activityService.getActivityStream(identity, params);
-	}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setListAdapter();
+    }
 
-	@Override
-	protected ArrayList<SocialActivityInfo> getSocialActivityList() {
-		return SocialServiceHelper.getInstance().myStatusList;
-	}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        instance = null;
+    }
 
-  }
+    public boolean isEmpty() {
+        return (SocialServiceHelper.getInstance().myStatusList == null || SocialServiceHelper.getInstance().myStatusList.size() == 0);
+    }
+
+    @Override
+    public SocialLoadTask getThisLoadTask() {
+        return new MyStatusLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+    }
+
+    public void setListAdapter() {
+        super.setListAdapter(SocialServiceHelper.getInstance().myStatusList);
+    }
+
+    @Override
+    public void setActivityList(ArrayList<SocialActivityInfo> list) {
+        if (!isLoadingMoreActivities)
+            SocialServiceHelper.getInstance().myStatusList = list;
+        else
+            SocialServiceHelper.getInstance().myStatusList.addAll(list);
+    }
+
+    public class MyStatusLoadTask extends SocialLoadTask {
+
+        public MyStatusLoadTask(Context context, LoaderActionBarItem loader) {
+            super(context, loader);
+        }
+
+        @Override
+        public void setResult(ArrayList<SocialActivityInfo> result) {
+            setActivityList(result);
+            setListAdapter();
+            listview.getAutoLoadProgressBar().setVisibility(View.GONE);
+            super.setResult(result);
+        }
+
+        @Override
+        protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity,
+                                                                       QueryParams params) throws SocialClientLibException {
+            return activityService.getActivityStream(identity, params);
+        }
+
+        @Override
+        protected ArrayList<SocialActivityInfo> getSocialActivityList() {
+            return SocialServiceHelper.getInstance().myStatusList;
+        }
+
+    }
 }

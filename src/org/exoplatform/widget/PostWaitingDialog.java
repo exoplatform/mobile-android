@@ -24,20 +24,20 @@ import android.content.Context;
 
 public class PostWaitingDialog extends WaitingDialog {
 
-  private ComposeMessageController messageController;
+    private ComposeMessageController messageController;
 
-  public PostWaitingDialog(Context context,
-                           ComposeMessageController controller,
-                           String titleString,
-                           String contentString) {
-    super(context, titleString, contentString);
-    messageController = controller;
-  }
+    public PostWaitingDialog(Context context,
+                             ComposeMessageController controller,
+                             String titleString,
+                             String contentString) {
+        super(context, titleString, contentString);
+        messageController = controller;
+    }
 
-  @Override
-  public void onBackPressed() {
-    super.onBackPressed();
-    messageController.onCancelPostTask();
-  }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        messageController.onCancelPostTask();
+    }
 
 }
