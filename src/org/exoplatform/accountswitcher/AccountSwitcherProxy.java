@@ -19,106 +19,104 @@
 package org.exoplatform.accountswitcher;
 
 import org.exoplatform.model.ExoAccount;
-import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.login.LoginProxy;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Philippe Aristote
- *          paristote@exoplatform.com
- * Sep 10, 2014  
+ * Created by The eXo Platform SAS Author : Philippe Aristote
+ * paristote@exoplatform.com Sep 10, 2014
  */
 public class AccountSwitcherProxy implements LoginProxy.ProxyListener {
 
-  private Context mContext;
-  
-  private AccountSwitcherListener mListener;
-  
-  private boolean mIgnoreRememberMe = false;
-  
-  public static final String TAG = "eXo____AccountSwitcherController____";
-  
-  public AccountSwitcherProxy(Context c, AccountSwitcherListener l, boolean ignore) {
-    mContext = c;
-    mListener = l;
-    mIgnoreRememberMe = ignore;
-  }
-  
-  /**
-   * Sign out the current account and sign in with the given account.<br/>
-   * If the password is unknown, a dialog will open to let the user type it.
-   * @param account the ExoAccount to switch to
-   * @return true if the procedure has started, false if password is missing
-   */
-  public void switchToAccount(ExoAccount account) {
-    if (account == null || account.serverUrl == null || account.serverUrl.isEmpty()) {
-        // Invalid account object
-        if (mListener != null) mListener.onAccountInvalid(account);
-    }
-    else if (account.username == null || account.username.isEmpty() ||
-             account.password == null || account.password.isEmpty() ||
-             (!mIgnoreRememberMe && !account.isRememberEnabled)) {
-        // Credentials are missing or remember me is off, we inform the fragment that is listening
-        if (mListener != null) mListener.onMissingPassword(account);
-    }
-    else {
-        Log.i(TAG, "Switching to account "+account.accountName);
-      
-        // We have all information to sign-in to the selected account
-        Bundle params = new Bundle();
-        params.putString(LoginProxy.USERNAME, account.username);
-        params.putString(LoginProxy.PASSWORD, account.password);
-        params.putString(LoginProxy.DOMAIN,   account.serverUrl);
-        params.putString(LoginProxy.ACCOUNT_NAME, account.accountName);
-        // Logout is done automatically in LoginTask.preExecute started by LoginProxy. Therefore we don't need to logout here.
-        LoginProxy login = new LoginProxy(mContext, LoginProxy.SWITCH_ACCOUNT, params);
-        login.setListener(this);
-        login.performLogin();
-      }
-  }
+    private Context                 mContext;
 
-  /**
-   * Feedback from the LoginProxy.<br/>
-   * If result is true, the login was successful, we can open the HomeActivity
-   */
-  @Override
-  public void onLoginFinished(boolean result) {
-    if (mListener != null) mListener.onSwitchAccountFinished(result);
-    if (result) {
-      // Login successful, redirect to Home screen
-      Intent home = new Intent(mContext, HomeActivity.class);
-      home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-      mContext.startActivity(home);
+    private AccountSwitcherListener mListener;
+
+    private boolean                 mIgnoreRememberMe = false;
+
+    public static final String      TAG               = "eXo____AccountSwitcherController____";
+
+    public AccountSwitcherProxy(Context c, AccountSwitcherListener l, boolean ignore) {
+        mContext = c;
+        mListener = l;
+        mIgnoreRememberMe = ignore;
     }
-  }
-  
-  /**
-   * An object that is listening to events sent by the Account Switcher Proxy.
-   * @author paristote
-   *
-   */
-  public interface AccountSwitcherListener {
+
     /**
-     * Called when the switch operation is finished, successful or not.
-     * @param result true if switching is successful, false otherwise
+     * Sign out the current account and sign in with the given account.<br/>
+     * If the password is unknown, a dialog will open to let the user type it.
+     * 
+     * @param account the ExoAccount to switch to
+     * @return true if the procedure has started, false if password is missing
      */
-    public void onSwitchAccountFinished(boolean result);
+    public void switchToAccount(ExoAccount account) {
+        if (account == null || account.serverUrl == null || account.serverUrl.isEmpty()) {
+            // Invalid account object
+            if (mListener != null)
+                mListener.onAccountInvalid(account);
+        } else if (account.username == null || account.username.isEmpty()
+                || account.password == null || account.password.isEmpty()
+                || (!mIgnoreRememberMe && !account.isRememberEnabled)) {
+            // Credentials are missing or remember me is off, we inform the
+            // fragment that is listening
+            if (mListener != null)
+                mListener.onMissingPassword(account);
+        } else {
+            Log.i(TAG, "Switching to account " + account.accountName);
+
+            // We have all information to sign-in to the selected account
+            Bundle params = new Bundle();
+            params.putString(LoginProxy.USERNAME, account.username);
+            params.putString(LoginProxy.PASSWORD, account.password);
+            params.putString(LoginProxy.DOMAIN, account.serverUrl);
+            params.putString(LoginProxy.ACCOUNT_NAME, account.accountName);
+            // Logout is done automatically in LoginTask.preExecute started by
+            // LoginProxy. Therefore we don't need to logout here.
+            LoginProxy login = new LoginProxy(mContext, LoginProxy.SWITCH_ACCOUNT, params);
+            login.setListener(this);
+            login.performLogin();
+        }
+    }
+
     /**
-     * Called when the switcher proxy detected that the password was missing for the account
-     * @param account the account whose password is missing
+     * @inheritDoc
      */
-    public void onMissingPassword(ExoAccount account);
+    @Override
+    public void onLoginFinished(boolean result) {
+        if (mListener != null)
+            mListener.onSwitchAccountFinished(result);
+    }
+
     /**
-     * Called when the account doesn't contain a URL.
-     * @param account the invalid ExoAccount
+     * An object that is listening to events sent by the Account Switcher Proxy.
+     * 
+     * @author paristote
      */
-    public void onAccountInvalid(ExoAccount account);
-  }
-  
-  
+    public interface AccountSwitcherListener {
+        /**
+         * Called when the switch operation is finished, successful or not.
+         * 
+         * @param result true if switching is successful, false otherwise
+         */
+        public void onSwitchAccountFinished(boolean result);
+
+        /**
+         * Called when the switcher proxy detected that the password was missing
+         * for the account
+         * 
+         * @param account the account whose password is missing
+         */
+        public void onMissingPassword(ExoAccount account);
+
+        /**
+         * Called when the account doesn't contain a URL.
+         * 
+         * @param account the invalid ExoAccount
+         */
+        public void onAccountInvalid(ExoAccount account);
+    }
+
 }
