@@ -258,4 +258,16 @@ public class ExoUtils {
         return finalName;
     }
 
+    /**
+     * Capitalizes the 1st character of the given string
+     * 
+     * @param str the String to capitalize
+     * @return the capitalized String
+     */
+    public static String capitalize(String str) {
+        if (str == null)
+            return null;
+        return Character.toUpperCase(str.charAt(0)) + str.substring(1);
+    }
+
 }

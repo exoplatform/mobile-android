@@ -406,7 +406,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener,
                 if (name == null)
                     name = ExoUtils.getAccountNameFromURL(mDomain,
                                                           mResource.getString(R.string.DefaultServer));
-                newAccountObj.accountName = name;
+                newAccountObj.accountName = ExoUtils.capitalize(name);
                 newAccountObj.serverUrl = mDomain;
                 newAccountObj.username = mNewUserName;
                 newAccountObj.password = mNewPassword;
