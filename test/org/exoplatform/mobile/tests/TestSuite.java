@@ -22,11 +22,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
- * @author Arnaud Héritier <aheritier@exoplatform.com>
+ * @author Arnaud Heritier <aheritier@exoplatform.com>
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({WelcomeActivityTest.class, LoginActivityTest.class, SignInOnPremiseActivityTest.class,
-                        LaunchActivityTest.class, ExoAccountInfoValidationTest.class, SettingsActivityTest.class,
-                        HomeActivityTest.class, ServerEditionActivityTest.class, AccountSwitcherTest.class})
+@Suite.SuiteClasses({ WelcomeActivityTest.class, LoginActivityTest.class,
+        SignInOnPremiseActivityTest.class, LaunchActivityTest.class,
+        ExoAccountInfoValidationTest.class, SettingsActivityTest.class, HomeActivityTest.class,
+        ServerEditionActivityTest.class, AccountSwitcherTest.class, ExoUtilsTest.class })
 public class TestSuite {
 }
