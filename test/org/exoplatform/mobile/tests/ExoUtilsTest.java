@@ -19,6 +19,8 @@
 package org.exoplatform.mobile.tests;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 import org.exoplatform.utils.ExoUtils;
 import org.junit.After;
@@ -40,12 +42,22 @@ public class ExoUtilsTest {
     }
 
     // @Test
-    public void testUrlValidation() {
+    public void testUrlValidationFailed() {
 
     }
 
     // @Test
-    public void testDocumentUrlValidation() {
+    public void testUrlValidationPassed() {
+
+    }
+
+    // @Test
+    public void testDocumentUrlValidationFailed() {
+
+    }
+
+    // @Test
+    public void testDocumentUrlValidationPassed() {
 
     }
 
@@ -60,17 +72,47 @@ public class ExoUtilsTest {
     }
 
     // @Test
-    public void testAccountNameValidation() {
+    public void testAccountNameValidationFailed() {
 
     }
 
     // @Test
-    public void testAccountUsernameValidation() {
+    public void testAccountNameValidationPassed() {
+
+    }
+
+    @Test
+    public void testAccountUsernameValidationFailed() {
+        // list all forbidden characters here, separated by a space
+        String incorrectChars = "~ ` ! @ # $ % ^ & * ( ) = { } [ ] | \\ : ; \" ' , < > ? /";
+        String[] chars = incorrectChars.split(" ");
+        for (String c : chars) {
+            String wrongUsername = "john" + c + "doe";
+            assertFalse("Username '" + wrongUsername + "' should not have been validated",
+                        ExoUtils.isUsernameValid(wrongUsername));
+        }
+        // test username that contains a space
+        assertFalse("Username 'john doe' should not have been validated",
+                    ExoUtils.isUsernameValid("john doe"));
+    }
+
+    @Test
+    public void testAccountUsernameValidationPassed() {
+        String[] testUsernames = { "johndoe", "john.doe", "john-doe", "john_doe", "john+doe",
+                "JohnDoe", "johndoe1234" };
+        for (String username : testUsernames) {
+            assertTrue("Username '" + username + "' should have been validated",
+                       ExoUtils.isUsernameValid(username));
+        }
+    }
+
+    // @Test
+    public void testEmailValidationFailed() {
 
     }
 
     // @Test
-    public void testEmailValidation() {
+    public void testEmailValidationPassed() {
 
     }
 
