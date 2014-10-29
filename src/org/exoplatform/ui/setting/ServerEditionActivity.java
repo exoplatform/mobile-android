@@ -25,6 +25,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.ServerConfigurationUtils;
@@ -69,6 +70,8 @@ public class ServerEditionActivity extends Activity {
     private ExoAccount          mAccountObj;
 
     private int                 mServerIdx;
+
+    private boolean             mIsEditDisabled;
 
     private Intent              mIntent;
 
@@ -128,6 +131,9 @@ public class ServerEditionActivity extends Activity {
             mServerIdx = ServerSettingHelper.getInstance()
                                             .getServerInfoList(this)
                                             .indexOf(mAccountObj);
+            // edit is disabled if the current account is the selected account,
+            // and we are logged-in
+            mIsEditDisabled = (Integer.valueOf(mSetting.getDomainIndex()) == mServerIdx && LoginProxy.userIsLoggedIn);
             initScreen();
         }
     }
@@ -209,6 +215,15 @@ public class ServerEditionActivity extends Activity {
         mServerUrlEditTxt.setText(mAccountObj.serverUrl);
         mUserEditTxt.setText(mAccountObj.username);
         mPassEditTxt.setText(mAccountObj.password);
+
+        // set text fields enabled/disabled
+        mServerUrlEditTxt.setEnabled(!mIsEditDisabled);
+        mUserEditTxt.setEnabled(!mIsEditDisabled);
+        mPassEditTxt.setEnabled(!mIsEditDisabled);
+        if (mIsEditDisabled) {
+            // remove the delete button if edit is disabled for this account
+            mDeleteBtn.setVisibility(View.GONE);
+        }
     }
 
     /**

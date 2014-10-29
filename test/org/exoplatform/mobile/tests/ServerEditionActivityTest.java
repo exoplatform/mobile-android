@@ -27,6 +27,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
+import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.ui.setting.ServerEditionActivity;
 import org.junit.After;
 import org.junit.Before;
@@ -65,6 +66,7 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
     public void teardown() {
         Context ctx = Robolectric.application.getApplicationContext();
         deleteAllAccounts(ctx);
+        LoginProxy.userIsLoggedIn = false;
         super.teardown();
     }
 
@@ -116,6 +118,36 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
         assertThat(mOkBtn).isVisible().isClickable().containsText(R.string.OK);
         assertThat(mDeleteBtn).isVisible().isClickable().containsText(R.string.Delete);
 
+    }
+
+    @Test
+    public void verifyDefaultLayoutWithLimitedEdit() {
+        LoginProxy.userIsLoggedIn = true; // simulate signed-in user
+        createWithDefaultServer();
+
+        // Server name is editable and contains the current account name
+        assertThat(mServerNameEditTxt).containsText(thisServer.accountName);
+        assertThat(mServerNameEditTxt).isEnabled();
+
+        // Server URL is *not* editable and contains the current server URL
+        assertThat(mServerUrlEditTxt).containsText(thisServer.serverUrl);
+        assertThat(mServerUrlEditTxt).isDisabled()
+                                     .overridingErrorMessage("Server URL field should be disabled");
+
+        // Account username is *not* editable and contains the current account
+        // username
+        assertThat(mUserEditTxt).containsText(thisServer.username);
+        assertThat(mUserEditTxt).isDisabled()
+                                .overridingErrorMessage("Username field should be disabled");
+
+        // Account password is *not* editable and contains the current account
+        // password
+        assertThat(mPassEditTxt).containsText(thisServer.password);
+        assertThat(mPassEditTxt).isDisabled()
+                                .overridingErrorMessage("Password field should be disabled");
+
+        // Delete button is not displayed
+        assertThat(mDeleteBtn).isGone().overridingErrorMessage("Delete button should be hidden");
     }
 
     @Test
@@ -262,7 +294,7 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
     }
 
     @Test
-    public void verifyAccountIsSelectedWhenOnlyOneExists() {
+    public void verifyAccountIsSelectedWhenOnlyOneRemainsAfterDelete() {
         Context ctx = Robolectric.application.getApplicationContext();
 
         // Create 2 accounts

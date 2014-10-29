@@ -88,7 +88,7 @@
         <EditText
                 android:id="@+id/server_setting_user_edit_txt"
                 style="@style/ServerSettingEditTextStyle"
-                android:hint="@string/RequiredHint"/>
+                android:hint="@string/OptionalHint"/>
 
     </TableRow>
 
