@@ -18,6 +18,7 @@ package org.exoplatform.mobile.tests;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.ProtocolVersion;
 import org.apache.http.entity.StringEntity;
@@ -246,6 +247,10 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
                 prefs.commit();
             }
         }
+    }
+
+    public List<ExoAccount> getAccounts(Context c) {
+        return ServerConfigurationUtils.getServerListFromFile(c, "ServerList.xml");
     }
 
     /**

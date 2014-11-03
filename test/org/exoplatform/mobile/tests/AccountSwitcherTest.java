@@ -21,6 +21,7 @@ package org.exoplatform.mobile.tests;
 import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -32,6 +33,7 @@ import org.exoplatform.R;
 import org.exoplatform.accountswitcher.AccountSwitcherActivity;
 import org.exoplatform.accountswitcher.AccountSwitcherFragment;
 import org.exoplatform.model.ExoAccount;
+import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.login.LoginActivity;
 import org.junit.Before;
@@ -192,6 +194,26 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
         assertEquals("Intent should have flags FLAG_ACTIVITY_CLEAR_TOP, FLAG_ACTIVITY_NEW_TASK and FLAG_ACTIVITY_CLEAR_TASK",
                      expectedFlags,
                      flags);
+    }
+
+    // @Test TODO
+    public void shouldDisabledAutoLoginOnLeftAccountWhenSwitching() {
+        create();
+        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
+                                        getResponseOKForRequest(REQ_PLATFORM_INFO));
+        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_JCR_USER_2),
+                                        getResponseOKForRequest(REQ_JCR_USER_2));
+        init();
+
+        // Current account is at position 0
+        ExoAccount acc = ServerSettingHelper.getInstance().getServerInfoList(activity).get(0);
+        assertTrue("AL should be enabled", acc.isAutoLoginEnabled);
+        // Simulate a click on the item at position 1
+        Robolectric.shadowOf(accountListView).performItemClick(1);
+
+        // Auto Login should be disabled
+        acc = ServerSettingHelper.getInstance().getServerInfoList(activity).get(0);
+        assertFalse("AL should be disabled", acc.isAutoLoginEnabled);
     }
 
 }
