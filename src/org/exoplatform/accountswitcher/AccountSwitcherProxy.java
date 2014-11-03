@@ -19,7 +19,9 @@
 package org.exoplatform.accountswitcher;
 
 import org.exoplatform.model.ExoAccount;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.login.LoginProxy;
+import org.exoplatform.utils.SettingUtils;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -74,7 +76,10 @@ public class AccountSwitcherProxy implements LoginProxy.ProxyListener {
             params.putString(LoginProxy.DOMAIN, account.serverUrl);
             params.putString(LoginProxy.ACCOUNT_NAME, account.accountName);
             // Logout is done automatically in LoginTask.preExecute started by
-            // LoginProxy. Therefore we don't need to logout here.
+            // LoginProxy. Therefore we don't need to logout here, but we must
+            // disable Auto Login.
+            AccountSetting.getInstance().getCurrentAccount().isAutoLoginEnabled = false;
+            SettingUtils.persistServerSetting(mContext);
             LoginProxy login = new LoginProxy(mContext, LoginProxy.SWITCH_ACCOUNT, params);
             login.setListener(this);
             login.performLogin();

@@ -18,11 +18,13 @@ package org.exoplatform.mobile.tests;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.ProtocolVersion;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHttpResponse;
 import org.exoplatform.model.ExoAccount;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.junit.After;
@@ -200,6 +202,12 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
         prefs.commit();
     }
 
+    public void selectAccountAtIndex(Context c, int idx) {
+        SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
+        prefs.putString("exo_prf_domain_index", String.valueOf(idx));
+        prefs.commit();
+    }
+
     /**
      * Deletes all accounts in the app's preferences
      * 
@@ -244,21 +252,54 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
                 SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
                 prefs.putString("exo_prf_domain_index", String.valueOf(posDefault));
                 prefs.commit();
+                Log.i(TAG_TEST, "Account selected: " + posDefault);
+                AccountSetting.getInstance().setDomainIndex(String.valueOf(posDefault));
             }
         }
     }
 
-    public ArrayList<ExoAccount> createXAccounts(int x) {
+    public List<ExoAccount> getAccounts(Context c) {
+        return ServerConfigurationUtils.getServerListFromFile(c, "ServerList.xml");
+    }
+
+    public ExoAccount getCurrentAccount(Context c) {
+        List<ExoAccount> list = getAccounts(c);
+        SharedPreferences pref = c.getSharedPreferences("exo_preference", 0);
+        int current = Integer.parseInt(pref.getString("exo_prf_domain_index", "-1"));
+        return list.get(current);
+    }
+
+    /**
+     * Creates x accounts and sets remember me and auto login options
+     * 
+     * @param x the number of accounts to create
+     * @param rm the Remember Me option
+     * @param al the Auto Login option
+     * @return a List of accounts
+     */
+    public ArrayList<ExoAccount> createXAccountsWithRMAndAL(int x, boolean rm, boolean al) {
         ArrayList<ExoAccount> accounts = new ArrayList<ExoAccount>(x);
 
         for (int i = 1; i <= x; i++) {
             ExoAccount acc = getServerWithDefaultValues();
             acc.accountName = TEST_SERVER_NAME + " " + i;
             acc.username = TEST_USER_NAME + "_" + i;
+            acc.isRememberEnabled = rm;
+            acc.isAutoLoginEnabled = al;
             accounts.add(acc);
         }
 
         return accounts;
+    }
+
+    /**
+     * Creates x accounts with remember me and auto login activated
+     * 
+     * @param x the number of accounts to create
+     * @return a List of accounts
+     */
+    public ArrayList<ExoAccount> createXAccounts(int x) {
+        return createXAccountsWithRMAndAL(x, true, true);
     }
 
     /**
