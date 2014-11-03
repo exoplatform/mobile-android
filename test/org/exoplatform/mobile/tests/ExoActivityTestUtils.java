@@ -248,17 +248,37 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
         }
     }
 
-    public ArrayList<ExoAccount> createXAccounts(int x) {
+    /**
+     * Creates x accounts and sets remember me and auto login options
+     * 
+     * @param x the number of accounts to create
+     * @param rm the Remember Me option
+     * @param al the Auto Login option
+     * @return a List of accounts
+     */
+    public ArrayList<ExoAccount> createXAccountsWithRMAndAL(int x, boolean rm, boolean al) {
         ArrayList<ExoAccount> accounts = new ArrayList<ExoAccount>(x);
 
         for (int i = 1; i <= x; i++) {
             ExoAccount acc = getServerWithDefaultValues();
             acc.accountName = TEST_SERVER_NAME + " " + i;
             acc.username = TEST_USER_NAME + "_" + i;
+            acc.isRememberEnabled = rm;
+            acc.isAutoLoginEnabled = al;
             accounts.add(acc);
         }
 
         return accounts;
+    }
+
+    /**
+     * Creates x accounts with remember me and auto login activated
+     * 
+     * @param x the number of accounts to create
+     * @return a List of accounts
+     */
+    public ArrayList<ExoAccount> createXAccounts(int x) {
+        return createXAccountsWithRMAndAL(x, true, true);
     }
 
     /**
