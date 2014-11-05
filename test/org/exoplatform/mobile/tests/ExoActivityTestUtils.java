@@ -24,6 +24,7 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHttpResponse;
 import org.exoplatform.model.ExoAccount;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.junit.After;
@@ -201,6 +202,12 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
         prefs.commit();
     }
 
+    public void selectAccountAtIndex(Context c, int idx) {
+        SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
+        prefs.putString("exo_prf_domain_index", String.valueOf(idx));
+        prefs.commit();
+    }
+
     /**
      * Deletes all accounts in the app's preferences
      * 
@@ -245,12 +252,21 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
                 SharedPreferences.Editor prefs = c.getSharedPreferences("exo_preference", 0).edit();
                 prefs.putString("exo_prf_domain_index", String.valueOf(posDefault));
                 prefs.commit();
+                Log.i(TAG_TEST, "Account selected: " + posDefault);
+                AccountSetting.getInstance().setDomainIndex(String.valueOf(posDefault));
             }
         }
     }
 
     public List<ExoAccount> getAccounts(Context c) {
         return ServerConfigurationUtils.getServerListFromFile(c, "ServerList.xml");
+    }
+
+    public ExoAccount getCurrentAccount(Context c) {
+        List<ExoAccount> list = getAccounts(c);
+        SharedPreferences pref = c.getSharedPreferences("exo_preference", 0);
+        int current = Integer.parseInt(pref.getString("exo_prf_domain_index", "-1"));
+        return list.get(current);
     }
 
     /**

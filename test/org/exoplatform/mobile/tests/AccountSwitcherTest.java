@@ -23,6 +23,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.robolectric.Robolectric.shadowOf;
@@ -36,6 +37,7 @@ import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.login.LoginActivity;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,6 +85,14 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
         super.create();
     }
 
+    @Override
+    @After
+    public void teardown() {
+        Context ctx = Robolectric.application.getApplicationContext();
+        deleteAllAccounts(ctx);
+        super.teardown();
+    }
+
     public void init() {
         accountSwitcherFragment = (AccountSwitcherFragment) activity.getSupportFragmentManager()
                                                                     .findFragmentByTag(FRAGMENT_TAG);
@@ -118,19 +128,37 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
         }
     }
 
-    // @Test TODO
+    @Test
     public void shouldDismissFragmentAndActivityWhenCurrentAccountIsSelected() {
+        Context ctx = Robolectric.application.getApplicationContext();
         create();
         init();
 
         // Current account is at position 0
+        ExoAccount oldA = getCurrentAccount(ctx);
+        assertThat("1st account should be selected", oldA.accountName, equalTo(TEST_SERVER_NAME
+                + " 1"));
+
         // Simulate a click on the item at position 0
         Robolectric.shadowOf(accountListView).performItemClick(0);
 
+        ShadowActivity shadowActivity = shadowOf(activity);
+        // Activity should be finishing
+        assertTrue("Account Switcher activity should be finishing", shadowActivity.isFinishing());
+
+        // There should be no intent (the screen is simply closed)
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertNull("No intent should have been fired", startedIntent);
+
+        // Same account is still selected
+        ExoAccount newA = getCurrentAccount(ctx);
+        assertThat("1st account should be selected", newA.accountName, equalTo(TEST_SERVER_NAME
+                + " 1"));
     }
 
     @Test
     public void shouldSignOutCurrentAccountAndSignInSelectedAccount() {
+        Context ctx = Robolectric.application.getApplicationContext();
         create();
         Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
                                         getResponseOKForRequest(REQ_PLATFORM_INFO));
@@ -139,14 +167,20 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
         init();
 
         // Current account is at position 0
+        ExoAccount oldA = getCurrentAccount(ctx);
+        assertThat("1st account should be selected", oldA.accountName, equalTo(TEST_SERVER_NAME
+                + " 1"));
+
         // Simulate a click on the item at position 1
         Robolectric.shadowOf(accountListView).performItemClick(1);
 
         ShadowActivity shadowActivity = shadowOf(activity);
+        // Activity should be finishing
+        assertTrue("Account Switcher activity should be finishing", shadowActivity.isFinishing());
+
         Intent startedIntent = shadowActivity.getNextStartedActivity();
         ShadowIntent shadowIntent = shadowOf(startedIntent);
-        // After successful login, the app should be redirected to the Home
-        // screen
+        // App should be redirected to the Home screen
         assertThat("Should be redirecting to Home screen after a successful login.",
                    shadowIntent.getComponent().getClassName(),
                    equalTo(HomeActivity.class.getName()));
@@ -156,10 +190,44 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
         assertEquals("Intent should have flags FLAG_ACTIVITY_CLEAR_TOP, FLAG_ACTIVITY_NEW_TASK and FLAG_ACTIVITY_CLEAR_TASK",
                      expectedFlags,
                      flags);
+
+        // Current account is at position 1
+        ExoAccount newA = getCurrentAccount(ctx);
+        assertThat("2nd account should be selected", newA.accountName, equalTo(TEST_SERVER_NAME
+                + " 2"));
     }
 
     // @Test TODO
-    public void shouldSignOutAndRedirectToLoginScreenWhenSwitchFails() {
+    public void shouldDisableAutoLoginWhenLeavingAccount() {
+        enableLog();
+        Context ctx = Robolectric.application.getApplicationContext();
+        create();
+        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
+                                        getResponseOKForRequest(REQ_PLATFORM_INFO));
+        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_JCR_USER_2),
+                                        getResponseOKForRequest(REQ_JCR_USER_2));
+        init();
+
+        // Current account is at position 0
+        ExoAccount acc = getCurrentAccount(ctx);
+        assertTrue("AL should be enabled", acc.isAutoLoginEnabled);
+        assertEquals("1st account should be selected", getAccounts(ctx).indexOf(acc), 0);
+
+        // Switch to account at position 1
+        Robolectric.shadowOf(accountListView).performItemClick(1);
+
+        ExoAccount newA = getCurrentAccount(ctx);
+        assertEquals("1st account should be selected", getAccounts(ctx).indexOf(newA), 1);
+
+        // Auto Login should be disabled on account 0
+        // acc = getAccounts(ctx).get(0);
+        acc = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
+        assertFalse("AL should be disabled", acc.isAutoLoginEnabled);
+        disableLog();
+    }
+
+    // @Test TODO
+    public void shouldSignOutAndRedirectToLoginScreenWhenSwitchingFails() {
         create();
         Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
                                         getResponseFailedWithStatus(404));
@@ -194,26 +262,6 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
         assertEquals("Intent should have flags FLAG_ACTIVITY_CLEAR_TOP, FLAG_ACTIVITY_NEW_TASK and FLAG_ACTIVITY_CLEAR_TASK",
                      expectedFlags,
                      flags);
-    }
-
-    // @Test TODO
-    public void shouldDisabledAutoLoginOnLeftAccountWhenSwitching() {
-        create();
-        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
-                                        getResponseOKForRequest(REQ_PLATFORM_INFO));
-        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_JCR_USER_2),
-                                        getResponseOKForRequest(REQ_JCR_USER_2));
-        init();
-
-        // Current account is at position 0
-        ExoAccount acc = ServerSettingHelper.getInstance().getServerInfoList(activity).get(0);
-        assertTrue("AL should be enabled", acc.isAutoLoginEnabled);
-        // Simulate a click on the item at position 1
-        Robolectric.shadowOf(accountListView).performItemClick(1);
-
-        // Auto Login should be disabled
-        acc = ServerSettingHelper.getInstance().getServerInfoList(activity).get(0);
-        assertFalse("AL should be disabled", acc.isAutoLoginEnabled);
     }
 
 }
