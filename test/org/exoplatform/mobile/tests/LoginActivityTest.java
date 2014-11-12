@@ -24,11 +24,13 @@ import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ExoAccount;
+import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.login.AccountPanel;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.login.ServerPanel;
 import org.exoplatform.utils.ExoConstants;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,6 +65,13 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
     @Before
     public void setup() {
         controller = Robolectric.buildActivity(LoginActivity.class);
+        deleteAllAccounts(Robolectric.getShadowApplication().getApplicationContext());
+    }
+
+    @After
+    public void teardown() {
+        deleteAllAccounts(Robolectric.getShadowApplication().getApplicationContext());
+        super.teardown();
     }
 
     @Override
@@ -115,6 +124,8 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
 
         assertNotNull(loginBtn); // login button should exist and be disabled
         assertThat(loginBtn).isDisabled();
+        assertThat(loginBtn).containsText("Connect"); // only Connect when no
+                                                      // account is selected
 
         assertNotNull(user); // username and password fields should exist
         assertNotNull(pass); // and should be empty
@@ -180,6 +191,22 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
     }
 
     @Test
+    public void shouldAppendAccountNameToLoginButtonLabel() {
+        Context ctx = Robolectric.getShadowApplication().getApplicationContext();
+        // create 1 account named testserver (TEST_SERVER_NAME)
+        ExoAccount account = getServerWithDefaultValues();
+        setDefaultServerInPreferences(ctx, account);
+        create();
+        AccountSetting.getInstance().setCurrentAccount(account);
+
+        // open the login panel to refresh the button label
+        Robolectric.clickOn(accountBtn);
+
+        // the label on the button should be "Connect to testserver"
+        assertThat(loginBtn).containsText("Connect to testserver");
+    }
+
+    @Test
     public void shouldPopulateServerAndUsernameWhenStartingFromUrl() {
 
         Context ctx = Robolectric.getShadowApplication().getApplicationContext();
@@ -206,37 +233,38 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
 
     }
 
-    // @Test TODO
+    @Test
     public void shouldSetUsernamePasswordInTextfieldsWhenRememberMeIsOn() {
-        // create 2 accounts with RM on
-        ServerSettingHelper.getInstance().setServerInfoList(createXAccounts(2));
+        Context ctx = Robolectric.getShadowApplication().getApplicationContext();
+        // create 1 account named testserver (TEST_SERVER_NAME)
+        ExoAccount account = getServerWithDefaultValues();
+        account.isRememberEnabled = true;
+        setDefaultServerInPreferences(ctx, account);
         create();
-        // open the accounts panel
-        Robolectric.clickOn(serverBtn);
-        // back to the login panel
+        AccountSetting.getInstance().setCurrentAccount(account);
+
+        // open the login panel to refresh the content
         Robolectric.clickOn(accountBtn);
 
-        assertThat(user).hasTextString(TEST_USER_NAME + "_1");
-        // assertThat(pass).hasTextString(TEST_USER_PWD);
+        assertThat(user).hasTextString(TEST_USER_NAME);
+        assertThat(pass).hasTextString(TEST_USER_PWD);
 
-        assertThat(user).containsText(TEST_USER_NAME);
-        // assertThat(pass).containsText(TEST_USER_PWD);
     }
 
-    // @Test TODO
+    @Test
     public void shouldSetNothingInTextfieldsWhenRememberMeIsOff() {
-        // create 2 accounts with RM off
-        ServerSettingHelper.getInstance().setServerInfoList(createXAccountsWithRMAndAL(2,
-                                                                                       false,
-                                                                                       false));
+        Context ctx = Robolectric.getShadowApplication().getApplicationContext();
+        // create 1 account named testserver (TEST_SERVER_NAME)
+        ExoAccount account = getServerWithDefaultValues();
+        setDefaultServerInPreferences(ctx, account);
         create();
-        // open the accounts panel
-        Robolectric.clickOn(serverBtn);
-        // back to the login panel
+        AccountSetting.getInstance().setCurrentAccount(account);
+
+        // open the login panel to refresh the content
         Robolectric.clickOn(accountBtn);
 
-        assertThat(user).containsText("");
-        assertThat(pass).containsText("");
+        assertThat(user).hasTextString("");
+        assertThat(pass).hasTextString("");
     }
 
 }

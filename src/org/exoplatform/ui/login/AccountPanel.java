@@ -103,9 +103,9 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
             mPassEditTxt.setText(mSetting.isRememberMeEnabled()
                     && !mSetting.getPassword().isEmpty() ? mSetting.getPassword() : "");
             // 3) append the server name to the login button label
-            String in = mContext.getResources().getString(R.string.SignInButton_In);
-            String loginButtonLabel = mContext.getResources().getString(R.string.SignInButton)
-                    + " " + in + " " + mSetting.getServerName();
+            String to = mContext.getResources().getString(R.string.SignInButton_In);
+            String connect = mContext.getResources().getString(R.string.SignInButton);
+            String loginButtonLabel = connect + " " + to + " " + mSetting.getServerName();
             mLoginBtn.setText(loginButtonLabel);
         }
 
