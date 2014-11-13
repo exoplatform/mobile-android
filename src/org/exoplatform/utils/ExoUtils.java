@@ -237,25 +237,59 @@ public class ExoUtils {
                             );
     }
 
+    /**
+     * Extract a name from a Server URL by keeping the 1st part of the FQDN,
+     * between the protocol and the first dot or the end of the URL. It is then
+     * capitalized. If an IP address is given instead, it is used as-is.
+     * Examples:
+     * <ul>
+     * <li>http://int.exoplatform.com => Int</li>
+     * <li>http://community.exoplatform.com => Community</li>
+     * <li>https://mycompany.com => Mycompany</li>
+     * <li>https://intranet.secure.mycompany.co.uk => Intranet</li>
+     * <li>http://localhost => Localhost</li>
+     * <li>http://192.168.1.15 => 192.168.1.15</li>
+     * </ul>
+     * 
+     * @param url the Server URL
+     * @param defaultName a default name in case it is impossible to extract
+     * @return a name
+     */
     public static String getAccountNameFromURL(String url, String defaultName) {
-        String finalName;
-        if (url == null || url.isEmpty())
-            finalName = defaultName;
-        else {
+        String finalName = defaultName;
+        if (url != null && !url.isEmpty()) {
+            if (!url.startsWith("http"))
+                url = ExoConnectionUtils.HTTP + url;
             try {
                 URI theURL = new URI(url);
                 finalName = theURL.getHost();
-                int lastDot = finalName.lastIndexOf('.');
-                finalName = finalName.substring(0, lastDot);
-                int domainDot = finalName.lastIndexOf('.');
-                finalName = finalName.substring(domainDot + 1);
+                if (!isCorrectIPAddress(finalName)) {
+                    int firstDot = finalName.indexOf('.');
+                    if (firstDot > 0) {
+                        finalName = finalName.substring(0, firstDot);
+                    }
+                    // else, no dot was found in the host,
+                    // return the hostname as is, e.g. localhost
+                }
+                // else, URL is an IP address, return it as is
             } catch (URISyntaxException e) {
                 finalName = defaultName;
             } catch (IndexOutOfBoundsException e) {
                 finalName = defaultName;
             }
         }
-        return finalName;
+        return capitalize(finalName);
+    }
+
+    /**
+     * Check whether an IP address is correct using Patterns.IP_ADDRESS. Does
+     * *not* accept port numbers.
+     * 
+     * @param ip to check
+     * @return true if the given IP is correct
+     */
+    public static boolean isCorrectIPAddress(String ip) {
+        return Patterns.IP_ADDRESS.matcher(ip).matches();
     }
 
     /**
@@ -265,7 +299,7 @@ public class ExoUtils {
      * @return the capitalized String
      */
     public static String capitalize(String str) {
-        if (str == null)
+        if (str == null || str.isEmpty())
             return null;
         return Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }
