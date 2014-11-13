@@ -26,11 +26,13 @@ import org.exoplatform.utils.ExoUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * Created by The eXo Platform SAS Author : Philippe Aristote
  * paristote@exoplatform.com Oct 28, 2014
  */
+@RunWith(ExoRobolectricTestRunner.class)
 public class ExoUtilsTest {
 
     @Before
@@ -121,9 +123,40 @@ public class ExoUtilsTest {
 
     }
 
-    // @Test
+    @Test
     public void testAccountNameFromUrlExtraction() {
+        String url1 = "http://mycompany.com";
+        assertEquals("Mycompany", ExoUtils.getAccountNameFromURL(url1, ""));
 
+        String url2 = "http://int.mycompany.com";
+        assertEquals("Int", ExoUtils.getAccountNameFromURL(url2, ""));
+
+        String url3 = "http://intranet.secure.mycompany.com.vn";
+        assertEquals("Intranet", ExoUtils.getAccountNameFromURL(url3, ""));
+
+        String url4 = "https://mycompany.com"; // HTTPS
+        assertEquals("Mycompany", ExoUtils.getAccountNameFromURL(url4, ""));
+
+        String url5 = "http://mycompany.com:8080"; // Port 8080
+        assertEquals("Mycompany", ExoUtils.getAccountNameFromURL(url5, ""));
+
+        String url6 = "http://localhost";
+        assertEquals("Localhost", ExoUtils.getAccountNameFromURL(url6, ""));
+
+        String url7 = "http://192.168.4.42";
+        assertEquals("192.168.4.42", ExoUtils.getAccountNameFromURL(url7, ""));
+    }
+
+    @Test
+    public void testIpAddressCheck() {
+        String[] correctIPs = { "192.168.4.42", "1.1.1.1", "255.255.255.255" };
+        String[] incorrectIPs = { "z.a.b.c", "0123.45.67.89", "192.168.4.42:8080" };
+        for (String ip : correctIPs) {
+            assertTrue("IP " + ip + " should be correct", ExoUtils.isCorrectIPAddress(ip));
+        }
+        for (String ip : incorrectIPs) {
+            assertFalse("IP " + ip + " should be incorrect", ExoUtils.isCorrectIPAddress(ip));
+        }
     }
 
     @Test
