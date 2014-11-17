@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mobile.tests;
 
+import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -30,6 +31,7 @@ import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.WelcomeActivity;
 import org.exoplatform.ui.setting.CheckBox;
 import org.exoplatform.ui.setting.CheckBoxWithImage;
+import org.exoplatform.ui.setting.ServerEditionActivity;
 import org.exoplatform.ui.setting.ServerList;
 import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.utils.ExoConstants;
@@ -82,15 +84,17 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     ServerSettingHelper srvSettings;
 
     /**
-     * Create the activity with default parameters: - simulate a signed-in user
+     * Create the activity with default parameters.
+     * 
+     * @param online whether we start the activity as an online user or not
      */
-    public void createWithDefaultIntent() {
+    public void createWithDefaultIntent(boolean online) {
         initSettings();
         Intent i = new Intent(Robolectric.getShadowApplication().getApplicationContext(),
                               SettingActivity.class);
-        i.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.PERSONAL_TYPE); // simulate
-                                                                              // signed-in
-                                                                              // user
+        int settingType = online ? SettingActivity.PERSONAL_TYPE : SettingActivity.GLOBAL_TYPE;
+        i.putExtra(ExoConstants.SETTING_TYPE, settingType);
+
         createWithIntent(i);
         init();
     }
@@ -141,8 +145,8 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     }
 
     @Test
-    public void verifyDefaultLayout() {
-        createWithDefaultIntent();
+    public void verifyDefaultLayout_Online() {
+        createWithDefaultIntent(true); // online
 
         // Login
         assertNotNull(mRememberMeCbx);
@@ -167,17 +171,12 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
         // Social
         assertNotNull(mRememberFilterCbx);
 
-        // Server List
-        assertThat(srvSettings.getServerInfoList(activity).isEmpty(), equalTo(false)); // should
-                                                                                       // have
-                                                                                       // 1
-                                                                                       // server
-        org.fest.assertions.api.ANDROID.assertThat(serverList).hasChildCount(1);
+        // Server List : should have 1 server
+        assertThat(srvSettings.getServerInfoList(activity).size(), equalTo(1));
+        assertThat(serverList).hasChildCount(1);
         ServerItemLayout serverItem = (ServerItemLayout) serverList.getChildAt(0);
-        org.fest.assertions.api.ANDROID.assertThat(serverItem.serverName)
-                                       .containsText(TEST_SERVER_NAME);
-        org.fest.assertions.api.ANDROID.assertThat(serverItem.serverUrl)
-                                       .containsText(TEST_SERVER_URL);
+        assertThat(serverItem.serverName).containsText(TEST_SERVER_NAME);
+        assertThat(serverItem.serverUrl).containsText(TEST_SERVER_URL);
 
         // Assistant
         assertNotNull(mStartCloudSignUpBtn);
@@ -187,16 +186,59 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
         TextView srvVersion = (TextView) activity.findViewById(R.id.setting_server_version_value_txt);
         TextView srvEdition = (TextView) activity.findViewById(R.id.setting_server_edition_value_txt);
         TextView appVersion = (TextView) activity.findViewById(R.id.setting_app_version_value_txt);
-        org.fest.assertions.api.ANDROID.assertThat(appVersion).containsText(APP_VERSION);
-        org.fest.assertions.api.ANDROID.assertThat(srvVersion).containsText(SRV_VERSION);
-        org.fest.assertions.api.ANDROID.assertThat(srvEdition).containsText(SRV_EDITION);
+        assertThat(appVersion).containsText(APP_VERSION);
+        assertThat(srvVersion).containsText(SRV_VERSION);
+        assertThat(srvEdition).containsText(SRV_EDITION);
+
+    }
+
+    @Test
+    public void verifyDefaultLayout_Offline() {
+        createWithDefaultIntent(false); // offline
+
+        // Login section is disabled when user is offline
+        assertThat(mRememberMeCbx).isDisabled();
+        assertThat(mAutoLoginCbx).isDisabled();
+
+        // Languages
+        assertNotNull(mEnCbx); // checkboxes for EN, FR, DE, ES should exist
+        assertThat(mEnCbx.isChecked(), equalTo(true)); // EN is selected by
+                                                       // default
+        assertNotNull(mFrCbx);
+        assertThat(mFrCbx.isChecked(), equalTo(false));
+        assertNotNull(mDeCbx);
+        assertThat(mDeCbx.isChecked(), equalTo(false));
+        assertNotNull(mEsCbx);
+        assertThat(mEsCbx.isChecked(), equalTo(false));
+
+        // Social section is disabled when user is offline
+        assertThat(mRememberFilterCbx).isDisabled();
+
+        // Server List : should have 1 server
+        assertThat(srvSettings.getServerInfoList(activity).size(), equalTo(1));
+        assertThat(serverList).hasChildCount(1);
+        ServerItemLayout serverItem = (ServerItemLayout) serverList.getChildAt(0);
+        assertThat(serverItem.serverName).containsText(TEST_SERVER_NAME);
+        assertThat(serverItem.serverUrl).containsText(TEST_SERVER_URL);
+
+        // Assistant
+        assertNotNull(mStartCloudSignUpBtn);
+
+        // App Info ** 3 cells should exist and contain default values set in
+        // initSettings()
+        TextView srvVersion = (TextView) activity.findViewById(R.id.setting_server_version_value_txt);
+        TextView srvEdition = (TextView) activity.findViewById(R.id.setting_server_edition_value_txt);
+        TextView appVersion = (TextView) activity.findViewById(R.id.setting_app_version_value_txt);
+        assertThat(appVersion).containsText(APP_VERSION);
+        assertThat(srvVersion).containsText(SRV_VERSION);
+        assertThat(srvEdition).containsText(SRV_EDITION);
 
     }
 
     @Test
     public void shouldTurnOnRememberMe() {
 
-        createWithDefaultIntent();
+        createWithDefaultIntent(true);
 
         Robolectric.clickOn(mRememberMeCbx); // turning on remember me
 
@@ -206,7 +248,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     @Test
     public void shouldEnableAutoLoginWhenTurningOnRememberMe() {
 
-        createWithDefaultIntent();
+        createWithDefaultIntent(true);
 
         Robolectric.clickOn(mRememberMeCbx); // turning on remember me
 
@@ -218,7 +260,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     @Test
     public void shouldTurnOnAutoLogin() {
 
-        createWithDefaultIntent();
+        createWithDefaultIntent(true);
 
         Robolectric.clickOn(mRememberMeCbx); // turning on remember me
         Robolectric.clickOn(mAutoLoginCbx); // turning on auto login
@@ -229,7 +271,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     @Test
     public void shouldTurnOffAndDisableAutoLoginWhenTurningOffRememberMe() {
 
-        createWithDefaultIntent();
+        createWithDefaultIntent(true);
 
         Robolectric.clickOn(mRememberMeCbx); // turning on remember me
         Robolectric.clickOn(mAutoLoginCbx); // turning on auto login
@@ -248,7 +290,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     @Test
     public void shouldStartExoCloudSignupAssistant() {
 
-        createWithDefaultIntent();
+        createWithDefaultIntent(true);
 
         Robolectric.clickOn(mStartCloudSignUpBtn);
 
@@ -263,7 +305,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     @Test
     public void shouldChangeLanguage() {
 
-        createWithDefaultIntent();
+        createWithDefaultIntent(true);
 
         SharedPreferences prefs = activity.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
 
@@ -290,6 +332,27 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
         assertThat(mEnCbx.isChecked(), equalTo(true));
         assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""),
                    equalTo(ExoConstants.ENGLISH_LOCALIZATION));
+    }
+
+    @Test
+    public void shouldEnableAccountInServerList() {
+        createWithDefaultIntent(true);
+
+        assertThat(serverList).hasChildCount(1);
+
+        // Simulate tap on the account item
+        ServerItemLayout item = (ServerItemLayout) serverList.getChildAt(0);
+        // Click on item.layout because the OnClickListener is set on the layout
+        Robolectric.clickOn(item.layout);
+
+        ShadowActivity sActivity = shadowOf(activity);
+        Intent editAccount = sActivity.getNextStartedActivity();
+        ShadowIntent sIntent = shadowOf(editAccount);
+
+        // Should start the Server Edition activity
+        assertThat("Should start the server edition activity",
+                   sIntent.getComponent().getClassName(),
+                   equalTo(ServerEditionActivity.class.getName()));
     }
 
 }
