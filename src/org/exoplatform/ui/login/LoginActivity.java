@@ -26,7 +26,9 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.setting.SettingActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.LaunchUtils;
 import org.exoplatform.utils.SettingUtils;
 
@@ -211,13 +213,16 @@ public class LoginActivity extends Activity implements AccountPanel.ViewListener
                 username = host.substring(equalIdx + 1, host.length());
         } else
             return;
-
+        // Add http protocol to server URL if it is missing
+        if (!serverUrl.startsWith("http"))
+            serverUrl = ExoConnectionUtils.HTTP + serverUrl;
         /* Add server to server list if server is new */
         ExoAccount serverObj = new ExoAccount();
-        serverObj.accountName = Uri.parse(serverUrl).getAuthority();
+        serverObj.accountName = ExoUtils.getAccountNameFromURL(serverUrl, "My Intranet");
         serverObj.serverUrl = serverUrl;
         serverObj.username = username;
-        serverObj.isRememberEnabled = ("".equals(username)) ? false : true; // activates remember me if a username is provided
+        // activates remember me if a username is provided
+        serverObj.isRememberEnabled = ("".equals(username)) ? false : true;
 
         ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance()
                                                               .getServerInfoList(this);

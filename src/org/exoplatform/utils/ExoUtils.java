@@ -258,6 +258,8 @@ public class ExoUtils {
     public static String getAccountNameFromURL(String url, String defaultName) {
         String finalName = defaultName;
         if (url != null && !url.isEmpty()) {
+            if (!url.startsWith("http"))
+                url = ExoConnectionUtils.HTTP + url;
             try {
                 URI theURL = new URI(url);
                 finalName = theURL.getHost();
@@ -280,8 +282,8 @@ public class ExoUtils {
     }
 
     /**
-     * Check whether an IP address is correct using Patterns.IP_ADDRESS.    
-     * Does *not* accept port numbers.
+     * Check whether an IP address is correct using Patterns.IP_ADDRESS. Does
+     * *not* accept port numbers.
      * 
      * @param ip to check
      * @return true if the given IP is correct
