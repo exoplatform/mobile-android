@@ -91,7 +91,7 @@ public class ExoUtils {
      * The returned URL has the format: http(s)://host(:port)
      * 
      * @param url The URL to reformat.
-     * @return The reformated URL.
+     * @return The reformatted URL.
      */
     public static String stripUrl(String url) {
         String sUrl;
@@ -219,21 +219,13 @@ public class ExoUtils {
      * @return true if the URL is forbidden, false otherwise
      */
     public static boolean isURLForbidden(String url) {
-        return (url == null) ? false : // false if url is null
-                            (Arrays.asList(WRONG_CLOUD_URLS).contains( // true
-                                                                       // if the
-                                                                       // given
-                                                                       // url is
-                                                                       // in the
-                                                                       // list
-                            !url.startsWith("http://") ? "http://" + url : url) // add
-                                                                                // http://
-                                                                                // to
-                                                                                // the
-                                                                                // url
-                                                                                // if
-                                                                                // it's
-                                                                                // missing
+        return (url == null) ? false // false if url is null
+                            :
+                            // true if the given url is in the list
+                            (Arrays.asList(WRONG_CLOUD_URLS).contains(!url.startsWith("http://") ? "http://"
+                                                                                                        + url
+                                                                                                : url)
+                            // add http:// to the url if it's missing
                             );
     }
 

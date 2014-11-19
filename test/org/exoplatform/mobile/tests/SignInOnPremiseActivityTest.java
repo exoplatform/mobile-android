@@ -189,10 +189,8 @@ public class SignInOnPremiseActivityTest extends ExoActivityTestUtils<SignInOnPr
     public void shouldAcceptURLWithNoProtocol() {
         createAndExpectHTTPRequests();
 
-        typeValues(TEST_USER_NAME, TEST_USER_PWD, TEST_SERVER_NAME + ".com"); // URL
-                                                                              // should
-                                                                              // be
-                                                                              // testserver.com
+        // URL should be testserver.com
+        typeValues(TEST_USER_NAME, TEST_USER_PWD, TEST_SERVER_NAME + ".com");
 
         Robolectric.clickOn(login);
 

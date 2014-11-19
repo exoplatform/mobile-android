@@ -124,7 +124,6 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
     public void verifyDefaultLayoutWithLimitedEdit() {
         LoginProxy.userIsLoggedIn = true; // simulate signed-in user
         createWithDefaultServer();
-
         // Server name is editable and contains the current account name
         assertThat(mServerNameEditTxt).containsText(thisServer.accountName);
         assertThat(mServerNameEditTxt).isEnabled();

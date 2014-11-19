@@ -556,9 +556,9 @@ public class ExoConnectionUtils {
             new LogoutTask(ExoConnectionUtils.httpClient).execute();
             ExoConnectionUtils.httpClient = null;
         }
-        AccountSetting.getInstance().cookiesList = null;
-
-        /** Clear all social service data */
+        // Clear all cached settings about the current account
+        AccountSetting.getInstance().clear();
+        // Clear all social service data
         SocialServiceHelper.getInstance().clearData();
     }
 

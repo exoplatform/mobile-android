@@ -152,6 +152,11 @@ public class ExoAccount implements Parcelable {
         b.append("* Name: ").append(accountName).append("\n");
         b.append("* URL: ").append(serverUrl).append("\n");
         b.append("* User: ").append(username).append("\n");
+        b.append("* RM: [")
+         .append(isRememberEnabled)
+         .append("] / AL: [")
+         .append(isAutoLoginEnabled)
+         .append("]\n");
         b.append("* Full name: ").append(userFullName).append("\n");
         b.append("* Last login: ").append(lastLoginDate).append("\n");
         b.append("* Avatar: ").append(avatarUrl).append("\n");

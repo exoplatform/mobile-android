@@ -43,14 +43,25 @@ public class ExoUtilsTest {
     public void tearDown() throws Exception {
     }
 
-    // @Test
+    @Test
     public void testUrlValidationFailed() {
+        String[] validUrls = { "http://www.mycompany.", "shttps://safe.company.com",
+                "www.mycompany.com!", "http://int.my.company_com.vn", "http://1192.168.4.42" };
 
+        for (String url : validUrls) {
+            assertFalse(url + " should NOT be valid.", ExoUtils.isUrlValid(url));
+        }
     }
 
-    // @Test
+    @Test
     public void testUrlValidationPassed() {
+        String[] validUrls = { "http://www.mycompany.com", "https://safe.company.com",
+                "www.mycompany.com", "http://int.my.company.com.vn", "http://192.168.4.42",
+                "http://192.168.4.42:8080", "http://my-company.com" };
 
+        for (String url : validUrls) {
+            assertTrue(url + " should be valid.", ExoUtils.isUrlValid(url));
+        }
     }
 
     // @Test
@@ -68,19 +79,41 @@ public class ExoUtilsTest {
 
     }
 
-    // @Test
+    @Test
     public void testStripUrl() {
+        String url1 = "http://www.mycompany.com";
+        String url2 = "https://www.mycompany.com";
+        String url3 = "http://www.mycompany.com:8080";
+        String url4 = "http://www.mycompany.com/some/path";
+        String url5 = "http://www.mycompany.com?foo=bar";
+        String url6 = "www.mycompany.com";
 
+        assertEquals("http://www.mycompany.com", ExoUtils.stripUrl(url1));
+        assertEquals("https://www.mycompany.com", ExoUtils.stripUrl(url2));
+        assertEquals("http://www.mycompany.com:8080", ExoUtils.stripUrl(url3));
+        assertEquals("http://www.mycompany.com", ExoUtils.stripUrl(url4));
+        assertEquals("http://www.mycompany.com", ExoUtils.stripUrl(url5));
+        assertEquals("http://www.mycompany.com", ExoUtils.stripUrl(url6));
     }
 
-    // @Test
+    @Test
     public void testAccountNameValidationFailed() {
-
+        String incorrectChars = "~ ` ! @ # $ % ^ & * ( ) = { } [ ] | \\ : ; \" ' , < > ? / - _ .";
+        String[] chars = incorrectChars.split(" ");
+        for (String c : chars) {
+            String incorrectName = "Account " + c;
+            assertFalse(incorrectName + " should be an invalid account name",
+                        ExoUtils.isServerNameValid(incorrectName));
+        }
+        assertFalse("null should be invalid", ExoUtils.isServerNameValid(null));
     }
 
-    // @Test
+    @Test
     public void testAccountNameValidationPassed() {
-
+        String[] correctNames = { "Account", "Account 123", "My Account", "my long account name" };
+        for (String name : correctNames) {
+            assertTrue(name + " should be a valid account name", ExoUtils.isServerNameValid(name));
+        }
     }
 
     @Test
@@ -108,19 +141,31 @@ public class ExoUtilsTest {
         }
     }
 
-    // @Test
+    @Test
     public void testEmailValidationFailed() {
+        String[] invalidEmails = { "test@@example.com", "test@example@example.com",
+                "test@example.", "test@example+com" };
 
+        for (String email : invalidEmails) {
+            assertFalse(email + " should be an invalid email address", ExoUtils.isEmailValid(email));
+        }
     }
 
-    // @Test
+    @Test
     public void testEmailValidationPassed() {
-
+        String[] validEmails = { "test@example.com", "test@example.com.vn", "test.foo@example.com" };
+        for (String email : validEmails) {
+            assertTrue(email + " should be a valid email address", ExoUtils.isEmailValid(email));
+        }
     }
 
-    // @Test
+    @Test
     public void testForbiddenUrls() {
-
+        String[] forbiddenUrls = { "http://exoplatform.net", "http://wks-acc.exoplatform.org",
+                "http://netstg.exoplatform.org" };
+        for (String url : forbiddenUrls) {
+            assertTrue(url + " should be forbidden", ExoUtils.isURLForbidden(url));
+        }
     }
 
     @Test

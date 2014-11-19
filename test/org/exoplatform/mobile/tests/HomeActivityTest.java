@@ -47,20 +47,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowConfiguration;
-import org.robolectric.shadows.ShadowDialog;
 import org.robolectric.shadows.ShadowIntent;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
-
-;
 
 /**
  * Created by The eXo Platform SAS Author : Philippe Aristote
@@ -135,29 +128,20 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
 
         final String nameAndAccount = TEST_USER_NAME + " (" + TEST_SERVER_NAME + ")";
 
-        // Ensures that the async tasks that load the social services (profile,
-        // activity stream) are executed
-        // Seems not needed anymore...
-        // Robolectric.runUiThreadTasksIncludingDelayedTasks();
+        // text field is filled by data returned in RESP_SOCIAL_IDENTITY
+        assertThat(userNameTV).containsText(nameAndAccount);
 
-        assertThat(userNameTV).containsText(nameAndAccount); // text field is
-                                                             // filled by data
-                                                             // returned in
-                                                             // RESP_SOCIAL_IDENTITY
-
-        assertThat(flipper).hasChildCount(1); // should have only 1 activity in
-                                              // the flipper since
-                                              // RESP_SOCIAL_NEWS contains just
-                                              // 1 activity
+        // should have only 1 activity in the flipper since RESP_SOCIAL_NEWS
+        // contains just 1 activity
+        assertThat(flipper).hasChildCount(1);
 
         assertThat(activitiesTV).containsText(R.string.ActivityStream);
         assertThat(documentsTV).containsText(R.string.Documents);
         assertThat(appsTV).containsText(R.string.Dashboard);
 
         // because it's a greendroid actionbar, the number of items is not
-        // exposed
-        // we use a trick to verify that only 2 items are present (without
-        // account switcher)
+        // exposed we use a trick to verify that only 2 items are present
+        // (without account switcher)
         assertNotNull(actionBar.getItem(0)); // refresh button, must not be null
         assertNotNull(actionBar.getItem(1)); // sign-out button, must not be
                                              // null
@@ -284,28 +268,8 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
 
     }
 
-    // @Test TODO
-    public void shouldWaitSocialServiceBeforeActivatingAccountSwitcherButton() {
-
-        Context ctx = Robolectric.application.getApplicationContext();
-        ArrayList<ExoAccount> accounts = createXAccounts(2);
-        addServersInPreferences(ctx, accounts);
-        create();
-        init();
-
-        View accSwitcherView = actionBar.getItem(1).getItemView();
-        assertThat(accSwitcherView).isDisabled();
-
-        // Ensures that the async tasks that load the social services are
-        // executed
-        // Robolectric.runUiThreadTasksIncludingDelayedTasks();
-        // Robolectric.runBackgroundTasks();
-
-        assertThat(accSwitcherView).isEnabled();
-    }
-
     @Test
-    public void shouldOpenAccountSwitcherInActivity() {
+    public void shouldOpenAccountSwitcherActivity() {
         Context ctx = Robolectric.application.getApplicationContext();
         ArrayList<ExoAccount> accounts = createXAccounts(2);
         addServersInPreferences(ctx, accounts);
@@ -325,45 +289,7 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
                    equalTo(AccountSwitcherActivity.class.getName()));
     }
 
-    // @Test TODO
-    // @Config(qualifiers="large")
-    public void shouldOpenAccountSwitcherInDialog() {
-
-        Context ctx = Robolectric.application.getApplicationContext();
-        ArrayList<ExoAccount> accounts = createXAccounts(2);
-        addServersInPreferences(ctx, accounts);
-        create();
-        init();
-
-        // simulate a tap on the account switcher button
-        Robolectric.clickOn(actionBar.getItem(1).getItemView());
-
-        // On large and larger screens, the account switcher is opened as a
-        // dialog
-        Dialog accountSwitcherDialog = ShadowDialog.getLatestDialog();
-        ShadowConfiguration config = shadowOf(ctx.getResources().getConfiguration());
-        int screenLayout = config.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
-
-        assertTrue("Screen layout should be LARGE in the app's configuration",
-                   screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE);
-        assertNotNull("Account Switcher Dialog should not be null", accountSwitcherDialog);
-
-    }
-
-    // @Test
-    public void shouldRefreshFlipper() {
-        /*
-         * FIXME current impl refresh activities in the activity stream
-         * (SocialTabsActivity) HomeActivity.onHandleActionBarItemCLick() {
-         * homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER,
-         * SocialTabsActivity.ALL_UPDATES); } TODO it should refresh in the
-         * flipper view instead HomeActivity.onHandleActionBarItemCLick() {
-         * homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER,
-         * HomeController.FLIPPER_VIEW); }
-         */
-    }
-
-    // @Test TODO
+    @Test
     public void shouldDisableAutoLoginOnAccountWhenSigningOut() {
         create();
         init();
@@ -371,14 +297,16 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
         acc.isRememberEnabled = true;
         acc.isAutoLoginEnabled = true;
         setDefaultServerInPreferences(activity, acc);
-
+        acc = null;
         acc = getAccounts(activity).get(0);
         assertTrue("AL should be enabled", acc.isAutoLoginEnabled);
 
         // simulate tap on the sign out button
         Robolectric.clickOn(actionBar.getItem(1).getItemView());
 
+        acc = null;
         acc = getAccounts(activity).get(0);
+
         assertFalse("AL should be disabled", acc.isAutoLoginEnabled);
     }
 

@@ -45,10 +45,12 @@ import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowDialog;
 import org.robolectric.shadows.ShadowIntent;
+import org.robolectric.shadows.ShadowResources.ShadowTheme;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v4.content.IntentCompat;
 import android.view.View;
 import android.widget.ListView;
@@ -129,6 +131,30 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
     }
 
     @Test
+    public void verifyDefaultLayout_Dialog() {
+        // Sets a large screen layout
+        // @Config(qualifiers="large") doesn't work
+        Robolectric.application.getResources().getConfiguration().screenLayout = Configuration.SCREENLAYOUT_SIZE_LARGE;
+
+        create();
+        init();
+
+        assertThat(accountSwitcherFragment).isAdded()
+                                           .isVisible()
+                                           .isNotDetached()
+                                           .hasTag(FRAGMENT_TAG);
+        enableLog();
+
+        ShadowTheme sTheme = shadowOf(activity.getTheme());
+        assertThat("Theme should be 'Theme_eXo_Dialog'",
+                   sTheme.getStyleResourceId(),
+                   equalTo(R.style.Theme_eXo_Dialog));
+
+        disableLog();
+
+    }
+
+    @Test
     public void shouldDismissFragmentAndActivityWhenCurrentAccountIsSelected() {
         Context ctx = Robolectric.application.getApplicationContext();
         create();
@@ -197,9 +223,8 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
                 + " 2"));
     }
 
-    // @Test TODO
+    @Test
     public void shouldDisableAutoLoginWhenLeavingAccount() {
-        enableLog();
         Context ctx = Robolectric.application.getApplicationContext();
         create();
         Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
@@ -216,17 +241,18 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
         // Switch to account at position 1
         Robolectric.shadowOf(accountListView).performItemClick(1);
 
+        // Current account is now at position 1
         ExoAccount newA = getCurrentAccount(ctx);
-        assertEquals("1st account should be selected", getAccounts(ctx).indexOf(newA), 1);
+        assertEquals("2nd account should be selected", getAccounts(ctx).indexOf(newA), 1);
 
         // Auto Login should be disabled on account 0
         // acc = getAccounts(ctx).get(0);
+        acc = null;
         acc = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
         assertFalse("AL should be disabled", acc.isAutoLoginEnabled);
-        disableLog();
     }
 
-    // @Test TODO
+    @Test
     public void shouldSignOutAndRedirectToLoginScreenWhenSwitchingFails() {
         create();
         Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
