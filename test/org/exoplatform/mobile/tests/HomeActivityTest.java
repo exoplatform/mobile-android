@@ -47,19 +47,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowConfiguration;
-import org.robolectric.shadows.ShadowDialog;
 import org.robolectric.shadows.ShadowIntent;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
-
-;
 
 /**
  * Created by The eXo Platform SAS Author : Philippe Aristote
@@ -277,7 +271,7 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
     }
 
     @Test
-    public void shouldOpenAccountSwitcherInActivity() {
+    public void shouldOpenAccountSwitcherActivity() {
         Context ctx = Robolectric.application.getApplicationContext();
         ArrayList<ExoAccount> accounts = createXAccounts(2);
         addServersInPreferences(ctx, accounts);
@@ -295,31 +289,6 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
         // activity (full screen)
         assertThat(sIntent.getComponent().getClassName(),
                    equalTo(AccountSwitcherActivity.class.getName()));
-    }
-
-    // @Test TODO
-    // @Config(qualifiers="large")
-    public void shouldOpenAccountSwitcherInDialog() {
-
-        Context ctx = Robolectric.application.getApplicationContext();
-        ArrayList<ExoAccount> accounts = createXAccounts(2);
-        addServersInPreferences(ctx, accounts);
-        create();
-        init();
-
-        // simulate a tap on the account switcher button
-        Robolectric.clickOn(actionBar.getItem(1).getItemView());
-
-        // On large and larger screens, the account switcher is opened as a
-        // dialog
-        Dialog accountSwitcherDialog = ShadowDialog.getLatestDialog();
-        ShadowConfiguration config = shadowOf(ctx.getResources().getConfiguration());
-        int screenLayout = config.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
-
-        assertTrue("Screen layout should be LARGE in the app's configuration",
-                   screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE);
-        assertNotNull("Account Switcher Dialog should not be null", accountSwitcherDialog);
-
     }
 
     @Test
