@@ -338,12 +338,8 @@ public class HomeActivity extends MyActionBar {
      * Disables Auto Login.
      */
     private void logoutAndRedirect() {
-        // Disable auto login for the current account and store the parameter
-        int currentAccountIdx = Integer.parseInt(AccountSetting.getInstance().getDomainIndex());
-        int numberOfAccounts = ServerSettingHelper.getInstance().getServerInfoList(this).size();
-        if (currentAccountIdx >= 0 && currentAccountIdx < numberOfAccounts)
-            ServerSettingHelper.getInstance().getServerInfoList(this).get(currentAccountIdx).isAutoLoginEnabled = false;
-        SettingUtils.persistServerSetting(this);
+        // // Disable auto login for the current account and store the parameter
+        SettingUtils.disableAutoLogin(this);
         // Log out
         Log.d(TAG, "Logging out...");
         onLoggingOut();

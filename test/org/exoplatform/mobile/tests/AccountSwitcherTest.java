@@ -223,9 +223,8 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
                 + " 2"));
     }
 
-    // @Test TODO
+    @Test
     public void shouldDisableAutoLoginWhenLeavingAccount() {
-        enableLog();
         Context ctx = Robolectric.application.getApplicationContext();
         create();
         Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
@@ -242,14 +241,15 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
         // Switch to account at position 1
         Robolectric.shadowOf(accountListView).performItemClick(1);
 
+        // Current account is now at position 1
         ExoAccount newA = getCurrentAccount(ctx);
-        assertEquals("1st account should be selected", getAccounts(ctx).indexOf(newA), 1);
+        assertEquals("2nd account should be selected", getAccounts(ctx).indexOf(newA), 1);
 
         // Auto Login should be disabled on account 0
         // acc = getAccounts(ctx).get(0);
+        acc = null;
         acc = ServerSettingHelper.getInstance().getServerInfoList(ctx).get(0);
         assertFalse("AL should be disabled", acc.isAutoLoginEnabled);
-        disableLog();
     }
 
     // @Test TODO
