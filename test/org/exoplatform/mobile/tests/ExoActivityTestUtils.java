@@ -122,13 +122,9 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
     }
 
     public void createWithBundle(Bundle b) {
-        activity = controller.create(b) // passing the bundle here, no need to
-                                        // call
-                                        // controller.restoreInstanceState(b)
-                             .start()
-                             .resume()
-                             .visible()
-                             .get();
+        // passing the bundle here, no need to call
+        // controller.restoreInstanceState(b)
+        activity = controller.create(b).start().resume().visible().get();
     }
 
     public void createWithIntent(Intent i) {

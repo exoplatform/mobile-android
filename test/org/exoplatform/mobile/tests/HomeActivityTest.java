@@ -131,19 +131,17 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
         // text field is filled by data returned in RESP_SOCIAL_IDENTITY
         assertThat(userNameTV).containsText(nameAndAccount);
 
-        assertThat(flipper).hasChildCount(1); // should have only 1 activity in
-                                              // the flipper since
-                                              // RESP_SOCIAL_NEWS contains just
-                                              // 1 activity
+        // should have only 1 activity in the flipper since RESP_SOCIAL_NEWS
+        // contains just 1 activity
+        assertThat(flipper).hasChildCount(1);
 
         assertThat(activitiesTV).containsText(R.string.ActivityStream);
         assertThat(documentsTV).containsText(R.string.Documents);
         assertThat(appsTV).containsText(R.string.Dashboard);
 
         // because it's a greendroid actionbar, the number of items is not
-        // exposed
-        // we use a trick to verify that only 2 items are present (without
-        // account switcher)
+        // exposed we use a trick to verify that only 2 items are present
+        // (without account switcher)
         assertNotNull(actionBar.getItem(0)); // refresh button, must not be null
         assertNotNull(actionBar.getItem(1)); // sign-out button, must not be
                                              // null

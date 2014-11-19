@@ -252,7 +252,7 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
         assertFalse("AL should be disabled", acc.isAutoLoginEnabled);
     }
 
-    // @Test TODO
+    @Test
     public void shouldSignOutAndRedirectToLoginScreenWhenSwitchingFails() {
         create();
         Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
