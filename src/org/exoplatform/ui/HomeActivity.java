@@ -46,6 +46,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -308,7 +309,7 @@ public class HomeActivity extends MyActionBar {
                 homeController.launchNewsService(loaderItem);
             } else {
                 homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER,
-                                      SocialTabsActivity.ALL_UPDATES);
+                                      HomeController.FLIPPER_VIEW);
             }
             break;
         case 1:
@@ -337,9 +338,15 @@ public class HomeActivity extends MyActionBar {
      * Disables Auto Login.
      */
     private void logoutAndRedirect() {
-        onLoggingOut();
-        AccountSetting.getInstance().getCurrentAccount().isAutoLoginEnabled = false;
+        // Disable auto login for the current account and store the parameter
+        int currentAccountIdx = Integer.parseInt(AccountSetting.getInstance().getDomainIndex());
+        int numberOfAccounts = ServerSettingHelper.getInstance().getServerInfoList(this).size();
+        if (currentAccountIdx >= 0 && currentAccountIdx < numberOfAccounts)
+            ServerSettingHelper.getInstance().getServerInfoList(this).get(currentAccountIdx).isAutoLoginEnabled = false;
         SettingUtils.persistServerSetting(this);
+        // Log out
+        Log.d(TAG, "Logging out...");
+        onLoggingOut();
         redirectToLogIn();
     }
 

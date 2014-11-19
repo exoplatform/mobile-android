@@ -55,7 +55,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -135,15 +134,8 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
 
         final String nameAndAccount = TEST_USER_NAME + " (" + TEST_SERVER_NAME + ")";
 
-        // Ensures that the async tasks that load the social services (profile,
-        // activity stream) are executed
-        // Seems not needed anymore...
-        // Robolectric.runUiThreadTasksIncludingDelayedTasks();
-
-        assertThat(userNameTV).containsText(nameAndAccount); // text field is
-                                                             // filled by data
-                                                             // returned in
-                                                             // RESP_SOCIAL_IDENTITY
+        // text field is filled by data returned in RESP_SOCIAL_IDENTITY
+        assertThat(userNameTV).containsText(nameAndAccount);
 
         assertThat(flipper).hasChildCount(1); // should have only 1 activity in
                                               // the flipper since
@@ -284,26 +276,6 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
 
     }
 
-    // @Test TODO
-    public void shouldWaitSocialServiceBeforeActivatingAccountSwitcherButton() {
-
-        Context ctx = Robolectric.application.getApplicationContext();
-        ArrayList<ExoAccount> accounts = createXAccounts(2);
-        addServersInPreferences(ctx, accounts);
-        create();
-        init();
-
-        View accSwitcherView = actionBar.getItem(1).getItemView();
-        assertThat(accSwitcherView).isDisabled();
-
-        // Ensures that the async tasks that load the social services are
-        // executed
-        // Robolectric.runUiThreadTasksIncludingDelayedTasks();
-        // Robolectric.runBackgroundTasks();
-
-        assertThat(accSwitcherView).isEnabled();
-    }
-
     @Test
     public void shouldOpenAccountSwitcherInActivity() {
         Context ctx = Robolectric.application.getApplicationContext();
@@ -350,20 +322,7 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
 
     }
 
-    // @Test
-    public void shouldRefreshFlipper() {
-        /*
-         * FIXME current impl refresh activities in the activity stream
-         * (SocialTabsActivity) HomeActivity.onHandleActionBarItemCLick() {
-         * homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER,
-         * SocialTabsActivity.ALL_UPDATES); } TODO it should refresh in the
-         * flipper view instead HomeActivity.onHandleActionBarItemCLick() {
-         * homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER,
-         * HomeController.FLIPPER_VIEW); }
-         */
-    }
-
-    // @Test TODO
+    @Test
     public void shouldDisableAutoLoginOnAccountWhenSigningOut() {
         create();
         init();
@@ -371,14 +330,16 @@ public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
         acc.isRememberEnabled = true;
         acc.isAutoLoginEnabled = true;
         setDefaultServerInPreferences(activity, acc);
-
+        acc = null;
         acc = getAccounts(activity).get(0);
         assertTrue("AL should be enabled", acc.isAutoLoginEnabled);
 
         // simulate tap on the sign out button
         Robolectric.clickOn(actionBar.getItem(1).getItemView());
 
+        acc = null;
         acc = getAccounts(activity).get(0);
+
         assertFalse("AL should be disabled", acc.isAutoLoginEnabled);
     }
 
