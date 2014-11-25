@@ -29,48 +29,48 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 
 public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
-    private String mURL;
+  private String mURL;
 
-    public TextUrlSpan(String url) {
-        mURL = url;
-    }
+  public TextUrlSpan(String url) {
+    mURL = url;
+  }
 
-    public TextUrlSpan(Parcel src) {
-        mURL = src.readString();
+  public TextUrlSpan(Parcel src) {
+    mURL = src.readString();
 
-    }
+  }
 
-    public int describeContents() {
+  public int describeContents() {
 
-        return 0;
+    return 0;
 
-    }
+  }
 
-    public void writeToParcel(Parcel dest, int flags) {
+  public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeString(mURL);
+    dest.writeString(mURL);
 
-    }
+  }
 
-    public String getURL() {
+  public String getURL() {
 
-        return mURL;
+    return mURL;
 
-    }
+  }
 
-    @Override
-    public void onClick(View widget) {
-        Context context = widget.getContext();
-        Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra(ExoConstants.WEB_VIEW_URL, getURL());
-        intent.putExtra(ExoConstants.WEB_VIEW_TITLE, getURL());
-        intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "false");
-        context.startActivity(intent);
-    }
+  @Override
+  public void onClick(View widget) {
+    Context context = widget.getContext();
+    Intent intent = new Intent(context, WebViewActivity.class);
+    intent.putExtra(ExoConstants.WEB_VIEW_URL, getURL());
+    intent.putExtra(ExoConstants.WEB_VIEW_TITLE, getURL());
+    intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "false");
+    context.startActivity(intent);
+  }
 
-    // @Override
-    public int getSpanTypeId() {
-        return 11;
-    }
+  // @Override
+  public int getSpanTypeId() {
+    return 11;
+  }
 
 }

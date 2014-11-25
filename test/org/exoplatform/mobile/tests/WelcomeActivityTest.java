@@ -26,12 +26,6 @@ import org.exoplatform.ui.SignInActivity;
 import org.exoplatform.ui.SignUpActivity;
 import org.exoplatform.ui.WelcomeActivity;
 import org.exoplatform.ui.login.LoginActivity;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowIntent;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -39,139 +33,126 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.widget.Button;
 import android.widget.TextView;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.shadows.ShadowActivity;
+import org.robolectric.shadows.ShadowIntent;
 
 /**
- * Created by The eXo Platform SAS Author : Philippe Aristote
- * paristote@exoplatform.com Apr 8, 2014
+ * Created by The eXo Platform SAS
+ * Author : Philippe Aristote
+ *          paristote@exoplatform.com
+ * Apr 8, 2014  
  */
 @RunWith(ExoRobolectricTestRunner.class)
 public class WelcomeActivityTest extends ExoActivityTestUtils<WelcomeActivity> {
 
-    Resources           res;
+  Resources res;
+  Button btnLogin, btnSignUp;
+  TextView skipTxt;
+  ViewPager pager;
+  CirclePageIndicator indicator;
+  
+  @Before
+  public void setup() {
+    controller = Robolectric.buildActivity(WelcomeActivity.class);    
+  }
+  
+  @Override
+  public void create() {
+    super.create();
+    init();
+  }
+  
+  @Override
+  public void createWithBundle(Bundle b) {
+    super.createWithBundle(b);
+    init();
+  }
+  
+  private void init() {
+    res = activity.getResources();
+    btnLogin = (Button)activity.findViewById(R.id.welcome_btn_login);
+    btnSignUp = (Button)activity.findViewById(R.id.welcome_btn_signup);
+    skipTxt = (TextView)activity.findViewById(R.id.welcome_txt_skipStep);
+    pager = (ViewPager)activity.findViewById(org.exoplatform.R.id.pager);
+    indicator = (CirclePageIndicator) activity.findViewById(R.id.circle_page_indicator);
+  }
+  
+  @Test
+  public void verifyDefaultLayout() {
+    create();
+    
+    assertThat(pager.getAdapter()).hasCount(5); // pager shows 5 screenshots
+    
+    // check Log In button label
+    assertThat(btnLogin).containsText(R.string.LogIn);
+    org.junit.Assert.assertThat(res.getString(R.string.LogIn), equalTo("Log In"));
+    
+    // check Sign Up button label
+    assertThat(btnSignUp).containsText(R.string.SignUp);
+    org.junit.Assert.assertThat(res.getString(R.string.SignUp), equalTo("Sign Up"));
+    
+    assertThat(skipTxt).containsText(R.string.SkipStep);
+    org.junit.Assert.assertThat(res.getString(R.string.SkipStep), equalTo("or skip this for now"));
+    
+  }
+  
+  @Test
+  public void shouldRedirectToSignInScreen() {
+    create();
+    
+    Robolectric.clickOn(btnLogin);
+    ShadowActivity shadowActivity = shadowOf(activity);
+    Intent startedIntent = shadowActivity.getNextStartedActivity();
+    ShadowIntent shadowIntent = shadowOf(startedIntent);
+    org.junit.Assert.assertThat(shadowIntent.getComponent().getClassName(), equalTo(SignInActivity.class.getName()));
+  }
+  
+  @Test
+  public void shouldRedirectToSignUpScreen() {
+    create();
+    
+    Robolectric.clickOn(btnSignUp);
+    ShadowActivity shadowActivity = shadowOf(activity);
+    Intent startedIntent = shadowActivity.getNextStartedActivity();
+    ShadowIntent shadowIntent = shadowOf(startedIntent);
+    org.junit.Assert.assertThat(shadowIntent.getComponent().getClassName(), equalTo(SignUpActivity.class.getName()));
+  }
+  
+  @Test
+  public void shouldRedirectToLoginScreen() {
+    create();
+    
+    Robolectric.clickOn(skipTxt);
+    ShadowActivity shadowActivity = shadowOf(activity);
+    Intent startedIntent = shadowActivity.getNextStartedActivity();
+    ShadowIntent shadowIntent = shadowOf(startedIntent);
+    org.junit.Assert.assertThat(shadowIntent.getComponent().getClassName(), equalTo(LoginActivity.class.getName()));
+  }
+  
+  @Test
+  public void shouldSaveInstanceState() {
+    create();
+    
+    Bundle bundle = new Bundle();
+    bundle.putInt("CURRENT_SLIDER", -1); // init current page to -1 to make sure the value is saved by the activity
+    
+    controller.saveInstanceState(bundle); // save the activity state in the bundle
+    
+    org.junit.Assert.assertThat(bundle.getInt("CURRENT_SLIDER"), equalTo(0)); // check that the current page number has been saved
 
-    Button              btnLogin, btnSignUp;
-
-    TextView            skipTxt;
-
-    ViewPager           pager;
-
-    CirclePageIndicator indicator;
-
-    @Before
-    public void setup() {
-        controller = Robolectric.buildActivity(WelcomeActivity.class);
-    }
-
-    @Override
-    public void create() {
-        super.create();
-        init();
-    }
-
-    @Override
-    public void createWithBundle(Bundle b) {
-        super.createWithBundle(b);
-        init();
-    }
-
-    private void init() {
-        res = activity.getResources();
-        btnLogin = (Button) activity.findViewById(R.id.welcome_btn_login);
-        btnSignUp = (Button) activity.findViewById(R.id.welcome_btn_signup);
-        skipTxt = (TextView) activity.findViewById(R.id.welcome_txt_skipStep);
-        pager = (ViewPager) activity.findViewById(org.exoplatform.R.id.pager);
-        indicator = (CirclePageIndicator) activity.findViewById(R.id.circle_page_indicator);
-    }
-
-    @Test
-    public void verifyDefaultLayout() {
-        create();
-
-        assertThat(pager.getAdapter()).hasCount(5); // pager shows 5 screenshots
-
-        // check Log In button label
-        assertThat(btnLogin).containsText(R.string.LogIn);
-        org.junit.Assert.assertThat(res.getString(R.string.LogIn), equalTo("Log In"));
-
-        // check Sign Up button label
-        assertThat(btnSignUp).containsText(R.string.SignUp);
-        org.junit.Assert.assertThat(res.getString(R.string.SignUp), equalTo("Sign Up"));
-
-        assertThat(skipTxt).containsText(R.string.SkipStep);
-        org.junit.Assert.assertThat(res.getString(R.string.SkipStep),
-                                    equalTo("or skip this for now"));
-
-    }
-
-    @Test
-    public void shouldRedirectToSignInScreen() {
-        create();
-
-        Robolectric.clickOn(btnLogin);
-        ShadowActivity shadowActivity = shadowOf(activity);
-        Intent startedIntent = shadowActivity.getNextStartedActivity();
-        ShadowIntent shadowIntent = shadowOf(startedIntent);
-        org.junit.Assert.assertThat(shadowIntent.getComponent().getClassName(),
-                                    equalTo(SignInActivity.class.getName()));
-    }
-
-    @Test
-    public void shouldRedirectToSignUpScreen() {
-        create();
-
-        Robolectric.clickOn(btnSignUp);
-        ShadowActivity shadowActivity = shadowOf(activity);
-        Intent startedIntent = shadowActivity.getNextStartedActivity();
-        ShadowIntent shadowIntent = shadowOf(startedIntent);
-        org.junit.Assert.assertThat(shadowIntent.getComponent().getClassName(),
-                                    equalTo(SignUpActivity.class.getName()));
-    }
-
-    @Test
-    public void shouldRedirectToLoginScreen() {
-        create();
-
-        Robolectric.clickOn(skipTxt);
-        ShadowActivity shadowActivity = shadowOf(activity);
-        Intent startedIntent = shadowActivity.getNextStartedActivity();
-        ShadowIntent shadowIntent = shadowOf(startedIntent);
-        org.junit.Assert.assertThat(shadowIntent.getComponent().getClassName(),
-                                    equalTo(LoginActivity.class.getName()));
-    }
-
-    @Test
-    public void shouldSaveInstanceState() {
-        create();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("CURRENT_SLIDER", -1); // init current page to -1 to make
-                                             // sure the value is saved by the
-                                             // activity
-
-        controller.saveInstanceState(bundle); // save the activity state in the
-                                              // bundle
-
-        org.junit.Assert.assertThat(bundle.getInt("CURRENT_SLIDER"), equalTo(0)); // check
-                                                                                  // that
-                                                                                  // the
-                                                                                  // current
-                                                                                  // page
-                                                                                  // number
-                                                                                  // has
-                                                                                  // been
-                                                                                  // saved
-
-    }
-
-    @Test
-    public void shoudRetrieveInstanceState() {
-        Bundle bundle = new Bundle();
-        bundle.putInt("CURRENT_SLIDER", 1); // change the value of the current
-                                            // page
-        createWithBundle(bundle);
-
-        assertThat(pager).hasCurrentItem(1); // check that the previous state
-                                             // was retrieved
-    }
-
+  }
+  
+  @Test
+  public void shoudRetrieveInstanceState() {
+    Bundle bundle = new Bundle();
+    bundle.putInt("CURRENT_SLIDER", 1); // change the value of the current page
+    createWithBundle(bundle);
+    
+    assertThat(pager).hasCurrentItem(1); // check that the previous state was retrieved
+  }
+  
 }

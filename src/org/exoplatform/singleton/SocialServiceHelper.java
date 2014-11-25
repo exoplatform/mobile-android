@@ -33,65 +33,65 @@ import org.exoplatform.ui.social.SocialTabsActivity;
  */
 public class SocialServiceHelper {
 
-    public ActivityService<RestActivity> activityService;
+  public ActivityService<RestActivity> activityService;
 
-    public IdentityService<RestIdentity> identityService;
+  public IdentityService<RestIdentity> identityService;
 
-    public String                        userIdentity;
+  public String                        userIdentity;
 
-    /*
-     * Social List
-     */
-    // public ArrayList<SocialActivityInfo> allUpdatesList;
+  /*
+   * Social List
+   */
+  // public ArrayList<SocialActivityInfo> allUpdatesList;
 
-    public ArrayList<SocialActivityInfo> myConnectionsList;
+  public ArrayList<SocialActivityInfo> myConnectionsList;
 
-    public ArrayList<SocialActivityInfo> mySpacesList;
+  public ArrayList<SocialActivityInfo> mySpacesList;
 
-    public ArrayList<SocialActivityInfo> myStatusList;
+  public ArrayList<SocialActivityInfo> myStatusList;
 
-    public ArrayList<SocialActivityInfo> socialInfoList;
+  public ArrayList<SocialActivityInfo> socialInfoList;
 
-    public String[]                      userProfile;
+  public String[]                      userProfile;
 
-    private static SocialServiceHelper   serviceHelper = new SocialServiceHelper();
+  private static SocialServiceHelper   serviceHelper = new SocialServiceHelper();
 
-    private SocialServiceHelper() {
+  private SocialServiceHelper() {
 
-    }
+  }
 
-    public static SocialServiceHelper getInstance() {
-        return serviceHelper;
-    }
+  public static SocialServiceHelper getInstance() {
+    return serviceHelper;
+  }
+  
+  public ArrayList<SocialActivityInfo> getSocialListForTab(int tabId) {
+	  switch (tabId) {
+	  case SocialTabsActivity.ALL_UPDATES:
+		  return socialInfoList;
+		  
+	  case SocialTabsActivity.MY_CONNECTIONS:
+		  return myConnectionsList;
+	  
+	  case SocialTabsActivity.MY_SPACES:
+		  return mySpacesList;
+		  
+	  case SocialTabsActivity.MY_STATUS:
+		  return myStatusList;
+		  
+	  default:
+		  return null;
+	  }
+  }
 
-    public ArrayList<SocialActivityInfo> getSocialListForTab(int tabId) {
-        switch (tabId) {
-        case SocialTabsActivity.ALL_UPDATES:
-            return socialInfoList;
-
-        case SocialTabsActivity.MY_CONNECTIONS:
-            return myConnectionsList;
-
-        case SocialTabsActivity.MY_SPACES:
-            return mySpacesList;
-
-        case SocialTabsActivity.MY_STATUS:
-            return myStatusList;
-
-        default:
-            return null;
-        }
-    }
-
-    public void clearData() {
-        userIdentity = null;
-        activityService = null;
-        identityService = null;
-        socialInfoList = null;
-        userProfile = null;
-        myConnectionsList = null;
-        mySpacesList = null;
-        myStatusList = null;
-    }
+  public void clearData() {
+    userIdentity = null;
+    activityService = null;
+    identityService = null;
+    socialInfoList = null;
+    userProfile = null;
+    myConnectionsList = null;
+    mySpacesList = null;
+    myStatusList = null;
+  }
 
 }

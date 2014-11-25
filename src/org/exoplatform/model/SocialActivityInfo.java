@@ -27,153 +27,152 @@ import org.exoplatform.social.client.api.model.RestLike;
 
 public class SocialActivityInfo {
 
-    private String             activityId;
+  private String             activityId;
 
-    private String             userID;
+  private String             userID;
 
-    private String             userName;
+  private String             userName;
 
-    private String             imageUrl;
+  private String             imageUrl;
 
-    private String             title;
+  private String             title;
 
-    private String             body;
+  private String             body;
 
-    private long               postedTime;
+  private long               postedTime;
 
-    /** Last update time of the activity, used for PLF 4 and above */
-    private long               updatedTime = 0;
+  /** Last update time of the activity, used for PLF 4 and above */
+  private long               updatedTime = 0;
 
-    private int                nbLikes;
+  private int                nbLikes;
 
-    private int                nbComments;
+  private int                nbComments;
 
-    private String             type;
+  private String             type;
+  
+  private String             attachImageUrl;
 
-    private String             attachImageUrl;
+  public Map<String, String> templateParams;
 
-    public Map<String, String> templateParams;
+  public RestActivityStream  restActivityStream;
 
-    public RestActivityStream  restActivityStream;
+  private List<RestComment>  commentList;
 
-    private List<RestComment>  commentList;
+  private List<RestLike>     likeList;
 
-    private List<RestLike>     likeList;
+  public SocialActivityInfo() {
 
-    public SocialActivityInfo() {
+  }
 
-    }
+  public void setActivityId(String actId) {
+    activityId = actId;
+  }
 
-    public void setActivityId(String actId) {
-        activityId = actId;
-    }
+  public String getActivityId() {
+    return activityId;
+  }
 
-    public String getActivityId() {
-        return activityId;
-    }
+  public void setUserId(String id) {
+    userID = id;
+  }
 
-    public void setUserId(String id) {
-        userID = id;
-    }
+  public String getUserId() {
+    return userID;
+  }
 
-    public String getUserId() {
-        return userID;
-    }
+  public void setUserName(String name) {
+    userName = name;
+  }
 
-    public void setUserName(String name) {
-        userName = name;
-    }
+  public String getUserName() {
+    return userName;
+  }
 
-    public String getUserName() {
-        return userName;
-    }
+  public void setImageUrl(String url) {
+    imageUrl = url;
+  }
 
-    public void setImageUrl(String url) {
-        imageUrl = url;
-    }
+  public String getImageUrl() {
+    return imageUrl;
+  }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  public void setTitle(String tit) {
+    title = tit;
+  }
 
-    public void setTitle(String tit) {
-        title = tit;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public void setBody(String bod) {
+    body = bod;
+  }
 
-    public void setBody(String bod) {
-        body = bod;
-    }
+  public String getBody() {
+    return body;
+  }
 
-    public String getBody() {
-        return body;
-    }
+  public void setType(String t) {
+    type = t;
+  }
 
-    public void setType(String t) {
-        type = t;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public String getType() {
-        return type;
-    }
+  public void setPostedTime(long time) {
+    postedTime = time;
+  }
 
-    public void setPostedTime(long time) {
-        postedTime = time;
-    }
+  public long getPostedTime() {
+    return postedTime;
+  }
 
-    public long getPostedTime() {
-        return postedTime;
-    }
+  public long getUpdatedTime() { return updatedTime; }
 
-    public long getUpdatedTime() {
-        return updatedTime;
-    }
+  public void setUpdatedTime(long time) {
+    updatedTime = time;
+  }
 
-    public void setUpdatedTime(long time) {
-        updatedTime = time;
-    }
+  public void setCommentList(List<RestComment> list) {
+    commentList = list;
+  }
 
-    public void setCommentList(List<RestComment> list) {
-        commentList = list;
-    }
+  public List<RestComment> getCommentList() {
+    return commentList;
+  }
 
-    public List<RestComment> getCommentList() {
-        return commentList;
-    }
+  public void setLikelist(List<RestLike> list) {
+    likeList = list;
+  }
 
-    public void setLikelist(List<RestLike> list) {
-        likeList = list;
-    }
+  public List<RestLike> getLikeList() {
+    return likeList;
+  }
 
-    public List<RestLike> getLikeList() {
-        return likeList;
-    }
+  public void setCommentNumber(int number) {
+    nbComments = number;
+  }
 
-    public void setCommentNumber(int number) {
-        nbComments = number;
-    }
+  public int getCommentNumber() {
+    return nbComments;
+  }
 
-    public int getCommentNumber() {
-        return nbComments;
-    }
+  public void setLikeNumber(int n) {
+    nbLikes = n;
+  }
 
-    public void setLikeNumber(int n) {
-        nbLikes = n;
-    }
+  public int getLikeNumber() {
+    return nbLikes;
+  }
 
-    public int getLikeNumber() {
-        return nbLikes;
-    }
+  public void setAttachedImageUrl(String url) {
+    attachImageUrl = url;
+  }
 
-    public void setAttachedImageUrl(String url) {
-        attachImageUrl = url;
-    }
-
-    public String getAttachedImageUrl() {
-        return attachImageUrl;
-    }
+  public String getAttachedImageUrl() {
+    return attachImageUrl;
+  }
+  
 
 }

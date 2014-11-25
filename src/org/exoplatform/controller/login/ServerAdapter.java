@@ -37,76 +37,75 @@ import android.widget.TextView;
  * Adapter for server list view
  */
 public class ServerAdapter extends BaseAdapter {
-    private ArrayList<ServerObjInfo> serverInfoList;
+  private ArrayList<ServerObjInfo> serverInfoList;
 
-    private Context                  mContext;
+  private Context                  mContext;
 
-    private AccountSetting           mSetting;
+  private AccountSetting           mSetting;
 
-    private static final String      TAG = "eXo____ServerAdapter____";
+  private static final String TAG = "eXo____ServerAdapter____";
 
-    public ServerAdapter(Context context) {
-        mContext = context;
-        serverInfoList = ServerSettingHelper.getInstance().getServerInfoList(context);
-        mSetting = AccountSetting.getInstance();
+
+  public ServerAdapter(Context context) {
+    mContext        = context;
+    serverInfoList  = ServerSettingHelper.getInstance().getServerInfoList(context);
+    mSetting        = AccountSetting.getInstance();
+  }
+
+  @Override
+  public int getCount() {
+    return serverInfoList.size();
+  }
+
+  @Override
+  public Object getItem(int pos) {
+    return serverInfoList.get(pos);
+  }
+
+  @Override
+  public long getItemId(int pos) {
+    return pos;
+  }
+
+  /**
+   * This method is called 3 times for each item
+   *
+   * @param position
+   * @param convertView
+   * @param parent
+   * @return rowView - view for the item, this view will be saved in the RecycleBin
+   * and will be passed as convertView for the next getView call
+   *
+   */
+  @Override
+  public View getView(int position, View convertView, ViewGroup parent) {
+    ViewHolder holder;
+    if (convertView == null) {
+      LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      convertView = inflater.inflate(R.layout.server_list_item, parent, false);
+      holder = new ViewHolder();
+      holder.name = (TextView) convertView.findViewById(R.id.TextView_ServerName);
+      holder.url  = (TextView) convertView.findViewById(R.id.TextView_URL);
+      holder.bg   = (ImageView) convertView.findViewById(R.id.ImageView_Checked);
+      convertView.setTag(holder);
+    }
+    else {
+      holder = (ViewHolder) convertView.getTag();
     }
 
-    @Override
-    public int getCount() {
-        return serverInfoList.size();
-    }
+    ServerObjInfo serverObj = serverInfoList.get(position);
+    holder.name.setText(serverObj.serverName);
+    holder.url.setText(serverObj.serverUrl);
+    if (Integer.valueOf(mSetting.getDomainIndex()) == position)
+      holder.bg.setBackgroundResource(R.drawable.authenticate_checkmark_on);
+    else holder.bg.setBackgroundResource(R.drawable.authenticate_checkmark_off);
 
-    @Override
-    public Object getItem(int pos) {
-        return serverInfoList.get(pos);
-    }
+    return convertView;
+  }
 
-    @Override
-    public long getItemId(int pos) {
-        return pos;
-    }
-
-    /**
-     * This method is called 3 times for each item
-     * 
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return rowView - view for the item, this view will be saved in the
-     *         RecycleBin and will be passed as convertView for the next getView
-     *         call
-     */
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.server_list_item, parent, false);
-            holder = new ViewHolder();
-            holder.name = (TextView) convertView.findViewById(R.id.TextView_ServerName);
-            holder.url = (TextView) convertView.findViewById(R.id.TextView_URL);
-            holder.bg = (ImageView) convertView.findViewById(R.id.ImageView_Checked);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        ServerObjInfo serverObj = serverInfoList.get(position);
-        holder.name.setText(serverObj.serverName);
-        holder.url.setText(serverObj.serverUrl);
-        if (Integer.valueOf(mSetting.getDomainIndex()) == position)
-            holder.bg.setBackgroundResource(R.drawable.authenticate_checkmark_on);
-        else
-            holder.bg.setBackgroundResource(R.drawable.authenticate_checkmark_off);
-
-        return convertView;
-    }
-
-    static class ViewHolder {
-        TextView  name;
-
-        TextView  url;
-
-        ImageView bg;
-    }
+  static class ViewHolder {
+    TextView name;
+    TextView url;
+    ImageView bg;
+  }
 }

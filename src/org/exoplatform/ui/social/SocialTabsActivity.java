@@ -47,212 +47,208 @@ import android.support.v4.view.ViewPager;
  */
 public class SocialTabsActivity extends MyActionBar {
 
-    public static final int              ALL_UPDATES             = 0;
+  public static final int              ALL_UPDATES             = 0;
 
-    public static final int              MY_CONNECTIONS          = 1;
+  public static final int              MY_CONNECTIONS          = 1;
 
-    public static final int              MY_SPACES               = 2;
+  public static final int              MY_SPACES               = 2;
 
-    public static final int              MY_STATUS               = 3;
+  public static final int              MY_STATUS               = 3;
 
-    public ViewPager                     mPager;
+  public ViewPager                     mPager;
 
-    private PageIndicator                mIndicator;
+  private PageIndicator                mIndicator;
 
-    private SocialTabsAdapter            mAdapter;
+  private SocialTabsAdapter            mAdapter;
 
-    private static String[]              TAB_NAMES;
+  private static String[]              TAB_NAMES;
 
-    private static final String          NUMBER_OF_ACTIVITY      = "NUMBER_OF_ACTIVITY";
+  private static final String          NUMBER_OF_ACTIVITY      = "NUMBER_OF_ACTIVITY";
 
-    private static final String          NUMBER_OF_MORE_ACTIVITY = "NUMBER_OF_MORE_ACTIVITY";
+  private static final String          NUMBER_OF_MORE_ACTIVITY = "NUMBER_OF_MORE_ACTIVITY";
 
-    private static final String          ACCOUNT_SETTING         = "account_setting";
+  private static final String          ACCOUNT_SETTING         = "account_setting";
 
-    private static final String          DOCUMENT_HELPER         = "document_helper";
+  private static final String          DOCUMENT_HELPER         = "document_helper";
 
-    public ArrayList<SocialActivityInfo> socialList;
+  public ArrayList<SocialActivityInfo> socialList;
 
-    public LoaderActionBarItem           loaderItem;
+  public LoaderActionBarItem           loaderItem;
 
-    public int                           number_of_activity;
+  public int                           number_of_activity;
 
-    public int                           number_of_more_activity;
+  public int                           number_of_more_activity;
 
-    private SharedPreferences            prefs;
+  private SharedPreferences            prefs;
 
-    private boolean                      isSocialFilterEnable    = false;
+  private boolean                      isSocialFilterEnable    = false;
 
-    public static SocialTabsActivity     instance;
+  public static SocialTabsActivity     instance;
 
-    private static final String          TAG                     = "eXo____SocialTabsActivity____";
+  private static final String TAG = "eXo____SocialTabsActivity____";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        instance = this;
-        setActionBarContentView(R.layout.social_activity_tabs);
-        getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-        addActionBarItem(Type.Refresh);
-        getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
-        addActionBarItem();
-        getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
-        String title = getString(R.string.ActivityStream);
-        setTitle(title);
 
-        if (savedInstanceState != null) {
-            number_of_activity = savedInstanceState.getInt(NUMBER_OF_ACTIVITY);
-            number_of_more_activity = savedInstanceState.getInt(NUMBER_OF_MORE_ACTIVITY);
-            AccountSetting accountSetting = savedInstanceState.getParcelable(ACCOUNT_SETTING);
-            AccountSetting.getInstance().setInstance(accountSetting);
-            ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
-            ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
-            DocumentHelper helper = savedInstanceState.getParcelable(DOCUMENT_HELPER);
-            DocumentHelper.getInstance().setInstance(helper);
-        } else {
-            number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
-            number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
-        }
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    instance = this;
+    setActionBarContentView(R.layout.social_activity_tabs);
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    addActionBarItem(Type.Refresh);
+    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
+    addActionBarItem();
+    getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
+    String title = getString(R.string.ActivityStream);
+    setTitle(title);
 
-        loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+    if (savedInstanceState != null) {
+      number_of_activity = savedInstanceState.getInt(NUMBER_OF_ACTIVITY);
+      number_of_more_activity = savedInstanceState.getInt(NUMBER_OF_MORE_ACTIVITY);
+      AccountSetting accountSetting = savedInstanceState.getParcelable(ACCOUNT_SETTING);
+      AccountSetting.getInstance().setInstance(accountSetting);
+      ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
+      ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
+      DocumentHelper helper = savedInstanceState.getParcelable(DOCUMENT_HELPER);
+      DocumentHelper.getInstance().setInstance(helper);
+    } else {
+      number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
+      number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
+    }
 
-        TAB_NAMES = getResources().getStringArray(R.array.SocialTabs);
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
-        mAdapter = new SocialTabsAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mAdapter);
-        mIndicator.setViewPager(mPager);
+    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
 
-        prefs = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
-        isSocialFilterEnable = prefs.getBoolean(AccountSetting.getInstance().socialKey, false);
-        if (isSocialFilterEnable) {
-            int savedIndex = prefs.getInt(AccountSetting.getInstance().socialKeyIndex, ALL_UPDATES);
-            mPager.setCurrentItem(savedIndex);
-        }
+    TAB_NAMES = getResources().getStringArray(R.array.SocialTabs);
+    mPager = (ViewPager) findViewById(R.id.pager);
+    mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
+    mAdapter = new SocialTabsAdapter(getSupportFragmentManager());
+    mPager.setAdapter(mAdapter);
+    mIndicator.setViewPager(mPager);
+
+    prefs = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
+    isSocialFilterEnable = prefs.getBoolean(AccountSetting.getInstance().socialKey, false);
+    if (isSocialFilterEnable) {
+      int savedIndex = prefs.getInt(AccountSetting.getInstance().socialKeyIndex, ALL_UPDATES);
+      mPager.setCurrentItem(savedIndex);
+    }
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putInt(NUMBER_OF_ACTIVITY, number_of_activity);
+    outState.putInt(NUMBER_OF_MORE_ACTIVITY, number_of_more_activity);
+    outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
+    outState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
+  }
+
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
+    finishFragment();
+  }
+
+  @Override
+  protected void onPause() {
+    /* to avoid issues such as https://jira.exoplatform.org/browse/MOB-1660
+     * we need to make the call to finishFragment in onPause rather than onDestroy:
+       * cf http://developer.android.com/reference/android/app/Activity.html#onDestroy%28%29
+       * Note: do not count on this method being called as a place for saving data! 
+       * For example, if an activity is editing data in a content provider, those edits should be committed in 
+       * either onPause() or onSaveInstanceState(Bundle), not here.
+     */
+    finishFragment();
+    super.onPause();
+  }
+
+  @Override
+  protected void onDestroy() {
+    instance = null;
+    super.onDestroy();
+  }
+
+  private void finishFragment() {
+    if (isSocialFilterEnable) {
+      int tabId = mPager.getCurrentItem();
+      Editor editor = prefs.edit();
+      editor.putInt(AccountSetting.getInstance().socialKeyIndex, tabId);
+      editor.commit();
+    }
+  }
+
+  @Override
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+    switch (position) {
+
+    case -1:
+      finishFragment();
+      finish();
+      break;
+    case 0:
+      loaderItem = (LoaderActionBarItem) item;
+      int tabId = mPager.getCurrentItem();
+      switch (tabId) {
+      case ALL_UPDATES:
+        AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+        break;
+      case MY_CONNECTIONS:
+        MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+        break;
+      case MY_SPACES:
+        MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+        break;
+      case MY_STATUS:
+        MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+        break;
+      }
+      break;
+    case 1:
+      Intent intent = new Intent(this, ComposeMessageActivity.class);
+      intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+      intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_POST_TYPE);
+      startActivity(intent);
+      break;
+
+    }
+    return true;
+
+  }
+
+  private class SocialTabsAdapter extends FragmentPagerAdapter {
+
+    public SocialTabsAdapter(FragmentManager fm) {
+      super(fm);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(NUMBER_OF_ACTIVITY, number_of_activity);
-        outState.putInt(NUMBER_OF_MORE_ACTIVITY, number_of_more_activity);
-        outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
-        outState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
+    public Fragment getItem(int position) {
+      ActivityStreamFragment fragment = null;
+      switch (position) {
+      case ALL_UPDATES:
+        fragment = AllUpdatesFragment.getInstance();
+        break;
+      case MY_CONNECTIONS:
+        fragment = MyConnectionsFragment.getInstance();
+        break;
+      case MY_SPACES:
+        fragment = MySpacesFragment.getInstance();
+        break;
+      case MY_STATUS:
+        fragment = MyStatusFragment.getInstance();
+        break;
+      }
+      return fragment;
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finishFragment();
+    public int getCount() {
+      return SocialTabsActivity.TAB_NAMES.length;
     }
 
     @Override
-    protected void onPause() {
-        /*
-         * to avoid issues such as https://jira.exoplatform.org/browse/MOB-1660
-         * we need to make the call to finishFragment in onPause rather than
-         * onDestroy: cf
-         * http://developer.android.com/reference/android/app/Activity
-         * .html#onDestroy%28%29 Note: do not count on this method being called
-         * as a place for saving data! For example, if an activity is editing
-         * data in a content provider, those edits should be committed in either
-         * onPause() or onSaveInstanceState(Bundle), not here.
-         */
-        finishFragment();
-        super.onPause();
+    public CharSequence getPageTitle(int position) {
+      return SocialTabsActivity.TAB_NAMES[position];
     }
 
-    @Override
-    protected void onDestroy() {
-        instance = null;
-        super.onDestroy();
-    }
-
-    private void finishFragment() {
-        if (isSocialFilterEnable) {
-            int tabId = mPager.getCurrentItem();
-            Editor editor = prefs.edit();
-            editor.putInt(AccountSetting.getInstance().socialKeyIndex, tabId);
-            editor.commit();
-        }
-    }
-
-    @Override
-    public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-        switch (position) {
-
-        case -1:
-            finishFragment();
-            finish();
-            break;
-        case 0:
-            loaderItem = (LoaderActionBarItem) item;
-            int tabId = mPager.getCurrentItem();
-            switch (tabId) {
-            case ALL_UPDATES:
-                AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
-                break;
-            case MY_CONNECTIONS:
-                MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                             true,
-                                                             0);
-                break;
-            case MY_SPACES:
-                MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
-                break;
-            case MY_STATUS:
-                MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
-                break;
-            }
-            break;
-        case 1:
-            Intent intent = new Intent(this, ComposeMessageActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_POST_TYPE);
-            startActivity(intent);
-            break;
-
-        }
-        return true;
-
-    }
-
-    private class SocialTabsAdapter extends FragmentPagerAdapter {
-
-        public SocialTabsAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            ActivityStreamFragment fragment = null;
-            switch (position) {
-            case ALL_UPDATES:
-                fragment = AllUpdatesFragment.getInstance();
-                break;
-            case MY_CONNECTIONS:
-                fragment = MyConnectionsFragment.getInstance();
-                break;
-            case MY_SPACES:
-                fragment = MySpacesFragment.getInstance();
-                break;
-            case MY_STATUS:
-                fragment = MyStatusFragment.getInstance();
-                break;
-            }
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return SocialTabsActivity.TAB_NAMES.length;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return SocialTabsActivity.TAB_NAMES[position];
-        }
-
-    }
+  }
 
 }

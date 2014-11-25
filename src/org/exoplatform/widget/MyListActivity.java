@@ -18,6 +18,9 @@
  */
 package org.exoplatform.widget;
 
+import com.cyrilmottier.android.greendroid.R;
+
+
 import greendroid.util.Config;
 import greendroid.widget.ActionBar;
 import android.annotation.SuppressLint;
@@ -27,27 +30,23 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.cyrilmottier.android.greendroid.R;
 
 @SuppressLint("Registered")
 public class MyListActivity extends MyActionBar {
 
     private ListAdapter mAdapter;
+    private ListView mList;
+    private View mEmptyView;
 
-    private ListView    mList;
+    private Handler mHandler = new Handler();
+    private boolean mFinishedStart = false;
 
-    private View        mEmptyView;
-
-    private Handler     mHandler       = new Handler();
-
-    private boolean     mFinishedStart = false;
-
-    private Runnable    mRequestFocus  = new Runnable() {
-                                           public void run() {
-                                               mList.focusableViewAvailable(mList);
-                                           }
-                                       };
-
+    private Runnable mRequestFocus = new Runnable() {
+        public void run() {
+            mList.focusableViewAvailable(mList);
+        }
+    };
+    
     public MyListActivity() {
         super();
     }
@@ -123,19 +122,18 @@ public class MyListActivity extends MyActionBar {
     @Override
     public int createLayout() {
         if (Config.GD_INFO_LOGS_ENABLED) {
-            // Log.d(LOG_TAG,
-            // "No layout specified : creating the default layout");
+//            Log.d(LOG_TAG, "No layout specified : creating the default layout");
         }
-
+        
         switch (getActionBarType()) {
-        case Dashboard:
-            return R.layout.gd_list_content_dashboard;
-        case Empty:
-            return R.layout.gd_list_content_empty;
-        case Normal:
-
-        default:
-            return R.layout.gd_list_content_normal;
+            case Dashboard:
+                return R.layout.gd_list_content_dashboard;
+            case Empty:
+                return R.layout.gd_list_content_empty;
+            case Normal:
+                
+            default:
+                return R.layout.gd_list_content_normal;
         }
     }
 
@@ -172,15 +170,9 @@ public class MyListActivity extends MyActionBar {
     }
 
     private AdapterView.OnItemClickListener mOnClickListener = new AdapterView.OnItemClickListener() {
-                                                                 public void onItemClick(AdapterView<?> parent,
-                                                                                         View v,
-                                                                                         int position,
-                                                                                         long id) {
-                                                                     onListItemClick((ListView) parent,
-                                                                                     v,
-                                                                                     position,
-                                                                                     id);
-                                                                 }
-                                                             };
+        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+            onListItemClick((ListView) parent, v, position, id);
+        }
+    };
 
 }

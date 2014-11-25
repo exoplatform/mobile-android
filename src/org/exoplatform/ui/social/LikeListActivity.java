@@ -45,138 +45,138 @@ import android.widget.TextView;
  */
 public class LikeListActivity extends MyActionBar {
 
+  /*
+   * This class for displaying the liker list information include avatar and
+   * liker's name
+   */
+
+  private ArrayList<SocialLikeInfo> likeList;
+
+  private GridView                  likedGridView;
+
+  private StringBuffer              title;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setActionBarContentView(R.layout.like_list_activity_layout);
     /*
-     * This class for displaying the liker list information include avatar and
-     * liker's name
+     * Get liker list from intent extra
      */
-
-    private ArrayList<SocialLikeInfo> likeList;
-
-    private GridView                  likedGridView;
-
-    private StringBuffer              title;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setActionBarContentView(R.layout.like_list_activity_layout);
-        /*
-         * Get liker list from intent extra
-         */
-        likeList = getIntent().getParcelableArrayListExtra(ExoConstants.SOCIAL_LIKED_LIST_EXTRA);
-        int size = 0;
-        if (likeList != null) {
-            size = likeList.size();
-            initUI();
-        }
-
-        /*
-         * Set title for activity
-         */
-
-        String liker;
-        if (size == 0 || size == 1) {
-            liker = getResources().getString(R.string.Liker);
-        } else {
-            liker = getResources().getString(R.string.Likers);
-        }
-        title = new StringBuffer();
-        title.append(size);
-        title.append(" ");
-        title.append(liker);
-        setTitle(title.toString());
-
-    }
-
-    private void initUI() {
-        likedGridView = (GridView) findViewById(R.id.like_list_gridview);
-        likedGridView.setAdapter(new LikedItemAdapter(this));
-        likedGridView.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-
-            }
-        });
-    }
-
-    @Override
-    public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-        switch (position) {
-        case -1:
-            if (SocialDetailActivity.socialDetailActivity != null) {
-                SocialDetailActivity.socialDetailActivity.finish();
-            }
-            if (SocialTabsActivity.instance != null) {
-                SocialTabsActivity.instance.finish();
-            }
-
-            finish();
-
-            break;
-
-        default:
-            break;
-        }
-
-        return true;
+    likeList = getIntent().getParcelableArrayListExtra(ExoConstants.SOCIAL_LIKED_LIST_EXTRA);
+    int size = 0;
+    if (likeList != null) {
+      size = likeList.size();
+      initUI();
     }
 
     /*
-     * The adapter for liker grid
+     * Set title for activity
      */
 
-    private class LikedItemAdapter extends BaseAdapter {
+    String liker;
+    if (size == 0 || size == 1) {
+      liker = getResources().getString(R.string.Liker);
+    } else {
+      liker = getResources().getString(R.string.Likers);
+    }
+    title = new StringBuffer();
+    title.append(size);
+    title.append(" ");
+    title.append(liker);
+    setTitle(title.toString());
 
-        private LayoutInflater mInflater;
+  }
 
-        public LikedItemAdapter(Context context) {
-            mInflater = LayoutInflater.from(context);
-        }
+  private void initUI() {
+    likedGridView = (GridView) findViewById(R.id.like_list_gridview);
+    likedGridView.setAdapter(new LikedItemAdapter(this));
+    likedGridView.setOnItemClickListener(new OnItemClickListener() {
 
-        @Override
-        public int getCount() {
-            return likeList.size();
-        }
+      @Override
+      public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
 
-        @Override
-        public Object getItem(int position) {
-            return position;
-        }
+      }
+    });
+  }
 
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
+  @Override
+  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+    switch (position) {
+    case -1:
+      if (SocialDetailActivity.socialDetailActivity != null) {
+        SocialDetailActivity.socialDetailActivity.finish();
+      }
+      if (SocialTabsActivity.instance != null) {
+        SocialTabsActivity.instance.finish();
+      }
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder;
-            if (convertView == null) {
-                /*
-                 * Inflate layout from layout resource
-                 */
-                convertView = mInflater.inflate(R.layout.liked_grid_item, null);
-                viewHolder = new ViewHolder();
-                viewHolder.imageView = (ShaderImageView) convertView.findViewById(R.id.liked_avatar);
-                viewHolder.textView = (TextView) convertView.findViewById(R.id.liked_name);
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-            viewHolder.imageView.setDefaultImageResource(R.drawable.default_avatar);
-            viewHolder.imageView.setUrl(likeList.get(position).likedImageUrl);
-            viewHolder.textView.setText(likeList.get(position).getLikeName());
+      finish();
 
-            return convertView;
-        }
+      break;
 
+    default:
+      break;
     }
 
-    private class ViewHolder {
-        public ShaderImageView imageView;
+    return true;
+  }
 
-        public TextView        textView;
+  /*
+   * The adapter for liker grid
+   */
+
+  private class LikedItemAdapter extends BaseAdapter {
+
+    private LayoutInflater mInflater;
+
+    public LikedItemAdapter(Context context) {
+      mInflater = LayoutInflater.from(context);
     }
+
+    @Override
+    public int getCount() {
+      return likeList.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+      return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+      return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+      ViewHolder viewHolder;
+      if (convertView == null) {
+        /*
+         * Inflate layout from layout resource
+         */
+        convertView = mInflater.inflate(R.layout.liked_grid_item, null);
+        viewHolder = new ViewHolder();
+        viewHolder.imageView = (ShaderImageView) convertView.findViewById(R.id.liked_avatar);
+        viewHolder.textView = (TextView) convertView.findViewById(R.id.liked_name);
+        convertView.setTag(viewHolder);
+      } else {
+        viewHolder = (ViewHolder) convertView.getTag();
+      }
+      viewHolder.imageView.setDefaultImageResource(R.drawable.default_avatar);
+      viewHolder.imageView.setUrl(likeList.get(position).likedImageUrl);
+      viewHolder.textView.setText(likeList.get(position).getLikeName());
+
+      return convertView;
+    }
+
+  }
+
+  private class ViewHolder {
+    public ShaderImageView imageView;
+
+    public TextView        textView;
+  }
 
 }

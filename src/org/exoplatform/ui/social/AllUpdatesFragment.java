@@ -42,84 +42,84 @@ import android.view.View;
  */
 public class AllUpdatesFragment extends ActivityStreamFragment {
 
-    public static AllUpdatesFragment instance;
+  public static AllUpdatesFragment instance;
+  
+	@Override
+	public int getThisTabId() {
+		return SocialTabsActivity.ALL_UPDATES;
+	}
 
-    @Override
-    public int getThisTabId() {
-        return SocialTabsActivity.ALL_UPDATES;
-    }
+  public static AllUpdatesFragment getInstance() {
+    AllUpdatesFragment fragment = new AllUpdatesFragment();
+    return fragment;
+  }
 
-    public static AllUpdatesFragment getInstance() {
-        AllUpdatesFragment fragment = new AllUpdatesFragment();
-        return fragment;
-    }
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    instance = this;
+    fragment_layout = R.layout.social_all_updates_layout;
+    fragment_list_view_id = R.id.all_updates_listview;
+    fragment_empty_view_id = R.id.social_all_updates_empty_stub;
+    super.onCreate(savedInstanceState);
+  }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        instance = this;
-        fragment_layout = R.layout.social_all_updates_layout;
-        fragment_list_view_id = R.id.all_updates_listview;
-        fragment_empty_view_id = R.id.social_all_updates_empty_stub;
-        super.onCreate(savedInstanceState);
-    }
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    setListAdapter();
+  }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setListAdapter();
-    }
+  public void setListAdapter() {
+    super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList);
+  }
 
-    public void setListAdapter() {
-        super.setListAdapter(SocialServiceHelper.getInstance().socialInfoList);
-    }
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    instance = null;
+  }
+  
+  public boolean isEmpty() {
+	  return (SocialServiceHelper.getInstance().socialInfoList == null
+	        || SocialServiceHelper.getInstance().socialInfoList.size() == 0);
+  }
+  
+  @Override
+  public SocialLoadTask getThisLoadTask() {
+  	return new AllUpdateLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+  }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        instance = null;
-    }
+  @Override
+  public void setActivityList(ArrayList<SocialActivityInfo> list) {
+	if (!isLoadingMoreActivities)
+		SocialServiceHelper.getInstance().socialInfoList = list;
+	else
+		SocialServiceHelper.getInstance().socialInfoList.addAll(list);
+  }
 
-    public boolean isEmpty() {
-        return (SocialServiceHelper.getInstance().socialInfoList == null || SocialServiceHelper.getInstance().socialInfoList.size() == 0);
-    }
+  public class AllUpdateLoadTask extends SocialLoadTask {
 
-    @Override
-    public SocialLoadTask getThisLoadTask() {
-        return new AllUpdateLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
-    }
+	  public AllUpdateLoadTask(Context context, LoaderActionBarItem loader) {
+	    super(context, loader);
+	  }
 
-    @Override
-    public void setActivityList(ArrayList<SocialActivityInfo> list) {
-        if (!isLoadingMoreActivities)
-            SocialServiceHelper.getInstance().socialInfoList = list;
-        else
-            SocialServiceHelper.getInstance().socialInfoList.addAll(list);
-    }
+	  @Override
+	  public void setResult(ArrayList<SocialActivityInfo> result) {
+	  	setActivityList(result);
+	  	setListAdapter();
+	  	listview.getAutoLoadProgressBar().setVisibility(View.GONE);
+	  	super.setResult(result);
+	  }
 
-    public class AllUpdateLoadTask extends SocialLoadTask {
+		@Override
+		protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
+			return activityService.getFeedActivityStream(identity, params);
+		}
 
-        public AllUpdateLoadTask(Context context, LoaderActionBarItem loader) {
-            super(context, loader);
-        }
+		@Override
+		protected ArrayList<SocialActivityInfo> getSocialActivityList() {
+			return SocialServiceHelper.getInstance().socialInfoList;
+		}
 
-        @Override
-        public void setResult(ArrayList<SocialActivityInfo> result) {
-            setActivityList(result);
-            setListAdapter();
-            listview.getAutoLoadProgressBar().setVisibility(View.GONE);
-            super.setResult(result);
-        }
-
-        @Override
-        protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity,
-                                                                       QueryParams params) throws SocialClientLibException {
-            return activityService.getFeedActivityStream(identity, params);
-        }
-
-        @Override
-        protected ArrayList<SocialActivityInfo> getSocialActivityList() {
-            return SocialServiceHelper.getInstance().socialInfoList;
-        }
-
-    }
+	}
 }
