@@ -304,7 +304,7 @@ public class SocialActivityUtil {
         return EXO_SOCIAL_RELATIONSHIP;
       } else if (type.contains("exosocial:people")) {
         return EXO_SOCIAL_PEOPLE;
-      } else if (type.contains("contents:spaces")) {
+      } else if (type.contains("contents:spaces") || type.contains("files:spaces") ) {
         return CONTENT_SPACE;
       } else if (type.contains("ks-answer")) {
         return KS_ANSWER;
