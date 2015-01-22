@@ -29,7 +29,7 @@
   </parent>
   <groupId>org.exoplatform.mobile.platform</groupId>
   <artifactId>exo-mobile-android</artifactId>
-  <version>2.4.2</version>
+  <version>2.4.x-SNAPSHOT</version>
   <packaging>apk</packaging>
   <name>eXo Mobile Android</name>
   <description>eXo Mobile Android project.</description>
@@ -54,7 +54,7 @@
     <android.annotations.version>4.1.1.4</android.annotations.version><!-- Sept 2012  -->
     <!-- Libraries -->
     <commons-lang.version>2.4</commons-lang.version>
-    <exo.social.client.version>1.0.0-alpha4-SNAPSHOT</exo.social.client.version>
+    <exo.social.client.version>1.0.0-SNAPSHOT</exo.social.client.version>
     <slf4j-android.version>1.6.1-RC1</slf4j-android.version>
     <greendroid.version>67aa3ed</greendroid.version>
 	<!-- Test Dependencies  -->
@@ -63,7 +63,7 @@
 	<junit.version>4.8.2</junit.version>
 	<android.test.version>4.2.2_r2</android.test.version>
     <!-- Maven Plugins -->
-    <maven-android-plugin.plugin-version>3.7.0</maven-android-plugin.plugin-version>
+    <maven-android-plugin.plugin-version>3.8.0</maven-android-plugin.plugin-version>
     <version.release.plugin>2.2.1</version.release.plugin>
     <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
     <!-- Java version -->
@@ -88,7 +88,7 @@
     <!-- Dependency With Social Client Library -->
     <dependency>
       <groupId>org.exoplatform.social</groupId>
-      <artifactId>exo.social.client</artifactId>
+      <artifactId>social-client-java</artifactId>
       <version>${exo.social.client.version}</version>
       <exclusions>
         <!-- Exclusion for slf4j not compatible with android -->

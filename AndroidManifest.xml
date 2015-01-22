@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1" android:versionName="2.4.2" package="org.exoplatform">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1" android:versionName="2.4.x-SNAPSHOT" package="org.exoplatform">
 
     <supports-screens android:smallScreens="false"/>
 
