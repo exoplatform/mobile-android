@@ -8,7 +8,6 @@
     <string name="NoUsernameEnter">Bitte geben Sie Ihren Benutzernamen ein</string>
     <string name="NoPasswordEnter">Bitte geben Sie Ihr Passwort ein</string>
     <string name="UserNamePasswordFailed">Ungültige Benutzername/Passwort-Kombination.</string>
-    <string name="ServerInvalid">Ungültige Serveradresse</string>
     <string name="ServerUnreachable">Serveradresse ist nicht erreichbar</string>
     <string name="UserNameCellTitle">Benutzername</string>
     <string name="PasswordCellTitle">Passwort</string>
@@ -88,7 +87,6 @@
     <string name="WarningServerNameIsEmpty">Servername oder URL darf nicht leer sein.</string>
     <string name="WarningServerNameIsExist">Dieser Servername ist in der Liste bereits vorhanden</string>
     <string name="WarningServerUrlIsExist">Diese Server-URL ist in Ihrer Liste bereits vorhanden</string>
-    <string name="WarningServerUrlAndUserAlreadyExist">Diese Kombination aus Server-URL und Benutzername ist bereits in Ihrer Liste</string>
     <string name="DetailsNotAvaiable">Details der Aktivität sind nicht verfügbar</string>
     <string name="ErrorOnComment">Sie können diese Aktivität nicht kommentieren.</string>
     <string name="CannotLoadMoreActivities">Kann ältere Aktivitäten nicht laden. Die Liste wird aktualisiert.</string>
@@ -133,7 +131,6 @@
     <string name="CalendarLocation">Ort:</string>
     <string name="CalendarStart">Startzeit:</string>
     <string name="CalendarEnd">Endzeit:</string>
-    <string name="SpecialCharacters">Sonderzeichen sind nicht erlaubt.</string>
     <string name="In"> in</string>
     <string name="Space"> Raum</string>
     <string name="Personal">Persönlich</string>
@@ -218,8 +215,6 @@
     <string name="Number2">2</string>
 
     <!-- Server edition -->
-    <string name="AddServer">Neuer Server</string>
-    <string name="ModifyServer">Server ändern</string>
     <string name="OptionalHint">Optional</string>
     <string name="RequiredHint">Erforderlich</string>
     <string name="YourCredentials">Ihre Anmeldeinformationen</string>

@@ -18,12 +18,12 @@
  */
 package org.exoplatform.ui.setting;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.util.Log;
+import java.util.ArrayList;
+
 import greendroid.widget.ActionBarItem;
 
 import org.exoplatform.R;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.ui.WelcomeActivity;
@@ -33,6 +33,8 @@ import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.MyActionBar;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -75,12 +77,10 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
 
   private CheckBox              mPrivateDriveCbx;
 
-  private Button                mAddServerBtn;
+  private Button                mNewAccountBtn;
 
-  private Button                mStartCloudSignUpBtn;
-
-  /* list of servers */
-  private ServerList            mListServer;
+  /* list of accounts */
+  private ServerList            mListAccounts;
 
   /**=== State ===**/
   private int                   mSettingType;
@@ -91,7 +91,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
   /** launch setting while logging in */
   public static final int       PERSONAL_TYPE         = 1;
 
-  private static final String   TAG = "eXoSettingActivity";
+  @SuppressWarnings("unused")
+  private static final String   TAG = "eXo____SettingActivity____";
 
 
   @Override
@@ -107,12 +108,20 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
 
     setTheme(R.style.Theme_eXo);
     setActionBarContentView(R.layout.settings);
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    getActionBar().setTitle(mResources.getString(R.string.Settings));
+    super.getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    super.getActionBar().setTitle(mResources.getString(R.string.Settings));
+  }
+  
+  
 
+  @Override
+  protected void onResume() {
     initSubViews();
     initStates();
+    super.onResume();
   }
+
+
 
   /**
    * On returning from Server Edition Activity
@@ -125,7 +134,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
 
     int operation = intent.getIntExtra(ServerEditionActivity.SETTING_OPERATION, -1);
     int serverIdx = intent.getIntExtra(ServerEditionActivity.SERVER_IDX, -1);
-    mListServer.updateServerList(operation, serverIdx);
+    mListAccounts.updateServerList(operation, serverIdx);
   }
 
 
@@ -137,9 +146,17 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     mRememberMeCbx.setText(mResources.getString(R.string.RememberMe))
                   .setChecked(mSetting.isRememberMeEnabled(), false)
                   .setViewListener(this);
-    mAutoLoginCbx.setText(mResources.getString(R.string.Autologin))
-                 .setChecked(mSetting.isAutoLoginEnabled(), false)
-                 .setViewListener(this);
+    if (mSetting.isRememberMeEnabled()) {
+      mAutoLoginCbx.setText(mResources.getString(R.string.Autologin))
+                   .setChecked(mSetting.isAutoLoginEnabled(), false)
+                   .setViewListener(this);
+      mAutoLoginCbx.enabled(true);
+    } else {
+      mAutoLoginCbx.setText(mResources.getString(R.string.Autologin))
+      .setChecked(false, false)
+      .setViewListener(this);
+      mAutoLoginCbx.enabled(false);
+    }
 
     /** Language */
     mEnCbx = (CheckBoxWithImage) findViewById(R.id.setting_en_ckb);
@@ -172,19 +189,15 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     mRememberFilterCbx.setText(mResources.getString(R.string.SocialSettingContent))
                       .setChecked(mSharedPerf.getBoolean(mSetting.socialKey, false), false);
     /** Server */
-    mAddServerBtn = (Button) findViewById(R.id.setting_modify_server_btn);
-    mAddServerBtn.setOnClickListener(this);
+    mNewAccountBtn = (Button) findViewById(R.id.setting_new_account_btn);
+    mNewAccountBtn.setOnClickListener(this);
 
-    mListServer = (ServerList) findViewById(R.id.setting_list_server);
+    mListAccounts = (ServerList) findViewById(R.id.setting_list_accounts);
 
     /** Documents */
     mPrivateDriveCbx = (CheckBox) findViewById(R.id.setting_private_drive_ckb);
     mPrivateDriveCbx.setText(mResources.getString(R.string.DocumentShowPrivateDrive))
                     .setChecked(mSharedPerf.getBoolean(mSetting.documentKey, true), false);
-
-    /** eXo */
-    mStartCloudSignUpBtn = (Button) findViewById(R.id.setting_start_cloud_signup_btn);
-    mStartCloudSignUpBtn.setOnClickListener(this);
 
     /** App Info */
     ((TextView) findViewById(R.id.setting_server_version_value_txt)).setText(mServerSetting.getServerVersion());
@@ -222,7 +235,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
   private void onChangeLanguage(String language) {
     SettingUtils.setLocale(this, language);
 
-    getActionBar().setTitle(mResources.getString(R.string.Settings));
+    super.getActionBar().setTitle(mResources.getString(R.string.Settings));
 
     ((TextView) findViewById(R.id.setting_login_title_txt)).setText(mResources.getString(R.string.LoginTitle));
     mRememberMeCbx.setText(mResources.getString(R.string.RememberMe));
@@ -237,7 +250,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     mRememberFilterCbx.setText(mResources.getString(R.string.SocialSettingContent));
 
     ((TextView) findViewById(R.id.setting_social_title)).setText(mResources.getString(R.string.SocialSettingTitle));
-    ((TextView) findViewById(R.id.setting_server_title)).setText(mResources.getString(R.string.Server));
+    ((TextView) findViewById(R.id.setting_accounts_title)).setText(mResources.getString(R.string.Server));
 
     ((TextView) findViewById(R.id.setting_document_title)).setText(mResources.getString(R.string.DocumentSettingTitle));
 
@@ -246,8 +259,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
     ((TextView) findViewById(R.id.setting_server_version_txt)).setText(mResources.getString(R.string.ServerVersion));
     ((TextView) findViewById(R.id.setting_app_version_txt)).setText(mResources.getString(R.string.ApplicationVersion));
 
-    mAddServerBtn.setText(mResources.getString(R.string.AddAServer));
-    mStartCloudSignUpBtn.setText(mResources.getString(R.string.StartCloudSignUpAssistant));
+    mNewAccountBtn.setText(mResources.getString(R.string.AddAServer));
   }
 
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
@@ -263,22 +275,9 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
   @Override
   public void onClick(View view) {
 
-    if (view.equals(mAddServerBtn)) {
-      Intent next = new Intent(this, ServerEditionActivity.class);
-      next.putExtra(ExoConstants.SETTING_ADDING_SERVER, true);
-      next.putExtra(ExoConstants.SETTING_TYPE, mSettingType);
-      startActivity(next);
-    }
-
-    /** Users start cloud sign up */
-    if (view.equals(mStartCloudSignUpBtn)) {
-      //mSetting.setCurrentServer(null);
-      //mSetting.setDomainIndex("-1");
-      //SettingUtils.modifySharedPerf(this);
-
-      /* do not allow to come back to setting */
+	  // To add a new account, the user must use the assistant
+    if (view.equals(mNewAccountBtn)) {
       Intent next = new Intent(this, WelcomeActivity.class);
-      //next.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
       startActivity(next);
     }
 
@@ -296,6 +295,15 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
 
     ServerConfigurationUtils.generateXmlFileWithServerList(this,
       ServerSettingHelper.getInstance().getServerInfoList(this), ExoConstants.EXO_SERVER_SETTING_FILE, "");
+  }
+  
+  public void updateAccountInList(ExoAccount account) {
+    ArrayList<ExoAccount> list = mServerSetting.getServerInfoList(this);
+    int index = list.indexOf(account);
+    if (index >= 0) {
+      list.remove(index);
+      list.add(index, account);
+    }
   }
 
   @Override
@@ -334,11 +342,13 @@ public class SettingActivity extends MyActionBar implements OnClickListener,
       }
       else mAutoLoginCbx.enabled(true);
 
-      mSetting.getCurrentServer().isRememberEnabled  = mRememberMeCbx.isChecked();
-      mSetting.getCurrentServer().isAutoLoginEnabled = mAutoLoginCbx.isChecked();
+      mSetting.getCurrentAccount().isRememberEnabled  = mRememberMeCbx.isChecked();
+      mSetting.getCurrentAccount().isAutoLoginEnabled = mAutoLoginCbx.isChecked();
+      updateAccountInList(mSetting.getCurrentAccount());
     }
     else if (checkBox.equals(mAutoLoginCbx)) {
-      mSetting.getCurrentServer().isAutoLoginEnabled = mAutoLoginCbx.isChecked();
+      mSetting.getCurrentAccount().isAutoLoginEnabled = mAutoLoginCbx.isChecked();
+      updateAccountInList(mSetting.getCurrentAccount());
     }
 
   }

@@ -8,7 +8,6 @@
   <string name="NoUsernameEnter">Por favor introduzca su nombre de usuario</string>
   <string name="NoPasswordEnter">Por favor introduzca su contraseña</string>
   <string name="UserNamePasswordFailed">Combinación de nombre de usuario/contraseña no válida.</string>
-  <string name="ServerInvalid">Dirección de servidor no válida</string>
   <string name="ServerUnreachable">La dirección del servidor no está disponible</string>
   <string name="UserNameCellTitle">Nombre de usuario</string>
   <string name="PasswordCellTitle">Contraseña</string>
@@ -88,7 +87,6 @@
   <string name="WarningServerNameIsEmpty">El nombre del servidor o la dirección URL no pueden estar en blanco.</string>
   <string name="WarningServerNameIsExist">Este nombre de servidor ya existe en tu lista</string>
   <string name="WarningServerUrlIsExist">Esta URL del servidor ya existe en su lista</string>
-  <string name="WarningServerUrlAndUserAlreadyExist">Esta combinación de URL del servidor y nombre de usuario ya existe en su lista</string>
   <string name="DetailsNotAvaiable">Los detalles de las noticias no están disponibles</string>
   <string name="ErrorOnComment">No puede comentar esta actividad.</string>
   <string name="CannotLoadMoreActivities">No se pueden cargar actividades anteriores. La lista está siendo renovada.</string>
@@ -133,7 +131,6 @@
   <string name="CalendarLocation">Localización:</string>
   <string name="CalendarStart">Hora de inicio:</string>
   <string name="CalendarEnd">Hora de finalización:</string>
-  <string name="SpecialCharacters">No se permiten caracteres especiales.</string>
   <string name="In"> en</string>
   <string name="Space"> espacio</string>
   <string name="Personal">Personal</string>
@@ -218,8 +215,6 @@
   <string name="Number2">2</string>
 
   <!-- Server edition -->
-  <string name="AddServer">Nuevo servidor</string>
-  <string name="ModifyServer">Modify Server</string>
   <string name="OptionalHint">Opcional</string>
   <string name="RequiredHint">Requerido</string>
   <string name="YourCredentials">Sus credenciales</string>

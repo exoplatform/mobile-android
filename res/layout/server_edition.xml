@@ -10,6 +10,18 @@
             android:id="@+id/server_setting_title_txt"
             style="@style/SignUpBlueHeaderStyle"
             android:layout_marginBottom="15dp"/>
+    
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#535353"
+        android:textSize="@dimen/title_txt_size"
+        android:textStyle="bold"
+        android:text="@string/Account"/>
 
     <TableLayout style="@style/ServerSettingTableStyle"
                  android:layout_marginBottom="10dp">
@@ -110,12 +122,11 @@
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/cancel_button_background_shape"
+            android:background="@drawable/send_button_background_shape"
             android:shadowColor="#000000"
             android:shadowDx="1.0"
             android:shadowDy="2.0"
-            android:shadowRadius="1.0"
-            android:textColor="#ffffff"/>
+            android:shadowRadius="1.0"/>
 
     <Button
             android:id="@+id/server_setting_delete_btn"
@@ -127,10 +138,11 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:background="@drawable/send_button_background_shape"
+            android:background="@drawable/cancel_button_background_shape"
             android:shadowColor="#888888"
             android:shadowDx="1.0"
             android:shadowDy="2.0"
-            android:shadowRadius="1.0"/>
+            android:shadowRadius="1.0"
+            android:textColor="#ffffff"/>
 
 </LinearLayout>

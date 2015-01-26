@@ -380,7 +380,7 @@ public class ExoDocumentUtils {
 
     } else {
       urlStr = getDriverUrl(file);
-      urlStr = URLAnalyzer.encodeUrl(urlStr);
+      urlStr = ExoUtils.encodeDocumentUrl(urlStr);
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       arrFilesTmp.addAll(getContentOfFolder(response, file));
       if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
@@ -497,7 +497,7 @@ public class ExoDocumentUtils {
   private static String getRootDriverPath(ExoFile file) {
     String path = null;
     String urlStr = getDriverUrl(file);
-    urlStr = URLAnalyzer.encodeUrl(urlStr);
+    urlStr = ExoUtils.encodeDocumentUrl(urlStr);
     Document obj_doc = null;
     DocumentBuilderFactory doc_build_fact = null;
     DocumentBuilder doc_builder = null;
@@ -670,7 +670,7 @@ public class ExoDocumentUtils {
   public static boolean deleteFile(String url) {
     HttpResponse response;
     try {
-      url = URLAnalyzer.encodeUrl(url);
+      url = ExoUtils.encodeDocumentUrl(url);
       WebdavMethod delete = new WebdavMethod("DELETE", url);
       response = ExoConnectionUtils.httpClient.execute(delete);
       int status = response.getStatusLine().getStatusCode();
@@ -693,8 +693,8 @@ public class ExoDocumentUtils {
       if (source.equals(destination)) {
         return false;
       }
-      source = URLAnalyzer.encodeUrl(source);
-      destination = URLAnalyzer.encodeUrl(destination);
+      source = ExoUtils.encodeDocumentUrl(source);
+      destination = ExoUtils.encodeDocumentUrl(destination);
       WebdavMethod copy = new WebdavMethod("COPY", source, destination);
       response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
@@ -715,8 +715,8 @@ public class ExoDocumentUtils {
       if (source.equals(destination)) {
         return false;
       }
-      source = URLAnalyzer.encodeUrl(source);
-      destination = URLAnalyzer.encodeUrl(destination);
+      source = ExoUtils.encodeDocumentUrl(source);
+      destination = ExoUtils.encodeDocumentUrl(destination);
       WebdavMethod move = new WebdavMethod("MOVE", source, destination);
       response = ExoConnectionUtils.httpClient.execute(move);
       int status = response.getStatusLine().getStatusCode();
@@ -734,8 +734,8 @@ public class ExoDocumentUtils {
   public static boolean renameFolder(String source, String destination) {
     HttpResponse response;
     try {
-      source = URLAnalyzer.encodeUrl(source);
-      destination = URLAnalyzer.encodeUrl(destination);
+      source = ExoUtils.encodeDocumentUrl(source);
+      destination = ExoUtils.encodeDocumentUrl(destination);
       WebdavMethod create = new WebdavMethod("HEAD", destination);
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();
@@ -762,7 +762,7 @@ public class ExoDocumentUtils {
     HttpResponse response;
     try {
 
-      destination = URLAnalyzer.encodeUrl(destination);
+      destination = ExoUtils.encodeDocumentUrl(destination);
       WebdavMethod create = new WebdavMethod("HEAD", destination);
       response = ExoConnectionUtils.httpClient.execute(create);
       int status = response.getStatusLine().getStatusCode();

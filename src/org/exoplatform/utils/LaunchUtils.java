@@ -18,27 +18,19 @@
  */
 package org.exoplatform.utils;
 
-import android.app.Activity;
-import android.content.Intent;
 import greendroid.util.Config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-import org.exoplatform.R;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.ui.login.LoginActivity;
-import org.exoplatform.ui.WelcomeActivity;
-import org.exoplatform.utils.AssetUtils;
-import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.ServerConfigurationUtils;
-import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.image.SocialImageLoader;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -60,13 +52,10 @@ public class LaunchUtils {
 
   private AccountSetting           mSetting;
 
-  private Activity                 mCurrentActivity;
-
   private static final String TAG = "eXoLaunchController";
 
   public LaunchUtils(Activity context) {
     mContext = context;
-    mCurrentActivity = context;
     mSharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     mSetting = AccountSetting.getInstance();
 
@@ -91,13 +80,13 @@ public class LaunchUtils {
    * Retrieve server list from config file and set it up for server setting helper
    */
   private void setServerList() {
-    ArrayList<ServerObjInfo> _serverList =
+    ArrayList<ExoAccount> _serverList =
         ServerConfigurationUtils.getServerListFromFile(mContext, ExoConstants.EXO_SERVER_SETTING_FILE);
     ServerSettingHelper.getInstance().setServerInfoList(_serverList);
 
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
-    mSetting.setCurrentServer((selectedServerIdx == -1 || selectedServerIdx >= _serverList.size()) ? null : _serverList.get(selectedServerIdx));
+    mSetting.setCurrentAccount((selectedServerIdx == -1 || selectedServerIdx >= _serverList.size()) ? null : _serverList.get(selectedServerIdx));
   }
 
 
@@ -107,13 +96,13 @@ public class LaunchUtils {
    * @param oldConfigFile
    */
   private void setOldServerList(String oldConfigFile) {
-    ArrayList<ServerObjInfo> _serverList =
+    ArrayList<ExoAccount> _serverList =
         ServerConfigurationUtils.getServerListFromOldConfigFile(oldConfigFile);
     ServerSettingHelper.getInstance().setServerInfoList(_serverList);
     if (_serverList.size() == 0) return;
     /* force app to start login screen */
     mSetting.setDomainIndex("0");
-    mSetting.setCurrentServer(_serverList.get(0));
+    mSetting.setCurrentAccount(_serverList.get(0));
     _serverList.get(0).isAutoLoginEnabled = false;
 
     /* persist the configuration */

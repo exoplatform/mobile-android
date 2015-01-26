@@ -18,22 +18,17 @@
  */
 package org.exoplatform.ui;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import org.exoplatform.R;
-import org.exoplatform.utils.LaunchUtils;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.login.LoginActivity;
 import org.exoplatform.ui.login.LoginProxy;
 import org.exoplatform.ui.login.LoginWarningDialog;
-import org.exoplatform.widget.WarningDialog;
+import org.exoplatform.utils.LaunchUtils;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.os.Bundle;
 
 /**
  * Lightweight activity acts as entry point to the application
@@ -60,7 +55,7 @@ public class LaunchActivity extends Activity implements LoginProxy.ProxyListener
 
   public void redirect() {
     /** no account configured - redirect to Welcome screen */
-    if (mSetting.getCurrentServer() == null) {
+    if (mSetting.getCurrentAccount() == null) {
       Intent next = new Intent(this, WelcomeActivity.class);
       startActivityForResult(next, 0);
       overridePendingTransition(0, 0);

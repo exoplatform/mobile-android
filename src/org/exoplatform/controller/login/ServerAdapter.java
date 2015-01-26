@@ -21,7 +21,7 @@ package org.exoplatform.controller.login;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.model.ServerObjInfo;
+import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 
@@ -37,7 +37,7 @@ import android.widget.TextView;
  * Adapter for server list view
  */
 public class ServerAdapter extends BaseAdapter {
-  private ArrayList<ServerObjInfo> serverInfoList;
+  private ArrayList<ExoAccount> serverInfoList;
 
   private Context                  mContext;
 
@@ -93,8 +93,8 @@ public class ServerAdapter extends BaseAdapter {
       holder = (ViewHolder) convertView.getTag();
     }
 
-    ServerObjInfo serverObj = serverInfoList.get(position);
-    holder.name.setText(serverObj.serverName);
+    ExoAccount serverObj = serverInfoList.get(position);
+    holder.name.setText(serverObj.accountName);
     holder.url.setText(serverObj.serverUrl);
     if (Integer.valueOf(mSetting.getDomainIndex()) == position)
       holder.bg.setBackgroundResource(R.drawable.authenticate_checkmark_on);
