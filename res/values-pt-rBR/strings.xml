@@ -163,12 +163,6 @@
   <string name="MemoryWarning">A memória não está disponível ou não tem espaço livre suficiente.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Lembrar meu filtro</string>
-  <string-array name="SocialTabs">
-    <item id="AllUpdates">Todas as atualizações</item>
-    <item id="MyConnections">Minhas conexões</item>
-    <item id="MySpaces">Meus Espaços</item>
-    <item id="MyStatus">Meu Status</item>
-  </string-array>
 
   <!-- Welcome screen -->
   <string name="Slogan">Your social intranet, anywhere, anytime!</string>
@@ -245,5 +239,10 @@
   <string name="RedirectToLogin">Try again</string>
   <string name="LoginWarningMsg">Connection error</string>
 
-
+  <string-array name="SocialTabs">
+    <item id="AllUpdates">Todas as atualizações</item>
+    <item id="MyConnections">Minhas conexões</item>
+    <item id="MySpaces">Meus Espaços</item>
+    <item id="MyStatus">Meu Status</item>
+  </string-array>
 </resources>
