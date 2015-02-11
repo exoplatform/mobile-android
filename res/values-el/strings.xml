@@ -228,7 +228,6 @@
   <string name="Number2">2</string>
 
   <!-- Server edition -->
- 
   <string name="Account">Account</string>
   <string name="AddServer">Νέος διακομιστής</string>
   <string name="ModifyServer">Modify Server</string>
@@ -249,9 +248,9 @@
   <string name="LoginWarningMsg">Connection error</string>
 
   <string-array name="SocialTabs">
-    <item id="AllUpdates">Όλες οι δραστηριότητες</item>
+    <item id="AllUpdates">Όλες οι ενημερώσεις</item>
     <item id="MyConnections">Οι συνδέσεις μου</item>
     <item id="MySpaces">Οι χώροι μου</item>
-    <item id="MyStatus">Οι δραστηριότητές μου</item>
+    <item id="MyStatus">Η κατάστασή μου</item>
   </string-array>
 </resources>
