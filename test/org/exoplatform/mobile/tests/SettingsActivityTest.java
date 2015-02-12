@@ -66,13 +66,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
 
     CheckBox            mAutoLoginCbx;
 
-    CheckBoxWithImage   mEnCbx;
-
-    CheckBoxWithImage   mFrCbx;
-
-    CheckBoxWithImage   mDeCbx;
-
-    CheckBoxWithImage   mEsCbx;
+    CheckBoxWithImage   mEnCbx, mFrCbx, mDeCbx, mEsCbx, mPtBrCbx;
 
     CheckBox            mRememberFilterCbx;
 
@@ -127,6 +121,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
         mFrCbx = (CheckBoxWithImage) activity.findViewById(R.id.setting_fr_ckb);
         mDeCbx = (CheckBoxWithImage) activity.findViewById(R.id.setting_de_ckb);
         mEsCbx = (CheckBoxWithImage) activity.findViewById(R.id.setting_es_ckb);
+        mPtBrCbx = (CheckBoxWithImage) activity.findViewById(R.id.setting_pt_br_ckb);
 
         // Social
         mRememberFilterCbx = (CheckBox) activity.findViewById(R.id.setting_remember_filter_ckb);
@@ -158,7 +153,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
         assertThat("Auto Login should be disabled", mAutoLoginCbx.isChecked(), equalTo(false));
 
         // Languages
-        assertNotNull(mEnCbx); // checkboxes for EN, FR, DE, ES should exist
+        assertNotNull(mEnCbx); // checkboxes for EN, FR, DE, ES, PT should exist
         assertThat(mEnCbx.isChecked(), equalTo(true)); // EN is selected by
                                                        // default
         assertNotNull(mFrCbx);
@@ -167,6 +162,8 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
         assertThat(mDeCbx.isChecked(), equalTo(false));
         assertNotNull(mEsCbx);
         assertThat(mEsCbx.isChecked(), equalTo(false));
+        assertNotNull(mPtBrCbx);
+        assertThat(mPtBrCbx.isChecked(), equalTo(false));
 
         // Social
         assertNotNull(mRememberFilterCbx);
@@ -210,6 +207,8 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
         assertThat(mDeCbx.isChecked(), equalTo(false));
         assertNotNull(mEsCbx);
         assertThat(mEsCbx.isChecked(), equalTo(false));
+        assertNotNull(mPtBrCbx);
+        assertThat(mPtBrCbx.isChecked(), equalTo(false));
 
         // Social section is disabled when user is offline
         assertThat(mRememberFilterCbx).isDisabled();
@@ -310,26 +309,37 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
         SharedPreferences prefs = activity.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
 
         Robolectric.clickOn(mDeCbx); // turn on German
-        assertThat(mEnCbx.isChecked(), equalTo(false)); // English is off
-        assertThat(mDeCbx.isChecked(), equalTo(true));
+        // English is off
+        assertThat("English should be OFF", mEnCbx.isChecked(), equalTo(false));
+        assertThat("German should be ON", mDeCbx.isChecked(), equalTo(true));
         assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""),
                    equalTo(ExoConstants.GERMAN_LOCALIZATION));
 
         Robolectric.clickOn(mFrCbx); // turn on French
-        assertThat(mDeCbx.isChecked(), equalTo(false)); // German is off
-        assertThat(mFrCbx.isChecked(), equalTo(true));
+        // German is off
+        assertThat("German should be OFF", mDeCbx.isChecked(), equalTo(false));
+        assertThat("French should be ON", mFrCbx.isChecked(), equalTo(true));
         assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""),
                    equalTo(ExoConstants.FRENCH_LOCALIZATION));
 
         Robolectric.clickOn(mEsCbx); // turn on Spanish
-        assertThat(mFrCbx.isChecked(), equalTo(false)); // French is off
-        assertThat(mEsCbx.isChecked(), equalTo(true));
+        // French is off
+        assertThat("French should be OFF", mFrCbx.isChecked(), equalTo(false));
+        assertThat("Spanish should be ON", mEsCbx.isChecked(), equalTo(true));
         assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""),
                    equalTo(ExoConstants.SPANISH_LOCALIZATION));
 
+        Robolectric.clickOn(mPtBrCbx); // turn on Portuguese
+        // Spanish is off
+        assertThat("Spanish should be OFF", mEsCbx.isChecked(), equalTo(false));
+        assertThat("Portuguese should be ON", mPtBrCbx.isChecked(), equalTo(true));
+        assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""),
+                   equalTo(ExoConstants.BRAZIL_LOCALIZATION));
+
         Robolectric.clickOn(mEnCbx); // turn on English
-        assertThat(mEsCbx.isChecked(), equalTo(false)); // Spanish is off
-        assertThat(mEnCbx.isChecked(), equalTo(true));
+        // Portuguese is off
+        assertThat("Portuguese should be OFF", mPtBrCbx.isChecked(), equalTo(false));
+        assertThat("English should be ON", mEnCbx.isChecked(), equalTo(true));
         assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""),
                    equalTo(ExoConstants.ENGLISH_LOCALIZATION));
     }

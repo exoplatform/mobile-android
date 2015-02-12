@@ -54,6 +54,8 @@
         <!-- Spain checkbox -->
         <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_es_ckb" />
 
+        <!-- Portuguese (Brazil) checkbox -->
+        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_pt_br_ckb" />
 
         <!--<include layout="@layout/separator_line" /> -->
 

@@ -34,6 +34,7 @@
   <string name="French">French</string>
   <string name="German">German</string>
   <string name="Spanish">Spanish</string>
+  <string name="PortugueseBrazil">Portuguese (Brazil)</string>
   <string name="CompliantMessage">We cannot connect to a compatible Platform version at this URL, please contact your administrator.</string>
   <string name="Delete">Delete</string>
   <string name="Copy">Copy</string>

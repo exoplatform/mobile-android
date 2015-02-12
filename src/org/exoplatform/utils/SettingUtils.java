@@ -39,7 +39,17 @@ public class SettingUtils {
      */
 
     public static void setLocale(Context mContext, String localize) {
-        final Locale locale = new Locale(localize);
+        final Locale locale;
+        // Back to English if invalid locale is given
+        if (localize == null || "".equals(localize))
+            localize = "en";
+        // Support for locales with country code, e.g. pt_BR
+        if (localize.length() > 2 && localize.charAt(2) == '_') {
+            String[] language = localize.split("_");
+            locale = new Locale(language[0], language[1]);
+        } else {
+            locale = new Locale(localize);
+        }
         Locale.setDefault(locale);
 
         final Resources res = mContext.getResources();
