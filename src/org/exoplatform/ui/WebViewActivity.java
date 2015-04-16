@@ -52,7 +52,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class WebViewActivity extends MyActionBar {
-    private static final String ACCOUNT_SETTING = "account_setting";
+    private static final String ACCOUNT_SETTING      = "account_setting";
+
+    private static final int    CODE_OPEN_IN_BROWSER = 42;
 
     private WebViewLoadTask     mLoadTask;
 
@@ -183,7 +185,17 @@ public class WebViewActivity extends MyActionBar {
         if (_url == null)
             return;
         Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(_url));
-        startActivity(browser);
+        startActivityForResult(browser, CODE_OPEN_IN_BROWSER);
+    }
+
+    @Override
+    protected void onActivityResult(int reqCode, int resCode, Intent data) {
+        // If the activity that has returned was the Browser
+        // We go back from the WebView to the Activity details
+        if (reqCode == CODE_OPEN_IN_BROWSER)
+            onBackPressed();
+        else
+            super.onActivityResult(reqCode, resCode, data);
     }
 
     @SuppressLint("SetJavaScriptEnabled")
