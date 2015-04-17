@@ -28,6 +28,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({ WelcomeActivityTest.class, LoginActivityTest.class,
         SignInOnPremiseActivityTest.class, LaunchActivityTest.class,
         ExoAccountInfoValidationTest.class, SettingsActivityTest.class, HomeActivityTest.class,
-        ServerEditionActivityTest.class, AccountSwitcherTest.class, ExoUtilsTest.class })
+        ServerEditionActivityTest.class, AccountSwitcherTest.class, ExoUtilsTest.class,
+        ExoDocumentUtilsTest.class })
 public class TestSuite {
 }
