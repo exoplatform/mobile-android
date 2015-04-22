@@ -23,8 +23,10 @@ import java.util.ArrayList;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
+import org.exoplatform.social.client.api.model.RestSpace;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.IdentityService;
+import org.exoplatform.social.client.api.service.SpaceService;
 import org.exoplatform.ui.social.SocialTabsActivity;
 
 /*
@@ -33,65 +35,68 @@ import org.exoplatform.ui.social.SocialTabsActivity;
  */
 public class SocialServiceHelper {
 
-  public ActivityService<RestActivity> activityService;
+    public ActivityService<RestActivity> activityService;
 
-  public IdentityService<RestIdentity> identityService;
+    public IdentityService<RestIdentity> identityService;
 
-  public String                        userIdentity;
+    public SpaceService<RestSpace>       spaceService;
 
-  /*
-   * Social List
-   */
-  // public ArrayList<SocialActivityInfo> allUpdatesList;
+    public String                        userIdentity;
 
-  public ArrayList<SocialActivityInfo> myConnectionsList;
+    /*
+     * Social List
+     */
+    // public ArrayList<SocialActivityInfo> allUpdatesList;
 
-  public ArrayList<SocialActivityInfo> mySpacesList;
+    public ArrayList<SocialActivityInfo> myConnectionsList;
 
-  public ArrayList<SocialActivityInfo> myStatusList;
+    public ArrayList<SocialActivityInfo> mySpacesList;
 
-  public ArrayList<SocialActivityInfo> socialInfoList;
+    public ArrayList<SocialActivityInfo> myStatusList;
 
-  public String[]                      userProfile;
+    public ArrayList<SocialActivityInfo> socialInfoList;
 
-  private static SocialServiceHelper   serviceHelper = new SocialServiceHelper();
+    public String[]                      userProfile;
 
-  private SocialServiceHelper() {
+    private static SocialServiceHelper   serviceHelper = new SocialServiceHelper();
 
-  }
+    private SocialServiceHelper() {
 
-  public static SocialServiceHelper getInstance() {
-    return serviceHelper;
-  }
-  
-  public ArrayList<SocialActivityInfo> getSocialListForTab(int tabId) {
-	  switch (tabId) {
-	  case SocialTabsActivity.ALL_UPDATES:
-		  return socialInfoList;
-		  
-	  case SocialTabsActivity.MY_CONNECTIONS:
-		  return myConnectionsList;
-	  
-	  case SocialTabsActivity.MY_SPACES:
-		  return mySpacesList;
-		  
-	  case SocialTabsActivity.MY_STATUS:
-		  return myStatusList;
-		  
-	  default:
-		  return null;
-	  }
-  }
+    }
 
-  public void clearData() {
-    userIdentity = null;
-    activityService = null;
-    identityService = null;
-    socialInfoList = null;
-    userProfile = null;
-    myConnectionsList = null;
-    mySpacesList = null;
-    myStatusList = null;
-  }
+    public static SocialServiceHelper getInstance() {
+        return serviceHelper;
+    }
+
+    public ArrayList<SocialActivityInfo> getSocialListForTab(int tabId) {
+        switch (tabId) {
+        case SocialTabsActivity.ALL_UPDATES:
+            return socialInfoList;
+
+        case SocialTabsActivity.MY_CONNECTIONS:
+            return myConnectionsList;
+
+        case SocialTabsActivity.MY_SPACES:
+            return mySpacesList;
+
+        case SocialTabsActivity.MY_STATUS:
+            return myStatusList;
+
+        default:
+            return null;
+        }
+    }
+
+    public void clearData() {
+        userIdentity = null;
+        activityService = null;
+        identityService = null;
+        socialInfoList = null;
+        userProfile = null;
+        myConnectionsList = null;
+        mySpacesList = null;
+        myStatusList = null;
+        spaceService = null;
+    }
 
 }
