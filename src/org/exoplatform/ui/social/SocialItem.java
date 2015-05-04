@@ -21,8 +21,6 @@ package org.exoplatform.ui.social;
 import java.net.URLConnection;
 import java.util.Locale;
 
-import android.util.Log;
-import android.widget.*;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
@@ -40,6 +38,10 @@ import android.graphics.Color;
 import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * Represents activity item on activity stream
@@ -49,7 +51,12 @@ public class SocialItem {
 
   private static final int    AVATAR_BORDER_COLOR = 0x22000000;
 
-  public LinearLayout contentLayoutWrap;
+  /**
+   * We are not on the Home screen
+   */
+  private final boolean       IS_HOME_STREAM      = false;
+
+  public LinearLayout         contentLayoutWrap;
 
   private ShaderImageView     imageViewAvatar;
 
@@ -83,10 +90,9 @@ public class SocialItem {
 
   private Resources           resource;
 
-  private static final String TAG = "eXo____SocialItem____";
+  private static final String TAG                 = "eXo____SocialItem____";
 
-  public SocialItem(Context context, StandardArrayAdapter.ViewHolder holder,
-                    SocialActivityInfo info, boolean is) {
+  public SocialItem(Context context, StandardArrayAdapter.ViewHolder holder, SocialActivityInfo info, boolean is) {
     mContext = context;
     resource = mContext.getResources();
     activityInfo = info;
@@ -113,7 +119,7 @@ public class SocialItem {
     if (avatarUrl != null) {
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inSampleSize = 4;
-      options.inPurgeable  = true;
+      options.inPurgeable = true;
       options.inInputShareable = true;
       imageViewAvatar.setOptions(options);
       imageViewAvatar.setUrl(avatarUrl);
@@ -124,7 +130,8 @@ public class SocialItem {
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()), TextView.BufferType.SPANNABLE);
     textViewMessage.setVisibility(View.VISIBLE);
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
-      activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime() : activityInfo.getPostedTime()));
+                                                                activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
+                                                                                                  : activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
     textViewTempMessage.setVisibility(View.GONE);
@@ -153,72 +160,68 @@ public class SocialItem {
   }
 
   private void setViewByType(int typeId) {
-
+    String spaceInfo = null;
     switch (typeId) {
 
-      case SocialActivityUtil.KS_FORUM_SPACE:
-        setActivityTypeForum();
-        break;
+    case SocialActivityUtil.ACTIVITY_TYPE_FORUM:
+      setActivityTypeForum();
+      break;
 
-      case SocialActivityUtil.KS_WIKI_SPACE:
-      // Map<String, String> templateMap = activityInfo.templateParams;
-      // Set<String> set = templateMap.keySet();
-      // for (String param : set) {
-      // System.out.println("type: " + activityInfo.getType() +
-      // "--template key: " + param + "-- "
-      // + templateMap.get(param));
-      // }
-        setActivityTypeWiki();
-        break;
+    case SocialActivityUtil.ACTIVITY_TYPE_WIKI:
+      setActivityTypeWiki();
+      break;
 
-      case SocialActivityUtil.EXO_SOCIAL_SPACE:
-        break;
+    case SocialActivityUtil.ACTIVITY_TYPE_SPACE:
+      /* add space information */
+      spaceInfo = SocialActivityUtil.getHeaderWithSpaceInfo(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
+      if (spaceInfo != null)
+        textViewName.setText(Html.fromHtml(spaceInfo), TextView.BufferType.SPANNABLE);
+      break;
 
-      case SocialActivityUtil.DOC_ACTIVITY:
-        /** add space information */
-        String docBuffer = SocialActivityUtil.getActivityTypeDocument(userName, activityInfo,
-                                                                      resource, FONT_COLOR, true);
-        if (docBuffer != null) textViewName.setText(Html.fromHtml(docBuffer), TextView.BufferType.SPANNABLE);
-        String tempMessage = activityInfo.templateParams.get("MESSAGE");
-        if (tempMessage != null) textViewMessage.setText(tempMessage.trim());
+    case SocialActivityUtil.ACTIVITY_TYPE_DOC:
+      /* add space information */
+      spaceInfo = SocialActivityUtil.getHeaderWithSpaceInfo(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
+      if (spaceInfo != null)
+        textViewName.setText(Html.fromHtml(spaceInfo), TextView.BufferType.SPANNABLE);
+      /* add document info */
+      String tempMessage = activityInfo.templateParams.get("MESSAGE");
+      if (tempMessage != null)
+        textViewMessage.setText(tempMessage.trim());
 
-        String docLink = activityInfo.templateParams.get("DOCLINK");
-        if (docLink != null) {
-          String docName = activityInfo.templateParams.get("DOCNAME");
-          String url = domain + docLink;
-          /** get mimetype from url */
-          String mimeTypeExtension = URLConnection.guessContentTypeFromName(url);
-          displayAttachImage(url, docName, null, mimeTypeExtension, false);
-        }
-        break;
-
-      case SocialActivityUtil.DEFAULT_ACTIVITY:
-        break;
-
-      case SocialActivityUtil.LINK_ACTIVITY:
-        setActivityTypeLink();
-        break;
-
-      case SocialActivityUtil.EXO_SOCIAL_RELATIONSHIP:
-        break;
-
-      case SocialActivityUtil.EXO_SOCIAL_PEOPLE:
-        break;
-
-      case SocialActivityUtil.CONTENT_SPACE:
-      /*
-       * add space information
-       */
-
-      String spaceBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
-                                                                      activityInfo,
-                                                                      resource,
-                                                                      FONT_COLOR,
-                                                                      true);
-      if (spaceBuffer != null) {
-        textViewName.setText(Html.fromHtml(spaceBuffer), TextView.BufferType.SPANNABLE);
+      String docLink = activityInfo.templateParams.get("DOCLINK");
+      if (docLink != null) {
+        String docName = activityInfo.templateParams.get("DOCNAME");
+        String url = domain + docLink;
+        /** get mimetype from url */
+        String mimeTypeExtension = URLConnection.guessContentTypeFromName(url);
+        displayAttachImage(url, docName, null, mimeTypeExtension, false);
       }
+      break;
 
+    case SocialActivityUtil.ACTIVITY_TYPE_NORMAL:
+      /* add space information */
+      spaceInfo = SocialActivityUtil.getHeaderWithSpaceInfo(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
+      if (spaceInfo != null) {
+        textViewName.setText(Html.fromHtml(spaceInfo), TextView.BufferType.SPANNABLE);
+      }
+      break;
+
+    case SocialActivityUtil.ACTIVITY_TYPE_LINK:
+      setActivityTypeLink();
+      break;
+
+    case SocialActivityUtil.ACTIVITY_TYPE_RELATIONSHIP:
+      break;
+
+    case SocialActivityUtil.ACTIVITY_TYPE_PEOPLE:
+      break;
+
+    case SocialActivityUtil.ACTIVITY_TYPE_CONTENT:
+      /* add space information */
+      spaceInfo = SocialActivityUtil.getHeaderWithSpaceInfo(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
+      if (spaceInfo != null)
+        textViewName.setText(Html.fromHtml(spaceInfo), TextView.BufferType.SPANNABLE);
+      /* add content info */
       String contentLink = activityInfo.templateParams.get("contenLink");
       if (contentLink != null) {
 
@@ -234,24 +237,21 @@ public class SocialItem {
 
       }
       break;
-    case SocialActivityUtil.KS_ANSWER:
+    case SocialActivityUtil.ACTIVITY_TYPE_ANSWER:
       setActivityTypeAnswer();
       break;
 
-    case SocialActivityUtil.CS_CALENDAR_SPACES:
+    case SocialActivityUtil.ACTIVITY_TYPE_CALENDAR:
       setActivityTypeCalendar();
       break;
+
     default:
       break;
     }
   }
 
   private void setActivityTypeForum() {
-    String forumBuffer = SocialActivityUtil.getActivityTypeForum(userName,
-                                                                 activityInfo,
-                                                                 resource,
-                                                                 FONT_COLOR,
-                                                                 false);
+    String forumBuffer = SocialActivityUtil.getActivityTypeForum(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
 
     textViewName.setText(Html.fromHtml(forumBuffer), TextView.BufferType.SPANNABLE);
     String forumBody = activityInfo.getBody();
@@ -261,11 +261,7 @@ public class SocialItem {
   }
 
   private void setActivityTypeWiki() {
-    String wikiBuffer = SocialActivityUtil.getActivityTypeWiki(userName,
-                                                               activityInfo,
-                                                               resource,
-                                                               FONT_COLOR,
-                                                               false);
+    String wikiBuffer = SocialActivityUtil.getActivityTypeWiki(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
     textViewName.setText(Html.fromHtml(wikiBuffer), TextView.BufferType.SPANNABLE);
     String wikiBody = activityInfo.getBody();
     if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
@@ -277,11 +273,7 @@ public class SocialItem {
 
   private void setActivityTypeAnswer() {
 
-    String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName,
-                                                                   activityInfo,
-                                                                   resource,
-                                                                   FONT_COLOR,
-                                                                   false);
+    String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
 
     textViewName.setText(Html.fromHtml(answerBuffer), TextView.BufferType.SPANNABLE);
 
@@ -296,14 +288,18 @@ public class SocialItem {
                                                                        activityInfo,
                                                                        resource,
                                                                        FONT_COLOR,
-                                                                       false);
+                                                                       IS_HOME_STREAM);
 
     textViewName.setText(Html.fromHtml(calendarBuffer), TextView.BufferType.SPANNABLE);
-    SocialActivityUtil.setCaledarContent(textViewMessage, activityInfo, resource);
+    SocialActivityUtil.setCalendarContent(textViewMessage, activityInfo, resource);
 
   }
 
   private void setActivityTypeLink() {
+
+    String info = SocialActivityUtil.getLinkActivityInfo(activityInfo, FONT_COLOR, resource);
+    textViewName.setText(Html.fromHtml(info), TextView.BufferType.SPANNABLE);
+
     String templateComment = activityInfo.templateParams.get("comment");
     String description = activityInfo.templateParams.get("description").trim();
 
@@ -315,10 +311,7 @@ public class SocialItem {
       textViewCommnet.setVisibility(View.VISIBLE);
     }
 
-    String linkBuffer = SocialActivityUtil.getActivityTypeLink(description,
-                                                               activityInfo,
-                                                               FONT_COLOR,
-                                                               false);
+    String linkBuffer = SocialActivityUtil.getActivityTypeLink(description, activityInfo, FONT_COLOR, IS_HOME_STREAM);
 
     String imageParams = activityInfo.templateParams.get("image");
     if ((imageParams != null) && (imageParams.toLowerCase(Locale.US).contains(ExoConstants.HTTP_PROTOCOL))) {
@@ -329,11 +322,7 @@ public class SocialItem {
     }
   }
 
-  private void displayAttachImage(String url,
-                                  String name,
-                                  String description,
-                                  String fileType,
-                                  boolean isLinkType) {
+  private void displayAttachImage(String url, String name, String description, String fileType, boolean isLinkType) {
     initAttachStubView(url, name, description, fileType, isLinkType);
     attachStubView.setVisibility(View.VISIBLE);
   }

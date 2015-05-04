@@ -44,29 +44,29 @@ import android.widget.TextView;
 
 public class SocialActivityUtil {
 
-  public static final int     DEFAULT_TYPE               = 0;
+  public static final int     ACTIVITY_TYPE_DEFAULT      = 0;
 
-  public static final int     KS_FORUM_SPACE             = 1;
+  public static final int     ACTIVITY_TYPE_FORUM        = 1;
 
-  public static final int     KS_WIKI_SPACE              = 2;
+  public static final int     ACTIVITY_TYPE_WIKI         = 2;
 
-  public static final int     EXO_SOCIAL_SPACE           = 3;
+  public static final int     ACTIVITY_TYPE_SPACE        = 3;
 
-  public static final int     DOC_ACTIVITY               = 4;
+  public static final int     ACTIVITY_TYPE_DOC          = 4;
 
-  public static final int     DEFAULT_ACTIVITY           = 5;
+  public static final int     ACTIVITY_TYPE_NORMAL       = 5;
 
-  public static final int     LINK_ACTIVITY              = 6;
+  public static final int     ACTIVITY_TYPE_LINK         = 6;
 
-  public static final int     EXO_SOCIAL_RELATIONSHIP    = 7;
+  public static final int     ACTIVITY_TYPE_RELATIONSHIP = 7;
 
-  public static final int     EXO_SOCIAL_PEOPLE          = 8;
+  public static final int     ACTIVITY_TYPE_PEOPLE       = 8;
 
-  public static final int     CONTENT_SPACE              = 9;
+  public static final int     ACTIVITY_TYPE_CONTENT      = 9;
 
-  public static final int     KS_ANSWER                  = 10;
+  public static final int     ACTIVITY_TYPE_ANSWER       = 10;
 
-  public static final int     CS_CALENDAR_SPACES         = 11;
+  public static final int     ACTIVITY_TYPE_CALENDAR     = 11;
 
   private static final String LARGER_THUMBNAIL_IMAGE_URL = "thumbnailImage/large";
 
@@ -85,10 +85,8 @@ public class SocialActivityUtil {
 
     String strSection = SocialActivityUtil.getPostedTimeString(context, postedTime);
     // Check activities of today
-    if (strSection.contains(context.getString(R.string.Minute))
-        || strSection.contains(context.getString(R.string.Minutes))
-        || strSection.contains(context.getString(R.string.Hour))
-        || strSection.contains(context.getString(R.string.Hours))) {
+    if (strSection.contains(context.getString(R.string.Minute)) || strSection.contains(context.getString(R.string.Minutes))
+        || strSection.contains(context.getString(R.string.Hour)) || strSection.contains(context.getString(R.string.Hours))) {
 
       // Search the current array of activities for today
       return context.getString(R.string.Today);
@@ -289,70 +287,70 @@ public class SocialActivityUtil {
   public static int getActivityTypeId(String type) {
     if (type != null) {
       if (type.contains("ks-forum:spaces")) {
-        return KS_FORUM_SPACE;
+        return ACTIVITY_TYPE_FORUM;
       } else if (type.contains("ks-wiki:spaces")) {
-        return KS_WIKI_SPACE;
+        return ACTIVITY_TYPE_WIKI;
       } else if (type.contains("exosocial:spaces")) {
-        return EXO_SOCIAL_SPACE;
+        return ACTIVITY_TYPE_SPACE;
       } else if (type.contains("DOC_ACTIVITY")) {
-        return DOC_ACTIVITY;
+        return ACTIVITY_TYPE_DOC;
       } else if (type.contains("DEFAULT_ACTIVITY")) {
-        return DEFAULT_ACTIVITY;
+        return ACTIVITY_TYPE_NORMAL;
       } else if (type.contains("LINK_ACTIVITY")) {
-        return LINK_ACTIVITY;
+        return ACTIVITY_TYPE_LINK;
       } else if (type.contains("exosocial:relationship")) {
-        return EXO_SOCIAL_RELATIONSHIP;
+        return ACTIVITY_TYPE_RELATIONSHIP;
       } else if (type.contains("exosocial:people")) {
-        return EXO_SOCIAL_PEOPLE;
-      } else if (type.contains("contents:spaces") || type.contains("files:spaces") ) {
-        return CONTENT_SPACE;
+        return ACTIVITY_TYPE_PEOPLE;
+      } else if (type.contains("contents:spaces") || type.contains("files:spaces")) {
+        return ACTIVITY_TYPE_CONTENT;
       } else if (type.contains("ks-answer")) {
-        return KS_ANSWER;
+        return ACTIVITY_TYPE_ANSWER;
       } else if (type.contains("cs-calendar:spaces")) {
-        return CS_CALENDAR_SPACES;
+        return ACTIVITY_TYPE_CALENDAR;
       } else
-        return DEFAULT_TYPE;
+        return ACTIVITY_TYPE_DEFAULT;
     } else
-      return DEFAULT_TYPE;
+      return ACTIVITY_TYPE_DEFAULT;
   }
 
   public static void setImageType(int type, ImageView imageView) {
     int returnType = 0;
     switch (type) {
-    case DEFAULT_TYPE:
+    case ACTIVITY_TYPE_DEFAULT:
       returnType = R.drawable.activity_type_normal;
       break;
-    case KS_FORUM_SPACE:
+    case ACTIVITY_TYPE_FORUM:
       returnType = R.drawable.activity_type_forum;
       break;
-    case KS_WIKI_SPACE:
+    case ACTIVITY_TYPE_WIKI:
       returnType = R.drawable.activity_type_wiki;
       break;
-    case EXO_SOCIAL_SPACE:
+    case ACTIVITY_TYPE_SPACE:
       returnType = R.drawable.activity_type_normal;
       break;
-    case DOC_ACTIVITY:
+    case ACTIVITY_TYPE_DOC:
       returnType = R.drawable.activity_type_document;
       break;
-    case DEFAULT_ACTIVITY:
+    case ACTIVITY_TYPE_NORMAL:
       returnType = R.drawable.activity_type_normal;
       break;
-    case LINK_ACTIVITY:
+    case ACTIVITY_TYPE_LINK:
       returnType = R.drawable.activity_type_link;
       break;
-    case EXO_SOCIAL_RELATIONSHIP:
+    case ACTIVITY_TYPE_RELATIONSHIP:
       returnType = R.drawable.activity_type_connection;
       break;
-    case EXO_SOCIAL_PEOPLE:
+    case ACTIVITY_TYPE_PEOPLE:
       returnType = R.drawable.activity_type_normal;
       break;
-    case CONTENT_SPACE:
+    case ACTIVITY_TYPE_CONTENT:
       returnType = R.drawable.activity_type_normal;
       break;
-    case KS_ANSWER:
+    case ACTIVITY_TYPE_ANSWER:
       returnType = R.drawable.activity_type_answer;
       break;
-    case CS_CALENDAR_SPACES:
+    case ACTIVITY_TYPE_CALENDAR:
       returnType = R.drawable.activity_type_calendar;
 
     }
@@ -404,10 +402,7 @@ public class SocialActivityUtil {
     return "style=\"color: #FFFFFF";
   }
 
-  private static String addSpaceInfo(SocialActivityInfo info,
-                                     Resources resource,
-                                     String fontColor,
-                                     boolean isHomeStyle) {
+  private static String addSpaceInfo(SocialActivityInfo info, Resources resource, String fontColor, boolean isHomeStyle) {
     RestActivityStream actStream = info.restActivityStream;
     String spaceType = actStream.getType();
     StringBuffer spaceBuffer = new StringBuffer();
@@ -456,30 +451,30 @@ public class SocialActivityUtil {
     String actTypeDesc = null;
     String forumName = null;
     if (getPlatformVersion() >= 4.0f) {
-    	// on PLF4.0 only AddTopic action creates an activity
-    	actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
-    	forumLink = activityInfo.templateParams.get("TopicLink");
-    	forumName = activityInfo.templateParams.get("RESOURCE_BUNDLE_VALUES_PARAM");
+      // on PLF4.0 only AddTopic action creates an activity
+      actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
+      forumLink = activityInfo.templateParams.get("TopicLink");
+      forumName = activityInfo.templateParams.get("RESOURCE_BUNDLE_VALUES_PARAM");
     } else {
-	    String actType = activityInfo.templateParams.get("ActivityType");
-	    forumBuffer.append(appendFontColor(fontColor));
-	    if (actType.equalsIgnoreCase("AddPost")) {
-	      forumLink = activityInfo.templateParams.get("PostLink");
-	      actTypeDesc = resource.getString(R.string.HasAddANewPost);
-	      forumName = activityInfo.templateParams.get("PostName");
-	    } else if (actType.equalsIgnoreCase("UpdatePost")) {
-	      forumLink = activityInfo.templateParams.get("PostLink");
-	      actTypeDesc = resource.getString(R.string.HasUpdateANewPost);
-	      forumName = activityInfo.templateParams.get("PostName");
-	    } else if (actType.equalsIgnoreCase("AddTopic")) {
-	      forumLink = activityInfo.templateParams.get("TopicLink");
-	      actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
-	      forumName = activityInfo.templateParams.get("TopicName");
-	    } else if (actType.equalsIgnoreCase("UpdateTopic")) {
-	      forumLink = activityInfo.templateParams.get("TopicLink");
-	      actTypeDesc = resource.getString(R.string.HasUpdateAnewTopic);
-	      forumName = activityInfo.templateParams.get("TopicName");
-	    }
+      String actType = activityInfo.templateParams.get("ActivityType");
+      forumBuffer.append(appendFontColor(fontColor));
+      if (actType.equalsIgnoreCase("AddPost")) {
+        forumLink = activityInfo.templateParams.get("PostLink");
+        actTypeDesc = resource.getString(R.string.HasAddANewPost);
+        forumName = activityInfo.templateParams.get("PostName");
+      } else if (actType.equalsIgnoreCase("UpdatePost")) {
+        forumLink = activityInfo.templateParams.get("PostLink");
+        actTypeDesc = resource.getString(R.string.HasUpdateANewPost);
+        forumName = activityInfo.templateParams.get("PostName");
+      } else if (actType.equalsIgnoreCase("AddTopic")) {
+        forumLink = activityInfo.templateParams.get("TopicLink");
+        actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
+        forumName = activityInfo.templateParams.get("TopicName");
+      } else if (actType.equalsIgnoreCase("UpdateTopic")) {
+        forumLink = activityInfo.templateParams.get("TopicLink");
+        actTypeDesc = resource.getString(R.string.HasUpdateAnewTopic);
+        forumName = activityInfo.templateParams.get("TopicName");
+      }
     }
     forumBuffer.append(actTypeDesc);
     forumBuffer.append("</font>");
@@ -496,17 +491,16 @@ public class SocialActivityUtil {
     return forumBuffer.toString();
   }
 
-  
   public static float getPlatformVersion() {
     /* if server does not return platform version then use 3.5 */
     if (ServerSettingHelper.getInstance().getServerVersion() == null) {
       return 3.5f;
     }
-    
+
     /* use first 3 character to represent platform version */
     return Float.parseFloat(ServerSettingHelper.getInstance().getServerVersion().substring(0, 3));
   }
-  
+
   public static String getActivityTypeWiki(String userName,
                                            SocialActivityInfo activityInfo,
                                            Resources resource,
@@ -529,27 +523,29 @@ public class SocialActivityUtil {
 
     String act_key_des = "";
     if (act_key != null) {
-      
+
       if (getPlatformVersion() >= 4.0f) {
-        /* on PLF4 we have editPageContent and editPageTitle action instead of update_page */
+        /*
+         * on PLF4 we have editPageContent and editPageTitle action instead of
+         * update_page
+         */
         if (act_key.equalsIgnoreCase("editPageContent") || act_key.equalsIgnoreCase("editPageTitle")) {
           wiki_url = activityInfo.templateParams.get("view_change_url");
-          act_key_des = resource.getString(R.string.HasEditWikiPage);        
+          act_key_des = resource.getString(R.string.HasEditWikiPage);
         }
-      }  
-      else { 
+      } else {
         if (act_key.equalsIgnoreCase("update_page")) {
           wiki_url = activityInfo.templateParams.get("view_change_url");
           act_key_des = resource.getString(R.string.HasEditWikiPage);
         }
       }
-      
+
       if (act_key.equalsIgnoreCase("add_page")) {
         wiki_url = activityInfo.templateParams.get("page_url");
         act_key_des = resource.getString(R.string.HasCreatWikiPage);
       }
     }
-  
+
     buffer.append(act_key_des);
     buffer.append("</font>");
     buffer.append("<br>");
@@ -560,18 +556,17 @@ public class SocialActivityUtil {
       buffer.append(appendLinkStyleColor());
     }
     buffer.append(">");
-    buffer.append(page_name);    
+    buffer.append(page_name);
     buffer.append("</a>");
     buffer.append("</body></html>");
     return buffer.toString();
   }
 
-  
   public static String getActivityTypeAnswer(String userName,
                                              SocialActivityInfo activityInfo,
                                              Resources resource,
                                              String fontColor,
-                                             boolean isHomeStyle) {    
+                                             boolean isHomeStyle) {
     String answer_link = "";
     StringBuffer answerBuffer = new StringBuffer();
     answerBuffer.append("<html><body>");
@@ -588,14 +583,16 @@ public class SocialActivityUtil {
 
     String act_key_des = "";
     String page_name = "";
-            
+
     if (getPlatformVersion() >= 4.0f) {
-      /* on PLF 4, currently we do not have act_key so no way to distinguish QuestionAdd, QuestionUpdate or AnswerAdd */
+      /*
+       * on PLF 4, currently we do not have act_key so no way to distinguish
+       * QuestionAdd, QuestionUpdate or AnswerAdd
+       */
       act_key_des = resource.getString(R.string.HasAskAnswer);
       page_name = activityInfo.getTitle();
-    } 
-    else {
-    
+    } else {
+
       String act_key = activityInfo.templateParams.get("ActivityType");
       if (act_key.equalsIgnoreCase("QuestionUpdate")) {
         act_key_des = resource.getString(R.string.HasUpdatedQuestion);
@@ -604,13 +601,13 @@ public class SocialActivityUtil {
       } else if (act_key.equalsIgnoreCase("AnswerAdd")) {
         act_key_des = resource.getString(R.string.HasAnswerQuestion);
       }
-      
+
       page_name = activityInfo.templateParams.get("Name");
     }
     answerBuffer.append(act_key_des);
     answerBuffer.append("</font>");
     answerBuffer.append("<br>");
-    answer_link = activityInfo.templateParams.get("Link");      
+    answer_link = activityInfo.templateParams.get("Link");
     answerBuffer.append("<a href=");
     answerBuffer.append(answer_link);
     if (isHomeStyle) {
@@ -628,7 +625,7 @@ public class SocialActivityUtil {
                                                SocialActivityInfo activityInfo,
                                                Resources resource,
                                                String fontColor,
-                                               boolean isHomeStyle) {    
+                                               boolean isHomeStyle) {
     StringBuffer forumBuffer = new StringBuffer();
     forumBuffer.append("<html><body>");
     forumBuffer.append("<a>");
@@ -639,7 +636,7 @@ public class SocialActivityUtil {
       forumBuffer.append(spaceInfo);
     }
     forumBuffer.append(" ");
-    String actType = activityInfo.templateParams.get("EventType");    
+    String actType = activityInfo.templateParams.get("EventType");
     String actTypeDesc = null;
     String forumName = null;
     // forumBuffer.append("<font color=\"#696969\">");
@@ -669,10 +666,22 @@ public class SocialActivityUtil {
     return forumBuffer.toString();
   }
 
-  public static String getActivityTypeLink(String userName,
-                                           SocialActivityInfo activityInfo,
-                                           String fontColor,
-                                           boolean isHomeStyle) {    
+  public static String getLinkActivityInfo(SocialActivityInfo activityInfo, String fontColor, Resources resources) {
+    StringBuffer buffer = new StringBuffer();
+    buffer.append("<html><body>");
+    buffer.append("<a>");
+    buffer.append(activityInfo.getUserName());
+    buffer.append("</a>");
+    String spaceInfo = addSpaceInfo(activityInfo, resources, fontColor, false);
+    if (spaceInfo != null) {
+      buffer.append(" ");
+      buffer.append(spaceInfo);
+    }
+    buffer.append("</body></html>");
+    return buffer.toString();
+  }
+
+  public static String getActivityTypeLink(String userName, SocialActivityInfo activityInfo, String fontColor, boolean isHomeStyle) {
     StringBuffer linkBuffer = new StringBuffer();
     String linkTitle = activityInfo.templateParams.get("title").trim();
     String linkUrl = activityInfo.templateParams.get("link");
@@ -690,11 +699,23 @@ public class SocialActivityUtil {
     return linkBuffer.toString();
   }
 
-  public static String getActivityTypeDocument(String userName,
-                                               SocialActivityInfo activityInfo,
-                                               Resources resource,
-                                               String fontColor,
-                                               boolean isHomeStyle) {
+  /**
+   * Returns an HTML string with the user's fullname and the space's name. The
+   * labels are returned in the user's language. <br/>
+   * Example: <b>Philippe Aristote</b> in <b>eXo Mobile</b> space
+   * 
+   * @param userName
+   * @param activityInfo the activity for which we retrieve the header
+   * @param resource
+   * @param fontColor
+   * @param isHomeStyle if this header is displayed on the home ticker or not
+   * @return a String that contains HTML markup
+   */
+  public static String getHeaderWithSpaceInfo(String userName,
+                                              SocialActivityInfo activityInfo,
+                                              Resources resource,
+                                              String fontColor,
+                                              boolean isHomeStyle) {
     String space = addSpaceInfo(activityInfo, resource, fontColor, isHomeStyle);
 
     if (space != null) {
@@ -709,14 +730,12 @@ public class SocialActivityUtil {
 
   }
 
-  public static void setCaledarContent(TextView textView,
-                                       SocialActivityInfo activityInfo,
-                                       Resources resource) {    
+  public static void setCalendarContent(TextView textView, SocialActivityInfo activityInfo, Resources resource) {
     StringBuffer caledarBuffer = new StringBuffer();
     caledarBuffer.append("<html><body>");
     caledarBuffer.append(resource.getString(R.string.CalendarDescription));
     caledarBuffer.append("\n");
-    
+
     String description = activityInfo.templateParams.get("EventDescription");
     if (description != null) {
       caledarBuffer.append(description);

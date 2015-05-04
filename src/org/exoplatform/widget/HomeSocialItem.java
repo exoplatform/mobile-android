@@ -18,14 +18,13 @@
  */
 package org.exoplatform.widget;
 
-import android.graphics.BitmapFactory;
-import android.util.Log;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.utils.SocialActivityUtil;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,14 +32,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * Represents sliding Item on Home screen
- *
- * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com May
- * 22, 2012
+ * Represents sliding Item on Home screen. Created by The eXo Platform SAS
+ * 
+ * @author eXoPlatform exo@exoplatform.com May 22, 2012
  */
 public class HomeSocialItem extends LinearLayout {
 
-  private static final String FONT_COLOR = "#FFFFFF";
+  private static final String FONT_COLOR     = "#FFFFFF";
+
+  /**
+   * We are on the Home screen
+   */
+  private final boolean       IS_HOME_STREAM = true;
 
   private Context             mContext;
 
@@ -56,14 +59,13 @@ public class HomeSocialItem extends LinearLayout {
 
   private SocialActivityInfo  activityInfo;
 
-  private static final String TAG = "eXo____HomeSocialItem____";
-
+  private static final String TAG            = "eXo____HomeSocialItem____";
 
   public HomeSocialItem(Context context) {
     super(context);
     mContext = context;
   }
-  
+
   public HomeSocialItem(Context context, SocialActivityInfo info) {
     super(context);
     mContext = context;
@@ -79,7 +81,7 @@ public class HomeSocialItem extends LinearLayout {
 
     BitmapFactory.Options options = new BitmapFactory.Options();
     options.inSampleSize = 4;
-    options.inPurgeable  = true;
+    options.inPurgeable = true;
     options.inInputShareable = true;
     activtyAvatar.setOptions(options);
     activtyAvatar.setUrl(info.getImageUrl());
@@ -90,28 +92,21 @@ public class HomeSocialItem extends LinearLayout {
     setViewByType(imageId);
   }
 
-
   private void setViewByType(int typeId) {
+    String spaceInfo = null;
     switch (typeId) {
-    case SocialActivityUtil.KS_FORUM_SPACE:
+    case SocialActivityUtil.ACTIVITY_TYPE_FORUM:
 
-      String forumBuffer = SocialActivityUtil.getActivityTypeForum(userName,
-                                                                   activityInfo,
-                                                                   resource,
-                                                                   FONT_COLOR,
-                                                                   true);
+      String forumBuffer = SocialActivityUtil.getActivityTypeForum(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
 
       textViewName.setText(Html.fromHtml(forumBuffer));
       String forumBody = activityInfo.getBody();
 
       textViewMessage.setText(Html.fromHtml(forumBody));
       break;
-    case SocialActivityUtil.KS_WIKI_SPACE:
-      String wikiBuffer = SocialActivityUtil.getActivityTypeWiki(userName,
-                                                                 activityInfo,
-                                                                 resource,
-                                                                 FONT_COLOR,
-                                                                 true);
+
+    case SocialActivityUtil.ACTIVITY_TYPE_WIKI:
+      String wikiBuffer = SocialActivityUtil.getActivityTypeWiki(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
       textViewName.setText(Html.fromHtml(wikiBuffer));
       String wikiBody = activityInfo.getBody();
       if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
@@ -120,31 +115,34 @@ public class HomeSocialItem extends LinearLayout {
         textViewMessage.setText(Html.fromHtml(wikiBody));
       }
       break;
-    case SocialActivityUtil.EXO_SOCIAL_SPACE:
+
+    case SocialActivityUtil.ACTIVITY_TYPE_SPACE:
+      /* add space information */
+      spaceInfo = SocialActivityUtil.getHeaderWithSpaceInfo(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
+      if (spaceInfo != null)
+        textViewName.setText(Html.fromHtml(spaceInfo), TextView.BufferType.SPANNABLE);
       break;
-    case SocialActivityUtil.DOC_ACTIVITY:
-      /*
-       * add space information
-       */
 
-      String docBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
-                                                                    activityInfo,
-                                                                    resource,
-                                                                    FONT_COLOR,
-                                                                    true);
-      if (docBuffer != null) {
-        textViewName.setText(Html.fromHtml(docBuffer));
-      }
-
+    case SocialActivityUtil.ACTIVITY_TYPE_DOC:
+      /* add space information */
+      spaceInfo = SocialActivityUtil.getHeaderWithSpaceInfo(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
+      if (spaceInfo != null)
+        textViewName.setText(Html.fromHtml(spaceInfo), TextView.BufferType.SPANNABLE);
+      /* add document info */
       String tempMessage = activityInfo.templateParams.get("MESSAGE");
       if (tempMessage != null) {
         textViewMessage.setText(tempMessage.trim());
       }
+      break;
 
+    case SocialActivityUtil.ACTIVITY_TYPE_NORMAL:
+      /* add space information */
+      spaceInfo = SocialActivityUtil.getHeaderWithSpaceInfo(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
+      if (spaceInfo != null)
+        textViewName.setText(Html.fromHtml(spaceInfo), TextView.BufferType.SPANNABLE);
       break;
-    case SocialActivityUtil.DEFAULT_ACTIVITY:
-      break;
-    case SocialActivityUtil.LINK_ACTIVITY:
+
+    case SocialActivityUtil.ACTIVITY_TYPE_LINK:
       String templateComment = activityInfo.templateParams.get("comment");
       String description = activityInfo.templateParams.get("description").trim();
 
@@ -156,32 +154,21 @@ public class HomeSocialItem extends LinearLayout {
       }
 
       break;
-    case SocialActivityUtil.EXO_SOCIAL_RELATIONSHIP:
-
+    case SocialActivityUtil.ACTIVITY_TYPE_RELATIONSHIP:
       break;
-    case SocialActivityUtil.EXO_SOCIAL_PEOPLE:
-      break;
-    case SocialActivityUtil.CONTENT_SPACE:
-      /*
-       * add space information
-       */
 
-      String spaceBuffer = SocialActivityUtil.getActivityTypeDocument(userName,
-                                                                      activityInfo,
-                                                                      resource,
-                                                                      FONT_COLOR,
-                                                                      true);
-      if (spaceBuffer != null) {
-        textViewName.setText(Html.fromHtml(spaceBuffer));
-      }
-
+    case SocialActivityUtil.ACTIVITY_TYPE_PEOPLE:
       break;
-    case SocialActivityUtil.KS_ANSWER:
-      String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName,
-                                                                     activityInfo,
-                                                                     resource,
-                                                                     FONT_COLOR,
-                                                                     true);
+
+    case SocialActivityUtil.ACTIVITY_TYPE_CONTENT:
+      /* add space information */
+      spaceInfo = SocialActivityUtil.getHeaderWithSpaceInfo(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
+      if (spaceInfo != null)
+        textViewName.setText(Html.fromHtml(spaceInfo), TextView.BufferType.SPANNABLE);
+      break;
+
+    case SocialActivityUtil.ACTIVITY_TYPE_ANSWER:
+      String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
 
       textViewName.setText(Html.fromHtml(answerBuffer));
 
@@ -191,15 +178,15 @@ public class HomeSocialItem extends LinearLayout {
       }
       break;
 
-    case SocialActivityUtil.CS_CALENDAR_SPACES:
+    case SocialActivityUtil.ACTIVITY_TYPE_CALENDAR:
       String calendarBuffer = SocialActivityUtil.getActivityTypeCalendar(userName,
                                                                          activityInfo,
                                                                          resource,
                                                                          FONT_COLOR,
-                                                                         true);
+                                                                         IS_HOME_STREAM);
 
       textViewName.setText(Html.fromHtml(calendarBuffer));
-      SocialActivityUtil.setCaledarContent(textViewMessage, activityInfo, resource);
+      SocialActivityUtil.setCalendarContent(textViewMessage, activityInfo, resource);
       break;
     default:
       break;
