@@ -60,11 +60,10 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
 
       /** Login OK - check mobile compatibility */
       if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
-        boolean isCompliant = ExoConnectionUtils.checkPLFVersion(response);
+        boolean isCompliant = ExoConnectionUtils.checkPLFVersion(response, domain, username);
         if (!isCompliant) return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
       }
 
-      ExoDocumentUtils.setRepositoryHomeUrl(username, domain);
       return ExoConnectionUtils.checkPlatformRespose(response);
     } catch(HttpHostConnectException e) {
       Log.d(TAG, "HttpHostConnectException: " + e.getLocalizedMessage());

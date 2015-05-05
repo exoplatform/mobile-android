@@ -265,31 +265,12 @@ public class ExoDocumentUtils {
 
     }
 
-    public static void setRepositoryHomeUrl(String userName, String domain) {
+  public static void setRepositoryHomeUrl(String userName, String userHomeNodePath, String domain) {
         String documentPath = getDocumenPath();
         StringBuilder buffer = new StringBuilder();
         buffer.append(domain);
         buffer.append(documentPath);
-
-        int length = userName.length();
-        if (length < 4) {
-            for (int i = 1; i < length; i++) {
-                String userNameLevel = userName.substring(0, i);
-                buffer.append("/");
-                buffer.append(userNameLevel);
-                buffer.append("___");
-            }
-        } else {
-            for (int i = 1; i < 4; i++) {
-                String userNameLevel = userName.substring(0, i);
-                buffer.append("/");
-                buffer.append(userNameLevel);
-                buffer.append("___");
-            }
-        }
-
-        buffer.append("/");
-        buffer.append(userName);
+        buffer.append(userHomeNodePath);
 
         try {
             WebdavMethod copy = new WebdavMethod("HEAD", buffer.toString());
@@ -420,8 +401,6 @@ public class ExoDocumentUtils {
         documentPath.append(DocumentHelper.getInstance().repository);
         documentPath.append("/");
         documentPath.append(ExoConstants.DOCUMENT_COLLABORATION);
-        documentPath.append("/");
-        documentPath.append(ExoConstants.DOCUMENT_USERS);
         return documentPath.toString();
     }
 

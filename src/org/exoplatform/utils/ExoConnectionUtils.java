@@ -491,7 +491,7 @@ public class ExoConnectionUtils {
     /*
      * Check the version of PLF is mobile compatible or not
      */
-    public static boolean checkPLFVersion(HttpResponse response) {
+    public static boolean checkPLFVersion(HttpResponse response, String domain, String username) {
         try {
 
             String result = getPLFStream(response);
@@ -504,6 +504,7 @@ public class ExoConnectionUtils {
                 String verObject = json.get(ExoConstants.PLATFORM_VERSION).toString();
                 ServerSettingHelper.getInstance().setServerVersion(verObject);
 
+
                 /*
                  * Get repository name
                  */
@@ -515,6 +516,9 @@ public class ExoConnectionUtils {
                     }
                 }
                 DocumentHelper.getInstance().repository = repository;
+
+                String userHomeNode = json.get(ExoConstants.USER_HOME_NODE_PATH).toString();
+                ExoDocumentUtils.setRepositoryHomeUrl(username,userHomeNode, domain);
                 return true;
             } else
                 return false;
