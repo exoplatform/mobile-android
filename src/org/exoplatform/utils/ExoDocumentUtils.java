@@ -237,6 +237,7 @@ public class ExoDocumentUtils {
         return docFileType;
     }
 
+<<<<<<< HEAD
     public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
         try {
             url = url.replaceAll(" ", "%20");
@@ -265,11 +266,12 @@ public class ExoDocumentUtils {
 
     }
 
-    public static void setRepositoryHomeUrl(String userName, String domain) {
-        String documentPath = getDocumenPath();
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(domain);
-        buffer.append(documentPath);
+  public static void setRepositoryHomeUrl(String userName, String userHomeNodePath, String domain) {
+    String documentPath = getDocumenPath();
+    StringBuilder buffer = new StringBuilder();
+    buffer.append(domain);
+    buffer.append(documentPath);
+    buffer.append(userHomeNodePath);
 
         int length = userName.length();
         if (length < 4) {
