@@ -244,7 +244,7 @@
     <string name="LoginWarningMsg">La connexion a échoué</string>
 
   <string-array name="SocialTabs">
-    <item id="AllUpdates">Toutes les Activités</item>
+    <item id="AllUpdates">Toutes Les Activités</item>
     <item id="MyConnections">Mes Connexions</item>
     <item id="MySpaces">Mes Espaces</item>
     <item id="MyStatus">Mes Activités</item>
