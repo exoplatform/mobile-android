@@ -34,6 +34,7 @@
   <string name="French">Francés</string>
   <string name="German">Alemán</string>
   <string name="Spanish">Español</string>
+  <string name="PortugueseBrazil">Portuguese (Brazil)</string>
   <string name="CompliantMessage">No pudimos conectar a una versión compatible de la plataforma en esta dirección URL, por favor contacte con su administrador.</string>
   <string name="Delete">Eliminar</string>
   <string name="Copy">Copiar</string>
@@ -61,6 +62,13 @@
   <string name="YourComment">Su comentario …</string>
   <string name="Comment">Comentar</string>
   <string name="StatusUpdate">Publicar</string>
+  <string name="PostTo">To:</string>
+  <string name="Public">Your stream</string>
+  <string name="NoSpaces">You are not in any space</string>
+  <string name="ComposerPlaceHolder">What are you working on?</string>
+  <string name="ShareWithWhom">Select who will see this post</string>
+  <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
+  <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
   <string name="NoLike">Ningún \"me gusta\" por el momento</string>
   <string name="LikedThis"> le gusta esto</string>
   <string name="And"> y</string>
