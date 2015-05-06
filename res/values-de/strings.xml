@@ -27,8 +27,8 @@
     <string name="ModifyServerList">Die Liste ändern</string>
     <string name="ServerDetail">Serverkonfiguration</string>
     <string name="NewServer">Neuer Server</string>
-    <string name="NameOfTheServer">Server namen</string>
-    <string name="URLOfTheSerVer">Server URL</string>
+  <string name="NameOfTheServer">Name des Servers</string>
+  <string name="URLOfTheSerVer">URL des Servers</string>
     <string name="CannotEditServer"> Der Server kann weder geändert noch gelöscht werden. Es ist derzeit in Verwendung.</string>
     <string name="English">Englisch</string>
     <string name="French">Französisch</string>
@@ -63,6 +63,13 @@
     <string name="YourComment">Ihr Kommentar…</string>
     <string name="Comment">Kommentar</string>
     <string name="StatusUpdate">Post</string>
+  <string name="PostTo">To:</string>
+  <string name="Public">Your stream</string>
+  <string name="NoSpaces">You are not in any space</string>
+  <string name="ComposerPlaceHolder">What are you working on?</string>
+  <string name="ShareWithWhom">Select who will see this post</string>
+  <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
+  <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
     <string name="NoLike">Im Moment gefällt dies niemandem</string>
     <string name="LikedThis"> gefällt dies</string>
     <string name="And"> und</string>
