@@ -34,6 +34,7 @@
   <string name="French">Franceză</string>
   <string name="German">Germană</string>
   <string name="Spanish">Spaniolă</string>
+  <string name="PortugueseBrazil">Portuguese (Brazil)</string>
   <string name="CompliantMessage">Nu ne putem conecta la o versiune compatibilă de platforma la acest URL, vă rugăm să contactaţi administratorul.</string>
   <string name="Delete">Ştergeţi</string>
   <string name="Copy">Copiați</string>
@@ -61,6 +62,13 @@
   <string name="YourComment">Comentariul tau...</string>
   <string name="Comment">Comentariu</string>
   <string name="StatusUpdate">Postare</string>
+  <string name="PostTo">To:</string>
+  <string name="Public">Your stream</string>
+  <string name="NoSpaces">You are not in any space</string>
+  <string name="ComposerPlaceHolder">What are you working on?</string>
+  <string name="ShareWithWhom">Select who will see this post</string>
+  <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
+  <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
   <string name="NoLike">Nu sunt aprecieri pentru moment</string>
   <string name="LikedThis"> -a plăcut acest lucru</string>
   <string name="And"> şi</string>
