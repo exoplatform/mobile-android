@@ -34,6 +34,7 @@
   <string name="French">فرنسية</string>
   <string name="German">الألمانية</string>
   <string name="Spanish">الإسبانيّة</string>
+  <string name="PortugueseBrazil">Portuguese (Brazil)</string>
   <string name="CompliantMessage">لا يمكننا التّواصل بمنصة متوافقة في المصدر مع هذا العنوان (URL) ، يُرجى الاتصال بالمسؤول.</string>
   <string name="Delete">حذف</string>
   <string name="Copy">نسخ</string>
@@ -61,6 +62,13 @@
   <string name="YourComment">التعليق الخاص بك...</string>
   <string name="Comment">تعليق</string>
   <string name="StatusUpdate">ردّ</string>
+  <string name="PostTo">To:</string>
+  <string name="Public">Your stream</string>
+  <string name="NoSpaces">You are not in any space</string>
+  <string name="ComposerPlaceHolder">What are you working on?</string>
+  <string name="ShareWithWhom">Select who will see this post</string>
+  <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
+  <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
   <string name="NoLike">لا يوجد أشخاص معجبون بهذا.</string>
   <string name="LikedThis"> أحب هذا</string>
   <string name="And"> و</string>
