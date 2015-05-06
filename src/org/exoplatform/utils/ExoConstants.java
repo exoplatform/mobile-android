@@ -30,6 +30,8 @@ public class ExoConstants {
 
     public static final String PLATFORM_CURRENT_REPO_NAME            = "currentRepoName";
 
+    public static final String USER_HOME_NODE_PATH                   = "userHomeNodePath";
+
     public static final String LOGIN_YES                             = "YES";
 
     public static final String LOGIN_NO                              = "NO";

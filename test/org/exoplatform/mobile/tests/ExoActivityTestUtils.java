@@ -97,13 +97,17 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
 
     final int             REQ_PLATFORM_INFO          = 6;
 
-    final String          RESP_PLATFORM_INFO         = "{\"duration\":\"UNLIMITED\",\"platformEdition\":\"ENTERPRISE\",\"buildNumber\":null,\"productCode\":\"CWI-team-09LC0xLDA2L\",\"unlockKey\":\"aaabbbccc\",\"nbUsers\":null,\"dateOfKeyGeneration\":null,\"platformVersion\":\"4.0.4\",\"isMobileCompliant\":\"true\",\"platformBuildNumber\":\"20131225\",\"platformRevision\":\"aaabbbccc\",\"userHomeNodePath\":\"/Users/p___/ph___/phi___/philippe\",\"runningProfile\":\"all\",\"currentRepoName\":\"repository\",\"defaultWorkSpaceName\":\"collaboration\"}";
+    final String          RESP_PLATFORM_INFO         = "{\"duration\":\"UNLIMITED\",\"platformEdition\":\"ENTERPRISE\",\"buildNumber\":null,\"productCode\":\"CWI-team-09LC0xLDA2L\",\"unlockKey\":\"aaabbbccc\",\"nbUsers\":null,\"dateOfKeyGeneration\":null,\"platformVersion\":\"4.0.4\",\"isMobileCompliant\":\"true\",\"platformBuildNumber\":\"20131225\",\"platformRevision\":\"aaabbbccc\",\"userHomeNodePath\":\"/Users/t___/te___/tes___/testuser\",\"runningProfile\":\"all\",\"currentRepoName\":\"repository\",\"defaultWorkSpaceName\":\"collaboration\"}";
 
     final int             REQ_JCR_USER               = 7;
 
     final int             REQ_JCR_USER_2             = 8;
 
     final String          RESP_JCR_USER              = "{}";
+
+    final int             REQ_PLATFORM_INFO_USER_2          = 9;
+
+    final String          RESP_PLATFORM_INFO_USER_2         = "{\"duration\":\"UNLIMITED\",\"platformEdition\":\"ENTERPRISE\",\"buildNumber\":null,\"productCode\":\"CWI-team-09LC0xLDA2L\",\"unlockKey\":\"aaabbbccc\",\"nbUsers\":null,\"dateOfKeyGeneration\":null,\"platformVersion\":\"4.0.4\",\"isMobileCompliant\":\"true\",\"platformBuildNumber\":\"20131225\",\"platformRevision\":\"aaabbbccc\",\"userHomeNodePath\":\"/Users/t___/te___/tes___/testuser_2\",\"runningProfile\":\"all\",\"currentRepoName\":\"repository\",\"defaultWorkSpaceName\":\"collaboration\"}";
 
     ActivityController<A> controller;
 
@@ -347,6 +351,10 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
         case REQ_JCR_USER_2:
             m.path("rest/private/jcr/repository/collaboration/Users/t___/te___/tes___/testuser_2");
             break;
+
+        case REQ_PLATFORM_INFO_USER_2:
+            m.path("rest/private/platform/info");
+            break;
         }
         return m;
     }
@@ -392,6 +400,10 @@ public abstract class ExoActivityTestUtils<A extends Activity> {
             case REQ_PLATFORM_INFO:
                 resp.setEntity(new StringEntity(RESP_PLATFORM_INFO));
                 break;
+            case REQ_PLATFORM_INFO_USER_2:
+                resp.setEntity(new StringEntity(RESP_PLATFORM_INFO_USER_2));
+                break;
+
 
             case REQ_JCR_USER:
             case REQ_JCR_USER_2:

@@ -186,8 +186,8 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
     public void shouldSignOutCurrentAccountAndSignInSelectedAccount() {
         Context ctx = Robolectric.application.getApplicationContext();
         create();
-        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
-                                        getResponseOKForRequest(REQ_PLATFORM_INFO));
+        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO_USER_2),
+                                        getResponseOKForRequest(REQ_PLATFORM_INFO_USER_2));
         Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_JCR_USER_2),
                                         getResponseOKForRequest(REQ_JCR_USER_2));
         init();
@@ -227,8 +227,8 @@ public class AccountSwitcherTest extends ExoActivityTestUtils<AccountSwitcherAct
     public void shouldDisableAutoLoginWhenLeavingAccount() {
         Context ctx = Robolectric.application.getApplicationContext();
         create();
-        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO),
-                                        getResponseOKForRequest(REQ_PLATFORM_INFO));
+        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_PLATFORM_INFO_USER_2),
+                getResponseOKForRequest(REQ_PLATFORM_INFO_USER_2));
         Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_JCR_USER_2),
                                         getResponseOKForRequest(REQ_JCR_USER_2));
         init();
