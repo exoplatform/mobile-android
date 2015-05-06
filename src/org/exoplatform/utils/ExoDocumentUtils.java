@@ -237,7 +237,6 @@ public class ExoDocumentUtils {
         return docFileType;
     }
 
-<<<<<<< HEAD
     public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
         try {
             url = url.replaceAll(" ", "%20");
