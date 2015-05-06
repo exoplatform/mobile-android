@@ -57,7 +57,7 @@
     <!-- Sept 2012  -->
     <!-- Libraries -->
     <commons-lang.version>2.4</commons-lang.version>
-    <exo.social.client.version>1.0.1-SNAPSHOT</exo.social.client.version>
+    <exo.social.client.version>1.0.1</exo.social.client.version>
     <slf4j-android.version>1.6.1-RC1</slf4j-android.version>
     <greendroid.version>67aa3ed</greendroid.version>
     <!-- Test Dependencies  -->
