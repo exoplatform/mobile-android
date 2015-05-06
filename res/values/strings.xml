@@ -244,11 +244,10 @@
   <string name="RedirectToLogin">Try again</string>
   <string name="LoginWarningMsg">Connection error</string>
 
-
-    <string-array name="SocialTabs">
-    <item>All Updates</item>
-    <item>My Connections</item>
-    <item>My Spaces</item>
-    <item>My Status</item>
+  <string-array name="SocialTabs">
+    <item id="AllUpdates">All Activities</item>
+    <item id="MyConnections">My Connections</item>
+    <item id="MySpaces">My Spaces</item>
+    <item id="MyStatus">My Activities</item>
   </string-array>
 </resources>
