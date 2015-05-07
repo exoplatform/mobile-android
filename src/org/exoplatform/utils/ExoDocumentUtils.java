@@ -266,31 +266,11 @@ public class ExoDocumentUtils {
     }
 
   public static void setRepositoryHomeUrl(String userName, String userHomeNodePath, String domain) {
-    String documentPath = getDocumenPath();
-    StringBuilder buffer = new StringBuilder();
-    buffer.append(domain);
-    buffer.append(documentPath);
-    buffer.append(userHomeNodePath);
-
-        int length = userName.length();
-        if (length < 4) {
-            for (int i = 1; i < length; i++) {
-                String userNameLevel = userName.substring(0, i);
-                buffer.append("/");
-                buffer.append(userNameLevel);
-                buffer.append("___");
-            }
-        } else {
-            for (int i = 1; i < 4; i++) {
-                String userNameLevel = userName.substring(0, i);
-                buffer.append("/");
-                buffer.append(userNameLevel);
-                buffer.append("___");
-            }
-        }
-
-        buffer.append("/");
-        buffer.append(userName);
+        String documentPath = getDocumenPath();
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(domain);
+        buffer.append(documentPath);
+        buffer.append(userHomeNodePath);
 
         try {
             WebdavMethod copy = new WebdavMethod("HEAD", buffer.toString());
