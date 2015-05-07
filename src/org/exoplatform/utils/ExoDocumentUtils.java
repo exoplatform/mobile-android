@@ -401,8 +401,6 @@ public class ExoDocumentUtils {
         documentPath.append(DocumentHelper.getInstance().repository);
         documentPath.append("/");
         documentPath.append(ExoConstants.DOCUMENT_COLLABORATION);
-        documentPath.append("/");
-        documentPath.append(ExoConstants.DOCUMENT_USERS);
         return documentPath.toString();
     }
 
