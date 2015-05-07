@@ -248,9 +248,9 @@
   <string name="LoginWarningMsg">Connection error</string>
 
   <string-array name="SocialTabs">
-    <item id="AllUpdates">Όλες οι ενημερώσεις</item>
+    <item id="AllUpdates">Όλες οι δραστηριότητες</item>
     <item id="MyConnections">Οι συνδέσεις μου</item>
     <item id="MySpaces">Οι χώροι μου</item>
-    <item id="MyStatus">Η κατάστασή μου</item>
+    <item id="MyStatus">Οι δραστηριότητές μου</item>
   </string-array>
 </resources>
