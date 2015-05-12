@@ -244,7 +244,6 @@
   <string name="RedirectToLogin">Try again</string>
   <string name="LoginWarningMsg">Connection error</string>
 
-
   <string-array name="SocialTabs">
     <item id="AllUpdates">Todas las Actividades</item>
     <item id="MyConnections">Mis conexiones</item>
