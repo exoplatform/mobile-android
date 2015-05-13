@@ -41,6 +41,7 @@ import org.apache.http.params.HttpParams;
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.Base64;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
@@ -123,6 +124,7 @@ public class SocialImageLoader {
     HttpConnectionParams.setSoTimeout(httpParameters, 10000);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
     DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+    httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
     try {
       File f = fileCache.getFile(url);
 
@@ -141,8 +143,7 @@ public class SocialImageLoader {
         StringBuilder buffer = new StringBuilder(username);
         buffer.append(":");
         buffer.append(password);
-        getRequest.setHeader("Authorization",
-                             "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
+        getRequest.setHeader("Authorization", "Basic " + Base64.encodeBytes(buffer.toString().getBytes()));
         HttpResponse response = httpClient.execute(getRequest);
         HttpEntity entity = response.getEntity();
         if (entity != null) {

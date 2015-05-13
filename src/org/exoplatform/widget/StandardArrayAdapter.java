@@ -18,8 +18,6 @@
  */
 package org.exoplatform.widget;
 
-import android.util.Log;
-import android.widget.*;
 import greendroid.widget.LoaderActionBarItem;
 
 import java.util.ArrayList;
@@ -50,6 +48,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
@@ -63,7 +66,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   private LikeLoadTask                        mLoadTask;
 
-  private static final String TAG = "eXo____StandardArrayAdapter____";
+  private static final String                 TAG    = "eXo____StandardArrayAdapter____";
 
   public StandardArrayAdapter(Context context, ArrayList<SocialActivityInfo> items) {
     super(context, R.layout.activitybrowserviewcell, items);
@@ -79,8 +82,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     if (convertView == null) {
       convertView = mInflater.inflate(R.layout.activitybrowserviewcell, null);
       holder = new ViewHolder();
-      holder.imageViewAvatar = (ShaderImageView) convertView.findViewById(R.id.imageView_Avatar);
-      holder.imageViewAvatar.setDefaultImageResource(R.drawable.default_avatar);
+      holder.imageViewAvatar = (ImageView) convertView.findViewById(R.id.imageView_Avatar);
       holder.contentLayoutWrap = (LinearLayout) convertView.findViewById(R.id.relativeLayout_Content);
       holder.textViewName = (TextView) convertView.findViewById(R.id.textView_Name);
       holder.textViewName.setLinkTextColor(Color.rgb(21, 94, 173));
@@ -149,27 +151,27 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
   }
 
   public static class ViewHolder {
-    public LinearLayout    contentLayoutWrap;
+    public LinearLayout contentLayoutWrap;
 
-    public ShaderImageView imageViewAvatar;
+    public ImageView    imageViewAvatar;
 
-    public TextView        textViewName;
+    public TextView     textViewName;
 
-    public TextView        textViewMessage;
+    public TextView     textViewMessage;
 
-    public TextView        textViewTempMessage;
+    public TextView     textViewTempMessage;
 
-    public TextView        textViewCommnet;
+    public TextView     textViewCommnet;
 
-    public Button          buttonComment;
+    public Button       buttonComment;
 
-    public Button          buttonLike;
+    public Button       buttonLike;
 
-    public ImageView       typeImageView;
+    public ImageView    typeImageView;
 
-    public TextView        textViewTime;
+    public TextView     textViewTime;
 
-    public View            attachStubView;
+    public View         attachStubView;
   }
 
   private class LikeLoadTask extends AsyncTask<SocialActivityInfo, Void, Boolean> {
@@ -217,36 +219,28 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
           switch (tabId) {
           case SocialTabsActivity.ALL_UPDATES:
 
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                      true,
-                                                      currentPosition);
+            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             if (AllUpdatesFragment.instance.isLoading())
               holder.buttonLike.setClickable(false);
             else
               holder.buttonLike.setClickable(true);
             break;
           case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                         true,
-                                                         currentPosition);
+            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             if (MyConnectionsFragment.instance.isLoading())
               holder.buttonLike.setClickable(false);
             else
               holder.buttonLike.setClickable(true);
             break;
           case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
+            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             if (MySpacesFragment.instance.isLoading())
               holder.buttonLike.setClickable(false);
             else
               holder.buttonLike.setClickable(true);
             break;
           case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
+            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             if (MyStatusFragment.instance.isLoading())
               holder.buttonLike.setClickable(false);
             else

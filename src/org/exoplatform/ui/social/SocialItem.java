@@ -27,14 +27,15 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.image.ExoPicasso;
+import org.exoplatform.utils.image.RoundedCornersTranformer;
 import org.exoplatform.utils.image.SocialImageLoader;
-import org.exoplatform.widget.ShaderImageView;
 import org.exoplatform.widget.StandardArrayAdapter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,18 +48,16 @@ import android.widget.TextView;
  * Represents activity item on activity stream
  */
 public class SocialItem {
-  private static final String FONT_COLOR          = "#696969";
-
-  private static final int    AVATAR_BORDER_COLOR = 0x22000000;
+  private static final String FONT_COLOR     = "#696969";
 
   /**
    * We are not on the Home screen
    */
-  private final boolean       IS_HOME_STREAM      = false;
+  private final boolean       IS_HOME_STREAM = false;
 
   public LinearLayout         contentLayoutWrap;
 
-  private ShaderImageView     imageViewAvatar;
+  private ImageView           imageViewAvatar;
 
   public TextView             textViewName;
 
@@ -90,7 +89,7 @@ public class SocialItem {
 
   private Resources           resource;
 
-  private static final String TAG                 = "eXo____SocialItem____";
+  private static final String TAG            = "eXo____SocialItem____";
 
   public SocialItem(Context context, StandardArrayAdapter.ViewHolder holder, SocialActivityInfo info, boolean is) {
     mContext = context;
@@ -99,7 +98,6 @@ public class SocialItem {
     isDetail = is;
     domain = SocialActivityUtil.getDomain();
     imageViewAvatar = holder.imageViewAvatar;
-    imageViewAvatar.setDefaultImageResource(R.drawable.default_avatar);
     contentLayoutWrap = holder.contentLayoutWrap;
     textViewName = holder.textViewName;
     textViewName.setLinkTextColor(Color.rgb(21, 94, 173));
@@ -117,12 +115,13 @@ public class SocialItem {
 
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl != null) {
-      BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inSampleSize = 4;
-      options.inPurgeable = true;
-      options.inInputShareable = true;
-      imageViewAvatar.setOptions(options);
-      imageViewAvatar.setUrl(avatarUrl);
+      ExoPicasso.picasso(mContext)
+                .load(Uri.parse(avatarUrl))
+                .transform(new RoundedCornersTranformer(mContext))
+                .placeholder(R.drawable.default_avatar)
+                .error(R.drawable.default_avatar)
+                .fit()
+                .into(imageViewAvatar);
     }
 
     userName = activityInfo.getUserName();
@@ -146,7 +145,6 @@ public class SocialItem {
 
   private void setDetailView() {
     if (isDetail) {
-      imageViewAvatar.setBorderColor(AVATAR_BORDER_COLOR);
       contentLayoutWrap.setBackgroundDrawable(null);
       contentLayoutWrap.setPadding(5, -2, 5, 5);
       buttonComment.setVisibility(View.GONE);

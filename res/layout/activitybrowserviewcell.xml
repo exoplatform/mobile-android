@@ -8,10 +8,12 @@
               android:paddingTop="5dp" >
 
     <!-- Avatar -->
-    <org.exoplatform.widget.ShaderImageView
+    <ImageView
             android:id="@+id/imageView_Avatar"
             android:layout_width="@dimen/social_avatar_size"
             android:layout_height="@dimen/social_avatar_size"
+            android:contentDescription="@string/Me"
+            android:src="@drawable/default_avatar"
             android:layout_marginLeft="5dp"
             android:scaleType="fitXY" />
 

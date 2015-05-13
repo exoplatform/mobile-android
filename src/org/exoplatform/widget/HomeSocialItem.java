@@ -21,13 +21,16 @@ package org.exoplatform.widget;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.image.ExoPicasso;
+import org.exoplatform.utils.image.RoundedCornersTranformer;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -51,7 +54,7 @@ public class HomeSocialItem extends LinearLayout {
 
   private TextView            textViewMessage;
 
-  private ShaderImageView     activtyAvatar;
+  private ImageView           activityAvatar;
 
   private String              userName;
 
@@ -74,17 +77,17 @@ public class HomeSocialItem extends LinearLayout {
     activityInfo = info;
     LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View view = inflate.inflate(R.layout.home_social_item_layout, this);
-    activtyAvatar = (ShaderImageView) view.findViewById(R.id.home_activity_avatar);
-    activtyAvatar.setDefaultImageResource(R.drawable.default_avatar);
+    activityAvatar = (ImageView) view.findViewById(R.id.home_activity_avatar);
     textViewName = (TextView) view.findViewById(R.id.home_activity_name_txt);
     textViewMessage = (TextView) view.findViewById(R.id.home_activity_message_txt);
 
-    BitmapFactory.Options options = new BitmapFactory.Options();
-    options.inSampleSize = 4;
-    options.inPurgeable = true;
-    options.inInputShareable = true;
-    activtyAvatar.setOptions(options);
-    activtyAvatar.setUrl(info.getImageUrl());
+    ExoPicasso.picasso(mContext)
+              .load(Uri.parse(info.getImageUrl()))
+              .transform(new RoundedCornersTranformer(mContext))
+              .placeholder(R.drawable.default_avatar)
+              .error(R.drawable.default_avatar)
+              .fit()
+              .into(activityAvatar);
 
     textViewName.setText(Html.fromHtml(userName));
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()));
