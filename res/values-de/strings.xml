@@ -34,8 +34,8 @@
     <string name="French">Französisch</string>
     <string name="German">Deutsch</string>
     <string name="Spanish">Spanisch</string>
-    <string name="PortugueseBrazil">Portugiesisch (Brasilien)</string>
-    <string name="Greek">Griechisch</string>
+  <string name="PortugueseBrazil">Portuguese (Brazil)</string>
+  <string name="Greek">Greek</string>
     <string name="CompliantMessage">Wir können keine Verbindung zu einer kompatiblen Plattformversion unter dieser URL herstellen Bitte kontaktieren Sie Ihren Administrator.</string>
     <string name="Delete">Löschen</string>
     <string name="Copy">Kopieren</string>
