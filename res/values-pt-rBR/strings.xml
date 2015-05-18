@@ -35,6 +35,7 @@
   <string name="German">Alemão</string>
   <string name="Spanish">Espanhol</string>
   <string name="PortugueseBrazil">Português (Brasil)</string>
+  <string name="Greek">Grego</string>
   <string name="CompliantMessage">Nós não podemos nos conectar a uma versão de plataforma compatível neste endereço, por favor, entre em contato com o administrador.</string>
   <string name="Delete">Excluir</string>
   <string name="Copy">Copiar</string>

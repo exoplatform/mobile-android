@@ -56,6 +56,9 @@
 
         <!-- Portuguese (Brazil) checkbox -->
         <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_pt_br_ckb" />
+        
+        <!-- Greek checkbox -->
+        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_el_ckb" />
 
         <!--<include layout="@layout/separator_line" /> -->
 

@@ -26,6 +26,7 @@
   <string name="German">Alemán</string>
   <string name="Spanish">Español</string>
   <string name="PortugueseBrazil">Portugués (Brasil)</string>
+  <string name="Greek">Griego</string>
   <string name="CompliantMessage">No pudimos conectar a una versión compatible de la plataforma en esta dirección URL, por favor contacte con su administrador.</string>
   <string name="Delete">Eliminar</string>
   <string name="Copy">Copiar</string>
