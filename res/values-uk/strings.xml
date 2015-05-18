@@ -35,6 +35,7 @@
   <string name="German">Німецька</string>
   <string name="Spanish">іспанська</string>
   <string name="PortugueseBrazil">Portuguese (Brazil)</string>
+  <string name="Greek">Greek</string>
   <string name="CompliantMessage">Не вдалося підключитися до сумісні версії платформи за цією URL-адресою, будь ласка, зверніться до адміністратора.</string>
   <string name="Delete">Видалити</string>
   <string name="Copy">Копіювати</string>
