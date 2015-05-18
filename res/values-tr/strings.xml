@@ -35,6 +35,7 @@
   <string name="German">Almanca</string>
   <string name="Spanish">İspanyolca</string>
   <string name="PortugueseBrazil">Portuguese (Brazil)</string>
+  <string name="Greek">Greek</string>
   <string name="CompliantMessage">Bu URL\'deki platforma sürüm uyuşmazlığı nedeni ile bağlanamıyoruz, lütfen sistem yöneticisine başvurun.</string>
   <string name="Delete">Sil</string>
   <string name="Copy">Kopyala</string>
