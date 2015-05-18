@@ -35,6 +35,7 @@
   <string name="German">Tysk</string>
   <string name="Spanish">Spanish</string>
   <string name="PortugueseBrazil">Portuguese (Brazil)</string>
+  <string name="Greek">Greek</string>
   <string name="CompliantMessage">Vi kan ikke koble til en kompatibel plattformversjon på denne URL-en, vennligst kontakt systemansvarlig.</string>
   <string name="Delete">Slett</string>
   <string name="Copy">Kopier</string>
