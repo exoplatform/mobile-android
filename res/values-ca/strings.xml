@@ -35,6 +35,7 @@
   <string name="German">Alemany</string>
   <string name="Spanish">Castellà</string>
   <string name="PortugueseBrazil">Portuguese (Brazil)</string>
+  <string name="Greek">Greek</string>
   <string name="CompliantMessage">L\'aplicació no és compatible amb la versió de la plataforma d\'aquesta URL. Contacteu amb el vostre administrador.</string>
   <string name="Delete">Suprimeix</string>
   <string name="Copy">Copia</string>
