@@ -35,6 +35,7 @@
   <string name="German">Vokiečių</string>
   <string name="Spanish">Ispanų</string>
   <string name="PortugueseBrazil">Portuguese (Brazil)</string>
+  <string name="Greek">Greek</string>
   <string name="CompliantMessage">Mes negalime prisijungti prie suderinamos platformos versijos šiuo URL, prašome susisiekti su savo administratoriumi.</string>
   <string name="Delete">Ištrinti</string>
   <string name="Copy">Kopijuoti</string>
