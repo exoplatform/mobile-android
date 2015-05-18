@@ -35,6 +35,7 @@
   <string name="German">德文</string>
   <string name="Spanish">西班牙文</string>
   <string name="PortugueseBrazil">Portuguese (Brazil)</string>
+  <string name="Greek">Greek</string>
   <string name="CompliantMessage">我們不能連接到相容的平臺版本在該 URL，請與您的管理員聯繫。</string>
   <string name="Delete">刪除</string>
   <string name="Copy">複製</string>
