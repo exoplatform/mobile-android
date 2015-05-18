@@ -35,6 +35,7 @@
   <string name="German">Tiếng Đức</string>
   <string name="Spanish">Spanish</string>
   <string name="PortugueseBrazil">Portuguese (Brazil)</string>
+  <string name="Greek">Greek</string>
   <string name="CompliantMessage">We cannot connect to a compatible Platform version at this URL, please contact your administrator.</string>
   <string name="Delete">Xóa</string>
   <string name="Copy">Sao chép</string>
