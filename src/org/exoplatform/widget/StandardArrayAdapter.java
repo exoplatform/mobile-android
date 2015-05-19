@@ -34,7 +34,7 @@ import org.exoplatform.ui.social.MyConnectionsFragment;
 import org.exoplatform.ui.social.MySpacesFragment;
 import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.ui.social.SocialDetailActivity;
-import org.exoplatform.ui.social.SocialItem;
+import org.exoplatform.ui.social.SocialActivityStreamItem;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
@@ -99,8 +99,8 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
       holder = (ViewHolder) convertView.getTag();
     }
 
-    SocialItem socialItem = new SocialItem(mContext, holder, actInfo, false);
-    socialItem.initCommonInfo();
+    SocialActivityStreamItem socialActivityStreamItem = new SocialActivityStreamItem(mContext, holder, actInfo, false);
+    socialActivityStreamItem.initCommonInfo();
     holder.contentLayoutWrap.setOnClickListener(new OnClickListener() {
 
       public void onClick(View v) {

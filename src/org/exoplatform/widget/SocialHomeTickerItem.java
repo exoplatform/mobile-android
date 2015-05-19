@@ -39,7 +39,7 @@ import android.widget.TextView;
  * 
  * @author eXoPlatform exo@exoplatform.com May 22, 2012
  */
-public class HomeSocialItem extends LinearLayout {
+public class SocialHomeTickerItem extends LinearLayout {
 
   private static final String FONT_COLOR     = "#FFFFFF";
 
@@ -64,12 +64,12 @@ public class HomeSocialItem extends LinearLayout {
 
   private static final String TAG            = "eXo____HomeSocialItem____";
 
-  public HomeSocialItem(Context context) {
+  public SocialHomeTickerItem(Context context) {
     super(context);
     mContext = context;
   }
 
-  public HomeSocialItem(Context context, SocialActivityInfo info) {
+  public SocialHomeTickerItem(Context context, SocialActivityInfo info) {
     super(context);
     mContext = context;
     userName = info.getUserName();

@@ -27,8 +27,6 @@ import java.util.Locale;
 import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.utils.image.SocialImageLoader;
 
 import android.app.Activity;
 import android.content.Context;
@@ -37,20 +35,18 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 /**
- * Entry point of application
- * load setting and redirect application to appropriate screen
- *
- * if no account is configured, welcome screen shows up
- * if account is configured and auto-login disabled, login screen shows up
- * if account is configured and auto-login enabled, home screen shows up
+ * Entry point of application load setting and redirect application to
+ * appropriate screen if no account is configured, welcome screen shows up if
+ * account is configured and auto-login disabled, login screen shows up if
+ * account is configured and auto-login enabled, home screen shows up
  */
 public class LaunchUtils {
 
-  private Context                  mContext;
+  private Context             mContext;
 
-  private SharedPreferences        mSharedPreference;
+  private SharedPreferences   mSharedPreference;
 
-  private AccountSetting           mSetting;
+  private AccountSetting      mSetting;
 
   private static final String TAG = "eXoLaunchController";
 
@@ -62,12 +58,12 @@ public class LaunchUtils {
     initAssets();
     setAppVersion();
     setLocalize();
-    initSocialImageLoader();
     String oldConfigFile = ServerConfigurationUtils.checkPreviousAppConfig(mContext);
-    if (oldConfigFile != null) setOldServerList(oldConfigFile);
-    else setServerList();
+    if (oldConfigFile != null)
+      setOldServerList(oldConfigFile);
+    else
+      setServerList();
   }
-
 
   /**
    * Init assets utils
@@ -77,29 +73,30 @@ public class LaunchUtils {
   }
 
   /**
-   * Retrieve server list from config file and set it up for server setting helper
+   * Retrieve server list from config file and set it up for server setting
+   * helper
    */
   private void setServerList() {
-    ArrayList<ExoAccount> _serverList =
-        ServerConfigurationUtils.getServerListFromFile(mContext, ExoConstants.EXO_SERVER_SETTING_FILE);
+    ArrayList<ExoAccount> _serverList = ServerConfigurationUtils.getServerListFromFile(mContext,
+                                                                                       ExoConstants.EXO_SERVER_SETTING_FILE);
     ServerSettingHelper.getInstance().setServerInfoList(_serverList);
 
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
-    mSetting.setCurrentAccount((selectedServerIdx == -1 || selectedServerIdx >= _serverList.size()) ? null : _serverList.get(selectedServerIdx));
+    mSetting.setCurrentAccount((selectedServerIdx == -1 || selectedServerIdx >= _serverList.size()) ? null
+                                                                                                   : _serverList.get(selectedServerIdx));
   }
-
 
   /**
    * Get server list from previous config of app
-   *
+   * 
    * @param oldConfigFile
    */
   private void setOldServerList(String oldConfigFile) {
-    ArrayList<ExoAccount> _serverList =
-        ServerConfigurationUtils.getServerListFromOldConfigFile(oldConfigFile);
+    ArrayList<ExoAccount> _serverList = ServerConfigurationUtils.getServerListFromOldConfigFile(oldConfigFile);
     ServerSettingHelper.getInstance().setServerInfoList(_serverList);
-    if (_serverList.size() == 0) return;
+    if (_serverList.size() == 0)
+      return;
     /* force app to start login screen */
     mSetting.setDomainIndex("0");
     mSetting.setCurrentAccount(_serverList.get(0));
@@ -136,28 +133,13 @@ public class LaunchUtils {
 
     /** no app language */
     if (strLocalize.equals("")) {
-      String[] currentLanguagesSupported = new String[]{
-          ExoConstants.ENGLISH_LOCALIZATION,
-          ExoConstants.FRENCH_LOCALIZATION,
-          ExoConstants.GERMAN_LOCALIZATION,
-          ExoConstants.SPANISH_LOCALIZATION
-      };
+      String[] currentLanguagesSupported = new String[] { ExoConstants.ENGLISH_LOCALIZATION, ExoConstants.FRENCH_LOCALIZATION,
+          ExoConstants.GERMAN_LOCALIZATION, ExoConstants.SPANISH_LOCALIZATION };
 
       strLocalize = Locale.getDefault().getLanguage();
       if (!Arrays.asList(currentLanguagesSupported).contains(strLocalize))
         strLocalize = ExoConstants.ENGLISH_LOCALIZATION;
     }
     SettingUtils.setLocale(mContext, strLocalize);
-  }
-
-  /**
-  * Initialize SocialImageLoader when application start up and clear all data
-  * cache.
-  */
-  private void initSocialImageLoader() {
-    if (SocialDetailHelper.getInstance().socialImageLoader == null) {
-      SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
-      SocialDetailHelper.getInstance().socialImageLoader.clearCache();
-    }
   }
 }

@@ -38,7 +38,7 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.HomeSocialItem;
+import org.exoplatform.widget.SocialHomeTickerItem;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.ShaderImageView;
 
@@ -279,7 +279,7 @@ public class HomeActivity extends MyActionBar {
         if (list == null)
             return;
 
-        HomeSocialItem socialItem;
+        SocialHomeTickerItem socialItem;
         // viewFlipper.removeAllViews();
         LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
         /*
@@ -289,7 +289,7 @@ public class HomeActivity extends MyActionBar {
         int maxChild = (listSize > ExoConstants.HOME_SOCIAL_MAX_NUMBER) ? ExoConstants.HOME_SOCIAL_MAX_NUMBER
                                                                        : listSize;
         for (int i = 0; i < maxChild; i++) {
-            socialItem = new HomeSocialItem(this, list.get(i));
+            socialItem = new SocialHomeTickerItem(this, list.get(i));
             viewFlipper.addView(socialItem, params);
         }
         viewFlipper.setInAnimation(AnimationUtils.loadAnimation(this,

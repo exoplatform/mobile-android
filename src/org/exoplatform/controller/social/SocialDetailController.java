@@ -37,7 +37,7 @@ import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.ShaderImageView;
-import org.exoplatform.widget.SocialActivityStreamItem;
+import org.exoplatform.widget.SocialActivityDetailsItem;
 
 import android.content.Context;
 import android.content.Intent;
@@ -175,7 +175,7 @@ public class SocialDetailController {
     setLikedState();
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     contentDetailLayout.removeAllViews();
-    SocialActivityStreamItem item = new SocialActivityStreamItem(mContext, streamInfo, true);
+    SocialActivityDetailsItem item = new SocialActivityDetailsItem(mContext, streamInfo, true);
     SocialActivityUtil.setTextLinkfy(item.textViewMessage);
     SocialActivityUtil.setTextLinkfy(item.textViewName);
     SocialActivityUtil.setTextLinkfy(item.textViewTempMessage);

@@ -18,8 +18,6 @@
  */
 package org.exoplatform.singleton;
 
-import org.exoplatform.utils.image.SocialImageLoader;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -29,8 +27,6 @@ public class SocialDetailHelper implements Parcelable {
   private boolean                   liked;
 
   private String                    attachImageUrl;
-
-  public SocialImageLoader          socialImageLoader;
 
   private static SocialDetailHelper detailHelper = new SocialDetailHelper();
 

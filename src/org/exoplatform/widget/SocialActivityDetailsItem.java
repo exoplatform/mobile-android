@@ -16,38 +16,38 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.ui.social;
+package org.exoplatform.widget;
 
 import java.net.URLConnection;
 import java.util.Locale;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
-import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.image.EmptyImageGetter;
 import org.exoplatform.utils.image.ExoPicasso;
 import org.exoplatform.utils.image.RoundedCornersTranformer;
-import org.exoplatform.utils.image.SocialImageLoader;
-import org.exoplatform.widget.StandardArrayAdapter;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.Html;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * Represents activity item on activity stream
+ * Represents the layout for activity details
  */
-public class SocialItem {
+public class SocialActivityDetailsItem extends LinearLayout {
   private static final String FONT_COLOR     = "#696969";
 
   /**
@@ -56,6 +56,8 @@ public class SocialItem {
   private final boolean       IS_HOME_STREAM = false;
 
   public LinearLayout         contentLayoutWrap;
+
+  private View                view;
 
   private ImageView           imageViewAvatar;
 
@@ -67,7 +69,7 @@ public class SocialItem {
 
   private TextView            textViewCommnet;
 
-  private Button              buttonComment;
+  public Button               buttonComment;
 
   private Button              buttonLike;
 
@@ -89,30 +91,40 @@ public class SocialItem {
 
   private Resources           resource;
 
-  private static final String TAG            = "eXo____SocialItem____";
+  private static final String TAG            = "eXo____SocialActivityStreamItem____";
 
-  public SocialItem(Context context, StandardArrayAdapter.ViewHolder holder, SocialActivityInfo info, boolean is) {
+  public SocialActivityDetailsItem(Context context, AttributeSet attrs) {
+    super(context, attrs);
+
+  }
+
+  public SocialActivityDetailsItem(Context context, SocialActivityInfo info, boolean is) {
+    super(context);
+
     mContext = context;
     resource = mContext.getResources();
     activityInfo = info;
     isDetail = is;
+    LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     domain = SocialActivityUtil.getDomain();
-    imageViewAvatar = holder.imageViewAvatar;
-    contentLayoutWrap = holder.contentLayoutWrap;
-    textViewName = holder.textViewName;
+    view = inflate.inflate(R.layout.activitybrowserviewcell, this);
+    imageViewAvatar = (ImageView) view.findViewById(R.id.imageView_Avatar);
+    contentLayoutWrap = (LinearLayout) view.findViewById(R.id.relativeLayout_Content);
+    textViewName = (TextView) view.findViewById(R.id.textView_Name);
     textViewName.setLinkTextColor(Color.rgb(21, 94, 173));
-    textViewMessage = holder.textViewMessage;
-    textViewTempMessage = holder.textViewTempMessage;
-    textViewCommnet = holder.textViewCommnet;
-    buttonComment = holder.buttonComment;
-    buttonLike = holder.buttonLike;
-    typeImageView = holder.typeImageView;
-    textViewTime = holder.textViewTime;
-    attachStubView = holder.attachStubView;
+    textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
+    textViewTempMessage = (TextView) view.findViewById(R.id.textview_temp_message);
+    textViewCommnet = (TextView) view.findViewById(R.id.activity_comment_view);
+    buttonComment = (Button) view.findViewById(R.id.button_Comment);
+    buttonLike = (Button) view.findViewById(R.id.button_Like);
+    typeImageView = (ImageView) view.findViewById(R.id.activity_image_type);
+    textViewTime = (TextView) view.findViewById(R.id.textView_Time);
+
+    initCommonInfo();
+
   }
 
   public void initCommonInfo() {
-
     String avatarUrl = activityInfo.getImageUrl();
     if (avatarUrl != null) {
       ExoPicasso.picasso(mContext)
@@ -127,16 +139,12 @@ public class SocialItem {
     userName = activityInfo.getUserName();
     textViewName.setText(Html.fromHtml(userName));
     textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()), TextView.BufferType.SPANNABLE);
-    textViewMessage.setVisibility(View.VISIBLE);
+
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
                                                                 activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
                                                                                                   : activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
-    textViewTempMessage.setVisibility(View.GONE);
-    textViewCommnet.setVisibility(View.GONE);
-    attachStubView.setVisibility(View.GONE);
-
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());
     SocialActivityUtil.setImageType(imageId, typeImageView);
     setViewByType(imageId);
@@ -160,7 +168,6 @@ public class SocialItem {
   private void setViewByType(int typeId) {
     String spaceInfo = null;
     switch (typeId) {
-
     case SocialActivityUtil.ACTIVITY_TYPE_FORUM:
       setActivityTypeForum();
       break;
@@ -183,25 +190,25 @@ public class SocialItem {
         textViewName.setText(Html.fromHtml(spaceInfo), TextView.BufferType.SPANNABLE);
       /* add document info */
       String tempMessage = activityInfo.templateParams.get("MESSAGE");
-      if (tempMessage != null)
+      if (tempMessage != null) {
         textViewMessage.setText(tempMessage.trim());
+      }
 
       String docLink = activityInfo.templateParams.get("DOCLINK");
       if (docLink != null) {
         String docName = activityInfo.templateParams.get("DOCNAME");
         String url = domain + docLink;
-        /** get mimetype from url */
         String mimeTypeExtension = URLConnection.guessContentTypeFromName(url);
         displayAttachImage(url, docName, null, mimeTypeExtension, false);
       }
+
       break;
 
     case SocialActivityUtil.ACTIVITY_TYPE_NORMAL:
       /* add space information */
       spaceInfo = SocialActivityUtil.getHeaderWithSpaceInfo(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
-      if (spaceInfo != null) {
+      if (spaceInfo != null)
         textViewName.setText(Html.fromHtml(spaceInfo), TextView.BufferType.SPANNABLE);
-      }
       break;
 
     case SocialActivityUtil.ACTIVITY_TYPE_LINK:
@@ -210,7 +217,6 @@ public class SocialItem {
 
     case SocialActivityUtil.ACTIVITY_TYPE_RELATIONSHIP:
       break;
-
     case SocialActivityUtil.ACTIVITY_TYPE_PEOPLE:
       break;
 
@@ -230,11 +236,11 @@ public class SocialItem {
           buffer.append(domain);
           buffer.append("/portal/rest/jcr/");
           buffer.append(contentLink);
-          displayAttachImage(buffer.toString(), contentName, null, contentType, true);
+          displayAttachImage(buffer.toString(), contentName, null, contentType, false);
         }
-
       }
       break;
+
     case SocialActivityUtil.ACTIVITY_TYPE_ANSWER:
       setActivityTypeAnswer();
       break;
@@ -270,7 +276,6 @@ public class SocialItem {
   }
 
   private void setActivityTypeAnswer() {
-
     String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
 
     textViewName.setText(Html.fromHtml(answerBuffer), TextView.BufferType.SPANNABLE);
@@ -287,33 +292,27 @@ public class SocialItem {
                                                                        resource,
                                                                        FONT_COLOR,
                                                                        IS_HOME_STREAM);
-
     textViewName.setText(Html.fromHtml(calendarBuffer), TextView.BufferType.SPANNABLE);
     SocialActivityUtil.setCalendarContent(textViewMessage, activityInfo, resource);
-
   }
 
   private void setActivityTypeLink() {
-
-    String info = SocialActivityUtil.getLinkActivityInfo(activityInfo, FONT_COLOR, resource);
-    textViewName.setText(Html.fromHtml(info), TextView.BufferType.SPANNABLE);
-
     String templateComment = activityInfo.templateParams.get("comment");
     String description = activityInfo.templateParams.get("description").trim();
 
     if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
-      textViewMessage.setText(Html.fromHtml(templateComment), TextView.BufferType.SPANNABLE);
+      textViewMessage.setText(Html.fromHtml(templateComment, new EmptyImageGetter(mContext), null), TextView.BufferType.SPANNABLE);
     }
     if (description != null) {
       textViewCommnet.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
       textViewCommnet.setVisibility(View.VISIBLE);
     }
 
-    String linkBuffer = SocialActivityUtil.getActivityTypeLink(description, activityInfo, FONT_COLOR, IS_HOME_STREAM);
+    String linkBuffer = SocialActivityUtil.getActivityTypeLink(description, activityInfo, FONT_COLOR, false);
 
-    String imageParams = activityInfo.templateParams.get("image");
+    String imageParams = activityInfo.templateParams.get(ExoDocumentUtils.IMAGE_TYPE);
     if ((imageParams != null) && (imageParams.toLowerCase(Locale.US).contains(ExoConstants.HTTP_PROTOCOL))) {
-      displayAttachImage(imageParams, "", linkBuffer, "image", true);
+      displayAttachImage(imageParams, "", linkBuffer, ExoDocumentUtils.IMAGE_TYPE, true);
     } else {
       textViewTempMessage.setText(Html.fromHtml(linkBuffer), TextView.BufferType.SPANNABLE);
       textViewTempMessage.setVisibility(View.VISIBLE);
@@ -321,7 +320,9 @@ public class SocialItem {
   }
 
   private void displayAttachImage(String url, String name, String description, String fileType, boolean isLinkType) {
-    initAttachStubView(url, name, description, fileType, isLinkType);
+    if (attachStubView == null) {
+      initAttachStubView(url, name, description, fileType, isLinkType);
+    }
     attachStubView.setVisibility(View.VISIBLE);
   }
 
@@ -330,6 +331,7 @@ public class SocialItem {
                                   String description,
                                   final String fileType,
                                   boolean isLinkType) {
+    attachStubView = ((ViewStub) findViewById(R.id.attached_image_stub_activity)).inflate();
     ImageView attachImage = (ImageView) attachStubView.findViewById(R.id.attached_image_view);
     TextView txtViewFileName = (TextView) attachStubView.findViewById(R.id.textView_file_name);
     if (description == null)
@@ -341,17 +343,15 @@ public class SocialItem {
         SocialActivityUtil.setTextLinkfy(txtViewFileName);
         txtViewFileName.setMaxLines(100);
       }
-
     }
-    /*
-     * Use SocialImageLoader to get and display attached image.
-     */
 
     if (fileType != null && fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
-      if (SocialDetailHelper.getInstance().socialImageLoader == null) {
-        SocialDetailHelper.getInstance().socialImageLoader = new SocialImageLoader(mContext);
-      }
-      SocialDetailHelper.getInstance().socialImageLoader.displayImage(url, attachImage, isLinkType);
+      int errorDrawable = isLinkType ? R.drawable.icon_for_unreadable_link : R.drawable.icon_for_placeholder_image;
+      ExoPicasso.picasso(mContext)
+                .load(Uri.parse(url))
+                .placeholder(R.drawable.loading_rect)
+                .error(errorDrawable)
+                .into(attachImage);
     } else {
       attachImage.setImageResource(ExoDocumentUtils.getIconFromType(fileType));
     }
@@ -363,7 +363,6 @@ public class SocialItem {
 
         @Override
         public void onClick(View v) {
-
           ExoDocumentUtils.fileOpen(mContext, fileType, url, fileName);
         }
       });
@@ -371,4 +370,11 @@ public class SocialItem {
 
   }
 
+  public Button likeButton() {
+    return buttonLike;
+  }
+
+  public Button commentButton() {
+    return buttonComment;
+  }
 }

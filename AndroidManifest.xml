@@ -50,7 +50,6 @@
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialDetailActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.ComposeMessageActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SelectedImageActivity"/>
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialAttachedImageActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.LikeListActivity"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialTabsActivity" android:theme="@style/Theme.PageIndicatorDefaults"/>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignUpActivity"/>

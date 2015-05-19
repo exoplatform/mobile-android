@@ -5,7 +5,7 @@
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:orientation="horizontal"
-              android:paddingTop="5dp" >
+              android:paddingTop="@dimen/margin_xxs" >
 
     <!-- Avatar -->
     <ImageView
@@ -14,7 +14,7 @@
             android:layout_height="@dimen/social_avatar_size"
             android:contentDescription="@string/Me"
             android:src="@drawable/default_avatar"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/margin_xxs"
             android:scaleType="fitXY" />
 
     <!-- Content -->
@@ -22,18 +22,18 @@
             android:id="@+id/relativeLayout_Content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dip"
-            android:layout_marginRight="5dp"
+            android:layout_marginLeft="@dimen/margin_xxs"
+            android:layout_marginRight="@dimen/margin_xxs"
             android:background="@drawable/news_browser_background_shape"
             android:orientation="vertical"
-            android:padding="5dp" >
+            android:padding="@dimen/margin_xxs" >
 
         <TextView
                 android:id="@+id/textView_Name"
                 style="@style/textview_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
+                android:layout_marginLeft="@dimen/margin_xs"
                 android:maxLines="5"
                 android:textStyle="bold" />
 
@@ -42,8 +42,8 @@
                 style="@style/textview_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_marginTop="3dip"
+                android:layout_marginLeft="@dimen/margin_xs"
+                android:layout_marginTop="@dimen/margin_xxs"
                 android:maxLines="5" />
 
         <TextView
@@ -51,20 +51,21 @@
                 style="@style/textview_content"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_marginTop="3dip"
+                android:layout_marginLeft="@dimen/margin_xs"
+                android:layout_marginTop="@dimen/margin_xxs"
                 android:maxLines="5"
                 android:visibility="gone" />
 
         <ViewStub
                 android:id="@+id/attached_image_stub_activity"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/margin_xxs"
+                android:layout_marginBottom="@dimen/margin_xxs"
                 android:inflatedId="@+id/attached_image_stub_inflate"
                 android:layout="@layout/activity_image_display_layout"
-                android:padding="5dp"
+                android:padding="@dimen/margin_xxs"
                 android:visibility="gone" />
 
         <TextView
@@ -72,17 +73,17 @@
                 style="@style/textview_content"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_marginTop="3dip"
+                android:layout_marginLeft="@dimen/margin_xs"
+                android:layout_marginTop="@dimen/margin_xxs"
                 android:maxLines="5"
                 android:visibility="gone" />
 
         <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginBottom="@dimen/margin_xxs"
+                android:layout_marginRight="@dimen/margin_xs"
+                android:layout_marginTop="@dimen/margin_xs"
                 android:gravity="center_vertical">
 
             <ImageView
@@ -90,8 +91,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/ImageDesc"
-                    android:layout_marginLeft="5dp"
-                    android:padding="2dp"
+                    android:layout_marginLeft="@dimen/margin_xxs"
+                    android:padding="@dimen/margin_xxs"
                     android:scaleType="fitXY" />
 
             <!-- Time text view -->
@@ -101,10 +102,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/activity_image_type"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="@dimen/margin_xxs"
+                    android:layout_marginTop="@dimen/margin_xxs"
                     android:gravity="center_horizontal"
-                    android:layout_marginRight="3dp" />
+                    android:layout_marginRight="@dimen/margin_xxs" />
 
             <!-- Comment button -->
             <Button
@@ -115,7 +116,7 @@
                     android:layout_alignParentRight="true"
                     android:background="@drawable/social_activity_browser_comment_button_shape"
                     android:gravity="center_vertical"
-                    android:padding="2dp" />
+                    android:padding="@dimen/margin_xxs" />
 
             <!-- Like button -->
             <Button
@@ -126,7 +127,7 @@
                     android:layout_toLeftOf="@id/button_Comment"
                     android:background="@drawable/social_activity_browser_like_button_shape"
                     android:gravity="center_vertical"
-                    android:padding="2dp" />
+                    android:padding="@dimen/margin_xxs" />
 
         </RelativeLayout>
     </LinearLayout>
