@@ -10,11 +10,11 @@
   <string name="NoPasswordEnter">crwdns6795691:0crwdne6795691:0</string>
   <string name="UserNamePasswordFailed">crwdns6795692:0crwdne6795692:0</string>
   <string name="SpecialCharacters">crwdns6795818:0crwdne6795818:0</string>
-  <string name="AccountNameInvalid">crwdns6812271:0crwdne6812271:0</string>
-  <string name="AccountServerInvalid">crwdns6812272:0crwdne6812272:0</string>
-  <string name="AccountServerForbidden">crwdns6812273:0crwdne6812273:0</string>
-  <string name="AccountUsernameInvalid">crwdns6812274:0crwdne6812274:0</string>
-  <string name="AccountPasswordInvalid">crwdns6812275:0crwdne6812275:0</string>
+  <string name="AccountNameInvalid">crwdns6812620:0crwdne6812620:0</string>
+  <string name="AccountServerInvalid">crwdns6812621:0crwdne6812621:0</string>
+  <string name="AccountServerForbidden">crwdns6812622:0crwdne6812622:0</string>
+  <string name="AccountUsernameInvalid">crwdns6812623:0crwdne6812623:0</string>
+  <string name="AccountPasswordInvalid">crwdns6812624:0crwdne6812624:0</string>
   <string name="Connected">crwdns6812276:0crwdne6812276:0</string>
   <string name="LastLoginDate">crwdns6812277:0crwdne6812277:0</string>
   <string name="ServerUnreachable">crwdns6795694:0crwdne6795694:0</string>
@@ -64,7 +64,7 @@
   <string name="Comment">crwdns6795736:0crwdne6795736:0</string>
   <string name="StatusUpdate">crwdns6795737:0crwdne6795737:0</string>
   <string name="PostTo">crwdns6812279:0crwdne6812279:0</string>
-  <string name="Public">crwdns6812280:0crwdne6812280:0</string>
+  <string name="Public">crwdns6812625:0crwdne6812625:0</string>
   <string name="NoSpaces">crwdns6812281:0crwdne6812281:0</string>
   <string name="ComposerPlaceHolder">crwdns6812282:0crwdne6812282:0</string>
   <string name="ShareWithWhom">crwdns6812283:0crwdne6812283:0</string>
