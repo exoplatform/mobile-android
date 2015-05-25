@@ -10,11 +10,11 @@
   <string name="NoPasswordEnter">Prašome įvesti savo slaptažodį</string>
   <string name="UserNamePasswordFailed">Klaidingas vartotojo vardas arba slaptažodis.</string>
   <string name="SpecialCharacters">Specialūs simboliai neleidžiami.</string>
-  <string name="AccountNameInvalid">Only alpha-numeric characters and spaces are allowed in the account name</string>
-  <string name="AccountServerInvalid">Invalid account server address</string>
-  <string name="AccountServerForbidden">This Server URL is not allowed</string>
-  <string name="AccountUsernameInvalid">Only alpha-numeric characters, hyphens, underscores, dots and pluses are allowed in the username</string>
-  <string name="AccountPasswordInvalid">Spaces are not allowed in the password</string>
+  <string name="AccountNameInvalid">Only alphanumeric characters and spaces are allowed in the account name</string>
+  <string name="AccountServerInvalid">Invalid server address</string>
+  <string name="AccountServerForbidden">This server URL is not allowed</string>
+  <string name="AccountUsernameInvalid">Only alphanumeric characters, dashes, underscores, dots and pluses are allowed in the username</string>
+  <string name="AccountPasswordInvalid">Blanks are not allowed in the password</string>
   <string name="Connected">Prisijungta</string>
   <string name="LastLoginDate">Last login</string>
   <string name="ServerUnreachable">Serverio adresas yra nepasiekiamas</string>
@@ -64,7 +64,7 @@
   <string name="Comment">Komentuoti</string>
   <string name="StatusUpdate">Siųsti</string>
   <string name="PostTo">Iki:</string>
-  <string name="Public">Your stream</string>
+  <string name="Public">Mano veiklos</string>
   <string name="NoSpaces">You are not in any space</string>
   <string name="ComposerPlaceHolder">Ką jūs dabar dirbate?</string>
   <string name="ShareWithWhom">Select who will see this post</string>
