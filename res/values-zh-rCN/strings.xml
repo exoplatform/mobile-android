@@ -10,11 +10,11 @@
   <string name="NoPasswordEnter">请输入您的密码</string>
   <string name="UserNamePasswordFailed">用户名无效或者密码错误</string>
   <string name="SpecialCharacters">不允许使用特殊字符。</string>
-  <string name="AccountNameInvalid">Only alpha-numeric characters and spaces are allowed in the account name</string>
-  <string name="AccountServerInvalid">Invalid account server address</string>
-  <string name="AccountServerForbidden">This Server URL is not allowed</string>
-  <string name="AccountUsernameInvalid">Only alpha-numeric characters, hyphens, underscores, dots and pluses are allowed in the username</string>
-  <string name="AccountPasswordInvalid">Spaces are not allowed in the password</string>
+  <string name="AccountNameInvalid">Only alphanumeric characters and spaces are allowed in the account name</string>
+  <string name="AccountServerInvalid">Invalid server address</string>
+  <string name="AccountServerForbidden">This server URL is not allowed</string>
+  <string name="AccountUsernameInvalid">Only alphanumeric characters, dashes, underscores, dots and pluses are allowed in the username</string>
+  <string name="AccountPasswordInvalid">Blanks are not allowed in the password</string>
   <string name="Connected">已连接</string>
   <string name="LastLoginDate">Last login</string>
   <string name="ServerUnreachable">服务器地址是不可访问</string>
@@ -64,7 +64,7 @@
   <string name="Comment">评论</string>
   <string name="StatusUpdate">帖子</string>
   <string name="PostTo">到：</string>
-  <string name="Public">Your stream</string>
+  <string name="Public">我的活动</string>
   <string name="NoSpaces">You are not in any space</string>
   <string name="ComposerPlaceHolder">你在做什么？</string>
   <string name="ShareWithWhom">Select who will see this post</string>
