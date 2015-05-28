@@ -35,265 +35,192 @@ import android.util.Patterns;
  */
 public class ExoUtils {
 
-    public static final String[] WRONG_CLOUD_URLS = new String[] { "http://exoplatform.net",
-            "http://wks-acc.exoplatform.org", "http://netstg.exoplatform.org" };
+  public static final String[] WRONG_CLOUD_URLS = new String[] { "http://exoplatform.net", "http://wks-acc.exoplatform.org",
+      "http://netstg.exoplatform.org"          };
 
-    /**
-     * Validate an URL with pattern
-     * http://developer.android.com/reference/android/util/Patterns.html#WEB_URL
-     * or #IP_ADDRESS
-     * 
-     * @param url The URL to validate
-     * @return true if the URL matches the pattern, false otherwise
-     */
-    public static boolean isUrlValid(String url) {
-        return (url == null) ? false
-                            : (Patterns.WEB_URL.matcher(url).matches() || Patterns.IP_ADDRESS.matcher(url)
-                                                                                             .matches());
+  /**
+   * Validate an URL with pattern
+   * http://developer.android.com/reference/android/util/Patterns.html#WEB_URL
+   * or #IP_ADDRESS
+   * 
+   * @param url The URL to validate
+   * @return true if the URL matches the pattern, false otherwise
+   */
+  public static boolean isUrlValid(String url) {
+    return (url == null) ? false : (Patterns.WEB_URL.matcher(url).matches() || Patterns.IP_ADDRESS.matcher(url).matches());
+  }
+
+  public static boolean isDocumentUrlValid(String str) {
+    try {
+      URL url = new URL(str.replaceAll(" ", "%20"));
+      url.toURI();
+      return true;
+    } catch (MalformedURLException e) {
+      return false;
+    } catch (URISyntaxException e) {
+      return false;
+    }
+  }
+
+  public static String encodeDocumentUrl(String urlString) {
+    try {
+
+      URL url = new URL(urlString);
+      URI uri = new URI(url.getProtocol(),
+                        url.getUserInfo(),
+                        url.getHost(),
+                        url.getPort(),
+                        url.getPath(),
+                        url.getQuery(),
+                        url.getRef());
+
+      return uri.toASCIIString();
+
+    } catch (MalformedURLException e) {
+      return null;
+    } catch (URISyntaxException e) {
+      return null;
     }
 
-    public static boolean isDocumentUrlValid(String str) {
-        try {
-            URL url = new URL(str.replaceAll(" ", "%20"));
-            url.toURI();
-            return true;
-        } catch (MalformedURLException e) {
-            return false;
-        } catch (URISyntaxException e) {
-            return false;
+  }
+
+  /**
+   * Removes unnecessary parts of the given URL.<br/>
+   * The returned URL has the format: http(s)://host(:port)
+   * 
+   * @param url The URL to reformat.
+   * @return The reformatted URL.
+   */
+  public static String stripUrl(String url) {
+    String sUrl;
+    try {
+      ExoWebAddress webaddress = new ExoWebAddress(url);
+      String scheme = webaddress.getScheme();
+      String host = webaddress.getHost();
+      int portNumber = webaddress.getPort();
+      String port = "";
+      if (portNumber != -1) {
+        port = ":" + Integer.toString(portNumber);
+      }
+      sUrl = scheme + "://" + host + port;
+    } catch (ParseException pe) {
+      sUrl = null;
+    }
+    return sUrl;
+  }
+
+  /**
+   * Verifies that an account name contains allowed characters only.
+   * 
+   * @param serverName the server name to verify
+   * @return true if only allowed characters are found, false otherwise.
+   */
+  public static boolean isServerNameValid(String serverName) {
+    return (serverName == null) ? false : Pattern.matches(ExoConstants.ALLOWED_ACCOUNT_NAME_CHARSET, serverName);
+  }
+
+  /**
+   * Verifies that an account username contains allowed characters only.
+   * 
+   * @param username the username to verify
+   * @return true if only allowed characters are found, false otherwise.
+   */
+  public static boolean isUsernameValid(String username) {
+    return (username == null) ? false : Pattern.matches(ExoConstants.ALLOWED_ACCOUNT_USERNAME_CHARSET, username);
+  }
+
+  /**
+   * Validate an email address with
+   * http://developer.android.com/reference/android
+   * /util/Patterns.html#EMAIL_ADDRESS
+   * 
+   * @param email
+   * @return true if the given email matches the pattern, false otherwise
+   */
+  public static boolean isEmailValid(String email) {
+    return (email == null) ? false : Patterns.EMAIL_ADDRESS.matcher(email).matches();
+  }
+
+  /**
+   * Check whether a given URL is forbidden or not.<br/>
+   * URL cannot be one of "http://exoplatform.net",
+   * "http://wks-acc.exoplatform.org", "http://netstg.exoplatform.org"
+   * 
+   * @param url the URL to check
+   * @return true if the URL is forbidden, false otherwise
+   */
+  public static boolean isURLForbidden(String url) {
+    return (url == null) ? false // false if url is null
+                        :
+                        // true if the given url is in the list
+                        (Arrays.asList(WRONG_CLOUD_URLS).contains(!url.startsWith("http://") ? "http://" + url : url)
+                        // add http:// to the url if it's missing
+                        );
+  }
+
+  /**
+   * Extract a name from a Server URL by keeping the 1st part of the FQDN,
+   * between the protocol and the first dot or the end of the URL. It is then
+   * capitalized. If an IP address is given instead, it is used as-is. Examples:
+   * <ul>
+   * <li>http://int.exoplatform.com => Int</li>
+   * <li>http://community.exoplatform.com => Community</li>
+   * <li>https://mycompany.com => Mycompany</li>
+   * <li>https://intranet.secure.mycompany.co.uk => Intranet</li>
+   * <li>http://localhost => Localhost</li>
+   * <li>http://192.168.1.15 => 192.168.1.15</li>
+   * </ul>
+   * 
+   * @param url the Server URL
+   * @param defaultName a default name in case it is impossible to extract
+   * @return a name
+   */
+  public static String getAccountNameFromURL(String url, String defaultName) {
+    String finalName = defaultName;
+    if (url != null && !url.isEmpty()) {
+      if (!url.startsWith("http"))
+        url = ExoConnectionUtils.HTTP + url;
+      try {
+        URI theURL = new URI(url);
+        finalName = theURL.getHost();
+        if (!isCorrectIPAddress(finalName)) {
+          int firstDot = finalName.indexOf('.');
+          if (firstDot > 0) {
+            finalName = finalName.substring(0, firstDot);
+          }
+          // else, no dot was found in the host,
+          // return the hostname as is, e.g. localhost
         }
+        // else, URL is an IP address, return it as is
+      } catch (URISyntaxException e) {
+        finalName = defaultName;
+      } catch (IndexOutOfBoundsException e) {
+        finalName = defaultName;
+      }
     }
+    return capitalize(finalName);
+  }
 
-    public static String encodeDocumentUrl(String urlString) {
-        try {
+  /**
+   * Check whether an IP address is correct using Patterns.IP_ADDRESS. Does
+   * *not* accept port numbers.
+   * 
+   * @param ip to check
+   * @return true if the given IP is correct
+   */
+  public static boolean isCorrectIPAddress(String ip) {
+    return Patterns.IP_ADDRESS.matcher(ip).matches();
+  }
 
-            URL url = new URL(urlString);
-            URI uri = new URI(url.getProtocol(),
-                              url.getUserInfo(),
-                              url.getHost(),
-                              url.getPort(),
-                              url.getPath(),
-                              url.getQuery(),
-                              url.getRef());
-
-            return uri.toASCIIString();
-
-        } catch (MalformedURLException e) {
-            return null;
-        } catch (URISyntaxException e) {
-            return null;
-        }
-
-    }
-
-    /**
-     * Removes unnecessary parts of the given URL.<br/>
-     * The returned URL has the format: http(s)://host(:port)
-     * 
-     * @param url The URL to reformat.
-     * @return The reformatted URL.
-     */
-    public static String stripUrl(String url) {
-        String sUrl;
-        try {
-            ExoWebAddress webaddress = new ExoWebAddress(url);
-            String scheme = webaddress.getScheme();
-            String host = webaddress.getHost();
-            int portNumber = webaddress.getPort();
-            String port = "";
-            if (portNumber != -1) {
-                port = ":" + Integer.toString(portNumber);
-            }
-            sUrl = scheme + "://" + host + port;
-        } catch (ParseException pe) {
-            sUrl = null;
-        }
-        return sUrl;
-    }
-
-    // /**
-    // * Verifies that a server name doesn't contain any special characters.
-    // *
-    // * @param serverName the server name to verify
-    // * @return true if no special characters are found, false otherwise.
-    // */
-    // public static boolean isServerNameValid(String serverName) {
-    // return (serverName == null) ? false
-    // : !ExoDocumentUtils.isContainSpecialChar(serverName,
-    // ExoConstants.SPECIAL_CHAR_NAME_SET);
-    // }
-
-    // /**
-    // * Check whether a given URL is forbidden or not.<br/>
-    // * URL cannot be one of "http://exoplatform.net",
-    // * "http://wks-acc.exoplatform.org", "http://netstg.exoplatform.org"
-    // *
-    // * @param url the URL to check
-    // * @return true if the URL is forbidden, false otherwise
-    // */
-    // public static boolean urlHasWrongTenant(String url) {
-    // return (url == null) ? false : // false if url is null
-    // (Arrays.asList(WRONG_CLOUD_URLS).contains( // true
-    // // if the
-    // // given
-    // // url is
-    // // in the
-    // // list
-    // !url.startsWith("http://") ? "http://" + url : url) // add
-    // // http://
-    // // to
-    // // the
-    // // url
-    // // if
-    // // it's
-    // // missing
-    // );
-    // }
-
-    // public static String getAccountNameFromURL(String url, String
-    // defaultName) {
-    // String finalName;
-    // if (url == null || url.isEmpty())
-    // finalName = defaultName;
-    // else {
-    // try {
-    // URI theURL = new URI(url);
-    // finalName = theURL.getHost();
-    // int lastDot = finalName.lastIndexOf('.');
-    // finalName = finalName.substring(0, lastDot);
-    // int domainDot = finalName.lastIndexOf('.');
-    // finalName = finalName.substring(domainDot + 1);
-    // } catch (URISyntaxException e) {
-    // finalName = defaultName;
-    // } catch (IndexOutOfBoundsException e) {
-    // finalName = defaultName;
-    // }
-    // }
-    // return finalName;
-    // }
-    // return sUrl;
-    // }
-
-    /**
-     * Verifies that an account name contains allowed characters only.
-     * 
-     * @param serverName the server name to verify
-     * @return true if only allowed characters are found, false otherwise.
-     */
-    public static boolean isServerNameValid(String serverName) {
-        return (serverName == null) ? false
-                                   : Pattern.matches(ExoConstants.ALLOWED_ACCOUNT_NAME_CHARSET,
-                                                     serverName);
-    }
-
-    /**
-     * Verifies that an account username contains allowed characters only.
-     * 
-     * @param username the username to verify
-     * @return true if only allowed characters are found, false otherwise.
-     */
-    public static boolean isUsernameValid(String username) {
-        return (username == null) ? false
-                                 : Pattern.matches(ExoConstants.ALLOWED_ACCOUNT_USERNAME_CHARSET,
-                                                   username);
-    }
-
-    /**
-     * Validate an email address with
-     * http://developer.android.com/reference/android
-     * /util/Patterns.html#EMAIL_ADDRESS
-     * 
-     * @param email
-     * @return true if the given email matches the pattern, false otherwise
-     */
-    public static boolean isEmailValid(String email) {
-        return (email == null) ? false : Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    /**
-     * Check whether a given URL is forbidden or not.<br/>
-     * URL cannot be one of "http://exoplatform.net",
-     * "http://wks-acc.exoplatform.org", "http://netstg.exoplatform.org"
-     * 
-     * @param url the URL to check
-     * @return true if the URL is forbidden, false otherwise
-     */
-    public static boolean isURLForbidden(String url) {
-        return (url == null) ? false // false if url is null
-                            :
-                            // true if the given url is in the list
-                            (Arrays.asList(WRONG_CLOUD_URLS).contains(!url.startsWith("http://") ? "http://"
-                                                                                                        + url
-                                                                                                : url)
-                            // add http:// to the url if it's missing
-                            );
-    }
-
-    /**
-     * Extract a name from a Server URL by keeping the 1st part of the FQDN,
-     * between the protocol and the first dot or the end of the URL. It is then
-     * capitalized. If an IP address is given instead, it is used as-is.
-     * Examples:
-     * <ul>
-     * <li>http://int.exoplatform.com => Int</li>
-     * <li>http://community.exoplatform.com => Community</li>
-     * <li>https://mycompany.com => Mycompany</li>
-     * <li>https://intranet.secure.mycompany.co.uk => Intranet</li>
-     * <li>http://localhost => Localhost</li>
-     * <li>http://192.168.1.15 => 192.168.1.15</li>
-     * </ul>
-     * 
-     * @param url the Server URL
-     * @param defaultName a default name in case it is impossible to extract
-     * @return a name
-     */
-    public static String getAccountNameFromURL(String url, String defaultName) {
-        String finalName = defaultName;
-        if (url != null && !url.isEmpty()) {
-            if (!url.startsWith("http"))
-                url = ExoConnectionUtils.HTTP + url;
-            try {
-                URI theURL = new URI(url);
-                finalName = theURL.getHost();
-                if (!isCorrectIPAddress(finalName)) {
-                    int firstDot = finalName.indexOf('.');
-                    if (firstDot > 0) {
-                        finalName = finalName.substring(0, firstDot);
-                    }
-                    // else, no dot was found in the host,
-                    // return the hostname as is, e.g. localhost
-                }
-                // else, URL is an IP address, return it as is
-            } catch (URISyntaxException e) {
-                finalName = defaultName;
-            } catch (IndexOutOfBoundsException e) {
-                finalName = defaultName;
-            }
-        }
-        return capitalize(finalName);
-    }
-
-    /**
-     * Check whether an IP address is correct using Patterns.IP_ADDRESS. Does
-     * *not* accept port numbers.
-     * 
-     * @param ip to check
-     * @return true if the given IP is correct
-     */
-    public static boolean isCorrectIPAddress(String ip) {
-        return Patterns.IP_ADDRESS.matcher(ip).matches();
-    }
-
-    /**
-     * Capitalizes the 1st character of the given string
-     * 
-     * @param str the String to capitalize
-     * @return the capitalized String
-     */
-    public static String capitalize(String str) {
-        if (str == null || str.isEmpty())
-            return null;
-        return Character.toUpperCase(str.charAt(0)) + str.substring(1);
-    }
-
+  /**
+   * Capitalizes the 1st character of the given string
+   * 
+   * @param str the String to capitalize
+   * @return the capitalized String
+   */
+  public static String capitalize(String str) {
+    if (str == null || str.isEmpty())
+      return null;
+    return Character.toUpperCase(str.charAt(0)) + str.substring(1);
+  }
 }

@@ -138,7 +138,8 @@ public class SocialActivityDetailsItem extends LinearLayout {
 
     userName = activityInfo.getUserName();
     textViewName.setText(Html.fromHtml(userName));
-    textViewMessage.setText(Html.fromHtml(activityInfo.getTitle()), TextView.BufferType.SPANNABLE);
+    textViewMessage.setText(Html.fromHtml(activityInfo.getTitle(), new EmptyImageGetter(mContext), null),
+                            TextView.BufferType.SPANNABLE);
 
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
                                                                 activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
