@@ -150,7 +150,7 @@
   <string name="CalendarStart">Date de début :</string>
   <string name="CalendarEnd">Date de fin :</string>
   <string name="In">dans </string>
-  <string name="Space">l\'espace</string>
+  <string name="Space"></string>
   <string name="Personal">Personnel</string>
   <string name="Group">Groupe</string>
   <string name="General">Général</string>
