@@ -21,6 +21,7 @@ package org.exoplatform.controller.social;
 import java.io.File;
 
 import org.exoplatform.R;
+import org.exoplatform.model.SocialSpaceInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
@@ -52,194 +53,177 @@ import android.widget.Toast;
 
 public class ComposeMessageController {
 
-    private PostWaitingDialog _progressDialog;
+  private PostWaitingDialog _progressDialog;
 
-    private int               composeType;
+  private int               composeType;
 
-    private Context           mContext;
+  private Context           mContext;
 
-    private PostStatusTask    mPostTask;
+  private PostStatusTask    mPostTask;
 
-    private CommentTask       mCommetnTask;
+  private CommentTask       mCommetnTask;
 
-    private String            sdcard_temp_dir = null;
+  private String            sdcard_temp_dir = null;
 
-    private String            inputTextWarning;
+  private String            inputTextWarning;
 
-    private String            okString;
+  private String            okString;
 
-    private String            titleString;
+  private String            titleString;
 
-    private String            contentString;
+  private String            contentString;
 
-    /**
-     * Either null (public) or the space id
-     */
-    private String            postDestination;
+  /**
+   * Either null (public) or the space name
+   */
+  private SocialSpaceInfo   postDestination;
 
-    public ComposeMessageController(Context context, int type, PostWaitingDialog dialog) {
-        mContext = context;
-        composeType = type;
-        postDestination = null;
-        _progressDialog = dialog;
-        changeLanguage();
+  public ComposeMessageController(Context context, int type, PostWaitingDialog dialog) {
+    mContext = context;
+    composeType = type;
+    postDestination = null;
+    _progressDialog = dialog;
+    changeLanguage();
 
-    }
+  }
 
-    /**
-     * Set this post's destination.
-     * 
-     * @param destination null (public) or a space id
-     */
-    public void setPostDestination(String destination) {
-        this.postDestination = destination;
-    }
+  /**
+   * Set this post's destination.
+   * 
+   * @param destination null (public) or the SocialSpaceInfo object
+   */
+  public void setPostDestination(SocialSpaceInfo destination) {
+    this.postDestination = destination;
+  }
 
-    /**
-     * @return This post's destination:<br/>
-     *         - null: public<br/>
-     *         - string: the destination space's technical name
-     */
-    public String getPostDestination() {
-        return this.postDestination;
-    }
+  /**
+   * @return This post's destination:<br/>
+   *         - null: public<br/>
+   *         - SocialSpaceInfo: the destination space
+   */
+  public SocialSpaceInfo getPostDestination() {
+    return this.postDestination;
+  }
 
-    /*
-     * Take a photo and store it into /sdcard/eXo/DocumentCache
-     */
+  /*
+   * Take a photo and store it into /sdcard/eXo/DocumentCache
+   */
 
-    public void initCamera() {
-        String parentPath = PhotoUtils.getParentImagePath(mContext);
-        sdcard_temp_dir = parentPath + "/" + PhotoUtils.getImageFileName();
+  public void initCamera() {
+    String parentPath = PhotoUtils.getParentImagePath(mContext);
+    sdcard_temp_dir = parentPath + "/" + PhotoUtils.getImageFileName();
 
-        Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                                             Uri.fromFile(new File(sdcard_temp_dir)));
-        ((Activity) mContext).startActivityForResult(takePictureFromCameraIntent,
-                                                     ExoConstants.TAKE_PICTURE_WITH_CAMERA);
-    }
+    Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(sdcard_temp_dir)));
+    ((Activity) mContext).startActivityForResult(takePictureFromCameraIntent, ExoConstants.TAKE_PICTURE_WITH_CAMERA);
+  }
 
-    public void onSendMessage(String composeMessage, String sdcard, int position) {
-        if ((composeMessage != null) && (composeMessage.length() > 0)) {
-            if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
-                if (composeType == 0) {
-                    onPostTask(composeMessage, sdcard);
-                } else {
-                    onCommentTask(composeMessage, position);
-                }
-            } else {
-                new ConnectionErrorDialog(mContext).show();
-            }
+  public void onSendMessage(String composeMessage, String sdcard, int position) {
+    if ((composeMessage != null) && (composeMessage.length() > 0)) {
+      if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+        if (composeType == 0) {
+          onPostTask(composeMessage, sdcard);
         } else {
-            Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.BOTTOM, 0, 0);
-            toast.show();
+          onCommentTask(composeMessage, position);
         }
+      } else {
+        new ConnectionErrorDialog(mContext).show();
+      }
+    } else {
+      Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_LONG);
+      toast.setGravity(Gravity.BOTTOM, 0, 0);
+      toast.show();
+    }
+  }
+
+  private void onPostTask(String composeMessage, String sdcard) {
+    if (mPostTask == null || mPostTask.getStatus() == PostStatusTask.Status.FINISHED) {
+      mPostTask = (PostStatusTask) new PostStatusTask(mContext, sdcard, composeMessage, this, _progressDialog).execute();
+    }
+  }
+
+  public void onCancelPostTask() {
+    if (mPostTask != null && mPostTask.getStatus() == PostStatusTask.Status.RUNNING) {
+      mPostTask.cancel(true);
+      mPostTask = null;
+    }
+  }
+
+  private void onCommentTask(String composeMessage, int position) {
+    if (mCommetnTask == null || mCommetnTask.getStatus() == CommentTask.Status.FINISHED) {
+      mCommetnTask = (CommentTask) new CommentTask(position).execute(composeMessage);
+    }
+  }
+
+  public String getSdCardTempDir() {
+    return sdcard_temp_dir;
+  }
+
+  private void changeLanguage() {
+    Resources resource = mContext.getResources();
+    inputTextWarning = resource.getString(R.string.InputTextWarning);
+    okString = resource.getString(R.string.OK);
+    titleString = resource.getString(R.string.Warning);
+    contentString = resource.getString(R.string.ErrorOnComment);
+  }
+
+  private class CommentTask extends AsyncTask<String, Void, Boolean> {
+
+    private int currentPosition;
+
+    public CommentTask(int position) {
+      currentPosition = position;
     }
 
-    private void onPostTask(String composeMessage, String sdcard) {
-        if (mPostTask == null || mPostTask.getStatus() == PostStatusTask.Status.FINISHED) {
-            mPostTask = (PostStatusTask) new PostStatusTask(mContext,
-                                                            sdcard,
-                                                            composeMessage,
-                                                            this,
-                                                            _progressDialog).execute();
-        }
-    }
+    @Override
+    protected Boolean doInBackground(String... params) {
+      try {
+        String composeMessage = params[0];
+        RestComment comment = new RestComment();
+        comment.setText(composeMessage);
+        String selectedId = SocialDetailHelper.getInstance().getActivityId();
+        ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
+        RestActivity restActivity = (RestActivity) activityService.get(selectedId);
 
-    public void onCancelPostTask() {
-        if (mPostTask != null && mPostTask.getStatus() == PostStatusTask.Status.RUNNING) {
-            mPostTask.cancel(true);
-            mPostTask = null;
-        }
-    }
-
-    private void onCommentTask(String composeMessage, int position) {
-        if (mCommetnTask == null || mCommetnTask.getStatus() == CommentTask.Status.FINISHED) {
-            mCommetnTask = (CommentTask) new CommentTask(position).execute(composeMessage);
-        }
-    }
-
-    public String getSdCardTempDir() {
-        return sdcard_temp_dir;
-    }
-
-    private void changeLanguage() {
-        Resources resource = mContext.getResources();
-        inputTextWarning = resource.getString(R.string.InputTextWarning);
-        okString = resource.getString(R.string.OK);
-        titleString = resource.getString(R.string.Warning);
-        contentString = resource.getString(R.string.ErrorOnComment);
-    }
-
-    private class CommentTask extends AsyncTask<String, Void, Boolean> {
-
-        private int currentPosition;
-
-        public CommentTask(int position) {
-            currentPosition = position;
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            try {
-                String composeMessage = params[0];
-                RestComment comment = new RestComment();
-                comment.setText(composeMessage);
-                String selectedId = SocialDetailHelper.getInstance().getActivityId();
-                ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
-                RestActivity restActivity = (RestActivity) activityService.get(selectedId);
-
-                activityService.createComment(restActivity, comment);
-                return true;
-            } catch (SocialClientLibException e) {
-                return false;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                ((Activity) mContext).finish();
-                if (SocialDetailActivity.socialDetailActivity != null) {
-                    SocialDetailActivity.socialDetailActivity.onLoad();
-                }
-
-                if (SocialTabsActivity.instance != null) {
-                    int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
-                    switch (tabId) {
-                    case SocialTabsActivity.ALL_UPDATES:
-                        AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                                  true,
-                                                                  currentPosition);
-                        break;
-                    case SocialTabsActivity.MY_CONNECTIONS:
-                        MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                                     true,
-                                                                     currentPosition);
-                        break;
-                    case SocialTabsActivity.MY_SPACES:
-                        MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                                true,
-                                                                currentPosition);
-                        break;
-                    case SocialTabsActivity.MY_STATUS:
-                        MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                                true,
-                                                                currentPosition);
-                        break;
-                    }
-                }
-            } else {
-                WarningDialog dialog = new WarningDialog(mContext,
-                                                         titleString,
-                                                         contentString,
-                                                         okString);
-                dialog.show();
-            }
-        }
+        activityService.createComment(restActivity, comment);
+        return true;
+      } catch (SocialClientLibException e) {
+        return false;
+      }
 
     }
+
+    @Override
+    protected void onPostExecute(Boolean result) {
+      if (result) {
+        ((Activity) mContext).finish();
+        if (SocialDetailActivity.socialDetailActivity != null) {
+          SocialDetailActivity.socialDetailActivity.onLoad();
+        }
+
+        if (SocialTabsActivity.instance != null) {
+          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+          switch (tabId) {
+          case SocialTabsActivity.ALL_UPDATES:
+            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+            break;
+          case SocialTabsActivity.MY_CONNECTIONS:
+            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+            break;
+          case SocialTabsActivity.MY_SPACES:
+            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+            break;
+          case SocialTabsActivity.MY_STATUS:
+            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+            break;
+          }
+        }
+      } else {
+        WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+        dialog.show();
+      }
+    }
+
+  }
 
 }

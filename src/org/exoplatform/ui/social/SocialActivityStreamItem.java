@@ -299,13 +299,13 @@ public class SocialActivityStreamItem {
     textViewName.setText(Html.fromHtml(info), TextView.BufferType.SPANNABLE);
 
     String templateComment = activityInfo.templateParams.get("comment");
-    String description = activityInfo.templateParams.get("description").trim();
+    String description = activityInfo.templateParams.get("description");
 
     if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
       textViewMessage.setText(Html.fromHtml(templateComment, new EmptyImageGetter(mContext), null), TextView.BufferType.SPANNABLE);
     }
     if (description != null) {
-      textViewCommnet.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
+      textViewCommnet.setText(Html.fromHtml(description.trim()), TextView.BufferType.SPANNABLE);
       textViewCommnet.setVisibility(View.VISIBLE);
     }
 

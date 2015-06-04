@@ -147,13 +147,13 @@ public class SocialHomeTickerItem extends LinearLayout {
 
     case SocialActivityUtil.ACTIVITY_TYPE_LINK:
       String templateComment = activityInfo.templateParams.get("comment");
-      String description = activityInfo.templateParams.get("description").trim();
+      String description = activityInfo.templateParams.get("description");
 
       if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
         textViewMessage.setText(Html.fromHtml(templateComment));
       }
       if (description != null) {
-        textViewMessage.setText(Html.fromHtml(description));
+        textViewMessage.setText(Html.fromHtml(description.trim()));
       }
 
       break;

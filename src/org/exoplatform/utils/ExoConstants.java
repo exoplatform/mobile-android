@@ -30,6 +30,8 @@ public class ExoConstants {
 
   public static final String PLATFORM_CURRENT_REPO_NAME            = "currentRepoName";
 
+  public static final String PLATFORM_DEFAULT_WORKSPACE            = "defaultWorkSpaceName";
+
   public static final String USER_HOME_NODE_PATH                   = "userHomeNodePath";
 
   public static final String LOGIN_YES                             = "YES";
@@ -146,6 +148,8 @@ public class ExoConstants {
 
   public static final String DOCUMENT_COLLABORATION                = "collaboration";
 
+  public static final String DOCUMENT_PERSONAL_DRIVE_NAME          = "Personal Documents";
+
   public static final String DOCUMENT_JCR_PATH                     = "/rest/private/jcr";
 
   public static final String DOCUMENT_USERS                        = "Users";
@@ -153,6 +157,10 @@ public class ExoConstants {
   public static final String DOCUMENT_DRIVE_PATH_REST              = "/rest/managedocument/getDrives?driveType=";
 
   public static final String DOCUMENT_FILE_PATH_REST               = "/rest/managedocument/getFoldersAndFiles?driveName=";
+
+  public static final String DOCUMENT_UPLOAD_PATH_REST             = "/rest/managedocument/uploadFile/upload";
+
+  public static final String DOCUMENT_CONTROL_PATH_REST            = "/rest/managedocument/uploadFile/control";
 
   public static final String DOCUMENT_WORKSPACE_NAME               = "&workspaceName=";
 

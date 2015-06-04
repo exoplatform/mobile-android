@@ -48,16 +48,16 @@
     <jira.project.key>MOB</jira.project.key>
     <jenkins.job.name>mobile-android-master-ci</jenkins.job.name>
     <!-- Android -->
+    <!-- Max allowed to not have conflict with GreenDroid's ActionBar  -->
     <android.version>2.3.3</android.version>
     <android.sdk.platform>10</android.sdk.platform>
-    <!-- max allowed to not have conflict with GreenDroid's ActionBar  -->
-    <android.support.version>r7</android.support.version>
+    <!-- Lib support available via maven-android-sdk-deployer  -->
+    <android.support.version>20.0.0</android.support.version>
     <!-- March 2012 -->
     <android.annotations.version>4.1.1.4</android.annotations.version>
-    <!-- Sept 2012  -->
     <!-- Libraries -->
     <commons-lang.version>2.4</commons-lang.version>
-    <exo.social.client.version>1.0.1</exo.social.client.version>
+    <exo.social.client.version>1.0.2-SNAPSHOT</exo.social.client.version>
     <slf4j-android.version>1.6.1-RC1</slf4j-android.version>
     <greendroid.version>67aa3ed</greendroid.version>
     <!-- Test Dependencies  -->
@@ -107,8 +107,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.android</groupId>
-      <artifactId>support-v4</artifactId>
+      <groupId>android.support</groupId>
+      <artifactId>compatibility-v4</artifactId>
       <version>${android.support.version}</version>
     </dependency>
     <dependency>
