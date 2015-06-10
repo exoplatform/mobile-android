@@ -10,11 +10,11 @@
   <string name="NoPasswordEnter">Entrez votre mot de passe</string>
   <string name="UserNamePasswordFailed">Nom d\'utilisateur et/ou mot de passe invalide.</string>
   <string name="SpecialCharacters">Caractères spéciaux non autorisés.</string>
-  <string name="AccountNameInvalid">Only alphanumeric characters and spaces are allowed in the account name</string>
-  <string name="AccountServerInvalid">Invalid server address</string>
-  <string name="AccountServerForbidden">This server URL is not allowed</string>
-  <string name="AccountUsernameInvalid">Only alphanumeric characters, dashes, underscores, dots and pluses are allowed in the username</string>
-  <string name="AccountPasswordInvalid">Blanks are not allowed in the password</string>
+  <string name="AccountNameInvalid">Seuls les caractères alphanumériques et les espaces sont autorisés dans le nom du compte</string>
+  <string name="AccountServerInvalid">Adresse du serveur non valide</string>
+  <string name="AccountServerForbidden">Cette URL de serveur n\'est pas autorisée</string>
+  <string name="AccountUsernameInvalid">Seuls les caractères alphanumériques, les points, les plus, les tirets et les tirets de soulignement sont autorisés dans le nom d\'utilisateur</string>
+  <string name="AccountPasswordInvalid">Les espaces ne sont pas autorisés dans le mot de passe</string>
   <string name="Connected">Connecté</string>
   <string name="LastLoginDate">Dernière connexion</string>
   <string name="ServerUnreachable">Le serveur ne peut être contacté</string>
