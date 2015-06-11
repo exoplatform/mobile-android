@@ -158,6 +158,12 @@ public class DashboardActivity extends MyActionBar {
   }
 
   @Override
+  protected void onDestroy() {
+    onCancelLoad();
+    super.onDestroy();
+  }
+
+  @Override
   public void onBackPressed() {
     onCancelLoad();
     finish();
