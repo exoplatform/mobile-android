@@ -10,13 +10,13 @@
   <string name="NoPasswordEnter">Si us plau, introdueix la teva contrasenya</string>
   <string name="UserNamePasswordFailed">Combinació de nom d\'usuari/contrasenya no vàlida.</string>
   <string name="SpecialCharacters">No es permeten caràcters especials.</string>
-  <string name="AccountNameInvalid">Only alphanumeric characters and spaces are allowed in the account name</string>
-  <string name="AccountServerInvalid">Invalid server address</string>
-  <string name="AccountServerForbidden">This server URL is not allowed</string>
-  <string name="AccountUsernameInvalid">Only alphanumeric characters, dashes, underscores, dots and pluses are allowed in the username</string>
-  <string name="AccountPasswordInvalid">Blanks are not allowed in the password</string>
+  <string name="AccountNameInvalid">Només s\'admeten caràcters alfanumèrics i espais al nom del compte</string>
+  <string name="AccountServerInvalid">Adreça del servidor no vàlida</string>
+  <string name="AccountServerForbidden">Aquesta adreça URL del servidor no està permesa</string>
+  <string name="AccountUsernameInvalid">Només es permeten caràcters alfanumèrics, guions, guions baixos, punts i signes de suma a l\'usuari</string>
+  <string name="AccountPasswordInvalid">No es permeten els espais en blanc en la contrasenya</string>
   <string name="Connected">Connectat</string>
-  <string name="LastLoginDate">Last login</string>
+  <string name="LastLoginDate">Últim accés</string>
   <string name="ServerUnreachable">L\'adreça del servidor és inaccessible</string>
   <string name="UserNameCellTitle">Nom d\'usuari</string>
   <string name="PasswordCellTitle">Contrasenya</string>
@@ -34,8 +34,8 @@
   <string name="French">Francès</string>
   <string name="German">Alemany</string>
   <string name="Spanish">Castellà</string>
-  <string name="PortugueseBrazil">Portuguese (Brazil)</string>
-  <string name="Greek">Greek</string>
+  <string name="PortugueseBrazil">Portuguès (Brasil)</string>
+  <string name="Greek">Grec</string>
   <string name="CompliantMessage">L\'aplicació no és compatible amb la versió de la plataforma d\'aquesta URL. Contacteu amb el vostre administrador.</string>
   <string name="Delete">Suprimeix</string>
   <string name="Copy">Copia</string>
@@ -65,11 +65,11 @@
   <string name="StatusUpdate">Publicar</string>
   <string name="PostTo">Al:</string>
   <string name="Public">Les Meves Activitats</string>
-  <string name="NoSpaces">You are not in any space</string>
+  <string name="NoSpaces">No ets a cap espai</string>
   <string name="ComposerPlaceHolder">En què està treballant?</string>
-  <string name="ShareWithWhom">Select who will see this post</string>
-  <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
-  <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
+  <string name="ShareWithWhom">Selecciona qui veurà aquest missatge</string>
+  <string name="AddImageDisabled">No pots afegir una imatge ja que estàs publicant en un espai</string>
+  <string name="SelectSpaceDisabled">No pots seleccionar un espai perquè el teu missatge conté una imatge</string>
   <string name="NoLike">A ningú li agrada en aquest moment</string>
   <string name="LikedThis"> li ha agradat això</string>
   <string name="And"> i</string>
@@ -105,7 +105,7 @@
   <string name="WarningServerNameIsEmpty">El nom del servidor o l\'URL no poden estar buits.</string>
   <string name="WarningServerNameIsExist">El nom del servidor ja existeix a la teva llista</string>
   <string name="WarningServerUrlIsExist">La URL del servidor ja existeix a la teva llista</string>
-  <string name="WarningServerAlreadyExists">This account already exists in your list</string>
+  <string name="WarningServerAlreadyExists">Aquest compte ja existeix a la teva llista</string>
   <string name="DetailsNotAvaiable">Els detalls de les notícies no estàn disponibles</string>
   <string name="ErrorOnComment">No pots comentar aquesta activitat.</string>
   <string name="CannotLoadMoreActivities">No es poden carregar més activitats. S\'esta recarregant la llista.</string>
@@ -230,7 +230,7 @@
   <!-- Server edition -->
   <string name="OptionalHint">Optional</string>
   <string name="RequiredHint">Required</string>
-  <string name="Account">Account</string>
+  <string name="Account">Compte</string>
   <string name="YourCredentials">Your credentials</string>
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
