@@ -66,7 +66,7 @@ public class WebViewActivity extends MyActionBar {
 
   public void onCreate(Bundle icicle) {
 
-    super.onCreate(icicle);    
+    super.onCreate(icicle);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.webview);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
@@ -98,14 +98,13 @@ public class WebViewActivity extends MyActionBar {
     _wvGadget.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
     _wvGadget.getSettings().setSupportZoom(true);
     if (getIntent().getStringExtra(ExoConstants.WEB_VIEW_ALLOW_JS) != null) {
-      boolean allowJS = Boolean.parseBoolean( getIntent().getStringExtra(ExoConstants.WEB_VIEW_ALLOW_JS) );
-      setJavascript(allowJS);  
+      boolean allowJS = Boolean.parseBoolean(getIntent().getStringExtra(ExoConstants.WEB_VIEW_ALLOW_JS));
+      setJavascript(allowJS);
+    } else {
+      // Disable JS by default
+      setJavascript(false);
     }
-    else {
-      // Disable JS by default 
-      setJavascript(false);  
-    }
-    
+
     _wvGadget.getSettings().setPluginsEnabled(true);
     _wvGadget.getSettings().setLoadsImagesAutomatically(true);
     _wvGadget.addJavascriptInterface(this, "MainScreen");
@@ -115,8 +114,8 @@ public class WebViewActivity extends MyActionBar {
      * content into one column that is the width of the view.
      */
     if (contentType != null && contentType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
-    _wvGadget.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
-    _wvGadget.getSettings().setUseWideViewPort(false);
+      _wvGadget.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+      _wvGadget.getSettings().setUseWideViewPort(false);
     }
     final Activity activity = this;
 
@@ -154,7 +153,7 @@ public class WebViewActivity extends MyActionBar {
     _wvGadget.getSettings().setJavaScriptEnabled(allowJS);
     _wvGadget.getSettings().setJavaScriptCanOpenWindowsAutomatically(allowJS);
   }
-  
+
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
@@ -218,7 +217,7 @@ public class WebViewActivity extends MyActionBar {
   @Override
   public void onBackPressed() {
     onCancelLoad();
-    if (_wvGadget.canGoBack()) {
+    if (_wvGadget != null && _wvGadget.canGoBack()) {
       _wvGadget.goBack();
     } else
       finish();
@@ -279,10 +278,7 @@ public class WebViewActivity extends MyActionBar {
     }
 
     @Override
-    public void onReceivedHttpAuthRequest(WebView view,
-                                          HttpAuthHandler handler,
-                                          String host,
-                                          String realm) {
+    public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
       super.onReceivedHttpAuthRequest(view, handler, host, realm);
       view.reload();
     }

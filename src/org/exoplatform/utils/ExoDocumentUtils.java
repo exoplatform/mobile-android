@@ -70,35 +70,37 @@ import android.webkit.MimeTypeMap;
 
 public class ExoDocumentUtils {
 
-  public static final String ALL_VIDEO_TYPE       = "video/*";
+  private static final String LOG_TAG              = "____eXo____ExoDocumentUtils____";
 
-  public static final String ALL_AUDIO_TYPE       = "audio/*";
+  public static final String  ALL_VIDEO_TYPE       = "video/*";
 
-  public static final String ALL_IMAGE_TYPE       = "image/*";
+  public static final String  ALL_AUDIO_TYPE       = "audio/*";
 
-  public static final String ALL_TEXT_TYPE        = "text/*";
+  public static final String  ALL_IMAGE_TYPE       = "image/*";
 
-  public static final String IMAGE_TYPE           = "image";
+  public static final String  ALL_TEXT_TYPE        = "text/*";
 
-  public static final String TEXT_TYPE            = "text";
+  public static final String  IMAGE_TYPE           = "image";
 
-  public static final String VIDEO_TYPE           = "video";
+  public static final String  TEXT_TYPE            = "text";
 
-  public static final String AUDIO_TYPE           = "audio";
+  public static final String  VIDEO_TYPE           = "video";
 
-  public static final String MSWORD_TYPE          = "application/msword";
+  public static final String  AUDIO_TYPE           = "audio";
 
-  public static final String OPEN_MSWORD_TYPE     = "application/vnd.oasis.opendocument.text";
+  public static final String  MSWORD_TYPE          = "application/msword";
 
-  public static final String PDF_TYPE             = "application/pdf";
+  public static final String  OPEN_MSWORD_TYPE     = "application/vnd.oasis.opendocument.text";
 
-  public static final String XLS_TYPE             = "application/xls";
+  public static final String  PDF_TYPE             = "application/pdf";
 
-  public static final String OPEN_XLS_TYPE        = "application/vnd.oasis.opendocument.spreadsheet";
+  public static final String  XLS_TYPE             = "application/xls";
 
-  public static final String POWERPOINT_TYPE      = "application/vnd.ms-powerpoint";
+  public static final String  OPEN_XLS_TYPE        = "application/vnd.oasis.opendocument.spreadsheet";
 
-  public static final String OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
+  public static final String  POWERPOINT_TYPE      = "application/vnd.ms-powerpoint";
+
+  public static final String  OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
 
   public static boolean isEnoughMemory(int fileSize) {
     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -288,10 +290,10 @@ public class ExoDocumentUtils {
         DocumentHelper.getInstance().setRepositoryHomeUrl(buffer.toString());
       }
 
-    } catch (IOException e) {
+    } catch (Exception e) {
+      Log.e(LOG_TAG, e.getMessage(), e);
       DocumentHelper.getInstance().setRepositoryHomeUrl(null);
     }
-
   }
 
   // Get file array from URL
@@ -792,7 +794,8 @@ public class ExoDocumentUtils {
           return false;
       }
 
-    } catch (IOException e) {
+    } catch (Exception e) {
+      Log.e(LOG_TAG, e.getMessage(), e);
       return false;
     }
   }

@@ -29,6 +29,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialPostInfo;
 import org.exoplatform.shareextension.service.Action.ActionListener;
 import org.exoplatform.singleton.DocumentHelper;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.ExoDocumentUtils.DocumentInfo;
@@ -230,6 +231,9 @@ public class ShareService extends IntentService {
       @Override
       public void onSuccess(String message) {
         // Share finished successfully
+        // Cleanup
+        ExoConnectionUtils.loggingOut();
+        // Notify
         notifyResult(ShareResult.SUCCESS);
       }
 

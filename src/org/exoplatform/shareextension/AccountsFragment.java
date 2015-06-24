@@ -104,7 +104,7 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
   public void onListItemClick(ListView l, View v, int position, long id) {
     if (accounts != null && position >= 0 && position < accounts.size()) {
       ExoAccount acc = accounts.get(position);
-      if (acc.password != null && !"".equals(acc.password) && acc.isRememberEnabled && acc.isAutoLoginEnabled) {
+      if (acc.password != null && !"".equals(acc.password)) {
         getShareActivity().onAccountSelected(acc);
         getShareActivity().openFragment(ComposeFragment.getFragment(),
                                         ComposeFragment.COMPOSE_FRAGMENT,

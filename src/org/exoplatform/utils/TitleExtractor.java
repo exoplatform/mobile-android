@@ -34,7 +34,7 @@ public class TitleExtractor {
 
     // ContentType is an inner class defined below
     ContentType contentType = getContentTypeHeader(conn);
-    if (!contentType.contentType.equals("text/html"))
+    if (contentType == null || !contentType.contentType.equals("text/html"))
       return null; // don't continue if not HTML
     else {
       // determine the charset, or use the default

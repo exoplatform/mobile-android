@@ -153,7 +153,7 @@ public class ShareActivity extends FragmentActivity {
       postInfo.ownerAccount = AccountSetting.getInstance().getCurrentAccount();
     }
     ExoAccount acc = postInfo.ownerAccount;
-    if (acc != null && acc.password != null && !"".equals(acc.password) && acc.isRememberEnabled && acc.isAutoLoginEnabled) {
+    if (acc != null && acc.password != null && !"".equals(acc.password)) {
       // Try to login to setup the social services
       loginWithSelectedAccount();
     }
@@ -330,6 +330,7 @@ public class ShareActivity extends FragmentActivity {
     // Called when an account with password was selected.
     // If the selected account has no password, we open the SignInFragment first
     if (!account.equals(postInfo.ownerAccount)) {
+      online = false;
       postInfo.ownerAccount = account;
       loginWithSelectedAccount();
     }

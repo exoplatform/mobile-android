@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -46,6 +47,8 @@ import android.widget.ListView;
  * @since Apr 21, 2015
  */
 public class SpaceSelectorActivity extends MyActionBar implements LoaderCallbacks<List<SocialSpaceInfo>>, OnItemClickListener {
+
+  private static final String   LOG_TAG        = "____eXo_SpaceSelectorActivity____";
 
   public static final String    SELECTED_SPACE = "SelectedSpace";
 
@@ -139,8 +142,12 @@ public class SpaceSelectorActivity extends MyActionBar implements LoaderCallback
     return new AsyncTaskLoader<List<SocialSpaceInfo>>(this) {
       @Override
       public List<SocialSpaceInfo> loadInBackground() {
+        List<SocialSpaceInfo> spacesNames = new ArrayList<SocialSpaceInfo>();
+        if (SocialServiceHelper.getInstance().spaceService == null) {
+          Log.e(LOG_TAG, "Cannot retrieve spaces. Social Space service is null.");
+          return null;
+        }
         List<RestSpace> spaces = SocialServiceHelper.getInstance().spaceService.getMySocialSpaces();
-        List<SocialSpaceInfo> spacesNames = new ArrayList<SocialSpaceInfo>(spaces.size());
         String currentServer = AccountSetting.getInstance().getDomainName();
         for (RestSpace space : spaces) {
           SocialSpaceInfo sp = new SocialSpaceInfo();
@@ -157,9 +164,11 @@ public class SpaceSelectorActivity extends MyActionBar implements LoaderCallback
 
   @Override
   public void onLoadFinished(Loader<List<SocialSpaceInfo>> loader, List<SocialSpaceInfo> data) {
-    listInfoSpaces = data;
-    listAdapterSpaces.setSpaceList(data);
-    listAdapterSpaces.notifyDataSetChanged();
+    if (data != null) {
+      listInfoSpaces = data;
+      listAdapterSpaces.setSpaceList(data);
+      listAdapterSpaces.notifyDataSetChanged();
+    }
   }
 
   @Override
