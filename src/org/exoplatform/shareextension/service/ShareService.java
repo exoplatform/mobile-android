@@ -94,7 +94,7 @@ public class ShareService extends IntentService {
 
     } else {
       // We don't have an attachment, maybe a link
-      // TODO move as a separate Action - MOB-1845
+      // TODO move as a separate Action - MOB-1866
       String link = null;
       link = extractLinkFromText();
       if (link != null) {
@@ -231,7 +231,7 @@ public class ShareService extends IntentService {
       @Override
       public void onSuccess(String message) {
         // Share finished successfully
-        // Cleanup
+        // Needed to avoid some problems when reopening the app
         ExoConnectionUtils.loggingOut();
         // Notify
         notifyResult(ShareResult.SUCCESS);
@@ -269,7 +269,7 @@ public class ShareService extends IntentService {
 
   private Map<String, String> linkParams(String link) {
     // Create and return TemplateParams for a LINK_ACTIVITY
-    // Return null if the is no link
+    // Return null if there is no link
     if (link == null)
       return null;
     Map<String, String> templateParams = new HashMap<String, String>();

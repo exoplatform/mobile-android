@@ -102,7 +102,7 @@ public class ShareActivity extends FragmentActivity {
       String type = intent.getType();
       if ("text/plain".equals(type)) {
         // The share does not contain an attachment
-        // TODO extract the link info - MOB-1845
+        // TODO extract the link info - MOB-1866
         postInfo.postMessage = intent.getStringExtra(Intent.EXTRA_TEXT);
       } else {
         // The share contains an attachment

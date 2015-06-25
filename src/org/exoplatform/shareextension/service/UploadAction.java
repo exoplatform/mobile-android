@@ -19,14 +19,12 @@
 package org.exoplatform.shareextension.service;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.CookieStore;
@@ -110,7 +108,6 @@ public class UploadAction extends Action {
       writer.append("--" + boundary + "--").append(CRLF).flush();
       // Execute the connection and retrieve the status code
       status = uploadReq.getResponseCode();
-      readUploadResponse(uploadReq.getInputStream());
     } catch (Exception e) {
       Log.e(LOG_TAG, "Error while uploading " + uploadInfo.fileToUpload, e);
     } finally {
@@ -145,7 +142,6 @@ public class UploadAction extends Action {
       // Execute the request and retrieve the status code
       HttpResponse move = ExoConnectionUtils.httpClient.execute(moveReq);
       status = move.getStatusLine().getStatusCode();
-      readSaveResponse(move.getEntity());
     } catch (Exception e) {
       Log.e(LOG_TAG, "Error while saving " + uploadInfo.fileToUpload + " in JCR", e);
     }
@@ -155,29 +151,6 @@ public class UploadAction extends Action {
     } else {
       listener.onError("Could not save the file " + uploadInfo.fileToUpload.documentName);
     }
-  }
-
-  /*
-   * DEBUG stuff (TODO : remove)
-   */
-
-  private void readUploadResponse(InputStream input) throws IOException {
-    StringBuffer resp = new StringBuffer();
-    byte[] buf = new byte[256];
-    while (input.read(buf) != -1) {
-      resp.append(new String(buf));
-    }
-    Log.d(LOG_TAG, resp.toString());
-  }
-
-  private void readSaveResponse(HttpEntity entity) throws IllegalStateException, IOException {
-    InputStream input = entity.getContent();
-    StringBuffer resp = new StringBuffer();
-    byte[] buf = new byte[256];
-    while (input.read(buf) != -1) {
-      resp.append(new String(buf));
-    }
-    Log.d(LOG_TAG, resp.toString());
   }
 
 }
