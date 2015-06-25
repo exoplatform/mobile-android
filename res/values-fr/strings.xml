@@ -68,8 +68,6 @@
   <string name="NoSpaces">You are not in any space</string>
   <string name="ComposerPlaceHolder">Sur quoi travaillez-vous?</string>
   <string name="ShareWithWhom">Select who will see this post</string>
-  <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
-  <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
   <string name="NoLike">Personne n\'aime pour le moment</string>
   <string name="LikedThis">aiment cela</string>
   <string name="And">et</string>

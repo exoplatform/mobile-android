@@ -488,8 +488,8 @@ public class ExoConnectionUtils {
       String result = getPLFStream(response);
       JSONObject json = (JSONObject) JSONValue.parse(result);
 
-      String isComplicant = json.get(ExoConstants.IS_MOBILE_COMPLIANT).toString();
-      if ("true".equalsIgnoreCase(isComplicant)) {
+      String isCompliant = json.get(ExoConstants.IS_MOBILE_COMPLIANT).toString();
+      if ("true".equalsIgnoreCase(isCompliant)) {
         String editionObject = json.get(ExoConstants.PLATFORM_EDITION).toString();
         ServerSettingHelper.getInstance().setServerEdition(editionObject);
         String verObject = json.get(ExoConstants.PLATFORM_VERSION).toString();
@@ -506,6 +506,17 @@ public class ExoConnectionUtils {
           }
         }
         DocumentHelper.getInstance().repository = repository;
+
+        /*
+         * Get default workspace name
+         */
+        String workspace = ExoConstants.DOCUMENT_COLLABORATION;
+        if (json.containsKey(ExoConstants.PLATFORM_DEFAULT_WORKSPACE)) {
+          workspace = json.get(ExoConstants.PLATFORM_DEFAULT_WORKSPACE).toString();
+          if (workspace == null || "".equals(workspace.trim()))
+            workspace = ExoConstants.DOCUMENT_COLLABORATION;
+        }
+        DocumentHelper.getInstance().workspace = workspace;
 
         String userHomeNode = json.get(ExoConstants.USER_HOME_NODE_PATH).toString();
         ExoDocumentUtils.setRepositoryHomeUrl(username, userHomeNode, domain);

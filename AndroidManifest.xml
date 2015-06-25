@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1505061113" android:versionName="2.5.x-SNAPSHOT" package="org.exoplatform">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1506251642" android:versionName="2.5.x-SNAPSHOT" package="org.exoplatform">
     <supports-screens android:smallScreens="false"/>
 
     <!-- Application Permissions -->
@@ -57,6 +57,36 @@
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.SignInOnPremiseActivity"/>
         <activity android:name=".accountswitcher.AccountSwitcherActivity"/>
         <activity android:name=".ui.social.SpaceSelectorActivity"/>
+        <activity android:label="eXo" android:name=".shareextension.ShareActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/*"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="audio/*"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/*"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="video/*"/>
+            </intent-filter>
+        </activity>
+        <!-- Services  -->
+        <service android:exported="false" android:name="org.exoplatform.shareextension.service.ShareService"/>
+        <!-- Other -->
         <meta-data android:name="com.crashlytics.ApiKey" android:value="b8421f485868032ad402cef01a4bd7c70263d97e"/>
     </application>
 

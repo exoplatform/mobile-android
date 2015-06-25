@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -40,135 +41,137 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 /**
- * Created by The eXo Platform SAS Author : Philippe Aristote
- * paristote@exoplatform.com Apr 21, 2015
+ * Created by The eXo Platform SAS
+ * 
+ * @author Philippe Aristote paristote@exoplatform.com
+ * @since Apr 21, 2015
  */
-public class SpaceSelectorActivity extends MyActionBar implements
-        LoaderCallbacks<List<SocialSpaceInfo>>, OnItemClickListener {
+public class SpaceSelectorActivity extends MyActionBar implements LoaderCallbacks<List<SocialSpaceInfo>>, OnItemClickListener {
 
-    public static final String    SELECTED_DESTINATION        = "Destination";
+  private static final String   LOG_TAG        = "____eXo_SpaceSelectorActivity____";
 
-    public static final String    SELECTED_SPACE_DISPLAY_NAME = "SpaceName";
+  public static final String    SELECTED_SPACE = "SelectedSpace";
 
-    public static final String    SELECTED_SPACE_IMAGE        = "SpaceImage";
+  private ListView              listViewSpaces;
 
-    private ListView              listViewSpaces;
+  private SpaceListAdapter      listAdapterSpaces;
 
-    private SpaceListAdapter      listAdapterSpaces;
+  private List<SocialSpaceInfo> listInfoSpaces;
 
-    private List<SocialSpaceInfo> listInfoSpaces;
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
+    setTheme(R.style.Theme_eXo);
+    setActionBarContentView(R.layout.compose_message_space_selector_activity);
+    getActionBar().setType(greendroid.widget.ActionBar.Type.Empty);
+    setTitle(R.string.ShareWithWhom);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setTheme(R.style.Theme_eXo);
-        setActionBarContentView(R.layout.compose_message_space_selector_activity);
-        getActionBar().setType(greendroid.widget.ActionBar.Type.Empty);
-        setTitle(R.string.ShareWithWhom);
+    listViewSpaces = (ListView) findViewById(R.id.list_spaces);
+    listViewSpaces.setOnItemClickListener(this);
+    listAdapterSpaces = new SpaceListAdapter(this);
+    listViewSpaces.setAdapter(listAdapterSpaces);
+    listViewSpaces.setEmptyView(findViewById(R.id.list_spaces_empty_view));
+    getSupportLoaderManager().initLoader(0, null, this).forceLoad();
+  }
 
-        listViewSpaces = (ListView) findViewById(R.id.list_spaces);
-        listViewSpaces.setOnItemClickListener(this);
-        listAdapterSpaces = new SpaceListAdapter(this);
-        listViewSpaces.setAdapter(listAdapterSpaces);
-        listViewSpaces.setEmptyView(findViewById(R.id.list_spaces_empty_view));
-        getSupportLoaderManager().initLoader(0, null, this).forceLoad();
+  /*
+   * Tap listeners
+   */
+
+  /**
+   * Called when the "Public" item is tapped.<br/>
+   * Results in a call to
+   * 
+   * <pre>
+   * sendResultToComposer(-1);
+   * </pre>
+   * 
+   * @param view
+   */
+  public void selectPublicDestination(View view) {
+    sendResultToComposer(-1);
+  }
+
+  /**
+   * Called when an item of the spaces list is tapped.<br/>
+   * Results in a call to
+   * 
+   * <pre>
+   * sendResultToComposer(...);
+   * </pre>
+   * 
+   * with the position of the selected space in the list.
+   */
+  @Override
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    SocialSpaceInfo selectedSpace = listInfoSpaces.get(position);
+    if (selectedSpace != null) {
+      sendResultToComposer(position);
+    } else {
+      // TODO handle failure to get space
     }
+  }
 
-    /*
-     * Tap listeners
-     */
-
-    /**
-     * Called when the "Public" item is tapped.<br/>
-     * Results in a call to
-     * 
-     * <pre>
-     * sendResultToComposer(-1);
-     * </pre>
-     * 
-     * @param view
-     */
-    public void selectPublicDestination(View view) {
-        sendResultToComposer(-1);
+  /**
+   * Return the result to the calling activity (the message composer).
+   * 
+   * @param result <br/>
+   *          if a space was selected, the intent will contain the extras:<br/>
+   *          - SELECTED_DESTINATION: the space technical name<br/>
+   *          - SELECTED_SPACE_DISPLAY_NAME: the space display name<br/>
+   *          - SELECTED_SPACE_IMAGE: the avatar url of the space<br/>
+   *          if "Public" was selected, the intent contains no extra
+   */
+  private void sendResultToComposer(int result) {
+    Intent data = new Intent();
+    if (result >= 0 && result < listInfoSpaces.size()) {
+      SocialSpaceInfo space = listInfoSpaces.get(result);
+      data.putExtra(SELECTED_SPACE, space);
     }
+    setResult(RESULT_OK, data);
+    finish();
+  }
 
-    /**
-     * Called when an item of the spaces list is tapped.<br/>
-     * Results in a call to
-     * 
-     * <pre>
-     * sendResultToComposer(...);
-     * </pre>
-     * 
-     * with the position of the selected space in the list.
-     */
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SocialSpaceInfo selectedSpace = listInfoSpaces.get(position);
-        if (selectedSpace != null) {
-            sendResultToComposer(position);
-        } else {
-            // TODO
+  /*
+   * Loader manager
+   */
+
+  @Override
+  public Loader<List<SocialSpaceInfo>> onCreateLoader(int id, Bundle args) {
+    return new AsyncTaskLoader<List<SocialSpaceInfo>>(this) {
+      @Override
+      public List<SocialSpaceInfo> loadInBackground() {
+        List<SocialSpaceInfo> spacesNames = new ArrayList<SocialSpaceInfo>();
+        if (SocialServiceHelper.getInstance().spaceService == null) {
+          Log.e(LOG_TAG, "Cannot retrieve spaces. Social Space service is null.");
+          return null;
         }
-    }
-
-    /**
-     * Return the result to the calling activity (the message composer).
-     * 
-     * @param result <br/>
-     *            if a space was selected, the intent will contain the extras:<br/>
-     *            - SELECTED_DESTINATION: the space technical name<br/>
-     *            - SELECTED_SPACE_DISPLAY_NAME: the space display name<br/>
-     *            - SELECTED_SPACE_IMAGE: the avatar url of the space<br/>
-     *            if "Public" was selected, the intent contains no extra
-     */
-    private void sendResultToComposer(int result) {
-        Intent data = new Intent();
-        if (result >= 0 && result < listInfoSpaces.size()) {
-            SocialSpaceInfo space = listInfoSpaces.get(result);
-            data.putExtra(SELECTED_DESTINATION, space.name);
-            data.putExtra(SELECTED_SPACE_DISPLAY_NAME, space.displayName);
-            data.putExtra(SELECTED_SPACE_IMAGE, space.avatarUrl);
+        List<RestSpace> spaces = SocialServiceHelper.getInstance().spaceService.getMySocialSpaces();
+        String currentServer = AccountSetting.getInstance().getDomainName();
+        for (RestSpace space : spaces) {
+          SocialSpaceInfo sp = new SocialSpaceInfo();
+          sp.displayName = space.getDisplayName();
+          sp.name = space.getName();
+          sp.avatarUrl = currentServer + space.getAvatarUrl();
+          sp.groupId = space.getGroupId();
+          spacesNames.add(sp);
         }
-        setResult(RESULT_OK, data);
-        finish();
-    }
+        return spacesNames;
+      }
+    };
+  }
 
-    /*
-     * Loader manager
-     */
-
-    @Override
-    public Loader<List<SocialSpaceInfo>> onCreateLoader(int id, Bundle args) {
-        return new AsyncTaskLoader<List<SocialSpaceInfo>>(this) {
-            @Override
-            public List<SocialSpaceInfo> loadInBackground() {
-                List<RestSpace> spaces = SocialServiceHelper.getInstance().spaceService.getMySocialSpaces();
-                List<SocialSpaceInfo> spacesNames = new ArrayList<SocialSpaceInfo>(spaces.size());
-                String currentServer = AccountSetting.getInstance().getDomainName();
-                for (RestSpace space : spaces) {
-                    SocialSpaceInfo sp = new SocialSpaceInfo();
-                    sp.displayName = space.getDisplayName();
-                    sp.name = space.getName();
-                    sp.avatarUrl = currentServer + space.getAvatarUrl();
-                    spacesNames.add(sp);
-                }
-                return spacesNames;
-            }
-        };
+  @Override
+  public void onLoadFinished(Loader<List<SocialSpaceInfo>> loader, List<SocialSpaceInfo> data) {
+    if (data != null) {
+      listInfoSpaces = data;
+      listAdapterSpaces.setSpaceList(data);
+      listAdapterSpaces.notifyDataSetChanged();
     }
+  }
 
-    @Override
-    public void onLoadFinished(Loader<List<SocialSpaceInfo>> loader, List<SocialSpaceInfo> data) {
-        listInfoSpaces = data;
-        listAdapterSpaces.setSpaceList(data);
-        listAdapterSpaces.notifyDataSetChanged();
-        // listViewSpaces.setAdapter(listAdapterSpaces);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<SocialSpaceInfo>> loader) {
-        // listInfoSpaces = null;
-    }
+  @Override
+  public void onLoaderReset(Loader<List<SocialSpaceInfo>> loader) {
+  }
 }

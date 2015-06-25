@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import org.exoplatform.R;
 import org.exoplatform.controller.social.ComposeMessageController;
+import org.exoplatform.model.SocialSpaceInfo;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SettingUtils;
@@ -57,7 +58,6 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -177,11 +177,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       break;
 
     case 0:
-      // Adding an image is supported only if the post is public,
-      if (isPostPublic())
-        new AddPhotoDialog(this, messageController).show();
-      else
-        Toast.makeText(this, R.string.AddImageDisabled, Toast.LENGTH_LONG).show();
+      new AddPhotoDialog(this, messageController).show();
       break;
     }
 
@@ -215,19 +211,21 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
       // Get the destination of the post from the SpaceSelectorActivity
       case SELECT_POST_DESTINATION:
-        String destination = intent.getStringExtra(SpaceSelectorActivity.SELECTED_DESTINATION);
-        messageController.setPostDestination(destination);
-        if (destination != null) {
-          String spaceName = intent.getStringExtra(SpaceSelectorActivity.SELECTED_SPACE_DISPLAY_NAME);
-          postDestinationView.setText(spaceName);
-          String spaceAvatar = intent.getStringExtra(SpaceSelectorActivity.SELECTED_SPACE_IMAGE);
-          Picasso.with(this).load(spaceAvatar).placeholder(R.drawable.icon_space_default).into(postDestinationIcon);
+        SocialSpaceInfo space = intent.getParcelableExtra(SpaceSelectorActivity.SELECTED_SPACE);
+
+        if (space != null) {
+          messageController.setPostDestination(space);
+          postDestinationView.setText(space.displayName);
+          Picasso.with(this).load(space.avatarUrl).placeholder(R.drawable.icon_space_default).into(postDestinationIcon);
         } else {
+          messageController.setPostDestination(null);
           postDestinationView.setText(R.string.Public);
           Picasso.with(this).load(R.drawable.icon_post_public).into(postDestinationIcon);
         }
         break;
       }
+    } else {
+      // TODO handle failure of startActivityForResult
     }
     /*
      * Set default language to our application setting language
@@ -309,14 +307,8 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   public void openSpaceSelectionActivity(View v) {
     // Open the Space Selector Activity and expect a result
-    // Posting in a space is supported only if no attachment is added
-    if (!hasAttachment()) {
-      Intent selectSpace = new Intent(this, SpaceSelectorActivity.class);
-      startActivityForResult(selectSpace, SELECT_POST_DESTINATION);
-    } else {
-      Toast.makeText(this, R.string.SelectSpaceDisabled, Toast.LENGTH_LONG).show();
-    }
-
+    Intent selectSpace = new Intent(this, SpaceSelectorActivity.class);
+    startActivityForResult(selectSpace, SELECT_POST_DESTINATION);
   }
 
   private void changeLanguage() {
@@ -326,21 +318,4 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
     sendText = resource.getString(R.string.Send);
     cancelText = resource.getString(R.string.Cancel);
   }
-
-  /**
-   * @return <i>true</i> if the message is a post and is public (not in a
-   *         space), <i>false</i> otherwise
-   */
-  public boolean isPostPublic() {
-    return (composeType == ExoConstants.COMPOSE_POST_TYPE && messageController.getPostDestination() == null);
-  }
-
-  /**
-   * @return <i>true</i> if the temporary space on the sdcard is not null,
-   *         <i>false</i> otherwise
-   */
-  public boolean hasAttachment() {
-    return sdcard_temp_dir != null;
-  }
-
 }

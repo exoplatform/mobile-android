@@ -149,7 +149,7 @@ public class AccountSwitcherFragment extends Fragment implements AccountSwitcher
         // TODO add a slide-in and slide-out transitions
         getActivity().getSupportFragmentManager()
                      .beginTransaction()
-                     .replace(R.id.fragment_panel, signInFragment, SignInFragment.FRAGMENT_TAG)
+                     .replace(R.id.share_extension_fragment, signInFragment, SignInFragment.FRAGMENT_TAG)
                      .addToBackStack(FRAGMENT_TAG)
                      .commit();
     }

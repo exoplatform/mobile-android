@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <ScrollView 
+        android:id="@+id/share_scroll_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/share_account_wrapper"
+        android:background="@drawable/compose_textfield_background"
+        android:padding="@dimen/margin_xs">
+        
+        <EditText
+	        android:id="@+id/share_post_message"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center_vertical|top"
+	        android:hint="@string/ComposerPlaceHolder"
+	        android:inputType="textShortMessage|textMultiLine"
+	        android:layout_marginRight="105dp"
+	        android:background="@android:color/transparent" />
+    
+    </ScrollView>
+    
+    <ImageView android:id="@+id/share_attachment_thumbnail"
+        android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:layout_margin="@dimen/margin_xs"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/icon_for_placeholder_image"
+        android:contentDescription="@string/AttachedPhoto"/>
+    
+    <LinearLayout 
+        android:id="@+id/share_account_wrapper"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@drawable/compose_textfield_background"
+        android:layout_above="@+id/share_space_wrapper"
+        android:layout_alignParentLeft="true"
+        android:padding="@dimen/margin_xs"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Account"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_marginRight="@dimen/margin_xs"
+            android:textColor="#000"/>
+        
+        <TextView
+            android:id="@+id/share_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:drawableRight="@drawable/icon_chevron_right_grey"
+            android:drawablePadding="@dimen/margin_xxs"
+            android:ellipsize="end"
+            android:lines="1"
+            android:onClick="onSelectAccount"
+            android:text="@string/Account"
+            android:textSize="@dimen/text_size_medium" />
+        
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/share_space_wrapper"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@drawable/compose_textfield_background"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:padding="@dimen/margin_xs"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/PostTo"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_marginRight="@dimen/margin_xs"
+            android:textColor="#000"/>
+
+        <TextView
+	        android:id="@+id/share_space"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="right"
+	        android:onClick="onSelectSpace"
+	        android:text="@string/Public"
+	        android:textSize="@dimen/text_size_medium"
+	        android:drawableRight="@drawable/icon_chevron_right_grey"
+            android:drawablePadding="@dimen/margin_xxs"
+	        android:lines="1"
+	        android:ellipsize="end" />
+        
+    </LinearLayout>
+
+</RelativeLayout>

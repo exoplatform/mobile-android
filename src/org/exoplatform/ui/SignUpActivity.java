@@ -41,7 +41,7 @@ public class SignUpActivity extends FragmentActivity {
 
     getSupportFragmentManager()
         .beginTransaction()
-        .add(R.id.fragment_panel, new CreationAccountFragment(this))
+        .add(R.id.share_extension_fragment, new CreationAccountFragment(this))
         .commit();
   }
 
@@ -50,7 +50,7 @@ public class SignUpActivity extends FragmentActivity {
         .beginTransaction()
         .setCustomAnimations(
             R.anim.grow_from_middle, R.anim.shrink_to_middle)
-        .replace(R.id.fragment_panel, new GreetingsFragment())
+        .replace(R.id.share_extension_fragment, new GreetingsFragment())
         .commit();
   }
 

@@ -682,9 +682,11 @@ public class SocialActivityUtil {
   }
 
   public static String getActivityTypeLink(String userName, SocialActivityInfo activityInfo, String fontColor, boolean isHomeStyle) {
-    StringBuffer linkBuffer = new StringBuffer();
-    String linkTitle = activityInfo.templateParams.get("title").trim();
     String linkUrl = activityInfo.templateParams.get("link");
+    if (linkUrl == null)
+      return "";
+    String linkTitle = activityInfo.templateParams.get("title");
+    StringBuffer linkBuffer = new StringBuffer();
     linkBuffer.append("<html><body>");
 
     linkBuffer.append("<a href=");
@@ -693,7 +695,7 @@ public class SocialActivityUtil {
       linkBuffer.append(appendLinkStyleColor());
     }
     linkBuffer.append(">");
-    linkBuffer.append(linkTitle);
+    linkBuffer.append(linkTitle != null ? linkTitle.trim() : linkUrl);
     linkBuffer.append("</a>");
     linkBuffer.append("</body></html>");
     return linkBuffer.toString();

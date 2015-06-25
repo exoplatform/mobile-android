@@ -57,7 +57,7 @@ public class AccountSwitcherActivity extends FragmentActivity {
         setContentView(R.layout.account_switcher_activity);
 
         getSupportFragmentManager().beginTransaction()
-                                   .add(R.id.fragment_panel,
+                                   .add(R.id.share_extension_fragment,
                                         new AccountSwitcherFragment(),
                                         AccountSwitcherFragment.FRAGMENT_TAG)
                                    .commit();

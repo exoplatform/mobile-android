@@ -68,8 +68,6 @@
   <string name="NoSpaces">You are not in any space</string>
   <string name="ComposerPlaceHolder">Τι κάνετε τώρα;</string>
   <string name="ShareWithWhom">Select who will see this post</string>
-  <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
-  <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
   <string name="NoLike">Δεν υπάρχουν likes προς το παρόν</string>
   <string name="LikedThis"> άρεσε αυτό</string>
   <string name="And"> και</string>

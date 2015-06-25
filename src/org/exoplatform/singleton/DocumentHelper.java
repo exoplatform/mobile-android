@@ -34,11 +34,13 @@ public class DocumentHelper implements Parcelable {
 
   private String                _urlrepositoryHome;
 
-  public ExoFile                _fileCopied    = new ExoFile();                    ;
+  public ExoFile                _fileCopied    = new ExoFile();        ;
 
   public ExoFile                _fileMoved     = new ExoFile();
 
   public String                 repository     = null;
+
+  public String                 workspace      = null;
 
   /*
    * The dictionary for mapping between parent folder and its child files
@@ -100,7 +102,6 @@ public class DocumentHelper implements Parcelable {
    */
   @Override
   public int describeContents() {
-    // TODO Auto-generated method stub
     return 0;
   }
 

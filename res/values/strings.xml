@@ -63,13 +63,11 @@
   <string name="YourComment">Your comment …</string>
   <string name="Comment">Comment</string>
   <string name="StatusUpdate">Post</string>
-  <string name="PostTo">To:</string>
+  <string name="PostTo">To</string>
   <string name="Public">Your stream</string>
   <string name="NoSpaces">You are not in any space</string>
   <string name="ComposerPlaceHolder">What are you working on?</string>
   <string name="ShareWithWhom">Select who will see this post</string>
-  <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
-  <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
   <string name="NoLike">No likes for the moment</string>
   <string name="LikedThis"> liked this</string>
   <string name="And"> and</string>
@@ -251,4 +249,23 @@
     <item id="MySpaces">My Spaces</item>
     <item id="MyStatus">My Activities</item>
   </string-array>
+  
+  <!-- Share Extension -->
+  <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
+  <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
+  <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
+  <string name="ShareOperationSuccess">Success</string>
+  <string name="ShareDocumentTitle">Share document</string>
+  <string name="ShareMessageTitle">Share message</string>
+  <string name="ShareDocumentText">Upload in progress</string>
+  <string name="ShareMessageText">Your message will be posted shortly</string>
+  <string name="ShareErrorNoAccountConfigured">No account configured</string>
+  <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
+  <string name="ShareErrorFileTooBig">You cannot share documents more than 10 MB</string>
+  <string name="ShareErrorUploadFailed">Could not share the document</string>
+  <string name="ShareErrorPostFailed">Could not post the message</string>
+  <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
+  <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
+  <string name="ShareErrorSignInFailed">Login failed, please try again</string>
+  
 </resources>
