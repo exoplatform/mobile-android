@@ -42,6 +42,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -77,6 +78,8 @@ public class ExoConnectionUtils {
 
   // Default connection and socket timeout of 30 seconds. Tweak to taste.
   public static final int         SOCKET_OPERATION_TIMEOUT   = 30 * 1000;
+
+  public static final String      USER_AGENT                 = "eXo/2.5.4 (Android)";
 
   public static DefaultHttpClient httpClient;
 
@@ -227,6 +230,7 @@ public class ExoConnectionUtils {
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setSoTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+    HttpProtocolParams.setUserAgent(httpParameters, USER_AGENT);
 
     return new DefaultHttpClient(httpParameters);
   }
@@ -366,9 +370,9 @@ public class ExoConnectionUtils {
         return false;
 
       return convertStreamToString(response.getEntity().getContent()).replace("\n", "")
-                                                                     .replace("\r", "")
-                                                                     .replace("\r\n", "")
-                                                                     .equalsIgnoreCase("true");
+              .replace("\r", "")
+              .replace("\r\n", "")
+              .equalsIgnoreCase("true");
     } catch (IOException e) {
       Log.d(TAG, "IOException: " + e.getLocalizedMessage());
       return false;
@@ -395,8 +399,8 @@ public class ExoConnectionUtils {
       /** 200 - tenant exists - check status */
       if (response.getEntity() != null) {
         String tenantStatus = convertStreamToString(response.getEntity().getContent()).replace("\n", "")
-                                                                                      .replace("\r", "")
-                                                                                      .replace("\r\n", "");
+                .replace("\r", "")
+                .replace("\r\n", "");
 
         Log.d(TAG, "tenant status: " + tenantStatus);
         if (tenantStatus.equalsIgnoreCase(ONLINE))
