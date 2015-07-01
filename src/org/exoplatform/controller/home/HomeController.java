@@ -31,8 +31,8 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 
 import android.content.Context;
+import android.view.MenuItem;
 
-// TODO add progress bar
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com May
  * 17, 2012
@@ -44,7 +44,7 @@ public class HomeController {
 
   private SocialLoadTask       mLoadTask;
 
-  // private LoaderActionBarItem loader;
+  private MenuItem             loaderItem;
 
   public static final int      FLIPPER_VIEW = 10;
 
@@ -59,14 +59,10 @@ public class HomeController {
     onCancelLoad();
   }
 
-  public void launchNewsService(/* LoaderActionBarItem loaderItem */) {
-    // loader = loaderItem;
+  public void launchNewsService() {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mServiceLoadTask == null || mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.FINISHED) {
-        mServiceLoadTask = (SocialServiceLoadTask) new SocialServiceLoadTask(mContext, this/*
-                                                                                            * ,
-                                                                                            * loader
-                                                                                            */).execute();
+        mServiceLoadTask = (SocialServiceLoadTask) new SocialServiceLoadTask(mContext, this, loaderItem).execute();
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -90,7 +86,7 @@ public class HomeController {
   public void onLoad(int number, int type) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext/* , loader */) {
+        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, loaderItem) {
 
           @Override
           protected ArrayList<SocialActivityInfo> getSocialActivityList() {
@@ -117,6 +113,10 @@ public class HomeController {
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
+  }
+
+  public void setLoader(MenuItem loader) {
+    this.loaderItem = loader;
   }
 
 }

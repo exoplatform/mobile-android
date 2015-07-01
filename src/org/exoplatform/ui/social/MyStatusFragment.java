@@ -32,6 +32,7 @@ import org.exoplatform.social.client.api.service.QueryParams;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 /**
@@ -79,10 +80,7 @@ public class MyStatusFragment extends ActivityStreamFragment {
 
   @Override
   public SocialLoadTask getThisLoadTask() {
-    return new MyStatusLoadTask(getActivity()/*
-                                              * , SocialTabsActivity.instance.
-                                              * loaderItem
-                                              */);
+    return new MyStatusLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
   }
 
   public void setListAdapter() {
@@ -99,8 +97,8 @@ public class MyStatusFragment extends ActivityStreamFragment {
 
   public class MyStatusLoadTask extends SocialLoadTask {
 
-    public MyStatusLoadTask(Context context/* , LoaderActionBarItem loader */) {
-      super(context/* , loader */);
+    public MyStatusLoadTask(Context context, MenuItem loader) {
+      super(context, loader);
     }
 
     @Override

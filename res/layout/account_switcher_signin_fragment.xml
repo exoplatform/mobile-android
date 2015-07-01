@@ -2,85 +2,60 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/AccountListBackgroundColor">
-    
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        
-        <TextView
-	        android:id="@+id/account_switcher_signin_title"
-	        style="@style/AccountFragmentTitleStyle"
-	        android:text=""/>
-        
-        <Button
-	        android:id="@+id/account_switcher_signin_btn"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentRight="true"
-	        android:text="@string/SignInInformation"
-	        style="@style/AccountSwitcherSignInButtonStyle" />
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/account_switcher_signin_btn"
-            android:layout_centerVertical="true"
-            android:src="@drawable/action_bar_separator_complete"
-            android:layout_marginRight="5dp"
-            android:contentDescription="@string/SignInButton" />
-
-    </RelativeLayout>
-
+    android:background="@color/AccountListBackgroundColor"
+    android:orientation="vertical" >
 
     <TextView
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
         android:layout_marginTop="10dp"
+        android:text="@string/YourCredentials"
         android:textColor="#535353"
         android:textSize="@dimen/title_txt_size"
-        android:textStyle="bold"
-        android:text="@string/YourCredentials"/>
-    
-    <TableLayout style="@style/ServerSettingTableStyle"
-                 android:layout_marginBottom="20dp">
+        android:textStyle="bold" />
 
-    <TableRow
-            style="@style/ServerSettingTableFirstRowStyle">
+    <TableLayout
+        style="@style/ServerSettingTableStyle"
+        android:layout_marginBottom="20dp" >
 
-        <!-- 3rd row -->
-        <TextView
+        <TableRow style="@style/ServerSettingTableFirstRowStyle" >
+
+            <!-- 3rd row -->
+
+            <TextView
                 android:id="@+id/account_switcher_signin_user_txt"
                 style="@style/ServerSettingTextViewStyle"
-                android:text="@string/UserNameCellTitle"/>
+                android:text="@string/UserNameCellTitle" />
 
-        <EditText
+            <EditText
                 android:id="@+id/account_switcher_signin_user_edit_txt"
-                style="@style/ServerSettingEditTextStyle"/>
+                style="@style/ServerSettingEditTextStyle" />
+        </TableRow>
 
-    </TableRow>
+        <TableRow style="@style/ServerSettingTableRowStyle" >
 
-    <TableRow
-            style="@style/ServerSettingTableRowStyle">
+            <!-- 4th row -->
 
-        <!-- 4th row -->
-        <TextView
+            <TextView
                 android:id="@+id/account_switcher_signin_pass_txt"
                 style="@style/ServerSettingTextViewStyle"
-                android:text="@string/PasswordCellTitle"/>
+                android:text="@string/PasswordCellTitle" />
 
-        <EditText
+            <EditText
                 android:id="@+id/account_switcher_signin_pass_edit_txt"
                 style="@style/ServerSettingEditTextStyle"
-                android:inputType="textPassword"/>
-
-    </TableRow>
-
+                android:inputType="textPassword" />
+        </TableRow>
     </TableLayout>
+
+    <Button
+        android:id="@+id/account_switcher_signin_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/SignInInformation"
+        android:layout_gravity="right" />
 
 </LinearLayout>

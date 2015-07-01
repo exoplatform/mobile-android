@@ -36,9 +36,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
 import android.view.MenuItem;
 
-// TODO add progress bar
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
  * 23, 2012
@@ -71,7 +71,7 @@ public class SocialTabsActivity extends FragmentActivity {
 
   public ArrayList<SocialActivityInfo> socialList;
 
-  // public LoaderActionBarItem loaderItem;
+  public MenuItem                      loaderItem;
 
   public int                           number_of_activity;
 
@@ -89,14 +89,7 @@ public class SocialTabsActivity extends FragmentActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     instance = this;
-    // setActionBarContentView(R.layout.social_activity_tabs);
     setContentView(R.layout.social_activity_tabs);
-    // TODO add action bar
-    // getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    // addActionBarItem(Type.Refresh);
-    // getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
-    // addActionBarItem();
-    // getActionBar().getItem(1).setDrawable(R.drawable.action_bar_icon_compose);
     String title = getString(R.string.ActivityStream);
     setTitle(title);
 
@@ -113,8 +106,6 @@ public class SocialTabsActivity extends FragmentActivity {
       number_of_activity = ExoConstants.NUMBER_OF_ACTIVITY;
       number_of_more_activity = ExoConstants.NUMBER_OF_MORE_ACTIVITY;
     }
-
-    // loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
 
     TAB_NAMES = getResources().getStringArray(R.array.SocialTabs);
     mPager = (ViewPager) findViewById(R.id.pager);
@@ -133,6 +124,13 @@ public class SocialTabsActivity extends FragmentActivity {
   }
 
   @Override
+  protected void onResume() {
+    if (loaderItem != null)
+      loaderItem.setActionView(null);
+    super.onResume();
+  }
+
+  @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putInt(NUMBER_OF_ACTIVITY, number_of_activity);
@@ -143,8 +141,8 @@ public class SocialTabsActivity extends FragmentActivity {
 
   @Override
   public void onBackPressed() {
-    super.onBackPressed();
     finishFragment();
+    super.onBackPressed();
   }
 
   @Override
@@ -180,15 +178,26 @@ public class SocialTabsActivity extends FragmentActivity {
   }
 
   @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.activity_stream, menu);
+    loaderItem = menu.findItem(R.id.menu_as_refresh);
+    if (loaderItem != null)
+      // at this point we're already loading activities,
+      // so we display the loading indicator now
+      loaderItem.setActionView(R.layout.action_bar_loading_indicator);
+    return true;
+  }
+
+  @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
 
-    case -1:
+    case android.R.id.home:
       finishFragment();
       finish();
       break;
-    case 0:
-      // loaderItem = (LoaderActionBarItem) item;
+    case R.id.menu_as_refresh:
+      loaderItem = item;
       int tabId = mPager.getCurrentItem();
       switch (tabId) {
       case ALL_UPDATES:
@@ -205,7 +214,7 @@ public class SocialTabsActivity extends FragmentActivity {
         break;
       }
       break;
-    case 1:
+    case R.id.menu_as_compose:
       Intent intent = new Intent(this, ComposeMessageActivity.class);
       intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
       intent.putExtra(ExoConstants.COMPOSE_TYPE, ExoConstants.COMPOSE_POST_TYPE);

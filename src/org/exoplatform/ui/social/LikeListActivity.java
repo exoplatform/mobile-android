@@ -101,11 +101,11 @@ public class LikeListActivity extends Activity {
       }
     });
   }
-
+  
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-    case -1:
+    case android.R.id.home:
       if (SocialDetailActivity.socialDetailActivity != null) {
         SocialDetailActivity.socialDetailActivity.finish();
       }

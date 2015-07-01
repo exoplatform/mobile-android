@@ -48,6 +48,7 @@ import org.exoplatform.social.client.api.service.QueryParams;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 /**
@@ -95,21 +96,17 @@ public class MySpacesFragment extends ActivityStreamFragment {
 
   @Override
   public SocialLoadTask getThisLoadTask() {
-    return new MySpacesLoadTask(getActivity()/*
-                                              * , SocialTabsActivity.instance.
-                                              * loaderItem
-                                              */);
+    return new MySpacesLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
   }
 
   public void setListAdapter() {
     super.setListAdapter(SocialServiceHelper.getInstance().mySpacesList);
   }
 
-  // TODO add progress bar
   public class MySpacesLoadTask extends SocialLoadTask {
 
-    public MySpacesLoadTask(Context context/* , LoaderActionBarItem loader */) {
-      super(context/* , loader */);
+    public MySpacesLoadTask(Context context, MenuItem loader) {
+      super(context, loader);
     }
 
     @Override

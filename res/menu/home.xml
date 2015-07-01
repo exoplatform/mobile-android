@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item android:id="@+id/menu_home_refresh" android:title="@string/LoadingData" android:icon="@drawable/action_bar_icon_refresh" android:visible="true" android:showAsAction="ifRoom"></item>
+    
+    <item android:id="@+id/menu_home_account_switcher" android:title="@string/Account" android:icon="@drawable/action_bar_switcher_icon" android:visible="false" android:showAsAction="collapseActionView"></item>
+    <item android:id="@+id/menu_home_settings" android:showAsAction="collapseActionView" android:icon="@drawable/optionsettingsbutton" android:visible="true" android:title="@string/Settings"></item><item android:id="@+id/menu_home_logout" android:title="@string/LogoutTitle" android:icon="@drawable/action_bar_logout_button" android:visible="true" android:showAsAction="collapseActionView"></item>
+    
+</menu>

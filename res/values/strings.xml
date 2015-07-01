@@ -251,6 +251,7 @@
   </string-array>
   
   <!-- Share Extension -->
+  <string name="ShareTitle">Share</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>

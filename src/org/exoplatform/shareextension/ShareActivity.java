@@ -22,6 +22,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,16 +57,19 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.text.format.DateFormat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 /**
  * Created by The eXo Platform SAS
@@ -82,33 +86,40 @@ public class ShareActivity extends FragmentActivity {
     NO_ANIM, FROM_LEFT, FROM_RIGHT
   }
 
-  public static final String LOG_TAG                  = "____eXo____Share_Extension____";
+  public static final String       LOG_TAG                  = "____eXo____Share_Extension____";
 
-  public static final String DEFAULT_CONTENT_NAME     = "TEMP_FILE_TO_SHARE";
+  public static final String       DEFAULT_CONTENT_NAME     = "TEMP_FILE_TO_SHARE";
 
-  private static final int   SELECT_SHARE_DESTINATION = 11;
+  private static final int         SELECT_SHARE_DESTINATION = 11;
 
-  private boolean            online;
+  private boolean                  online;
 
-  private ProgressBar        loadingIndicator;
+  private Button                   mainButton;
 
-  private Button             mainButton;
+  private ViewSwitcher             mButtonWrapper;
 
-  private SocialPostInfo     postInfo;
+  private WeakReference<LoginTask> mLoginRef;
 
-  private boolean            mMultiFlag               = false;
+  private MenuItem                 mMenuItem;
 
-  private List<Uri>          mAttachmentUris;
+  private boolean                  mBtnEnable               = false;
+
+  private SocialPostInfo           postInfo;
+
+  private boolean                  mMultiFlag               = false;
+
+  private List<Uri>                mAttachmentUris;
 
   @Override
   protected void onCreate(Bundle bundle) {
     super.onCreate(bundle);
 
     setContentView(R.layout.share_extension_activity);
-
-    loadingIndicator = (ProgressBar) findViewById(R.id.share_progress_indicator);
-    mainButton = (Button) findViewById(R.id.share_button);
-    mainButton.setTag(R.attr.share_button_type_post);
+    setTitle(R.string.ShareTitle);
+    // loadingIndicator = (ProgressBar)
+    // findViewById(R.id.share_progress_indicator);
+    // mainButton = (Button) findViewById(R.id.share_button);
+    // mainButton.setTag(R.attr.share_button_type_post);
     online = false;
     postInfo = new SocialPostInfo();
 
@@ -255,14 +266,6 @@ public class ShareActivity extends FragmentActivity {
    * GETTERS & SETTERS
    */
 
-  public ProgressBar getLoadingIndicator() {
-    return loadingIndicator;
-  }
-
-  public Button getMainButton() {
-    return mainButton;
-  }
-
   public void setPostMessage(String message) {
     if (message != null) {
       postInfo.postMessage = message;
@@ -273,15 +276,60 @@ public class ShareActivity extends FragmentActivity {
     return postInfo;
   }
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    Log.d("TEST", "onCreateOptionsMenu");
+    getMenuInflater().inflate(R.menu.share, menu);
+    mMenuItem = menu.findItem(R.id.menu_as_post);
+    if (mMenuItem != null) {
+      View v = mMenuItem.getActionView();
+      if (v != null) {
+        mButtonWrapper = (ViewSwitcher) v.findViewById(R.id.share_button_wrapper);
+        mainButton = (Button) v.findViewById(R.id.share_button);
+        mainButton.setTag(R.attr.share_button_type_post);
+        enableDisableMainButton(mBtnEnable);
+        LoginTask task = mLoginRef == null ? null : mLoginRef.get();
+        if (task != null && task.getStatus() == Status.RUNNING) {
+          toogleProgressVisible(true);
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
+   * @param type pass 0 for invisible the button
+   */
   public void toggleMainButtonType(int type) {
+    if (mMenuItem == null)
+      return;
     if (type == R.attr.share_button_type_signin) {
       // switch from post => signin
+      mMenuItem.setVisible(true);
+      mMenuItem.setTitle(R.string.SignInInformation);
       mainButton.setText(R.string.SignInInformation);
       mainButton.setTag(R.attr.share_button_type_signin);
     } else if (type == R.attr.share_button_type_post) {
       // switch from signin => post
+      mMenuItem.setVisible(true);
+      mMenuItem.setTitle(R.string.StatusUpdate);
       mainButton.setText(R.string.StatusUpdate);
       mainButton.setTag(R.attr.share_button_type_post);
+    } else {
+      mMenuItem.setVisible(false);
+    }
+  }
+
+  public boolean isProgressVisible() {
+    // 1: progressbar
+    return (mButtonWrapper != null && mButtonWrapper.getDisplayedChild() == 1);
+  }
+
+  public void toogleProgressVisible(boolean visible) {
+    if (mButtonWrapper != null) {
+      // 0: mainButton
+      // 1: progress bar
+      mButtonWrapper.setDisplayedChild(visible ? 1 : 0);
     }
   }
 
@@ -292,15 +340,12 @@ public class ShareActivity extends FragmentActivity {
    * @param enabled
    */
   public void enableDisableMainButton(boolean enabled) {
+    mBtnEnable = enabled;
+    if (mMenuItem == null) {
+      return;
+    }
     boolean currentState = mainButton.isEnabled();
     if (currentState != enabled) {
-      int color;
-      if (enabled) {
-        color = getResources().getColor(android.R.color.white);
-      } else {
-        color = getResources().getColor(android.R.color.darker_gray);
-      }
-      mainButton.setTextColor(color);
       int buttonType = ((Integer) mainButton.getTag()).intValue();
       if (buttonType == R.attr.share_button_type_post) {
         mainButton.setEnabled(enabled && online);
@@ -379,7 +424,9 @@ public class ShareActivity extends FragmentActivity {
    */
 
   public void loginWithSelectedAccount() {
-    new LoginTask().execute(postInfo.ownerAccount);
+    LoginTask task = new LoginTask();
+    mLoginRef = new WeakReference<ShareActivity.LoginTask>(task);
+    task.execute(postInfo.ownerAccount);
   }
 
   private void prepareAttachmentsAsync() {
@@ -559,8 +606,7 @@ public class ShareActivity extends FragmentActivity {
 
     @Override
     protected void onPreExecute() {
-      mainButton.setVisibility(View.INVISIBLE);
-      loadingIndicator.setVisibility(View.VISIBLE);
+      toogleProgressVisible(true);
       super.onPreExecute();
     }
 
@@ -600,6 +646,12 @@ public class ShareActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onCancelled() {
+      super.onCancelled();
+      toogleProgressVisible(false);
+    }
+
+    @Override
     protected void onPostExecute(Integer result) {
       Log.d(LOG_TAG, String.format("Received login response %s", result));
       if (ExoConnectionUtils.LOGIN_SUCCESS == result.intValue()) {
@@ -609,8 +661,7 @@ public class ShareActivity extends FragmentActivity {
         postInfo.ownerAccount.password = "";
         online = false;
       }
-      loadingIndicator.setVisibility(View.INVISIBLE);
-      mainButton.setVisibility(View.VISIBLE);
+      toogleProgressVisible(false);
       enableDisableMainButton(online && !"".equals(ComposeFragment.getFragment().getPostMessage()));
     }
   }

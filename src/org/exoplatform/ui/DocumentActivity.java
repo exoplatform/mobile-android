@@ -41,10 +41,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
-import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -77,6 +77,8 @@ public class DocumentActivity extends Activity {
 
   // default
   public static final int        ACTION_DEFAULT   = 8;
+  
+  private MenuItem               mDocAction;
 
   private static final String    DOCUMENT_HELPER  = "document_helper";
 
@@ -108,12 +110,9 @@ public class DocumentActivity extends Activity {
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);
 
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo);
-    // setActionBarContentView(R.layout.exofilesview);
     setContentView(R.layout.exofilesview);
+    setTitle(R.string.Documents);
     // TODO add documents action bar
-    // getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     _documentActivityInstance = this;
     init();
 
@@ -134,7 +133,7 @@ public class DocumentActivity extends Activity {
       DocumentHelper.getInstance().childFilesMap = new Bundle();
       DocumentHelper.getInstance().currentFileMap = new Bundle();
       _fileForCurrentActionBar = new ExoFile();
-      setTitle(getResources().getString(R.string.Documents));
+      setTitle(R.string.Documents);
     }
     onLoad(DocumentHelper.getInstance().getRepositoryHomeUrl(), null, ACTION_DEFAULT);
 
@@ -152,17 +151,25 @@ public class DocumentActivity extends Activity {
     outState.putParcelable(CURRENT_FILE, _fileForCurrentActionBar);
 
   }
-
+  
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.document, menu);
+    mDocAction = menu.findItem(R.id.menu_doc_action);
+    addOrRemoveFileActionButton();
+    return true;
+  }
+  
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     // TODO implement with action bar item
     switch (item.getItemId()) {
 
-    case -1:
+    case android.R.id.home:
       _documentActivityInstance = null;
       finish();
       break;
-    case 0:
+    case R.id.menu_doc_action:
 
       _documentAdapter._documentActionDialog = new DocumentActionDialog(this, _fileForCurrentActionBar, true);
       _documentAdapter._documentActionDialog._documentActionAdapter.setSelectedFile(_fileForCurrentActionBar);
@@ -188,12 +195,24 @@ public class DocumentActivity extends Activity {
      */
     if (_fileForCurrentActionBar == null) {
       // getActionBar().removeItem(0);
+      if (mDocAction != null) {
+        mDocAction.setVisible(false);
+      }
     } else {
       if (_fileForCurrentActionBar.name == null) {
         // getActionBar().removeItem(0);
+        if (mDocAction != null) {
+          mDocAction.setVisible(false);
+        }
       } else if ("".equals(_fileForCurrentActionBar.name) || "".equals(_fileForCurrentActionBar.path)) {
         // getActionBar().removeItem(0);
+        if (mDocAction != null) {
+          mDocAction.setVisible(false);
+        }
       } else {
+        if (mDocAction != null) {
+          mDocAction.setVisible(true);
+        }
         // if (getActionBar().getItem(0) == null) {
         // addActionBarItem();
         // getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
@@ -201,6 +220,8 @@ public class DocumentActivity extends Activity {
       }
     }
   }
+  
+  
 
   @Override
   public void onBackPressed() {

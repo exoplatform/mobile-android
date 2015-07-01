@@ -20,15 +20,17 @@
         android:layout_marginLeft="5dip"
         android:layout_toRightOf="@id/icon" >
 
-        <Button
+        <ImageButton
             android:id="@+id/Button_FileAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
             android:layout_marginLeft="5dip"
-            android:background="@drawable/documentdisclosureactionbutton" />
-
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/documentdisclosureactionbutton" />
+        
         <TextView
             android:id="@+id/label"
             android:layout_width="fill_parent"
@@ -39,6 +41,7 @@
             android:padding="3dp"
             android:textColor="#000000"
             android:textSize="16sp" />
+
     </RelativeLayout>
 
 </RelativeLayout>

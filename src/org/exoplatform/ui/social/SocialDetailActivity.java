@@ -26,11 +26,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewStub;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-// TODO add progress bar
 /**
  * Screen for activity details
  */
@@ -69,21 +66,12 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
 
   public static SocialDetailActivity socialDetailActivity;
 
-  // private LoaderActionBarItem loaderItem;
-
   private int                        currentPosition;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo);
-    // setActionBarContentView(R.layout.activity_display_view);
     setContentView(R.layout.activity_display_view);
-    // TODO add action bar
-    // getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    // addActionBarItem(Type.Refresh);
-    // getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     socialDetailActivity = this;
     currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, currentPosition);
     changeLanguage();
@@ -91,7 +79,6 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
       finish();
     else
       initComponent();
-
   }
 
   private void initComponent() {
@@ -122,8 +109,7 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
                                                   likeButton,
                                                   contentDetailLayout,
                                                   textView_Like_Count);
-    // loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-    detailController.onLoad(/* loaderItem, */false, currentPosition);
+    detailController.onLoad(false, currentPosition);
   }
 
   @Override
@@ -134,29 +120,24 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
     super.finish();
   }
 
-  @Override
-  public void onBackPressed() {
-    finish();
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-    case -1:
-      if (SocialTabsActivity.instance != null) {
-        SocialTabsActivity.instance.finish();
-      }
-      finish();
-      break;
-    case 0:
-      // loaderItem = (LoaderActionBarItem) item;
-      detailController.onLoad(/* loaderItem, */false, currentPosition);
-      break;
-
-    }
-
-    return true;
-  }
+  // TODO add refresh button and loading indicator in the action bar
+  // @Override
+  // public boolean onOptionsItemSelected(MenuItem item) {
+  // switch (item.getItemId()) {
+  // case -1:
+  // if (SocialTabsActivity.instance != null) {
+  // SocialTabsActivity.instance.finish();
+  // }
+  // finish();
+  // break;
+  // case 0:
+  // detailController.onLoad(false, currentPosition);
+  // break;
+  //
+  // }
+  //
+  // return true;
+  // }
 
   @Override
   public void onClick(View view) {

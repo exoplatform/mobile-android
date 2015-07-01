@@ -21,6 +21,7 @@ package org.exoplatform.ui;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
+import org.exoplatform.accountswitcher.AccountSwitcherActivity;
 import org.exoplatform.controller.home.HomeController;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.singleton.AccountSetting;
@@ -33,6 +34,7 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.image.ExoPicasso;
+import org.exoplatform.utils.image.RoundedCornersTranformer;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SocialHomeTickerItem;
 
@@ -47,14 +49,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-// TODO add progress bar
-// TODO add action bar
 /**
  * Represents the home screen with dashboard
  */
@@ -84,30 +83,19 @@ public class HomeActivity extends Activity {
 
   private ViewFlipper         viewFlipper;
 
-  // private LoaderActionBarItem loaderItem;
-
   public static HomeActivity  homeActivity;
 
   private static final String TAG           = "eXo____HomeActivity____";
 
   private AccountSetting      mSetting;
 
-  /**
-   * The account switcher button in the action bar. It is null if only 1 account
-   * exists
-   */
-  // private ActionBarItem mAccountSwitcherBtn;
+  private MenuItem            loaderItem;
 
   @Override
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    // setActionBarContentView(R.layout.home_layout);
     setContentView(R.layout.home_layout);
-
-    // only set the type of action bar here, the buttons are initialized in
-    // onResume
-    // super.getActionBar().setType(greendroid.widget.ActionBar.Type.Dashboard);
+    setTitle("");
 
     mSetting = AccountSetting.getInstance();
 
@@ -126,38 +114,6 @@ public class HomeActivity extends Activity {
     init();
   }
 
-  private void resetActionBarItems() {
-    // final int index = 0;
-    // ActionBarItem item = super.getActionBar().getItem(index);
-    // while (item != null) {
-    // super.getActionBar().removeItem(index);
-    // item = super.getActionBar().getItem(index);
-    // }
-  }
-
-  // TODO set account switcher button in action bar
-  private void initActionBar() {
-    // need to reset the existing items before
-    resetActionBarItems();
-    // addActionBarItem(Type.Refresh);
-    // super.getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
-    // display the account switcher button only if 2+ accounts are
-    // configured
-    // mAccountSwitcherBtn = null;
-    // if (ServerSettingHelper.getInstance().twoOrMoreAccountsExist(this)) {
-    // mAccountSwitcherBtn = addActionBarItem();
-    // mAccountSwitcherBtn.setDrawable(R.drawable.action_bar_switcher_icon);
-    // mAccountSwitcherBtn.getItemView().setEnabled(false);
-    // }
-    // add the logout button, position 2 if the account switcher btn exists,
-    // position 1 otherwise
-    // addActionBarItem();
-    // super.getActionBar().getItem(mAccountSwitcherBtn != null ? 2 :
-    // 1).setDrawable(R.drawable.action_bar_logout_button);
-
-    // loaderItem = (LoaderActionBarItem) super.getActionBar().getItem(0);
-  }
-
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
@@ -168,85 +124,77 @@ public class HomeActivity extends Activity {
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    // getContentView().removeAllViews();
-    // setActionBarContentView(R.layout.home_layout);
     SettingUtils.setDefaultLanguage(this);
     init();
     setInfo();
-    startSocialService(/* loaderItem */);
+    startSocialService();
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    initActionBar();
     SettingUtils.setDefaultLanguage(this);
     setInfo();
-    startSocialService(/* loaderItem */);
+    startSocialService();
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-
     viewFlipper.removeAllViews();
     // getGDApplication().getImageCache().flush();
-    System.gc();
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.home, menu);
+    // keep an instance of the refresh button to display a loading indicator
+    loaderItem = menu.findItem(R.id.menu_home_refresh);
+    homeController.setLoader(loaderItem);
+    if (loaderItem != null)
+      // we should already be loading the profile and activities,
+      // so we start the loading indicator now
+      loaderItem.setActionView(R.layout.action_bar_loading_indicator);
+    return true;
   }
 
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
-    menu.clear();
-    menu.add(0, 1, 0, getResources().getString(R.string.Settings)).setIcon(R.drawable.optionsettingsbutton);
+    // show/hide the account switcher button depending on the nb of accounts
+    MenuItem accountSwitcherItem = menu.findItem(R.id.menu_home_account_switcher);
+    if (accountSwitcherItem != null) {
+      if (ServerSettingHelper.getInstance().twoOrMoreAccountsExist(this))
+        accountSwitcherItem.setVisible(true);
+      else
+        accountSwitcherItem.setVisible(false);
+    }
     return true;
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+    case R.id.menu_home_refresh:
+      startSocialService();
+      break;
 
-    int selectedItemIndex = item.getItemId();
+    case R.id.menu_home_account_switcher:
+      Intent accSwitcherIntent = new Intent(this, AccountSwitcherActivity.class);
+      startActivity(accSwitcherIntent);
+      break;
 
-    if (selectedItemIndex == 1) {
+    case R.id.menu_home_logout:
+      logoutAndRedirect();
+      break;
+
+    case R.id.menu_home_settings:
       Intent next = new Intent(HomeActivity.this, SettingActivity.class);
       next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.PERSONAL_TYPE);
       startActivity(next);
+      break;
     }
+
     return false;
-  }
-
-  public boolean onHandleActionBarItemClick(/* ActionBarItem item, */int position) {
-    // TODO move impl in onOptionsItemSelected (above)
-    switch (position) {
-    case -1: // click on home
-      break;
-    case 0: // click on refresh button
-      // loaderItem = (LoaderActionBarItem) item;
-      if (SocialServiceHelper.getInstance().activityService == null) {
-        homeController.launchNewsService(/* loaderItem */);
-      } else {
-        homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
-      }
-      break;
-    case 1:
-      // if (mAccountSwitcherBtn != null) { // open the account switcher
-      // if (mAccountSwitcherBtn.getItemView().isEnabled()) {
-      // Intent accSwitcherIntent = new Intent(this,
-      // AccountSwitcherActivity.class);
-      // startActivity(accSwitcherIntent);
-      // }
-      // } else { // or sign-out (position 1 if account switcher is not
-      // displayed)
-      logoutAndRedirect();
-      // }
-      break;
-    case 2: // sign-out is at position 2 only if the account switcher button
-            // is displayed
-            // if (mAccountSwitcherBtn != null) {
-      // logoutAndRedirect();
-      // }
-    }
-    return true;
-
   }
 
   @Override
@@ -255,8 +203,6 @@ public class HomeActivity extends Activity {
     onLoggingOut();
 
     super.onBackPressed();
-
-    // new LogoutDialog(HomeActivity.this, homeController).show();
   }
 
   private void init() {
@@ -284,25 +230,26 @@ public class HomeActivity extends Activity {
     }
   }
 
-  private void startSocialService(/* LoaderActionBarItem loader */) {
-    /** if soc activity service is null then loads all soc services */
+  private void startSocialService() {
+    // if social activity service is null then loads all social services
     if (SocialServiceHelper.getInstance().activityService == null)
-      homeController.launchNewsService(/* loader */);
+      homeController.launchNewsService();
     else
       homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
   }
 
   public void setProfileInfo(String[] profile) {
     homeUserAvatar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_right_to_left));
-    // TODO check image loading
-    ExoPicasso.picasso(this).load(Uri.parse(profile[0])).error(defaultAvatar).into(homeUserAvatar);
-    // homeUserAvatar.setUrl(profile[0]);
-    String userAndAccount = profile[1] + " (" + mSetting.getCurrentAccount().accountName + ")";
+    ExoPicasso.picasso(this)
+              .load(Uri.parse(profile[0]))
+              .transform(new RoundedCornersTranformer(this))
+              .error(defaultAvatar)
+              .into(homeUserAvatar);
+    // e.g. John Smith (Intranet)
+    String userAndAccount = String.format("%s (%s)", profile[1], mSetting.getCurrentAccount().accountName);
     homeUserName.setText(userAndAccount);
     homeUserName.setAnimation(AnimationUtils.loadAnimation(this, R.anim.home_anim_right_to_left));
     homeUserAvatar.setVisibility(View.VISIBLE);
-    // if (mAccountSwitcherBtn != null)
-    // mAccountSwitcherBtn.getItemView().setEnabled(true);
   }
 
   /*
@@ -313,8 +260,8 @@ public class HomeActivity extends Activity {
       return;
 
     SocialHomeTickerItem socialItem;
-    // viewFlipper.removeAllViews();
-    LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+    viewFlipper.removeAllViews();
+    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     /*
      * Display maximum 10 activities
      */

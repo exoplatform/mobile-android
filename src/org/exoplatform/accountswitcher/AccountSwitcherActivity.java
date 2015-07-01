@@ -21,13 +21,10 @@ package org.exoplatform.accountswitcher;
 import org.exoplatform.R;
 import org.exoplatform.base.BaseActivity;
 import org.exoplatform.ui.HomeActivity;
-import org.exoplatform.ui.login.LoginActivity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.content.IntentCompat;
-import android.util.Log;
 
 /**
  * Created by The eXo Platform SAS Author : Philippe Aristote
@@ -39,19 +36,6 @@ public class AccountSwitcherActivity extends BaseActivity {
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    boolean isDialog = false;
-    // Detect the size of the screen and set a theme "Dialog" to display the
-    // activity as a dialog
-    // if the screen is LARGE or XLARGE
-    // TODO find how to set the black background translucent
-    int screenLayout = getResources().getConfiguration().screenLayout;
-    screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
-    if (screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE || screenLayout == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-      setTheme(R.style.Theme_eXo_Dialog);
-      isDialog = true;
-    }
-    Log.i(TAG, "Start account switcher in mode: " + (isDialog ? "dialog" : "activity"));
 
     setContentView(R.layout.account_switcher_activity);
 
@@ -70,17 +54,6 @@ public class AccountSwitcherActivity extends BaseActivity {
     // IntentCompat.FLAG_ACTIVITY_CLEAR_TASK works only from API_VERSION>=11
     home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
     startActivity(home);
-    finish();
-  }
-
-  /**
-   * Redirect to the LoginActivity (Authenticate screen)
-   */
-  public void redirectToLoginScreenAndFinish() {
-    Intent login = new Intent(this, LoginActivity.class);
-    // IntentCompat.FLAG_ACTIVITY_CLEAR_TASK works only from API_VERSION>=11
-    login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-    startActivity(login);
     finish();
   }
 

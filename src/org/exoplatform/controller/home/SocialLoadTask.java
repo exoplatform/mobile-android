@@ -42,8 +42,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.MenuItem;
 
-// TODO add progress bar
 /**
  * The asynchronous task that loads activities from the Social REST service.
  */
@@ -57,7 +57,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   private String                          contentString;
 
-  // private LoaderActionBarItem loaderItem;
+  private MenuItem                        loaderItem;
 
   private int                             feedType                = 0;
 
@@ -67,9 +67,9 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   private static final String             TAG                     = "eXo____SocialLoadTask____";
 
-  public SocialLoadTask(Context context/* , LoaderActionBarItem loader */) {
+  public SocialLoadTask(Context context, MenuItem loader) {
     mContext = context;
-    // loaderItem = loader;
+    loaderItem = loader;
     changeLanguage();
     activityService = SocialServiceHelper.getInstance().activityService;
   }
@@ -84,8 +84,8 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   @Override
   public void onPreExecute() {
-    // if (loaderItem != null)
-    // loaderItem.setLoading(true);
+    if (loaderItem != null)
+      loaderItem.setActionView(R.layout.action_bar_loading_indicator);
   }
 
   /**
@@ -181,14 +181,28 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   @Override
   public void onPostExecute(ArrayList<SocialActivityInfo> result) {
+    stopLoadingIndicator();
     if (result != null) {
       setResult(result);
     } else {
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
-    // if (loaderItem != null)
-    // loaderItem.setLoading(false);
+  }
+
+  @Override
+  protected void onCancelled(ArrayList<SocialActivityInfo> result) {
+    stopLoadingIndicator();
+    onCancelled();
+  }
+
+  // TODO refactor the loading indicator
+  private void stopLoadingIndicator() {
+    if (loaderItem == null && feedType != HomeController.FLIPPER_VIEW && SocialTabsActivity.instance != null)
+      loaderItem = SocialTabsActivity.instance.loaderItem;
+
+    if (loaderItem != null)
+      loaderItem.setActionView(null);
   }
 
   public void setResult(ArrayList<SocialActivityInfo> result) {

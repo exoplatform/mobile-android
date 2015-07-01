@@ -28,14 +28,14 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,7 +44,7 @@ import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
 // TODO add progress bar
-public class DashboardActivity extends Activity {
+public class DashboardActivity extends FragmentActivity {
   private static final String     ACCOUNT_SETTING = "account_setting";
 
   private ListView                listView;
@@ -59,12 +59,12 @@ public class DashboardActivity extends Activity {
 
   private DashboardLoadTask       mLoadTask;
 
-  // private LoaderActionBarItem loaderItem;
+   private MenuItem loaderItem;
 
   @Override
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
+//    requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.dashboard_layout);
     // setActionBarContentView(R.layout.dashboard_layout);
     changeLanguage();
@@ -88,8 +88,8 @@ public class DashboardActivity extends Activity {
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
     // loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-
-    onLoad(/* loaderItem */);
+    setTitle(R.string.Dashboard);
+    onLoad(loaderItem);
   }
 
   @Override
@@ -98,10 +98,10 @@ public class DashboardActivity extends Activity {
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
   }
 
-  public void onLoad(/* LoaderActionBarItem loader */) {
+  public void onLoad( MenuItem loader ) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (mLoadTask == null || mLoadTask.getStatus() == DashboardLoadTask.Status.FINISHED) {
-        mLoadTask = (DashboardLoadTask) new DashboardLoadTask(this/* , loader */).execute();
+        mLoadTask = (DashboardLoadTask) new DashboardLoadTask(this , loader ).execute();
       }
     } else {
       new ConnectionErrorDialog(this).show();
@@ -136,17 +136,23 @@ public class DashboardActivity extends Activity {
   }
 
   @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.dashboard, menu);
+    loaderItem = menu.findItem(R.id.menu_as_refresh);
+    return true;
+  }
+  
+  @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // TODO handle action bar item click
 
     switch (item.getItemId()) {
 
-    case -1:
+    case android.R.id.home:
       finish();
       break;
-    case 0:
+    case R.id.menu_as_refresh:
       // loaderItem = (LoaderActionBarItem) item;
-      onLoad(/* loaderItem */);
+      onLoad( loaderItem );
 
       break;
 

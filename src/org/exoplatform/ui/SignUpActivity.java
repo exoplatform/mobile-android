@@ -18,40 +18,33 @@
  */
 package org.exoplatform.ui;
 
+import org.exoplatform.R;
+
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import org.exoplatform.R;
-import org.exoplatform.utils.AssetUtils;
 
 public class SignUpActivity extends FragmentActivity {
 
-  private static final String TAG = "eXoSignUpActivity";
+  private static final String TAG = "eXo____SignUpActivity____";
 
   public void onCreate(Bundle savedInstanceState) {
-    if (!WelcomeActivity.mIsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    if (!WelcomeActivity.mIsTablet)
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.signup);
+    setTitle(R.string.GetStarted);
 
-    getSupportFragmentManager()
-        .beginTransaction()
-        .add(R.id.share_extension_fragment, new CreationAccountFragment(this))
-        .commit();
+    getSupportFragmentManager().beginTransaction().add(R.id.share_extension_fragment, new CreationAccountFragment(this)).commit();
   }
 
   public void flipToGreetingsPanel() {
-    getSupportFragmentManager()
-        .beginTransaction()
-        .setCustomAnimations(
-            R.anim.grow_from_middle, R.anim.shrink_to_middle)
-        .replace(R.id.share_extension_fragment, new GreetingsFragment())
-        .commit();
+    getSupportFragmentManager().beginTransaction()
+                               .setCustomAnimations(R.anim.grow_from_middle, R.anim.shrink_to_middle)
+                               .replace(R.id.share_extension_fragment, new GreetingsFragment())
+                               .commit();
   }
 
 }

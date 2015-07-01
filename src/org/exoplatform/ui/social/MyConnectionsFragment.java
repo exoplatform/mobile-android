@@ -32,6 +32,7 @@ import org.exoplatform.social.client.api.service.QueryParams;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 /**
@@ -79,22 +80,17 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
 
   @Override
   public SocialLoadTask getThisLoadTask() {
-    return new MyConnectionLoadTask(getActivity()/*
-                                                  * ,
-                                                  * SocialTabsActivity.instance
-                                                  * .loaderItem
-                                                  */);
+    return new MyConnectionLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
   }
 
   public void setListAdapter() {
     super.setListAdapter(SocialServiceHelper.getInstance().myConnectionsList);
   }
 
-  // TODO add probress bar
   public class MyConnectionLoadTask extends SocialLoadTask {
 
-    public MyConnectionLoadTask(Context context/* , LoaderActionBarItem loader */) {
-      super(context/* , loader */);
+    public MyConnectionLoadTask(Context context, MenuItem loader) {
+      super(context, loader);
     }
 
     @Override

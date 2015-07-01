@@ -30,12 +30,14 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 // TODO set progress bar
@@ -56,25 +58,22 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
 
   private String                   contentString;
 
-  // private LoaderActionBarItem loaderItem;
+  private MenuItem loaderItem;
 
   private ArrayList<DashboardItem> dashboardList;
 
   private ArrayList<GadgetInfo>    items          = new ArrayList<GadgetInfo>();
 
-  public DashboardLoadTask(DashboardActivity context/*
-                                                     * , LoaderActionBarItem
-                                                     * loader
-                                                     */) {
+  public DashboardLoadTask(DashboardActivity context, MenuItem loader) {
     dashboardActivity = context;
     dashboardController = new DashboardController();
-    // loaderItem = loader;
+    loaderItem = loader;
     changeLanguage();
   }
 
   @Override
   public void onPreExecute() {
-    // loaderItem.setLoading(true);
+    ExoUtils.setLoadingItem(loaderItem, true);
   }
 
   @Override
@@ -114,7 +113,7 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
 
   @Override
   protected void onCancelled() {
-    // loaderItem.setLoading(false);
+    ExoUtils.setLoadingItem(loaderItem, false);
   }
 
   @Override
@@ -136,7 +135,7 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
     } else if (result == RESULT_TIMEOUT) {
       new ConnTimeOutDialog(dashboardActivity, titleString, okString).show();
     }
-    // loaderItem.setLoading(false);
+    ExoUtils.setLoadingItem(loaderItem, false);
     String strGadgetsErrorList = dashboardController.getGadgetsErrorList();
     if (strGadgetsErrorList.length() > 0) {
       StringBuffer titleBuffer = new StringBuffer("Apps: ");

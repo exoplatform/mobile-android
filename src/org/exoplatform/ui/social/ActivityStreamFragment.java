@@ -155,19 +155,14 @@ public abstract class ActivityStreamFragment extends Fragment {
    */
   public void onPrepareLoad(int actNums, boolean isRefresh, int position) {
     currentPosition = position;
-    if (isRefresh) {
-      onLoad(actNums);
-      return;
-    }
-
-    if (isEmpty()) {
+    if (isRefresh || isEmpty()) {
       onLoad(actNums);
       return;
     }
   }
 
   /**
-   * Load <code>actNums</code> (default 100) newest activities and update the
+   * Load <code>actNums</code> (default 50) newest activities and update the
    * stream of this fragment.
    * 
    * @param actNums The number of activities to load.

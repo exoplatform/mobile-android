@@ -45,12 +45,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -107,12 +107,7 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo);
-    // setActionBarContentView(R.layout.compose_message_layout);
     setContentView(R.layout.compose_message_layout);
-    // TODO add action bar
-    // getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     changeLanguage();
     composeMessageActivity = this;
     if (savedInstanceState != null)
@@ -121,8 +116,6 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
       composeType = getIntent().getIntExtra(ExoConstants.COMPOSE_TYPE, composeType);
       if (composeType == ExoConstants.COMPOSE_POST_TYPE) {
         setTitle(statusUpdate);
-        // addActionBarItem();
-        // getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_photo);
       } else {
         currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, currentPosition);
         setTitle(comment);
@@ -163,21 +156,42 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
   }
 
   @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.composer, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onPrepareOptionsMenu(Menu menu) {
+    MenuItem attach = menu.findItem(R.id.menu_compose_attach);
+    if (attach != null) {
+      if (composeType == ExoConstants.COMPOSE_POST_TYPE) {
+        // show the attach photo menu item
+        attach.setVisible(true);
+      } else if (composeType == ExoConstants.COMPOSE_COMMENT_TYPE) {
+        // hide the attach photo menu item
+        attach.setVisible(false);
+      }
+    }
+    return true;
+  }
+
+  @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-    case -1:
-
-      if (SocialDetailActivity.socialDetailActivity != null) {
-        SocialDetailActivity.socialDetailActivity.finish();
-      }
-
-      if (SocialTabsActivity.instance != null) {
-        SocialTabsActivity.instance.finish();
-      }
-      finish();
-      break;
-
-    case 0:
+    // TODO cleanup
+    // case android.R.id.home:
+    //
+    // if (SocialDetailActivity.socialDetailActivity != null) {
+    // SocialDetailActivity.socialDetailActivity.finish();
+    // }
+    //
+    // if (SocialTabsActivity.instance != null) {
+    // SocialTabsActivity.instance.finish();
+    // }
+    // finish();
+    // break;
+    case R.id.menu_compose_attach:
       new AddPhotoDialog(this, messageController).show();
       break;
     }

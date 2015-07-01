@@ -80,7 +80,7 @@ public class SignInFragment extends Fragment {
     if (acc.isRememberEnabled)
       etPassword.setText(acc.password);
     getShareActivity().toggleMainButtonType(R.attr.share_button_type_signin);
-    getShareActivity().getMainButton().setVisibility(View.VISIBLE);
+    getShareActivity().toogleProgressVisible(false);
     enableDisableMainButton();
     super.onResume();
   }

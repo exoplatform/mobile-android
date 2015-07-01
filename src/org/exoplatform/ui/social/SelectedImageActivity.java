@@ -39,10 +39,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -87,8 +85,6 @@ public class SelectedImageActivity extends Activity implements OnClickListener {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo);
     setContentView(R.layout.social_selected_image_layout);
     if (savedInstanceState != null)
       finish();
@@ -102,8 +98,6 @@ public class SelectedImageActivity extends Activity implements OnClickListener {
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    // this.getContentView().removeAllViews();
-    // this.setActionBarContentView(R.layout.social_selected_image_layout);
     init();
     onLoad(modeId);
   }
@@ -141,27 +135,6 @@ public class SelectedImageActivity extends Activity implements OnClickListener {
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // TODO handle item click
-    switch (item.getItemId()) {
-    case -1:
-      finish();
-      if (ComposeMessageActivity.composeMessageActivity != null)
-        ComposeMessageActivity.composeMessageActivity.finish();
-      if (SocialTabsActivity.instance != null)
-        SocialTabsActivity.instance.finish();
-      if (DocumentActivity._documentActivityInstance != null) {
-        DocumentActivity._documentActivityInstance.finish();
-      }
-      break;
-
-    case 0:
-      break;
-    }
-    return true;
   }
 
   @Override

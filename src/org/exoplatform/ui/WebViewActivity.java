@@ -24,8 +24,6 @@ import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.ui.social.SocialDetailActivity;
-import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
@@ -37,9 +35,9 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
@@ -50,7 +48,6 @@ import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-// TODO add progress bar
 public class WebViewActivity extends Activity {
 
   private static final String ACCOUNT_SETTING = "account_setting";
@@ -67,17 +64,16 @@ public class WebViewActivity extends Activity {
 
   private String              contentType;
 
-  // private LoaderActionBarItem loaderItem;
+  private MenuItem            loaderItem;
+
+  private MenuItem            documentItem;
 
   public void onCreate(Bundle icicle) {
 
     super.onCreate(icicle);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    // setActionBarContentView(R.layout.webview);
     setContentView(R.layout.webview);
-    // TODO add action bar
-    // getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    // addActionBarItem(Type.Refresh, R.id.action_bar_refresh);
+    setTitle("");
+
     /*
      * restore the previous state
      */
@@ -133,23 +129,13 @@ public class WebViewActivity extends Activity {
       public void onProgressChanged(WebView view, int progress) {
         setTitle(getResources().getString(R.string.LoadingData));
         activity.setProgress(progress * 100);
-        // ActionBarItem item = getActionBar().getItem(0);
-        // if (item instanceof LoaderActionBarItem) {
-        // loaderItem = (LoaderActionBarItem) item;
-        // }
-        // if (loaderItem != null) {
-        // loaderItem.setLoading(true);
-        // }
-        // if (progress == 100) {
-        // setTitle(_titlebar);
-        // getActionBar().removeItem(0);
-        // if (contentType != null) {
-        // addActionBarItem();
-        // getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
-        // }
-        //
-        // }
-
+        setLoaderItemVisible(true);
+        if (progress == 100) {
+          setTitle(_titlebar);
+          setLoaderItemVisible(false);
+          if (contentType != null && documentItem != null)
+            documentItem.setVisible(true);
+        }
       }
 
     });
@@ -174,32 +160,19 @@ public class WebViewActivity extends Activity {
   }
 
   @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.webview, menu);
+    loaderItem = menu.findItem(R.id.menu_webview_refresh);
+    documentItem = menu.findItem(R.id.menu_webview_open_document);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // TODO handle action bar item click
     switch (item.getItemId()) {
-    case -1:
-      if (DashboardActivity.dashboardActivity != null) {
-        DashboardActivity.dashboardActivity.finish();
-      }
-      if (DocumentActivity._documentActivityInstance != null) {
-        DocumentActivity._documentActivityInstance.finish();
-      }
-      if (SocialDetailActivity.socialDetailActivity != null) {
-        SocialDetailActivity.socialDetailActivity.finish();
-        if (SocialTabsActivity.instance != null) {
-          SocialTabsActivity.instance.finish();
-        }
-      }
-      finish();
 
-      break;
-
-    case 0:
-      // if (item instanceof LoaderActionBarItem) {
-      //
-      // } else {
+    case R.id.menu_webview_open_document:
       new CompatibleFileOpenDialog(this, contentType, _url, _titlebar).show();
-      // }
       break;
 
     default:
@@ -230,6 +203,12 @@ public class WebViewActivity extends Activity {
         CookieManager.getInstance().setCookie(url, strCookie);
       }
       CookieSyncManager.getInstance().sync();
+    }
+  }
+
+  private void setLoaderItemVisible(boolean visible) {
+    if (loaderItem != null) {
+      loaderItem.setVisible(visible);
     }
   }
 
@@ -278,8 +257,7 @@ public class WebViewActivity extends Activity {
     @Override
     protected void onPreExecute() {
       setTitle(getResources().getString(R.string.LoadingData));
-      // loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-      // loaderItem.setLoading(true);
+      setLoaderItemVisible(true);
     }
 
     @Override
@@ -294,7 +272,7 @@ public class WebViewActivity extends Activity {
       if (result) {
         _wvGadget.loadUrl(_url);
       } else {
-        // getActionBar().removeItem(0);
+        setLoaderItemVisible(false);
         finish();
       }
 
@@ -302,7 +280,7 @@ public class WebViewActivity extends Activity {
 
     @Override
     protected void onCancelled() {
-      // loaderItem.setLoading(false);
+      setLoaderItemVisible(false);
       super.onCancelled();
     }
 
