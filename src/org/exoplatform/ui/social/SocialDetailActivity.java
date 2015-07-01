@@ -18,18 +18,15 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
-import greendroid.widget.LoaderActionBarItem;
-
 import org.exoplatform.R;
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.MyActionBar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewStub;
@@ -41,10 +38,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+// TODO add progress bar
 /**
  * Screen for activity details
  */
-public class SocialDetailActivity extends MyActionBar implements OnClickListener {
+public class SocialDetailActivity extends Activity implements OnClickListener {
   public LinearLayout                startScreen;
 
   private View                       emptyCommentStubView;
@@ -71,7 +69,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
 
   public static SocialDetailActivity socialDetailActivity;
 
-  private LoaderActionBarItem        loaderItem;
+  // private LoaderActionBarItem loaderItem;
 
   private int                        currentPosition;
 
@@ -80,14 +78,14 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.activity_display_view);
-
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    addActionBarItem(Type.Refresh);
-    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
+    // setActionBarContentView(R.layout.activity_display_view);
+    setContentView(R.layout.activity_display_view);
+    // TODO add action bar
+    // getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    // addActionBarItem(Type.Refresh);
+    // getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
     socialDetailActivity = this;
-    currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION,
-                                              currentPosition);
+    currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, currentPosition);
     changeLanguage();
     if (savedInstanceState != null)
       finish();
@@ -124,8 +122,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
                                                   likeButton,
                                                   contentDetailLayout,
                                                   textView_Like_Count);
-    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-    detailController.onLoad(loaderItem, false, currentPosition);
+    // loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
+    detailController.onLoad(/* loaderItem, */false, currentPosition);
   }
 
   @Override
@@ -141,8 +139,9 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     finish();
   }
 
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
     case -1:
       if (SocialTabsActivity.instance != null) {
         SocialTabsActivity.instance.finish();
@@ -150,8 +149,8 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
       finish();
       break;
     case 0:
-      loaderItem = (LoaderActionBarItem) item;
-      detailController.onLoad(loaderItem, false, currentPosition);
+      // loaderItem = (LoaderActionBarItem) item;
+      detailController.onLoad(/* loaderItem, */false, currentPosition);
       break;
 
     }
@@ -169,7 +168,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
       startActivity(intent);
     }
     if (view.equals(likeButton)) {
-      detailController.onLikePress(loaderItem, currentPosition);
+      detailController.onLikePress(/* loaderItem, */currentPosition);
     }
 
     if (view.equals(likedFrame)) {

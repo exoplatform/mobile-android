@@ -46,8 +46,8 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import greendroid.widget.LoaderActionBarItem;
 
+// TODO add progress bar
 /**
  * Load and connect the app to the Social services and objects:<br/>
  * - Identity service <br/>
@@ -76,14 +76,15 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
 
   private HomeController                homeController;
 
-  private LoaderActionBarItem           loaderItem;
+  // private LoaderActionBarItem loaderItem;
 
   private static final String           TAG = "eXo____SocialServiceLoadTask____";
 
-  public SocialServiceLoadTask(Context context, HomeController controller, LoaderActionBarItem loader) {
+  public SocialServiceLoadTask(Context context, HomeController controller
+  /* ,LoaderActionBarItem loader */) {
     mContext = context;
     homeController = controller;
-    loaderItem = loader;
+    // loaderItem = loader;
     changeLanguage();
   }
 
@@ -97,7 +98,7 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
 
   @Override
   public void onPreExecute() {
-    loaderItem.setLoading(true);
+    // loaderItem.setLoading(true);
   }
 
   @SuppressWarnings({ "deprecation", "unchecked" })
@@ -110,8 +111,8 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
       String password = AccountSetting.getInstance().getPassword();
       URL url = new URL(SocialActivityUtil.getDomain());
 
-      if (Log.LOGD)
-        Log.d(TAG, "userName: ", userName, " url: ", url.toString());
+      Log.i(TAG, "userName: " + userName);
+      Log.i(TAG, "url: " + url.toString());
 
       SocialClientContext.setProtocol(url.getProtocol());
       SocialClientContext.setHost(url.getHost());
@@ -166,10 +167,10 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
       }
 
       /** Load activities for view flipper */
-      homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY_HOME, HomeController.FLIPPER_VIEW);
+      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
 
     } else {
-      loaderItem.setLoading(false);
+      // loaderItem.setLoading(false);
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }

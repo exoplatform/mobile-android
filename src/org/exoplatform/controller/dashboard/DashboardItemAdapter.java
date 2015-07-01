@@ -18,15 +18,12 @@
  */
 package org.exoplatform.controller.dashboard;
 
-import greendroid.image.ImageProcessor;
-
 import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.ShaderImageView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -38,13 +35,20 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor {
+import com.squareup.picasso.Picasso;
+
+public class DashboardItemAdapter extends BaseAdapter /*
+                                                       * implements
+                                                       * ImageProcessor
+                                                       */{
 
   private ArrayList<GadgetInfo> _arrayOfItems;
 
@@ -86,10 +90,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
     paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
     Canvas c = new Canvas(mMask);
-    c.drawRoundRect(new RectF(0, 0, mThumbnailSize, mThumbnailSize),
-                    mThumbnailRadius,
-                    mThumbnailRadius,
-                    paint);
+    c.drawRoundRect(new RectF(0, 0, mThumbnailSize, mThumbnailSize), mThumbnailRadius, mThumbnailRadius, paint);
   }
 
   public int getCount() {
@@ -142,9 +143,12 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
           convertView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
       }
 
-      ShaderImageView imageViewAvatar = (ShaderImageView) convertView.findViewById(R.id.gadget_image);
-      imageViewAvatar.setDefaultImageResource(R.drawable.gadgetplaceholder);
-      imageViewAvatar.setUrl(inforGadget.getStrGadgetIcon());
+      ImageView imageViewAvatar = (ImageView) convertView.findViewById(R.id.gadget_image);
+      // TODO check image load
+      Picasso.with(mContext)
+             .load(Uri.parse(inforGadget.getStrGadgetIcon()))
+             .placeholder(R.drawable.gadgetplaceholder)
+             .into(imageViewAvatar);
       TextView textViewName = (TextView) convertView.findViewById(R.id.gadget_title);
       textViewName.setText(inforGadget.getGadgetName());
 

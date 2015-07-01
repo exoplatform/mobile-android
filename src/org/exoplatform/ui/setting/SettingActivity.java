@@ -18,8 +18,6 @@
  */
 package org.exoplatform.ui.setting;
 
-import greendroid.widget.ActionBarItem;
-
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -31,12 +29,13 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.SocialActivityUtil;
-import org.exoplatform.widget.MyActionBar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -47,7 +46,7 @@ import android.widget.TextView;
  * Represents the setting screen<br/>
  * Requires setting_type
  */
-public class SettingActivity extends MyActionBar implements OnClickListener, CheckBox.ViewListener {
+public class SettingActivity extends Activity implements OnClickListener, CheckBox.ViewListener {
 
   private AccountSetting      mSetting;
 
@@ -97,9 +96,11 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
     requestWindowFeature(Window.FEATURE_NO_TITLE);
 
     setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.settings);
-    super.getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    super.getActionBar().setTitle(mResources.getString(R.string.Settings));
+    // setActionBarContentView(R.layout.settings);
+    setContentView(R.layout.settings);
+    // super.getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    // super.getActionBar().setTitle(mResources.getString(R.string.Settings));
+    // TODO add action bar
   }
 
   @Override
@@ -255,7 +256,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
     mNewAccountBtn.setText(mResources.getString(R.string.AddAServer));
   }
 
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
     finish();
     return true;
   }

@@ -18,8 +18,6 @@
  */
 package org.exoplatform.controller.social;
 
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +51,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.view.View;
 
-
+// TODO add progress bar
 public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
   private RestActivity                 selectedRestActivity;
 
@@ -61,7 +59,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   private ArrayList<SocialCommentInfo> socialCommentList = new ArrayList<SocialCommentInfo>();
 
-  private LoaderActionBarItem          loaderItem;
+  // private LoaderActionBarItem loaderItem;
 
   private Context                      mContext;
 
@@ -85,13 +83,12 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   private int                          currentPosition;
 
-  public SocialDetailLoadTask(Context context,
-                              SocialDetailController controller,
-                              LoaderActionBarItem loader,
+  public SocialDetailLoadTask(Context context, SocialDetailController controller,
+  // LoaderActionBarItem loader,
                               int pos) {
     mContext = context;
     detailController = controller;
-    loaderItem = loader;
+    // loaderItem = loader;
     currentPosition = pos;
     changeLanguage();
 
@@ -99,7 +96,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   @Override
   public void onPreExecute() {
-    loaderItem.setLoading(true);
+    // loaderItem.setLoading(true);
   }
 
   @Override
@@ -196,37 +193,25 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
           int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
           switch (tabId) {
           case SocialTabsActivity.ALL_UPDATES:
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                      true,
-                                                      currentPosition);
+            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             break;
           case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                         true,
-                                                         currentPosition);
+            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             break;
           case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
+            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             break;
           case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
+            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             break;
           }
         }
       }
     } else {
-      dialog = new SocialDetailsWarningDialog(mContext,
-                                              titleString,
-                                              detailsErrorStr,
-                                              okString,
-                                              hasContent);
+      dialog = new SocialDetailsWarningDialog(mContext, titleString, detailsErrorStr, okString, hasContent);
       dialog.show();
     }
-    loaderItem.setLoading(false);
+    // loaderItem.setLoading(false);
     SocialDetailActivity.socialDetailActivity.startScreen.setVisibility(View.GONE);
 
   }

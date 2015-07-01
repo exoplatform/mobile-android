@@ -18,9 +18,6 @@
  */
 package org.exoplatform.controller.social;
 
-import android.graphics.BitmapFactory;
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -34,21 +31,25 @@ import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
-import org.exoplatform.utils.image.PicassoImageGetter;
+import org.exoplatform.utils.image.ExoPicasso;
 import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.ShaderImageView;
 import org.exoplatform.widget.SocialActivityDetailsItem;
+
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+// TODO add progress bar
 public class SocialDetailController {
 
   private Context                   mContext;
@@ -92,10 +93,13 @@ public class SocialDetailController {
     activityId = SocialDetailHelper.getInstance().getActivityId();
   }
 
-  public void onLoad(LoaderActionBarItem loader, boolean isLikeAction, int postion) {
+  public void onLoad(/* LoaderActionBarItem loader, */boolean isLikeAction, int postion) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialDetailLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this, loader, postion).execute(isLikeAction);
+        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this/*
+                                                                                   * ,
+                                                                                   * loader
+                                                                                   */, postion).execute(isLikeAction);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -110,10 +114,14 @@ public class SocialDetailController {
     }
   }
 
-  public void onLikeLoad(LoaderActionBarItem loader, String id, int position) {
+  public void onLikeLoad(/* LoaderActionBarItem loader, */String id, int position) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLikeLoadTask == null || mLikeLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
-        mLikeLoadTask = (LikeLoadTask) new LikeLoadTask(mContext, this, loader, position).execute(id);
+        mLikeLoadTask = (LikeLoadTask) new LikeLoadTask(mContext,
+                                                        this/*
+                                                             * , loader
+                                                             */,
+                                                        position).execute(id);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -138,25 +146,28 @@ public class SocialDetailController {
         CommentItemLayout commentItem = new CommentItemLayout(mContext);
         String avatarUrl = comment.getImageUrl();
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4;
-        options.inPurgeable  = true;
-        options.inInputShareable = true;
-        commentItem.comAvatarImage.setOptions(options);
+        // BitmapFactory.Options options = new BitmapFactory.Options();
+        // options.inSampleSize = 4;
+        // options.inPurgeable = true;
+        // options.inInputShareable = true;
+        // commentItem.comAvatarImage.setOptions(options);
 
         if (avatarUrl == null) {
           commentItem.comAvatarImage.setImageResource(ExoConstants.DEFAULT_AVATAR);
-        } else
-          commentItem.comAvatarImage.setUrl(avatarUrl);
+        } else {
+          // TODO check options + image loading
+          ExoPicasso.picasso(mContext).load(Uri.parse(avatarUrl)).into(commentItem.comAvatarImage);
+          // commentItem.comAvatarImage.setUrl(avatarUrl);
+        }
         String commentName = comment.getCommentName();
         commentItem.comTextViewName.setText(commentName);
+
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle(),
                                                              new PicassoImageGetter(commentItem.comTextViewMessage),
                                                              null),
                                                TextView.BufferType.SPANNABLE);
         SocialActivityUtil.setTextLinkfy(commentItem.comTextViewMessage);
-        commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
-                                                                                 comment.getPostedTime()));
+        commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(mContext, comment.getPostedTime()));
         commentLayoutWrap.addView(commentItem, params);
 
       }
@@ -214,29 +225,33 @@ public class SocialDetailController {
      * Set list of likers
      */
     likedLayoutWrap.removeAllViews();
-    likedAvatarSize = mContext.getResources()
-                              .getDimensionPixelSize(R.dimen.social_liked_avatar_size);
+    likedAvatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.social_liked_avatar_size);
     LayoutParams params = new LayoutParams(likedAvatarSize, likedAvatarSize);
     params.setMargins(5, 0, 0, 0);
-    ShaderImageView likedAvatar;
+    ImageView likedAvatar;
     for (int i = 0; i < maxChild; i++) {
-      likedAvatar = new ShaderImageView(mContext, true);
-      BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inSampleSize = 4;
-      options.inPurgeable  = true;
-      options.inInputShareable = true;
-      likedAvatar.setOptions(options);
-      likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
-      likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);
+      likedAvatar = new ImageView(mContext);
+      // BitmapFactory.Options options = new BitmapFactory.Options();
+      // options.inSampleSize = 4;
+      // options.inPurgeable = true;
+      // options.inInputShareable = true;
+      // likedAvatar.setOptions(options);
+      // TODO check image options + loading
+      ExoPicasso.picasso(mContext)
+                .load(Uri.parse(likeLinkedList.get(i).likedImageUrl))
+                .placeholder(R.drawable.default_avatar)
+                .into(likedAvatar);
+      // likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
+      // likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);
       likedLayoutWrap.addView(likedAvatar, params);
     }
     /*
      * If have more than 4 likers, we put a "more_likers" image icon at the last
      */
     if (size > 4) {
-      likedAvatar = new ShaderImageView(mContext, true);
-      likedAvatar.setDefaultImageDrawable(mContext.getResources()
-                                                  .getDrawable(R.drawable.activity_detail_more_likers));
+      likedAvatar = new ImageView(mContext);
+      Picasso.with(mContext).load(R.drawable.activity_detail_more_likers).into(likedAvatar);
+      // likedAvatar.setDefaultImageDrawable(mContext.getResources().getDrawable(R.drawable.activity_detail_more_likers));
       likedLayoutWrap.addView(likedAvatar, params);
     }
 
@@ -257,8 +272,8 @@ public class SocialDetailController {
   /*
    * When user click on like button, only update the liker part UI
    */
-  public void onLikePress(LoaderActionBarItem loader, int pos) {
-    onLikeLoad(loader, activityId, pos);
+  public void onLikePress(/* LoaderActionBarItem loader, */int pos) {
+    onLikeLoad(/* loader, */activityId, pos);
   }
 
 }

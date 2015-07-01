@@ -18,8 +18,6 @@
  */
 package org.exoplatform.controller.home;
 
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.ArrayList;
 
 import org.exoplatform.model.SocialActivityInfo;
@@ -34,92 +32,91 @@ import org.exoplatform.widget.ConnectionErrorDialog;
 
 import android.content.Context;
 
+// TODO add progress bar
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com May
  * 17, 2012
  */
 public class HomeController {
-    private Context              mContext;
+  private Context              mContext;
 
-    public SocialServiceLoadTask mServiceLoadTask;
+  public SocialServiceLoadTask mServiceLoadTask;
 
-    private SocialLoadTask       mLoadTask;
+  private SocialLoadTask       mLoadTask;
 
-    private LoaderActionBarItem  loader;
+  // private LoaderActionBarItem loader;
 
-    public static final int      FLIPPER_VIEW = 10;
+  public static final int      FLIPPER_VIEW = 10;
 
-    private static final String  TAG          = "eXo____HomeController____";
+  private static final String  TAG          = "eXo____HomeController____";
 
-    public HomeController(Context context) {
-        mContext = context;
+  public HomeController(Context context) {
+    mContext = context;
+  }
+
+  public void finishService() {
+    onCancelLoadNewsService();
+    onCancelLoad();
+  }
+
+  public void launchNewsService(/* LoaderActionBarItem loaderItem */) {
+    // loader = loaderItem;
+    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+      if (mServiceLoadTask == null || mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.FINISHED) {
+        mServiceLoadTask = (SocialServiceLoadTask) new SocialServiceLoadTask(mContext, this/*
+                                                                                            * ,
+                                                                                            * loader
+                                                                                            */).execute();
+      }
+    } else {
+      new ConnectionErrorDialog(mContext).show();
     }
 
-    public void finishService() {
-        onCancelLoadNewsService();
-        onCancelLoad();
+  }
+
+  private void onCancelLoadNewsService() {
+    if (mServiceLoadTask != null && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING) {
+      mServiceLoadTask.cancel(true);
+      mServiceLoadTask = null;
     }
+  }
 
-    public void launchNewsService(LoaderActionBarItem loaderItem) {
-        loader = loaderItem;
-        if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
-            if (mServiceLoadTask == null
-                    || mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.FINISHED) {
-                mServiceLoadTask = (SocialServiceLoadTask) new SocialServiceLoadTask(mContext,
-                                                                                     this,
-                                                                                     loader).execute();
-            }
-        } else {
-            new ConnectionErrorDialog(mContext).show();
-        }
+  /**
+   * Load a number of activities with specific type
+   * 
+   * @param number
+   * @param type
+   */
+  public void onLoad(int number, int type) {
+    if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+      if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
+        mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext/* , loader */) {
 
+          @Override
+          protected ArrayList<SocialActivityInfo> getSocialActivityList() {
+            return SocialServiceHelper.getInstance().socialInfoList;
+          }
+
+          @Override
+          protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
+            return activityService.getFeedActivityStream(identity, params);
+          }
+        }.execute(number, type);
+      }
+    } else {
+      new ConnectionErrorDialog(mContext).show();
     }
+  }
 
-    private void onCancelLoadNewsService() {
-        if (mServiceLoadTask != null
-                && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING) {
-            mServiceLoadTask.cancel(true);
-            mServiceLoadTask = null;
-        }
+  public boolean isLoadingTask() {
+    return (mServiceLoadTask != null && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING);
+  }
+
+  private void onCancelLoad() {
+    if (mLoadTask != null && mLoadTask.getStatus() == SocialLoadTask.Status.RUNNING) {
+      mLoadTask.cancel(true);
+      mLoadTask = null;
     }
-
-    /**
-     * Load a number of activities with specific type
-     * 
-     * @param number
-     * @param type
-     */
-    public void onLoad(int number, int type) {
-        if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
-            if (mLoadTask == null || mLoadTask.getStatus() == SocialLoadTask.Status.FINISHED) {
-                mLoadTask = (SocialLoadTask) new SocialLoadTask(mContext, loader) {
-
-                    @Override
-                    protected ArrayList<SocialActivityInfo> getSocialActivityList() {
-                        return SocialServiceHelper.getInstance().socialInfoList;
-                    }
-
-                    @Override
-                    protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity,
-                                                                                   QueryParams params) throws SocialClientLibException {
-                        return activityService.getFeedActivityStream(identity, params);
-                    }
-                }.execute(number, type);
-            }
-        } else {
-            new ConnectionErrorDialog(mContext).show();
-        }
-    }
-
-    public boolean isLoadingTask() {
-        return (mServiceLoadTask != null && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING);
-    }
-
-    private void onCancelLoad() {
-        if (mLoadTask != null && mLoadTask.getStatus() == SocialLoadTask.Status.RUNNING) {
-            mLoadTask.cancel(true);
-            mLoadTask = null;
-        }
-    }
+  }
 
 }

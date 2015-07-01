@@ -48,9 +48,8 @@
     <jira.project.key>MOB</jira.project.key>
     <jenkins.job.name>mobile-android-master-ci</jenkins.job.name>
     <!-- Android -->
-    <!-- Max allowed to not have conflict with GreenDroid's ActionBar  -->
-    <android.version>2.3.3</android.version>
-    <android.sdk.platform>10</android.sdk.platform>
+    <android.version>4.1.1.4</android.version>
+    <android.sdk.platform>21</android.sdk.platform>
     <!-- Lib support available via maven-android-sdk-deployer  -->
     <android.support.version>20.0.0</android.support.version>
     <!-- March 2012 -->
@@ -59,7 +58,6 @@
     <commons-lang.version>2.4</commons-lang.version>
     <exo.social.client.version>1.0.3</exo.social.client.version>
     <slf4j-android.version>1.6.1-RC1</slf4j-android.version>
-    <greendroid.version>67aa3ed</greendroid.version>
     <!-- Test Dependencies  -->
     <fest-android.version>1.0.7</fest-android.version>
     <robolectric.version>2.2</robolectric.version>
@@ -115,13 +113,6 @@
       <groupId>com.google.android</groupId>
       <artifactId>annotations</artifactId>
       <version>${android.annotations.version}</version>
-    </dependency>
-    <!-- Dependency With Greendroid library for Android -->
-    <dependency>
-      <groupId>com.greendroid</groupId>
-      <artifactId>greendroid</artifactId>
-      <version>${greendroid.version}</version>
-      <type>apklib</type>
     </dependency>
     <!-- Commons  -->
     <dependency>

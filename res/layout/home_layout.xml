@@ -21,8 +21,9 @@
             android:padding="0dp" >
 
             <!-- User avatar -->
-            <org.exoplatform.widget.ShaderImageView
+            <ImageView
                 android:id="@+id/home_user_avatar"
+                android:src="@drawable/default_avatar"
                 android:layout_width="@dimen/home_profile_avatar_size"
                 android:layout_height="@dimen/home_profile_avatar_size"
                 android:layout_marginLeft="7dp"

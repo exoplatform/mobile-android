@@ -18,9 +18,6 @@
  */
 package org.exoplatform.controller.dashboard;
 
-import greendroid.util.Config;
-import greendroid.widget.LoaderActionBarItem;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +38,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 
+// TODO set progress bar
 public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
   private static final int         RESULT_OK      = 1;
 
@@ -58,22 +56,25 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
 
   private String                   contentString;
 
-  private LoaderActionBarItem      loaderItem;
+  // private LoaderActionBarItem loaderItem;
 
   private ArrayList<DashboardItem> dashboardList;
 
   private ArrayList<GadgetInfo>    items          = new ArrayList<GadgetInfo>();
 
-  public DashboardLoadTask(DashboardActivity context, LoaderActionBarItem loader) {
+  public DashboardLoadTask(DashboardActivity context/*
+                                                     * , LoaderActionBarItem
+                                                     * loader
+                                                     */) {
     dashboardActivity = context;
     dashboardController = new DashboardController();
-    loaderItem = loader;
+    // loaderItem = loader;
     changeLanguage();
   }
 
   @Override
   public void onPreExecute() {
-    loaderItem.setLoading(true);
+    // loaderItem.setLoading(true);
   }
 
   @Override
@@ -100,8 +101,8 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
             items.addAll(gadgets);
           }
         } catch (IOException e) {
-          if (Config.GD_ERROR_LOGS_ENABLED)
-            Log.e("DashboardLoadTask", e.getMessage());
+          // if (Config.GD_ERROR_LOGS_ENABLED)
+          Log.e("DashboardLoadTask", e.getMessage());
         }
 
       }
@@ -113,7 +114,7 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
 
   @Override
   protected void onCancelled() {
-    loaderItem.setLoading(false);
+    // loaderItem.setLoading(false);
   }
 
   @Override
@@ -135,7 +136,7 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
     } else if (result == RESULT_TIMEOUT) {
       new ConnTimeOutDialog(dashboardActivity, titleString, okString).show();
     }
-    loaderItem.setLoading(false);
+    // loaderItem.setLoading(false);
     String strGadgetsErrorList = dashboardController.getGadgetsErrorList();
     if (strGadgetsErrorList.length() > 0) {
       StringBuffer titleBuffer = new StringBuffer("Apps: ");

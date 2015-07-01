@@ -5,11 +5,12 @@
         <item name="android:background">#dcdcdc</item>
     </style>
 
-    <style name="TextAppearanceLarge" parent="@style/TextAppearance.Large">
+    <style name="TextAppearanceLarge" parent="@android:style/TextAppearance.Large">
         <item name="android:textSize">18sp</item>
     </style>
 
     <style name="TitleTextAppearance">
+        <item name="android:textColor">#ffffff</item>
         <item name="android:shadowColor">#000000</item>
         <item name="android:shadowDx">1.0</item>
         <item name="android:shadowDy">2.0</item>
@@ -178,7 +179,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textColor">?attr/gdActionBarTitleColor</item>
+        <item name="android:textColor">#fff</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/action_bar_background_repeate</item>

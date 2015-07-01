@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 /*
-  * Copyright (C) 2003-2012 eXo Platform SAS.
+ * Copyright (C) 2003-2012 eXo Platform SAS.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -34,8 +34,6 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -47,6 +45,7 @@ import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -58,11 +57,11 @@ import android.view.View;
 public class MySpacesFragment extends ActivityStreamFragment {
 
   public static MySpacesFragment instance;
-  
+
   @Override
-	public int getThisTabId() {
-		return SocialTabsActivity.MY_SPACES;
-	}
+  public int getThisTabId() {
+    return SocialTabsActivity.MY_SPACES;
+  }
 
   public static MySpacesFragment getInstance() {
     MySpacesFragment fragment = new MySpacesFragment();
@@ -89,54 +88,56 @@ public class MySpacesFragment extends ActivityStreamFragment {
     super.onDestroy();
     instance = null;
   }
+
   public boolean isEmpty() {
-	  return (SocialServiceHelper.getInstance().mySpacesList == null
-	        || SocialServiceHelper.getInstance().mySpacesList.size() == 0);
+    return (SocialServiceHelper.getInstance().mySpacesList == null || SocialServiceHelper.getInstance().mySpacesList.size() == 0);
   }
-  
+
   @Override
   public SocialLoadTask getThisLoadTask() {
-  	return new MySpacesLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+    return new MySpacesLoadTask(getActivity()/*
+                                              * , SocialTabsActivity.instance.
+                                              * loaderItem
+                                              */);
   }
 
   public void setListAdapter() {
-	  super.setListAdapter(SocialServiceHelper.getInstance().mySpacesList);
+    super.setListAdapter(SocialServiceHelper.getInstance().mySpacesList);
   }
-  
+
+  // TODO add progress bar
   public class MySpacesLoadTask extends SocialLoadTask {
 
-    public MySpacesLoadTask(Context context, LoaderActionBarItem loader) {
-      super(context, loader);
+    public MySpacesLoadTask(Context context/* , LoaderActionBarItem loader */) {
+      super(context/* , loader */);
     }
 
     @Override
     public void setResult(ArrayList<SocialActivityInfo> result) {
-    	setActivityList(result);
-    	setListAdapter();
-    	listview.getAutoLoadProgressBar().setVisibility(View.GONE);
-    	super.setResult(result);
+      setActivityList(result);
+      setListAdapter();
+      listview.getAutoLoadProgressBar().setVisibility(View.GONE);
+      super.setResult(result);
     }
 
-	@Override
-	protected RealtimeListAccess<RestActivity> getRestActivityList(
-			RestIdentity identity, QueryParams params)
-			throws SocialClientLibException {
-		return activityService.getSpacesActivityStream(identity, params);
-	}
+    @Override
+    protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
+      return activityService.getSpacesActivityStream(identity, params);
+    }
 
-	@Override
-	protected ArrayList<SocialActivityInfo> getSocialActivityList() {
-		return SocialServiceHelper.getInstance().mySpacesList;
-	}
+    @Override
+    protected ArrayList<SocialActivityInfo> getSocialActivityList() {
+      return SocialServiceHelper.getInstance().mySpacesList;
+    }
 
   }
 
-	@Override
-	public void setActivityList(ArrayList<SocialActivityInfo> list) {
-		if (!isLoadingMoreActivities)
-			SocialServiceHelper.getInstance().mySpacesList = list;
-		else
-			SocialServiceHelper.getInstance().mySpacesList.addAll(list);
-	}
+  @Override
+  public void setActivityList(ArrayList<SocialActivityInfo> list) {
+    if (!isLoadingMoreActivities)
+      SocialServiceHelper.getInstance().mySpacesList = list;
+    else
+      SocialServiceHelper.getInstance().mySpacesList.addAll(list);
+  }
 
 }

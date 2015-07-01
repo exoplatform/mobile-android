@@ -18,32 +18,33 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.widget.ActionBarItem;
-
 import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.MyActionBar;
-import org.exoplatform.widget.ShaderImageView;
+import org.exoplatform.utils.image.ExoPicasso;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
  * 4, 2012
  */
-public class LikeListActivity extends MyActionBar {
+public class LikeListActivity extends Activity {
 
   /*
    * This class for displaying the liker list information include avatar and
@@ -59,7 +60,8 @@ public class LikeListActivity extends MyActionBar {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setActionBarContentView(R.layout.like_list_activity_layout);
+    // setActionBarContentView(R.layout.like_list_activity_layout);
+    setContentView(R.layout.like_list_activity_layout);
     /*
      * Get liker list from intent extra
      */
@@ -101,8 +103,8 @@ public class LikeListActivity extends MyActionBar {
   }
 
   @Override
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
     case -1:
       if (SocialDetailActivity.socialDetailActivity != null) {
         SocialDetailActivity.socialDetailActivity.finish();
@@ -158,14 +160,19 @@ public class LikeListActivity extends MyActionBar {
          */
         convertView = mInflater.inflate(R.layout.liked_grid_item, null);
         viewHolder = new ViewHolder();
-        viewHolder.imageView = (ShaderImageView) convertView.findViewById(R.id.liked_avatar);
+        viewHolder.imageView = (ImageView) convertView.findViewById(R.id.liked_avatar);
         viewHolder.textView = (TextView) convertView.findViewById(R.id.liked_name);
         convertView.setTag(viewHolder);
       } else {
         viewHolder = (ViewHolder) convertView.getTag();
       }
-      viewHolder.imageView.setDefaultImageResource(R.drawable.default_avatar);
-      viewHolder.imageView.setUrl(likeList.get(position).likedImageUrl);
+      // viewHolder.imageView.setDefaultImageResource(R.drawable.default_avatar);
+      ExoPicasso.picasso(getApplicationContext())
+                .load(Uri.parse(likeList.get(position).likedImageUrl))
+                .error(R.drawable.default_avatar)
+                .into(viewHolder.imageView);
+      // TODO check image loading
+      // viewHolder.imageView.setUrl(likeList.get(position).likedImageUrl);
       viewHolder.textView.setText(likeList.get(position).getLikeName());
 
       return convertView;
@@ -174,9 +181,9 @@ public class LikeListActivity extends MyActionBar {
   }
 
   private class ViewHolder {
-    public ShaderImageView imageView;
+    public ImageView imageView;
 
-    public TextView        textView;
+    public TextView  textView;
   }
 
 }

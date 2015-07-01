@@ -27,9 +27,9 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WaitingDialog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -39,14 +39,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import greendroid.widget.ActionBarItem;
 
-public class SelectedImageActivity extends MyActionBar implements OnClickListener {
+public class SelectedImageActivity extends Activity implements OnClickListener {
 
   private static final int    SCALE_WIDTH  = 1024;
 
@@ -89,7 +89,7 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.social_selected_image_layout);
+    setContentView(R.layout.social_selected_image_layout);
     if (savedInstanceState != null)
       finish();
     else {
@@ -102,8 +102,8 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    this.getContentView().removeAllViews();
-    this.setActionBarContentView(R.layout.social_selected_image_layout);
+    // this.getContentView().removeAllViews();
+    // this.setActionBarContentView(R.layout.social_selected_image_layout);
     init();
     onLoad(modeId);
   }
@@ -144,8 +144,9 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   }
 
   @Override
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
+  public boolean onOptionsItemSelected(MenuItem item) {
+    // TODO handle item click
+    switch (item.getItemId()) {
     case -1:
       finish();
       if (ComposeMessageActivity.composeMessageActivity != null)

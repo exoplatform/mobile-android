@@ -53,7 +53,6 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.os.Environment;
 import android.util.Xml;
-import greendroid.util.Config;
 
 /**
  * Help to deal with writing and reading from xml config file
@@ -209,8 +208,8 @@ public class ServerConfigurationUtils {
 
       }
     } catch (XmlPullParserException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("XmlPullParserException", "Cannot parse XML");
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e("XmlPullParserException", "Cannot parse XML");
     }
 
     boolean mExternalStorageAvailable = false;
@@ -298,14 +297,14 @@ public class ServerConfigurationUtils {
       }
 
     } catch (IOException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("IOException", "getServerListWithFileName");
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e("IOException", "getServerListWithFileName");
     } catch (ParserConfigurationException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("ParserConfigurationException", "getServerListWithFileName");
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e("ParserConfigurationException", "getServerListWithFileName");
     } catch (SAXException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("SAXException", "getServerListWithFileName");
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e("SAXException", "getServerListWithFileName");
     }
 
     return arrServerList;
@@ -369,16 +368,16 @@ public class ServerConfigurationUtils {
       Log.i(TAG, "File not found");
       return arrServerList;
     } catch (IOException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
       return arrServerList;
     } catch (ParserConfigurationException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
       return arrServerList;
     } catch (SAXException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
       return arrServerList;
     } catch (Exception e) {
       Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
@@ -467,14 +466,14 @@ public class ServerConfigurationUtils {
       Log.i(TAG, "File not found");
       return null;
     } catch (IOException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("IOException", "getServerListFromOldConfigFile");
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e("IOException", "getServerListFromOldConfigFile");
     } catch (ParserConfigurationException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("ParserConfigurationException", "getServerListFromOldConfigFile");
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e("ParserConfigurationException", "getServerListFromOldConfigFile");
     } catch (SAXException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("SAXException", "getServerListFromOldConfigFile");
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e("SAXException", "getServerListFromOldConfigFile");
     } catch (Exception e) {
       Log.e("Exception", "getServerListFromOldConfigFile - decryption exception : " + e.getLocalizedMessage());
     }

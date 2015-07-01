@@ -11,22 +11,25 @@
 	under the License. */
 -->
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme.eXo" parent="@style/Theme.GreenDroid.NoTitleBar">
-        <item name="gdActionBarTitleColor">#ffffffff</item>
-        <item name="gdActionBarBackground">@drawable/action_bar_background</item>
-        <item name="gdActionBarItemBackground">@drawable/action_bar_item_background</item>
-        <item name="gdActionBarDividerDrawable">@drawable/action_bar_separator_complete</item>
-        <item name="gdActionBarDividerWidth">2dp</item>
+    
+    <style name="Theme.eXo" parent="@android:style/Theme.Holo.Light">
+        <!-- <item name="gdActionBarItemBackground">@drawable/action_bar_item_background</item>
         <item name="gdActionBarApplicationDrawable">@drawable/exo_application_logo</item>
-        <item name="gdActionBarHomeDrawable">@drawable/action_bar_icon_home</item>
-        <item name="gdActionBarTitleStyle">@style/TitleTextAppearance</item>
+        <item name="gdActionBarHomeDrawable">@drawable/action_bar_icon_home</item> -->
+    </style>
+    
+    <style name="Theme.eXo_actionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:background">@drawable/action_bar_background</item>
+        <item name="android:divider">@drawable/action_bar_separator_complete</item>
+        <item name="android:dividerPadding">2dp</item>
+        <item name="android:textAppearance">@style/TitleTextAppearance</item>
     </style>
 
     <style name="Theme.eXo_signout" parent="@style/Theme.eXo">
-        <item name="gdActionBarBackground">@color/action_bar_tint</item>
-        <item name="gdActionBarHomeDrawable">@drawable/action_bar_logout_button</item>
+        <item name="android:background">@color/action_bar_tint</item>
+        <!-- <item name="gdActionBarHomeDrawable">@drawable/action_bar_logout_button</item> -->
     </style>
 
     <style name="Theme.PageIndicatorDefaults" parent="@style/Theme.eXo">

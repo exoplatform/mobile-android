@@ -26,13 +26,13 @@ import org.exoplatform.model.SocialSpaceInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.model.RestSpace;
-import org.exoplatform.widget.MyActionBar;
 
+import android.app.Activity;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.AsyncTaskLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -46,7 +46,7 @@ import android.widget.ListView;
  * @author Philippe Aristote paristote@exoplatform.com
  * @since Apr 21, 2015
  */
-public class SpaceSelectorActivity extends MyActionBar implements LoaderCallbacks<List<SocialSpaceInfo>>, OnItemClickListener {
+public class SpaceSelectorActivity extends Activity implements LoaderCallbacks<List<SocialSpaceInfo>>, OnItemClickListener {
 
   private static final String   LOG_TAG        = "____eXo_SpaceSelectorActivity____";
 
@@ -63,8 +63,10 @@ public class SpaceSelectorActivity extends MyActionBar implements LoaderCallback
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.compose_message_space_selector_activity);
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Empty);
+    // setActionBarContentView(R.layout.compose_message_space_selector_activity);
+    setContentView(R.layout.compose_message_space_selector_activity);
+    // TODO add action bar
+    // getActionBar().setType(greendroid.widget.ActionBar.Type.Empty);
     setTitle(R.string.ShareWithWhom);
 
     listViewSpaces = (ListView) findViewById(R.id.list_spaces);
@@ -72,7 +74,8 @@ public class SpaceSelectorActivity extends MyActionBar implements LoaderCallback
     listAdapterSpaces = new SpaceListAdapter(this);
     listViewSpaces.setAdapter(listAdapterSpaces);
     listViewSpaces.setEmptyView(findViewById(R.id.list_spaces_empty_view));
-    getSupportLoaderManager().initLoader(0, null, this).forceLoad();
+    getLoaderManager().initLoader(0, null, this).forceLoad();
+
   }
 
   /*

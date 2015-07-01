@@ -31,13 +31,13 @@ import org.exoplatform.utils.Log;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.AddPhotoDialog;
-import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.RemoveAttachedPhotoDialog;
 import org.exoplatform.widget.RetangleImageView;
 
 import com.squareup.picasso.Picasso;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -45,6 +45,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -58,9 +59,8 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import greendroid.widget.ActionBarItem;
 
-public class ComposeMessageActivity extends MyActionBar implements View.OnClickListener {
+public class ComposeMessageActivity extends Activity implements View.OnClickListener {
 
   private PostWaitingDialog            _progressDialog;
 
@@ -109,8 +109,10 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
     super.onCreate(savedInstanceState);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.compose_message_layout);
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
+    // setActionBarContentView(R.layout.compose_message_layout);
+    setContentView(R.layout.compose_message_layout);
+    // TODO add action bar
+    // getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     changeLanguage();
     composeMessageActivity = this;
     if (savedInstanceState != null)
@@ -119,8 +121,8 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       composeType = getIntent().getIntExtra(ExoConstants.COMPOSE_TYPE, composeType);
       if (composeType == ExoConstants.COMPOSE_POST_TYPE) {
         setTitle(statusUpdate);
-        addActionBarItem();
-        getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_photo);
+        // addActionBarItem();
+        // getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_photo);
       } else {
         currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, currentPosition);
         setTitle(comment);
@@ -161,8 +163,8 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
   }
 
   @Override
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
     case -1:
 
       if (SocialDetailActivity.socialDetailActivity != null) {
