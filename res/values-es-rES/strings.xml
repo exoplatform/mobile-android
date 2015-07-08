@@ -10,13 +10,13 @@
   <string name="NoPasswordEnter">Por favor introduzca su contraseña</string>
   <string name="UserNamePasswordFailed">Combinación de nombre de usuario/contraseña no válida.</string>
   <string name="SpecialCharacters">No se permiten caracteres especiales.</string>
-  <string name="AccountNameInvalid">Only alphanumeric characters and spaces are allowed in the account name</string>
-  <string name="AccountServerInvalid">Invalid server address</string>
-  <string name="AccountServerForbidden">This server URL is not allowed</string>
-  <string name="AccountUsernameInvalid">Only alphanumeric characters, dashes, underscores, dots and pluses are allowed in the username</string>
-  <string name="AccountPasswordInvalid">Blanks are not allowed in the password</string>
+  <string name="AccountNameInvalid">Sólo los caracteres alfanuméricos y los espacios están permitidos en el nombre de la cuenta</string>
+  <string name="AccountServerInvalid">Dirección de servidor incorrecta.</string>
+  <string name="AccountServerForbidden">Esta dirección URL del servidor no está permitida</string>
+  <string name="AccountUsernameInvalid">Sólo los caracteres alfanuméricos, guión, subguión, punto y suma están permitidos en el nombre de usuario</string>
+  <string name="AccountPasswordInvalid">No se permiten espacios en blanco en la contraseña</string>
   <string name="Connected">Conectado</string>
-  <string name="LastLoginDate">Last login</string>
+  <string name="LastLoginDate">Ultimo Inicio de sesion</string>
   <string name="ServerUnreachable">La dirección del servidor no está disponible</string>
   <string name="UserNameCellTitle">Nombre de usuario</string>
   <string name="PasswordCellTitle">Contraseña</string>
@@ -34,8 +34,8 @@
   <string name="French">Francés</string>
   <string name="German">Alemán</string>
   <string name="Spanish">Español</string>
-  <string name="PortugueseBrazil">Portuguese (Brazil)</string>
-  <string name="Greek">Greek</string>
+  <string name="PortugueseBrazil">Portugués (Brasil)</string>
+  <string name="Greek">Griego</string>
   <string name="CompliantMessage">No pudimos conectar a una versión compatible de la plataforma en esta dirección URL, por favor contacte con su administrador.</string>
   <string name="Delete">Eliminar</string>
   <string name="Copy">Copiar</string>
@@ -65,11 +65,11 @@
   <string name="StatusUpdate">Publicar</string>
   <string name="PostTo">Para:</string>
   <string name="Public">Mis Actividades</string>
-  <string name="NoSpaces">You are not in any space</string>
+  <string name="NoSpaces">No está en ningún espacio</string>
   <string name="ComposerPlaceHolder">¿En qué está trabajando?</string>
-  <string name="ShareWithWhom">Select who will see this post</string>
-  <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
-  <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
+  <string name="ShareWithWhom">Selecciona quien verá esta publicación</string>
+  <string name="AddImageDisabled">No se puede agregar una imagen porque se está publicado en un espacio</string>
+  <string name="SelectSpaceDisabled">No se puede seleccionar un espacio porque su mensaje contiene una imagen</string>
   <string name="NoLike">Ningún \"me gusta\" por el momento</string>
   <string name="LikedThis"> le gusta esto</string>
   <string name="And"> y</string>
@@ -105,7 +105,7 @@
   <string name="WarningServerNameIsEmpty">El nombre del servidor o la dirección URL no pueden estar en blanco.</string>
   <string name="WarningServerNameIsExist">Este nombre de servidor ya existe en tu lista</string>
   <string name="WarningServerUrlIsExist">Esta URL del servidor ya existe en su lista</string>
-  <string name="WarningServerAlreadyExists">This account already exists in your list</string>
+  <string name="WarningServerAlreadyExists">Esta cuenta ya existe en tu lista</string>
   <string name="DetailsNotAvaiable">Los detalles de las noticias no están disponibles</string>
   <string name="ErrorOnComment">No puede comentar esta actividad.</string>
   <string name="CannotLoadMoreActivities">No se pueden cargar actividades anteriores. La lista está siendo renovada.</string>
@@ -230,7 +230,7 @@
   <!-- Server edition -->
   <string name="OptionalHint">Optional</string>
   <string name="RequiredHint">Required</string>
-  <string name="Account">Account</string>
+  <string name="Account">Cuenta</string>
   <string name="YourCredentials">Your credentials</string>
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
