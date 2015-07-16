@@ -126,7 +126,7 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
 
   @Override
   public void onResume() {
-    getShareActivity().toggleMainButtonType(0);
+    getShareActivity().toggleMainButtonType(ShareActivity.BUTTON_TYPE_INVISIBLE);
     super.onResume();
   }
 

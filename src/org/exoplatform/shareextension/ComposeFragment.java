@@ -149,9 +149,9 @@ public class ComposeFragment extends Fragment {
   @Override
   public void onResume() {
     setTouchListener();
-    getShareActivity().toggleMainButtonType(R.attr.share_button_type_post);
+    getShareActivity().toggleMainButtonType(ShareActivity.BUTTON_TYPE_SHARE);
     if (!getShareActivity().isProgressVisible())
-      getShareActivity().toogleProgressVisible(false);
+      getShareActivity().toggleProgressVisible(false);
     ExoAccount selectedAccount = getShareActivity().getPostInfo().ownerAccount;
     if (selectedAccount != null)
       tvAccount.setText(selectedAccount.accountName + " (" + selectedAccount.username + ")");

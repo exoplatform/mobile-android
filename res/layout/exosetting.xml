@@ -19,7 +19,7 @@
                 android:layout_height="40dip"
                 android:gravity="center_vertical"
                 android:padding="3dp"
-                android:shadowColor="#000000"
+                android:shadowColor="@android:color/black"
                 android:shadowDx="1.0"
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"
@@ -55,7 +55,7 @@
                     android:layout_marginLeft="10dip"
                     android:gravity="center_vertical"
                     android:padding="4dp"
-                    android:textColor="#000000"
+                    android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
 
@@ -85,7 +85,7 @@
                     android:layout_marginLeft="10dip"
                     android:gravity="center_vertical"
                     android:padding="4dp"
-                    android:textColor="#000000"
+                    android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
 
@@ -118,7 +118,7 @@
             android:layout_below="@id/setting_login_separator_bottom_img"
             android:gravity="center_vertical"
             android:padding="3dp"
-            android:shadowColor="#000000"
+            android:shadowColor="@android:color/black"
             android:shadowDx="1.0"
             android:shadowDy="2.0"
             android:shadowRadius="1.0"
@@ -162,7 +162,7 @@
                 android:layout_marginLeft="10dip"
                 android:layout_toRightOf="@id/ImageView_English"
                 android:gravity="center_vertical"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -202,7 +202,7 @@
                 android:layout_marginLeft="10dip"
                 android:layout_toRightOf="@id/ImageView_French"
                 android:gravity="center_vertical"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -240,7 +240,7 @@
                 android:layout_below="@id/social_store_setting_title_header"
                 android:gravity="center_vertical"
                 android:padding="3dp"
-                android:shadowColor="#000000"
+                android:shadowColor="@android:color/black"
                 android:shadowDx="1.0"
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"
@@ -270,7 +270,7 @@
                 android:layout_height="40dip"
                 android:layout_marginLeft="10dip"
                 android:gravity="center_vertical"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -307,7 +307,7 @@
                 android:layout_below="@id/document_setting_title_header"
                 android:gravity="center_vertical"
                 android:padding="3dp"
-                android:shadowColor="#000000"
+                android:shadowColor="@android:color/black"
                 android:shadowDx="1.0"
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"
@@ -337,7 +337,7 @@
                 android:layout_height="40dip"
                 android:layout_marginLeft="10dip"
                 android:gravity="center_vertical"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -374,7 +374,7 @@
                 android:layout_below="@id/ImageView_Server_List_Section_Header"
                 android:gravity="center_vertical"
                 android:padding="3dp"
-                android:shadowColor="#000000"
+                android:shadowColor="@android:color/black"
                 android:shadowDx="1.0"
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"
@@ -410,7 +410,7 @@
                 android:layout_marginLeft="-2dp"
                 android:layout_marginRight="-2dp"
                 android:background="@drawable/file_item_background_shape"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textStyle="bold"/>
 
         <!-- eXo section -->
@@ -433,7 +433,7 @@
                     android:layout_height="40dip"
                     android:gravity="center_vertical"
                     android:padding="3dp"
-                    android:shadowColor="#000000"
+                    android:shadowColor="@android:color/black"
                     android:shadowDx="1.0"
                     android:shadowDy="2.0"
                     android:shadowRadius="1.0"
@@ -453,7 +453,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dip"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:text="@string/StartCloudSignUpAssistant"
@@ -482,7 +482,7 @@
                 android:layout_below="@id/ImageView_Server_Information_Section_Header"
                 android:gravity="center_vertical"
                 android:padding="3dp"
-                android:shadowColor="#000000"
+                android:shadowColor="@android:color/black"
                 android:shadowDx="1.0"
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"
@@ -514,7 +514,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -524,7 +524,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -546,7 +546,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -556,7 +556,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -578,7 +578,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -588,7 +588,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>

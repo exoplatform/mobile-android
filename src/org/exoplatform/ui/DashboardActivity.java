@@ -43,7 +43,6 @@ import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
-// TODO add progress bar
 public class DashboardActivity extends FragmentActivity {
   private static final String     ACCOUNT_SETTING = "account_setting";
 
@@ -64,30 +63,21 @@ public class DashboardActivity extends FragmentActivity {
   @Override
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);
-//    requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.dashboard_layout);
-    // setActionBarContentView(R.layout.dashboard_layout);
     changeLanguage();
     dashboardActivity = this;
-
-    // TODO add dashboard action bar
-    // getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    // addActionBarItem(Type.Refresh);
-    // getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
 
     listView = (ListView) findViewById(R.id.dashboard_listview);
     listView.setCacheColorHint(Color.TRANSPARENT);
     listView.setFadingEdgeLength(0);
     listView.setScrollbarFadingEnabled(true);
     listView.setDivider(null);
-    // listView.setDividerHeight(-1);
     if (bundle != null) {
       AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
       AccountSetting.getInstance().setInstance(accountSetting);
       ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
-    // loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
     setTitle(R.string.Dashboard);
     onLoad(loaderItem);
   }
@@ -138,7 +128,7 @@ public class DashboardActivity extends FragmentActivity {
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.dashboard, menu);
-    loaderItem = menu.findItem(R.id.menu_as_refresh);
+    loaderItem = menu.findItem(R.id.menu_dashboard_refresh);
     return true;
   }
   
@@ -150,8 +140,7 @@ public class DashboardActivity extends FragmentActivity {
     case android.R.id.home:
       finish();
       break;
-    case R.id.menu_as_refresh:
-      // loaderItem = (LoaderActionBarItem) item;
+    case R.id.menu_dashboard_refresh:
       onLoad( loaderItem );
 
       break;

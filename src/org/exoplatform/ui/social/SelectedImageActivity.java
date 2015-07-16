@@ -248,6 +248,13 @@ public class SelectedImageActivity extends Activity implements OnClickListener {
       _progressDialog.dismiss();
     }
 
+    @Override
+    protected void onCancelled(Bitmap result) {
+      if (_progressDialog != null)
+        _progressDialog.dismiss();
+      onCancelled();
+    }
+
   }
 
   private class SelectImageWaitingDialog extends WaitingDialog {

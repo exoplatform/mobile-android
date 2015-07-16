@@ -112,7 +112,6 @@ public class DocumentActivity extends Activity {
 
     setContentView(R.layout.exofilesview);
     setTitle(R.string.Documents);
-    // TODO add documents action bar
     _documentActivityInstance = this;
     init();
 
@@ -162,7 +161,6 @@ public class DocumentActivity extends Activity {
   
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // TODO implement with action bar item
     switch (item.getItemId()) {
 
     case android.R.id.home:

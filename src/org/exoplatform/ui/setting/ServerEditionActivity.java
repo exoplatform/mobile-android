@@ -316,40 +316,39 @@ public class ServerEditionActivity extends Activity {
    * @return
    */
   private boolean isServerValid(ExoAccount myServerObj) {
-    boolean isValid = true;
 
     // Account name and server are mandatory
     if (myServerObj.accountName == null || myServerObj.serverUrl == null || myServerObj.accountName.length() == 0
         || myServerObj.serverUrl.length() == 0) {
       Toast.makeText(this, mResources.getString(R.string.WarningServerNameIsEmpty), Toast.LENGTH_LONG).show();
-      isValid = false;
+      return false;
     }
     // Account name must not contain special characters
     if (!ExoUtils.isServerNameValid(myServerObj.accountName)) {
       Toast.makeText(this, mResources.getString(R.string.AccountNameInvalid), Toast.LENGTH_LONG).show();
-      isValid = false;
+      return false;
     }
     // Account server URL must be a valid URL
     myServerObj.serverUrl = ExoUtils.stripUrl(myServerObj.serverUrl);
     if (!ExoUtils.isUrlValid(myServerObj.serverUrl)) {
       Toast.makeText(this, mResources.getString(R.string.AccountServerInvalid), Toast.LENGTH_LONG).show();
-      isValid = false;
+      return false;
     }
     // Account server URL cannot be a forbidden URL
     if (ExoUtils.isURLForbidden(myServerObj.serverUrl)) {
       Toast.makeText(this, mResources.getString(R.string.AccountServerForbidden), Toast.LENGTH_LONG).show();
-      isValid = false;
+      return false;
     }
     // Only alphanumeric characters and - _ . + are allowed in the username
     // (optional)
     if (myServerObj.username != null && myServerObj.username.length() > 0) {
       if (!ExoUtils.isUsernameValid(myServerObj.username)) {
         Toast.makeText(this, mResources.getString(R.string.AccountUsernameInvalid), Toast.LENGTH_LONG).show();
-        isValid = false;
+        return false;
       }
     }
 
-    return isValid;
+    return true;
   }
 
   /**
