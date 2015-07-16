@@ -28,6 +28,7 @@ import org.exoplatform.singleton.SocialDetailHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.ui.social.ActivityStreamFragment;
 import org.exoplatform.ui.social.AllUpdatesFragment;
 import org.exoplatform.ui.social.ComposeMessageActivity;
 import org.exoplatform.ui.social.MyConnectionsFragment;
@@ -38,6 +39,7 @@ import org.exoplatform.ui.social.SocialActivityStreamItem;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -146,7 +148,12 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   private void onLikeLoad(SocialActivityInfo info, int position) {
     if (mLoadTask == null || mLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
-      mLoadTask = (LikeLoadTask) new LikeLoadTask(SocialTabsActivity.instance.loaderItem, position).execute(info);
+      LoaderActionBarItem loader = null;
+      SocialTabsActivity act = SocialTabsActivity.getInstance();
+      if (act != null) {
+        loader = act.loaderItem;
+      }
+      mLoadTask = (LikeLoadTask) new LikeLoadTask(loader, position).execute(info);
     }
   }
 
@@ -188,7 +195,8 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      loaderItem.setLoading(true);
+      if (loaderItem != null)
+        loaderItem.setLoading(true);
     }
 
     @Override
@@ -212,39 +220,24 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
     @Override
     protected void onPostExecute(Boolean result) {
-      loaderItem.setLoading(false);
+      if (loaderItem != null)
+        loaderItem.setLoading(false);
       if (result) {
-        if (SocialTabsActivity.instance != null) {
-          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+        SocialTabsActivity act = SocialTabsActivity.getInstance();
+        if (act != null) {
+          int tabId = act.mPager.getCurrentItem();
           switch (tabId) {
           case SocialTabsActivity.ALL_UPDATES:
-
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
-            if (AllUpdatesFragment.instance.isLoading())
-              holder.buttonLike.setClickable(false);
-            else
-              holder.buttonLike.setClickable(true);
+            prepareStream(Utils.getVal(AllUpdatesFragment.instance), holder, currentPosition);
             break;
           case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
-            if (MyConnectionsFragment.instance.isLoading())
-              holder.buttonLike.setClickable(false);
-            else
-              holder.buttonLike.setClickable(true);
+            prepareStream(Utils.getVal(MyConnectionsFragment.instance), holder, currentPosition);
             break;
           case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
-            if (MySpacesFragment.instance.isLoading())
-              holder.buttonLike.setClickable(false);
-            else
-              holder.buttonLike.setClickable(true);
+            prepareStream(Utils.getVal(MySpacesFragment.instance), holder, currentPosition);
             break;
           case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
-            if (MyStatusFragment.instance.isLoading())
-              holder.buttonLike.setClickable(false);
-            else
-              holder.buttonLike.setClickable(true);
+            prepareStream(Utils.getVal(MyStatusFragment.instance), holder, currentPosition);
             break;
           }
         }
@@ -259,4 +252,12 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   }
 
+  private void prepareStream(ActivityStreamFragment streamFrag, ViewHolder holder, int currentPosition) {
+    if (streamFrag != null) {
+      streamFrag.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+      if (streamFrag.isLoading())
+        holder.buttonLike.setClickable(false);
+    } else
+      holder.buttonLike.setClickable(true);
+  }
 }

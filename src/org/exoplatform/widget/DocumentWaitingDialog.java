@@ -19,6 +19,7 @@
 package org.exoplatform.widget;
 
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.Utils;
 
 import android.content.Context;
 
@@ -31,7 +32,9 @@ public class DocumentWaitingDialog extends WaitingDialog {
   @Override
   public void onBackPressed() {
     super.onBackPressed();
-    DocumentActivity._documentActivityInstance.onCancelLoad();
+    DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+    if (docAct != null)
+      docAct.onCancelLoad();
   }
 
 }

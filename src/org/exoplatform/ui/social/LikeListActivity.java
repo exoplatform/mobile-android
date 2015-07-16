@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.ShaderImageView;
 
@@ -104,11 +105,13 @@ public class LikeListActivity extends MyActionBar {
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
-      if (SocialDetailActivity.socialDetailActivity != null) {
-        SocialDetailActivity.socialDetailActivity.finish();
+      SocialDetailActivity socialDetailAct = Utils.getVal(SocialDetailActivity.socialDetailActivity);
+      if (socialDetailAct != null) {
+        socialDetailAct.finish();
       }
-      if (SocialTabsActivity.instance != null) {
-        SocialTabsActivity.instance.finish();
+      SocialTabsActivity act = SocialTabsActivity.getInstance();
+      if (act != null) {
+        act.finish();
       }
 
       finish();
@@ -156,7 +159,7 @@ public class LikeListActivity extends MyActionBar {
         /*
          * Inflate layout from layout resource
          */
-        convertView = mInflater.inflate(R.layout.liked_grid_item, null);
+        convertView = mInflater.inflate(R.layout.liked_grid_item, parent, false);
         viewHolder = new ViewHolder();
         viewHolder.imageView = (ShaderImageView) convertView.findViewById(R.id.liked_avatar);
         viewHolder.textView = (TextView) convertView.findViewById(R.id.liked_name);

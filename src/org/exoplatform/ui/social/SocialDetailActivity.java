@@ -22,11 +22,13 @@ import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
+import java.lang.ref.WeakReference;
+
 import org.exoplatform.R;
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.widget.MyActionBar;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -44,6 +46,7 @@ import android.widget.TextView;
 /**
  * Screen for activity details
  */
+@SuppressLint("NewApi")
 public class SocialDetailActivity extends MyActionBar implements OnClickListener {
   public LinearLayout                startScreen;
 
@@ -69,7 +72,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
 
   private SocialDetailController     detailController;
 
-  public static SocialDetailActivity socialDetailActivity;
+  public static WeakReference<SocialDetailActivity> socialDetailActivity;
 
   private LoaderActionBarItem        loaderItem;
 
@@ -85,7 +88,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem(Type.Refresh);
     getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
-    socialDetailActivity = this;
+    socialDetailActivity = new WeakReference<SocialDetailActivity>(this);
     currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION,
                                               currentPosition);
     changeLanguage();
@@ -144,8 +147,9 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
     switch (position) {
     case -1:
-      if (SocialTabsActivity.instance != null) {
-        SocialTabsActivity.instance.finish();
+      SocialTabsActivity act = SocialTabsActivity.getInstance();
+      if (act != null) {
+        act.finish();
       }
       finish();
       break;

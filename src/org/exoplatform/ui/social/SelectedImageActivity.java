@@ -27,6 +27,7 @@ import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WaitingDialog;
@@ -148,12 +149,18 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
         switch (position) {
         case -1:
             finish();
-            if (ComposeMessageActivity.composeMessageActivity != null)
-                ComposeMessageActivity.composeMessageActivity.finish();
-            if (SocialTabsActivity.instance != null)
-                SocialTabsActivity.instance.finish();
-            if (DocumentActivity._documentActivityInstance != null) {
-                DocumentActivity._documentActivityInstance.finish();
+            ComposeMessageActivity composeAct = Utils.getVal(ComposeMessageActivity.composeMessageActivity);
+            if (composeAct != null)
+              composeAct.finish();
+
+            SocialTabsActivity act = SocialTabsActivity.getInstance();
+            if (act != null) {
+              act.finish();
+            }
+            
+            DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+            if (docAct != null) {
+              docAct.finish();
             }
             break;
 
@@ -175,11 +182,12 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     public void onClick(View view) {
         if (view.equals(okButton)) {
             if (filePath != null) {
-                if (DocumentActivity._documentActivityInstance != null) {
-                    DocumentActivity._documentActivityInstance._sdcard_temp_dir = filePath;
-                    DocumentActivity._documentActivityInstance.uploadFile();
-                } else
-                    ComposeMessageActivity.addImageToMessage(file);
+              DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+              if (docAct != null) {
+                docAct._sdcard_temp_dir = filePath;
+                docAct.uploadFile();
+              } else
+                ComposeMessageActivity.addImageToMessage(file);
             }
 
         }
@@ -199,12 +207,14 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     private void backToGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(ExoConstants.PHOTO_ALBUM_IMAGE_TYPE);
-        if (DocumentActivity._documentActivityInstance != null) {
-            DocumentActivity._documentActivityInstance.startActivityForResult(intent,
-                                                                              ExoConstants.REQUEST_ADD_PHOTO);
-        } else if (ComposeMessageActivity.composeMessageActivity != null) {
-            ComposeMessageActivity.composeMessageActivity.startActivityForResult(intent,
-                                                                                 ExoConstants.REQUEST_ADD_PHOTO);
+        DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+        if (docAct != null) {
+          docAct.startActivityForResult(intent, ExoConstants.REQUEST_ADD_PHOTO);
+        } else {
+          ComposeMessageActivity composeAct = Utils.getVal(ComposeMessageActivity.composeMessageActivity);
+          if (composeAct != null) {
+            composeAct.startActivityForResult(intent, ExoConstants.REQUEST_ADD_PHOTO);
+          }
         }
     }
 

@@ -22,6 +22,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoUtils;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.utils.ExoDocumentUtils;
 
 import android.app.Dialog;
@@ -109,19 +110,18 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
       if ((folderName != null) && (folderName.length() > 0)) {
 
         if (actionId == DocumentActivity.ACTION_RENAME) {
-          if (DocumentActivity._documentActivityInstance._fileForCurrentActionBar != null) {
-            String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+          DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+          if (docAct != null && docAct._fileForCurrentActionBar != null) {
+            String currentFolder = docAct._fileForCurrentActionBar.currentFolder;
             String destinationUrl = ExoDocumentUtils.getParentUrl(selectedFile.path) + "/"
                 + folderName;
             if (currentFolder.equalsIgnoreCase(selectedFile.currentFolder)) {
-              DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
+              docAct._fileForCurrentActionBar.name = folderName;
               currentFolder = ExoDocumentUtils.getParentUrl(currentFolder) + "/" + folderName;
-              DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = currentFolder;
+              docAct._fileForCurrentActionBar.currentFolder = currentFolder;
             }
             if (ExoUtils.isDocumentUrlValid(destinationUrl)) {
-              DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
-                                                                destinationUrl,
-                                                                DocumentActivity.ACTION_RENAME);
+              docAct.onLoad(selectedFile.path, destinationUrl, DocumentActivity.ACTION_RENAME);
             } else {
               Toast toast = Toast.makeText(mContext, inputNameURLInvalid, Toast.LENGTH_SHORT);
               toast.setGravity(Gravity.CENTER, 0, 0);
@@ -133,9 +133,9 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
         } else {
           String desUrl = selectedFile.path + "/" + folderName;
           if (ExoUtils.isDocumentUrlValid(desUrl)) {
-            DocumentActivity._documentActivityInstance.onLoad(selectedFile.path,
-                                                              desUrl,
-                                                              DocumentActivity.ACTION_CREATE);
+            DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+            if (docAct != null) 
+              docAct.onLoad(selectedFile.path, desUrl, DocumentActivity.ACTION_CREATE);
           } else {
             Toast toast = Toast.makeText(mContext, inputNameURLInvalid, Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);

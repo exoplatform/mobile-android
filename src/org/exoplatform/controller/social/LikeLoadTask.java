@@ -40,6 +40,7 @@ import org.exoplatform.ui.social.MySpacesFragment;
 import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
 
 import android.content.Context;
@@ -142,28 +143,33 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
       detailController.setLikedState();
       detailController.setLikeInfoText(result);
       detailController.setLikedInfo(result);
-      if (SocialTabsActivity.instance != null) {
-        int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+      SocialTabsActivity act = SocialTabsActivity.getInstance();
+      if (act != null) {
+        int tabId = act.mPager.getCurrentItem();
         switch (tabId) {
-        case SocialTabsActivity.ALL_UPDATES:
-          AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
+        case SocialTabsActivity.ALL_UPDATES: {
+          AllUpdatesFragment frag = Utils.getVal(AllUpdatesFragment.instance);
+          if (frag != null)
+            frag.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+        }
           break;
-        case SocialTabsActivity.MY_CONNECTIONS:
-          MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                       true,
-                                                       currentPosition);
+        case SocialTabsActivity.MY_CONNECTIONS: {
+          MyConnectionsFragment frag = Utils.getVal(MyConnectionsFragment.instance);
+          if (frag != null)
+            frag.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+        }
           break;
-        case SocialTabsActivity.MY_SPACES:
-          MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                  true,
-                                                  currentPosition);
+        case SocialTabsActivity.MY_SPACES: {
+          MySpacesFragment frag = Utils.getVal(MySpacesFragment.instance);
+          if (frag != null)
+            frag.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+        }
           break;
-        case SocialTabsActivity.MY_STATUS:
-          MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                  true,
-                                                  currentPosition);
+        case SocialTabsActivity.MY_STATUS: {
+          MyStatusFragment frag = Utils.getVal(MyStatusFragment.instance);
+          if (frag != null)
+            frag.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+        }
           break;
         }
       }

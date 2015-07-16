@@ -27,6 +27,7 @@ import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.DocumentExtendDialog;
 
@@ -78,7 +79,10 @@ public class DocumentActionAdapter extends BaseAdapter {
 
     final int pos = position;
     LayoutInflater inflater = (LayoutInflater) _mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    View rowView = inflater.inflate(R.layout.fileactionitem, parent, false);
+    View rowView = convertView;
+    if (rowView == null) {
+      rowView = inflater.inflate(R.layout.fileactionitem, parent, false);
+    }
     rowView.setOnClickListener(new View.OnClickListener() {
 
       public void onClick(View v) {
@@ -105,9 +109,9 @@ public class DocumentActionAdapter extends BaseAdapter {
             String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
             String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-            DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path,
-                                                              destinationUrl,
-                                                              DocumentActivity.ACTION_COPY);
+            DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+            if (docAct != null)
+              docAct.onLoad(_fileCopied.path, destinationUrl, DocumentActivity.ACTION_COPY);
 
           }
           ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
@@ -115,24 +119,25 @@ public class DocumentActionAdapter extends BaseAdapter {
             String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
             String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-            DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path,
-                                                              destinationUrl,
-                                                              DocumentActivity.ACTION_MOVE);
+            DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+            if (docAct != null)
+              docAct.onLoad(_fileMoved.path, destinationUrl, DocumentActivity.ACTION_MOVE);
           }
           DocumentHelper.getInstance()._fileCopied = new ExoFile();
           DocumentHelper.getInstance()._fileMoved = new ExoFile();
 
           break;
         case DocumentActivity.ACTION_DELETE:
-          String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
+          DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+          if (docAct != null) {
+            String currentFolder = docAct._fileForCurrentActionBar.currentFolder;
 
-          if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder) && _selectedFile.isFolder) {
-            DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
+            if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder) && _selectedFile.isFolder) {
+              docAct._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(docAct._fileForCurrentActionBar.path);
+            }
+
+            docAct.onLoad(_selectedFile.path, _selectedFile.path, DocumentActivity.ACTION_DELETE);
           }
-
-          DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
-                                                            _selectedFile.path,
-                                                            DocumentActivity.ACTION_DELETE);
 
           break;
         case DocumentActivity.ACTION_RENAME:
@@ -168,10 +173,16 @@ public class DocumentActionAdapter extends BaseAdapter {
   }
 
   private void bindView(View view, DocumentActionDescription fileAction, int position) {
-    TextView label = (TextView) view.findViewById(R.id.label);
-    label.setText(fileAction.actionName);
-    ImageView icon = (ImageView) view.findViewById(R.id.icon);
-    icon.setImageResource(fileAction.imageID);
+   Holder holder = (Holder) view.getTag();
+   if (holder == null) {
+     holder = new Holder();
+     holder.label = (TextView) view.findViewById(R.id.label);
+     holder. icon = (ImageView) view.findViewById(R.id.icon);
+     view.setTag(holder);
+   }
+    
+    holder.label.setText(fileAction.actionName);
+    holder.icon.setImageResource(fileAction.imageID);
     /*
      * Disable action view if it can not be removed || position ==
      * DocumentActivity.ACTION_COPY
@@ -179,7 +190,7 @@ public class DocumentActionAdapter extends BaseAdapter {
     if (!_selectedFile.canRemove
         && (position == DocumentActivity.ACTION_MOVE || position == DocumentActivity.ACTION_DELETE
             || position == DocumentActivity.ACTION_RENAME || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path))))) {
-      label.setTextColor(android.graphics.Color.GRAY);
+      holder.label.setTextColor(android.graphics.Color.GRAY);
       view.setEnabled(false);
       return;
     }
@@ -188,7 +199,7 @@ public class DocumentActionAdapter extends BaseAdapter {
       if (position == DocumentActivity.ACTION_OPEN_IN
           || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path)))) {
 
-        label.setTextColor(android.graphics.Color.GRAY);
+        holder.label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
       }
     } else {
@@ -197,7 +208,7 @@ public class DocumentActionAdapter extends BaseAdapter {
           || position == DocumentActivity.ACTION_RENAME
           || position == DocumentActivity.ACTION_CREATE) {
 
-        label.setTextColor(android.graphics.Color.GRAY);
+        holder.label.setTextColor(android.graphics.Color.GRAY);
         view.setEnabled(false);
       }
 
@@ -205,6 +216,11 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   }
 
+  static class Holder {
+    TextView label;
+    ImageView icon;
+  }
+  
   public long getItemId(int position) {
 
     return position;

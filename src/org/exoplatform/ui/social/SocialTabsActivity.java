@@ -18,10 +18,7 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
-import greendroid.widget.LoaderActionBarItem;
-
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -30,6 +27,7 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.MyActionBar;
 
 import android.content.Intent;
@@ -40,6 +38,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import greendroid.widget.ActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.LoaderActionBarItem;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
@@ -83,15 +84,24 @@ public class SocialTabsActivity extends MyActionBar {
 
   private boolean                      isSocialFilterEnable    = false;
 
-  public static SocialTabsActivity     instance;
+  public static WeakReference<SocialTabsActivity>     instance;
+  
+  public static SocialTabsActivity getInstance() {
+    return instance == null ? null : instance.get();
+  }
 
+  private static void setInstance(SocialTabsActivity act) {
+    instance = new WeakReference<SocialTabsActivity>(act);
+  }
+  
   private static final String TAG = "eXo____SocialTabsActivity____";
 
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    instance = this;
+    setInstance(this);
+//    instance = this;
     setActionBarContentView(R.layout.social_activity_tabs);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem(Type.Refresh);
@@ -162,7 +172,7 @@ public class SocialTabsActivity extends MyActionBar {
 
   @Override
   protected void onDestroy() {
-    instance = null;
+//    instance = null;
     super.onDestroy();
   }
 
@@ -186,20 +196,23 @@ public class SocialTabsActivity extends MyActionBar {
     case 0:
       loaderItem = (LoaderActionBarItem) item;
       int tabId = mPager.getCurrentItem();
+      ActivityStreamFragment frag = null;
       switch (tabId) {
       case ALL_UPDATES:
-        AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+        frag = Utils.getVal(AllUpdatesFragment.instance);
         break;
       case MY_CONNECTIONS:
-        MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+        frag = Utils.getVal(MyConnectionsFragment.instance);
         break;
       case MY_SPACES:
-        MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+        frag = Utils.getVal(MySpacesFragment.instance);
         break;
       case MY_STATUS:
-        MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+        frag = Utils.getVal(MyStatusFragment.instance);
         break;
       }
+      if (frag != null)
+        frag.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
       break;
     case 1:
       Intent intent = new Intent(this, ComposeMessageActivity.class);

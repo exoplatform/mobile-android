@@ -38,6 +38,7 @@ import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
@@ -188,10 +189,13 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
   public void onPostExecute(Integer result) {
     if (result == 1) {
       ((Activity) mContext).finish();
-      if (AllUpdatesFragment.instance != null)
-        AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
-      if (MyStatusFragment.instance != null)
-        MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+      AllUpdatesFragment fragAllUpdates = Utils.getVal(AllUpdatesFragment.instance);
+      if (fragAllUpdates != null) 
+        fragAllUpdates.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
+      
+      MyStatusFragment fragMyStatus = Utils.getVal(MyStatusFragment.instance);
+      if (fragMyStatus != null) 
+        fragMyStatus.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, 0);
 
     } else {
       new WarningDialog(mContext, warningTitle, errorString, okString).show();

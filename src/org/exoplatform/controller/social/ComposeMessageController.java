@@ -37,6 +37,7 @@ import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -197,24 +198,35 @@ public class ComposeMessageController {
     protected void onPostExecute(Boolean result) {
       if (result) {
         ((Activity) mContext).finish();
-        if (SocialDetailActivity.socialDetailActivity != null) {
-          SocialDetailActivity.socialDetailActivity.onLoad();
+        
+        SocialDetailActivity socialDetailAct = Utils.getVal(SocialDetailActivity.socialDetailActivity);
+        if (socialDetailAct != null) {
+          socialDetailAct.onLoad();
         }
 
-        if (SocialTabsActivity.instance != null) {
-          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+        SocialTabsActivity act = SocialTabsActivity.getInstance();
+        if (act != null) {
+          int tabId = act.mPager.getCurrentItem();
           switch (tabId) {
           case SocialTabsActivity.ALL_UPDATES:
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+            AllUpdatesFragment fragAllUpdates = Utils.getVal(AllUpdatesFragment.instance);
+            if (fragAllUpdates != null) 
+              fragAllUpdates.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             break;
           case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+            MyConnectionsFragment fragMyConnections = Utils.getVal(MyConnectionsFragment.instance);
+            if (fragMyConnections != null) 
+              fragMyConnections.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             break;
           case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+            MySpacesFragment fragMySpaces = Utils.getVal(MySpacesFragment.instance);
+            if (fragMySpaces != null) 
+              fragMySpaces.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             break;
           case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
+            MyStatusFragment fragMyStatus = Utils.getVal(MyStatusFragment.instance);
+            if (fragMyStatus != null) 
+              fragMyStatus.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
             break;
           }
         }

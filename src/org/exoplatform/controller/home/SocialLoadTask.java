@@ -196,8 +196,11 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
       HomeActivity.homeActivity.setSocialInfo(result);
 
     if (isLoadingMoreActivities) {
-  	  SocialTabsActivity.instance.number_of_activity += result.size();
+      SocialTabsActivity act = SocialTabsActivity.getInstance();
+      if (act != null) {
+  	  act.number_of_activity += result.size();
   	  isLoadingMoreActivities = false;
+      }
     }
   }
 }

@@ -18,8 +18,7 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.widget.LoaderActionBarItem;
-
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -31,9 +30,12 @@ import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
+import org.exoplatform.utils.Utils;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import greendroid.widget.LoaderActionBarItem;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
@@ -41,7 +43,7 @@ import android.view.View;
  */
 public class MyConnectionsFragment extends ActivityStreamFragment {
 
-  public static MyConnectionsFragment instance;
+  public static WeakReference<MyConnectionsFragment> instance;
   
   @Override
 	public int getThisTabId() {
@@ -55,7 +57,7 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    instance = this;
+    instance = new WeakReference<MyConnectionsFragment>(this);
     fragment_layout = R.layout.social_my_connections_layout;
     fragment_list_view_id = R.id.my_connections_listview;
     fragment_empty_view_id = R.id.social_my_connections_empty_stub;
@@ -71,7 +73,9 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    instance = null;
+    MyConnectionsFragment frag = Utils.getVal(MyConnectionsFragment.instance);
+    if (frag == this) 
+      instance = null;
   }
   
   public boolean isEmpty() {
@@ -81,7 +85,12 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
   
   @Override
   public SocialLoadTask getThisLoadTask() {
-  	return new MyConnectionLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+    LoaderActionBarItem loader = null;
+    SocialTabsActivity act = SocialTabsActivity.getInstance();
+    if (act != null) {
+     loader = act.loaderItem;
+    }
+  	return new MyConnectionLoadTask(getActivity(), loader);
   }
 
   public void setListAdapter() {

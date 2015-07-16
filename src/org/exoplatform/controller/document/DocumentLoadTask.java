@@ -30,6 +30,7 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.DocumentWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -153,10 +154,14 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
           if (!isFolder)
             strSourceUrl = ExoDocumentUtils.getParentUrl(strSourceUrl);
         } else {
-          DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder = strSourceUrl;
           int lastIndex = strSourceUrl.lastIndexOf("/");
           String folderName = strSourceUrl.substring(lastIndex + 1, strSourceUrl.length());
-          DocumentActivity._documentActivityInstance._fileForCurrentActionBar.name = folderName;
+
+          DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+          if (docAct != null) {
+            docAct._fileForCurrentActionBar.currentFolder = strSourceUrl;
+            docAct._fileForCurrentActionBar.name = folderName;
+          }
         }
         break;
       case DocumentActivity.ACTION_CREATE:

@@ -20,10 +20,12 @@ package org.exoplatform.ui.social;
 
 import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
+import greendroid.widget.LoaderActionBarItem;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 import org.exoplatform.R;
 import org.exoplatform.controller.social.ComposeMessageController;
@@ -31,12 +33,13 @@ import org.exoplatform.model.SocialSpaceInfo;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SettingUtils;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.RemoveAttachedPhotoDialog;
 import org.exoplatform.widget.RetangleImageView;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -61,6 +64,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+@SuppressLint("NewApi")
 public class ComposeMessageActivity extends MyActionBar implements View.OnClickListener {
 
   private PostWaitingDialog            _progressDialog;
@@ -95,7 +99,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   private ComposeMessageController     messageController;
 
-  public static ComposeMessageActivity composeMessageActivity;
+  public static WeakReference<ComposeMessageActivity> composeMessageActivity;
 
   private String                       sdcard_temp_dir         = null;
 
@@ -113,7 +117,7 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
     setActionBarContentView(R.layout.compose_message_layout);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     changeLanguage();
-    composeMessageActivity = this;
+    composeMessageActivity = new WeakReference<ComposeMessageActivity>(this);
     if (savedInstanceState != null)
       finish();
     else {
@@ -166,12 +170,16 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
     switch (position) {
     case -1:
 
-      if (SocialDetailActivity.socialDetailActivity != null) {
-        SocialDetailActivity.socialDetailActivity.finish();
+      SocialDetailActivity socialDetailAct = Utils.getVal(SocialDetailActivity.socialDetailActivity);
+      if (socialDetailAct != null) {
+        socialDetailAct.finish();
       }
 
-      if (SocialTabsActivity.instance != null) {
-        SocialTabsActivity.instance.finish();
+
+      LoaderActionBarItem loader = null;
+      SocialTabsActivity act = SocialTabsActivity.getInstance();
+      if (act != null) {
+        act.finish();
       }
       finish();
       break;
@@ -234,9 +242,13 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
   }
 
   public static void addImageToMessage(File file) {
+    final ComposeMessageActivity composeMessageAct = Utils.getVal(ComposeMessageActivity.composeMessageActivity);
+    if (composeMessageAct == null) {
+      return;
+    }
     try {
       final String filePath = file.getAbsolutePath();
-      composeMessageActivity.sdcard_temp_dir = filePath;
+      composeMessageAct.sdcard_temp_dir = filePath;
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inSampleSize = 4;
       options.inPurgeable = true;
@@ -244,25 +256,25 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       FileInputStream fis = new FileInputStream(file);
       Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
       fis.close();
-      bitmap = PhotoUtils.resizeImageBitmap(composeMessageActivity, bitmap);
-      RetangleImageView image = new RetangleImageView(composeMessageActivity);
+      bitmap = PhotoUtils.resizeImageBitmap(composeMessageAct, bitmap);
+      RetangleImageView image = new RetangleImageView(composeMessageAct);
       image.setPadding(1, 1, 1, 1);
       image.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
       image.setImageBitmap(bitmap);
       image.setOnClickListener(new OnClickListener() {
 
         public void onClick(View v) {
-          Intent intent = new Intent(composeMessageActivity, SelectedImageActivity.class);
+          Intent intent = new Intent(composeMessageAct, SelectedImageActivity.class);
           intent.putExtra(ExoConstants.SELECTED_IMAGE_MODE, 1);
           intent.putExtra(ExoConstants.SELECTED_IMAGE_EXTRA, filePath);
-          composeMessageActivity.startActivity(intent);
+          composeMessageAct.startActivity(intent);
         }
       });
       image.setOnLongClickListener(new OnLongClickListener() {
 
         @Override
         public boolean onLongClick(View v) {
-          new RemoveAttachedPhotoDialog(composeMessageActivity).show();
+          new RemoveAttachedPhotoDialog(composeMessageAct).show();
           return true;
         }
       });
@@ -277,7 +289,10 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
 
   public static void removeImageFromMessage() {
     fileAttachWrap.removeAllViews();
-    composeMessageActivity.sdcard_temp_dir = null;
+    final ComposeMessageActivity composeMessageAct = Utils.getVal(ComposeMessageActivity.composeMessageActivity);
+    if (composeMessageAct != null) {
+      composeMessageAct.sdcard_temp_dir = null;
+    }
   }
 
   @Override

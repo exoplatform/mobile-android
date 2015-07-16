@@ -36,6 +36,7 @@ package org.exoplatform.ui.social;
 
 import greendroid.widget.LoaderActionBarItem;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -47,6 +48,8 @@ import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
+import org.exoplatform.utils.Utils;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -57,7 +60,7 @@ import android.view.View;
  */
 public class MySpacesFragment extends ActivityStreamFragment {
 
-  public static MySpacesFragment instance;
+  public static WeakReference<MySpacesFragment> instance;
   
   @Override
 	public int getThisTabId() {
@@ -71,7 +74,7 @@ public class MySpacesFragment extends ActivityStreamFragment {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    instance = this;
+    instance = new WeakReference<MySpacesFragment>(this);
     fragment_layout = R.layout.social_my_spaces_layout;
     fragment_list_view_id = R.id.my_spaces_listview;
     fragment_empty_view_id = R.id.social_my_spaces_empty_stub;
@@ -87,7 +90,9 @@ public class MySpacesFragment extends ActivityStreamFragment {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    instance = null;
+    MySpacesFragment frag = Utils.getVal(instance);
+    if (frag == this)
+      instance = null;
   }
   public boolean isEmpty() {
 	  return (SocialServiceHelper.getInstance().mySpacesList == null
@@ -96,7 +101,12 @@ public class MySpacesFragment extends ActivityStreamFragment {
   
   @Override
   public SocialLoadTask getThisLoadTask() {
-  	return new MySpacesLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+    LoaderActionBarItem loader = null;
+    SocialTabsActivity act = SocialTabsActivity.getInstance();
+    if (act != null) {
+     loader = act.loaderItem;
+    }
+  	return new MySpacesLoadTask(getActivity(), loader);
   }
 
   public void setListAdapter() {

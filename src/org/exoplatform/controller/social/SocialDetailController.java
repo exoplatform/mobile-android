@@ -34,6 +34,7 @@ import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.ShaderImageView;
@@ -129,7 +130,9 @@ public class SocialDetailController {
   public void createCommentList(ArrayList<SocialCommentInfo> commentList) {
     int commentListSize = commentList.size();
     if (commentListSize > 0) {
-      SocialDetailActivity.socialDetailActivity.setEmptyView(View.GONE);
+      SocialDetailActivity socialDetailAct = Utils.getVal(SocialDetailActivity.socialDetailActivity);
+      if (socialDetailAct != null)
+        socialDetailAct.setEmptyView(View.GONE);
       LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
       commentLayoutWrap.removeAllViews();
       for (int i = 0; i < commentListSize; i++) {
@@ -158,7 +161,9 @@ public class SocialDetailController {
 
       }
     } else {
-      SocialDetailActivity.socialDetailActivity.setEmptyView(View.VISIBLE);
+      SocialDetailActivity socialDetailAct = Utils.getVal(SocialDetailActivity.socialDetailActivity);
+      if (socialDetailAct != null)
+        socialDetailAct.setEmptyView(View.VISIBLE);
     }
 
   }

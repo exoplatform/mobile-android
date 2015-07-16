@@ -22,6 +22,7 @@ import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -54,7 +55,7 @@ public class DashboardActivity extends MyActionBar {
 
   private String                  dashboardEmptyString;
 
-  public static DashboardActivity dashboardActivity;
+  public static WeakReference<DashboardActivity> dashboardActivity;
 
   private DashboardLoadTask       mLoadTask;
 
@@ -66,7 +67,7 @@ public class DashboardActivity extends MyActionBar {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setActionBarContentView(R.layout.dashboard_layout);
     changeLanguage();
-    dashboardActivity = this;
+    dashboardActivity = new WeakReference<DashboardActivity>(this);
 
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem(Type.Refresh);

@@ -22,6 +22,7 @@ import greendroid.util.Config;
 import greendroid.widget.ActionBarItem;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -86,7 +87,7 @@ public class DocumentActivity extends MyActionBar {
 
     private static final String    CURRENT_FILE     = "current_file";
 
-    public static DocumentActivity _documentActivityInstance;
+    public static WeakReference<DocumentActivity> _documentActivityInstance;
 
     public ListView                _listViewDocument;
 
@@ -114,7 +115,7 @@ public class DocumentActivity extends MyActionBar {
         setTheme(R.style.Theme_eXo);
         setActionBarContentView(R.layout.exofilesview);
         getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-        _documentActivityInstance = this;
+        _documentActivityInstance = new WeakReference<DocumentActivity>(this);
         init();
 
         /*
@@ -335,7 +336,7 @@ public class DocumentActivity extends MyActionBar {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
             case ExoConstants.TAKE_PICTURE_WITH_CAMERA:
-                Intent intent1 = new Intent(_documentActivityInstance, SelectedImageActivity.class);
+                Intent intent1 = new Intent(this, SelectedImageActivity.class);
                 intent1.putExtra(ExoConstants.SELECTED_IMAGE_EXTRA, _sdcard_temp_dir);
                 startActivity(intent1);
                 break;

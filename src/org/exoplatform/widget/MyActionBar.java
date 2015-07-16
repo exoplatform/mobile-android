@@ -48,7 +48,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
-@SuppressLint("Registered")
+@SuppressLint({ "Registered", "NewApi" })
 public class MyActionBar extends FragmentActivity implements ActionBarActivity {
 
   private boolean       mDefaultConstructorUsed = false;
@@ -189,6 +189,7 @@ public class MyActionBar extends FragmentActivity implements ActionBarActivity {
     setTitle(getString(titleId));
   }
 
+  @SuppressLint("Override")
   public ActionBar getActionBar() {
     ensureLayout();
     return mActionBarHost.getActionBar();

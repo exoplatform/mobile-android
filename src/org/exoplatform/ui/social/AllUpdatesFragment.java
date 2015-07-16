@@ -20,6 +20,7 @@ package org.exoplatform.ui.social;
 
 import greendroid.widget.LoaderActionBarItem;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -31,6 +32,7 @@ import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
+import org.exoplatform.utils.Utils;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -42,7 +44,7 @@ import android.view.View;
  */
 public class AllUpdatesFragment extends ActivityStreamFragment {
 
-  public static AllUpdatesFragment instance;
+  public static WeakReference<AllUpdatesFragment> instance;
   
 	@Override
 	public int getThisTabId() {
@@ -56,7 +58,7 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    instance = this;
+    instance = new WeakReference<AllUpdatesFragment>(this);
     fragment_layout = R.layout.social_all_updates_layout;
     fragment_list_view_id = R.id.all_updates_listview;
     fragment_empty_view_id = R.id.social_all_updates_empty_stub;
@@ -76,7 +78,10 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    instance = null;
+    AllUpdatesFragment frag = Utils.getVal(instance);
+    if (this == frag) {
+      instance = null;
+    }
   }
   
   public boolean isEmpty() {
@@ -86,7 +91,12 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
   
   @Override
   public SocialLoadTask getThisLoadTask() {
-  	return new AllUpdateLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+    LoaderActionBarItem loader = null;
+    SocialTabsActivity act = SocialTabsActivity.getInstance();
+    if (act != null) {
+     loader = act.loaderItem;
+    }
+  	return new AllUpdateLoadTask(getActivity(), loader);
   }
 
   @Override

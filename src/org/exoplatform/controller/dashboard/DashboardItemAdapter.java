@@ -104,19 +104,56 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
   public long getItemId(int position) {
     return position;
   }
-
-  public View getView(int position, View convertView, ViewGroup parent) {
-
+  
+  private static final int VIEW_TYPE_TAB = 0;
+  private static final int VIEW_TYPE_ITEM = 1;
+  @Override
+  public int getViewTypeCount() {
+    // for tab and item layout
+    return 2;
+  }
+  
+  @Override
+  public int getItemViewType(int position) {
+    int type = VIEW_TYPE_ITEM;
     final GadgetInfo inforGadget = _arrayOfItems.get(position);
 
     if (inforGadget.getTabName() != null) {
+      type = VIEW_TYPE_TAB;
+    } else {
+      type = VIEW_TYPE_ITEM;
+    }
+    return type;
+  }
+  
+  public View getView(int position, View convertView, ViewGroup parent) {
 
-      convertView = mInflater.inflate(R.layout.gadget_tab_layout, parent, false);
-      TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
-      textViewTabTitle.setText(inforGadget.getTabName());
+    final GadgetInfo inforGadget = _arrayOfItems.get(position);
+    final int viewType = getItemViewType(position);
+    if (viewType == VIEW_TYPE_TAB) {
+      TabHolder holder;
+      if (convertView == null) {
+        convertView = mInflater.inflate(R.layout.gadget_tab_layout, parent, false);
+        holder = new TabHolder();
+        holder.textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
+        convertView.setTag(holder);
+      } else {
+        holder = (TabHolder) convertView.getTag();
+      } 
+      holder.textViewTabTitle.setText(inforGadget.getTabName());
 
     } else {
-      convertView = mInflater.inflate(R.layout.gadget_item_layout, parent, false);
+      ItemHolder holder;
+      if (convertView == null) {
+        convertView = mInflater.inflate(R.layout.gadget_item_layout, parent, false);
+        holder = new ItemHolder();
+        holder.imageViewAvatar = (ShaderImageView) convertView.findViewById(R.id.gadget_image);
+        holder.textViewName = (TextView) convertView.findViewById(R.id.gadget_title);
+        holder.textViewMessage = (TextView) convertView.findViewById(R.id.gadget_content);
+        convertView.setTag(holder);
+      } else {
+        holder = (ItemHolder) convertView.getTag();
+      } 
       if (position + 1 < _arrayOfItems.size()) {
         GadgetInfo nextItem = _arrayOfItems.get(position + 1);
 
@@ -142,14 +179,12 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
           convertView.setBackgroundResource(R.drawable.dashboard_single_background_shape);
       }
 
-      ShaderImageView imageViewAvatar = (ShaderImageView) convertView.findViewById(R.id.gadget_image);
-      imageViewAvatar.setDefaultImageResource(R.drawable.gadgetplaceholder);
-      imageViewAvatar.setUrl(inforGadget.getStrGadgetIcon());
-      TextView textViewName = (TextView) convertView.findViewById(R.id.gadget_title);
-      textViewName.setText(inforGadget.getGadgetName());
+      holder.imageViewAvatar.setDefaultImageResource(R.drawable.gadgetplaceholder);
+      holder.imageViewAvatar.setUrl(inforGadget.getStrGadgetIcon());
+      
+      holder.textViewName.setText(inforGadget.getGadgetName());
 
-      TextView textViewMessage = (TextView) convertView.findViewById(R.id.gadget_content);
-      textViewMessage.setText(inforGadget.getGadgetDescription());
+      holder.textViewMessage.setText(inforGadget.getGadgetDescription());
 
     }
 
@@ -164,6 +199,14 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
     return convertView;
   }
 
+  static class TabHolder {
+    TextView textViewTabTitle;
+  }
+  static class ItemHolder {
+    ShaderImageView imageViewAvatar;
+    TextView textViewName, textViewMessage;
+  }
+  
   public Bitmap processImage(Bitmap bitmap) {
     Bitmap result = Bitmap.createBitmap(mThumbnailSize, mThumbnailSize, Bitmap.Config.ARGB_8888);
     Canvas c = new Canvas(result);

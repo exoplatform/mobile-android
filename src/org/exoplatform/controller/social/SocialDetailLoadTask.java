@@ -38,6 +38,7 @@ import org.exoplatform.social.client.api.model.RestProfile;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.social.client.api.service.QueryParams;
 import org.exoplatform.social.client.core.service.QueryParamsImpl;
+import org.exoplatform.ui.social.ActivityStreamFragment;
 import org.exoplatform.ui.social.AllUpdatesFragment;
 import org.exoplatform.ui.social.MyConnectionsFragment;
 import org.exoplatform.ui.social.MySpacesFragment;
@@ -46,6 +47,7 @@ import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
 
 import android.content.Context;
@@ -192,30 +194,28 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       detailController.setLikeInfoText(likeLinkedList);
       detailController.setLikedInfo(likeLinkedList);
       if (isLikeAction) {
-        if (SocialTabsActivity.instance != null) {
-          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
+        SocialTabsActivity act = SocialTabsActivity.getInstance();
+        if (act != null) {
+          int tabId = act.mPager.getCurrentItem();
+          ActivityStreamFragment frag = null;
           switch (tabId) {
           case SocialTabsActivity.ALL_UPDATES:
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                      true,
-                                                      currentPosition);
+            frag = Utils.getVal(AllUpdatesFragment.instance);
             break;
           case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                         true,
-                                                         currentPosition);
+            frag = Utils.getVal(MyConnectionsFragment.instance);
             break;
           case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
+            frag = Utils.getVal(MySpacesFragment.instance);
             break;
           case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
+            frag = Utils.getVal(MyStatusFragment.instance);
             break;
           }
+          if (frag != null)
+            frag.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
+                         true,
+                         currentPosition);
         }
       }
     } else {
@@ -227,7 +227,9 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       dialog.show();
     }
     loaderItem.setLoading(false);
-    SocialDetailActivity.socialDetailActivity.startScreen.setVisibility(View.GONE);
+    SocialDetailActivity socialDetailAct = Utils.getVal(SocialDetailActivity.socialDetailActivity);
+    if (socialDetailAct != null)
+      socialDetailAct.startScreen.setVisibility(View.GONE);
 
   }
 

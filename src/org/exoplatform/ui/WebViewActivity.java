@@ -31,6 +31,7 @@ import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.CompatibleFileOpenDialog;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
@@ -49,6 +50,7 @@ import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+@SuppressLint("NewApi")
 public class WebViewActivity extends MyActionBar {
   private static final String ACCOUNT_SETTING = "account_setting";
 
@@ -167,16 +169,22 @@ public class WebViewActivity extends MyActionBar {
 
     switch (position) {
     case -1:
-      if (DashboardActivity.dashboardActivity != null) {
-        DashboardActivity.dashboardActivity.finish();
+
+      DashboardActivity dashboardAct = Utils.getVal(DashboardActivity.dashboardActivity);
+      if (dashboardAct != null) {
+        dashboardAct.finish();
       }
-      if (DocumentActivity._documentActivityInstance != null) {
-        DocumentActivity._documentActivityInstance.finish();
+      
+      DocumentActivity docAct = Utils.getVal(DocumentActivity._documentActivityInstance);
+      if (docAct != null) {
+        docAct.finish();
       }
-      if (SocialDetailActivity.socialDetailActivity != null) {
-        SocialDetailActivity.socialDetailActivity.finish();
-        if (SocialTabsActivity.instance != null) {
-          SocialTabsActivity.instance.finish();
+      SocialDetailActivity socialDetailAct = Utils.getVal(SocialDetailActivity.socialDetailActivity);
+      if (socialDetailAct != null) {
+        socialDetailAct.finish();
+        SocialTabsActivity act = SocialTabsActivity.getInstance();
+        if (act != null) {
+          act.finish();
         }
       }
       finish();

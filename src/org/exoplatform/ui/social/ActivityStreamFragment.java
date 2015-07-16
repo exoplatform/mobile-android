@@ -187,7 +187,12 @@ public abstract class ActivityStreamFragment extends Fragment {
 	  public void onLoadMore(int numberOfActivities, int currentPos, int firstVisible) {
 		  if (ExoConnectionUtils.isNetworkAvailableExt(getActivity())) {
 		      if (mLoadTask == null || mLoadTask.getStatus() == Status.FINISHED) {
-		    	  int currentTab = SocialTabsActivity.instance.mPager.getCurrentItem();
+
+		        SocialTabsActivity act = SocialTabsActivity.getInstance();
+		        if (act == null) {
+		          return;
+		        }
+		    	  int currentTab = act.mPager.getCurrentItem();
 		    	  int lastActivity = 0;
 		    	  ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().getSocialListForTab(currentTab);
 		    	  mLoadTask = getThisLoadTask();
