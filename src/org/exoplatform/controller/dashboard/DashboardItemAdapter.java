@@ -26,6 +26,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.ShaderImageView;
 
 import android.content.Context;
@@ -94,7 +95,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 
   public int getCount() {
 
-    return _arrayOfItems.size();
+    return Utils.getSize(_arrayOfItems);
   }
 
   public Object getItem(int position) {
@@ -116,9 +117,9 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
   @Override
   public int getItemViewType(int position) {
     int type = VIEW_TYPE_ITEM;
-    final GadgetInfo inforGadget = _arrayOfItems.get(position);
+    final GadgetInfo inforGadget = Utils.getItem(_arrayOfItems, position);
 
-    if (inforGadget.getTabName() != null) {
+    if (inforGadget == null || inforGadget.getTabName() != null) {
       type = VIEW_TYPE_TAB;
     } else {
       type = VIEW_TYPE_ITEM;
@@ -128,7 +129,9 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
   
   public View getView(int position, View convertView, ViewGroup parent) {
 
-    final GadgetInfo inforGadget = _arrayOfItems.get(position);
+    final GadgetInfo inforGadget = Utils.getItem(_arrayOfItems, position);
+    if (inforGadget == null)
+      return null;
     final int viewType = getItemViewType(position);
     if (viewType == VIEW_TYPE_TAB) {
       TabHolder holder;
@@ -171,7 +174,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
           }
         }
 
-      } else {
+      } else if (position > 0) {
         GadgetInfo previousItem = _arrayOfItems.get(position - 1);
         if (previousItem.getTabName() == null)
           convertView.setBackgroundResource(R.drawable.dasboard_bottom_background_shape);

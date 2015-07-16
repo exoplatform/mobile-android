@@ -55,7 +55,7 @@ public class DocumentAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return _documentList.size();
+        return Utils.getSize(_documentList);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class DocumentAdapter extends BaseAdapter {
         return pos;
     }
 
-  private static final int VIEW_TYPE_GADGET   = 0;
+  private static final int VIEW_TYPE_DRIVE_ITEM   = 0;
 
   private static final int VIEW_TYPE_FILEITEM = 1;
 
@@ -80,17 +80,17 @@ public class DocumentAdapter extends BaseAdapter {
 
   @Override
   public int getItemViewType(int position) {
-    int ret = VIEW_TYPE_GADGET;
-    final ExoFile myFile = _documentList.get(position);
-    if ("".equals(myFile.name) && "".equals(myFile.path)) {
-      ret = VIEW_TYPE_GADGET;
+    int ret = VIEW_TYPE_DRIVE_ITEM;
+    final ExoFile myFile = Utils.getItem(_documentList, position);
+    if (myFile == null || ("".equals(myFile.name) && "".equals(myFile.path))) {
+      ret = VIEW_TYPE_DRIVE_ITEM;
     } else {
       ret = VIEW_TYPE_FILEITEM;
     }
     return ret;
   }
   
-  static class GadgetHolder {
+  static class DriveHolder {
     TextView textViewTabTitle;
   }
   static class FileHolder {
@@ -104,25 +104,26 @@ public class DocumentAdapter extends BaseAdapter {
 
     final int pos = position;
     LayoutInflater inflater = (LayoutInflater) _mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    // View rowView = inflater.inflate(R.layout.fileitem, parent, false);
 
-    final ExoFile myFile = _documentList.get(pos);
+    final ExoFile myFile = Utils.getItem(_documentList, pos);
+    if (myFile == null)
+      return null;
     int viewType = getItemViewType(position);
-    if (viewType == VIEW_TYPE_GADGET) {
-      GadgetHolder holder;
+    if (viewType == VIEW_TYPE_DRIVE_ITEM) {
+      DriveHolder holder;
       if (convertView == null) {
         convertView = inflater.inflate(R.layout.gadget_tab_layout, parent, false);
-        holder = new GadgetHolder();
+        holder = new DriveHolder();
         holder.textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
         convertView.setTag(holder);
       } else {
-        holder = (GadgetHolder) convertView.getTag();
+        holder = (DriveHolder) convertView.getTag();
       }
-      if (myFile.driveName.equals(ExoConstants.DOCUMENT_PERSONAL_DRIVER))
+      if (ExoConstants.DOCUMENT_PERSONAL_DRIVER.equals(myFile.driveName))
         holder.textViewTabTitle.setText(_mContext.getResources().getString(R.string.Personal));
-      else if (myFile.driveName.equals(ExoConstants.DOCUMENT_GROUP_DRIVER))
+      else if (ExoConstants.DOCUMENT_GROUP_DRIVER.equals(myFile.driveName))
         holder.textViewTabTitle.setText(_mContext.getResources().getString(R.string.Group));
-      else if (myFile.driveName.equals(ExoConstants.DOCUMENT_GENERAL_DRIVER))
+      else if (ExoConstants.DOCUMENT_GENERAL_DRIVER.equals(myFile.driveName))
         holder.textViewTabTitle.setText(_mContext.getResources().getString(R.string.General));
       return (convertView);
     } else {

@@ -87,7 +87,7 @@ public class SocialTabsActivity extends MyActionBar {
   public static WeakReference<SocialTabsActivity>     instance;
   
   public static SocialTabsActivity getInstance() {
-    return instance == null ? null : instance.get();
+    return Utils.getVal(instance);
   }
 
   private static void setInstance(SocialTabsActivity act) {
@@ -101,7 +101,6 @@ public class SocialTabsActivity extends MyActionBar {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setInstance(this);
-//    instance = this;
     setActionBarContentView(R.layout.social_activity_tabs);
     getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
     addActionBarItem(Type.Refresh);
@@ -172,7 +171,10 @@ public class SocialTabsActivity extends MyActionBar {
 
   @Override
   protected void onDestroy() {
-//    instance = null;
+    SocialTabsActivity act = getInstance();
+    if (act == this) {
+      instance = null;
+    }
     super.onDestroy();
   }
 
