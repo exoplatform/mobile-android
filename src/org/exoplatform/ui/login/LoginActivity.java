@@ -21,6 +21,7 @@ package org.exoplatform.ui.login;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
+import org.exoplatform.base.BaseAct;
 import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -30,6 +31,7 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.LaunchUtils;
+import org.exoplatform.utils.Log;
 import org.exoplatform.utils.SettingUtils;
 
 import android.app.Activity;
@@ -38,7 +40,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +54,7 @@ import android.widget.Toast;
  * panel allows user to enter credentials and a server panel to select a server
  * to connect to. It also contain 2 buttons to switch between panels
  */
-public class LoginActivity extends Activity implements AccountPanel.ViewListener, OnClickListener,
+public class LoginActivity extends BaseAct implements AccountPanel.ViewListener, OnClickListener,
         LoginProxy.ProxyListener {
 
     private AccountSetting      mSetting;
@@ -111,6 +112,8 @@ public class LoginActivity extends Activity implements AccountPanel.ViewListener
     @Override
     protected void onResume() {
         super.onResume();
+        if (Log.LOGD)
+          Log.d(TAG, "onResume ", this);
         SettingUtils.setDefaultLanguage(this);
         onChangeLanguage();
         initState();
