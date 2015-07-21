@@ -39,15 +39,12 @@ import android.widget.TextView;
 public class ServerAdapter extends BaseAdapter {
   private ArrayList<ExoAccount> serverInfoList;
 
-  private Context                  mContext;
-
   private AccountSetting           mSetting;
 
   private static final String TAG = "eXo____ServerAdapter____";
 
 
   public ServerAdapter(Context context) {
-    mContext        = context;
     serverInfoList  = ServerSettingHelper.getInstance().getServerInfoList(context);
     mSetting        = AccountSetting.getInstance();
   }
@@ -81,7 +78,7 @@ public class ServerAdapter extends BaseAdapter {
   public View getView(int position, View convertView, ViewGroup parent) {
     ViewHolder holder;
     if (convertView == null) {
-      LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
       convertView = inflater.inflate(R.layout.server_list_item, parent, false);
       holder = new ViewHolder();
       holder.name = (TextView) convertView.findViewById(R.id.TextView_ServerName);

@@ -18,30 +18,21 @@
  */
 package org.exoplatform;
 
+
 import org.exoplatform.social.client.api.SocialClientContext;
+import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.LaunchUtils;
 
 import android.app.Application;
 
 public class ExoApplication extends Application {
-  // private String appUrl = "http://github.com/cyrilmottier/GreenDroid";
-
-  // @Override
-  // public Class<?> getHomeActivityClass() {
-  // return HomeActivity.class;
-  // }
-
-  // @Override
-  // public Intent getMainApplicationIntent() {
-  // return new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
-  // }
-
   @Override
   public void onCreate() {
     super.onCreate();
     LaunchUtils.setAppVersion(this);
     SocialClientContext.setUserAgent(ExoConnectionUtils.getUserAgent());
+    AssetUtils.setContext(this);
   }
 
 }

@@ -38,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DocumentAdapter extends BaseAdapter {
+
   private List<ExoFile>       _documentList;
 
   private DocumentActivity    _mContext;
@@ -125,7 +126,6 @@ public class DocumentAdapter extends BaseAdapter {
           else
             convertView.setBackgroundResource(R.drawable.dashboard_middle_background_shape);
         }
-
       }
 
       if (!myFile.isFolder) {
@@ -138,9 +138,7 @@ public class DocumentAdapter extends BaseAdapter {
       }
 
       convertView.setOnClickListener(new View.OnClickListener() {
-
         public void onClick(View v) {
-
           if (!myFile.isFolder) {
             /*
              * Open file with compatible application
@@ -157,7 +155,6 @@ public class DocumentAdapter extends BaseAdapter {
       });
 
       btnAction.setOnClickListener(new View.OnClickListener() {
-
         public void onClick(View v) {
           ExoFile file = _documentList.get(pos);
           _documentActionDialog = new DocumentActionDialog(_mContext, file, false);
@@ -166,7 +163,6 @@ public class DocumentAdapter extends BaseAdapter {
           _documentActionDialog._documentActionAdapter.notifyDataSetChanged();
           _documentActionDialog.setTileForDialog(file.name);
           _documentActionDialog.show();
-
         }
       });
       return convertView;

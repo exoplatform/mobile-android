@@ -95,6 +95,7 @@ public class ServerSettingHelper implements Parcelable {
    */
   public ArrayList<ExoAccount> getServerInfoList(Context context) {
     if (serverInfoList == null) {
+      // Jul 21, 2015, should use application context here?
       serverInfoList =
           ServerConfigurationUtils.getServerListFromFile(context, ExoConstants.EXO_SERVER_SETTING_FILE);
       ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);

@@ -33,8 +33,6 @@ import java.util.HashMap;
  */
 public class AssetUtils {
 
-  private static Context mContext;
-
   private static AssetManager mAssetManager;
 
   /* simple caching of typefaces */
@@ -49,8 +47,7 @@ public class AssetUtils {
   public static final String ROBOTO_BLACK   = "typefaces/Roboto-Black.ttf";
 
   public static void setContext(Context context) {
-    mContext      = context;
-    mAssetManager = mContext.getAssets();
+    mAssetManager = context.getAssets();
     mFontMaps     = new HashMap<String, Typeface>();
   }
 

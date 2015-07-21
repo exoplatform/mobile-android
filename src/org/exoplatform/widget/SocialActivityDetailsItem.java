@@ -36,7 +36,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.Html;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
@@ -93,11 +92,6 @@ public class SocialActivityDetailsItem extends LinearLayout {
   private Resources           resource;
 
   private static final String TAG            = "eXo____SocialActivityStreamItem____";
-
-  public SocialActivityDetailsItem(Context context, AttributeSet attrs) {
-    super(context, attrs);
-
-  }
 
   public SocialActivityDetailsItem(Context context, SocialActivityInfo info, boolean is) {
     super(context);

@@ -52,21 +52,12 @@ public class LaunchUtils {
     mContext = context;
     mSharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     mSetting = AccountSetting.getInstance();
-
-    initAssets();
     setLocalize();
     String oldConfigFile = ServerConfigurationUtils.checkPreviousAppConfig(mContext);
     if (oldConfigFile != null)
       setOldServerList(oldConfigFile);
     else
       setServerList();
-  }
-
-  /**
-   * Init assets utils
-   */
-  private void initAssets() {
-    AssetUtils.setContext(mContext);
   }
 
   /**

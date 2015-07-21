@@ -77,7 +77,6 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
     mUserTxt.addTextChangedListener(onAnyInputChanged());
     mPassTxt.addTextChangedListener(onAnyInputChanged());
 
-    AssetUtils.setContext(this);
     Typeface type = AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR);
     if (type != null) {
       AssetUtils.setTypeFace(type, mUrlTxt);

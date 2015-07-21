@@ -72,7 +72,6 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
     mEmailTxt.setText(email == null ? "" : email);
     TextWatcher _onEmailOrPasswordChanged = onEmailOrPasswordChanged();
     mEmailTxt.addTextChangedListener(_onEmailOrPasswordChanged);
-    AssetUtils.setContext(this);
     Typeface type = AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR);
     if (type != null)
       AssetUtils.setTypeFace(type, mEmailTxt);

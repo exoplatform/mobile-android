@@ -37,7 +37,10 @@ public class SignUpActivity extends FragmentActivity {
     setContentView(R.layout.signup);
     setTitle(R.string.GetStarted);
 
-    getSupportFragmentManager().beginTransaction().add(R.id.share_extension_fragment, new CreationAccountFragment(this)).commit();
+    getSupportFragmentManager()
+        .beginTransaction()
+        .add(R.id.share_extension_fragment, new CreationAccountFragment())
+        .commit();
   }
 
   public void flipToGreetingsPanel() {
