@@ -36,8 +36,6 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
 
   private Button  cancelButton;
 
-  private Context mContext;
-
   private String  fileType;
 
   private String  filePath;
@@ -46,7 +44,6 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
 
   public CompatibleFileOpenDialog(Context context, String fType, String fPath, String fName) {
     super(context);
-    mContext = context;
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.compatible_open_file_dialog_layout);
     TextView titleView = (TextView) findViewById(R.id.com_dialog_title_view);
@@ -69,7 +66,7 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
       dismiss();
     }
     if (view.equals(okButton)) {
-      new CompatibleFileOpen(mContext, fileType, filePath, fileName);
+      new CompatibleFileOpen(view.getContext(), fileType, filePath, fileName);
       dismiss();
     }
   }

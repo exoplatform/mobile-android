@@ -22,7 +22,6 @@ import org.exoplatform.R;
 import org.exoplatform.singleton.AccountSetting;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,10 +36,6 @@ import android.widget.LinearLayout;
  * login button
  */
 public class AccountPanel extends LinearLayout implements View.OnClickListener {
-
-    private Context             mContext;
-
-    private Resources           mResources;
 
     private AccountSetting      mSetting;
 
@@ -60,12 +55,10 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
 
     public AccountPanel(Context context) {
         super(context);
-        mContext = context;
     }
 
     public AccountPanel(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
     }
 
     @Override
@@ -73,7 +66,6 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
         super.onFinishInflate();
 
         mSetting = AccountSetting.getInstance();
-        mResources = mContext.getResources();
 
         initSubViews();
     }
@@ -103,8 +95,8 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
             mPassEditTxt.setText(mSetting.isRememberMeEnabled()
                     && !mSetting.getPassword().isEmpty() ? mSetting.getPassword() : "");
             // 3) append the server name to the login button label
-            String to = mContext.getResources().getString(R.string.SignInButton_In);
-            String connect = mContext.getResources().getString(R.string.SignInButton);
+            String to = getResources().getString(R.string.SignInButton_In);
+            String connect = getResources().getString(R.string.SignInButton);
             String loginButtonLabel = connect + " " + to + " " + mSetting.getServerName();
             mLoginBtn.setText(loginButtonLabel);
         }
@@ -130,9 +122,9 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
     }
 
     public void onChangeLanguage() {
-        mUserEditTxt.setHint(mResources.getString(R.string.UserNameCellTitle));
-        mPassEditTxt.setHint(mResources.getString(R.string.PasswordCellTitle));
-        mLoginBtn.setText(mResources.getString(R.string.SignInButton));
+        mUserEditTxt.setHint(getResources().getString(R.string.UserNameCellTitle));
+        mPassEditTxt.setHint(getResources().getString(R.string.PasswordCellTitle));
+        mLoginBtn.setText(getResources().getString(R.string.SignInButton));
     }
 
     /**

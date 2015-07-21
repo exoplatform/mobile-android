@@ -40,10 +40,6 @@ import android.widget.TextView;
 @SuppressLint("ValidFragment")
 public class CreationAccountFragment extends Fragment {
 
-  private SignUpActivity mSignUpActivity;
-
-  private Context  mContext;
-
   private TextView mAlertText;
 
   private EditText mEmailEditTxt;
@@ -53,14 +49,9 @@ public class CreationAccountFragment extends Fragment {
   private static final String TAG = "CreationAccountFragment";
 
   public CreationAccountFragment() {
-    
+    super();
   }
   
-  public CreationAccountFragment(SignUpActivity context) {
-    mSignUpActivity = context;
-    mContext = context;
-  }
-
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
@@ -94,9 +85,11 @@ public class CreationAccountFragment extends Fragment {
       @Override
       public void onClick(View mEmailEditTxt) {
         Log.i(TAG, "editEmailAddress");
-
+        Context ctx = mEmailEditTxt == null ? null : mEmailEditTxt.getContext();
+        if (ctx == null)
+          return;
         mAlertText.setVisibility(View.INVISIBLE);
-        InputMethodManager mgr = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager mgr = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.showSoftInput(mEmailEditTxt, InputMethodManager.HIDE_IMPLICIT_ONLY);
       }
     };
@@ -135,7 +128,8 @@ public class CreationAccountFragment extends Fragment {
 
   private void makeRequestCreatingAccount(String email) {
     Log.i(TAG, "makeRequestCreatingAccount");
-
-    new SignUpController(mSignUpActivity, email);
+    if (getActivity() instanceof SignUpActivity) {
+      new SignUpController((SignUpActivity) getActivity(), email);
+    }
   }
 }

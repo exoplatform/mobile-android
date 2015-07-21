@@ -303,6 +303,7 @@ public class ExoDocumentUtils {
 
   // Get file array from URL
   public static ArrayList<ExoFile> getPersonalDriveContent(Context context, ExoFile file) throws IOException {
+    // Jul 21, 2015 shoule use application context here?
     SharedPreferences prefs = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
     ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();

@@ -77,6 +77,7 @@ public class AccountSwitcherProxy implements LoginProxy.ProxyListener {
             // Logout is done automatically in LoginTask.preExecute started by
             // LoginProxy. Therefore we don't need to logout here, but we must
             // disable Auto Login.
+            // Jul 21, 2015 should use application context here?
             SettingUtils.disableAutoLogin(mContext);
             LoginProxy login = new LoginProxy(mContext, LoginProxy.SWITCH_ACCOUNT, params);
             login.setListener(this);

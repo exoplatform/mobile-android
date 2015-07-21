@@ -18,8 +18,6 @@
  */
 package org.exoplatform.utils;
 
-import greendroid.util.Config;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -33,6 +31,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
+import greendroid.util.Config;
 
 /**
  * Entry point of application load setting and redirect application to
@@ -54,21 +53,14 @@ public class LaunchUtils {
     mContext = context;
     mSharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     mSetting = AccountSetting.getInstance();
-
-    initAssets();
+    // Jul 21, 2015 should move to Application onCreate?
+    setAppVersion();
     setLocalize();
     String oldConfigFile = ServerConfigurationUtils.checkPreviousAppConfig(mContext);
     if (oldConfigFile != null)
       setOldServerList(oldConfigFile);
     else
       setServerList();
-  }
-
-  /**
-   * Init assets utils
-   */
-  private void initAssets() {
-    AssetUtils.setContext(mContext);
   }
 
   /**
@@ -82,8 +74,8 @@ public class LaunchUtils {
 
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
-    mSetting.setCurrentAccount((selectedServerIdx == -1 || selectedServerIdx >= _serverList.size()) ? null
-                                                                                                   : _serverList.get(selectedServerIdx));
+    mSetting.setCurrentAccount((selectedServerIdx == -1
+        || selectedServerIdx >= _serverList.size()) ? null : _serverList.get(selectedServerIdx));
   }
 
   /**

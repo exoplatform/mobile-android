@@ -64,11 +64,6 @@ public class SocialHomeTickerItem extends LinearLayout {
 
   private static final String TAG            = "eXo____HomeSocialItem____";
 
-  public SocialHomeTickerItem(Context context) {
-    super(context);
-    mContext = context;
-  }
-
   public SocialHomeTickerItem(Context context, SocialActivityInfo info) {
     super(context);
     mContext = context;

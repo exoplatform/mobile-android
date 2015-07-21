@@ -69,13 +69,10 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
 
   private ExoFile  selectedFile;
 
-  private Context  mContext;
-
   public DocumentExtendDialog(Context context, ExoFile file, int id) {
     super(context);
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.document_extend_dialog_layout);
-    mContext = context;
     actionId = id;
     selectedFile = file;
     onChangeLanguage();
@@ -123,7 +120,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
                                                                 destinationUrl,
                                                                 DocumentActivity.ACTION_RENAME);
             } else {
-              Toast toast = Toast.makeText(mContext, inputNameURLInvalid, Toast.LENGTH_SHORT);
+              Toast toast = Toast.makeText(getContext(), inputNameURLInvalid, Toast.LENGTH_SHORT);
               toast.setGravity(Gravity.CENTER, 0, 0);
               toast.show();
             }
@@ -137,7 +134,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
                                                               desUrl,
                                                               DocumentActivity.ACTION_CREATE);
           } else {
-            Toast toast = Toast.makeText(mContext, inputNameURLInvalid, Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getContext(), inputNameURLInvalid, Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
           }
@@ -145,7 +142,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
         }
         dismiss();
       } else {
-        Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getContext(), inputTextWarning, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM, 0, 0);
         toast.show();
       }
@@ -157,7 +154,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
   }
 
   private void onChangeLanguage() {
-    Resources res = mContext.getResources();
+    Resources res = getContext().getResources();
     renameTitleStr = res.getString(R.string.DocumentRenameTitle);
     renameActionTitle = res.getString(R.string.DocumentRenameContent);
     createTitleStr = res.getString(R.string.DocumentCreateTitle);

@@ -41,13 +41,10 @@ import android.widget.TextView;
 public class DocumentAdapter extends BaseAdapter {
     private ArrayList<ExoFile>  _documentList;
 
-    private DocumentActivity    _mContext;
-
     public DocumentActionDialog _documentActionDialog;
 
     public DocumentAdapter(DocumentActivity context, ArrayList<ExoFile> list) {
 
-        _mContext = context;
         _documentList = list;
 
     }
@@ -71,6 +68,7 @@ public class DocumentAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         final int pos = position;
+        final Context _mContext = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) _mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // View rowView = inflater.inflate(R.layout.fileitem, parent, false);
 
@@ -174,7 +172,7 @@ public class DocumentAdapter extends BaseAdapter {
 
                 public void onClick(View v) {
                     ExoFile file = _documentList.get(pos);
-                    _documentActionDialog = new DocumentActionDialog(_mContext, file, false);
+                    _documentActionDialog = new DocumentActionDialog((DocumentActivity) _mContext, file, false);
                     _documentActionDialog.myFile = file;
                     _documentActionDialog._documentActionAdapter.setSelectedFile(file);
                     _documentActionDialog._documentActionAdapter.notifyDataSetChanged();

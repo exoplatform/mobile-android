@@ -48,12 +48,10 @@ import com.squareup.picasso.Picasso;
 public class AccountListAdapter extends BaseAdapter {
   
   private ArrayList<ExoAccount> mAccountList;
-  private Context mContext;
   
   private final String TAG = "eXo____AccountListAdapter____";
   
   public AccountListAdapter(Context ctx) {
-    mContext = ctx;
     mAccountList = ServerSettingHelper.getInstance().getServerInfoList(ctx);
   }
 
@@ -75,6 +73,7 @@ public class AccountListAdapter extends BaseAdapter {
   @Override
   public View getView(int index, View convertView, ViewGroup parent) {
     ViewHolder holder;
+    Context mContext = parent.getContext();
     if (convertView == null) {
       LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
       convertView = inflater.inflate(R.layout.account_switcher_item_layout, parent, false);

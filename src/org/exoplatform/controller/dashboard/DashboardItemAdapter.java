@@ -62,10 +62,8 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 
   private LayoutInflater        mInflater;
 
-  private Context               mContext;
-
   public DashboardItemAdapter(Context context, ArrayList<GadgetInfo> items) {
-    mContext = context;
+    // Jul 21, 2015, shouldn't store layout inflater here because it's can be get in getView
     mInflater = LayoutInflater.from(context);
 
     mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
@@ -157,7 +155,7 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
 
       public void onClick(View v) {
         if (inforGadget.getTabName() == null)
-          showGadget(inforGadget);
+          showGadget(v.getContext(), inforGadget);
       }
     });
 
@@ -176,13 +174,13 @@ public class DashboardItemAdapter extends BaseAdapter implements ImageProcessor 
     return result;
   }
 
-  public void showGadget(GadgetInfo gadget) {
+  public void showGadget(Context ctx, GadgetInfo gadget) {
     String gadgetUrl = gadget.getGadgetUrl();
-    Intent intent = new Intent(mContext, WebViewActivity.class);
+    Intent intent = new Intent(ctx, WebViewActivity.class);
     intent.putExtra(ExoConstants.WEB_VIEW_URL, gadgetUrl);
     intent.putExtra(ExoConstants.WEB_VIEW_TITLE, gadget.getGadgetName());
     intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "true");
-    mContext.startActivity(intent);
+    ctx.startActivity(intent);
 
   }
 

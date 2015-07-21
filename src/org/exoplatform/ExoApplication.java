@@ -18,10 +18,8 @@
  */
 package org.exoplatform;
 
-import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.ui.HomeActivity;
-import org.exoplatform.utils.ExoConnectionUtils;
-import org.exoplatform.utils.LaunchUtils;
+import org.exoplatform.utils.AssetUtils;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -43,8 +41,9 @@ public class ExoApplication extends GDApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    LaunchUtils.setAppVersion(this);
-    SocialClientContext.setUserAgent(ExoConnectionUtils.getUserAgent());
+    // LaunchUtils.setAppVersion(this);
+    // SocialClientContext.setUserAgent(ExoConnectionUtils.getUserAgent());
+    AssetUtils.setContext(this);
   }
-  
+
 }

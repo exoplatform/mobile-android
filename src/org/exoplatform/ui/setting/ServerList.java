@@ -41,18 +41,14 @@ import android.widget.LinearLayout;
  */
 public class ServerList extends LinearLayout {
 
-    private Context mContext;
-
     private Handler mHandler = new Handler();
 
     public ServerList(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
     }
 
     public ServerList(Context context) {
         super(context);
-        mContext = context;
     }
 
     @Override
@@ -68,7 +64,7 @@ public class ServerList extends LinearLayout {
         removeAllViews();
 
         ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance()
-                                                              .getServerInfoList(mContext);
+                                                              .getServerInfoList(getContext());
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT,
                                                      LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 0, 0, -1);
@@ -90,7 +86,7 @@ public class ServerList extends LinearLayout {
     public void updateServerList(int operation, int serverIdx) {
         if (operation == -1 || serverIdx == -1)
             return;
-
+        Context mContext = getContext();
         ServerItemLayout serverItemLayout;
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT,
                                                      LayoutParams.WRAP_CONTENT);
@@ -141,16 +137,16 @@ public class ServerList extends LinearLayout {
      */
     private ServerItemLayout initServerItem(ExoAccount _serverObj, int serverIdx) {
         final ExoAccount serverObj = _serverObj;
-        ServerItemLayout serverItem = new ServerItemLayout(mContext);
+        ServerItemLayout serverItem = new ServerItemLayout(getContext());
         serverItem.serverName.setText(serverObj.accountName);
         serverItem.serverUrl.setText(serverObj.serverUrl);
 
         serverItem.layout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(mContext, ServerEditionActivity.class);
+                Intent next = new Intent(getContext(), ServerEditionActivity.class);
                 next.putExtra(ExoConstants.EXO_SERVER_OBJ, serverObj);
-                mContext.startActivity(next);
+                getContext().startActivity(next);
             }
         });
 
