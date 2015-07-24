@@ -21,7 +21,7 @@ package org.exoplatform.ui.login;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
-import org.exoplatform.base.BaseAct;
+import org.exoplatform.base.BaseActivity;
 import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -54,7 +54,7 @@ import android.widget.Toast;
  * panel allows user to enter credentials and a server panel to select a server
  * to connect to. It also contain 2 buttons to switch between panels
  */
-public class LoginActivity extends BaseAct implements AccountPanel.ViewListener, OnClickListener,
+public class LoginActivity extends BaseActivity implements AccountPanel.ViewListener, OnClickListener,
         LoginProxy.ProxyListener {
 
     private AccountSetting      mSetting;

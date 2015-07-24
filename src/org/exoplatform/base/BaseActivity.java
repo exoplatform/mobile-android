@@ -32,7 +32,7 @@ import android.support.v4.app.FragmentActivity;
  *           MinhTDH@exoplatform.com
  * Jul 20, 2015  
  */
-public class BaseAct extends FragmentActivity {
+public class BaseActivity extends FragmentActivity {
   /**
    * same purpose with ActivityLifecycleCallbacks in API 14, 
    * but only interested in onPaused and onResume.
@@ -40,19 +40,19 @@ public class BaseAct extends FragmentActivity {
    *
    */
   public interface ActivityLifecycleCallbacks {
-    void onResume(BaseAct act);
-    void onPause(BaseAct act);
+    void onResume(BaseActivity act);
+    void onPause(BaseActivity act);
   }
 
   public static class BasicActivityLifecycleCallbacks implements ActivityLifecycleCallbacks {
 
     @Override
-    public void onResume(BaseAct act) {
+    public void onResume(BaseActivity act) {
       
     }
 
     @Override
-    public void onPause(BaseAct act) {
+    public void onPause(BaseActivity act) {
       
     }
     
@@ -61,7 +61,7 @@ public class BaseAct extends FragmentActivity {
   private HashSet<WeakReference<BasicActivityLifecycleCallbacks>> mLifeCycleCallbackSet = new HashSet<WeakReference<BasicActivityLifecycleCallbacks>>();
 
   public void addLifeCycleObserverRef(BasicActivityLifecycleCallbacks cbRef) {
-    mLifeCycleCallbackSet.add(new WeakReference<BaseAct.BasicActivityLifecycleCallbacks>(cbRef));
+    mLifeCycleCallbackSet.add(new WeakReference<BaseActivity.BasicActivityLifecycleCallbacks>(cbRef));
   }
 
   public void removeLifeCycleObserver(BasicActivityLifecycleCallbacks removeCb) {

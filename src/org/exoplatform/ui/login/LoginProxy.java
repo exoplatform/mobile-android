@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import com.crashlytics.android.Crashlytics;
 
 import org.exoplatform.R;
-import org.exoplatform.base.BaseAct;
-import org.exoplatform.base.BaseAct.BasicActivityLifecycleCallbacks;
+import org.exoplatform.base.BaseActivity;
+import org.exoplatform.base.BaseActivity.BasicActivityLifecycleCallbacks;
 import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
@@ -95,9 +95,9 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
 
   private LoginWaitingDialog  mProgressDialog;
   
-  private BasicActivityLifecycleCallbacks mLifecycleCallcback = new BasicActivityLifecycleCallbacks() {
+  private BasicActivityLifecycleCallbacks mLifecycleCallback = new BasicActivityLifecycleCallbacks() {
     
-    public void onPause(org.exoplatform.base.BaseAct act) {
+    public void onPause(org.exoplatform.base.BaseActivity act) {
       if (act == mContext) {
         // TODO implement correct behavior, current only dismissUI and cancel current task
         if (Log.LOGD)
@@ -106,7 +106,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
         if (mLoginTask != null && mLoginTask.getStatus() == Status.RUNNING) {
           mLoginTask.cancel(true);
         }
-        dismissUI();
+        dismissDialog();
       }
     };
   };
@@ -149,8 +149,8 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
     mResource = mContext.getResources();
     mSetting = AccountSetting.getInstance();
     mLaunchMode = state;
-    if (mContext instanceof BaseAct) {
-      ((BaseAct) mContext).addLifeCycleObserverRef(mLifecycleCallcback);
+    if (mContext instanceof BaseActivity) {
+      ((BaseActivity) mContext).addLifeCycleObserverRef(mLifecycleCallback);
     }
     initStates(loginData);
   }
@@ -356,10 +356,10 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
   
   @Override
   public void onCanceled() {
-    dismissUI();
+    dismissDialog();
   }
 
-  private void dismissUI() {
+  private void dismissDialog() {
     if (mProgressDialog != null && mProgressDialog.isShowing())
       mProgressDialog.dismiss();
   }
@@ -377,7 +377,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
     if (mState == FINISHED)
       return;
     mState = FINISHED;
-    dismissUI();
+    dismissDialog();
 
     switch (result) {
     case ExoConnectionUtils.LOGIN_INCOMPATIBLE:
@@ -479,9 +479,6 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
       Crashlytics.setString("ServerDomain", mDomain);
       break;
     }
-
-    if (mProgressDialog != null)
-      mProgressDialog.dismiss();
 
     /** invoke listeners */
     if (mWarningDialog != null && mLaunchMode == SWITCH_ACCOUNT && result != ExoConnectionUtils.LOGIN_SUCCESS) {
