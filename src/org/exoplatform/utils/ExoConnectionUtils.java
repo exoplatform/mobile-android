@@ -80,7 +80,7 @@ public class ExoConnectionUtils {
   // Default connection and socket timeout of 30 seconds. Tweak to taste.
   public static final int         SOCKET_OPERATION_TIMEOUT   = 30 * 1000;
 
-  public static String      USER_AGENT;
+  private static String      USER_AGENT;
 
   public static DefaultHttpClient httpClient;
 
