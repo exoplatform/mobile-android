@@ -21,6 +21,7 @@ package org.exoplatform;
 import greendroid.app.GDApplication;
 
 import org.exoplatform.ui.HomeActivity;
+import org.exoplatform.utils.LaunchUtils;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -38,4 +39,10 @@ public class ExoApplication extends GDApplication {
     return new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
   }
 
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    LaunchUtils.setAppVersion(this);
+  }
+  
 }

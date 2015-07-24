@@ -43,21 +43,22 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import com.crashlytics.android.Crashlytics;
+
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.ui.login.tasks.LogoutTask;
 import org.exoplatform.utils.image.ExoPicasso;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-
-import com.crashlytics.android.Crashlytics;
 
 //interact with server
 public class ExoConnectionUtils {
@@ -79,7 +80,7 @@ public class ExoConnectionUtils {
   // Default connection and socket timeout of 30 seconds. Tweak to taste.
   public static final int         SOCKET_OPERATION_TIMEOUT   = 30 * 1000;
 
-  public static final String      USER_AGENT                 = "eXo/2.5.4 (Android)";
+  public static String      USER_AGENT;
 
   public static DefaultHttpClient httpClient;
 
@@ -225,12 +226,21 @@ public class ExoConnectionUtils {
 
   }
 
+  public static final String getUserAgent() {
+    if (USER_AGENT == null) {
+      USER_AGENT = new StringBuilder("eXo/").append(ServerSettingHelper.getInstance().getApplicationVersion())
+                                            .append(" (Android)")
+                                            .toString();
+    }
+    return USER_AGENT;
+  }
+  
   public static DefaultHttpClient initHttpClient() {
     HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setSoTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
     HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-    HttpProtocolParams.setUserAgent(httpParameters, USER_AGENT);
+    HttpProtocolParams.setUserAgent(httpParameters, getUserAgent());
 
     return new DefaultHttpClient(httpParameters);
   }
