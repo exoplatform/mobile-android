@@ -56,7 +56,6 @@ public class LaunchUtils {
     mSetting = AccountSetting.getInstance();
 
     initAssets();
-    setAppVersion();
     setLocalize();
     String oldConfigFile = ServerConfigurationUtils.checkPreviousAppConfig(mContext);
     if (oldConfigFile != null)
@@ -115,9 +114,9 @@ public class LaunchUtils {
   /**
    * Provide app version for setting
    */
-  private void setAppVersion() {
+  public static void setAppVersion(Context ctx) {
     try {
-      String appVer = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
+      String appVer = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0).versionName;
       ServerSettingHelper.getInstance().setApplicationVersion(appVer);
     } catch (NameNotFoundException e) {
       if (Config.GD_ERROR_LOGS_ENABLED)
