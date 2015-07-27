@@ -18,14 +18,9 @@
  */
 package org.exoplatform.utils;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
 
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.protocol.HTTP;
-
-import android.util.Log;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Aug
@@ -38,26 +33,17 @@ public class WebdavMethod extends HttpRequestBase {
   // Constructor for delete, create new folder, check reachability url
   public WebdavMethod(String method, String sourceUriStr) {
     this.method = method;
-    setSourceUri(sourceUriStr);
+    this.setURI(URI.create(sourceUriStr));
   }
 
   // Constructor for copy, move
   public WebdavMethod(String method, String sourceUriStr, String destinationUriStr) {
     this.method = method;
-    setSourceUri(sourceUriStr);
+    this.setURI(URI.create(sourceUriStr));
     this.setHeader("Overwrite", "T");
     this.setHeader("Destination", destinationUriStr);
   }
 
-  private void setSourceUri(String sourceUriStr) {
-    try {
-      sourceUriStr = URLEncoder.encode(sourceUriStr, HTTP.UTF_8);
-      this.setURI(URI.create(sourceUriStr));
-    } catch (UnsupportedEncodingException e) {
-      Log.d(getClass().getSimpleName(), Log.getStackTraceString(e));
-    }
-  }
-  
   @Override
   public String getMethod() {
     return method;

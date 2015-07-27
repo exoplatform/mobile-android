@@ -18,10 +18,6 @@
  */
 package org.exoplatform.ui;
 
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -39,6 +35,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -48,6 +45,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import greendroid.widget.ActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.LoaderActionBarItem;
 
 public class WebViewActivity extends MyActionBar {
   private static final String ACCOUNT_SETTING = "account_setting";
@@ -209,9 +209,17 @@ public class WebViewActivity extends MyActionBar {
   }
 
   @Override
-  protected void onDestroy() {
-    super.onDestroy();
+  protected void onPause() {
+    onCancelLoad();
+    super.onPause();
+  }
 
+  @Override
+  public void finish() {
+    // Avoids leaking the ZoomButtonsController when leaving the activity
+    ViewGroup layout = (ViewGroup) getWindow().getDecorView();
+    layout.removeAllViews();
+    super.finish();
   }
 
   @Override
@@ -265,6 +273,12 @@ public class WebViewActivity extends MyActionBar {
         finish();
       }
 
+    }
+
+    @Override
+    protected void onCancelled() {
+      loaderItem.setLoading(false);
+      super.onCancelled();
     }
 
   }

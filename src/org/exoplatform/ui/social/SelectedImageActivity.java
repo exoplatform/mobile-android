@@ -219,11 +219,11 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     }
 
     private class DisplayImageTask extends AsyncTask<Integer, Void, Bitmap> {
-        private SeclectImageWaitingDialog _progressDialog;
+        private SelectImageWaitingDialog _progressDialog;
 
         @Override
         public void onPreExecute() {
-            _progressDialog = new SeclectImageWaitingDialog(SelectedImageActivity.this,
+            _progressDialog = new SelectImageWaitingDialog(SelectedImageActivity.this,
                                                             null,
                                                             loadingData);
             _progressDialog.show();
@@ -279,9 +279,9 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
 
     }
 
-    private class SeclectImageWaitingDialog extends WaitingDialog {
+    private class SelectImageWaitingDialog extends WaitingDialog {
 
-        public SeclectImageWaitingDialog(Context context, String titleString, String contentString) {
+        public SelectImageWaitingDialog(Context context, String titleString, String contentString) {
             super(context, titleString, contentString);
         }
 
