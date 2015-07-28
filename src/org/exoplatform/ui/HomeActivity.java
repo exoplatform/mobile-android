@@ -155,7 +155,7 @@ public class HomeActivity extends Activity {
       // we should already be loading the profile and activities,
       // so we start the loading indicator now
       loaderItem.setActionView(R.layout.action_bar_loading_indicator);
-    return true;
+    return super.onCreateOptionsMenu(menu); // true;
   }
 
   @Override
@@ -168,7 +168,7 @@ public class HomeActivity extends Activity {
       else
         accountSwitcherItem.setVisible(false);
     }
-    return true;
+    return super.onPrepareOptionsMenu(menu); // true;
   }
 
   @Override

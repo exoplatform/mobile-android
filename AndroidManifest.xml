@@ -15,7 +15,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
 
     <!-- SDK -->
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22"/>
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="21"/>
 
     <!-- Application Information -->
     <application android:allowBackup="true" android:icon="@drawable/application_icon" android:label="eXo" android:name=".ExoApplication" android:theme="@style/Theme.eXo">

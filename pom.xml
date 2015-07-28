@@ -60,7 +60,7 @@
     <slf4j-android.version>1.6.1-RC1</slf4j-android.version>
     <!-- Test Dependencies  -->
     <fest-android.version>1.0.7</fest-android.version>
-    <robolectric.version>2.2</robolectric.version>
+    <robolectric.version>3.0</robolectric.version>
     <junit.version>4.8.2</junit.version>
     <android.test.version>4.2.2_r2</android.test.version>
     <!-- Java version -->
@@ -148,6 +148,36 @@
     <dependency>
       <groupId>org.robolectric</groupId>
       <artifactId>robolectric</artifactId>
+      <version>${robolectric.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.robolectric</groupId>
+      <artifactId>shadows-core</artifactId>
+      <version>${robolectric.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.robolectric</groupId>
+      <artifactId>robolectric-resources</artifactId>
+      <version>${robolectric.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.robolectric</groupId>
+      <artifactId>robolectric-utils</artifactId>
+      <version>${robolectric.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.robolectric</groupId>
+      <artifactId>robolectric-annotations</artifactId>
+      <version>${robolectric.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.robolectric</groupId>
+      <artifactId>shadows-httpclient</artifactId>
       <version>${robolectric.version}</version>
       <scope>test</scope>
     </dependency>

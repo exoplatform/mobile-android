@@ -20,7 +20,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.robolectric.Robolectric.shadowOf;
+import static org.robolectric.Shadows.shadowOf;
 
 import java.util.Locale;
 
@@ -32,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowIntent;
 
@@ -51,7 +52,7 @@ public class LaunchActivityTest extends ExoActivityTestUtils<LaunchActivity> {
   @Before
   public void setup() {
     controller = Robolectric.buildActivity(LaunchActivity.class);
-    ctx = Robolectric.application.getApplicationContext();
+    ctx = RuntimeEnvironment.application.getApplicationContext();
   }
 
   @Test
@@ -185,6 +186,7 @@ public class LaunchActivityTest extends ExoActivityTestUtils<LaunchActivity> {
     assertTrue("Saved language should be English", lang.equals(expectedLang));
   }
 
+<<<<<<< HEAD
   /*
    * Tests rule AUTO_DETECT_LANGUAGE_04
    */
@@ -291,6 +293,27 @@ public class LaunchActivityTest extends ExoActivityTestUtils<LaunchActivity> {
     assertFalse("Saved language should not be empty", prefLang.equals(""));
 
     setLanguageInPreferences(ctx, ""); // cleanup
+=======
+  @Test
+  /*
+   * Test rule AUTO_DETECT_LANGUAGE_04
+   */
+  public void shouldSetLanguagePreferenceInAnyCase() {
+    String[] langs = { "en", "fr", "de", "es", "ja", "fr_FR", "fr_BE", "" };
+    setLanguageInPreferences(ctx, ""); // empty the language preference in
+                                       // the app
+
+    for (String lang : langs) {
+      Locale.setDefault(new Locale(lang));
+      create();
+      String prefLang = ctx.getSharedPreferences("exo_preference", 0).getString("exo_prf_localize", "");
+      // Saved language should not be empty
+      assertFalse("Saved language should not be empty", prefLang.equals(""));
+
+      setLanguageInPreferences(ctx, ""); // empty again before the next
+                                         // iteration
+    }
+>>>>>>> MOB-1695 Update unit tests and upgrade to Robolectric 3.0. Updated target sdk version. Stop using dialog theme on acc switcher act. Call super for onCreateOptionsMenu and onPrepareOptionsMenu in Home act.
   }
 
   @Test
