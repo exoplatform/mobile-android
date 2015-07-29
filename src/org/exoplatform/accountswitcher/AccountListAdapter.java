@@ -106,10 +106,12 @@ public class AccountListAdapter extends BaseAdapter {
         connStatus = "";
         holder.connectionStatus.setVisibility(View.GONE);
       } else {
+        StringBuilder statusBld = new StringBuilder();
         // load 'LastLoginDate' label from resources
-        connStatus = mContext.getResources().getString(R.string.LastLoginDate);
+        statusBld.append(mContext.getResources().getString(R.string.LastLoginDate));
         // append the date written in words
-        connStatus = connStatus+": "+SocialActivityUtil.getPostedTimeString(mContext, account.lastLoginDate);
+        statusBld.append(": ").append(SocialActivityUtil.getPostedTimeString(mContext, account.lastLoginDate));
+        connStatus = statusBld.toString();
         holder.connectionStatus.setVisibility(View.VISIBLE);
       }
     }
