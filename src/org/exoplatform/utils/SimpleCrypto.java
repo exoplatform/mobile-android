@@ -49,12 +49,7 @@ public class SimpleCrypto {
     return key;
   }
 
-  private static byte[] getRawKey1(byte[] seed) throws Exception {
-    byte[] raw = generateKey().getEncoded();
-    return raw;
-  }
-
-    private static byte[] getRawKey(byte[] seed) throws Exception {
+  private static byte[] getRawKey(byte[] seed) throws Exception {
     KeyGenerator kgen = KeyGenerator.getInstance("AES");
     SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "Crypto");
     sr.setSeed(seed);
