@@ -146,6 +146,7 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
             Log.d(TAG, "SocialClientLibException: " + e.getLocalizedMessage());
             return null;
         } catch (RuntimeException e) {
+      // XXX cannot replace because SocialClientLib can throw exceptions like ServerException, UnsupportMethod ,..
             Log.d(TAG, "RuntimeException: " + e.getLocalizedMessage());
             return null;
         } catch (MalformedURLException e) {

@@ -206,6 +206,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
       } catch (SocialClientLibException e) {
         return false;
       } catch (RuntimeException e) {
+        // XXX cannot replace because SocialClientLib can throw exceptions like ServerException, UnsupportMethod ,..
         return false;
       }
     }

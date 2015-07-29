@@ -179,6 +179,7 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
     } catch (SocialClientLibException e) {
       return 0;
     } catch (RuntimeException e) {
+      // XXX cannot replace because SocialClientLib can throw exceptions like ServerException, UnsupportMethod ,..
       return -2;
     }
 

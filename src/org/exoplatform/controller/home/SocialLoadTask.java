@@ -18,9 +18,6 @@
  */
 package org.exoplatform.controller.home;
 
-import android.util.Log;
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -38,12 +35,14 @@ import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Log;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import greendroid.widget.LoaderActionBarItem;
 
 /**
  * The asynchronous task that loads activities from the Social REST service.
@@ -144,8 +143,9 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
       if (activityList != null && activityList.size() > 0) {
         SocialActivityInfo streamInfo = null;
         RestProfile profile = null;
-        for (int i = 0; i < activityList.size(); i++) {
-          RestActivity act = activityList.get(i);
+        for (RestActivity act : activityList) {
+          if (act == null) 
+            continue;
           streamInfo = new SocialActivityInfo();
           profile = act.getPosterIdentity().getProfile();
           streamInfo.restActivityStream = act.getActivityStream();
@@ -170,10 +170,11 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
       return listActivity;
     } catch (SocialClientLibException e) {
-      Log.d(TAG, "SocialClientLibException: " + e.getLocalizedMessage());
+      Log.d(TAG, "SocialClientLibException: ", e.getLocalizedMessage());
       return null;
     } catch (RuntimeException e) {
-      Log.d(TAG, "RuntimeException: " + e.getLocalizedMessage());
+      // XXX cannot replace because SocialClientLib can throw many kind of exceptions like ServerException, UnsupportMethod ,..
+      Log.d(TAG, "RuntimeException: ", e.getLocalizedMessage());
       return null;
     }
   }

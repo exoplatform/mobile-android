@@ -366,10 +366,12 @@ public class SocialActivityUtil {
 
           int start = spannable.getSpanStart(span);
           int stop = spannable.getSpanEnd(span);
+          // TODO error here? should be spannable getSpanFlag ? 
           int flags = spannable.getSpanEnd(span);
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
           TextUrlSpan myUrlSpan = null;
+          // TODO check case https?
           if (spanUrl.toLowerCase(Locale.US).startsWith(ExoConstants.HTTP_PROTOCOL)) {
             myUrlSpan = new TextUrlSpan(spanUrl);
           } else {
@@ -381,6 +383,7 @@ public class SocialActivityUtil {
           textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
       } catch (Exception e) {
+        // XXX unknown why catch exception here, a Jira issue or setSpan issue?
         if (Config.GD_ERROR_LOGS_ENABLED)
           Log.e("Exception", "LinkMovementMethod error!");
       }
