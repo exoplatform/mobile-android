@@ -136,9 +136,9 @@ public class ExoConnectionUtils {
   public static final String      HTTPS                      = "https://";
 
   /** eXo cloud workspace url */
-  public static final String      EXO_CLOUD_WS_DOMAIN        = "exoplatform.net";                                 // "wks-acc.exoplatform.org";
-                                                                                                                  // //
-                                                                                                                  // "netstg.exoplatform.org";
+  public static final String      EXO_CLOUD_WS_DOMAIN        = "exoplatform.net";
+  // "wks-acc.exoplatform.org";
+  // "netstg.exoplatform.org";
 
   /** eXo cloud base service url */
   public static final String      SERVICE_BASE_URL           = "/rest/cloud-admin/cloudworkspaces/tenant-service";
@@ -181,11 +181,15 @@ public class ExoConnectionUtils {
         sb.append(line + "\n");
       }
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     } finally {
       try {
         is.close();
       } catch (IOException e) {
+        if (Log.LOGD)
+          Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
         return null;
       }
     }
@@ -220,8 +224,12 @@ public class ExoConnectionUtils {
       }
 
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return LOGIN_WRONG;
-    } catch (IllegalStateException ise) {
+    } catch (IllegalStateException e) {
+      if (Log.LOGD)
+        Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return LOGIN_INVALID;
     }
 
@@ -264,20 +272,20 @@ public class ExoConnectionUtils {
 
   // Get input stream from url
   public static InputStream sendRequest(HttpResponse response) {
-    try {
-      HttpEntity entity;
+    if (response != null && response.getStatusLine() != null) {
       int statusCode = response.getStatusLine().getStatusCode();
       if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
-        entity = response.getEntity();
+        HttpEntity entity = response.getEntity();
         if (entity != null) {
-          return entity.getContent();
+          try {
+            return entity.getContent();
+          } catch (IOException e) {
+            Log.d(TAG, e.getClass().getSimpleName(), e.getMessage());
+          } catch (IllegalStateException e) {
+            Log.d(TAG, e.getClass().getSimpleName(), e.getMessage());
+          }
         }
-      } else {
-        return null;
       }
-
-    } catch (IOException e) {
-      return null;
     }
     return null;
   }
@@ -364,10 +372,12 @@ public class ExoConnectionUtils {
       JSONObject json = (JSONObject) JSONValue.parse(result);
       results[0] = json.get(ExoConstants.USERNAME).toString();
       results[1] = json.get(ExoConstants.TENANT).toString();
-      Log.d(TAG, "user:   " + results[0] + " - tenant: " + results[1]);
+      Log.d(TAG, "user:   ", results[0], " - tenant: ", results[1]);
       return results;
     } catch (RuntimeException e) {
-      Log.d(TAG, "RuntimeException: " + e.getLocalizedMessage());
+      // XXX can not replace because getPLFStream, JSONValue.parse can throw
+      // exceptions.
+      Log.d(TAG, "RuntimeException: ", e.getLocalizedMessage());
       return null;
     }
   }
@@ -482,9 +492,9 @@ public class ExoConnectionUtils {
         ipstr = entity.getContent();
       }
     } catch (ClientProtocolException e) {
-      e.getMessage();
+      Log.d(TAG, "sendRequestWithoutAuthen", Log.getStackTraceString(e));
     } catch (IOException e) {
-      e.getMessage();
+      Log.d(TAG, "sendRequestWithoutAuthen", Log.getStackTraceString(e));
     }
     return ipstr;
   }
@@ -544,6 +554,8 @@ public class ExoConnectionUtils {
       } else
         return false;
     } catch (RuntimeException e) {
+      // XXX cannot replace because getPLFStream, JSONValue.parse can throw
+      // exception,
       return false;
     }
 

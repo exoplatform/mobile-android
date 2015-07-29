@@ -94,7 +94,8 @@ public class HomeController {
           }
 
           @Override
-          protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
+          protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity,
+                                                                         QueryParams params) throws SocialClientLibException {
             return activityService.getFeedActivityStream(identity, params);
           }
         }.execute(number, type);
@@ -103,6 +104,7 @@ public class HomeController {
       new ConnectionErrorDialog(mContext).show();
     }
   }
+
 
   public boolean isLoadingTask() {
     return (mServiceLoadTask != null && mServiceLoadTask.getStatus() == SocialServiceLoadTask.Status.RUNNING);

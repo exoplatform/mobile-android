@@ -36,14 +36,15 @@ import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoUtils;
+import org.exoplatform.utils.Log;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.MenuItem;
+
 
 /**
  * The asynchronous task that loads activities from the Social REST service.
@@ -98,7 +99,6 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
    */
   protected abstract RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity,
                                                                           QueryParams params) throws SocialClientLibException;
-
   /**
    * Get the list of SocialActivity for the current stream.
    * 
@@ -150,8 +150,9 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
       if (activityList != null && activityList.size() > 0) {
         SocialActivityInfo streamInfo = null;
         RestProfile profile = null;
-        for (int i = 0; i < activityList.size(); i++) {
-          RestActivity act = activityList.get(i);
+        for (RestActivity act : activityList) {
+          if (act == null) 
+            continue;
           streamInfo = new SocialActivityInfo();
           profile = act.getPosterIdentity().getProfile();
           streamInfo.restActivityStream = act.getActivityStream();
@@ -176,10 +177,11 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
       return listActivity;
     } catch (SocialClientLibException e) {
-      Log.d(TAG, "SocialClientLibException: " + e.getLocalizedMessage());
+      Log.d(TAG, "SocialClientLibException: ", e.getLocalizedMessage());
       return null;
     } catch (RuntimeException e) {
-      Log.d(TAG, "RuntimeException: " + e.getLocalizedMessage());
+      // Cannot replace because SocialClientLib can throw many kind of exceptions like ServerException, UnsupportMethod, etc
+      Log.d(TAG, "RuntimeException: ", e.getLocalizedMessage());
       return null;
     }
   }

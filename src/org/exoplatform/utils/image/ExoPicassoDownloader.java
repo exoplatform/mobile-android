@@ -124,7 +124,8 @@ public class ExoPicassoDownloader extends UrlConnectionDownloader {
   @Override
   public Response load(Uri uri, int networkPolicy) throws IOException {
     // TODO use networkPolicy as in com.squareup.picasso.UrlConnectionDownloader
-    // https://github.com/square/picasso/blob/picasso-parent-2.5.2/picasso/src/main/java/com/squareup/picasso/UrlConnectionDownloader.java
+    // https://github.com/square/picasso/blob/picasso-parent-2.5.2/
+    // picasso/src/main/java/com/squareup/picasso/UrlConnectionDownloader.java
     HttpURLConnection connection = connection(uri);
     connection.setInstanceFollowRedirects(true);
     connection.setUseCaches(true);

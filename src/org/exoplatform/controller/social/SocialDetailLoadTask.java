@@ -43,6 +43,7 @@ import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Log;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
 
@@ -167,8 +168,12 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
       return 1;
     } catch (SocialClientLibException e) {
+      if (Log.LOGD)
+        Log.d(getClass().getSimpleName(), "doInBackground ", Log.getStackTraceString(e));
       return 0;
-    } catch (RuntimeException re) {
+    } catch (RuntimeException e) {
+      if (Log.LOGD)
+        Log.d(getClass().getSimpleName(), "doInBackground ", Log.getStackTraceString(e));
       return -1;
     }
   }

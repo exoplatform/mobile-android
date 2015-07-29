@@ -104,7 +104,6 @@ public class DocumentActionAdapter extends BaseAdapter {
           if (!"".equals(_fileCopied.path)) {
             String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
             String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
-
             DocumentActivity._documentActivityInstance.pasteFile(_fileCopied, destinationUrl, DocumentActivity.ACTION_COPY);
 
           }
@@ -112,7 +111,6 @@ public class DocumentActionAdapter extends BaseAdapter {
           if (!"".equals(_fileMoved.path)) {
             String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
             String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
-
             DocumentActivity._documentActivityInstance.pasteFile(_fileMoved, destinationUrl, DocumentActivity.ACTION_MOVE);
           }
           DocumentHelper.getInstance()._fileCopied = new ExoFile();
@@ -135,9 +133,9 @@ public class DocumentActionAdapter extends BaseAdapter {
             @Override
             public void onClick(DialogInterface dialog, int which) {
               String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
-
               if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder) && _selectedFile.isFolder) {
-                DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().folderToParentMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
+                DocumentActivity._documentActivityInstance._fileForCurrentActionBar = 
+                    DocumentHelper.getInstance().folderToParentMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
               }
 
               DocumentActivity._documentActivityInstance.deleteFile(_selectedFile);

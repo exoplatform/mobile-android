@@ -219,7 +219,8 @@ public class LoginActivity extends BaseActivity implements AccountPanel.ViewList
     // activates remember me if a username is provided
     serverObj.isRememberEnabled = ("".equals(username)) ? false : true;
 
-    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(this);
+    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance()
+                                                          .getServerInfoList(this);
     String domainIdx;
     int serverIdx = serverList.indexOf(serverObj);
     if (serverIdx > -1) {

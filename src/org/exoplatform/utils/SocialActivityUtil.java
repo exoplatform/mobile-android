@@ -36,7 +36,6 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -364,10 +363,12 @@ public class SocialActivityUtil {
 
           int start = spannable.getSpanStart(span);
           int stop = spannable.getSpanEnd(span);
+          // TODO error here? should be spannable getSpanFlag ? 
           int flags = spannable.getSpanEnd(span);
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
           TextUrlSpan myUrlSpan = null;
+          // TODO check case https?
           if (spanUrl.toLowerCase(Locale.US).startsWith(ExoConstants.HTTP_PROTOCOL)) {
             myUrlSpan = new TextUrlSpan(spanUrl);
           } else {
@@ -379,8 +380,9 @@ public class SocialActivityUtil {
           textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
       } catch (Exception e) {
-        // if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("Exception", "LinkMovementMethod error!");
+        // TODO check (git blame) why we need to catch Exception here
+        if (Log.LOGE)
+          Log.e("Exception", "LinkMovementMethod error!");
       }
     }
   }
@@ -679,7 +681,10 @@ public class SocialActivityUtil {
     return buffer.toString();
   }
 
-  public static String getActivityTypeLink(String userName, SocialActivityInfo activityInfo, String fontColor, boolean isHomeStyle) {
+  public static String getActivityTypeLink(String userName,
+                                           SocialActivityInfo activityInfo,
+                                           String fontColor,
+                                           boolean isHomeStyle) {
     String linkUrl = activityInfo.templateParams.get("link");
     if (linkUrl == null)
       return "";

@@ -179,6 +179,9 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
       else
         return 0;
     } catch (RuntimeException e) {
+      // Cannot replace because SocialClientLib can throw exceptions like ServerException, UnsupportMethod, etc
+      if (Log.LOGD)
+        Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return -2;
     }
 

@@ -130,8 +130,9 @@ public class SocialActivityStreamItem {
                             TextView.BufferType.SPANNABLE);
     textViewMessage.setVisibility(View.VISIBLE);
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
-                                                                activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
-                                                                                                   : activityInfo.getPostedTime()));
+                            activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
+                                                               : activityInfo.getPostedTime()));
+
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
     textViewTempMessage.setVisibility(View.GONE);

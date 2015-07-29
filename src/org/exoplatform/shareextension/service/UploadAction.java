@@ -22,11 +22,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.cookie.Cookie;
@@ -35,9 +37,9 @@ import org.exoplatform.shareextension.service.ShareService.UploadInfo;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Log;
 
 import android.net.Uri;
-import android.util.Log;
 
 /**
  * Created by The eXo Platform SAS<br/>
@@ -82,12 +84,15 @@ public class UploadAction extends Action {
     OutputStream output = null;
     PrintWriter writer = null;
     try {
+      if (postInfo == null || postInfo.ownerAccount == null)
+        throw new IOException(new StringBuilder("Input parameter null info=").append(postInfo).toString());
       // Open a connection to the upload web service
       StringBuffer stringUrl = new StringBuffer(postInfo.ownerAccount.serverUrl).append("/portal")
                                                                                 .append(ExoConstants.DOCUMENT_UPLOAD_PATH_REST)
                                                                                 .append("?uploadId=")
                                                                                 .append(id);
       URL uploadUrl = new URL(stringUrl.toString());
+      // TODO need check case https connection ?
       HttpURLConnection uploadReq = (HttpURLConnection) uploadUrl.openConnection();
       uploadReq.setDoOutput(true);
       uploadReq.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
@@ -104,10 +109,12 @@ public class UploadAction extends Action {
       // Write the form data
       output = uploadReq.getOutputStream();
       writer = new PrintWriter(new OutputStreamWriter(output, "UTF-8"), true);
-      writer.append("--" + boundary).append(CRLF);
-      writer.append("Content-Disposition: form-data; name=\"file\"; filename=\"" + uploadInfo.fileToUpload.documentName + "\"")
+      writer.append("--").append(boundary).append(CRLF);
+      writer.append("Content-Disposition: form-data; name=\"file\"; filename=\"")
+            .append(uploadInfo.fileToUpload.documentName)
+            .append("\"")
             .append(CRLF);
-      writer.append("Content-Type: " + uploadInfo.fileToUpload.documentMimeType).append(CRLF);
+      writer.append("Content-Type: ").append(uploadInfo.fileToUpload.documentMimeType).append(CRLF);
       writer.append(CRLF).flush();
       byte[] buf = new byte[1024];
       while (uploadInfo.fileToUpload.documentData.read(buf) != -1) {
@@ -115,11 +122,13 @@ public class UploadAction extends Action {
       }
       output.flush();
       writer.append(CRLF).flush();
-      writer.append("--" + boundary + "--").append(CRLF).flush();
+      writer.append("--").append(boundary).append("--").append(CRLF).flush();
       // Execute the connection and retrieve the status code
       status = uploadReq.getResponseCode();
-    } catch (Exception e) {
-      Log.e(LOG_TAG, "Error while uploading " + uploadInfo.fileToUpload, e);
+    } catch (UnsupportedEncodingException e) {
+      Log.e(LOG_TAG, "Error while uploading ", uploadInfo.fileToUpload, Log.getStackTraceString(e));
+    } catch (IOException e) {
+      Log.e(LOG_TAG, "Error while uploading ", uploadInfo.fileToUpload, Log.getStackTraceString(e));
     } finally {
       if (uploadInfo != null && uploadInfo.fileToUpload != null && uploadInfo.fileToUpload.documentData != null)
         try {
@@ -138,12 +147,18 @@ public class UploadAction extends Action {
     }
     if (status < HttpURLConnection.HTTP_OK || status >= HttpURLConnection.HTTP_MULT_CHOICE) {
       // Exit if the upload went wrong
-      return listener.onError("Could not upload the file " + uploadInfo.fileToUpload.documentName);
+      return listener.onError(String.format("Could not upload the file %s", uploadInfo.fileToUpload.documentName));
     }
     status = -1;
-    try {
+    try
+
+    {
+      if (postInfo == null || postInfo.ownerAccount == null)
+        throw new IOException(new StringBuilder("Input parameter null info=").append(postInfo).toString());
       // Prepare the request to save the file in JCR
-      String stringUrl = postInfo.ownerAccount.serverUrl + "/portal" + ExoConstants.DOCUMENT_CONTROL_PATH_REST;
+      String stringUrl = new StringBuilder(postInfo.ownerAccount.serverUrl).append("/portal")
+                                                                           .append(ExoConstants.DOCUMENT_CONTROL_PATH_REST)
+                                                                           .toString();
       Uri moveUri = Uri.parse(stringUrl);
       moveUri = moveUri.buildUpon()
                        .appendQueryParameter("uploadId", id)
@@ -157,14 +172,36 @@ public class UploadAction extends Action {
       // Execute the request and retrieve the status code
       HttpResponse move = ExoConnectionUtils.httpClient.execute(moveReq);
       status = move.getStatusLine().getStatusCode();
-    } catch (Exception e) {
-      Log.e(LOG_TAG, "Error while saving " + uploadInfo.fileToUpload + " in JCR", e);
+    } catch (
+
+    ClientProtocolException e)
+
+    {
+      Log.e(LOG_TAG, "Error while saving ", uploadInfo.fileToUpload, " in JCR", Log.getStackTraceString(e));
+    } catch (
+
+    IOException e)
+
+    {
+      Log.e(LOG_TAG, "Error while saving ", uploadInfo.fileToUpload, " in JCR", Log.getStackTraceString(e));
+    } catch (
+
+    Exception e)
+
+    {
+      // XXX can not remove because Uri.parse can throw runtime exception.
+      Log.e(LOG_TAG, "Error while saving ", uploadInfo.fileToUpload, " in JCR", Log.getStackTraceString(e));
     }
+
     boolean ret = false;
-    if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
-      ret = listener.onSuccess("File " + uploadInfo.fileToUpload.documentName + "uploaded successfully");
-    } else {
-      ret = listener.onError("Could not save the file " + uploadInfo.fileToUpload.documentName);
+    if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES)
+
+    {
+      ret = listener.onSuccess(String.format("File %s uploaded successfully", uploadInfo.fileToUpload.documentName));
+    } else
+
+    {
+      ret = listener.onError(String.format("Could not save the file %s", uploadInfo.fileToUpload.documentName));
     }
     return ret;
   }

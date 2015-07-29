@@ -171,7 +171,8 @@ public class SocialHomeTickerItem extends LinearLayout {
       break;
 
     case SocialActivityUtil.ACTIVITY_TYPE_ANSWER:
-      String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
+      String answerBuffer =
+          SocialActivityUtil.getActivityTypeAnswer(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
 
       textViewName.setText(Html.fromHtml(answerBuffer));
 

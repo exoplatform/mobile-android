@@ -143,8 +143,8 @@ public class SocialActivityDetailsItem extends LinearLayout {
                             TextView.BufferType.SPANNABLE);
 
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
-                                                                activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
-                                                                                                   : activityInfo.getPostedTime()));
+                           activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
+                                                              : activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());

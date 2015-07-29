@@ -56,8 +56,9 @@ public abstract class BaseActivity extends FragmentActivity {
     }
 
   }
-
-  private HashSet<WeakReference<BasicActivityLifecycleCallbacks>> mLifeCycleCallbackSet = new HashSet<WeakReference<BasicActivityLifecycleCallbacks>>();
+  
+  private HashSet<WeakReference<BasicActivityLifecycleCallbacks>> mLifeCycleCallbackSet =
+      new HashSet<WeakReference<BasicActivityLifecycleCallbacks>>();
 
   public void addLifeCycleObserverRef(BasicActivityLifecycleCallbacks cbRef) {
     mLifeCycleCallbackSet.add(new WeakReference<BaseActivity.BasicActivityLifecycleCallbacks>(cbRef));
@@ -65,7 +66,8 @@ public abstract class BaseActivity extends FragmentActivity {
 
   public void removeLifeCycleObserver(BasicActivityLifecycleCallbacks removeCb) {
     synchronized (mLifeCycleCallbackSet) {
-      ArrayList<WeakReference<BasicActivityLifecycleCallbacks>> removeList = new ArrayList<WeakReference<BasicActivityLifecycleCallbacks>>();
+      ArrayList<WeakReference<BasicActivityLifecycleCallbacks>> removeList =
+          new ArrayList<WeakReference<BasicActivityLifecycleCallbacks>>();
       for (WeakReference<BasicActivityLifecycleCallbacks> cbRef : mLifeCycleCallbackSet) {
         BasicActivityLifecycleCallbacks cb = cbRef == null ? null : cbRef.get();
         if (cb == removeCb) {

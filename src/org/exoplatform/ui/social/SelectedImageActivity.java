@@ -227,15 +227,14 @@ public class SelectedImageActivity extends Activity implements OnClickListener {
         filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
       }
 
-      try {
-        Log.i(TAG, "[Photo Picker] Image File Path: " + filePath);
+      if (filePath != null) {
+        Log.i("PHOTO_PICKER", "Image File Path: " + filePath);
         file = new File(filePath);
         Bitmap bm = PhotoUtils.shrinkBitmap(filePath, SCALE_WIDTH, SCALE_HEIGHT);
         return ExoDocumentUtils.rotateBitmapToNormal(filePath, bm);
-      } catch (NullPointerException e) {
+      } else {
         return null;
       }
-
     }
 
     @Override
