@@ -66,7 +66,7 @@ public class ExoWebAddress {
     /** parses given uriString. */
     public ExoWebAddress(String address) {
         if (address == null) {
-            throw new NullPointerException();
+            throw new ParseException("Input address is null");
         }
 
         mScheme = "";
