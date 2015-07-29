@@ -120,7 +120,7 @@ public class SignInFragment extends Fragment {
     if (getActivity() instanceof ShareActivity) {
       return (ShareActivity) getActivity();
     } else {
-      throw new RuntimeException("This fragment is only valid in the activity org.exoplatform.shareextension.ShareActivity");
+      throw new UnsupportedOperationException("This fragment is only valid in the activity org.exoplatform.shareextension.ShareActivity");
     }
   }
 }
