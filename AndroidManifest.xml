@@ -122,8 +122,8 @@
         <!--
            Share Extension
           -->
+        <activity android:configChanges="keyboardHidden|orientation" android:label="eXo" android:name=".shareextension.ShareActivity">
 
-        <activity android:label="eXo" android:configChanges="keyboardHidden|orientation" android:name=".shareextension.ShareActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>

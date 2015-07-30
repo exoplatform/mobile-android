@@ -22,6 +22,7 @@ import org.exoplatform.R;
 import org.exoplatform.controller.document.DocumentActionAdapter;
 import org.exoplatform.model.ExoFile;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.view.Window;
 import android.widget.ListView;
@@ -31,17 +32,18 @@ import android.widget.TextView;
 public class DocumentActionDialog extends Dialog {
 
   private ListView             _listViewFileAction;   // List of
-                                                       // action
+                                                      // action
 
   private TextView             _txtvFileName;         // File's
-                                                       // name
+                                                      // name
 
   public ExoFile               myFile;                // Current
-                                                       // file
+                                                      // file
 
   public DocumentActionAdapter _documentActionAdapter;
-  
+
   // Constructor
+  @SuppressLint("Instantiatable")
   public DocumentActionDialog(DocumentActivity context, ExoFile file, boolean isActBar) {
 
     super(context);

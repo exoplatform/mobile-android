@@ -21,6 +21,7 @@ package org.exoplatform.accountswitcher;
 import org.exoplatform.R;
 import org.exoplatform.base.BaseActivity;
 import org.exoplatform.ui.HomeActivity;
+import org.exoplatform.ui.login.LoginActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +40,8 @@ public class AccountSwitcherActivity extends BaseActivity {
 
     setContentView(R.layout.account_switcher_activity);
 
+    setTitle(R.string.Server);
+
     getSupportFragmentManager().beginTransaction()
                                .add(R.id.share_extension_fragment,
                                     new AccountSwitcherFragment(),
@@ -54,6 +57,17 @@ public class AccountSwitcherActivity extends BaseActivity {
     // IntentCompat.FLAG_ACTIVITY_CLEAR_TASK works only from API_VERSION>=11
     home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
     startActivity(home);
+    finish();
+  }
+
+  /**
+   * Redirect to the LoginActivity (Authenticate screen)
+   */
+  public void redirectToLoginScreenAndFinish() {
+    Intent login = new Intent(this, LoginActivity.class);
+    // IntentCompat.FLAG_ACTIVITY_CLEAR_TASK works only from API_VERSION>=11
+    login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+    startActivity(login);
     finish();
   }
 

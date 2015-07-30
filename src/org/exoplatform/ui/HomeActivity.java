@@ -235,7 +235,7 @@ public class HomeActivity extends Activity {
     if (SocialServiceHelper.getInstance().activityService == null)
       homeController.launchNewsService();
     else
-      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
+      homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY_HOME, HomeController.FLIPPER_VIEW);
   }
 
   public void setProfileInfo(String[] profile) {
@@ -266,7 +266,7 @@ public class HomeActivity extends Activity {
      * Display maximum 10 activities
      */
     int listSize = list.size();
-    int maxChild = (listSize > ExoConstants.HOME_SOCIAL_MAX_NUMBER) ? ExoConstants.HOME_SOCIAL_MAX_NUMBER : listSize;
+    int maxChild = (listSize > ExoConstants.NUMBER_OF_ACTIVITY_HOME) ? ExoConstants.NUMBER_OF_ACTIVITY_HOME : listSize;
     for (int i = 0; i < maxChild; i++) {
       socialItem = new SocialHomeTickerItem(this, list.get(i));
       viewFlipper.addView(socialItem, params);

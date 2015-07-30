@@ -25,6 +25,8 @@ import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.ExoConstants;
 
+import com.squareup.picasso.Picasso;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -43,12 +45,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
-public class DashboardItemAdapter extends BaseAdapter /*
-                                                       * implements
-                                                       * ImageProcessor
-                                                       */{
+public class DashboardItemAdapter extends
+                                  BaseAdapter /*
+                                               * implements ImageProcessor
+                                               */ {
 
   private ArrayList<GadgetInfo> _arrayOfItems;
 
@@ -110,6 +110,7 @@ public class DashboardItemAdapter extends BaseAdapter /*
 
     final GadgetInfo inforGadget = _arrayOfItems.get(position);
 
+    // TODO use ViewHolder pattern
     if (inforGadget.getTabName() != null) {
 
       convertView = mInflater.inflate(R.layout.gadget_tab_layout, parent, false);
@@ -144,7 +145,6 @@ public class DashboardItemAdapter extends BaseAdapter /*
       }
 
       ImageView imageViewAvatar = (ImageView) convertView.findViewById(R.id.gadget_image);
-      // TODO check image load
       Picasso.with(mContext)
              .load(Uri.parse(inforGadget.getStrGadgetIcon()))
              .placeholder(R.drawable.gadgetplaceholder)

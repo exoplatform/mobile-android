@@ -224,6 +224,7 @@
     <string name="EXO">EXO</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
+    <string name="eXo">EXO</string>
 
     <!-- Server edition -->
     <string name="OptionalHint">Optionnel</string>

@@ -20,6 +20,8 @@ package org.exoplatform.utils.image;
 
 import org.exoplatform.R;
 
+import com.squareup.picasso.Transformation;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -27,8 +29,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
-
-import com.squareup.picasso.Transformation;
 
 /**
  * Created by The eXo Platform SAS May 14, 2015

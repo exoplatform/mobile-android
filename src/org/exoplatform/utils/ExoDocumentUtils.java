@@ -70,7 +70,6 @@ import android.os.StatFs;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.Html;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 public class ExoDocumentUtils {

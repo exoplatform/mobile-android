@@ -355,7 +355,7 @@ public class ShareActivity extends FragmentActivity {
     return (mButtonWrapper != null && mButtonWrapper.getDisplayedChild() == PROGRESS_INDEX);
   }
 
-  public void toogleProgressVisible(boolean visible) {
+  public void toggleProgressVisible(boolean visible) {
     if (mButtonWrapper != null) {
       mButtonWrapper.setDisplayedChild(visible ? PROGRESS_INDEX : getButtonIndexFromTag());
     }

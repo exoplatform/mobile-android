@@ -6,7 +6,8 @@
     android:background="@drawable/file_item_background_shape"
     android:gravity="center"
     android:orientation="horizontal"
-    android:padding="5dp" >
+    android:padding="5dp"
+    android:baselineAligned="false">
 
     <LinearLayout
         android:layout_width="0dp"

@@ -33,6 +33,8 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.ExoPicasso;
+import org.exoplatform.utils.image.PicassoImageGetter;
+import org.exoplatform.utils.image.RoundedCornersTranformer;
 import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SocialActivityDetailsItem;
@@ -150,18 +152,13 @@ public class SocialDetailController {
         CommentItemLayout commentItem = new CommentItemLayout(mContext);
         String avatarUrl = comment.getImageUrl();
 
-        // BitmapFactory.Options options = new BitmapFactory.Options();
-        // options.inSampleSize = 4;
-        // options.inPurgeable = true;
-        // options.inInputShareable = true;
-        // commentItem.comAvatarImage.setOptions(options);
-
         if (avatarUrl == null) {
           commentItem.comAvatarImage.setImageResource(ExoConstants.DEFAULT_AVATAR);
         } else {
-          // TODO check options + image loading
-          ExoPicasso.picasso(mContext).load(Uri.parse(avatarUrl)).into(commentItem.comAvatarImage);
-          // commentItem.comAvatarImage.setUrl(avatarUrl);
+          ExoPicasso.picasso(mContext)
+                    .load(Uri.parse(avatarUrl))
+                    .transform(new RoundedCornersTranformer(mContext))
+                    .into(commentItem.comAvatarImage);
         }
         String commentName = comment.getCommentName();
         commentItem.comTextViewName.setText(commentName);
@@ -220,11 +217,7 @@ public class SocialDetailController {
     /*
      * We only display maximum 4 likers at the detail screen
      */
-    int maxChild = 0;
-    if (size > 4) {
-      maxChild = 4;
-    } else
-      maxChild = size;
+    int maxChild = (size > 4) ? 4 : size;
     /*
      * Set list of likers
      */
@@ -235,18 +228,11 @@ public class SocialDetailController {
     ImageView likedAvatar;
     for (int i = 0; i < maxChild; i++) {
       likedAvatar = new ImageView(mContext);
-      // BitmapFactory.Options options = new BitmapFactory.Options();
-      // options.inSampleSize = 4;
-      // options.inPurgeable = true;
-      // options.inInputShareable = true;
-      // likedAvatar.setOptions(options);
-      // TODO check image options + loading
       ExoPicasso.picasso(mContext)
                 .load(Uri.parse(likeLinkedList.get(i).likedImageUrl))
                 .placeholder(R.drawable.default_avatar)
+                .transform(new RoundedCornersTranformer(mContext))
                 .into(likedAvatar);
-      // likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
-      // likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);
       likedLayoutWrap.addView(likedAvatar, params);
     }
     /*
@@ -254,11 +240,13 @@ public class SocialDetailController {
      */
     if (size > 4) {
       likedAvatar = new ImageView(mContext);
-      Picasso.with(mContext).load(R.drawable.activity_detail_more_likers).into(likedAvatar);
-      // likedAvatar.setDefaultImageDrawable(mContext.getResources().getDrawable(R.drawable.activity_detail_more_likers));
+      Picasso.with(mContext)
+             .load(R.drawable.activity_detail_more_likers)
+             .transform(new RoundedCornersTranformer(mContext))
+             .into(likedAvatar);
       likedLayoutWrap.addView(likedAvatar, params);
     }
-
+    likedLayoutWrap.requestLayout();
   }
 
   /*

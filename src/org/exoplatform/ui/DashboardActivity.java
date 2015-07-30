@@ -40,9 +40,6 @@ import android.view.ViewStub;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
-import greendroid.widget.LoaderActionBarItem;
 
 public class DashboardActivity extends FragmentActivity {
   private static final String     ACCOUNT_SETTING = "account_setting";
@@ -59,7 +56,7 @@ public class DashboardActivity extends FragmentActivity {
 
   private DashboardLoadTask       mLoadTask;
 
-   private MenuItem loaderItem;
+  private MenuItem                loaderItem;
 
   @Override
   public void onCreate(Bundle bundle) {
@@ -89,10 +86,10 @@ public class DashboardActivity extends FragmentActivity {
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
   }
 
-  public void onLoad( MenuItem loader ) {
+  public void onLoad(MenuItem loader) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (mLoadTask == null || mLoadTask.getStatus() == DashboardLoadTask.Status.FINISHED) {
-        mLoadTask = (DashboardLoadTask) new DashboardLoadTask(this , loader ).execute();
+        mLoadTask = (DashboardLoadTask) new DashboardLoadTask(this, loader).execute();
       }
     } else {
       new ConnectionErrorDialog(this).show();
@@ -136,7 +133,7 @@ public class DashboardActivity extends FragmentActivity {
     ExoUtils.setLoadingItem(loaderItem, true);
     return true;
   }
-  
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -146,7 +143,7 @@ public class DashboardActivity extends FragmentActivity {
       finish();
       break;
     case R.id.menu_dashboard_refresh:
-      onLoad( loaderItem );
+      onLoad(loaderItem);
 
       break;
 

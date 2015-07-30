@@ -99,7 +99,7 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
     editTextComment.setOnClickListener(this);
     likeButton = (Button) findViewById(R.id.like_button);
     likeButton.setOnClickListener(this);
-    likedFrame = (RelativeLayout) findViewById(R.id.detail_likers_layout_warpper);
+    likedFrame = (RelativeLayout) findViewById(R.id.detail_likers_layout_wrapper);
     likedFrame.setOnClickListener(this);
     onLoad();
 

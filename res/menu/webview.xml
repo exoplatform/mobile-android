@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
-    <item android:id="@+id/menu_webview_refresh" android:title="@string/LoadingData" android:icon="@drawable/action_bar_icon_refresh" android:visible="false" android:showAsAction="always" android:actionLayout="@layout/action_bar_loading_indicator"></item>
+    <item android:id="@+id/menu_webview_refresh" android:title="@string/RefreshTitle" android:icon="@drawable/action_bar_icon_refresh" android:visible="false" android:showAsAction="always" android:actionLayout="@layout/action_bar_loading_indicator"></item>
     <item android:id="@+id/menu_webview_open_document" android:title="@string/Documents" android:icon="@drawable/actionbar_icon_dodument" android:visible="false" android:showAsAction="ifRoom"></item>
     
     

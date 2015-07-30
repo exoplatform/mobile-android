@@ -36,12 +36,14 @@ import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoUtils;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -52,7 +54,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-// TODO add progress bar
 public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   private final ArrayList<SocialActivityInfo> items;
@@ -103,6 +104,8 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     holder.contentLayoutWrap.setOnClickListener(new OnClickListener() {
 
       public void onClick(View v) {
+        // TODO open the image immediately if there is one,
+        // otherwise open the details screen
         String activityId = actInfo.getActivityId();
         SocialDetailHelper.getInstance().setActivityId(activityId);
         SocialDetailHelper.getInstance().setAttachedImageUrl(actInfo.getAttachedImageUrl());
@@ -145,10 +148,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   private void onLikeLoad(SocialActivityInfo info, int position) {
     if (mLoadTask == null || mLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
-      mLoadTask = (LikeLoadTask) new LikeLoadTask(/*
-                                                   * SocialTabsActivity.instance.
-                                                   * loaderItem,
-                                                   */position).execute(info);
+      mLoadTask = (LikeLoadTask) new LikeLoadTask(position).execute(info);
     }
   }
 
@@ -178,19 +178,19 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   private class LikeLoadTask extends AsyncTask<SocialActivityInfo, Void, Boolean> {
 
-    // private LoaderActionBarItem loaderItem;
+    private MenuItem loaderItem;
 
-    private int currentPosition;
+    private int      currentPosition;
 
-    public LikeLoadTask(/* LoaderActionBarItem item, */int pos) {
-      // loaderItem = item;
+    public LikeLoadTask(int pos) {
+      loaderItem = (SocialTabsActivity.instance != null) ? SocialTabsActivity.instance.loaderItem : null;
       currentPosition = pos;
     }
 
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      // loaderItem.setLoading(true);
+      ExoUtils.setLoadingItem(loaderItem, true);
     }
 
     @Override
@@ -213,8 +213,14 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
     }
 
     @Override
+    protected void onCancelled() {
+      ExoUtils.setLoadingItem(loaderItem, false);
+      super.onCancelled();
+    }
+
+    @Override
     protected void onPostExecute(Boolean result) {
-      // loaderItem.setLoading(false);
+      ExoUtils.setLoadingItem(loaderItem, false);
       if (result) {
         if (SocialTabsActivity.instance != null) {
           int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();

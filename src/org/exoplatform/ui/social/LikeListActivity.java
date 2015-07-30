@@ -101,7 +101,7 @@ public class LikeListActivity extends Activity {
       }
     });
   }
-  
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
@@ -166,13 +166,11 @@ public class LikeListActivity extends Activity {
       } else {
         viewHolder = (ViewHolder) convertView.getTag();
       }
-      // viewHolder.imageView.setDefaultImageResource(R.drawable.default_avatar);
+
       ExoPicasso.picasso(getApplicationContext())
                 .load(Uri.parse(likeList.get(position).likedImageUrl))
                 .error(R.drawable.default_avatar)
                 .into(viewHolder.imageView);
-      // TODO check image loading
-      // viewHolder.imageView.setUrl(likeList.get(position).likedImageUrl);
       viewHolder.textView.setText(likeList.get(position).getLikeName());
 
       return convertView;

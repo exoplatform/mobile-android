@@ -418,8 +418,6 @@ public class ExoConnectionUtils {
         String tenantStatus = convertStreamToString(response.getEntity().getContent()).replace("\n", "")
                                                                                       .replace("\r", "")
                                                                                       .replace("\r\n", "");
-        if (Log.LOGD)
-          Log.d(TAG, "Tenant status: " + tenantStatus);
 
         if (tenantStatus.equalsIgnoreCase(ONLINE))
           return SIGNIN_SERVER_ONLINE;
@@ -580,7 +578,7 @@ public class ExoConnectionUtils {
    * Clean up connection data to log out
    */
   public static void loggingOut() {
-    // TODO do all this in an async task
+    // TODO log out in an async task
     if (ExoConnectionUtils.httpClient != null) {
       new LogoutTask(ExoConnectionUtils.httpClient).execute();
       ExoConnectionUtils.httpClient = null;

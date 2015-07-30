@@ -15,6 +15,7 @@
             android:contentDescription="@string/Me"
             android:src="@drawable/default_avatar"
             android:layout_marginLeft="@dimen/margin_xxs"
+            android:layout_marginStart="@dimen/margin_xxs"
             android:scaleType="fitXY" />
 
     <!-- Content -->
@@ -34,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_xs"
+                android:layout_marginStart="@dimen/margin_xs"
                 android:maxLines="5"
                 android:textStyle="bold" />
 
@@ -43,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_xs"
+                android:layout_marginStart="@dimen/margin_xs"
                 android:layout_marginTop="@dimen/margin_xxs"
                 android:maxLines="5" />
 
@@ -52,6 +55,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_xs"
+                android:layout_marginStart="@dimen/margin_xs"
                 android:layout_marginTop="@dimen/margin_xxs"
                 android:maxLines="5"
                 android:visibility="gone" />
@@ -66,7 +70,7 @@
                 android:inflatedId="@+id/attached_image_stub_inflate"
                 android:layout="@layout/activity_image_display_layout"
                 android:padding="@dimen/margin_xxs"
-                android:visibility="gone" />
+                />
 
         <TextView
                 android:id="@+id/activity_comment_view"
@@ -74,6 +78,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_xs"
+                android:layout_marginStart="@dimen/margin_xs"
                 android:layout_marginTop="@dimen/margin_xxs"
                 android:maxLines="5"
                 android:visibility="gone" />
@@ -83,6 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_xxs"
                 android:layout_marginRight="@dimen/margin_xs"
+                android:layout_marginEnd="@dimen/margin_xs"
                 android:layout_marginTop="@dimen/margin_xs"
                 android:gravity="center_vertical">
 
@@ -92,8 +98,10 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/ImageDesc"
                     android:layout_marginLeft="@dimen/margin_xxs"
+                    android:layout_marginStart="@dimen/margin_xxs"
                     android:padding="@dimen/margin_xxs"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/activity_type_calendar" />
 
             <!-- Time text view -->
             <TextView
@@ -102,10 +110,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/activity_image_type"
+                    android:layout_toEndOf="@id/activity_image_type"
                     android:layout_marginLeft="@dimen/margin_xxs"
-                    android:layout_marginTop="@dimen/margin_xxs"
+                    android:layout_marginTop="@dimen/margin_xs"
                     android:gravity="center_horizontal"
-                    android:layout_marginRight="@dimen/margin_xxs" />
+                    android:layout_marginRight="@dimen/margin_xxs"
+                    android:text="@string/About" />
 
             <!-- Comment button -->
             <Button
@@ -114,9 +124,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:background="@drawable/social_activity_browser_comment_button_shape"
                     android:gravity="center_vertical"
-                    android:padding="@dimen/margin_xxs" />
+                    android:padding="@dimen/margin_xxs"
+                    />
 
             <!-- Like button -->
             <Button
@@ -125,9 +137,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@id/button_Comment"
+                    android:layout_toStartOf="@id/button_Comment"
                     android:background="@drawable/social_activity_browser_like_button_shape"
                     android:gravity="center_vertical"
-                    android:padding="@dimen/margin_xxs" />
+                    android:padding="@dimen/margin_xxs"
+                    />
 
         </RelativeLayout>
     </LinearLayout>

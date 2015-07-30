@@ -77,7 +77,7 @@ public class DocumentActivity extends Activity {
 
   // default
   public static final int        ACTION_DEFAULT   = 8;
-  
+
   private MenuItem               mDocAction;
 
   private static final String    DOCUMENT_HELPER  = "document_helper";
@@ -150,7 +150,7 @@ public class DocumentActivity extends Activity {
     outState.putParcelable(CURRENT_FILE, _fileForCurrentActionBar);
 
   }
-  
+
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.document, menu);
@@ -158,7 +158,7 @@ public class DocumentActivity extends Activity {
     addOrRemoveFileActionButton();
     return true;
   }
-  
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
@@ -185,41 +185,26 @@ public class DocumentActivity extends Activity {
     return true;
   }
 
-  // TODO implement with action bar items
   public void addOrRemoveFileActionButton() {
     /*
      * If at the document level or driver level, make the action bar button
      * invisible
      */
+    if (mDocAction == null)
+      return;
+
     if (_fileForCurrentActionBar == null) {
-      // getActionBar().removeItem(0);
-      if (mDocAction != null) {
-        mDocAction.setVisible(false);
-      }
+      mDocAction.setVisible(false);
     } else {
       if (_fileForCurrentActionBar.name == null) {
-        // getActionBar().removeItem(0);
-        if (mDocAction != null) {
-          mDocAction.setVisible(false);
-        }
+        mDocAction.setVisible(false);
       } else if ("".equals(_fileForCurrentActionBar.name) || "".equals(_fileForCurrentActionBar.path)) {
-        // getActionBar().removeItem(0);
-        if (mDocAction != null) {
-          mDocAction.setVisible(false);
-        }
+        mDocAction.setVisible(false);
       } else {
-        if (mDocAction != null) {
-          mDocAction.setVisible(true);
-        }
-        // if (getActionBar().getItem(0) == null) {
-        // addActionBarItem();
-        // getActionBar().getItem(0).setDrawable(R.drawable.actionbar_icon_dodument);
-        // }
+        mDocAction.setVisible(true);
       }
     }
   }
-  
-  
 
   @Override
   public void onBackPressed() {

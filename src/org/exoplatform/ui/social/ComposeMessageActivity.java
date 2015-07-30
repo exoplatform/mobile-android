@@ -179,23 +179,10 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-    // TODO cleanup
-    // case android.R.id.home:
-    //
-    // if (SocialDetailActivity.socialDetailActivity != null) {
-    // SocialDetailActivity.socialDetailActivity.finish();
-    // }
-    //
-    // if (SocialTabsActivity.instance != null) {
-    // SocialTabsActivity.instance.finish();
-    // }
-    // finish();
-    // break;
     case R.id.menu_compose_attach:
       new AddPhotoDialog(this, messageController).show();
       break;
     }
-
     return true;
   }
 

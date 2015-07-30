@@ -174,7 +174,7 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
       }
 
       /** Load activities for view flipper */
-      homeController.onLoad(ExoConstants.HOME_SOCIAL_MAX_NUMBER, HomeController.FLIPPER_VIEW);
+      homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY_HOME, HomeController.FLIPPER_VIEW);
 
     } else {
       if (loaderItem != null)

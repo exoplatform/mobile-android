@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/menu_compose_attach" android:title="@string/AttachedPhoto" android:showAsAction="ifRoom" android:icon="@drawable/action_bar_icon_photo" android:visible="true"></item>
+    <item android:id="@+id/menu_compose_attach" android:title="@string/AddAPhoto" android:showAsAction="ifRoom" android:icon="@drawable/action_bar_icon_photo" android:visible="true"></item>
 </menu>
