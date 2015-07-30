@@ -37,6 +37,7 @@ import org.exoplatform.ui.social.AllUpdatesFragment;
 import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.Log;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -181,9 +182,13 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
       }
       return 1;
     } catch (SocialClientLibException e) {
+      if (Log.LOGD)
+        Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return 0;
     } catch (RuntimeException e) {
       // XXX cannot replace because SocialClientLib can throw exceptions like ServerException, UnsupportMethod ,..
+      if (Log.LOGD)
+        Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return -2;
     }
 

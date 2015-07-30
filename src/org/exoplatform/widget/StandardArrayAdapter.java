@@ -38,6 +38,7 @@ import org.exoplatform.ui.social.SocialActivityStreamItem;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Log;
 
 import android.content.Context;
 import android.content.Intent;
@@ -204,9 +205,13 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
         return true;
 
       } catch (SocialClientLibException e) {
+        if (Log.LOGD)
+          Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
         return false;
       } catch (RuntimeException e) {
         // XXX cannot replace because SocialClientLib can throw exceptions like ServerException, UnsupportMethod ,..
+        if (Log.LOGD)
+          Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
         return false;
       }
     }

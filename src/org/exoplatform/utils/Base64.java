@@ -584,12 +584,12 @@ public class Base64
         }   // end finally
         
         // Return value according to relevant encoding.
-        try 
-        {
+        try  {
             return new String( baos.toByteArray(), PREFERRED_ENCODING );
         }   // end try
-        catch (java.io.UnsupportedEncodingException uue)
-        {
+        catch (java.io.UnsupportedEncodingException e) {
+          if (Log.LOGD)
+            Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
             return new String( baos.toByteArray() );
         }   // end catch
         
@@ -946,12 +946,12 @@ public class Base64
     public static byte[] decode( String s, int options )
     {   
         byte[] bytes;
-        try
-        {
+        try {
             bytes = s.getBytes( PREFERRED_ENCODING );
         }   // end try
-        catch( java.io.UnsupportedEncodingException uee )
-        {
+        catch( java.io.UnsupportedEncodingException e ) {
+          if (Log.LOGD)
+            Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
             bytes = s.getBytes();
         }   // end catch
 		//</change>
@@ -962,32 +962,28 @@ public class Base64
         
         // Check to see if it's gzip-compressed
         // GZIP Magic Two-Byte Number: 0x8b1f (35615)
-        if( bytes != null && bytes.length >= 4 )
-        {
+        if( bytes != null && bytes.length >= 4 ) {
             
             int head = ((int)bytes[0] & 0xff) | ((bytes[1] << 8) & 0xff00);       
-            if( java.util.zip.GZIPInputStream.GZIP_MAGIC == head ) 
-            {
+            if( java.util.zip.GZIPInputStream.GZIP_MAGIC == head ) {
                 java.io.ByteArrayInputStream  bais = null;
                 java.util.zip.GZIPInputStream gzis = null;
                 java.io.ByteArrayOutputStream baos = null;
                 byte[] buffer = new byte[2048];
                 int    length = 0;
 
-                try
-                {
+                try {
                     baos = new java.io.ByteArrayOutputStream();
                     bais = new java.io.ByteArrayInputStream( bytes );
                     gzis = new java.util.zip.GZIPInputStream( bais );
 
-                    while( ( length = gzis.read( buffer ) ) >= 0 )
-                    {
+                    while( ( length = gzis.read( buffer ) ) >= 0 ) {
                         baos.write(buffer,0,length);
                     }   // end while: reading input
                     // No error? Get new bytes.
                     bytes = baos.toByteArray();
                 }   // end try
-                catch( java.io.IOException e ) {    
+                catch( java.io.IOException e ) {
                   Log.d(TAG, "IOException : ", e.getLocalizedMessage());
                     // Just return originally-decoded bytes
                 }   // end catch
@@ -1159,8 +1155,7 @@ public class Base64
             System.arraycopy( buffer, 0, decodedData, 0, length );
             
         }   // end try
-        catch( java.io.IOException e )
-        {
+        catch( java.io.IOException e ) {
             Log.d(TAG, "Error decoding from file " + filename + " - IOException : " + e.getLocalizedMessage());
         }   // end catch: IOException
         finally {

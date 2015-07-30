@@ -53,8 +53,7 @@ public class CheckingTenantStatusTask extends AsyncTask<String, Void, Integer> {
         return ExoConnectionUtils.TENANT_OK;
 
       return status;
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       Log.d(TAG, "IOException: " + e.getLocalizedMessage());
       return ExoConnectionUtils.SIGNIN_SERVER_NAV;
     }

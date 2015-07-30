@@ -88,6 +88,8 @@ public class ServerConfigurationUtils {
                     returnValue = f.createNewFile();
             }
         } catch (IOException e) {
+          if (Log.LOGD)
+            Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
             return false;
         }
 
@@ -408,7 +410,7 @@ public class ServerConfigurationUtils {
         Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
       return arrServerList;
     } catch (Exception e) {
-      // XXX unknown why catch exception here, maybe for parse booean, long ?
+      // XXX unknown why catch exception here, maybe for parse boolean, long ?
       Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
       return arrServerList;
     } finally {

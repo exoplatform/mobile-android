@@ -63,7 +63,8 @@ public class Log {
 
   public static int d(final String tag, final String msg, Object... args) {
     if (LOGD) {
-      StringBuilder bld = new StringBuilder(msg);
+      StringBuilder bld = new StringBuilder();
+      bld.append(msg);
       if (args != null) {
         for (Object obj : args) {
           bld.append(obj);
@@ -83,7 +84,8 @@ public class Log {
 
   public static int e(final String tag, final String msg, Object... args) {
     if (LOGE) {
-      StringBuilder bld = new StringBuilder(msg);
+      StringBuilder bld = new StringBuilder();
+      bld.append(msg);
       if (args != null) {
         for (Object obj : args) {
           bld.append(obj);
@@ -103,7 +105,8 @@ public class Log {
 
     public static int i(final String tag, final String msg, Object... args) {
       if (LOGI) {
-        StringBuilder bld = new StringBuilder(msg);
+        StringBuilder bld = new StringBuilder();
+        bld.append(msg);
         if (args != null) {
           for (Object obj : args) {
             bld.append(obj);

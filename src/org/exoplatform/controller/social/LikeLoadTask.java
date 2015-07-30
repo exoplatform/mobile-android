@@ -18,8 +18,6 @@
  */
 package org.exoplatform.controller.social;
 
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,11 +38,13 @@ import org.exoplatform.ui.social.MySpacesFragment;
 import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Log;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import greendroid.widget.LoaderActionBarItem;
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
@@ -127,6 +127,8 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
       }
       return likeLinkedList;
     } catch (SocialClientLibException e) {
+      if (Log.LOGD)
+        Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     }
   }

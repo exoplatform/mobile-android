@@ -269,6 +269,8 @@ public class ExoDocumentUtils {
         return false;
       }
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     } finally {
       fileManager.delete();
@@ -741,6 +743,8 @@ public class ExoDocumentUtils {
         return false;
 
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     }
   }
