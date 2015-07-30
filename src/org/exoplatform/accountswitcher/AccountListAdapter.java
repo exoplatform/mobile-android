@@ -119,10 +119,14 @@ public class AccountListAdapter extends BaseAdapter {
     
     if ("".equalsIgnoreCase(account.avatarUrl)) {
       // no avatar URL, load a standard image
-      Picasso.with(mContext).load(R.drawable.default_avatar).resizeDimen(R.dimen.account_list_avatar_size,R.dimen.account_list_avatar_size).centerCrop().into(holder.userAvatar);
+      Picasso.with(mContext).load(R.drawable.default_avatar)
+             .resizeDimen(R.dimen.account_list_avatar_size, R.dimen.account_list_avatar_size).centerCrop()
+             .into(holder.userAvatar);
     } else {
       // load the avatar from its URL
-      Picasso.with(mContext).load(account.avatarUrl).resizeDimen(R.dimen.account_list_avatar_size,R.dimen.account_list_avatar_size).centerCrop().into(holder.userAvatar);
+      Picasso.with(mContext).load(account.avatarUrl)
+             .resizeDimen(R.dimen.account_list_avatar_size, R.dimen.account_list_avatar_size).centerCrop()
+             .into(holder.userAvatar);
     }
     
     return convertView;

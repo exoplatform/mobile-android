@@ -331,98 +331,97 @@ public class ServerConfigurationUtils {
         return arrServerList;
     }
 
-    /**
-     * Retrieve server list from XML config file
-     * 
-     * @param context
-     * @param fileName
-     * @return a list of servers, or an empty list, but never null
-     */
-    public static ArrayList<ExoAccount> getServerListFromFile(Context context, String fileName) {
-        Log.i(TAG, "getServerListFromFile: " + fileName);
+  /**
+   * Retrieve server list from XML config file
+   * 
+   * @param context
+   * @param fileName
+   * @return a list of servers, or an empty list, but never null
+   */
+  public static ArrayList<ExoAccount> getServerListFromFile(Context context, String fileName) {
+    Log.i(TAG, "getServerListFromFile: " + fileName);
 
-        ArrayList<ExoAccount> arrServerList = new ArrayList<ExoAccount>();
-        FileInputStream fis = null;
-        try {
+    ArrayList<ExoAccount> arrServerList = new ArrayList<ExoAccount>();
+    FileInputStream fis = null;
+    try {
 
-            fis = context.openFileInput(fileName);
-            DocumentBuilderFactory doc_build_fact = DocumentBuilderFactory.newInstance();
-            DocumentBuilder doc_builder = doc_build_fact.newDocumentBuilder();
-            Document obj_doc = doc_builder.parse(fis);
+      fis = context.openFileInput(fileName);
+      DocumentBuilderFactory doc_build_fact = DocumentBuilderFactory.newInstance();
+      DocumentBuilder doc_builder = doc_build_fact.newDocumentBuilder();
+      Document obj_doc = doc_builder.parse(fis);
 
-            if (null != obj_doc) {
-                org.w3c.dom.Element feed = obj_doc.getDocumentElement();
-                NodeList obj_nod_list = feed.getElementsByTagName("server");
+      if (null != obj_doc) {
+        org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+        NodeList obj_nod_list = feed.getElementsByTagName("server");
 
-                for (int i = 0; i < obj_nod_list.getLength(); i++) {
-                    Node itemNode = obj_nod_list.item(i);
-                    if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element itemElement = (Element) itemNode;
+        for (int i = 0; i < obj_nod_list.getLength(); i++) {
+          Node itemNode = obj_nod_list.item(i);
+          if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+            Element itemElement = (Element) itemNode;
 
-                        ExoAccount serverObj = new ExoAccount();
-                        serverObj.accountName = itemElement.getAttribute("name");
-                        serverObj.serverUrl = itemElement.getAttribute(ExoConstants.EXO_URL_SERVER);
-                        serverObj.username = itemElement.getAttribute(ExoConstants.EXO_URL_USERNAME);
-                        try {
-                            serverObj.password = SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD,
-                                                                      itemElement.getAttribute("password"));
-                        } catch (Exception ee) {
-                          // XXX catch runtime exception throw while decrypt password
-                            Log.e(TAG, "Could not decrypt password: " + ee.getLocalizedMessage());
-                            Log.w(TAG, "Leaving password attribute empty");
-                            serverObj.password = "";
-                        }
-                        serverObj.isRememberEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
-                        serverObj.isAutoLoginEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
-                        serverObj.userFullName = itemElement.getAttribute(ExoConstants.EXO_USER_FULLNAME);
-                        try {
-                          String logTime = itemElement.getAttribute(ExoConstants.EXO_LAST_LOGIN);
-                          if (logTime != null) 
-                            serverObj.lastLoginDate = Long.parseLong(logTime);
-                          else {
-                            serverObj.lastLoginDate = -1;
-                            Log.i(TAG, "Last login date unknown");
-                          }
-                        } catch (NumberFormatException e) {
-                            serverObj.lastLoginDate = -1;
-                            Log.i(TAG, "Last login date unknown");
-                        }
-                        serverObj.avatarUrl = itemElement.getAttribute(ExoConstants.EXO_URL_AVATAR);
-                        arrServerList.add(serverObj);
-                    }
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            Log.i(TAG, "File not found");
-            return arrServerList;
-        } catch (IOException e) {
-            if (Config.GD_ERROR_LOGS_ENABLED)
-                Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
-            return arrServerList;
-        } catch (ParserConfigurationException e) {
-            if (Config.GD_ERROR_LOGS_ENABLED)
-                Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
-            return arrServerList;
-        } catch (SAXException e) {
-            if (Config.GD_ERROR_LOGS_ENABLED)
-                Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
-            return arrServerList;
-        } catch (Exception e) {
-          // XXX unknown why catch exception here, maybe for parse booean, long ?
-            Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
-            return arrServerList;
-        } finally {
-          if (fis != null)
+            ExoAccount serverObj = new ExoAccount();
+            serverObj.accountName = itemElement.getAttribute("name");
+            serverObj.serverUrl = itemElement.getAttribute(ExoConstants.EXO_URL_SERVER);
+            serverObj.username = itemElement.getAttribute(ExoConstants.EXO_URL_USERNAME);
             try {
-              fis.close();
-            } catch (IOException e) {
-              Log.d(TAG, Log.getStackTraceString(e));
+              serverObj.password = SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD, itemElement.getAttribute("password"));
+            } catch (Exception ee) {
+              // XXX catch runtime exception throw while decrypt password
+              Log.e(TAG, "Could not decrypt password: " + ee.getLocalizedMessage());
+              Log.w(TAG, "Leaving password attribute empty");
+              serverObj.password = "";
             }
+            serverObj.isRememberEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
+            serverObj.isAutoLoginEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
+            serverObj.userFullName = itemElement.getAttribute(ExoConstants.EXO_USER_FULLNAME);
+            try {
+              String logTime = itemElement.getAttribute(ExoConstants.EXO_LAST_LOGIN);
+              if (logTime != null)
+                serverObj.lastLoginDate = Long.parseLong(logTime);
+              else {
+                serverObj.lastLoginDate = -1;
+                Log.i(TAG, "Last login date unknown");
+              }
+            } catch (NumberFormatException e) {
+              serverObj.lastLoginDate = -1;
+              Log.i(TAG, "Last login date unknown");
+            }
+            serverObj.avatarUrl = itemElement.getAttribute(ExoConstants.EXO_URL_AVATAR);
+            arrServerList.add(serverObj);
+          }
         }
+      }
 
-        return arrServerList;
+    } catch (FileNotFoundException e) {
+      Log.i(TAG, "File not found");
+      return arrServerList;
+    } catch (IOException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      return arrServerList;
+    } catch (ParserConfigurationException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      return arrServerList;
+    } catch (SAXException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      return arrServerList;
+    } catch (Exception e) {
+      // XXX unknown why catch exception here, maybe for parse booean, long ?
+      Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      return arrServerList;
+    } finally {
+      if (fis != null)
+        try {
+          fis.close();
+        } catch (IOException e) {
+          Log.d(TAG, Log.getStackTraceString(e));
+        }
     }
+
+    return arrServerList;
+  }
 
     /**
      * Check whether new config file for app exists

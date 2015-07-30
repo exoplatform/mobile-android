@@ -69,7 +69,11 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
 
   private ComposeMessageController messageController;
 
-  public PostStatusTask(Context context, String dir, String content, ComposeMessageController controller, PostWaitingDialog dialog) {
+  public PostStatusTask(Context context,
+                        String dir,
+                        String content,
+                        ComposeMessageController controller,
+                        PostWaitingDialog dialog) {
     mContext = context;
     messageController = controller;
     sdcard_temp_dir = dir;

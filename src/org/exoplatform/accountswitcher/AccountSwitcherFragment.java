@@ -53,43 +53,36 @@ public class AccountSwitcherFragment extends Fragment implements AccountSwitcher
      */
     private TextView            mAccountSwitcherTitle;
 
-    /**
-     * Listener that is called when an account item is tapped
-     */
-    private OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
-                                                         @Override
-                                                         public void onItemClick(AdapterView<?> parent,
-                                                                                 View view,
-                                                                                 int position,
-                                                                                 long id) {
-                                                             if (AccountSetting.getInstance()
-                                                                               .getDomainIndex()
-                                                                               .equals(String.valueOf(position))) {
-                                                                 // If the
-                                                                 // current
-                                                                 // account was
-                                                                 // selected,
-                                                                 // return to
-                                                                 // the Home
-                                                                 // screen
-                                                                 dismissFragment();
-                                                             } else {
-                                                                 // Otherwise,
-                                                                 // get the
-                                                                 // account at
-                                                                 // the given
-                                                                 // position and
-                                                                 // start the
-                                                                 // switching
-                                                                 // operation
-                                                                 ExoAccount account = ServerSettingHelper.getInstance()
-                                                                                                         .getServerInfoList(getActivity())
-                                                                                                         .get(position);
-                                                                 if (account != null)
-                                                                     switchToAccount(account);
-                                                             }
-                                                         }
-                                                     };
+  /**
+   * Listener that is called when an account item is tapped
+   */
+  private OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+      if (AccountSetting.getInstance().getDomainIndex().equals(String.valueOf(position))) {
+        // If the
+        // current
+        // account was
+        // selected,
+        // return to
+        // the Home
+        // screen
+        dismissFragment();
+      } else {
+        // Otherwise,
+        // get the
+        // account at
+        // the given
+        // position and
+        // start the
+        // switching
+        // operation
+        ExoAccount account = ServerSettingHelper.getInstance().getServerInfoList(getActivity()).get(position);
+        if (account != null)
+          switchToAccount(account);
+      }
+    }
+  };
 
     public static final String  FRAGMENT_TAG         = "account_switcher_fragment_dialog";
 

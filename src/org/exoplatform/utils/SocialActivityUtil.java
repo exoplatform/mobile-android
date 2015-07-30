@@ -684,7 +684,10 @@ public class SocialActivityUtil {
     return buffer.toString();
   }
 
-  public static String getActivityTypeLink(String userName, SocialActivityInfo activityInfo, String fontColor, boolean isHomeStyle) {
+  public static String getActivityTypeLink(String userName,
+                                           SocialActivityInfo activityInfo,
+                                           String fontColor,
+                                           boolean isHomeStyle) {
     String linkUrl = activityInfo.templateParams.get("link");
     if (linkUrl == null)
       return "";

@@ -49,19 +49,19 @@ public class SignInFragment extends Fragment {
   private EditText              etPassword;
 
   private TextWatcher           passwordValidator = new TextWatcher() {
-                                                    @Override
-                                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                                      enableDisableMainButton();
-                                                    }
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+      enableDisableMainButton();
+    }
 
-                                                    @Override
-                                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                                    }
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
-                                                    @Override
-                                                    public void afterTextChanged(Editable s) {
-                                                    }
-                                                  };
+    @Override
+    public void afterTextChanged(Editable s) {
+    }
+  };
 
   private SignInFragment() {
   }
@@ -120,7 +120,8 @@ public class SignInFragment extends Fragment {
     if (getActivity() instanceof ShareActivity) {
       return (ShareActivity) getActivity();
     } else {
-      throw new UnsupportedOperationException("This fragment is only valid in the activity org.exoplatform.shareextension.ShareActivity");
+      throw new UnsupportedOperationException(new StringBuilder("This fragment is only valid in the activity")
+          .append(ShareActivity.class.getName()).toString());
     }
   }
 }

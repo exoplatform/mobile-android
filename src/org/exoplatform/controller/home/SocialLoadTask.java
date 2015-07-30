@@ -95,7 +95,8 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
    * @return The list of RestActivity.
    * @throws SocialClientLibException
    */
-  protected abstract RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException;
+  protected abstract RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity,
+                                                                          QueryParams params) throws SocialClientLibException;
   /**
    * Get the list of SocialActivity for the current stream.
    * @return the list of SocialActivityInfo.
