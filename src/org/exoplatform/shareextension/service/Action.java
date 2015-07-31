@@ -41,18 +41,18 @@ public abstract class Action {
       throw new IllegalArgumentException("Cannot pass null as the ActionListener argument");
   }
 
-  protected abstract void doExecute();
+  protected abstract boolean doExecute();
 
-  protected void execute() {
+  protected boolean execute() {
     check();
-    doExecute();
+    return doExecute();
   }
 
   public static interface ActionListener {
 
-    public void onSuccess(String message);
+    public boolean onSuccess(String message);
 
-    public void onError(String error);
+    public boolean onError(String error);
 
   }
 

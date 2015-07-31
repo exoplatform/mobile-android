@@ -121,7 +121,7 @@ public class ComposeMessageController {
   public void onSendMessage(String composeMessage, String sdcard, int position) {
     if ((composeMessage != null) && (composeMessage.length() > 0)) {
       if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
-        if (composeType == 0) {
+        if (composeType == ExoConstants.COMPOSE_POST_TYPE) {
           onPostTask(composeMessage, sdcard);
         } else {
           onCommentTask(composeMessage, position);

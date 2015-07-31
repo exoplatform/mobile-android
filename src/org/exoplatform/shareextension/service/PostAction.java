@@ -36,18 +36,24 @@ import android.util.Log;
  * @since Jun 17, 2015
  */
 public class PostAction extends Action {
-
-  public static void execute(SocialPostInfo post, ActionListener listener) {
+  /**
+   * create and execute post action, wait for return result
+   * @param post
+   * @param listener
+   * @return just created activity or null if execution failed.
+   */
+  public static RestActivity execute(SocialPostInfo post, PostActionListener listener) {
 
     PostAction action = new PostAction();
     action.postInfo = post;
     action.listener = listener;
     action.execute();
+    return listener.mRestActivity;
 
   }
 
   @Override
-  protected void doExecute() {
+  protected boolean doExecute() {
 
     boolean postResult = false;
     if (SocialPostInfo.TYPE_DOC.equals(postInfo.activityType))
@@ -57,12 +63,13 @@ public class PostAction extends Action {
     else {
       postResult = postTextActivity();
     }
-
+    boolean ret = false;
     if (postResult) {
-      listener.onSuccess("Message posted successfully");
+      ret = listener.onSuccess("Message posted successfully");
     } else {
-      listener.onError("Could not post the message");
+      ret = listener.onError("Could not post the message");
     }
+    return ret;
   }
 
   private boolean postDocActivity() {
@@ -112,7 +119,11 @@ public class PostAction extends Action {
     // Perform the actual Post using the Social Activity service
     try {
       if (postInfo.isPublic()) {
-        return (SocialServiceHelper.getInstance().activityService.create(activity) != null);
+        RestActivity createdActivity = SocialServiceHelper.getInstance().activityService.create(activity);
+        if (listener instanceof PostActionListener) {
+          ((PostActionListener) listener).mRestActivity = createdActivity;
+        }
+        return (createdActivity != null);
       } else {
         String spaceId = retrieveSpaceId(postInfo.destinationSpace.name);
         if (spaceId != null) {
@@ -121,7 +132,11 @@ public class PostAction extends Action {
           QueryParams params = new QueryParamsImpl();
           params.append(paramSpaceId);
           activity.setIdentityId(spaceId);
-          return (SocialServiceHelper.getInstance().activityService.create(activity, params) != null);
+          RestActivity createdActivity = SocialServiceHelper.getInstance().activityService.create(activity, params);
+          if (listener instanceof PostActionListener) {
+            ((PostActionListener) listener).mRestActivity = createdActivity;
+          }
+          return (createdActivity != null);
         } else {
           Log.e(LOG_TAG, "Post message failed: could not get space ID for space " + postInfo.destinationSpace);
         }
@@ -143,4 +158,24 @@ public class PostAction extends Action {
     return null;
   }
 
+  public static class PostActionListener implements ActionListener {
+    
+    private RestActivity mRestActivity; 
+    
+    @Override
+    public boolean onSuccess(String message) {
+      return true;
+    }
+    
+    @Override
+    public boolean onError(String error) {
+      return false;
+    }
+
+    public RestActivity getRestActivity() {
+      return mRestActivity;
+    }
+    
+  }
+  
 }

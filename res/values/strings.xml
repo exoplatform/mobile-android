@@ -264,6 +264,7 @@
   <string name="ShareErrorFileTooBig">You cannot share documents more than 10 MB</string>
   <string name="ShareErrorUploadFailed">Could not share the document</string>
   <string name="ShareErrorPostFailed">Could not post the message</string>
+  <string name="ShareErrorCommentFailed">Could not comment the message</string>
   <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
   <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
   <string name="ShareErrorSignInFailed">Login failed, please try again</string>

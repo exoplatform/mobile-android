@@ -55,17 +55,23 @@ public class UploadAction extends Action {
       throw new IllegalArgumentException("Cannot pass null as the UploadInfo argument");
     super.check();
   }
-
-  public static void execute(SocialPostInfo post, UploadInfo upload, ActionListener listener) {
+  /**
+   * create and execute upload action, wait for result
+   * @param post
+   * @param upload
+   * @param listener
+   * @return
+   */
+  public static boolean execute(SocialPostInfo post, UploadInfo upload, ActionListener listener) {
     UploadAction action = new UploadAction();
     action.postInfo = post;
     action.uploadInfo = upload;
     action.listener = listener;
-    action.execute();
+    return action.execute();
   }
 
   @Override
-  protected void doExecute() {
+  protected boolean doExecute() {
     String id = uploadInfo.uploadId;
     String boundary = "----------------------------" + id;
     String CRLF = "\r\n";
@@ -112,19 +118,24 @@ public class UploadAction extends Action {
     } catch (Exception e) {
       Log.e(LOG_TAG, "Error while uploading " + uploadInfo.fileToUpload, e);
     } finally {
-      try {
-        if (output != null)
+      if (uploadInfo != null && uploadInfo.fileToUpload != null && uploadInfo.fileToUpload.documentData != null)
+        try {
+          uploadInfo.fileToUpload.documentData.close();
+        } catch (IOException e1) {
+          Log.e(LOG_TAG, "Error while closing the upload stream", e1);
+        }
+      if (output != null)
+        try {
           output.close();
-        if (writer != null)
-          writer.close();
-      } catch (IOException e) {
-        Log.e(LOG_TAG, "Error while closing the connection", e);
-      }
+        } catch (IOException e) {
+          Log.e(LOG_TAG, "Error while closing the connection", e);
+        }
+      if (writer != null)
+        writer.close();
     }
     if (status < HttpURLConnection.HTTP_OK || status >= HttpURLConnection.HTTP_MULT_CHOICE) {
       // Exit if the upload went wrong
-      listener.onError("Could not upload the file " + uploadInfo.fileToUpload.documentName);
-      return;
+      return listener.onError("Could not upload the file " + uploadInfo.fileToUpload.documentName);
     }
     status = -1;
     try {
@@ -146,12 +157,13 @@ public class UploadAction extends Action {
     } catch (Exception e) {
       Log.e(LOG_TAG, "Error while saving " + uploadInfo.fileToUpload + " in JCR", e);
     }
-
+    boolean ret = false;
     if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
-      listener.onSuccess("File " + uploadInfo.fileToUpload.documentName + "uploaded successfully");
+      ret = listener.onSuccess("File " + uploadInfo.fileToUpload.documentName + "uploaded successfully");
     } else {
-      listener.onError("Could not save the file " + uploadInfo.fileToUpload.documentName);
+      ret = listener.onError("Could not save the file " + uploadInfo.fileToUpload.documentName);
     }
+    return ret;
   }
 
 }

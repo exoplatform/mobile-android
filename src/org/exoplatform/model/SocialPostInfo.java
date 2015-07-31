@@ -18,8 +18,12 @@
  */
 package org.exoplatform.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.exoplatform.utils.Utils;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -41,8 +45,8 @@ public class SocialPostInfo implements Parcelable {
   public ExoAccount          ownerAccount;
 
   public String              postMessage;
-
-  public String              postAttachmentUri;
+  // key is uri in device, value is url on server
+  public List<String> postAttachmentUri;
 
   public SocialSpaceInfo     destinationSpace;
 
@@ -76,7 +80,7 @@ public class SocialPostInfo implements Parcelable {
   public void writeToParcel(Parcel out, int flags) {
     out.writeParcelable(ownerAccount, flags);
     out.writeString(postMessage);
-    out.writeString(postAttachmentUri);
+    out.writeStringList(postAttachmentUri);
     out.writeParcelable(destinationSpace, flags);
     out.writeMap(templateParams);
     out.writeString(activityType);
@@ -86,7 +90,9 @@ public class SocialPostInfo implements Parcelable {
   public void readFromParcel(Parcel in) {
     ownerAccount = in.readParcelable(SocialPostInfo.class.getClassLoader());
     postMessage = in.readString();
-    postAttachmentUri = in.readString();
+//    postAttachmentUri = in.readS
+    postAttachmentUri = new ArrayList<String>();
+    in.readStringList(postAttachmentUri);
     destinationSpace = in.readParcelable(SocialPostInfo.class.getClassLoader());
     in.readMap(templateParams, SocialPostInfo.class.getClassLoader());
     activityType = in.readString();
@@ -108,7 +114,7 @@ public class SocialPostInfo implements Parcelable {
    * @return true if the post's attachment uri is not null and not empty
    */
   public boolean hasAttachment() {
-    return (postAttachmentUri != null && !"".equals(postAttachmentUri));
+    return Utils.notEmpty(postAttachmentUri);
   }
 
   /**
