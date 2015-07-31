@@ -18,9 +18,6 @@
  */
 package org.exoplatform.utils;
 
-import android.text.Html;
-import greendroid.util.Config;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -55,6 +52,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -66,8 +64,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.OpenableColumns;
-import android.util.Log;
+import android.text.Html;
 import android.webkit.MimeTypeMap;
+import greendroid.util.Config;
 
 public class ExoDocumentUtils {
 
@@ -577,7 +576,7 @@ public class ExoDocumentUtils {
               if (i > 0) {
                 ExoFile newFile = new ExoFile();
                 if (itemElement.hasAttribute("title")) {
-                  newFile.name= Html.fromHtml(itemElement.getAttribute("title")).toString();
+                  newFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
                 } else {
                   newFile.name = itemElement.getAttribute("name");
                 }
@@ -607,7 +606,7 @@ public class ExoDocumentUtils {
 
               ExoFile newFile = new ExoFile();
               if (itemElement.hasAttribute("title")) {
-                newFile.name=Html.fromHtml(itemElement.getAttribute("title")).toString();
+                newFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
               } else {
                 newFile.name = itemElement.getAttribute("name");
               }
@@ -822,12 +821,26 @@ public class ExoDocumentUtils {
     if (document == null)
       return null;
 
-    if (document.toString().startsWith("content://"))
-      return documentFromContentUri(document, context);
-    else if (document.toString().startsWith("file://"))
+    if (document.toString().startsWith("content://")) {
+      // In some cases, the content:// URI is fake and embeds a real file://
+      // content://authority/-1/1/file:///sdcard/path/file.jpg/ACTUAL/123
+      // e.g. open ASTRO File Manager > View File > Share
+      // Then we extract the real URI and pass it to documentFromFileUri(...)
+      long id = ContentUris.parseId(document);
+      String dec = Uri.decode(document.toString());
+      int fileIdx = dec.indexOf("file://");
+      if (fileIdx > -1) {
+        String fileUri = dec.substring(fileIdx);
+        fileUri = fileUri.replaceAll("(/ACTUAL/)(" + id + ")", "");
+        return documentFromFileUri(Uri.parse(fileUri));
+      } else {
+        return documentFromContentUri(document, context);
+      }
+    } else if (document.toString().startsWith("file://")) {
       return documentFromFileUri(document);
-    else
+    } else {
       return null; // other formats not supported
+    }
   }
 
   /**
@@ -855,6 +868,9 @@ public class ExoDocumentUtils {
       document.documentMimeType = cr.getType(contentUri);
       return document;
     } catch (Exception e) {
+      Log.e(LOG_TAG, "Cannot retrieve the content at " + contentUri);
+      if (Log.LOGD)
+        Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
     }
     return null;
   }
@@ -883,6 +899,9 @@ public class ExoDocumentUtils {
 
       return document;
     } catch (Exception e) {
+      Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
+      if (Log.LOGD)
+        Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
     }
     return null;
   }
@@ -899,6 +918,16 @@ public class ExoDocumentUtils {
     @Override
     public String toString() {
       return String.format(Locale.US, "File %s [%s - %s KB]", documentName, documentMimeType, documentSizeKb);
+    }
+
+    public void closeDocStream() {
+      if (documentData != null)
+        try {
+          documentData.close();
+        } catch (IOException e) {
+          if (Log.LOGD)
+            Log.d(LOG_TAG, Log.getStackTraceString(e));
+        }
     }
   }
 }

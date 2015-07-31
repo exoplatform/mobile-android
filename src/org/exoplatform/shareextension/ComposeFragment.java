@@ -18,6 +18,7 @@
  */
 package org.exoplatform.shareextension;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.exoplatform.R;
@@ -26,6 +27,8 @@ import org.exoplatform.model.SocialPostInfo;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.ExoDocumentUtils.DocumentInfo;
+import org.exoplatform.utils.Log;
+import org.exoplatform.utils.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -35,7 +38,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -106,9 +108,11 @@ public class ComposeFragment extends Fragment {
       tvAccount.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
     }
     SocialPostInfo post = getShareActivity().getPostInfo();
-    if (post.postAttachmentUri != null) {
-      // Retrieve some information about the attachment
-      DocumentInfo info = ExoDocumentUtils.documentInfoFromUri(Uri.parse(post.postAttachmentUri), getActivity());
+    if (Utils.notEmpty(post.postAttachmentUri)) {
+      // Retrieve some information about the 1st attachment
+      Uri uri = Uri.parse(post.postAttachmentUri.get(0));
+      DocumentInfo info = ExoDocumentUtils.documentInfoFromUri(uri ,
+                                                               getActivity());
       if (info == null) {
         Toast.makeText(getActivity(), R.string.ShareErrorCannotReadDoc, Toast.LENGTH_LONG).show();
         getActivity().finish();
@@ -126,6 +130,7 @@ public class ComposeFragment extends Fragment {
       if (thumbnail != null) {
         imgThumb.setImageBitmap(thumbnail);
       }
+      info.closeDocStream();
     }
   }
 
