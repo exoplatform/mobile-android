@@ -26,6 +26,7 @@ import org.exoplatform.R;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
@@ -260,7 +261,8 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
             try {
                 Log.i("PHOTO_PICKER", "Image File Path: " + filePath);
                 file = new File(filePath);
-                return PhotoUtils.shrinkBitmap(filePath, SCALE_WIDTH, SCALE_HEIGHT);
+                Bitmap bm = PhotoUtils.shrinkBitmap(filePath, SCALE_WIDTH, SCALE_HEIGHT);
+                return ExoDocumentUtils.rotateBitmapToNormal(filePath, bm);
             } catch (NullPointerException e) {
                 return null;
             }

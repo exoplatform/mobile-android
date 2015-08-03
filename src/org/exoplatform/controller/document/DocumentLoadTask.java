@@ -133,6 +133,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
         break;
       case DocumentActivity.ACTION_ADD_PHOTO:
         File file = new File(documentActivity._sdcard_temp_dir);
+        // TODO check orientation here;
         contentWarningString = resource.getString(R.string.DocumentUploadError);
         File tempFile = PhotoUtils.reziseFileImage(file);
         if (tempFile != null) {
