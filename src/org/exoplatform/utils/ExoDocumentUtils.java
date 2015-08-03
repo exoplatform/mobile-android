@@ -18,10 +18,9 @@
  */
 package org.exoplatform.utils;
 
-import greendroid.util.Config;
-
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -41,17 +40,18 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.widget.UnreadableFileDialog;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -60,13 +60,19 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
+import greendroid.util.Config;
 
 public class ExoDocumentUtils {
 
@@ -837,6 +843,7 @@ public class ExoDocumentUtils {
       Cursor c = cr.query(contentUri, null, null, null, null);
       int sizeIndex = c.getColumnIndex(OpenableColumns.SIZE);
       int nameIndex = c.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+      int orientIndex = c.getColumnIndex(MediaStore.Images.ImageColumns.ORIENTATION);
       c.moveToFirst();
 
       DocumentInfo document = new DocumentInfo();
@@ -844,6 +851,32 @@ public class ExoDocumentUtils {
       document.documentSizeKb = c.getLong(sizeIndex) / 1024;
       document.documentData = cr.openInputStream(contentUri);
       document.documentMimeType = cr.getType(contentUri);
+      if (orientIndex != -1) { // if found orient column
+        document.orientationAngle = c.getInt(orientIndex);
+      }
+      
+      if (document.orientationAngle != ROTATE_0) {
+        FileOutputStream fos = null;
+        try {
+          Bitmap bm = BitmapFactory.decodeStream(document.documentData);
+          bm = rotateBimapBy(bm, document.orientationAngle);
+          File file = new File(context.getExternalCacheDir(), document.documentName);
+          fos = new FileOutputStream(file);
+          bm.compress(CompressFormat.JPEG, 100, fos);
+          fos.flush();
+          document = documentFromFileUri(Uri.fromFile(file));
+          document.temporaryPath = file.getAbsolutePath();
+        } catch (OutOfMemoryError e) {
+          if (Log.LOGD)
+            Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+        } catch (IOException e) {
+          if (Log.LOGD)
+            Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+        } finally {
+          if (fos != null)
+            fos.close();
+        }
+      }
       return document;
     } catch (Exception e) {
     }
@@ -863,7 +896,7 @@ public class ExoDocumentUtils {
     try {
       URI uri = new URI(fileUri.toString());
       File file = new File(uri);
-
+      String filePath = file.getAbsolutePath();
       DocumentInfo document = new DocumentInfo();
       document.documentName = file.getName();
       document.documentSizeKb = file.length() / 1024;
@@ -871,13 +904,67 @@ public class ExoDocumentUtils {
       String ext = MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
       if (ext != null && !"".equals(ext))
         document.documentMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
-
+      if ("jpg".equals(ext) || "jpeg".equals(ext)) {
+        document.orientationAngle = getExifOrientationAngleFromFile(filePath);
+      }
       return document;
     } catch (Exception e) {
     }
     return null;
   }
+  public static final int ROTATE_0 = 0;
+  public static final int ROTATE_90 = 90;
+  public static final int ROTATE_180 = 180;
+  public static final int ROTATE_270 = 270;
+  public static int getExifOrientationAngleFromFile(String filePath) {
+    int ret = ROTATE_0;
+    try {
+      ret = new ExifInterface(filePath).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+      switch (ret) {
+      case ExifInterface.ORIENTATION_ROTATE_90:
+        ret = ROTATE_90;
+        break;
+      case ExifInterface.ORIENTATION_ROTATE_180:
+        ret = ROTATE_180;
+        break;
+      case ExifInterface.ORIENTATION_ROTATE_270:
+        ret = ROTATE_270;
+        break;
+      default:
+        break;
+      }
+    } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+    }
+    return ret;
+  }
+  
+  public static Bitmap rotateBitmapToNormal(String filePath, Bitmap source) {
+    Bitmap ret = source;
 
+    int orientation = getExifOrientationAngleFromFile(filePath);
+    if (orientation != ROTATE_0) {
+      ret = rotateBimapBy(source, orientation);
+    }
+    return ret;
+  }
+  
+  public static Bitmap rotateBimapBy(Bitmap source, int angle) {
+    Bitmap ret = source;
+    int w, h;
+    w = source.getWidth();
+    h = source.getHeight();
+    Matrix matrix = new Matrix();
+    matrix.postRotate(angle);
+    try {
+      ret = Bitmap.createBitmap(source, 0, 0, w, h, matrix, true);
+    } catch (OutOfMemoryError e) {
+      Log.d(ExoDocumentUtils.class.getSimpleName(), "Exception : ", e, Log.getStackTraceString(e));
+    }
+    return ret;
+  }
+  
   public static class DocumentInfo {
     public String      documentName;
 
@@ -886,10 +973,19 @@ public class ExoDocumentUtils {
     public InputStream documentData;
 
     public String      documentMimeType;
+    
+    public int         orientationAngle;
+    
+    public String     temporaryPath;
 
     @Override
     public String toString() {
-      return String.format(Locale.US, "File %s [%s - %s KB]", documentName, documentMimeType, documentSizeKb);
+      return String.format(Locale.US,
+                           "File %s [%s - %s KB], rotate %d",
+                           documentName,
+                           documentMimeType,
+                           documentSizeKb,
+                           orientationAngle);
     }
   }
 }

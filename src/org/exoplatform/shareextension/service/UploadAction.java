@@ -18,6 +18,7 @@
  */
 package org.exoplatform.shareextension.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -106,6 +107,12 @@ public class UploadAction extends Action {
       output.flush();
       writer.append(CRLF).flush();
       writer.append("--" + boundary + "--").append(CRLF).flush();
+      if (uploadInfo.fileToUpload.temporaryPath != null) {
+        File tmp = new File(uploadInfo.fileToUpload.temporaryPath);
+        if (tmp.exists()) {
+          tmp.delete();
+        }
+      }
       // Execute the connection and retrieve the status code
       status = uploadReq.getResponseCode();
     } catch (Exception e) {
