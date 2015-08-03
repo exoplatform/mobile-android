@@ -60,10 +60,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.Html;
 import android.webkit.MimeTypeMap;
@@ -814,8 +818,6 @@ public class ExoDocumentUtils {
     }
   }
 
-  // public static String guessMimeType()
-
   /**
    * Returns a DocumentInfo with info coming from the file at the given URI
    * 
@@ -865,6 +867,7 @@ public class ExoDocumentUtils {
       Cursor c = cr.query(contentUri, null, null, null, null);
       int sizeIndex = c.getColumnIndex(OpenableColumns.SIZE);
       int nameIndex = c.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+      int orientIndex = c.getColumnIndex(MediaStore.Images.ImageColumns.ORIENTATION);
       c.moveToFirst();
 
       DocumentInfo document = new DocumentInfo();
@@ -872,6 +875,9 @@ public class ExoDocumentUtils {
       document.documentSizeKb = c.getLong(sizeIndex) / 1024;
       document.documentData = cr.openInputStream(contentUri);
       document.documentMimeType = cr.getType(contentUri);
+      if (orientIndex != -1) { // if found orientation column
+        document.orientationAngle = c.getInt(orientIndex);
+      }
       return document;
     } catch (Exception e) {
       Log.e(LOG_TAG, "Cannot retrieve the content at " + contentUri);
@@ -915,6 +921,9 @@ public class ExoDocumentUtils {
           extension = document.documentName.substring(dotPos + 1);
         document.documentMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
       }
+      // Get the orientation angle from the EXIF properties
+      if ("image/jpeg".equals(document.documentMimeType))
+        document.orientationAngle = getExifOrientationAngleFromFile(file.getAbsolutePath());
       return document;
     } catch (Exception e) {
       Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
@@ -978,7 +987,89 @@ public class ExoDocumentUtils {
     return (name + ext);
   }
 
+  public static final int ROTATION_0   = 0;
+
+  public static final int ROTATION_90  = 90;
+
+  public static final int ROTATION_180 = 180;
+
+  public static final int ROTATION_270 = 270;
+
+  /**
+   * Get the EXIF orientation of the given file
+   * 
+   * @param filePath
+   * @return an int in ExoDocumentUtils.ROTATION_[0 , 90 , 180 , 270]
+   */
+  public static int getExifOrientationAngleFromFile(String filePath) {
+    int ret = ROTATION_0;
+    try {
+      ret = new ExifInterface(filePath).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+      switch (ret) {
+      case ExifInterface.ORIENTATION_ROTATE_90:
+        ret = ROTATION_90;
+        break;
+      case ExifInterface.ORIENTATION_ROTATE_180:
+        ret = ROTATION_180;
+        break;
+      case ExifInterface.ORIENTATION_ROTATE_270:
+        ret = ROTATION_270;
+        break;
+      default:
+        break;
+      }
+    } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+    }
+    return ret;
+  }
+
+  /**
+   * Rotate the bitmap at its correct orientation
+   * 
+   * @param filePath the file where the bitmap is stored
+   * @param source the bitmap itself
+   * @return the bitmap rotated with
+   *         {@link ExoDocumentUtils.rotateBitmapByAngle(Bitmap, int)}
+   */
+  public static Bitmap rotateBitmapToNormal(String filePath, Bitmap source) {
+    Bitmap ret = source;
+
+    int orientation = getExifOrientationAngleFromFile(filePath);
+    // Sometimes we get an orientation = 1
+    // To avoid a 1º rotation,
+    // we rotate only when the orientation is exactly 90º or 180º or 270º
+    if (orientation == ROTATION_90 || orientation == ROTATION_180 || orientation == ROTATION_270) {
+      ret = rotateBitmapByAngle(source, orientation);
+    }
+    return ret;
+  }
+
+  /**
+   * Rotate the bitmap by a certain angle. Uses {@link Matrix#postRotate(int)}
+   * 
+   * @param source the bitmap to rotate
+   * @param angle the rotation angle
+   * @return a new rotated bitmap
+   */
+  public static Bitmap rotateBitmapByAngle(Bitmap source, int angle) {
+    Bitmap ret = source;
+    int w, h;
+    w = source.getWidth();
+    h = source.getHeight();
+    Matrix matrix = new Matrix();
+    matrix.postRotate(angle);
+    try {
+      ret = Bitmap.createBitmap(source, 0, 0, w, h, matrix, true);
+    } catch (OutOfMemoryError e) {
+      Log.d(ExoDocumentUtils.class.getSimpleName(), "Exception : ", e, Log.getStackTraceString(e));
+    }
+    return ret;
+  }
+
   public static class DocumentInfo {
+
     public String      documentName;
 
     public long        documentSizeKb;
@@ -986,6 +1077,8 @@ public class ExoDocumentUtils {
     public InputStream documentData;
 
     public String      documentMimeType;
+
+    public int         orientationAngle = ROTATION_0;
 
     @Override
     public String toString() {

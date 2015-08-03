@@ -18,9 +18,6 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.util.Config;
-import greendroid.widget.ActionBarItem;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,6 +26,8 @@ import org.exoplatform.R;
 import org.exoplatform.controller.social.ComposeMessageController;
 import org.exoplatform.model.SocialSpaceInfo;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.Log;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.AddPhotoDialog;
@@ -37,6 +36,8 @@ import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.RemoveAttachedPhotoDialog;
 import org.exoplatform.widget.RetangleImageView;
 
+import com.squareup.picasso.Picasso;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -44,7 +45,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -58,8 +58,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
+import greendroid.widget.ActionBarItem;
 
 public class ComposeMessageActivity extends MyActionBar implements View.OnClickListener {
 
@@ -245,6 +244,8 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
       fis.close();
       bitmap = PhotoUtils.resizeImageBitmap(composeMessageActivity, bitmap);
+      bitmap = ExoDocumentUtils.rotateBitmapToNormal(filePath, bitmap);
+
       RetangleImageView image = new RetangleImageView(composeMessageActivity);
       image.setPadding(1, 1, 1, 1);
       image.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -270,8 +271,8 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       fileAttachWrap.removeAllViews();
       fileAttachWrap.addView(image, params);
     } catch (IOException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("Exception", "Error when adding image to message!");
+      if (Log.LOGD)
+        Log.e(TAG, "Error when adding image to message", e);
     }
   }
 

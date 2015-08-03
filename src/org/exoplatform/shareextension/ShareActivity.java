@@ -20,7 +20,6 @@ package org.exoplatform.shareextension;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
@@ -53,6 +52,7 @@ import org.exoplatform.utils.Log;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -412,6 +412,56 @@ public class ShareActivity extends FragmentActivity {
       return thumbnail;
     }
 
+    private File getFileWithRotatedBitmap(DocumentInfo info, String filename) throws IOException {
+      FileOutputStream fos = null;
+      try {
+        // Decode bitmap from input stream
+        Bitmap bm = BitmapFactory.decodeStream(info.documentData);
+        // Turn the image in the correct orientation
+        bm = ExoDocumentUtils.rotateBitmapByAngle(bm, info.orientationAngle);
+        File file = new File(getFilesDir(), filename);
+        fos = new FileOutputStream(file);
+        bm.compress(CompressFormat.JPEG, 100, fos);
+        fos.flush();
+        return file;
+      } catch (OutOfMemoryError e) {
+        throw new RuntimeException("Exception while decoding/rotating the bitmap", e);
+      } finally {
+        try {
+          // try..catch here to not break the process if close() fails
+          if (fos != null)
+            fos.close();
+        } catch (IOException e) {
+        }
+      }
+    }
+
+    private File getFileWithData(DocumentInfo info, String filename) throws IOException {
+      FileOutputStream fileOutput = null;
+      BufferedInputStream buffInput = null;
+      try {
+        // create temp file
+        fileOutput = openFileOutput(filename, MODE_PRIVATE);
+        buffInput = new BufferedInputStream(info.documentData);
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = buffInput.read(buf)) != -1) {
+          fileOutput.write(buf, 0, len);
+        }
+        File file = new File(getFilesDir(), filename);
+        return file;
+      } finally {
+        try {
+          // try..catch here to not break the process if close() fails
+          if (buffInput != null)
+            buffInput.close();
+          if (fileOutput != null)
+            fileOutput.close();
+        } catch (IOException e) {
+        }
+      }
+    }
+
     @Override
     protected Void doInBackground(Void... params) {
       Set<Integer> errors = new HashSet<Integer>();
@@ -441,35 +491,24 @@ public class ShareActivity extends FragmentActivity {
           String cleanName = ExoDocumentUtils.cleanupFilename(info.documentName);
           String tempFileName = DateFormat.format("yyyy-MM-dd-HH:mm:ss", System.currentTimeMillis()) + "-" + cleanName;
 
-          FileOutputStream fileOutput = null;
-          BufferedInputStream buffInput = null;
           try {
-            // create temp file
-            fileOutput = openFileOutput(tempFileName, MODE_PRIVATE);
-            buffInput = new BufferedInputStream(info.documentData);
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = buffInput.read(buf)) != -1) {
-              fileOutput.write(buf, 0, len);
+            // Create temp file
+            File tempFile = null;
+            if ("image/jpeg".equals(info.documentMimeType) && info.orientationAngle != ExoDocumentUtils.ROTATION_0) {
+              // For an image with an EXIF rotation information, we get the file
+              // from the bitmap rotated back to its correct orientation
+              tempFile = getFileWithRotatedBitmap(info, tempFileName);
+            } else {
+              // Otherwise we just write the data to a file
+              tempFile = getFileWithData(info, tempFileName);
             }
             // add file to list
-            File tempFile = new File(getFilesDir(), tempFileName);
             postInfo.postAttachedFiles.add(tempFile.getAbsolutePath());
             if (thumbnail == null) {
               thumbnail = getThumbnail(tempFile);
             }
-          } catch (FileNotFoundException e) {
+          } catch (Exception e) {
             errors.add(R.string.ShareErrorCannotReadDoc);
-          } catch (IOException e) {
-            errors.add(R.string.ShareErrorCannotReadDoc);
-          } finally {
-            try {
-              if (buffInput != null)
-                buffInput.close();
-              if (fileOutput != null)
-                fileOutput.close();
-            } catch (IOException e) {
-            }
           }
         }
         // Done creating the files

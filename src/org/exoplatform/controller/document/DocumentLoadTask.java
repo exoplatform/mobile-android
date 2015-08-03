@@ -38,7 +38,6 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.view.animation.AnimationUtils;
 
-
 public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
   /*
@@ -170,8 +169,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
        */
 
       if (result == true) {
-        _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity,
-                                                                 documentActivity._fileForCurrentActionBar);
+        _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity, documentActivity._fileForCurrentActionBar);
         return RESULT_OK;
       } else
         return RESULT_FALSE;
@@ -195,8 +193,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
       /*
        * Set animation for listview when access to folder
        */
-      documentActivity._listViewDocument.setAnimation(AnimationUtils.loadAnimation(documentActivity,
-                                                                                   R.anim.anim_right_to_left));
+      documentActivity._listViewDocument.setAnimation(AnimationUtils.loadAnimation(documentActivity, R.anim.anim_right_to_left));
 
     } else if (result == RESULT_ERROR) {
       new WarningDialog(documentActivity, titleString, contentWarningString, okString).show();
