@@ -26,6 +26,7 @@ import org.exoplatform.R;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.MyActionBar;
@@ -219,11 +220,11 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
     }
 
     private class DisplayImageTask extends AsyncTask<Integer, Void, Bitmap> {
-        private SeclectImageWaitingDialog _progressDialog;
+        private SelectImageWaitingDialog _progressDialog;
 
         @Override
         public void onPreExecute() {
-            _progressDialog = new SeclectImageWaitingDialog(SelectedImageActivity.this,
+            _progressDialog = new SelectImageWaitingDialog(SelectedImageActivity.this,
                                                             null,
                                                             loadingData);
             _progressDialog.show();
@@ -260,7 +261,8 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
             try {
                 Log.i("PHOTO_PICKER", "Image File Path: " + filePath);
                 file = new File(filePath);
-                return PhotoUtils.shrinkBitmap(filePath, SCALE_WIDTH, SCALE_HEIGHT);
+                Bitmap bm = PhotoUtils.shrinkBitmap(filePath, SCALE_WIDTH, SCALE_HEIGHT);
+                return ExoDocumentUtils.rotateBitmapToNormal(filePath, bm);
             } catch (NullPointerException e) {
                 return null;
             }
@@ -279,9 +281,9 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
 
     }
 
-    private class SeclectImageWaitingDialog extends WaitingDialog {
+    private class SelectImageWaitingDialog extends WaitingDialog {
 
-        public SeclectImageWaitingDialog(Context context, String titleString, String contentString) {
+        public SelectImageWaitingDialog(Context context, String titleString, String contentString) {
             super(context, titleString, contentString);
         }
 

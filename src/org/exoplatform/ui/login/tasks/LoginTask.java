@@ -75,6 +75,12 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
   }
 
   @Override
+  protected void onCancelled() {
+    super.onCancelled();
+    if (mListener != null) mListener.onCanceled();
+  }
+  
+  @Override
   public void onPostExecute(Integer result) {
     Log.d(TAG, "onPostExecute - login result: " + result);
 
@@ -88,5 +94,6 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
   public interface AsyncTaskListener {
 
     void onLoggingInFinished(int result);
+    void onCanceled();
   }
 }

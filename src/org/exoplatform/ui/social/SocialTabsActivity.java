@@ -162,7 +162,8 @@ public class SocialTabsActivity extends MyActionBar {
 
   @Override
   protected void onDestroy() {
-    instance = null;
+    if (instance == this)
+      instance = null;
     super.onDestroy();
   }
 

@@ -29,6 +29,7 @@ import org.exoplatform.R;
 import org.exoplatform.controller.social.ComposeMessageController;
 import org.exoplatform.model.SocialSpaceInfo;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.AddPhotoDialog;
@@ -42,6 +43,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -245,6 +247,9 @@ public class ComposeMessageActivity extends MyActionBar implements View.OnClickL
       Bitmap bitmap = BitmapFactory.decodeStream(fis, null, options);
       fis.close();
       bitmap = PhotoUtils.resizeImageBitmap(composeMessageActivity, bitmap);
+      // TODO rotate image here
+      bitmap = ExoDocumentUtils.rotateBitmapToNormal(filePath, bitmap);
+      
       RetangleImageView image = new RetangleImageView(composeMessageActivity);
       image.setPadding(1, 1, 1, 1);
       image.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));

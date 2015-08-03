@@ -193,6 +193,8 @@ public class PhotoUtils {
     try {
       String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
       Bitmap bitmap = shrinkBitmap(file.getPath(), IMAGE_WIDTH, IMAGE_HEIGH);
+      // TODO rotate bitmap
+      bitmap = ExoDocumentUtils.rotateBitmapToNormal(file.getAbsolutePath(), bitmap);
       ByteArrayOutputStream output = new ByteArrayOutputStream();
       bitmap.compress(CompressFormat.PNG, IMAGE_QUALITY, output);
       File tempFile = new File(parentPath + TEMP_FILE_NAME);

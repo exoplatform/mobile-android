@@ -18,10 +18,6 @@
  */
 package org.exoplatform.ui;
 
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -42,6 +38,9 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import greendroid.widget.ActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.LoaderActionBarItem;
 
 public class DashboardActivity extends MyActionBar {
   private static final String     ACCOUNT_SETTING = "account_setting";
@@ -153,20 +152,9 @@ public class DashboardActivity extends MyActionBar {
   }
 
   @Override
-  public void finish() {
-    super.finish();
-  }
-
-  @Override
-  protected void onDestroy() {
+  protected void onPause() {
     onCancelLoad();
-    super.onDestroy();
-  }
-
-  @Override
-  public void onBackPressed() {
-    onCancelLoad();
-    finish();
+    super.onPause();
   }
 
   private void changeLanguage() {

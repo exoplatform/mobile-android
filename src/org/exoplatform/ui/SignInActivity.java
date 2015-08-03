@@ -43,20 +43,21 @@ import android.widget.TextView;
 
 public class SignInActivity extends Activity implements LoginProxy.ProxyListener {
 
-  private Button   mLoginBtn;
+  private Button              mLoginBtn;
 
-  private EditText mEmailTxt;
+  private EditText            mEmailTxt;
 
-  private EditText mPassTxt;
+  private EditText            mPassTxt;
 
-  private TextView mAlertTxt;
+  private TextView            mAlertTxt;
 
-  private LoginProxy mLoginProxy;
+  private LoginProxy          mLoginProxy;
 
   private static final String TAG = "eXoSignInActivity";
 
   public void onCreate(Bundle savedInstanceState) {
-    if (!WelcomeActivity.mIsTablet) setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    if (!WelcomeActivity.mIsTablet)
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     super.onCreate(savedInstanceState);
 
@@ -67,21 +68,24 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
 
     mEmailTxt = (EditText) findViewById(R.id.signin_edit_txt_email);
     String email = getIntent().getStringExtra(ExoConstants.EXO_EMAIL);
-    mEmailTxt.setText(email == null? "": email);
+    mEmailTxt.setText(email == null ? "" : email);
     TextWatcher _onEmailOrPasswordChanged = onEmailOrPasswordChanged();
     mEmailTxt.addTextChangedListener(_onEmailOrPasswordChanged);
     AssetUtils.setContext(this);
     Typeface type = AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR);
-    if (type != null) AssetUtils.setTypeFace(type, mEmailTxt);
+    if (type != null)
+      AssetUtils.setTypeFace(type, mEmailTxt);
     InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     mgr.showSoftInput(mEmailTxt, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
     mPassTxt = (EditText) findViewById(R.id.signin_edit_txt_pass);
     mPassTxt.addTextChangedListener(_onEmailOrPasswordChanged);
-    if (type != null) AssetUtils.setTypeFace(type, mPassTxt);
+    if (type != null)
+      AssetUtils.setTypeFace(type, mPassTxt);
 
     mAlertTxt = (TextView) findViewById(R.id.signin_alert_txt);
-    if (type != null) AssetUtils.setTypeFace(type, mAlertTxt);
+    if (type != null)
+      AssetUtils.setTypeFace(type, mAlertTxt);
   }
 
   @Override
@@ -90,7 +94,6 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
     SettingUtils.setDefaultLanguage(this);
     onChangeLanguage();
   }
-
 
   private void onChangeLanguage() {
     Resources resources = getResources();
@@ -109,17 +112,18 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
     return new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-      Log.i(TAG, "click on log in");
+        Log.i(TAG, "click on log in");
 
         mAlertTxt.setVisibility(View.INVISIBLE);
-        String email    = mEmailTxt.getText().toString();
+        String email = mEmailTxt.getText().toString();
         String password = mPassTxt.getText().toString();
-        if (!ExoUtils.isEmailValid(email)) showAlertMessage();
-        else makeRequestSigningIn(email, password);
+        if (!ExoUtils.isEmailValid(email))
+          showAlertMessage();
+        else
+          makeRequestSigningIn(email, password);
       }
     };
   }
-
 
   private void showAlertMessage() {
     mAlertTxt.setVisibility(View.VISIBLE);
@@ -128,35 +132,37 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
   private void makeRequestSigningIn(String email, String password) {
     Log.i(TAG, "makeRequestSigningIn");
 
-    //new SignInController(this, email, password);
+    // new SignInController(this, email, password);
 
     Bundle loginData = new Bundle();
     loginData.putString(LoginProxy.EMAIL, email);
     loginData.putString(LoginProxy.PASSWORD, password);
     mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EMAIL, loginData);
     mLoginProxy.setListener(this);
-    //mLoginProxy.performLogin();  // do not call perform login when logging in by email
+    // mLoginProxy.performLogin(); // do not call perform login when logging in
+    // by email
   }
-
 
   @Override
   public void onLoginFinished(boolean result) {
-    if (!result) return ;
+    if (!result)
+      return;
     Intent next = new Intent(this, HomeActivity.class);
-    //next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    // next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     startActivity(next);
   }
 
   private TextWatcher onEmailOrPasswordChanged() {
     return new TextWatcher() {
       @Override
-      public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+      public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+      }
 
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 
         String email = mEmailTxt.getText().toString();
-        String pass  = mPassTxt.getText().toString();
+        String pass = mPassTxt.getText().toString();
 
         /* check password and email is inputted */
         if ((email != null) && (pass != null)) {
@@ -171,10 +177,10 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
       }
 
       @Override
-      public void afterTextChanged(Editable editable) { }
+      public void afterTextChanged(Editable editable) {
+      }
     };
   }
-
 
   public void connectToOnPremise(View connectOnPremiseBtn) {
     Log.i(TAG, "connectToOnPremise");
