@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +59,6 @@ import org.exoplatform.utils.image.ExoPicasso;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 //interact with server
 public class ExoConnectionUtils {
@@ -80,6 +80,8 @@ public class ExoConnectionUtils {
   // Default connection and socket timeout of 30 seconds. Tweak to taste.
   public static final int         SOCKET_OPERATION_TIMEOUT   = 30 * 1000;
 
+  public static final String USER_AGENT_KEY = "User-Agent";
+  
   private static String      USER_AGENT;
 
   public static DefaultHttpClient httpClient;
@@ -233,6 +235,11 @@ public class ExoConnectionUtils {
                                             .toString();
     }
     return USER_AGENT;
+  }
+  
+  public static void setUserAgent(HttpURLConnection connection) {
+    connection.setDoInput(true);
+    connection.addRequestProperty(USER_AGENT_KEY, getUserAgent());
   }
   
   public static DefaultHttpClient initHttpClient() {

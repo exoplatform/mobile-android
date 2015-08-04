@@ -91,6 +91,7 @@ public class UploadAction extends Action {
         }
         uploadReq.addRequestProperty("Cookie", cookieString.toString());
       }
+      ExoConnectionUtils.setUserAgent(uploadReq);
       // Write the form data
       output = uploadReq.getOutputStream();
       writer = new PrintWriter(new OutputStreamWriter(output, "UTF-8"), true);

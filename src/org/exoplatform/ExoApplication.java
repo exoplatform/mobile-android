@@ -18,13 +18,14 @@
  */
 package org.exoplatform;
 
-import greendroid.app.GDApplication;
-
+import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.ui.HomeActivity;
+import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.LaunchUtils;
 
 import android.content.Intent;
 import android.net.Uri;
+import greendroid.app.GDApplication;
 
 public class ExoApplication extends GDApplication {
   private String appUrl = "http://github.com/cyrilmottier/GreenDroid";
@@ -43,6 +44,7 @@ public class ExoApplication extends GDApplication {
   public void onCreate() {
     super.onCreate();
     LaunchUtils.setAppVersion(this);
+    SocialClientContext.setUserAgent(ExoConnectionUtils.getUserAgent());
   }
   
 }

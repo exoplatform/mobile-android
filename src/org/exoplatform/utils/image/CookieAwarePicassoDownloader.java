@@ -111,6 +111,7 @@ public class CookieAwarePicassoDownloader extends UrlConnectionDownloader {
    */
   private HttpURLConnection connection(Uri path) throws IOException {
     HttpURLConnection connection = super.openConnection(path);
+    ExoConnectionUtils.setUserAgent(connection);
     initCookieManager();
     return connection;
   }
