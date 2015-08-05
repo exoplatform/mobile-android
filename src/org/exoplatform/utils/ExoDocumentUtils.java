@@ -18,9 +18,6 @@
  */
 package org.exoplatform.utils;
 
-import android.text.Html;
-import greendroid.util.Config;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -66,8 +63,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.OpenableColumns;
-import android.util.Log;
+import android.text.Html;
 import android.webkit.MimeTypeMap;
+import greendroid.util.Config;
 
 public class ExoDocumentUtils {
 
@@ -577,7 +575,7 @@ public class ExoDocumentUtils {
               if (i > 0) {
                 ExoFile newFile = new ExoFile();
                 if (itemElement.hasAttribute("title")) {
-                  newFile.name= Html.fromHtml(itemElement.getAttribute("title")).toString();
+                  newFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
                 } else {
                   newFile.name = itemElement.getAttribute("name");
                 }
@@ -607,7 +605,7 @@ public class ExoDocumentUtils {
 
               ExoFile newFile = new ExoFile();
               if (itemElement.hasAttribute("title")) {
-                newFile.name=Html.fromHtml(itemElement.getAttribute("title")).toString();
+                newFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
               } else {
                 newFile.name = itemElement.getAttribute("name");
               }
@@ -899,6 +897,16 @@ public class ExoDocumentUtils {
     @Override
     public String toString() {
       return String.format(Locale.US, "File %s [%s - %s KB]", documentName, documentMimeType, documentSizeKb);
+    }
+
+    public void closeDocStream() {
+      if (documentData != null)
+        try {
+          documentData.close();
+        } catch (IOException e) {
+          if (Log.LOGD)
+            Log.d(LOG_TAG, Log.getStackTraceString(e));
+        }
     }
   }
 }

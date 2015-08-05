@@ -219,7 +219,9 @@ public class ShareService extends IntentService {
     uploadedMap.clear();
     UploadInfo uploadInfo = initUploadInfo;
     for (int i = 0; i < postInfo.postAttachmentUri.size(); i++) {
-
+      // close the current open input stream
+      if (uploadInfo != null && uploadInfo.fileToUpload != null)
+        uploadInfo.fileToUpload.closeDocStream();
       // Retrieve details of the document to upload
       if (i != 0) {
         uploadInfo = new UploadInfo(uploadInfo);
@@ -247,6 +249,8 @@ public class ShareService extends IntentService {
           return false;
         }
       });
+      if (uploadInfo != null && uploadInfo.fileToUpload != null)
+        uploadInfo.fileToUpload.closeDocStream();
       if (!uploadedAll) {
         if (Log.LOGD)
           Log.d(LOG_TAG, "doUpload failed when upload attach ", i, " uri=", uriString);

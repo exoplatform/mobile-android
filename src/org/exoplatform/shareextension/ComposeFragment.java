@@ -130,14 +130,7 @@ public class ComposeFragment extends Fragment {
       if (thumbnail != null) {
         imgThumb.setImageBitmap(thumbnail);
       }
-      if (info.documentData != null) {
-        try {
-          info.documentData.close();
-        } catch (IOException e) {
-          if (Log.LOGD)
-            Log.d(getClass().getSimpleName(), e.getMessage());
-        }
-      }
+      info.closeDocStream();
     }
   }
 
