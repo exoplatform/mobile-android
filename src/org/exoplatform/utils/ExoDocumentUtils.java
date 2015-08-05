@@ -1093,5 +1093,37 @@ public class ExoDocumentUtils {
             Log.d(LOG_TAG, Log.getStackTraceString(e));
         }
     }
+
+    /**
+     * On Platform 4.1-M2, the upload service renames the uploaded file.
+     * Therefore the link to this file in the activity becomes incorrect. To fix
+     * this, we rename the file before upload so the same name is used in the
+     * activity.
+     */
+    public void cleanupFilename(Context context) {
+      final String TILDE_HYPHENS_COLONS_SPACES = "[~_:\\s]";
+      final String MULTIPLE_HYPHENS = "-{2,}";
+      final String FORBIDDEN_CHARS = "[`!@#\\$%\\^&\\*\\|;\"'<>/\\\\\\[\\]\\{\\}\\(\\)\\?,=\\+\\.]+";
+      String name = documentName;
+      String ext = "";
+      int lastDot = name.lastIndexOf('.');
+      if (lastDot > 0 && lastDot < name.length()) {
+        ext = name.substring(lastDot); // the ext with the dot
+        name = name.substring(0, lastDot); // the name before the ext
+      }
+      // [~_:\s] Replaces ~ _ : and spaces by -
+      name = Pattern.compile(TILDE_HYPHENS_COLONS_SPACES).matcher(name).replaceAll("-");
+      // [`!@#\$%\^&\*\|;"'<>/\\\[\]\{\}\(\)\?,=\+\.]+ Deletes forbidden chars
+      name = Pattern.compile(FORBIDDEN_CHARS).matcher(name).replaceAll("");
+      // Converts accents to regular letters
+      name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+      // Replaces upper case characters by lower case
+      Locale loc = new Locale(SettingUtils.getPrefsLanguage(context.getApplicationContext()));
+      name = name.toLowerCase(loc == null ? Locale.getDefault() : loc);
+      // Remove consecutive -
+      name = Pattern.compile(MULTIPLE_HYPHENS).matcher(name).replaceAll("-");
+      // Save
+      documentName = name + ext;
+    }
   }
 }
