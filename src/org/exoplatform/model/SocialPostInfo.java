@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.shareextension.service.ShareService.UploadInfo;
+import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.Utils;
 
 import android.os.Parcel;
@@ -145,6 +147,27 @@ public class SocialPostInfo implements Parcelable {
     if (templateParams == null)
       return null;
     return templateParams.get(name);
+  }
+
+  public void builddocParams(UploadInfo uploadInfo) {
+    // Create and return TemplateParams for a DOC_ACTIVITY
+    String docUrl = uploadInfo.jcrUrl + "/" + uploadInfo.folder + "/" + uploadInfo.fileToUpload.documentName;
+    templateParams = new HashMap<String, String>();
+    templateParams.put("WORKSPACE", uploadInfo.workspace);
+    templateParams.put("REPOSITORY", uploadInfo.repository);
+    String docLink = docUrl.substring(ownerAccount.serverUrl.length());
+    templateParams.put("DOCLINK", docLink);
+    StringBuffer beginPath = new StringBuffer(ExoConstants.DOCUMENT_JCR_PATH).append("/")
+                                                                             .append(uploadInfo.repository)
+                                                                             .append("/")
+                                                                             .append(uploadInfo.workspace);
+    String docPath = docLink.substring(beginPath.length());
+    templateParams.put("DOCPATH", docPath);
+    templateParams.put("DOCNAME", uploadInfo.fileToUpload.documentName);
+
+    if (!isPublic()) {
+      templateParams.put("mimeType", uploadInfo.fileToUpload.documentMimeType);
+    }
   }
 
 }

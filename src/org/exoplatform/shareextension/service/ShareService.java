@@ -126,34 +126,11 @@ public class ShareService extends IntentService {
    */
   private UploadInfo initUpload() {
     postInfo.activityType = SocialPostInfo.TYPE_DOC;
-
     UploadInfo uploadInfo = new UploadInfo();
-    uploadInfo.uploadId = Long.toHexString(System.currentTimeMillis());
-    uploadInfo.repository = DocumentHelper.getInstance().repository;
-    uploadInfo.workspace = DocumentHelper.getInstance().workspace;
+    uploadInfo.init(postInfo);
 
-    if (postInfo.isPublic()) {
-      // File will be uploaded in the Public folder of the user's drive
-      // e.g. /Users/u___/us___/use___/user/Public/Mobile
-      uploadInfo.drive = ExoConstants.DOCUMENT_PERSONAL_DRIVE_NAME;
-      uploadInfo.folder = "Public/Mobile";
-      uploadInfo.jcrUrl = DocumentHelper.getInstance().getRepositoryHomeUrl();
-    } else {
-      // File will be uploaded in the Documents folder of the space's drive
-      // e.g. /Groups/spaces/the_space/Documents/Mobile
-      uploadInfo.drive = ".spaces." + postInfo.destinationSpace.getOriginalName();
-      uploadInfo.folder = "Mobile";
-      StringBuffer url = new StringBuffer(postInfo.ownerAccount.serverUrl).append(ExoConstants.DOCUMENT_JCR_PATH)
-                                                                          .append("/")
-                                                                          .append(uploadInfo.repository)
-                                                                          .append("/")
-                                                                          .append(uploadInfo.workspace)
-                                                                          .append("/Groups/spaces/")
-                                                                          .append(postInfo.destinationSpace.getOriginalName())
-                                                                          .append("/Documents");
-      uploadInfo.jcrUrl = url.toString();
-    }
     return uploadInfo;
+
   }
 
   /**
@@ -166,6 +143,23 @@ public class ShareService extends IntentService {
       @Override
       public boolean onSuccess(String message) {
         return true;
+        // =======
+        // public void onSuccess(String message) {
+        //
+        // // Retrieve details of the document to upload
+        // uploadInfo.fileToUpload =
+        // ExoDocumentUtils.documentInfoFromUri(Uri.parse(postInfo.postAttachmentUri),
+        // getBaseContext());
+        //
+        // if (uploadInfo.fileToUpload == null) {
+        // notifyResult(ShareResult.ERROR_INCORRECT_CONTENT_URI);
+        // return;
+        // } else {
+        // uploadInfo.fileToUpload.cleanupFilename(ShareService.this);
+        // }
+        //
+        // doUpload();
+        // >>>>>>> MOB-1384 Use UploadAction and PostAction in PostStatusTask
       }
 
       @Override
@@ -195,6 +189,7 @@ public class ShareService extends IntentService {
         uploadInfo = new UploadInfo(uploadInfo);
       }
 
+      // <<<<<<< HEAD
       String fileUri = "file://" + postInfo.postAttachedFiles.get(i);
       Uri uri = Uri.parse(fileUri);
       uploadInfo.fileToUpload = ExoDocumentUtils.documentInfoFromUri(uri, getBaseContext());
@@ -204,6 +199,13 @@ public class ShareService extends IntentService {
         return false;
       } else {
         uploadInfo.fileToUpload.documentName = ExoDocumentUtils.cleanupFilename(uploadInfo.fileToUpload.documentName);
+        // =======
+        //
+        // @Override
+        // public void onSuccess(String message) {
+        // postInfo.builddocParams(uploadInfo);
+        // doPost();
+        // >>>>>>> MOB-1384 Use UploadAction and PostAction in PostStatusTask
       }
       uploadedAll = UploadAction.execute(postInfo, uploadInfo, new ActionListener() {
 
@@ -241,6 +243,7 @@ public class ShareService extends IntentService {
         Log.d(LOG_TAG, "File " + f.getName() + " deleted: " + (f.delete() ? "YES" : "NO"));
     }
     return uploadedAll;
+
   }
 
   /**
@@ -310,6 +313,8 @@ public class ShareService extends IntentService {
     return ret;
   }
 
+  // <<<<<<<HEAD
+
   private String getDocUrl(UploadInfo pUploadInfo) {
     return pUploadInfo.jcrUrl + "/" + pUploadInfo.folder + "/" + pUploadInfo.fileToUpload.documentName;
   }
@@ -336,6 +341,8 @@ public class ShareService extends IntentService {
 
     return templateParams;
   }
+
+  // ======= >>>>>>>MOB-1384
 
   private Map<String, String> linkParams(String link) {
     // Create and return TemplateParams for a LINK_ACTIVITY
@@ -488,5 +495,33 @@ public class ShareService extends IntentService {
       this.jcrUrl = another.jcrUrl;
     }
 
+    public void init(SocialPostInfo postInfo) {
+
+      uploadId = Long.toHexString(System.currentTimeMillis());
+      repository = DocumentHelper.getInstance().repository;
+      workspace = DocumentHelper.getInstance().workspace;
+
+      if (postInfo.isPublic()) {
+        // File will be uploaded in the Public folder of the user's drive
+        // e.g. /Users/u___/us___/use___/user/Public/Mobile
+        drive = ExoConstants.DOCUMENT_PERSONAL_DRIVE_NAME;
+        folder = "Public/Mobile";
+        jcrUrl = DocumentHelper.getInstance().getRepositoryHomeUrl();
+      } else {
+        // File will be uploaded in the Documents folder of the space's drive
+        // e.g. /Groups/spaces/the_space/Documents/Mobile
+        drive = ".spaces." + postInfo.destinationSpace.getOriginalName();
+        folder = "Mobile";
+        StringBuffer url = new StringBuffer(postInfo.ownerAccount.serverUrl).append(ExoConstants.DOCUMENT_JCR_PATH)
+                                                                            .append("/")
+                                                                            .append(repository)
+                                                                            .append("/")
+                                                                            .append(workspace)
+                                                                            .append("/Groups/spaces/")
+                                                                            .append(postInfo.destinationSpace.getOriginalName())
+                                                                            .append("/Documents");
+        jcrUrl = url.toString();
+      }
+    }
   }
 }

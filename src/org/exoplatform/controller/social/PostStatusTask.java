@@ -19,24 +19,22 @@
 package org.exoplatform.controller.social;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.exoplatform.R;
+import org.exoplatform.model.SocialPostInfo;
+import org.exoplatform.shareextension.service.Action.ActionListener;
+import org.exoplatform.shareextension.service.PostAction;
 import org.exoplatform.shareextension.service.ShareService.UploadInfo;
+import org.exoplatform.shareextension.service.UploadAction;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
-import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.client.api.SocialClientLibException;
-import org.exoplatform.social.client.api.model.RestActivity;
-import org.exoplatform.social.client.api.model.RestIdentity;
-import org.exoplatform.social.client.api.service.QueryParams;
-import org.exoplatform.social.client.api.service.QueryParams.QueryParamOption;
-import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.social.AllUpdatesFragment;
 import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.Log;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
@@ -44,8 +42,8 @@ import org.exoplatform.widget.WarningDialog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.webkit.MimeTypeMap;
 
 // TODO replace by ShareService
 public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
@@ -88,96 +86,84 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
   public Integer doInBackground(Void... params) {
 
     try {
-      boolean isInSpace = messageController.getPostDestination() != null;
-      String thisServerUrl = AccountSetting.getInstance().getDomainName();
-      RestActivity activityImpl = new RestActivity();
-      activityImpl.setTitle(composeMessage);
-      // If the message is posted in a space
-      if (isInSpace)
-        activityImpl.setType(RestActivity.SPACE_DEFAULT_ACTIVITY_TYPE);
-      else
-        activityImpl.setType(RestActivity.DEFAULT_ACTIVITY_TYPE);
+      SocialPostInfo postInfo = new SocialPostInfo();
+      postInfo.destinationSpace = messageController.getPostDestination();
+      postInfo.postMessage = composeMessage;
+      postInfo.ownerAccount = AccountSetting.getInstance().getCurrentAccount();
 
       // If the post contains an attached image
       if (sdcard_temp_dir != null) {
-
+        postInfo.activityType = SocialPostInfo.TYPE_DOC;
         UploadInfo uploadInfo = new UploadInfo();
-        uploadInfo.repository = DocumentHelper.getInstance().repository;
-        uploadInfo.workspace = DocumentHelper.getInstance().workspace;
-        if (isInSpace) {
-          String spaceOriginalName = messageController.getPostDestination().getOriginalName();
-          uploadInfo.folder = "Mobile";
-          StringBuffer url = new StringBuffer(thisServerUrl).append(ExoConstants.DOCUMENT_JCR_PATH)
-                                                            .append("/")
-                                                            .append(uploadInfo.repository)
-                                                            .append("/")
-                                                            .append(uploadInfo.workspace)
-                                                            .append("/Groups/spaces/")
-                                                            .append(spaceOriginalName)
-                                                            .append("/Documents");
-          uploadInfo.jcrUrl = url.toString();
-        } else {
-          uploadInfo.folder = "Public/Mobile";
-          uploadInfo.jcrUrl = DocumentHelper.getInstance().getRepositoryHomeUrl();
-        }
+        uploadInfo.init(postInfo);
         uploadUrl = uploadInfo.jcrUrl + "/" + uploadInfo.folder;
 
         // Create destination folder
         if (ExoDocumentUtils.createFolder(uploadUrl)) {
+          
           // Upload file
           File file = new File(sdcard_temp_dir);
-          String imageDir = uploadUrl + "/" + file.getName();
           if (file != null) {
             File tempFile = PhotoUtils.reziseFileImage(file);
+            String uploadedFileName = file.getName();
             if (tempFile != null) {
-              String mime = ExoConstants.IMAGE_TYPE;
-              String ext = MimeTypeMap.getFileExtensionFromUrl(tempFile.getName());
-              if (ext != null && !"".equals(ext))
-                mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
-              ExoDocumentUtils.putFileToServerFromLocal(imageDir, tempFile, mime);
+              // TODO need check and test again after merge with MOB-1874
+              uploadInfo.fileToUpload = ExoDocumentUtils.documentInfoFromUri(Uri.fromFile(tempFile),
+                                                                             mContext.getApplicationContext());
+              uploadInfo.uploadId = Long.toHexString(System.currentTimeMillis());
+              if (uploadInfo.fileToUpload != null) {
+                uploadInfo.fileToUpload.documentName = uploadedFileName;
+                uploadInfo.fileToUpload.cleanupFilename(mContext);
+                final AtomicBoolean uploaded = new AtomicBoolean(false);
+                // UploadAction.excute is synchronize method
+                UploadAction.execute(postInfo, uploadInfo, new ActionListener() {
+                  
+                  @Override
+                  public void onSuccess(String message) {
+                    uploaded.set(true);
+                  }
+                  
+                  @Override
+                  public void onError(String error) {
+                    uploaded.set(false);
+                  }
+                });
+                if (uploadInfo.fileToUpload.documentData != null) {
+                  try {
+                    uploadInfo.fileToUpload.documentData.close();
+                  } catch (IOException e) {
+                    Log.d(getClass().getSimpleName(), Log.getStackTraceString(e));
+                  }
+                }
+                tempFile.delete();
+                if (uploaded.get()) {
+                  uploadedFileName = uploadInfo.fileToUpload.documentName;
+                }
+              }
             }
-            // Activity Type
-            if (isInSpace)
-              activityImpl.setType(RestActivity.SPACE_DOC_ACTIVITY_TYPE);
-            else
-              activityImpl.setType(RestActivity.DOC_ACTIVITY_TYPE);
-            // Template Params
-            Map<String, String> templateParams = new HashMap<String, String>();
-            String docLink = imageDir.substring(thisServerUrl.length());
-            StringBuffer beginPath = new StringBuffer(ExoConstants.DOCUMENT_JCR_PATH).append("/")
-                                                                                     .append(uploadInfo.repository)
-                                                                                     .append("/")
-                                                                                     .append(uploadInfo.workspace);
-            String docPath = docLink.substring(beginPath.length());
-            templateParams.put("DOCPATH", docPath);
-            templateParams.put("MESSAGE", composeMessage);
-            templateParams.put("DOCLINK", docLink);
-            templateParams.put("WORKSPACE", uploadInfo.workspace);
-            templateParams.put("REPOSITORY", uploadInfo.repository);
-            templateParams.put("DOCNAME", file.getName());
-            activityImpl.setTemplateParams(templateParams);
+            // build post param
+            postInfo.builddocParams(uploadInfo);
           }
         }
       }
-
-      // Publish
-      if (isInSpace) {
-        String spaceName = messageController.getPostDestination().name;
-        RestIdentity spaceIdentity = SocialServiceHelper.getInstance().identityService.getIdentity("space", spaceName);
-        if (spaceIdentity == null)
-          return 0; // Failed to get the space identity
-        activityImpl.setIdentityId(spaceIdentity.getId());
-        QueryParamOption paramSpaceId = QueryParams.IDENTITY_ID_PARAM;
-        paramSpaceId.setValue(spaceIdentity.getId());
-        QueryParams qparams = new QueryParamsImpl();
-        qparams.append(paramSpaceId);
-        SocialServiceHelper.getInstance().activityService.create(activityImpl, qparams);
-      } else {
-        SocialServiceHelper.getInstance().activityService.create(activityImpl);
-      }
-      return 1;
-    } catch (SocialClientLibException e) {
-      return 0;
+      final AtomicBoolean posted = new AtomicBoolean(false);
+      // post action execute is synchronize
+      PostAction.execute(postInfo, new ActionListener() {
+        
+        @Override
+        public void onSuccess(String message) {
+          posted.set(true);
+        }
+        
+        @Override
+        public void onError(String error) {
+          posted.set(false);
+        }
+      });
+      if (posted.get())
+        return 1;
+      else 
+        return 0;
     } catch (RuntimeException e) {
       return -2;
     }
