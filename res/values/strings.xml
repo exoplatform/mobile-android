@@ -268,4 +268,9 @@
   <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
   <string name="ShareErrorSignInFailed">Login failed, please try again</string>
   
+  <string name="DeleteConfirmFolderTitle">Delete folder</string>
+  <string name="DeleteConfirmFileTitle">Delete file</string>
+  <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
+  <string name="Folder">folder</string>
+  <string name="File">file</string>
 </resources>
