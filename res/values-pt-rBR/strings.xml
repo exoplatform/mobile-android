@@ -63,10 +63,10 @@
   <string name="YourComment">Seu comentário...</string>
   <string name="Comment">Comentário</string>
   <string name="StatusUpdate">Publicar</string>
-  <string name="PostTo">a:</string>
-  <string name="Public">Minhas Atividades</string>
+  <string name="PostTo">To:</string>
+  <string name="Public">My Activities</string>
   <string name="NoSpaces">You are not in any space</string>
-  <string name="ComposerPlaceHolder">No que você está trabalhando?</string>
+  <string name="ComposerPlaceHolder">What are you working on?</string>
   <string name="ShareWithWhom">Select who will see this post</string>
   <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
   <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
@@ -246,9 +246,9 @@
   <string name="LoginWarningMsg">Connection error</string>
 
   <string-array name="SocialTabs">
-    <item id="AllUpdates">Todas as atividades</item>
+    <item id="AllUpdates">All Activities</item>
     <item id="MyConnections">Minhas conexões</item>
     <item id="MySpaces">Meus Espaços</item>
-    <item id="MyStatus">Minhas Atividades</item>
+    <item id="MyStatus">My Activities</item>
   </string-array>
 </resources>
