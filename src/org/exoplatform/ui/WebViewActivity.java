@@ -53,7 +53,10 @@ import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.LoaderActionBarItem;
 
 public class WebViewActivity extends MyActionBar {
+
   private static final String ACCOUNT_SETTING = "account_setting";
+
+  private static final String LOG_TAG         = "eXo____WebViewActivity____";
 
   private WebViewLoadTask     mLoadTask;
 
@@ -212,7 +215,7 @@ public class WebViewActivity extends MyActionBar {
 
     } catch (URISyntaxException e) {
       domain = url;
-      Log.w("eXo____WebViewActivity____", "Setting cookie for invalid URL :" + url);
+      Log.w(LOG_TAG, "Setting cookie for invalid URL :" + url);
     }
 
     CookieSyncManager.createInstance(this);
