@@ -137,7 +137,7 @@ public class ExoConnectionUtils {
   public static final String      HTTPS                      = "https://";
 
   /** eXo cloud workspace url */
-  public static final String      EXO_CLOUD_WS_DOMAIN        = "exoplatform.net";                                 // "wks-acc.exoplatform.org";
+  public static final String      EXO_CLOUD_WS_DOMAIN        = "uxpacc02.exoplatform.org";                         // "wks-acc.exoplatform.org";
                                                                                                                    // //
                                                                                                                    // "netstg.exoplatform.org";
 
@@ -313,7 +313,7 @@ public class ExoConnectionUtils {
       httpClient = initHttpClient();
     }
 
-    HttpPost httpPost = new HttpPost(HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/signup");
+    HttpPost httpPost = new HttpPost(HTTPS + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/signup");
     List<NameValuePair> requestParameters = new ArrayList<NameValuePair>(1);
     requestParameters.add(new BasicNameValuePair("user-mail", email));
     httpPost.setEntity(new UrlEncodedFormEntity(requestParameters));
@@ -352,7 +352,7 @@ public class ExoConnectionUtils {
    * @throws IOException
    */
   public static HttpResponse requestTenantForEmail(String email) throws IOException {
-    return getRequestResponse(HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/usermailinfo/" + email);
+    return getRequestResponse(HTTPS + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/usermailinfo/" + email);
   }
 
   public static String[] checkRequestTenant(HttpResponse response) {
@@ -382,7 +382,7 @@ public class ExoConnectionUtils {
    * @return
    */
   public static boolean requestAccountExistsForUser(String user, String tenant) {
-    String url = HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/isuserexist/" + tenant + "/" + user;
+    String url = HTTPS + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/isuserexist/" + tenant + "/" + user;
     try {
       HttpResponse response = getRequestResponse(url);
       if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
@@ -405,7 +405,7 @@ public class ExoConnectionUtils {
    * @return
    */
   public static int requestTenantStatus(String tenant) {
-    String url = HTTP + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/status/" + tenant;
+    String url = HTTPS + EXO_CLOUD_WS_DOMAIN + SERVICE_BASE_URL + "/status/" + tenant;
     try {
       HttpResponse response = getRequestResponse(url);
       /** 404 - tenant does not exist */
