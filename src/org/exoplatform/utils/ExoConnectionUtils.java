@@ -238,8 +238,10 @@ public class ExoConnectionUtils {
   }
   
   public static void setUserAgent(HttpURLConnection connection) {
-    connection.setDoInput(true);
-    connection.addRequestProperty(USER_AGENT_KEY, getUserAgent());
+    if (connection != null) {
+      connection.setDoInput(true);
+      connection.addRequestProperty(USER_AGENT_KEY, getUserAgent());
+    }
   }
   
   public static DefaultHttpClient initHttpClient() {
