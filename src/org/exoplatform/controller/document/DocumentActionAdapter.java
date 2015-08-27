@@ -30,7 +30,9 @@ import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.DocumentExtendDialog;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,15 +126,33 @@ public class DocumentActionAdapter extends BaseAdapter {
 
           break;
         case DocumentActivity.ACTION_DELETE:
-          String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
-
-          if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder) && _selectedFile.isFolder) {
-            DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
+          Context ctx = v.getContext();
+          AlertDialog.Builder bld = new AlertDialog.Builder(ctx);
+          int selectedTypeStrId = R.string.File;
+          if (_selectedFile.isFolder) {
+            bld.setTitle(R.string.DeleteConfirmFolderTitle);
+            selectedTypeStrId = R.string.Folder;
+          } else {
+            bld.setTitle(R.string.DeleteConfirmFileTitle);
           }
+          bld.setMessage(ctx.getString(R.string.DeleteConfirmMessage, ctx.getString(selectedTypeStrId), _selectedFile.name));
+          bld.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
 
-          DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
-                                                            _selectedFile.path,
-                                                            DocumentActivity.ACTION_DELETE);
+              if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder) && _selectedFile.isFolder) {
+                DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
+              }
+
+              DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
+                                                                _selectedFile.path,
+                                                                DocumentActivity.ACTION_DELETE);
+            }
+          });
+          bld.setNegativeButton(android.R.string.no, null);
+          bld.show();
 
           break;
         case DocumentActivity.ACTION_RENAME:
