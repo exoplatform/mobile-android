@@ -64,9 +64,11 @@ public class ExoConstants {
 
   public static final int    COMPOSE_COMMENT_TYPE                  = 1;
 
-  public static final int    NUMBER_OF_ACTIVITY                    = 50;
+  public static final int    NUMBER_OF_ACTIVITY                    = 25;
 
-  public static final int    NUMBER_OF_MORE_ACTIVITY               = 20;
+  public static final int    NUMBER_OF_MORE_ACTIVITY               = 25;
+  
+  public static final int    NUMBER_OF_ACTIVITY_HOME               = 10;
 
   public static final int    NUMBER_OF_LIKES_PARAM                 = 50;
 
@@ -179,8 +181,6 @@ public class ExoConstants {
   public static final String SPECIAL_CHAR_URL_SET                  = "[\\[\\]\\&\\~\\?\\*\\|\\<\\>\\\"\\;\\+\\\\]";
 
   public static final int    HOME_AVATAR_BORDER_COLOR              = 0x44444444;
-
-  public static final int    HOME_SOCIAL_MAX_NUMBER                = 10;
 
   public static final String SOCIAL_FILE_CACHE                     = "SocialCache";
 
