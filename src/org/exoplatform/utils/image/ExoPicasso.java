@@ -30,7 +30,7 @@ import com.squareup.picasso.Picasso;
 /**
  * Created by The eXo Platform SAS <br/>
  * Creates a {@link Picasso} instance that uses a
- * {@link CookieAwarePicassoDownloader}
+ * {@link ExoPicassoDownloader}
  * 
  * @author Philippe Aristote paristote@exoplatform.com <br/>
  *         May 13, 2015
@@ -43,7 +43,7 @@ public class ExoPicasso {
 
   /**
    * Creates a {@link Picasso} instance that uses a
-   * {@link CookieAwarePicassoDownloader}
+   * {@link ExoPicassoDownloader}
    * 
    * @param ctx Context
    * @return the Picasso instance
@@ -51,7 +51,7 @@ public class ExoPicasso {
   public static Picasso picasso(Context ctx) {
     if (sPicasso == null) {
       Picasso.Builder b = new Picasso.Builder(ctx);
-      b.downloader(new CookieAwarePicassoDownloader(ctx));
+      b.downloader(new ExoPicassoDownloader(ctx));
       sPicasso = b.build();
     }
     return sPicasso;

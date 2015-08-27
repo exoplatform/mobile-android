@@ -40,18 +40,21 @@ import com.squareup.picasso.UrlConnectionDownloader;
 
 /**
  * Created by The eXo Platform SAS<br/>
- * A {@link Picasso} {@link UrlConnectionDownloader} that uses the cookies
- * synchronized from {@link ExoConnectionUtils}.
+ * A custom {@link Picasso} {@link UrlConnectionDownloader} that:
+ * <ul>
+ * <li>uses the cookies synchronized from {@link ExoConnectionUtils} to get permissions/restrictions about targeted resources</li>
+ * <li>sets the custom eXo/$version (Android) User-Agent header in the request</li>
+ * </ul>
  * 
  * @author Philippe Aristote paristote@exoplatform.com May 13, 2015
  */
-public class CookieAwarePicassoDownloader extends UrlConnectionDownloader {
+public class ExoPicassoDownloader extends UrlConnectionDownloader {
 
   private static final String TAG = "eXo___CookiesAwarePicassoDownloader___";
 
   // private static final String RESPONSE_SOURCE = "X-Android-Response-Source";
 
-  public CookieAwarePicassoDownloader(Context context) {
+  public ExoPicassoDownloader(Context context) {
     super(context);
   }
 
