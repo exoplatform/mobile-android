@@ -18,6 +18,8 @@
  */
 package org.exoplatform.ui;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -199,10 +201,22 @@ public class WebViewActivity extends MyActionBar {
   }
 
   private void setupCookies(String url) {
+    String domain = url;
+    try {
+      URI uri = new URI(url);
+      domain = uri.getHost();
+      if (uri.getPort()!=-1) {
+        domain=domain+":"+uri.getPort();
+      }
+
+    } catch (URISyntaxException e) {
+
+    }
+
     CookieSyncManager.createInstance(this);
     ArrayList<String> cookies = AccountSetting.getInstance().cookiesList;
     for (String strCookie : cookies) {
-      CookieManager.getInstance().setCookie(url, strCookie);
+      CookieManager.getInstance().setCookie(domain, strCookie);
     }
     CookieSyncManager.getInstance().sync();
 
