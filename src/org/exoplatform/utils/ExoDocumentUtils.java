@@ -18,6 +18,7 @@
  */
 package org.exoplatform.utils;
 
+import android.text.Html;
 import greendroid.util.Config;
 
 import java.io.File;
@@ -575,7 +576,11 @@ public class ExoDocumentUtils {
               Element itemElement = (Element) itemNode;
               if (i > 0) {
                 ExoFile newFile = new ExoFile();
-                newFile.name = itemElement.getAttribute("name");
+                if (itemElement.hasAttribute("title")) {
+                  newFile.name= Html.fromHtml(itemElement.getAttribute("title")).toString();
+                } else {
+                  newFile.name = itemElement.getAttribute("name");
+                }
                 newFile.workspaceName = itemElement.getAttribute("workspaceName");
                 newFile.path = fullURLofFile(newFile.workspaceName, itemElement.getAttribute("path"));
                 newFile.driveName = itemElement.getAttribute("driveName");
@@ -601,7 +606,11 @@ public class ExoDocumentUtils {
               Element itemElement = (Element) itemNode;
 
               ExoFile newFile = new ExoFile();
-              newFile.name = itemElement.getAttribute("name");
+              if (itemElement.hasAttribute("title")) {
+                newFile.name=Html.fromHtml(itemElement.getAttribute("title")).toString();
+              } else {
+                newFile.name = itemElement.getAttribute("name");
+              }
               newFile.workspaceName = itemElement.getAttribute("workspaceName");
               newFile.path = fullURLofFile(newFile.workspaceName, itemElement.getAttribute("path"));
               newFile.driveName = file.name;
