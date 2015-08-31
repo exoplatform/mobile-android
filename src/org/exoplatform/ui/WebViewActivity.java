@@ -18,6 +18,8 @@
  */
 package org.exoplatform.ui;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -35,6 +37,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.CookieManager;
@@ -199,10 +202,23 @@ public class WebViewActivity extends MyActionBar {
   }
 
   private void setupCookies(String url) {
+    String domain = "";
+    try {
+      URI uri = new URI(url);
+      domain = uri.getHost();
+      if (uri.getPort() != -1) {
+        domain = domain + ":" + uri.getPort();
+      }
+
+    } catch (URISyntaxException e) {
+      domain = url;
+      Log.w("eXo____WebViewActivity____", "Setting cookie for invalid URL :" + url);
+    }
+
     CookieSyncManager.createInstance(this);
     ArrayList<String> cookies = AccountSetting.getInstance().cookiesList;
     for (String strCookie : cookies) {
-      CookieManager.getInstance().setCookie(url, strCookie);
+      CookieManager.getInstance().setCookie(domain, strCookie);
     }
     CookieSyncManager.getInstance().sync();
 
