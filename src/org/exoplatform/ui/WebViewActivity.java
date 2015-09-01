@@ -201,7 +201,7 @@ public class WebViewActivity extends MyActionBar {
   }
 
   private void setupCookies(String url) {
-    String domain = url;
+    String domain = "";
     try {
       URI uri = new URI(url);
       domain = uri.getHost();
@@ -210,6 +210,7 @@ public class WebViewActivity extends MyActionBar {
       }
 
     } catch (URISyntaxException e) {
+        domain=url;
 
     }
 
