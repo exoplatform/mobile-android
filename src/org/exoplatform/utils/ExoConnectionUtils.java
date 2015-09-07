@@ -420,6 +420,7 @@ public class ExoConnectionUtils {
                                                                                       .replace("\r\n", "");
         if (Log.LOGD)
           Log.d(TAG, "Tenant status: " + tenantStatus);
+
         if (tenantStatus.equalsIgnoreCase(ONLINE))
           return SIGNIN_SERVER_ONLINE;
         else if (tenantStatus.equalsIgnoreCase(STOPPED))

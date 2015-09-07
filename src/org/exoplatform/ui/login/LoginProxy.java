@@ -77,6 +77,8 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
 
   private String                          mDomain;
 
+  private String                          mUpdatedDomain;
+
   private String                          mEmail;
 
   private Context                         mContext;
@@ -150,6 +152,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
     mResource = mContext.getResources();
     mSetting = AccountSetting.getInstance();
     mLaunchMode = state;
+    mUpdatedDomain = null;
     if (mContext instanceof BaseActivity) {
       ((BaseActivity) mContext).addLifeCycleObserverRef(mLifecycleCallback);
     }
@@ -250,7 +253,9 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
 
   /**
    * Figure out tenant based on url of server <br/>
-   * Url of cloud server must be in the form of https://<tenant>.
+   * <<<<<<< HEAD Url of cloud server must be in the form of https://<tenant>.
+   * ======= Url of cloud server must be in the form of http://<tenant>. >>>>>>>
+   * 5856d29... Support server URL and HTTP to HTTPS redirections
    * <exo_cloud_domain> <br/>
    * For example: http://exoplatform.wks-acc.exoplatform.org
    */
@@ -354,6 +359,13 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
       Log.i(TAG, "Login proxy was not executed in the context of an activity...");
     }
 
+  }
+
+  @Override
+  public void onUpdateDomain(String newDomain) {
+    if (newDomain != null && !newDomain.equalsIgnoreCase(mDomain)) {
+      mUpdatedDomain = newDomain;
+    }
   }
 
   @Override
@@ -465,6 +477,10 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
         // The password property is updated if it changed
         if (!duplicatedServer.password.equals(newAccountObj.password)) {
           duplicatedServer.password = newAccountObj.password;
+        }
+        // The server's URL is updated if it changed (e.g. from a 301 redir)
+        if (mUpdatedDomain != null) {
+          duplicatedServer.serverUrl = mUpdatedDomain;
         }
         duplicatedServer.lastLoginDate = newAccountObj.lastLoginDate;
       }

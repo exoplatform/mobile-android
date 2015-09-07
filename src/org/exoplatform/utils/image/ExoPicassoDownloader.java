@@ -31,26 +31,28 @@ import org.apache.http.cookie.Cookie;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.UrlConnectionDownloader;
+
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
-
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.UrlConnectionDownloader;
 
 /**
  * Created by The eXo Platform SAS<br/>
  * A custom {@link Picasso} {@link UrlConnectionDownloader} that:
  * <ul>
- * <li>uses the cookies synchronized from {@link ExoConnectionUtils} to get permissions/restrictions about targeted resources</li>
- * <li>sets the custom eXo/$version (Android) User-Agent header in the request</li>
+ * <li>uses the cookies synchronized from {@link ExoConnectionUtils} to get
+ * permissions/restrictions about targeted resources</li>
+ * <li>sets the custom eXo/$version (Android) User-Agent header in the request
+ * </li>
  * </ul>
  * 
  * @author Philippe Aristote paristote@exoplatform.com May 13, 2015
  */
 public class ExoPicassoDownloader extends UrlConnectionDownloader {
 
-  private static final String TAG = "eXo___CookiesAwarePicassoDownloader___";
+  private static final String TAG = "eXo___ExoPicassoDownloader___";
 
   // private static final String RESPONSE_SOURCE = "X-Android-Response-Source";
 
@@ -124,9 +126,22 @@ public class ExoPicassoDownloader extends UrlConnectionDownloader {
     // TODO use networkPolicy as in com.squareup.picasso.UrlConnectionDownloader
     // https://github.com/square/picasso/blob/picasso-parent-2.5.2/picasso/src/main/java/com/squareup/picasso/UrlConnectionDownloader.java
     HttpURLConnection connection = connection(uri);
+    connection.setInstanceFollowRedirects(true);
     connection.setUseCaches(true);
 
     int responseCode = connection.getResponseCode();
+    // Handle HTTP redirections that are not managed by HttpURLConnection
+    // automatically, e.g. HTTP -> HTTPS
+    // TODO consider using OkHttp instead
+    if (responseCode >= 300 && responseCode < 400) {
+      String location = connection.getHeaderField("Location");
+      connection.disconnect();
+      connection = connection(Uri.parse(location));
+      connection.setInstanceFollowRedirects(true);
+      connection.setUseCaches(true);
+      responseCode = connection.getResponseCode();
+    }
+    // Either the original or the new request have failed -> error
     if (responseCode >= 300) {
       connection.disconnect();
       throw new ResponseException(responseCode + " " + connection.getResponseMessage(), networkPolicy, responseCode);

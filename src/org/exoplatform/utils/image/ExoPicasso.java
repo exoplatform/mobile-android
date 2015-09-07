@@ -22,15 +22,14 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookieStore;
 
+import com.squareup.picasso.Picasso;
+
 import android.content.Context;
 import android.util.Log;
 
-import com.squareup.picasso.Picasso;
-
 /**
  * Created by The eXo Platform SAS <br/>
- * Creates a {@link Picasso} instance that uses a
- * {@link ExoPicassoDownloader}
+ * Creates a {@link Picasso} instance that uses a {@link ExoPicassoDownloader}
  * 
  * @author Philippe Aristote paristote@exoplatform.com <br/>
  *         May 13, 2015
@@ -42,8 +41,7 @@ public class ExoPicasso {
   private static Picasso      sPicasso;
 
   /**
-   * Creates a {@link Picasso} instance that uses a
-   * {@link ExoPicassoDownloader}
+   * Creates a {@link Picasso} instance that uses a {@link ExoPicassoDownloader}
    * 
    * @param ctx Context
    * @return the Picasso instance

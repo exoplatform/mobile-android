@@ -19,10 +19,15 @@
 package org.exoplatform.ui.login.tasks;
 
 import java.io.IOException;
+import java.net.URI;
 
+import org.apache.http.Header;
+import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.HttpStatus;
 import org.apache.http.conn.HttpHostConnectException;
+import org.apache.http.protocol.HttpContext;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.Log;
@@ -49,15 +54,20 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
     String username = params[0];
     String password = params[1];
     String domain = params[2];
+
     if (Log.LOGD)
       Log.d(TAG, "Logging in with " + username + " at " + domain);
 
     try {
       String versionUrl = domain + ExoConstants.DOMAIN_PLATFORM_VERSION;
       HttpResponse response = ExoConnectionUtils.getPlatformResponse(username, password, versionUrl);
+
+      setRedirectResponseInterceptor();
       int statusCode = response.getStatusLine().getStatusCode();
+
       if (Log.LOGD)
-        Log.d(TAG, "Response code: " + statusCode);
+        Log.d(TAG, "response code: " + statusCode);
+
       if (statusCode == HttpStatus.SC_NOT_FOUND)
         return ExoConnectionUtils.SIGNIN_SERVER_NAV;
 
@@ -75,6 +85,10 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
     } catch (IOException e) {
       Log.d(TAG, "IOException: " + e.getLocalizedMessage());
       return ExoConnectionUtils.SIGNIN_SERVER_NAV;
+    } finally {
+      if (ExoConnectionUtils.httpClient != null) {
+        ExoConnectionUtils.httpClient.clearResponseInterceptors();
+      }
     }
   }
 
@@ -94,14 +108,52 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
       mListener.onLoggingInFinished(result);
   }
 
+  private void setRedirectResponseInterceptor() {
+    if (ExoConnectionUtils.httpClient == null)
+      return;
+
+    ExoConnectionUtils.httpClient.addResponseInterceptor(new HttpResponseInterceptor() {
+
+      @Override
+      public void process(HttpResponse response, HttpContext context) throws HttpException, IOException {
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY) {
+          if (mListener != null) {
+            Header location = response.getFirstHeader("Location");
+            if (location != null) {
+              URI newDomain = URI.create(location.getValue());
+              mListener.onUpdateDomain(newDomain.getScheme() + "://" + newDomain.getHost()
+                  + (newDomain.getPort() == -1 ? "" : ":" + newDomain.getPort()));
+            }
+          }
+        }
+      }
+    });
+  }
+
   public void setListener(AsyncTaskListener listener) {
     mListener = listener;
   }
 
   public interface AsyncTaskListener {
 
+    /**
+     * Called when the task has finished to return the result.
+     * 
+     * @param result (1) for a successful login
+     */
     void onLoggingInFinished(int result);
 
+    /**
+     * Called when the task is canceled.
+     */
     void onCanceled();
+
+    /**
+     * Called when the original domain was redirected to a new one. <br/>
+     * 
+     * @param newDomain the new domain URL (scheme + host + optional port)
+     */
+    void onUpdateDomain(String newDomain);
   }
 }
