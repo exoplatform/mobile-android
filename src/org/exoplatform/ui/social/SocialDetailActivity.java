@@ -21,11 +21,14 @@ package org.exoplatform.ui.social;
 import org.exoplatform.R;
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoUtils;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewStub;
@@ -120,24 +123,24 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
     super.finish();
   }
 
-  // TODO add refresh button and loading indicator in the action bar
-  // @Override
-  // public boolean onOptionsItemSelected(MenuItem item) {
-  // switch (item.getItemId()) {
-  // case -1:
-  // if (SocialTabsActivity.instance != null) {
-  // SocialTabsActivity.instance.finish();
-  // }
-  // finish();
-  // break;
-  // case 0:
-  // detailController.onLoad(false, currentPosition);
-  // break;
-  //
-  // }
-  //
-  // return true;
-  // }
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+    case R.id.menu_act_detail_refresh:
+      detailController.onLoad(false, currentPosition);
+      break;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.activity_detail, menu);
+    MenuItem loader = menu.findItem(R.id.menu_act_detail_refresh);
+    detailController.setLoaderItem(loader);
+    ExoUtils.setLoadingItem(loader, true);
+    return super.onCreateOptionsMenu(menu);
+  }
 
   @Override
   public void onClick(View view) {
@@ -149,11 +152,11 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
       startActivity(intent);
     }
     if (view.equals(likeButton)) {
-      detailController.onLikePress(/* loaderItem, */currentPosition);
+      detailController.onLikePress(currentPosition);
     }
 
     if (view.equals(likedFrame)) {
-      detailController.onClickLikedFrame();
+      detailController.onClickLikesFrame();
     }
   }
 

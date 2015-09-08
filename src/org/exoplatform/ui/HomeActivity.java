@@ -32,6 +32,7 @@ import org.exoplatform.ui.setting.SettingActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.image.ExoPicasso;
 import org.exoplatform.utils.image.RoundedCornersTranformer;
@@ -151,10 +152,9 @@ public class HomeActivity extends Activity {
     // keep an instance of the refresh button to display a loading indicator
     loaderItem = menu.findItem(R.id.menu_home_refresh);
     homeController.setLoader(loaderItem);
-    if (loaderItem != null)
-      // we should already be loading the profile and activities,
-      // so we start the loading indicator now
-      loaderItem.setActionView(R.layout.action_bar_loading_indicator);
+    // we're already loading the profile and activities,
+    // so we start the loading indicator now
+    ExoUtils.setLoadingItem(loaderItem, true);
     return super.onCreateOptionsMenu(menu); // true;
   }
 

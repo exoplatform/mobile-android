@@ -51,15 +51,12 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.view.View;
 
-// TODO add progress bar
 public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
   private RestActivity                 selectedRestActivity;
 
   private LinkedList<SocialLikeInfo>   likeLinkedList    = new LinkedList<SocialLikeInfo>();
 
   private ArrayList<SocialCommentInfo> socialCommentList = new ArrayList<SocialCommentInfo>();
-
-  // private LoaderActionBarItem loaderItem;
 
   private Context                      mContext;
 
@@ -83,12 +80,9 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   private int                          currentPosition;
 
-  public SocialDetailLoadTask(Context context, SocialDetailController controller,
-  // LoaderActionBarItem loader,
-                              int pos) {
+  public SocialDetailLoadTask(Context context, SocialDetailController controller, int pos) {
     mContext = context;
     detailController = controller;
-    // loaderItem = loader;
     currentPosition = pos;
     changeLanguage();
 
@@ -96,7 +90,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
   @Override
   public void onPreExecute() {
-    // loaderItem.setLoading(true);
+    detailController.setLoading(true);
   }
 
   @Override
@@ -211,9 +205,15 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       dialog = new SocialDetailsWarningDialog(mContext, titleString, detailsErrorStr, okString, hasContent);
       dialog.show();
     }
-    // loaderItem.setLoading(false);
+    detailController.setLoading(false);
     SocialDetailActivity.socialDetailActivity.startScreen.setVisibility(View.GONE);
 
+  }
+
+  @Override
+  protected void onCancelled() {
+    detailController.setLoading(false);
+    super.onCancelled();
   }
 
   private void changeLanguage() {

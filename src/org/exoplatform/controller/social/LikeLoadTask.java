@@ -44,7 +44,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 
-// TODO add progress bar
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jun
  * 6, 2012
@@ -63,23 +62,18 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
 
   private SocialDetailController detailController;
 
-  // private LoaderActionBarItem loaderItem;
-
   private int                    currentPosition;
 
-  public LikeLoadTask(Context context, SocialDetailController controller,
-  // LoaderActionBarItem loader,
-                      int pos) {
+  public LikeLoadTask(Context context, SocialDetailController controller, int pos) {
     mContext = context;
     detailController = controller;
-    // loaderItem = loader;
     currentPosition = pos;
     changeLanguage();
   }
 
   @Override
   protected void onPreExecute() {
-    // loaderItem.setLoading(true);
+    detailController.setLoading(true);
   }
 
   @Override
@@ -131,7 +125,7 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
 
   @Override
   protected void onCancelled() {
-    // loaderItem.setLoading(false);
+    detailController.setLoading(false);
   }
 
   @Override
@@ -161,7 +155,7 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
       SocialDetailsWarningDialog dialog = new SocialDetailsWarningDialog(mContext, titleString, detailsErrorStr, okString, false);
       dialog.show();
     }
-    // loaderItem.setLoading(false);
+    detailController.setLoading(false);
   }
 
   private void changeLanguage() {

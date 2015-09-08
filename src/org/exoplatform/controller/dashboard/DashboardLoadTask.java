@@ -40,7 +40,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-// TODO set progress bar
 public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
   private static final int         RESULT_OK      = 1;
 
@@ -58,7 +57,7 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
 
   private String                   contentString;
 
-  private MenuItem loaderItem;
+  private MenuItem                 loaderItem;
 
   private ArrayList<DashboardItem> dashboardList;
 
@@ -71,6 +70,10 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
     changeLanguage();
   }
 
+  public void setLoaderItem(MenuItem item) {
+    this.loaderItem = item;
+  }
+
   @Override
   public void onPreExecute() {
     ExoUtils.setLoadingItem(loaderItem, true);
@@ -80,15 +83,15 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
   public Integer doInBackground(Void... params) {
     try {
       HttpResponse response;
-      String urlForDahboards = AccountSetting.getInstance().getDomainName() + ExoConstants.DASHBOARD_PATH;
+      String urlForDashboards = AccountSetting.getInstance().getDomainName() + ExoConstants.DASHBOARD_PATH;
       /*
        * Checking the session status each time we retrieve dashboard item list.
        * If time out, re logging in
        */
-      if (ExoConnectionUtils.checkTimeout(urlForDahboards) != ExoConnectionUtils.LOGIN_SUCCESS)
+      if (ExoConnectionUtils.checkTimeout(urlForDashboards) != ExoConnectionUtils.LOGIN_SUCCESS)
         return RESULT_TIMEOUT;
       items.clear();
-      response = ExoConnectionUtils.getRequestResponse(urlForDahboards);
+      response = ExoConnectionUtils.getRequestResponse(urlForDashboards);
       dashboardList = dashboardController.getDashboards(response);
       for (int i = 0; i < dashboardList.size(); i++) {
         DashboardItem gadgetTab = dashboardList.get(i);
@@ -100,7 +103,6 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
             items.addAll(gadgets);
           }
         } catch (IOException e) {
-          // if (Config.GD_ERROR_LOGS_ENABLED)
           Log.e("DashboardLoadTask", e.getMessage());
         }
 

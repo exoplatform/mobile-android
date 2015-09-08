@@ -35,6 +35,7 @@ import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import org.exoplatform.ui.HomeActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.WarningDialog;
 
@@ -84,8 +85,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   @Override
   public void onPreExecute() {
-    if (loaderItem != null)
-      loaderItem.setActionView(R.layout.action_bar_loading_indicator);
+    ExoUtils.setLoadingItem(loaderItem, true);
   }
 
   /**
@@ -96,7 +96,8 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
    * @return The list of RestActivity.
    * @throws SocialClientLibException
    */
-  protected abstract RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException;
+  protected abstract RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity,
+                                                                          QueryParams params) throws SocialClientLibException;
 
   /**
    * Get the list of SocialActivity for the current stream.
@@ -106,11 +107,15 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   protected abstract ArrayList<SocialActivityInfo> getSocialActivityList();
 
   @Override
-  /*
-   * Parameters are expected as follows: - The number of activities to load
-   * (params[0]). - The current activity stream (params[1]). - [optional] The
-   * position of the activity from which to load more activities (params[2]). If
-   * set, the task will add more activities to the current stream.
+  /**
+   * Parameters:
+   * <ul>
+   * <li>The number of activities to load (params[0])</li>
+   * <li>The current activity stream (params[1])</li>
+   * <li>The position of the activity from which to load more activities
+   * (params[2]) - optional. If set, the task will add more activities to the
+   * current stream</li>
+   * </ul>
    */
   public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
     Log.i(TAG, "load social activities - number: " + params[0] + " - type: " + params[1]);
@@ -196,13 +201,11 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
     onCancelled();
   }
 
-  // TODO refactor the loading indicator
   private void stopLoadingIndicator() {
     if (loaderItem == null && feedType != HomeController.FLIPPER_VIEW && SocialTabsActivity.instance != null)
       loaderItem = SocialTabsActivity.instance.loaderItem;
 
-    if (loaderItem != null)
-      loaderItem.setActionView(null);
+    ExoUtils.setLoadingItem(loaderItem, false);
   }
 
   public void setResult(ArrayList<SocialActivityInfo> result) {

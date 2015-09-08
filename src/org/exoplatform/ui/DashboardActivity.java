@@ -26,6 +26,7 @@ import org.exoplatform.controller.dashboard.DashboardLoadTask;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 
 import android.content.res.Resources;
@@ -129,6 +130,10 @@ public class DashboardActivity extends FragmentActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.dashboard, menu);
     loaderItem = menu.findItem(R.id.menu_dashboard_refresh);
+    mLoadTask.setLoaderItem(loaderItem);
+    // we're already loading the gadgets
+    // so we start the loading indicator now
+    ExoUtils.setLoadingItem(loaderItem, true);
     return true;
   }
   
