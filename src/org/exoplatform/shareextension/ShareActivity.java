@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
-
 import org.exoplatform.R;
 import org.exoplatform.model.ExoAccount;
 import org.exoplatform.model.SocialPostInfo;
@@ -87,8 +86,8 @@ public class ShareActivity extends FragmentActivity {
   private Button             mainButton;
 
   private SocialPostInfo     postInfo;
-  
-  private boolean mMultiFlag = false;
+
+  private boolean            mMultiFlag               = false;
 
   @Override
   protected void onCreate(Bundle bundle) {
@@ -108,7 +107,7 @@ public class ShareActivity extends FragmentActivity {
       if ("text/plain".equals(type)) {
         // The share does not contain an attachment
         // TODO extract the link info - MOB-1866
-            postInfo.postMessage = intent.getStringExtra(Intent.EXTRA_TEXT);
+        postInfo.postMessage = intent.getStringExtra(Intent.EXTRA_TEXT);
       } else {
         // The share contains an attachment
         if (mMultiFlag) {
@@ -121,7 +120,7 @@ public class ShareActivity extends FragmentActivity {
             if (Log.LOGD)
               Log.d(LOG_TAG, "onCreate attach size=", attachs.size());
           }
-//          postInfo
+          // postInfo
         } else {
           Uri contentUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
           if (contentUri != null) {
@@ -165,12 +164,12 @@ public class ShareActivity extends FragmentActivity {
         Toast.makeText(this, R.string.ShareErrorNoAccountConfigured, Toast.LENGTH_LONG).show();
         finish();
       }
-      int selectedServerIdx = Integer.parseInt(getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0).getString(ExoConstants.EXO_PRF_DOMAIN_INDEX,
+      int selectedServerIdx = Integer.parseInt(getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0).getString(
+                                                                                                              ExoConstants.EXO_PRF_DOMAIN_INDEX,
                                                                                                               "-1"));
       AccountSetting.getInstance().setDomainIndex(String.valueOf(selectedServerIdx));
-      AccountSetting.getInstance()
-                    .setCurrentAccount((selectedServerIdx == -1 || selectedServerIdx >= serverList.size()) ? null
-                                                                                                          : serverList.get(selectedServerIdx));
+      AccountSetting.getInstance().setCurrentAccount((selectedServerIdx == -1
+          || selectedServerIdx >= serverList.size()) ? null : serverList.get(selectedServerIdx));
       postInfo.ownerAccount = AccountSetting.getInstance().getCurrentAccount();
     }
     ExoAccount acc = postInfo.ownerAccount;
@@ -322,6 +321,8 @@ public class ShareActivity extends FragmentActivity {
 
       Log.d(LOG_TAG, "Start share service...");
       Intent share = new Intent(getBaseContext(), ShareService.class);
+      share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+      share.setData(Uri.parse(postInfo.postAttachmentUri.get(0)));
       share.putExtra(ShareService.POST_INFO, postInfo);
       startService(share);
       Toast.makeText(getBaseContext(), R.string.ShareOperationStarted, Toast.LENGTH_LONG).show();
@@ -499,8 +500,10 @@ public class ShareActivity extends FragmentActivity {
           }
           out.close();
           in.close();
-          // TODO comment because DownloadTask is unused now, no need to update code to match multi share case
-//          postInfo.postAttachmentUri = new URI("file://" + getFileStreamPath(fileName).getAbsolutePath()).toString();
+          // TODO comment because DownloadTask is unused now, no need to update
+          // code to match multi share case
+          // postInfo.postAttachmentUri = new URI("file://" +
+          // getFileStreamPath(fileName).getAbsolutePath()).toString();
           // isLocalFile = true;
           Log.d(LOG_TAG, "Download successful: " + postInfo.postAttachmentUri);
         } catch (Exception e) {

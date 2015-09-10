@@ -52,6 +52,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -820,12 +821,26 @@ public class ExoDocumentUtils {
     if (document == null)
       return null;
 
-    if (document.toString().startsWith("content://"))
-      return documentFromContentUri(document, context);
-    else if (document.toString().startsWith("file://"))
+    if (document.toString().startsWith("content://")) {
+      // In some cases, the content:// URI is fake and embeds a real file://
+      // content://authority/-1/1/file:///sdcard/path/file.jpg/ACTUAL/123
+      // e.g. open ASTRO File Manager > View File > Share
+      // Then we extract the real URI and pass it to documentFromFileUri(...)
+      long id = ContentUris.parseId(document);
+      String dec = Uri.decode(document.toString());
+      int fileIdx = dec.indexOf("file://");
+      if (fileIdx > -1) {
+        String fileUri = dec.substring(fileIdx);
+        fileUri = fileUri.replaceAll("(/ACTUAL/)(" + id + ")", "");
+        return documentFromFileUri(Uri.parse(fileUri));
+      } else {
+        return documentFromContentUri(document, context);
+      }
+    } else if (document.toString().startsWith("file://")) {
       return documentFromFileUri(document);
-    else
+    } else {
       return null; // other formats not supported
+    }
   }
 
   /**
@@ -853,6 +868,9 @@ public class ExoDocumentUtils {
       document.documentMimeType = cr.getType(contentUri);
       return document;
     } catch (Exception e) {
+      Log.e(LOG_TAG, "Cannot retrieve the content at " + contentUri);
+      if (Log.LOGD)
+        Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
     }
     return null;
   }
@@ -881,6 +899,9 @@ public class ExoDocumentUtils {
 
       return document;
     } catch (Exception e) {
+      Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
+      if (Log.LOGD)
+        Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
     }
     return null;
   }

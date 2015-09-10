@@ -60,22 +60,21 @@ import android.support.v4.app.NotificationCompat;
  */
 public class ShareService extends IntentService {
 
-  public static final String LOG_TAG   = "____eXo____ShareService____";
+  public static final String LOG_TAG     = "____eXo____ShareService____";
 
-  public static final String POST_INFO = "postInfo";
+  public static final String POST_INFO   = "postInfo";
 
-  private int                notifId   = 1;
+  private int                notifId     = 1;
 
   private SocialPostInfo     postInfo;
 
-//  private UploadInfo         uploadInfo;
+  // private UploadInfo uploadInfo;
 
   // key is uri in device, value is url on server
-  private List<UploadInfo> uploadedMap = new ArrayList<UploadInfo>();
+  private List<UploadInfo>   uploadedMap = new ArrayList<UploadInfo>();
 
   private enum ShareResult {
-    SUCCESS, ERROR_INCORRECT_CONTENT_URI, ERROR_INCORRECT_ACCOUNT, ERROR_CREATE_FOLDER, ERROR_UPLOAD_FAILED, ERROR_POST_FAILED,
-    ERROR_COMMENT_FAILED
+    SUCCESS, ERROR_INCORRECT_CONTENT_URI, ERROR_INCORRECT_ACCOUNT, ERROR_CREATE_FOLDER, ERROR_UPLOAD_FAILED, ERROR_POST_FAILED, ERROR_COMMENT_FAILED
   }
 
   public ShareService() {
@@ -108,7 +107,8 @@ public class ShareService extends IntentService {
           // already set templateParam when first doc upload completed
           doPost();
         }
-      };
+      }
+      ;
     } else {
       // We don't have an attachment, maybe a link
       // TODO move as a separate Action - MOB-1866
@@ -274,14 +274,14 @@ public class ShareService extends IntentService {
    * Post the message
    */
   private boolean doPost() {
-    RestActivity createdAct =  PostAction.execute(postInfo, new PostActionListener());
+    RestActivity createdAct = PostAction.execute(postInfo, new PostActionListener());
     boolean ret = createdAct != null;
     if (ret) {
       if (Log.LOGD)
         Log.d(LOG_TAG, "doPost post commplete");
       for (UploadInfo commentInfo : uploadedMap) {
         ret = doComment(createdAct, commentInfo);
-        if (!ret) 
+        if (!ret)
           break;
         if (Log.LOGD)
           Log.d(LOG_TAG, "doPost comment success");
@@ -292,9 +292,9 @@ public class ShareService extends IntentService {
         ExoConnectionUtils.loggingOut();
         // Notify
         notifyResult(ShareResult.SUCCESS);
-      } else 
+      } else
         notifyResult(ShareResult.ERROR_COMMENT_FAILED);
-    } else 
+    } else
       notifyResult(ShareResult.ERROR_POST_FAILED);
     return ret;
   }
@@ -304,12 +304,16 @@ public class ShareService extends IntentService {
     String mimeType = (commentInfo == null ? null
                                            : (commentInfo.fileToUpload == null ? null
                                                                                : commentInfo.fileToUpload.documentMimeType));
-    StringBuilder bld = new  StringBuilder();
+    StringBuilder bld = new StringBuilder();
     // append link
-    bld.append("<a href=\"").append(commentInfo.uploadedUrl).append("\" >").append(commentInfo.fileToUpload.documentName)
-    .append("</a>");
+    bld.append("<a href=\"")
+       .append(commentInfo.uploadedUrl)
+       .append("\" >")
+       .append(commentInfo.fileToUpload.documentName)
+       .append("</a>");
     if (mimeType != null && mimeType.startsWith("image/")) {
-      bld.append("<br/><img src=\"").append(commentInfo.uploadedUrl).append("\" />");
+      String src = commentInfo.uploadedUrl.replace("/jcr/", "/thumbnailImage/medium/");
+      bld.append("<br/><img src=\"").append(src).append("\" />");
     }
 
     ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
@@ -322,11 +326,11 @@ public class ShareService extends IntentService {
     }
     return ret;
   }
-  
+
   private String getDocUrl(UploadInfo pUploadInfo) {
     return pUploadInfo.jcrUrl + "/" + pUploadInfo.folder + "/" + pUploadInfo.fileToUpload.documentName;
   }
-  
+
   private Map<String, String> docParams(UploadInfo pUploadInfo) {
     // Create and return TemplateParams for a DOC_ACTIVITY
     String docUrl = pUploadInfo.uploadedUrl;
@@ -460,11 +464,11 @@ public class ShareService extends IntentService {
     public String       jcrUrl;
 
     public String       uploadedUrl;
-    
+
     public UploadInfo() {
       super();
     }
-    
+
     public UploadInfo(UploadInfo another) {
       uploadId = Long.toHexString(System.currentTimeMillis());
       this.repository = another.repository;
@@ -473,6 +477,6 @@ public class ShareService extends IntentService {
       this.folder = another.folder;
       this.jcrUrl = another.jcrUrl;
     }
-    
+
   }
 }
