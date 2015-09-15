@@ -19,13 +19,11 @@
 package org.exoplatform.shareextension.service;
 
 import java.io.IOException;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialPostInfo;
@@ -42,7 +40,6 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.ExoDocumentUtils.DocumentInfo;
 import org.exoplatform.utils.Log;
-import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.TitleExtractor;
 
 import android.app.IntentService;
@@ -67,8 +64,6 @@ public class ShareService extends IntentService {
   private int                notifId     = 1;
 
   private SocialPostInfo     postInfo;
-
-  // private UploadInfo uploadInfo;
 
   // key is uri in device, value is url on server
   private List<UploadInfo>   uploadedMap = new ArrayList<UploadInfo>();
@@ -122,37 +117,6 @@ public class ShareService extends IntentService {
       doPost();
     }
 
-  }
-
-  /**
-   * On Platform 4.1-M2, the upload service renames the uploaded file. Therefore
-   * the link to this file in the activity becomes incorrect. To fix this, we
-   * rename the file before upload so the same name is used in the activity.
-   */
-  private void cleanupFilename(UploadInfo uploadInfo) {
-    final String TILDE_HYPHENS_COLONS_SPACES = "[~_:\\s]";
-    final String MULTIPLE_HYPHENS = "-{2,}";
-    final String FORBIDDEN_CHARS = "[`!@#\\$%\\^&\\*\\|;\"'<>/\\\\\\[\\]\\{\\}\\(\\)\\?,=\\+\\.]+";
-    String name = uploadInfo.fileToUpload.documentName;
-    String ext = "";
-    int lastDot = name.lastIndexOf('.');
-    if (lastDot > 0 && lastDot < name.length()) {
-      ext = name.substring(lastDot); // the ext with the dot
-      name = name.substring(0, lastDot); // the name before the ext
-    }
-    // [~_:\s] Replaces ~ _ : and spaces by -
-    name = Pattern.compile(TILDE_HYPHENS_COLONS_SPACES).matcher(name).replaceAll("-");
-    // [`!@#\$%\^&\*\|;"'<>/\\\[\]\{\}\(\)\?,=\+\.]+ Deletes forbidden chars
-    name = Pattern.compile(FORBIDDEN_CHARS).matcher(name).replaceAll("");
-    // Converts accents to regular letters
-    name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-    // Replaces upper case characters by lower case
-    Locale loc = new Locale(SettingUtils.getPrefsLanguage(getApplicationContext()));
-    name = name.toLowerCase(loc == null ? Locale.getDefault() : loc);
-    // Remove consecutive -
-    name = Pattern.compile(MULTIPLE_HYPHENS).matcher(name).replaceAll("-");
-    // Save
-    uploadInfo.fileToUpload.documentName = name + ext;
   }
 
   /**
@@ -218,7 +182,9 @@ public class ShareService extends IntentService {
     boolean uploadedAll = false;
     uploadedMap.clear();
     UploadInfo uploadInfo = initUploadInfo;
-    for (int i = 0; i < postInfo.postAttachmentUri.size(); i++) {
+    for (int i = 0; i < postInfo.postAttachedFiles.size(); i++) {
+      // notify the start of the upload i / total
+      notifyProgress(i + 1, postInfo.postAttachedFiles.size());
       // close the current open input stream
       if (uploadInfo != null && uploadInfo.fileToUpload != null)
         uploadInfo.fileToUpload.closeDocStream();
@@ -226,15 +192,16 @@ public class ShareService extends IntentService {
       if (i != 0) {
         uploadInfo = new UploadInfo(uploadInfo);
       }
-      String uriString = postInfo.postAttachmentUri.get(i);
-      Uri uri = Uri.parse(uriString);
+
+      String fileUri = "file://" + postInfo.postAttachedFiles.get(i);
+      Uri uri = Uri.parse(fileUri);
       uploadInfo.fileToUpload = ExoDocumentUtils.documentInfoFromUri(uri, getBaseContext());
 
       if (uploadInfo.fileToUpload == null) {
         notifyResult(ShareResult.ERROR_INCORRECT_CONTENT_URI);
         return false;
       } else {
-        cleanupFilename(uploadInfo);
+        uploadInfo.fileToUpload.documentName = ExoDocumentUtils.cleanupFilename(uploadInfo.fileToUpload.documentName);
       }
       uploadedAll = UploadAction.execute(postInfo, uploadInfo, new ActionListener() {
 
@@ -253,13 +220,13 @@ public class ShareService extends IntentService {
         uploadInfo.fileToUpload.closeDocStream();
       if (!uploadedAll) {
         if (Log.LOGD)
-          Log.d(LOG_TAG, "doUpload failed when upload attach ", i, " uri=", uriString);
+          Log.d(LOG_TAG, "doUpload failed when upload attach ", i, " uri=", fileUri);
         break;
       }
       if (uploadedAll) {
         uploadInfo.uploadedUrl = getDocUrl(uploadInfo);
         if (Log.LOGD)
-          Log.d(LOG_TAG, "doUpload uploaded attach ", i, " uri=", uriString);
+          Log.d(LOG_TAG, "doUpload uploaded attach ", i, " uri=", fileUri);
         if (i == 0)
           postInfo.templateParams = docParams(uploadInfo);
         else {
@@ -267,6 +234,8 @@ public class ShareService extends IntentService {
         }
       }
     }
+    // Delete temporary files
+    ExoDocumentUtils.deleteLocalFiles(postInfo.postAttachedFiles);
     return uploadedAll;
   }
 
@@ -312,7 +281,7 @@ public class ShareService extends IntentService {
        .append(commentInfo.fileToUpload.documentName)
        .append("</a>");
     if (mimeType != null && mimeType.startsWith("image/")) {
-      String src = commentInfo.uploadedUrl.replace("/jcr/", "/thumbnailImage/medium/");
+      String src = commentInfo.uploadedUrl.replace("/jcr/", "/thumbnailImage/large/");
       bld.append("<br/><img src=\"").append(src).append("\" />");
     }
 
@@ -395,6 +364,9 @@ public class ShareService extends IntentService {
     }
   }
 
+  /**
+   * Send a local notification to inform that the share has started
+   */
   private void notifyBegin() {
     notifId = (int) System.currentTimeMillis();
     String title = postInfo.hasAttachment() ? getString(R.string.ShareDocumentTitle) : getString(R.string.ShareMessageTitle);
@@ -409,6 +381,30 @@ public class ShareService extends IntentService {
     manager.notify(notifId, builder.build());
   }
 
+  /**
+   * Send a local notification to inform of the progress. Only called if the
+   * share contains 1 or more attachments.
+   * 
+   * @param current the index of the current file being uploaded
+   * @param total the total number of files to upload
+   */
+  private void notifyProgress(int current, int total) {
+    String text = String.format(Locale.US, "%s (%d/%d)", getString(R.string.ShareDocumentText), current, total);
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+    builder.setSmallIcon(R.drawable.application_icon);
+    builder.setContentTitle(getString(R.string.ShareDocumentTitle));
+    builder.setContentText(text);
+    builder.setAutoCancel(true);
+    builder.setProgress(0, 0, true);
+    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    manager.notify(notifId, builder.build());
+  }
+
+  /**
+   * Notify the end of the sharing. The message depends on the given result.
+   * 
+   * @param result one of {@link ShareResult} values
+   */
   private void notifyResult(ShareResult result) {
     String text = "";
     switch (result) {

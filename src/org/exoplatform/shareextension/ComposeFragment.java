@@ -18,22 +18,13 @@
  */
 package org.exoplatform.shareextension;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.exoplatform.R;
 import org.exoplatform.model.ExoAccount;
-import org.exoplatform.model.SocialPostInfo;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.utils.ExoDocumentUtils;
-import org.exoplatform.utils.ExoDocumentUtils.DocumentInfo;
 import org.exoplatform.utils.Log;
-import org.exoplatform.utils.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -47,7 +38,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by The eXo Platform SAS
@@ -107,31 +97,6 @@ public class ComposeFragment extends Fragment {
     } else {
       tvAccount.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
     }
-    SocialPostInfo post = getShareActivity().getPostInfo();
-    if (Utils.notEmpty(post.postAttachmentUri)) {
-      // Retrieve some information about the 1st attachment
-      Uri uri = Uri.parse(post.postAttachmentUri.get(0));
-      DocumentInfo info = ExoDocumentUtils.documentInfoFromUri(uri ,
-                                                               getActivity());
-      if (info == null) {
-        Toast.makeText(getActivity(), R.string.ShareErrorCannotReadDoc, Toast.LENGTH_LONG).show();
-        getActivity().finish();
-        return;
-      }
-
-      if (info.documentSizeKb > 10 * 1024) {
-        // Max 10MB
-        Toast.makeText(getActivity(), R.string.ShareErrorFileTooBig, Toast.LENGTH_LONG).show();
-        getActivity().finish();
-        return;
-      }
-      // Create a thumbnail of the attachment, works only for images
-      Bitmap thumbnail = getThumbnail(info.documentData);
-      if (thumbnail != null) {
-        imgThumb.setImageBitmap(thumbnail);
-      }
-      info.closeDocStream();
-    }
   }
 
   public void setTouchListener() {
@@ -150,12 +115,9 @@ public class ComposeFragment extends Fragment {
     });
   }
 
-  private Bitmap getThumbnail(InputStream bitmapStream) {
-    BitmapFactory.Options opts = new BitmapFactory.Options();
-    opts.inSampleSize = 4;
-    opts.inPreferredConfig = Bitmap.Config.RGB_565;
-    Bitmap thumbnail = BitmapFactory.decodeStream(bitmapStream, null, opts);
-    return thumbnail;
+  public void setThumbnailImage(Bitmap bm) {
+    if (bm != null)
+      imgThumb.setImageBitmap(bm);
   }
 
   @Override

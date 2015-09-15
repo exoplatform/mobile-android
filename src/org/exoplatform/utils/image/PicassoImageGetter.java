@@ -20,12 +20,12 @@ package org.exoplatform.utils.image;
 
 import java.lang.ref.WeakReference;
 
-import com.squareup.picasso.Picasso.LoadedFrom;
-import com.squareup.picasso.Target;
-
 import org.exoplatform.utils.Log;
 import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.PicassoTextView;
+
+import com.squareup.picasso.Picasso.LoadedFrom;
+import com.squareup.picasso.Target;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -36,24 +36,24 @@ import android.widget.TextView;
 
 /**
  * Created by The eXo Platform SAS
- * Author :  MinhTDH
- *           MinhTDH@exoplatform.com
- * Jul 31, 2015  
+ * 
+ * @author MinhTDH MinhTDH@exoplatform.com Jul 31, 2015
  */
 public class PicassoImageGetter implements ImageGetter {
 
   private WeakReference<TextView> mTvRef;
-  
+
   public PicassoImageGetter(TextView textView) {
     super();
     mTvRef = new WeakReference<TextView>(textView);
   }
-  private static final int PLACEHODER_SIZE = 200;
+
+  private static final int PLACEHOLDER_SIZE = 300;
+
   @Override
   public Drawable getDrawable(String paramString) {
     final DrawablePlaceHolder ret = new DrawablePlaceHolder();
-    // TODO calculate and set place holder size;
-    ret.setBounds(0, 0, PLACEHODER_SIZE, PLACEHODER_SIZE);
+    ret.setBounds(0, 0, PLACEHOLDER_SIZE, PLACEHOLDER_SIZE);
     TextView tv = Utils.getVal(mTvRef);
     if (tv != null) {
       PicassoGetterTarget target = new PicassoGetterTarget(tv, ret);
@@ -62,27 +62,30 @@ public class PicassoImageGetter implements ImageGetter {
       }
       ExoPicasso.picasso(tv.getContext())
                 .load(paramString)
-                // TODO calculate and set place holder size;
-                .resize(PLACEHODER_SIZE, PLACEHODER_SIZE)
+                .resize(PLACEHOLDER_SIZE, PLACEHOLDER_SIZE)
                 .centerInside()
                 .into(target);
     }
+    // TODO add loading placeholder
     return ret;
   }
 
   public static class PicassoGetterTarget implements Target {
-    
-    private WeakReference<TextView> mTvRef;
+
+    private WeakReference<TextView>            mTvRef;
+
     private WeakReference<DrawablePlaceHolder> mDrawRef;
 
     public PicassoGetterTarget(TextView textView, DrawablePlaceHolder drawable) {
       super();
       mTvRef = new WeakReference<TextView>(textView);
-      mDrawRef = new WeakReference<PicassoImageGetter.DrawablePlaceHolder>(drawable); 
+      mDrawRef = new WeakReference<PicassoImageGetter.DrawablePlaceHolder>(drawable);
     }
-    
+
     @Override
     public void onBitmapFailed(Drawable arg0) {
+      if (Log.LOGD)
+        Log.d(this.getClass().getName(), "Image could not be loaded");
     }
 
     @Override
@@ -92,25 +95,22 @@ public class PicassoImageGetter implements ImageGetter {
         DrawablePlaceHolder drawable = Utils.getVal(mDrawRef);
         if (drawable != null) {
           BitmapDrawable bd = new BitmapDrawable(tv.getResources(), bm);
-
           bd.setBounds(0, 0, bd.getIntrinsicWidth(), bd.getIntrinsicHeight());
-
           drawable.drawable = bd;
           drawable.setBounds(0, 0, bd.getIntrinsicWidth(), bd.getIntrinsicHeight());
-
           tv.setText(tv.getText());
         }
       }
     }
 
     @Override
-    public void onPrepareLoad(Drawable arg0) {
+    public void onPrepareLoad(Drawable placeholder) {
     }
   }
-  
+
   public static class DrawablePlaceHolder extends BitmapDrawable {
 
-    Drawable drawable;
+    private Drawable drawable;
 
     @Override
     public void draw(final Canvas canvas) {

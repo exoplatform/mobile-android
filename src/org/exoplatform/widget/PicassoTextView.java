@@ -18,24 +18,26 @@
  */
 package org.exoplatform.widget;
 
-import java.util.WeakHashMap;
-
-import com.squareup.picasso.Target;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.exoplatform.utils.image.ExoPicasso;
+
+import com.squareup.picasso.Target;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
 /**
- * Created by The eXo Platform SAS
- * for use as target to load bitmap by Picasso lib, auto cancel request when detached
- * Author :  MinhTDH
- *           MinhTDH@exoplatform.com
- * Jul 31, 2015  
+ * Created by The eXo Platform SAS for use as target to load bitmap by Picasso
+ * lib, auto cancel request when detached
+ * 
+ * @author MinhTDH MinhTDH@exoplatform.com Jul 31, 2015
  */
 public class PicassoTextView extends TextView {
+
+  private List<Target> mTargets;
 
   public PicassoTextView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
@@ -51,19 +53,20 @@ public class PicassoTextView extends TextView {
 
   @Override
   protected void onDetachedFromWindow() {
-    for (Target target : mTargetMap.keySet()) {
-      if (target != null) {
-        ExoPicasso.picasso(getContext()).cancelRequest(target);
+    if (mTargets != null) {
+      for (Target target : mTargets) {
+        if (target != null) {
+          ExoPicasso.picasso(getContext()).cancelRequest(target);
+        }
       }
     }
     super.onDetachedFromWindow();
   }
-  
-  WeakHashMap<Target, Object> mTargetMap;
+
   public void addTarget(Target target) {
-    if (mTargetMap == null) {
-      mTargetMap = new WeakHashMap<Target, Object>();
+    if (mTargets == null) {
+      mTargets = new ArrayList<Target>();
     }
-    mTargetMap.put(target, null);
+    mTargets.add(target);
   }
 }

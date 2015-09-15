@@ -19,11 +19,16 @@
 package org.exoplatform.shareextension;
 
 import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.http.HttpResponse;
 import org.exoplatform.R;
@@ -41,17 +46,21 @@ import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
 import org.exoplatform.ui.social.SpaceSelectorActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.ExoDocumentUtils.DocumentInfo;
 import org.exoplatform.utils.Log;
-import org.exoplatform.utils.Utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -89,6 +98,8 @@ public class ShareActivity extends FragmentActivity {
 
   private boolean            mMultiFlag               = false;
 
+  private List<Uri>          mAttachmentUris;
+
   @Override
   protected void onCreate(Bundle bundle) {
     super.onCreate(bundle);
@@ -111,24 +122,18 @@ public class ShareActivity extends FragmentActivity {
       } else {
         // The share contains an attachment
         if (mMultiFlag) {
-          ArrayList<Uri> attachs = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-          if (Utils.notEmpty(attachs)) {
-            postInfo.postAttachmentUri = new ArrayList<String>();
-            for (Uri uri : attachs) {
-              postInfo.postAttachmentUri.add(uri.toString());
-            }
-            if (Log.LOGD)
-              Log.d(LOG_TAG, "onCreate attach size=", attachs.size());
-          }
-          // postInfo
+          mAttachmentUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         } else {
           Uri contentUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
           if (contentUri != null) {
-            postInfo.postAttachmentUri = new ArrayList<String>();
-            postInfo.postAttachmentUri.add(contentUri.toString());
+            mAttachmentUris = new ArrayList<Uri>();
+            mAttachmentUris.add(contentUri);
           }
-          Log.d(LOG_TAG, String.format("Sharing file at uri %s", contentUri));
+          if (Log.LOGD) {
+            Log.d(LOG_TAG, "Number of files to share: ", mAttachmentUris.size());
+          }
         }
+        prepareAttachmentsAsync();
       }
 
       init();
@@ -141,6 +146,7 @@ public class ShareActivity extends FragmentActivity {
       // ACTION_SEND intent
       finish();
     }
+
   }
 
   private boolean isIntentCorrect() {
@@ -227,6 +233,8 @@ public class ShareActivity extends FragmentActivity {
     // If we're on the composer, call super to finish the activity
     ComposeFragment composer = ComposeFragment.getFragment();
     if (composer.isAdded()) {
+      if (postInfo != null)
+        ExoDocumentUtils.deleteLocalFiles(postInfo.postAttachedFiles);
       super.onBackPressed();
     } else if (AccountsFragment.getFragment().isAdded()) {
       // close the accounts fragment and reopen the composer fragment
@@ -321,8 +329,6 @@ public class ShareActivity extends FragmentActivity {
 
       Log.d(LOG_TAG, "Start share service...");
       Intent share = new Intent(getBaseContext(), ShareService.class);
-      share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-      share.setData(Uri.parse(postInfo.postAttachmentUri.get(0)));
       share.putExtra(ShareService.POST_INFO, postInfo);
       startService(share);
       Toast.makeText(getBaseContext(), R.string.ShareOperationStarted, Toast.LENGTH_LONG).show();
@@ -376,6 +382,140 @@ public class ShareActivity extends FragmentActivity {
     new LoginTask().execute(postInfo.ownerAccount);
   }
 
+  private void prepareAttachmentsAsync() {
+    new PrepareAttachmentsTask().execute();
+  }
+
+  /**
+   * Performs these operations asynchronously:
+   * <ol>
+   * <li>Check each file URI in mAttachmentsUris</li>
+   * <li>If the file is less than 10MB, add it to postInfo</li>
+   * <li>Stop after 10 files</li>
+   * <li>Generate a bitmap for the thumbnail</li>
+   * <li>Wait until the Compose fragment is ready and display the thumbnail</li>
+   * </ol>
+   * 
+   * @author paristote
+   */
+  private class PrepareAttachmentsTask extends AsyncTask<Void, Void, Void> {
+
+    private Bitmap thumbnail = null;
+
+    private String errorMessage;
+
+    private Bitmap getThumbnail(File origin) {
+      BitmapFactory.Options opts = new BitmapFactory.Options();
+      opts.inSampleSize = 4;
+      opts.inPreferredConfig = Bitmap.Config.RGB_565;
+      Bitmap thumbnail = BitmapFactory.decodeFile(origin.getAbsolutePath(), opts);
+      return thumbnail;
+    }
+
+    @Override
+    protected Void doInBackground(Void... params) {
+      Set<Integer> errors = new HashSet<Integer>();
+      if (mAttachmentUris != null && !mAttachmentUris.isEmpty()) {
+        postInfo.postAttachedFiles = new ArrayList<String>(ExoConstants.SHARE_EXTENSION_MAX_ITEMS);
+        for (Uri att : mAttachmentUris) {
+          // Stop when we reach the maximum number of files
+          if (postInfo.postAttachedFiles.size() == ExoConstants.SHARE_EXTENSION_MAX_ITEMS) {
+            errors.add(R.string.ShareErrorTooManyFiles);
+            break;
+          }
+          DocumentInfo info = ExoDocumentUtils.documentInfoFromUri(att, getApplicationContext());
+          // Skip if the file cannot be read
+          if (info == null) {
+            errors.add(R.string.ShareErrorCannotReadDoc);
+            continue;
+          }
+          // Skip if the file is more than 10MB
+          if (info.documentSizeKb > (ExoConstants.SHARE_EXTENSION_MAX_SIZE_MB * 1024)) {
+            errors.add(R.string.ShareErrorFileTooBig);
+            continue;
+          }
+          // All good, let's copy this file in our app's storage
+          // We must do this because some sharing apps (e.g. Google Photos)
+          // will revoke the permission on the files when the activity stops,
+          // therefore the service won't be able to access them
+          String cleanName = ExoDocumentUtils.cleanupFilename(info.documentName);
+          String tempFileName = DateFormat.format("yyyy-MM-dd-HH:mm:ss", System.currentTimeMillis()) + "-" + cleanName;
+
+          FileOutputStream fileOutput = null;
+          BufferedInputStream buffInput = null;
+          try {
+            // create temp file
+            fileOutput = openFileOutput(tempFileName, MODE_PRIVATE);
+            buffInput = new BufferedInputStream(info.documentData);
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = buffInput.read(buf)) != -1) {
+              fileOutput.write(buf, 0, len);
+            }
+            // add file to list
+            File tempFile = new File(getFilesDir(), tempFileName);
+            postInfo.postAttachedFiles.add(tempFile.getAbsolutePath());
+            if (thumbnail == null) {
+              thumbnail = getThumbnail(tempFile);
+            }
+          } catch (FileNotFoundException e) {
+            errors.add(R.string.ShareErrorCannotReadDoc);
+          } catch (IOException e) {
+            errors.add(R.string.ShareErrorCannotReadDoc);
+          } finally {
+            try {
+              if (buffInput != null)
+                buffInput.close();
+              if (fileOutput != null)
+                fileOutput.close();
+            } catch (IOException e) {
+            }
+          }
+        }
+        // Done creating the files
+        // Create an error message (if any) to display in onPostExecute
+        if (!errors.isEmpty()) {
+          StringBuilder message;
+          if (postInfo.postAttachedFiles.size() == 0)
+            message = new StringBuilder(getString(R.string.ShareErrorAllFilesCannotShare)).append(":");
+          else
+            message = new StringBuilder(getString(R.string.ShareErrorSomeFilesCannotShare)).append(":");
+          for (Integer errCode : errors) {
+            switch (errCode) {
+            case R.string.ShareErrorCannotReadDoc:
+            case R.string.ShareErrorFileTooBig:
+            case R.string.ShareErrorTooManyFiles:
+              message.append("\n").append(getString(errCode));
+              break;
+            }
+          }
+          errorMessage = message.toString();
+        }
+        while (ComposeFragment.getFragment() == null) {
+          // Wait until the compose fragment is ready
+        }
+      }
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void result) {
+      ComposeFragment.getFragment().setThumbnailImage(thumbnail);
+      if (errorMessage != null)
+        Toast.makeText(ShareActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+    };
+  }
+
+  /**
+   * Perform these operations in background:
+   * <ol>
+   * <li>Logout any currently logged in account</li>
+   * <li>Login with the given account</li>
+   * <li>If login is successful, setup the social client and services</li>
+   * </ol>
+   * 
+   * @author paristote
+   */
   private class LoginTask extends AsyncTask<ExoAccount, Void, Integer> {
 
     @Override
@@ -505,7 +645,7 @@ public class ShareActivity extends FragmentActivity {
           // postInfo.postAttachmentUri = new URI("file://" +
           // getFileStreamPath(fileName).getAbsolutePath()).toString();
           // isLocalFile = true;
-          Log.d(LOG_TAG, "Download successful: " + postInfo.postAttachmentUri);
+          // Log.d(LOG_TAG, "Download successful: ");
         } catch (Exception e) {
           Log.e(LOG_TAG, "Error ", e);
         }
