@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -689,7 +690,12 @@ public class ExoDocumentUtils {
     return matcher.find();
   }
 
-  // Delete file/folder method
+  /**
+   * Delete remote folder or file
+   * 
+   * @param url the URL of the folder or file to delete
+   * @return true if the file was deleted, false otherwise
+   */
   public static boolean deleteFile(String url) {
     HttpResponse response;
     try {
@@ -893,10 +899,22 @@ public class ExoDocumentUtils {
       document.documentName = file.getName();
       document.documentSizeKb = file.length() / 1024;
       document.documentData = new FileInputStream(file);
-      String ext = MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
-      if (ext != null && !"".equals(ext))
-        document.documentMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
-
+      // Guess the mime type in 2 ways
+      try {
+        // 1) by inspecting the file's first bytes
+        document.documentMimeType = URLConnection.guessContentTypeFromStream(document.documentData);
+      } catch (IOException e) {
+        document.documentMimeType = null;
+      }
+      if (document.documentMimeType == null) {
+        // 2) if it fails, by stripping the extension of the filename
+        // and getting the mime type from it
+        String extension = "";
+        int dotPos = document.documentName.lastIndexOf('.');
+        if (0 <= dotPos)
+          extension = document.documentName.substring(dotPos + 1);
+        document.documentMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+      }
       return document;
     } catch (Exception e) {
       Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
@@ -904,6 +922,60 @@ public class ExoDocumentUtils {
         Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
     }
     return null;
+  }
+
+  /**
+   * Delete the Files at the given paths
+   * 
+   * @param files a list of file paths
+   * @return true if all files were deleted, false otherwise
+   */
+  public static boolean deleteLocalFiles(List<String> files) {
+    boolean result = true;
+    if (files != null) {
+      for (String filePath : files) {
+        File f = new File(filePath);
+        boolean del = f.delete();
+        Log.d(LOG_TAG, "File " + f.getName() + " deleted: " + (del ? "YES" : "NO"));
+        result &= del;
+      }
+    }
+    return result;
+  }
+
+  /**
+   * On Platform 4.1-M2, the upload service renames the uploaded file. Therefore
+   * the link to this file in the activity becomes incorrect. To fix this, we
+   * rename the file before upload so the same name is used in the activity.
+   * 
+   * @param originalName the name to clean
+   * @return a String without forbidden characters
+   */
+  public static String cleanupFilename(String originalName) {
+    final String TILDE_HYPHENS_COLONS_SPACES = "[~_:\\s]";
+    final String MULTIPLE_HYPHENS = "-{2,}";
+    final String FORBIDDEN_CHARS = "[`!@#\\$%\\^&\\*\\|;\"'<>/\\\\\\[\\]\\{\\}\\(\\)\\?,=\\+\\.]+";
+    String name = originalName;
+    String ext = "";
+    int lastDot = name.lastIndexOf('.');
+    if (lastDot > 0 && lastDot < name.length()) {
+      ext = name.substring(lastDot); // the ext with the dot
+      name = name.substring(0, lastDot); // the name before the ext
+    }
+    // [~_:\s] Replaces ~ _ : and spaces by -
+    name = Pattern.compile(TILDE_HYPHENS_COLONS_SPACES).matcher(name).replaceAll("-");
+    // [`!@#\$%\^&\*\|;"'<>/\\\[\]\{\}\(\)\?,=\+\.]+ Deletes forbidden chars
+    name = Pattern.compile(FORBIDDEN_CHARS).matcher(name).replaceAll("");
+    // Converts accents to regular letters
+    name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+    // Replaces upper case characters by lower case
+    // Locale loc = new
+    // Locale(SettingUtils.getPrefsLanguage(getApplicationContext()));
+    name = name.toLowerCase(Locale.getDefault());
+    // Remove consecutive -
+    name = Pattern.compile(MULTIPLE_HYPHENS).matcher(name).replaceAll("-");
+    // Save
+    return (name + ext);
   }
 
   public static class DocumentInfo {

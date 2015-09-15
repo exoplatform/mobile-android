@@ -242,4 +242,14 @@ public class ExoConstants {
    * (-), dot (.) and plus (+)
    */
   public static final String ALLOWED_ACCOUNT_USERNAME_CHARSET      = "^([a-zA-Z0-9_-]|\\.|\\+)+$";
+
+  /**
+   * Maximum size in MB of each file to share
+   */
+  public static final int    SHARE_EXTENSION_MAX_SIZE_MB           = 10;
+
+  /**
+   * Maximum number of files that can be shared
+   */
+  public static final int    SHARE_EXTENSION_MAX_ITEMS             = 10;
 }
