@@ -640,7 +640,7 @@ public class ShareActivity extends FragmentActivity {
           }
           out.close();
           in.close();
-          // TODO comment because DownloadTask is unused now, no need to update
+          // comment because DownloadTask is unused now, no need to update
           // code to match multi share case
           // postInfo.postAttachmentUri = new URI("file://" +
           // getFileStreamPath(fileName).getAbsolutePath()).toString();

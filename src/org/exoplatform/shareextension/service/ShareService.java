@@ -18,6 +18,7 @@
  */
 package org.exoplatform.shareextension.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -182,9 +183,10 @@ public class ShareService extends IntentService {
     boolean uploadedAll = false;
     uploadedMap.clear();
     UploadInfo uploadInfo = initUploadInfo;
-    for (int i = 0; i < postInfo.postAttachedFiles.size(); i++) {
+    final int numberOfFiles = postInfo.postAttachedFiles.size();
+    for (int i = 0; i < numberOfFiles; i++) {
       // notify the start of the upload i / total
-      notifyProgress(i + 1, postInfo.postAttachedFiles.size());
+      notifyProgress(i + 1, numberOfFiles);
       // close the current open input stream
       if (uploadInfo != null && uploadInfo.fileToUpload != null)
         uploadInfo.fileToUpload.closeDocStream();
@@ -220,22 +222,24 @@ public class ShareService extends IntentService {
         uploadInfo.fileToUpload.closeDocStream();
       if (!uploadedAll) {
         if (Log.LOGD)
-          Log.d(LOG_TAG, "doUpload failed when upload attach ", i, " uri=", fileUri);
+          Log.e(LOG_TAG, String.format("Failed to upload file %d/%d : %s (doUpload)", i + 1, numberOfFiles, fileUri));
         break;
       }
       if (uploadedAll) {
         uploadInfo.uploadedUrl = getDocUrl(uploadInfo);
         if (Log.LOGD)
-          Log.d(LOG_TAG, "doUpload uploaded attach ", i, " uri=", fileUri);
+          Log.d(LOG_TAG, String.format("Uploaded file %d/%d OK %s (doUpload)", i + 1, numberOfFiles, fileUri));
         if (i == 0)
           postInfo.templateParams = docParams(uploadInfo);
         else {
           uploadedMap.add(uploadInfo);
         }
       }
+      // Delete file after upload
+      File f = new File(postInfo.postAttachedFiles.get(i));
+      if (Log.LOGD)
+        Log.d(LOG_TAG, "File " + f.getName() + " deleted: " + (f.delete() ? "YES" : "NO"));
     }
-    // Delete temporary files
-    ExoDocumentUtils.deleteLocalFiles(postInfo.postAttachedFiles);
     return uploadedAll;
   }
 
@@ -247,13 +251,13 @@ public class ShareService extends IntentService {
     boolean ret = createdAct != null;
     if (ret) {
       if (Log.LOGD)
-        Log.d(LOG_TAG, "doPost post commplete");
+        Log.d(LOG_TAG, "Post activity done");
       for (UploadInfo commentInfo : uploadedMap) {
         ret = doComment(createdAct, commentInfo);
         if (!ret)
           break;
         if (Log.LOGD)
-          Log.d(LOG_TAG, "doPost comment success");
+          Log.d(LOG_TAG, "Comment activity done");
       }
       // Share finished successfully
       // Needed to avoid some problems when reopening the app
@@ -268,7 +272,15 @@ public class ShareService extends IntentService {
     return ret;
   }
 
+  /**
+   * Post a comment on an activity
+   * 
+   * @param restAct the activity to comment
+   * @param commentInfo the info to put in the comment
+   * @return
+   */
   private boolean doComment(RestActivity restAct, UploadInfo commentInfo) {
+    // TODO create a Comment Action to delegate the operation
     boolean ret = false;
     String mimeType = (commentInfo == null ? null
                                            : (commentInfo.fileToUpload == null ? null
@@ -277,12 +289,13 @@ public class ShareService extends IntentService {
     // append link
     bld.append("<a href=\"")
        .append(commentInfo.uploadedUrl)
-       .append("\" >")
+       .append("\">")
        .append(commentInfo.fileToUpload.documentName)
        .append("</a>");
+    // add image in the comment's body
     if (mimeType != null && mimeType.startsWith("image/")) {
       String src = commentInfo.uploadedUrl.replace("/jcr/", "/thumbnailImage/large/");
-      bld.append("<br/><img src=\"").append(src).append("\" />");
+      bld.append("<br/><a href=\"").append(commentInfo.uploadedUrl).append("\"><img src=\"").append(src).append("\" /></a>");
     }
 
     ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
@@ -291,7 +304,8 @@ public class ShareService extends IntentService {
     try {
       ret = activityService.createComment(restAct, restComment) != null;
     } catch (SocialClientLibException e) {
-      Log.d(LOG_TAG, Log.getStackTraceString(e));
+      if (Log.LOGD)
+        Log.e(LOG_TAG, Log.getStackTraceString(e));
     }
     return ret;
   }

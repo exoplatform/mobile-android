@@ -899,10 +899,22 @@ public class ExoDocumentUtils {
       document.documentName = file.getName();
       document.documentSizeKb = file.length() / 1024;
       document.documentData = new FileInputStream(file);
-      String ext = MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
-      if (ext != null && !"".equals(ext))
-        document.documentMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
-
+      // Guess the mime type in 2 ways
+      try {
+        // 1) by inspecting the file's first bytes
+        document.documentMimeType = URLConnection.guessContentTypeFromStream(document.documentData);
+      } catch (IOException e) {
+        document.documentMimeType = null;
+      }
+      if (document.documentMimeType == null) {
+        // 2) if it fails, by stripping the extension of the filename
+        // and getting the mime type from it
+        String extension = "";
+        int dotPos = document.documentName.lastIndexOf('.');
+        if (0 <= dotPos)
+          extension = document.documentName.substring(dotPos + 1);
+        document.documentMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+      }
       return document;
     } catch (Exception e) {
       Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
