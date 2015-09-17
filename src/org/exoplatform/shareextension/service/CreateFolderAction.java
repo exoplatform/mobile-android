@@ -38,29 +38,29 @@ public class CreateFolderAction extends Action {
       throw new IllegalArgumentException("Cannot pass null as the UploadInfo argument");
     super.check();
   }
-
-  public static void execute(SocialPostInfo post, UploadInfo upload, ActionListener listener) {
+  // create and execute create folder request, wait for result
+  public static boolean execute(SocialPostInfo post, UploadInfo upload, ActionListener listener) {
 
     CreateFolderAction action = new CreateFolderAction();
     action.postInfo = post;
     action.listener = listener;
     action.uploadInfo = upload;
-    action.execute();
+    return action.execute();
 
   }
 
   @Override
-  protected void doExecute() {
+  protected boolean doExecute() {
 
     String folderUrl = uploadInfo.jcrUrl + "/" + uploadInfo.folder;
     boolean createFolder = ExoDocumentUtils.createFolder(folderUrl);
-
+    boolean ret = false;
     if (createFolder) {
-      listener.onSuccess("Destination folder ready");
+      ret = listener.onSuccess("Destination folder ready");
     } else {
-      listener.onError("Could not create the destination folder");
+      ret = listener.onError("Could not create the destination folder");
     }
-
+    return ret;
   }
 
 }

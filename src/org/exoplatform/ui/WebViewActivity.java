@@ -217,11 +217,12 @@ public class WebViewActivity extends MyActionBar {
 
     CookieSyncManager.createInstance(this);
     ArrayList<String> cookies = AccountSetting.getInstance().cookiesList;
-    for (String strCookie : cookies) {
-      CookieManager.getInstance().setCookie(domain, strCookie);
+    if (cookies != null) {
+      for (String strCookie : cookies) {
+        CookieManager.getInstance().setCookie(url, strCookie);
+      }
+      CookieSyncManager.getInstance().sync();
     }
-    CookieSyncManager.getInstance().sync();
-
   }
 
   @Override

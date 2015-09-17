@@ -32,7 +32,7 @@
             android:padding="2dp"
             android:textStyle="bold" />
 
-        <TextView
+        <org.exoplatform.widget.PicassoTextView
             android:id="@+id/textView_Message"
             style="@style/textview_content"
             android:layout_width="fill_parent"
@@ -52,6 +52,7 @@
             android:layout_marginLeft="10dip"
             android:layout_marginTop="5dip"
             android:padding="3dp" />
+
     </RelativeLayout>
 
 </RelativeLayout>

@@ -261,16 +261,21 @@
   <string name="ShareMessageText">Your message will be posted shortly</string>
   <string name="ShareErrorNoAccountConfigured">No account configured</string>
   <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
-  <string name="ShareErrorFileTooBig">You cannot share documents more than 10 MB</string>
+  <string name="ShareErrorFileTooBig">Cannot share documents more than 10 MB</string>
+  <string name="ShareErrorTooManyFiles">Cannot share more than 10 documents</string>
   <string name="ShareErrorUploadFailed">Could not share the document</string>
   <string name="ShareErrorPostFailed">Could not post the message</string>
+  <string name="ShareErrorCommentFailed">Could not comment the message</string>
   <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
   <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
   <string name="ShareErrorSignInFailed">Login failed, please try again</string>
+  <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
+  <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
   
   <string name="DeleteConfirmFolderTitle">Delete folder</string>
   <string name="DeleteConfirmFileTitle">Delete file</string>
   <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
   <string name="Folder">folder</string>
   <string name="File">file</string>
+
 </resources>

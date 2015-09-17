@@ -18,22 +18,29 @@
  */
 package org.exoplatform.shareextension.service;
 
+import java.io.File;
 import java.io.IOException;
-import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialPostInfo;
 import org.exoplatform.shareextension.service.Action.ActionListener;
+import org.exoplatform.shareextension.service.PostAction.PostActionListener;
 import org.exoplatform.singleton.DocumentHelper;
+import org.exoplatform.singleton.SocialServiceHelper;
+import org.exoplatform.social.client.api.SocialClientLibException;
+import org.exoplatform.social.client.api.model.RestActivity;
+import org.exoplatform.social.client.api.model.RestComment;
+import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.ExoDocumentUtils.DocumentInfo;
-import org.exoplatform.utils.SettingUtils;
+import org.exoplatform.utils.Log;
 import org.exoplatform.utils.TitleExtractor;
 
 import android.app.IntentService;
@@ -42,7 +49,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 /**
  * Created by The eXo Platform SAS.<br/>
@@ -52,18 +58,19 @@ import android.util.Log;
  */
 public class ShareService extends IntentService {
 
-  public static final String LOG_TAG   = "____eXo____ShareService____";
+  public static final String LOG_TAG     = "____eXo____ShareService____";
 
-  public static final String POST_INFO = "postInfo";
+  public static final String POST_INFO   = "postInfo";
 
-  private int                notifId   = 1;
+  private int                notifId     = 1;
 
   private SocialPostInfo     postInfo;
 
-  private UploadInfo         uploadInfo;
+  // key is uri in device, value is url on server
+  private List<UploadInfo>   uploadedMap = new ArrayList<UploadInfo>();
 
   private enum ShareResult {
-    SUCCESS, ERROR_INCORRECT_CONTENT_URI, ERROR_INCORRECT_ACCOUNT, ERROR_CREATE_FOLDER, ERROR_UPLOAD_FAILED, ERROR_POST_FAILED
+    SUCCESS, ERROR_INCORRECT_CONTENT_URI, ERROR_INCORRECT_ACCOUNT, ERROR_CREATE_FOLDER, ERROR_UPLOAD_FAILED, ERROR_POST_FAILED, ERROR_COMMENT_FAILED
   }
 
   public ShareService() {
@@ -88,10 +95,16 @@ public class ShareService extends IntentService {
 
     if (postInfo.hasAttachment()) {
 
-      initUpload();
-
-      startUpload();
-
+      UploadInfo initUploadInfo = initUpload();
+      boolean uploadStarted = startUpload(initUploadInfo);
+      if (uploadStarted) {
+        boolean uploadedAll = doUpload(initUploadInfo);
+        if (uploadedAll) {
+          // already set templateParam when first doc upload completed
+          doPost();
+        }
+      }
+      ;
     } else {
       // We don't have an attachment, maybe a link
       // TODO move as a separate Action - MOB-1866
@@ -108,44 +121,13 @@ public class ShareService extends IntentService {
   }
 
   /**
-   * On Platform 4.1-M2, the upload service renames the uploaded file. Therefore
-   * the link to this file in the activity becomes incorrect. To fix this, we
-   * rename the file before upload so the same name is used in the activity.
-   */
-  private void cleanupFilename() {
-    final String TILDE_HYPHENS_COLONS_SPACES = "[~_:\\s]";
-    final String MULTIPLE_HYPHENS = "-{2,}";
-    final String FORBIDDEN_CHARS = "[`!@#\\$%\\^&\\*\\|;\"'<>/\\\\\\[\\]\\{\\}\\(\\)\\?,=\\+\\.]+";
-    String name = uploadInfo.fileToUpload.documentName;
-    String ext = "";
-    int lastDot = name.lastIndexOf('.');
-    if (lastDot > 0 && lastDot < name.length()) {
-      ext = name.substring(lastDot); // the ext with the dot
-      name = name.substring(0, lastDot); // the name before the ext
-    }
-    // [~_:\s] Replaces ~ _ : and spaces by -
-    name = Pattern.compile(TILDE_HYPHENS_COLONS_SPACES).matcher(name).replaceAll("-");
-    // [`!@#\$%\^&\*\|;"'<>/\\\[\]\{\}\(\)\?,=\+\.]+ Deletes forbidden chars
-    name = Pattern.compile(FORBIDDEN_CHARS).matcher(name).replaceAll("");
-    // Converts accents to regular letters
-    name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-    // Replaces upper case characters by lower case
-    Locale loc = new Locale(SettingUtils.getPrefsLanguage(getApplicationContext()));
-    name = name.toLowerCase(loc == null ? Locale.getDefault() : loc);
-    // Remove consecutive -
-    name = Pattern.compile(MULTIPLE_HYPHENS).matcher(name).replaceAll("-");
-    // Save
-    uploadInfo.fileToUpload.documentName = name + ext;
-  }
-
-  /**
    * Create the resources needed to create the upload destination folder and
    * upload the file
    */
-  private void initUpload() {
+  private UploadInfo initUpload() {
     postInfo.activityType = SocialPostInfo.TYPE_DOC;
 
-    uploadInfo = new UploadInfo();
+    UploadInfo uploadInfo = new UploadInfo();
     uploadInfo.uploadId = Long.toHexString(System.currentTimeMillis());
     uploadInfo.repository = DocumentHelper.getInstance().repository;
     uploadInfo.workspace = DocumentHelper.getInstance().workspace;
@@ -171,34 +153,25 @@ public class ShareService extends IntentService {
                                                                           .append("/Documents");
       uploadInfo.jcrUrl = url.toString();
     }
+    return uploadInfo;
   }
 
   /**
    * Create the directory where the files are stored on the server, if it does
    * not already exist.
    */
-  private void startUpload() {
-    CreateFolderAction.execute(postInfo, uploadInfo, new ActionListener() {
+  private boolean startUpload(UploadInfo uploadInfo) {
+    return CreateFolderAction.execute(postInfo, uploadInfo, new ActionListener() {
 
       @Override
-      public void onSuccess(String message) {
-
-        // Retrieve details of the document to upload
-        uploadInfo.fileToUpload = ExoDocumentUtils.documentInfoFromUri(Uri.parse(postInfo.postAttachmentUri), getBaseContext());
-
-        if (uploadInfo.fileToUpload == null) {
-          notifyResult(ShareResult.ERROR_INCORRECT_CONTENT_URI);
-          return;
-        } else {
-          cleanupFilename();
-        }
-
-        doUpload();
+      public boolean onSuccess(String message) {
+        return true;
       }
 
       @Override
-      public void onError(String error) {
+      public boolean onError(String error) {
         notifyResult(ShareResult.ERROR_CREATE_FOLDER);
+        return false;
       }
     });
   }
@@ -206,62 +179,159 @@ public class ShareService extends IntentService {
   /**
    * Upload the file
    */
-  private void doUpload() {
-    UploadAction.execute(postInfo, uploadInfo, new ActionListener() {
-
-      @Override
-      public void onSuccess(String message) {
-        postInfo.templateParams = docParams();
-        doPost();
+  private boolean doUpload(UploadInfo initUploadInfo) {
+    boolean uploadedAll = false;
+    uploadedMap.clear();
+    UploadInfo uploadInfo = initUploadInfo;
+    final int numberOfFiles = postInfo.postAttachedFiles.size();
+    for (int i = 0; i < numberOfFiles; i++) {
+      // notify the start of the upload i / total
+      notifyProgress(i + 1, numberOfFiles);
+      // close the current open input stream
+      if (uploadInfo != null && uploadInfo.fileToUpload != null)
+        uploadInfo.fileToUpload.closeDocStream();
+      // Retrieve details of the document to upload
+      if (i != 0) {
+        uploadInfo = new UploadInfo(uploadInfo);
       }
 
-      @Override
-      public void onError(String error) {
-        notifyResult(ShareResult.ERROR_UPLOAD_FAILED);
+      String fileUri = "file://" + postInfo.postAttachedFiles.get(i);
+      Uri uri = Uri.parse(fileUri);
+      uploadInfo.fileToUpload = ExoDocumentUtils.documentInfoFromUri(uri, getBaseContext());
+
+      if (uploadInfo.fileToUpload == null) {
+        notifyResult(ShareResult.ERROR_INCORRECT_CONTENT_URI);
+        return false;
+      } else {
+        uploadInfo.fileToUpload.documentName = ExoDocumentUtils.cleanupFilename(uploadInfo.fileToUpload.documentName);
       }
-    });
+      uploadedAll = UploadAction.execute(postInfo, uploadInfo, new ActionListener() {
+
+        @Override
+        public boolean onSuccess(String message) {
+          return true;
+        }
+
+        @Override
+        public boolean onError(String error) {
+          notifyResult(ShareResult.ERROR_UPLOAD_FAILED);
+          return false;
+        }
+      });
+      if (uploadInfo != null && uploadInfo.fileToUpload != null)
+        uploadInfo.fileToUpload.closeDocStream();
+      if (!uploadedAll) {
+        if (Log.LOGD)
+          Log.e(LOG_TAG, String.format("Failed to upload file %d/%d : %s (doUpload)", i + 1, numberOfFiles, fileUri));
+        break;
+      }
+      if (uploadedAll) {
+        uploadInfo.uploadedUrl = getDocUrl(uploadInfo);
+        if (Log.LOGD)
+          Log.d(LOG_TAG, String.format("Uploaded file %d/%d OK %s (doUpload)", i + 1, numberOfFiles, fileUri));
+        if (i == 0)
+          postInfo.templateParams = docParams(uploadInfo);
+        else {
+          uploadedMap.add(uploadInfo);
+        }
+      }
+      // Delete file after upload
+      File f = new File(postInfo.postAttachedFiles.get(i));
+      if (Log.LOGD)
+        Log.d(LOG_TAG, "File " + f.getName() + " deleted: " + (f.delete() ? "YES" : "NO"));
+    }
+    return uploadedAll;
   }
 
   /**
    * Post the message
    */
-  private void doPost() {
-    PostAction.execute(postInfo, new ActionListener() {
-
-      @Override
-      public void onSuccess(String message) {
-        // Share finished successfully
-        // Needed to avoid some problems when reopening the app
+  private boolean doPost() {
+    RestActivity createdAct = PostAction.execute(postInfo, new PostActionListener());
+    boolean ret = createdAct != null;
+    if (ret) {
+      if (Log.LOGD)
+        Log.d(LOG_TAG, "Post activity done");
+      for (UploadInfo commentInfo : uploadedMap) {
+        ret = doComment(createdAct, commentInfo);
+        if (!ret)
+          break;
+        if (Log.LOGD)
+          Log.d(LOG_TAG, "Comment activity done");
+      }
+      // Share finished successfully
+      // Needed to avoid some problems when reopening the app
+      if (ret) {
         ExoConnectionUtils.loggingOut();
         // Notify
         notifyResult(ShareResult.SUCCESS);
-      }
-
-      @Override
-      public void onError(String error) {
-        notifyResult(ShareResult.ERROR_POST_FAILED);
-      }
-    });
+      } else
+        notifyResult(ShareResult.ERROR_COMMENT_FAILED);
+    } else
+      notifyResult(ShareResult.ERROR_POST_FAILED);
+    return ret;
   }
 
-  private Map<String, String> docParams() {
+  /**
+   * Post a comment on an activity
+   * 
+   * @param restAct the activity to comment
+   * @param commentInfo the info to put in the comment
+   * @return
+   */
+  private boolean doComment(RestActivity restAct, UploadInfo commentInfo) {
+    // TODO create a Comment Action to delegate the operation
+    boolean ret = false;
+    String mimeType = (commentInfo == null ? null
+                                           : (commentInfo.fileToUpload == null ? null
+                                                                               : commentInfo.fileToUpload.documentMimeType));
+    StringBuilder bld = new StringBuilder();
+    // append link
+    bld.append("<a href=\"")
+       .append(commentInfo.uploadedUrl)
+       .append("\">")
+       .append(commentInfo.fileToUpload.documentName)
+       .append("</a>");
+    // add image in the comment's body
+    if (mimeType != null && mimeType.startsWith("image/")) {
+      String src = commentInfo.uploadedUrl.replace("/jcr/", "/thumbnailImage/large/");
+      bld.append("<br/><a href=\"").append(commentInfo.uploadedUrl).append("\"><img src=\"").append(src).append("\" /></a>");
+    }
+
+    ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
+    RestComment restComment = new RestComment();
+    restComment.setText(bld.toString());
+    try {
+      ret = activityService.createComment(restAct, restComment) != null;
+    } catch (SocialClientLibException e) {
+      if (Log.LOGD)
+        Log.e(LOG_TAG, Log.getStackTraceString(e));
+    }
+    return ret;
+  }
+
+  private String getDocUrl(UploadInfo pUploadInfo) {
+    return pUploadInfo.jcrUrl + "/" + pUploadInfo.folder + "/" + pUploadInfo.fileToUpload.documentName;
+  }
+
+  private Map<String, String> docParams(UploadInfo pUploadInfo) {
     // Create and return TemplateParams for a DOC_ACTIVITY
-    String docUrl = uploadInfo.jcrUrl + "/" + uploadInfo.folder + "/" + uploadInfo.fileToUpload.documentName;
+    String docUrl = pUploadInfo.uploadedUrl;
     Map<String, String> templateParams = new HashMap<String, String>();
-    templateParams.put("WORKSPACE", uploadInfo.workspace);
-    templateParams.put("REPOSITORY", uploadInfo.repository);
+    templateParams.put("WORKSPACE", pUploadInfo.workspace);
+    templateParams.put("REPOSITORY", pUploadInfo.repository);
     String docLink = docUrl.substring(postInfo.ownerAccount.serverUrl.length());
     templateParams.put("DOCLINK", docLink);
     StringBuffer beginPath = new StringBuffer(ExoConstants.DOCUMENT_JCR_PATH).append("/")
-                                                                             .append(uploadInfo.repository)
+                                                                             .append(pUploadInfo.repository)
                                                                              .append("/")
-                                                                             .append(uploadInfo.workspace);
+                                                                             .append(pUploadInfo.workspace);
     String docPath = docLink.substring(beginPath.length());
     templateParams.put("DOCPATH", docPath);
-    templateParams.put("DOCNAME", uploadInfo.fileToUpload.documentName);
+    templateParams.put("DOCNAME", pUploadInfo.fileToUpload.documentName);
 
     if (!postInfo.isPublic()) {
-      templateParams.put("mimeType", uploadInfo.fileToUpload.documentMimeType);
+      templateParams.put("mimeType", pUploadInfo.fileToUpload.documentMimeType);
     }
 
     return templateParams;
@@ -308,6 +378,9 @@ public class ShareService extends IntentService {
     }
   }
 
+  /**
+   * Send a local notification to inform that the share has started
+   */
   private void notifyBegin() {
     notifId = (int) System.currentTimeMillis();
     String title = postInfo.hasAttachment() ? getString(R.string.ShareDocumentTitle) : getString(R.string.ShareMessageTitle);
@@ -322,6 +395,30 @@ public class ShareService extends IntentService {
     manager.notify(notifId, builder.build());
   }
 
+  /**
+   * Send a local notification to inform of the progress. Only called if the
+   * share contains 1 or more attachments.
+   * 
+   * @param current the index of the current file being uploaded
+   * @param total the total number of files to upload
+   */
+  private void notifyProgress(int current, int total) {
+    String text = String.format(Locale.US, "%s (%d/%d)", getString(R.string.ShareDocumentText), current, total);
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+    builder.setSmallIcon(R.drawable.application_icon);
+    builder.setContentTitle(getString(R.string.ShareDocumentTitle));
+    builder.setContentText(text);
+    builder.setAutoCancel(true);
+    builder.setProgress(0, 0, true);
+    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    manager.notify(notifId, builder.build());
+  }
+
+  /**
+   * Notify the end of the sharing. The message depends on the given result.
+   * 
+   * @param result one of {@link ShareResult} values
+   */
   private void notifyResult(ShareResult result) {
     String text = "";
     switch (result) {
@@ -336,6 +433,9 @@ public class ShareService extends IntentService {
       break;
     case ERROR_POST_FAILED:
       text = getString(R.string.ShareErrorPostFailed);
+      break;
+    case ERROR_COMMENT_FAILED:
+      text = getString(R.string.ShareErrorCommentFailed);
       break;
     case ERROR_UPLOAD_FAILED:
       text = getString(R.string.ShareErrorUploadFailed);
@@ -372,6 +472,21 @@ public class ShareService extends IntentService {
     public String       folder;
 
     public String       jcrUrl;
+
+    public String       uploadedUrl;
+
+    public UploadInfo() {
+      super();
+    }
+
+    public UploadInfo(UploadInfo another) {
+      uploadId = Long.toHexString(System.currentTimeMillis());
+      this.repository = another.repository;
+      this.workspace = another.workspace;
+      this.drive = another.drive;
+      this.folder = another.folder;
+      this.jcrUrl = another.jcrUrl;
+    }
 
   }
 }

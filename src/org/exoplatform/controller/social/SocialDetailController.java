@@ -34,6 +34,7 @@ import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.image.PicassoImageGetter;
 import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.ShaderImageView;
@@ -149,7 +150,9 @@ public class SocialDetailController {
           commentItem.comAvatarImage.setUrl(avatarUrl);
         String commentName = comment.getCommentName();
         commentItem.comTextViewName.setText(commentName);
-        commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle()),
+        commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle(),
+                                                             new PicassoImageGetter(commentItem.comTextViewMessage),
+                                                             null),
                                                TextView.BufferType.SPANNABLE);
         SocialActivityUtil.setTextLinkfy(commentItem.comTextViewMessage);
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
