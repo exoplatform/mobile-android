@@ -53,8 +53,6 @@ public class LaunchUtils {
     mContext = context;
     mSharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     mSetting = AccountSetting.getInstance();
-    // Jul 21, 2015 should move to Application onCreate?
-    setAppVersion();
     setLocalize();
     String oldConfigFile = ServerConfigurationUtils.checkPreviousAppConfig(mContext);
     if (oldConfigFile != null)
