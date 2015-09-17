@@ -47,9 +47,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.RadialGradient;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
@@ -58,7 +58,6 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
-import android.util.FloatMath;
 import android.util.Log;
 
 public class PhotoUtils {
@@ -179,9 +178,14 @@ public class PhotoUtils {
 
       matrix.postScale(scaleWidth, scaleHeight);
 
-      resizedBitmap = Bitmap.createBitmap(originalImage, 0, 0,
+      resizedBitmap = Bitmap.createBitmap(originalImage,
+                                          0,
+                                          0,
 
-      width, height, matrix, true);
+                                          width,
+                                          height,
+                                          matrix,
+                                          true);
 
     } else
       return originalImage;
@@ -193,7 +197,6 @@ public class PhotoUtils {
     try {
       String parentPath = Environment.getExternalStorageDirectory() + "/eXo/";
       Bitmap bitmap = shrinkBitmap(file.getPath(), IMAGE_WIDTH, IMAGE_HEIGH);
-      // TODO rotate bitmap
       bitmap = ExoDocumentUtils.rotateBitmapToNormal(file.getAbsolutePath(), bitmap);
       ByteArrayOutputStream output = new ByteArrayOutputStream();
       bitmap.compress(CompressFormat.PNG, IMAGE_QUALITY, output);
@@ -240,7 +243,7 @@ public class PhotoUtils {
    */
   public static String getFileFromUri(Uri uri, Activity activity) {
     String filePath = null;
-    String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
+    String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */ };
     Cursor c = activity.managedQuery(uri, projection, null, null, null);
     if (c != null && c.moveToFirst()) {
       int columnIndex = c.getColumnIndex(MediaColumns.DATA);
@@ -386,9 +389,12 @@ public class PhotoUtils {
    * Make radial gradient bitmap
    */
   public static Bitmap makeRadGrad(int width, int height) {
-    RadialGradient gradient = new RadialGradient(width / 2, height / 2,
-                                                 width / 2, 0x8F8F8F8F,
-                                                 0x1C1C1C1C, android.graphics.Shader.TileMode.CLAMP);
+    RadialGradient gradient = new RadialGradient(width / 2,
+                                                 height / 2,
+                                                 width / 2,
+                                                 0x8F8F8F8F,
+                                                 0x1C1C1C1C,
+                                                 android.graphics.Shader.TileMode.CLAMP);
     Paint p = new Paint();
     p.setDither(true);
     p.setShader(gradient);

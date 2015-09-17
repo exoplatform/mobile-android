@@ -20,7 +20,6 @@ package org.exoplatform.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -62,8 +61,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -821,8 +818,6 @@ public class ExoDocumentUtils {
     }
   }
 
-  // public static String guessMimeType()
-
   /**
    * Returns a DocumentInfo with info coming from the file at the given URI
    * 
@@ -880,31 +875,8 @@ public class ExoDocumentUtils {
       document.documentSizeKb = c.getLong(sizeIndex) / 1024;
       document.documentData = cr.openInputStream(contentUri);
       document.documentMimeType = cr.getType(contentUri);
-      if (orientIndex != -1) { // if found orient column
+      if (orientIndex != -1) { // if found orientation column
         document.orientationAngle = c.getInt(orientIndex);
-      }
-
-      if (document.orientationAngle != ROTATE_0) {
-        FileOutputStream fos = null;
-        try {
-          Bitmap bm = BitmapFactory.decodeStream(document.documentData);
-          bm = rotateBimapBy(bm, document.orientationAngle);
-          File file = new File(context.getExternalCacheDir(), document.documentName);
-          fos = new FileOutputStream(file);
-          bm.compress(CompressFormat.JPEG, 100, fos);
-          fos.flush();
-          document = documentFromFileUri(Uri.fromFile(file));
-          document.temporaryPath = file.getAbsolutePath();
-        } catch (OutOfMemoryError e) {
-          if (Log.LOGD)
-            Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
-        } catch (IOException e) {
-          if (Log.LOGD)
-            Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
-        } finally {
-          if (fos != null)
-            fos.close();
-        }
       }
       return document;
     } catch (Exception e) {
@@ -928,7 +900,7 @@ public class ExoDocumentUtils {
     try {
       URI uri = new URI(fileUri.toString());
       File file = new File(uri);
-      String filePath = file.getAbsolutePath();
+
       DocumentInfo document = new DocumentInfo();
       document.documentName = file.getName();
       document.documentSizeKb = file.length() / 1024;
@@ -949,8 +921,9 @@ public class ExoDocumentUtils {
           extension = document.documentName.substring(dotPos + 1);
         document.documentMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
       }
+      // Get the orientation angle from the EXIF properties
       if ("image/jpeg".equals(document.documentMimeType))
-        document.orientationAngle = getExifOrientationAngleFromFile(filePath);
+        document.orientationAngle = getExifOrientationAngleFromFile(file.getAbsolutePath());
       return document;
     } catch (Exception e) {
       Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
@@ -1014,27 +987,33 @@ public class ExoDocumentUtils {
     return (name + ext);
   }
 
-  public static final int ROTATE_0   = 0;
+  public static final int ROTATION_0   = 0;
 
-  public static final int ROTATE_90  = 90;
+  public static final int ROTATION_90  = 90;
 
-  public static final int ROTATE_180 = 180;
+  public static final int ROTATION_180 = 180;
 
-  public static final int ROTATE_270 = 270;
+  public static final int ROTATION_270 = 270;
 
+  /**
+   * Get the EXIF orientation of the given file
+   * 
+   * @param filePath
+   * @return an int in ExoDocumentUtils.ROTATION_[0 , 90 , 180 , 270]
+   */
   public static int getExifOrientationAngleFromFile(String filePath) {
-    int ret = ROTATE_0;
+    int ret = ROTATION_0;
     try {
       ret = new ExifInterface(filePath).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
       switch (ret) {
       case ExifInterface.ORIENTATION_ROTATE_90:
-        ret = ROTATE_90;
+        ret = ROTATION_90;
         break;
       case ExifInterface.ORIENTATION_ROTATE_180:
-        ret = ROTATE_180;
+        ret = ROTATION_180;
         break;
       case ExifInterface.ORIENTATION_ROTATE_270:
-        ret = ROTATE_270;
+        ret = ROTATION_270;
         break;
       default:
         break;
@@ -1046,17 +1025,35 @@ public class ExoDocumentUtils {
     return ret;
   }
 
+  /**
+   * Rotate the bitmap at its correct orientation
+   * 
+   * @param filePath the file where the bitmap is stored
+   * @param source the bitmap itself
+   * @return the bitmap rotated with
+   *         {@link ExoDocumentUtils.rotateBitmapByAngle(Bitmap, int)}
+   */
   public static Bitmap rotateBitmapToNormal(String filePath, Bitmap source) {
     Bitmap ret = source;
 
     int orientation = getExifOrientationAngleFromFile(filePath);
-    if (orientation != ROTATE_0) {
-      ret = rotateBimapBy(source, orientation);
+    // Sometimes we get an orientation = 1
+    // To avoid a 1º rotation,
+    // we rotate only when the orientation is exactly 90º or 180º or 270º
+    if (orientation == ROTATION_90 || orientation == ROTATION_180 || orientation == ROTATION_270) {
+      ret = rotateBitmapByAngle(source, orientation);
     }
     return ret;
   }
 
-  public static Bitmap rotateBimapBy(Bitmap source, int angle) {
+  /**
+   * Rotate the bitmap by a certain angle. Uses {@link Matrix#postRotate(int)}
+   * 
+   * @param source the bitmap to rotate
+   * @param angle the rotation angle
+   * @return a new rotated bitmap
+   */
+  public static Bitmap rotateBitmapByAngle(Bitmap source, int angle) {
     Bitmap ret = source;
     int w, h;
     w = source.getWidth();
@@ -1072,6 +1069,7 @@ public class ExoDocumentUtils {
   }
 
   public static class DocumentInfo {
+
     public String      documentName;
 
     public long        documentSizeKb;
@@ -1080,18 +1078,11 @@ public class ExoDocumentUtils {
 
     public String      documentMimeType;
 
-    public int         orientationAngle;
-
-    public String      temporaryPath;
+    public int         orientationAngle = ROTATION_0;
 
     @Override
     public String toString() {
-      return String.format(Locale.US,
-                           "File %s [%s - %s KB], rotate %d",
-                           documentName,
-                           documentMimeType,
-                           documentSizeKb,
-                           orientationAngle);
+      return String.format(Locale.US, "File %s [%s - %s KB]", documentName, documentMimeType, documentSizeKb);
     }
 
     public void closeDocStream() {
