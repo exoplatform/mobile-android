@@ -96,7 +96,7 @@
   <string name="PhotoLibrary">Photo Library </string>
   <string name="SelectedPhoto">Selected Image</string>
   <string name="AttachedPhoto">Attached Photo</string>
-  <string name="Warning">Warning</string>
+  <string name="Warning">هشدار</string>
   <string name="PostError">Error while posting an activity.</string>
   <string name="ErrorOnLike">You can not like this activity.</string>
   <string name="ConnectionError">The network can not be reached.</string>
