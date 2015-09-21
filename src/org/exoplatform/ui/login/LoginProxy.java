@@ -279,8 +279,6 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
     if (!checkNetworkConnection())
       return;
 
-    if (Log.LOGD)
-      Log.d(TAG, "performLogin ", this, " ", mContext);
     if (mProgressDialog != null && !mProgressDialog.isShowing())
       mProgressDialog.show();
 

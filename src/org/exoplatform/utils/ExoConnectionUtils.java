@@ -44,17 +44,16 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
-import com.crashlytics.android.Crashlytics;
-
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.ui.login.tasks.LogoutTask;
 import org.exoplatform.utils.image.ExoPicasso;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import com.crashlytics.android.Crashlytics;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -80,9 +79,9 @@ public class ExoConnectionUtils {
   // Default connection and socket timeout of 30 seconds. Tweak to taste.
   public static final int         SOCKET_OPERATION_TIMEOUT   = 30 * 1000;
 
-  public static final String USER_AGENT_KEY = "User-Agent";
-  
-  private static String      USER_AGENT;
+  public static final String      USER_AGENT_KEY             = "User-Agent";
+
+  private static String           USER_AGENT;
 
   public static DefaultHttpClient httpClient;
 
@@ -137,9 +136,9 @@ public class ExoConnectionUtils {
   public static final String      HTTPS                      = "https://";
 
   /** eXo cloud workspace url */
-  public static final String      EXO_CLOUD_WS_DOMAIN        = "uxpacc02.exoplatform.org";                         // "wks-acc.exoplatform.org";
-                                                                                                                   // //
-                                                                                                                   // "netstg.exoplatform.org";
+  public static final String      EXO_CLOUD_WS_DOMAIN        = "exoplatform.net";                                 // "wks-acc.exoplatform.org";
+                                                                                                                  // //
+                                                                                                                  // "netstg.exoplatform.org";
 
   /** eXo cloud base service url */
   public static final String      SERVICE_BASE_URL           = "/rest/cloud-admin/cloudworkspaces/tenant-service";
@@ -236,14 +235,14 @@ public class ExoConnectionUtils {
     }
     return USER_AGENT;
   }
-  
+
   public static void setUserAgent(HttpURLConnection connection) {
     if (connection != null) {
       connection.setDoInput(true);
       connection.addRequestProperty(USER_AGENT_KEY, getUserAgent());
     }
   }
-  
+
   public static DefaultHttpClient initHttpClient() {
     HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
@@ -332,9 +331,8 @@ public class ExoConnectionUtils {
         return ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS;
     }
     /* code 202 */// TODO: check CLDINT-1197 if any change to response code
-    else if (statusCode == HttpStatus.SC_ACCEPTED
-        || (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR && message != null && message.startsWith(SIGNUP_MAX_USERS_MSG
-            + email)))
+    else if (statusCode == HttpStatus.SC_ACCEPTED || (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR && message != null
+        && message.startsWith(SIGNUP_MAX_USERS_MSG + email)))
       return ExoConnectionUtils.SIGNUP_MAX_USERS;
 
     if (statusCode != HttpStatus.SC_OK)
@@ -389,9 +387,9 @@ public class ExoConnectionUtils {
         return false;
 
       return convertStreamToString(response.getEntity().getContent()).replace("\n", "")
-              .replace("\r", "")
-              .replace("\r\n", "")
-              .equalsIgnoreCase("true");
+                                                                     .replace("\r", "")
+                                                                     .replace("\r\n", "")
+                                                                     .equalsIgnoreCase("true");
     } catch (IOException e) {
       Log.d(TAG, "IOException: " + e.getLocalizedMessage());
       return false;
@@ -418,10 +416,10 @@ public class ExoConnectionUtils {
       /** 200 - tenant exists - check status */
       if (response.getEntity() != null) {
         String tenantStatus = convertStreamToString(response.getEntity().getContent()).replace("\n", "")
-                .replace("\r", "")
-                .replace("\r\n", "");
-
-        Log.d(TAG, "tenant status: " + tenantStatus);
+                                                                                      .replace("\r", "")
+                                                                                      .replace("\r\n", "");
+        if (Log.LOGD)
+          Log.d(TAG, "Tenant status: " + tenantStatus);
         if (tenantStatus.equalsIgnoreCase(ONLINE))
           return SIGNIN_SERVER_ONLINE;
         else if (tenantStatus.equalsIgnoreCase(STOPPED))
