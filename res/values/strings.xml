@@ -63,8 +63,8 @@
   <string name="YourComment">Your comment …</string>
   <string name="Comment">Comment</string>
   <string name="StatusUpdate">Post</string>
-  <string name="PostTo">To</string>
-  <string name="Public">Your stream</string>
+  <string name="PostTo">To:</string>
+  <string name="Public">My Activities</string>
   <string name="NoSpaces">You are not in any space</string>
   <string name="ComposerPlaceHolder">What are you working on?</string>
   <string name="ShareWithWhom">Select who will see this post</string>
