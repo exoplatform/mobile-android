@@ -348,7 +348,7 @@ public class ShareActivity extends FragmentActivity {
     mgr.hideSoftInputFromWindow(ComposeFragment.getFragment().getEditText().getWindowToken(), 0);
   }
 
-  public void onSelectAccount(View v) {
+  public void onSelectAccount() {
     // Called when the select account field is tapped
     hideSoftKeyboard();
     openFragment(AccountsFragment.getFragment(), AccountsFragment.ACCOUNTS_FRAGMENT, Anim.FROM_RIGHT);
@@ -364,7 +364,7 @@ public class ShareActivity extends FragmentActivity {
     }
   }
 
-  public void onSelectSpace(View v) {
+  public void onSelectSpace() {
     // Called when the select space field is tapped
     if (online) {
       Intent spaceSelector = new Intent(this, SpaceSelectorActivity.class);

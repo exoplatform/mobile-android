@@ -126,7 +126,19 @@ public class ComposeFragment extends Fragment {
     etPostMessage = (EditText) layout.findViewById(R.id.share_post_message);
     etPostMessage.addTextChangedListener(postValidator);
     tvAccount = (TextView) layout.findViewById(R.id.share_account);
+    tvAccount.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        getShareActivity().onSelectAccount();
+      }
+    });
     tvSpace = (TextView) layout.findViewById(R.id.share_space);
+    tvSpace.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        getShareActivity().onSelectSpace();
+      }
+    });
     imgThumb = (ImageView) layout.findViewById(R.id.share_attachment_thumbnail);
     scroller = (ScrollView) layout.findViewById(R.id.share_scroll_wrapper);
     init();
