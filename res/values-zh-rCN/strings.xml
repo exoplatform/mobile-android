@@ -68,8 +68,6 @@
   <string name="NoSpaces">You are not in any space</string>
   <string name="ComposerPlaceHolder">你在做什么？</string>
   <string name="ShareWithWhom">Select who will see this post</string>
-  <string name="AddImageDisabled">You cannot add an image because you are posting in a space</string>
-  <string name="SelectSpaceDisabled">You cannot select a space because your post contains an image</string>
   <string name="NoLike">暂时没有人赞</string>
   <string name="LikedThis">已赞</string>
   <string name="And">和</string>
@@ -251,4 +249,33 @@
     <item id="MySpaces">我的空间</item>
     <item id="MyStatus">我的活动</item>
   </string-array>
+  
+  <!-- Share Extension -->
+  <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
+  <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
+  <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
+  <string name="ShareOperationSuccess">Success</string>
+  <string name="ShareDocumentTitle">Share document</string>
+  <string name="ShareMessageTitle">Share message</string>
+  <string name="ShareDocumentText">Upload in progress</string>
+  <string name="ShareMessageText">Your message will be posted shortly</string>
+  <string name="ShareErrorNoAccountConfigured">No account configured</string>
+  <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
+  <string name="ShareErrorFileTooBig">Cannot share documents more than 10 MB</string>
+  <string name="ShareErrorTooManyFiles">Cannot share more than 10 documents</string>
+  <string name="ShareErrorUploadFailed">Could not share the document</string>
+  <string name="ShareErrorPostFailed">Could not post the message</string>
+  <string name="ShareErrorCommentFailed">Could not comment the message</string>
+  <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
+  <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
+  <string name="ShareErrorSignInFailed">Login failed, please try again</string>
+  <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
+  <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
+  
+  <string name="DeleteConfirmFolderTitle">Delete folder</string>
+  <string name="DeleteConfirmFileTitle">Delete file</string>
+  <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
+  <string name="Folder">folder</string>
+  <string name="File">file</string>
+
 </resources>
