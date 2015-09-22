@@ -68,8 +68,6 @@
   <string name="NoSpaces">crwdns6812281:0crwdne6812281:0</string>
   <string name="ComposerPlaceHolder">crwdns6812282:0crwdne6812282:0</string>
   <string name="ShareWithWhom">crwdns6812283:0crwdne6812283:0</string>
-  <string name="AddImageDisabled">crwdns6812284:0crwdne6812284:0</string>
-  <string name="SelectSpaceDisabled">crwdns6812285:0crwdne6812285:0</string>
   <string name="NoLike">crwdns6795738:0crwdne6795738:0</string>
   <string name="LikedThis">crwdns6795739:0crwdne6795739:0</string>
   <string name="And">crwdns6795740:0crwdne6795740:0</string>
@@ -251,4 +249,33 @@
     <item id="MySpaces">crwdns6795899:0crwdne6795899:0</item>
     <item id="MyStatus">crwdns6812289:0crwdne6812289:0</item>
   </string-array>
+  
+  <!-- Share Extension -->
+  <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
+  <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
+  <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
+  <string name="ShareOperationSuccess">Success</string>
+  <string name="ShareDocumentTitle">Share document</string>
+  <string name="ShareMessageTitle">Share message</string>
+  <string name="ShareDocumentText">Upload in progress</string>
+  <string name="ShareMessageText">Your message will be posted shortly</string>
+  <string name="ShareErrorNoAccountConfigured">No account configured</string>
+  <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
+  <string name="ShareErrorFileTooBig">Cannot share documents more than 10 MB</string>
+  <string name="ShareErrorTooManyFiles">Cannot share more than 10 documents</string>
+  <string name="ShareErrorUploadFailed">Could not share the document</string>
+  <string name="ShareErrorPostFailed">Could not post the message</string>
+  <string name="ShareErrorCommentFailed">Could not comment the message</string>
+  <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
+  <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
+  <string name="ShareErrorSignInFailed">Login failed, please try again</string>
+  <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
+  <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
+  
+  <string name="DeleteConfirmFolderTitle">Delete folder</string>
+  <string name="DeleteConfirmFileTitle">Delete file</string>
+  <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
+  <string name="Folder">folder</string>
+  <string name="File">file</string>
+
 </resources>
