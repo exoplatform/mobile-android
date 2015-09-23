@@ -254,7 +254,7 @@
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
-  <string name="ShareOperationSuccess">Success</string>
+  <string name="ShareOperationSuccess">Succès</string>
   <string name="ShareDocumentTitle">Share document</string>
   <string name="ShareMessageTitle">Share message</string>
   <string name="ShareDocumentText">Upload in progress</string>
