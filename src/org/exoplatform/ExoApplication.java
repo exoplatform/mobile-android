@@ -20,6 +20,7 @@ package org.exoplatform;
 
 import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.ui.HomeActivity;
+import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.LaunchUtils;
 
@@ -45,6 +46,7 @@ public class ExoApplication extends GDApplication {
     super.onCreate();
     LaunchUtils.setAppVersion(this);
     SocialClientContext.setUserAgent(ExoConnectionUtils.getUserAgent());
+    AssetUtils.setContext(this);
   }
-  
+
 }

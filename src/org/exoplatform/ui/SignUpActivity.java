@@ -18,15 +18,11 @@
  */
 package org.exoplatform.ui;
 
+import org.exoplatform.R;
+
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import org.exoplatform.R;
-import org.exoplatform.utils.AssetUtils;
 
 public class SignUpActivity extends FragmentActivity {
 
@@ -41,7 +37,7 @@ public class SignUpActivity extends FragmentActivity {
 
     getSupportFragmentManager()
         .beginTransaction()
-        .add(R.id.share_extension_fragment, new CreationAccountFragment(this))
+        .add(R.id.share_extension_fragment, new CreationAccountFragment())
         .commit();
   }
 

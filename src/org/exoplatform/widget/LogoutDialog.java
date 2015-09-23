@@ -36,15 +36,9 @@ public class LogoutDialog extends Dialog implements OnClickListener {
 
   private Button         cancelButton;
 
-  private HomeActivity homeActivity;
-
-  private Context        mContext;
-
   public LogoutDialog(Context context, HomeActivity homeAct) {
     super(context);
     setContentView(R.layout.logout_dialog_layout);
-    mContext = context;
-    homeActivity = homeAct;
     contentView = (TextView) findViewById(R.id.logout_content);
 
     okButton = (Button) findViewById(R.id.logout_ok_button);
@@ -68,7 +62,7 @@ public class LogoutDialog extends Dialog implements OnClickListener {
   }
 
   private void changeLanguage() {
-    Resources res = mContext.getResources();
+    Resources res = getContext().getResources();
     String titleString = res.getString(R.string.LogoutTitle);
     setTitle(titleString);
     String contentString = res.getString(R.string.LogoutContent);

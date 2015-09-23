@@ -90,7 +90,6 @@ public class WelcomeActivity extends FragmentActivity {
     if (mIsTablet) detectScreenOrientation();
 
     ViewGroup vg = (ViewGroup) findViewById(R.id.welcome_layout);
-    AssetUtils.setContext(this);
     AssetUtils.setTypeFace(AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_BLACK), vg);
 
     mSeparatorImg  = (ImageView) findViewById(R.id.welcome_separator_img);
