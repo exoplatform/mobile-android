@@ -181,10 +181,12 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
       // warning
       mEmail = mNewUserName + "@" + mTenant + ".com";
 
-      mProgressDialog = loginData.getBoolean(SHOW_PROGRESS, true) ? new LoginWaitingDialog(mContext,
-                                                                                           null,
-                                                                                           mResource.getString(R.string.SigningIn))
-                                                                 : null;
+      mProgressDialog =
+          loginData.getBoolean(SHOW_PROGRESS, true)
+                                                    ? new LoginWaitingDialog(mContext,
+                                                                             null,
+                                                                             mResource.getString(R.string.SigningIn))
+                                                    : null;
       break;
 
     /**
@@ -323,9 +325,8 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
   }
 
   private void launchLoginTask() {
-    mDomain = !(mDomain.startsWith(ExoConnectionUtils.HTTP) || mDomain.startsWith(ExoConnectionUtils.HTTPS)) ? ExoConnectionUtils.HTTP
-                                                                                                                + mDomain
-                                                                                                            : mDomain;
+    mDomain = !(mDomain.startsWith(ExoConnectionUtils.HTTP) || mDomain.startsWith(ExoConnectionUtils.HTTPS))
+        ? ExoConnectionUtils.HTTP + mDomain : mDomain;
     mLoginTask = new LoginTask();
     mLoginTask.setListener(this);
     mLoginTask.execute(mNewUserName, mNewPassword, mDomain);

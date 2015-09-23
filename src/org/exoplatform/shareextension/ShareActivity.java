@@ -22,6 +22,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.social.client.api.ClientServiceFactory;
 import org.exoplatform.social.client.api.SocialClientContext;
+import org.exoplatform.social.client.api.SocialClientLibException;
 import org.exoplatform.social.client.api.service.VersionService;
 import org.exoplatform.social.client.core.ClientServiceFactoryHelper;
 import org.exoplatform.ui.social.SpaceSelectorActivity;
@@ -593,7 +595,15 @@ public class ShareActivity extends FragmentActivity {
           SocialServiceHelper.getInstance().identityService = clientServiceFactory.createIdentityService();
         }
         return Integer.valueOf(result);
+      } catch (MalformedURLException e) {
+        Log.e(LOG_TAG, "Login task failed", e);
+      } catch (IOException e) {
+        Log.e(LOG_TAG, "Login task failed", e);
+      } catch (SocialClientLibException e) {
+        Log.e(LOG_TAG, "Login task failed", e);
       } catch (Exception e) {
+        // XXX cannot replace because SocialClientLib can throw exceptions like
+        // ServerException, UnsupportMethod ,..
         Log.e(LOG_TAG, "Login task failed", e);
       }
       return Integer.valueOf(ExoConnectionUtils.LOGIN_FAILED);

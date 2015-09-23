@@ -218,7 +218,7 @@ public class LoginActivity extends BaseActivity implements AccountPanel.ViewList
             return;
         // Add http protocol to server URL if it is missing
         if (!serverUrl.startsWith("http"))
-            serverUrl = ExoConnectionUtils.HTTP + serverUrl;
+            serverUrl = new StringBuilder(ExoConnectionUtils.HTTP).append(serverUrl).toString();
         /* Add server to server list if server is new */
         ExoAccount serverObj = new ExoAccount();
         serverObj.accountName = ExoUtils.getAccountNameFromURL(serverUrl, "My Intranet");

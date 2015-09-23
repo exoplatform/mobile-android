@@ -18,14 +18,12 @@
  */
 package org.exoplatform.controller.dashboard;
 
-import greendroid.util.Config;
-import greendroid.widget.LoaderActionBarItem;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
+
 import org.exoplatform.R;
 import org.exoplatform.model.DashboardItem;
 import org.exoplatform.model.GadgetInfo;
@@ -33,13 +31,15 @@ import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.ui.DashboardActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Log;
 import org.exoplatform.widget.ConnTimeOutDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
+import greendroid.util.Config;
+import greendroid.widget.LoaderActionBarItem;
 
 public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
   private static final int         RESULT_OK      = 1;
@@ -107,6 +107,8 @@ public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
       }
       return RESULT_OK;
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return RESULT_ERROR;
     }
   }

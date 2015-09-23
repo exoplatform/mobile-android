@@ -113,7 +113,7 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
         String pass     = mPassTxt.getText().toString();
 
         if (!(url.startsWith(ExoConnectionUtils.HTTP) || url.startsWith(ExoConnectionUtils.HTTPS)))
-          url = ExoConnectionUtils.HTTP + url;
+          url = new StringBuilder(ExoConnectionUtils.HTTP).append(url).toString();
 
         if (ExoUtils.isURLForbidden(url)) {
           InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);

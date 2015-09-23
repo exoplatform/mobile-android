@@ -149,7 +149,7 @@ public class MyListActivity extends MyActionBar {
         mEmptyView = findViewById(android.R.id.empty);
         mList = (ListView) findViewById(android.R.id.list);
         if (mList == null) {
-            throw new RuntimeException("Your content must have a ListView whose id attribute is "
+            throw new UnsupportedOperationException("Your content must have a ListView whose id attribute is "
                     + "'android.R.id.list'");
         }
     }

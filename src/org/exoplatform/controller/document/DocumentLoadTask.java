@@ -28,6 +28,7 @@ import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.Log;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.widget.ConnTimeOutDialog;
@@ -175,6 +176,8 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
         return RESULT_FALSE;
 
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return RESULT_ERROR;
     }
   }

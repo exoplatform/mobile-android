@@ -33,9 +33,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -54,7 +60,6 @@ import org.xmlpull.v1.XmlSerializer;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.os.Environment;
-import android.util.Log;
 import android.util.Xml;
 
 /**
@@ -83,6 +88,8 @@ public class ServerConfigurationUtils {
                     returnValue = f.createNewFile();
             }
         } catch (IOException e) {
+          if (Log.LOGD)
+            Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
             return false;
         }
 
@@ -153,10 +160,15 @@ public class ServerConfigurationUtils {
                     }
                 }
             }
-
-        } catch (Exception e) {
+            
+        } catch (SAXException e) {
             Log.e(TAG, "Exception while getting app version:" + e.getLocalizedMessage());
+        } catch (IOException e) {
+          Log.e(TAG, "Exception while getting app version:" + e.getLocalizedMessage());
+        } catch (ParserConfigurationException e) {
+          Log.e(TAG, "Exception while getting app version:" + e.getLocalizedMessage());
         } finally {
+          if (obj_is != null)
             try {
                 obj_is.close();
             } catch (IOException e) {
@@ -207,8 +219,14 @@ public class ServerConfigurationUtils {
 
                 try {
                     eventType = parser.next();
-                } catch (Exception e) {
+                } catch (XmlPullParserException e) {
                     eventType = 0;
+                    if (Config.GD_ERROR_LOGS_ENABLED)
+                      Log.e("XmlPullParserException", "Cannot parse next XML type");
+                } catch (IOException e) {
+                  eventType = 0;
+                  if (Config.GD_ERROR_LOGS_ENABLED)
+                    Log.e("XmlPullParserException", "Cannot parse next XML type");
                 }
 
             }
@@ -315,83 +333,97 @@ public class ServerConfigurationUtils {
         return arrServerList;
     }
 
-    /**
-     * Retrieve server list from XML config file
-     * 
-     * @param context
-     * @param fileName
-     * @return a list of servers, or an empty list, but never null
-     */
-    public static ArrayList<ExoAccount> getServerListFromFile(Context context, String fileName) {
-        Log.i(TAG, "getServerListFromFile: " + fileName);
+  /**
+   * Retrieve server list from XML config file
+   * 
+   * @param context
+   * @param fileName
+   * @return a list of servers, or an empty list, but never null
+   */
+  public static ArrayList<ExoAccount> getServerListFromFile(Context context, String fileName) {
+    Log.i(TAG, "getServerListFromFile: " + fileName);
 
-        ArrayList<ExoAccount> arrServerList = new ArrayList<ExoAccount>();
+    ArrayList<ExoAccount> arrServerList = new ArrayList<ExoAccount>();
+    FileInputStream fis = null;
+    try {
 
-        try {
+      fis = context.openFileInput(fileName);
+      DocumentBuilderFactory doc_build_fact = DocumentBuilderFactory.newInstance();
+      DocumentBuilder doc_builder = doc_build_fact.newDocumentBuilder();
+      Document obj_doc = doc_builder.parse(fis);
 
-            FileInputStream fis = context.openFileInput(fileName);
-            DocumentBuilderFactory doc_build_fact = DocumentBuilderFactory.newInstance();
-            DocumentBuilder doc_builder = doc_build_fact.newDocumentBuilder();
-            Document obj_doc = doc_builder.parse(fis);
+      if (null != obj_doc) {
+        org.w3c.dom.Element feed = obj_doc.getDocumentElement();
+        NodeList obj_nod_list = feed.getElementsByTagName("server");
 
-            if (null != obj_doc) {
-                org.w3c.dom.Element feed = obj_doc.getDocumentElement();
-                NodeList obj_nod_list = feed.getElementsByTagName("server");
+        for (int i = 0; i < obj_nod_list.getLength(); i++) {
+          Node itemNode = obj_nod_list.item(i);
+          if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+            Element itemElement = (Element) itemNode;
 
-                for (int i = 0; i < obj_nod_list.getLength(); i++) {
-                    Node itemNode = obj_nod_list.item(i);
-                    if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element itemElement = (Element) itemNode;
-
-                        ExoAccount serverObj = new ExoAccount();
-                        serverObj.accountName = itemElement.getAttribute("name");
-                        serverObj.serverUrl = itemElement.getAttribute(ExoConstants.EXO_URL_SERVER);
-                        serverObj.username = itemElement.getAttribute(ExoConstants.EXO_URL_USERNAME);
-                        try {
-                            serverObj.password = SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD,
-                                                                      itemElement.getAttribute("password"));
-                        } catch (Exception ee) {
-                            Log.e(TAG, "Could not decrypt password: " + ee.getLocalizedMessage());
-                            Log.w(TAG, "Leaving password attribute empty");
-                            serverObj.password = "";
-                        }
-                        serverObj.isRememberEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
-                        serverObj.isAutoLoginEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
-                        serverObj.userFullName = itemElement.getAttribute(ExoConstants.EXO_USER_FULLNAME);
-                        try {
-                            serverObj.lastLoginDate = Long.parseLong(itemElement.getAttribute(ExoConstants.EXO_LAST_LOGIN));
-                        } catch (Exception ee) {
-                            serverObj.lastLoginDate = -1;
-                            Log.i(TAG, "Last login date unknown");
-                        }
-                        serverObj.avatarUrl = itemElement.getAttribute(ExoConstants.EXO_URL_AVATAR);
-                        arrServerList.add(serverObj);
-                    }
-                }
+            ExoAccount serverObj = new ExoAccount();
+            serverObj.accountName = itemElement.getAttribute("name");
+            serverObj.serverUrl = itemElement.getAttribute(ExoConstants.EXO_URL_SERVER);
+            serverObj.username = itemElement.getAttribute(ExoConstants.EXO_URL_USERNAME);
+            try {
+              serverObj.password = SimpleCrypto.decrypt(ExoConstants.EXO_MASTER_PASSWORD, itemElement.getAttribute("password"));
+            } catch (Exception ee) {
+              // XXX catch runtime exception throw while decrypt password
+              Log.e(TAG, "Could not decrypt password: " + ee.getLocalizedMessage());
+              Log.w(TAG, "Leaving password attribute empty");
+              serverObj.password = "";
             }
-
-        } catch (FileNotFoundException e) {
-            Log.i(TAG, "File not found");
-            return arrServerList;
-        } catch (IOException e) {
-            if (Config.GD_ERROR_LOGS_ENABLED)
-                Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
-            return arrServerList;
-        } catch (ParserConfigurationException e) {
-            if (Config.GD_ERROR_LOGS_ENABLED)
-                Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
-            return arrServerList;
-        } catch (SAXException e) {
-            if (Config.GD_ERROR_LOGS_ENABLED)
-                Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
-            return arrServerList;
-        } catch (Exception e) {
-            Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
-            return arrServerList;
+            serverObj.isRememberEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_REMEMBER_ME));
+            serverObj.isAutoLoginEnabled = Boolean.parseBoolean(itemElement.getAttribute(ExoConstants.EXO_AUTOLOGIN));
+            serverObj.userFullName = itemElement.getAttribute(ExoConstants.EXO_USER_FULLNAME);
+            try {
+              String logTime = itemElement.getAttribute(ExoConstants.EXO_LAST_LOGIN);
+              if (logTime != null)
+                serverObj.lastLoginDate = Long.parseLong(logTime);
+              else {
+                serverObj.lastLoginDate = -1;
+                Log.i(TAG, "Last login date unknown");
+              }
+            } catch (NumberFormatException e) {
+              serverObj.lastLoginDate = -1;
+              Log.i(TAG, "Last login date unknown");
+            }
+            serverObj.avatarUrl = itemElement.getAttribute(ExoConstants.EXO_URL_AVATAR);
+            arrServerList.add(serverObj);
+          }
         }
+      }
 
-        return arrServerList;
+    } catch (FileNotFoundException e) {
+      Log.i(TAG, "File not found");
+      return arrServerList;
+    } catch (IOException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      return arrServerList;
+    } catch (ParserConfigurationException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      return arrServerList;
+    } catch (SAXException e) {
+      if (Config.GD_ERROR_LOGS_ENABLED)
+        Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      return arrServerList;
+    } catch (Exception e) {
+      // XXX unknown why catch exception here, maybe for parse boolean, long ?
+      Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
+      return arrServerList;
+    } finally {
+      if (fis != null)
+        try {
+          fis.close();
+        } catch (IOException e) {
+          Log.d(TAG, Log.getStackTraceString(e));
+        }
     }
+
+    return arrServerList;
+  }
 
     /**
      * Check whether new config file for app exists
@@ -438,8 +470,9 @@ public class ServerConfigurationUtils {
 
         ArrayList<ExoAccount> arrServerList = new ArrayList<ExoAccount>();
         File file = new File(fileName);
+        FileInputStream fis = null;
         try {
-            FileInputStream fis = new FileInputStream(file);
+            fis = new FileInputStream(file);
             DocumentBuilderFactory doc_build_fact = DocumentBuilderFactory.newInstance();
             DocumentBuilder doc_builder = doc_build_fact.newDocumentBuilder();
             Document obj_doc = doc_builder.parse(fis);
@@ -464,12 +497,6 @@ public class ServerConfigurationUtils {
                     }
                 }
             }
-            fis.close();
-
-            if (file.delete())
-                Log.i(TAG, "delete old config file");
-            else
-                Log.e("Error", "Can not delete old config file: " + fileName);
         } catch (FileNotFoundException e) {
             Log.i(TAG, "File not found");
             return null;
@@ -483,9 +510,21 @@ public class ServerConfigurationUtils {
             if (Config.GD_ERROR_LOGS_ENABLED)
                 Log.e("SAXException", "getServerListFromOldConfigFile");
         } catch (Exception e) {
+          // XXX unknown why catch exception here 
             Log.e("Exception",
                   "getServerListFromOldConfigFile - decryption exception : "
                           + e.getLocalizedMessage());
+        } finally {
+          if (fis != null)
+            try {
+              fis.close();
+            } catch (IOException e) {
+              Log.d(TAG, Log.getStackTraceString(e));
+            }
+          if (file.delete())
+              Log.i(TAG, "delete old config file");
+          else
+              Log.e("Error", "Can not delete old config file: " + fileName);
         }
 
         return arrServerList;
@@ -613,15 +652,36 @@ public class ServerConfigurationUtils {
                 serializer.attribute(null, ExoConstants.EXO_URL_USERNAME, serverObj.username);
 
                 /* encrypt password */
+                boolean encypted = false;
+                Exception ex = null;
                 try {
                     serializer.attribute(null,
                                          "password",
                                          SimpleCrypto.encrypt(ExoConstants.EXO_MASTER_PASSWORD,
                                                               serverObj.password));
-                } catch (Exception e) {
-                    Log.e(TAG, "Error while encrypting password: " + e.getLocalizedMessage());
-                    Log.w(TAG, "Writing password in clear");
-                    serializer.attribute(null, "password", serverObj.password);
+                    encypted = true;
+                } catch (NoSuchAlgorithmException e) {
+                    ex = e;
+                } catch (InvalidKeyException e) {
+                  ex = e;
+                } catch (IllegalArgumentException e) {
+                  ex = e;
+                } catch (IllegalStateException e) {
+                  ex = e;
+                } catch (NoSuchPaddingException e) {
+                  ex = e;
+                } catch (IllegalBlockSizeException e) {
+                  ex = e;
+                } catch (BadPaddingException e) {
+                  ex = e;
+                } catch (NoSuchProviderException e) {
+                  ex = e;
+                }
+                if (!encypted) {
+                  if (ex != null)
+                    Log.e(TAG, "Error while encrypting password: ", ex.getLocalizedMessage());
+                  Log.w(TAG, "Writing password in clear");
+                  serializer.attribute(null, "password", serverObj.password);
                 }
 
                 serializer.attribute(null,

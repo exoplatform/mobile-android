@@ -20,9 +20,11 @@ package org.exoplatform.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.Normalizer;
@@ -267,6 +269,8 @@ public class ExoDocumentUtils {
         return false;
       }
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     } finally {
       fileManager.delete();
@@ -296,7 +300,9 @@ public class ExoDocumentUtils {
       }
 
     } catch (Exception e) {
-      Log.e(LOG_TAG, e.getMessage(), e);
+      // XXX cannot replace because WebdavMethod, httpclient.execute can throw
+      // exception
+      Log.e(LOG_TAG, e.getMessage(), Log.getStackTraceString(e));
       DocumentHelper.getInstance().setRepositoryHomeUrl(null);
     }
   }
@@ -737,6 +743,8 @@ public class ExoDocumentUtils {
         return false;
 
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     }
   }
@@ -813,6 +821,8 @@ public class ExoDocumentUtils {
       }
 
     } catch (Exception e) {
+      // XXX catch null of destination, WebdavMethod initial, httpclient
+      // exception
       Log.e(LOG_TAG, e.getMessage(), e);
       return false;
     }
@@ -879,6 +889,8 @@ public class ExoDocumentUtils {
         document.orientationAngle = c.getInt(orientIndex);
       }
       return document;
+    } catch (FileNotFoundException e) {
+      Log.d(LOG_TAG, e.getClass().getSimpleName(), e.getLocalizedMessage());
     } catch (Exception e) {
       Log.e(LOG_TAG, "Cannot retrieve the content at " + contentUri);
       if (Log.LOGD)
@@ -925,7 +937,11 @@ public class ExoDocumentUtils {
       if ("image/jpeg".equals(document.documentMimeType))
         document.orientationAngle = getExifOrientationAngleFromFile(file.getAbsolutePath());
       return document;
-    } catch (Exception e) {
+    } catch (URISyntaxException e) {
+      Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
+      if (Log.LOGD)
+        Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
+    } catch (FileNotFoundException e) {
       Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
       if (Log.LOGD)
         Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));

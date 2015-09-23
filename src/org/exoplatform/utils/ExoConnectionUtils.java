@@ -44,17 +44,16 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
-import com.crashlytics.android.Crashlytics;
-
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.ui.login.tasks.LogoutTask;
 import org.exoplatform.utils.image.ExoPicasso;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import com.crashlytics.android.Crashlytics;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -80,9 +79,9 @@ public class ExoConnectionUtils {
   // Default connection and socket timeout of 30 seconds. Tweak to taste.
   public static final int         SOCKET_OPERATION_TIMEOUT   = 30 * 1000;
 
-  public static final String USER_AGENT_KEY = "User-Agent";
-  
-  private static String      USER_AGENT;
+  public static final String      USER_AGENT_KEY             = "User-Agent";
+
+  private static String           USER_AGENT;
 
   public static DefaultHttpClient httpClient;
 
@@ -137,9 +136,9 @@ public class ExoConnectionUtils {
   public static final String      HTTPS                      = "https://";
 
   /** eXo cloud workspace url */
-  public static final String      EXO_CLOUD_WS_DOMAIN        = "exoplatform.net";                                 // "wks-acc.exoplatform.org";
-                                                                                                                   // //
-                                                                                                                   // "netstg.exoplatform.org";
+  public static final String      EXO_CLOUD_WS_DOMAIN        = "exoplatform.net";
+  // "wks-acc.exoplatform.org";
+  // "netstg.exoplatform.org";
 
   /** eXo cloud base service url */
   public static final String      SERVICE_BASE_URL           = "/rest/cloud-admin/cloudworkspaces/tenant-service";
@@ -182,11 +181,15 @@ public class ExoConnectionUtils {
         sb.append(line + "\n");
       }
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     } finally {
       try {
         is.close();
       } catch (IOException e) {
+        if (Log.LOGD)
+          Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
         return null;
       }
     }
@@ -221,8 +224,12 @@ public class ExoConnectionUtils {
       }
 
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return LOGIN_WRONG;
-    } catch (IllegalStateException ise) {
+    } catch (IllegalStateException e) {
+      if (Log.LOGD)
+        Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return LOGIN_INVALID;
     }
 
@@ -236,14 +243,14 @@ public class ExoConnectionUtils {
     }
     return USER_AGENT;
   }
-  
+
   public static void setUserAgent(HttpURLConnection connection) {
     if (connection != null) {
       connection.setDoInput(true);
       connection.addRequestProperty(USER_AGENT_KEY, getUserAgent());
     }
   }
-  
+
   public static DefaultHttpClient initHttpClient() {
     HttpParams httpParameters = new BasicHttpParams();
     HttpConnectionParams.setConnectionTimeout(httpParameters, SOCKET_OPERATION_TIMEOUT);
@@ -265,20 +272,20 @@ public class ExoConnectionUtils {
 
   // Get input stream from url
   public static InputStream sendRequest(HttpResponse response) {
-    try {
-      HttpEntity entity;
+    if (response != null && response.getStatusLine() != null) {
       int statusCode = response.getStatusLine().getStatusCode();
       if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
-        entity = response.getEntity();
+        HttpEntity entity = response.getEntity();
         if (entity != null) {
-          return entity.getContent();
+          try {
+            return entity.getContent();
+          } catch (IOException e) {
+            Log.d(TAG, e.getClass().getSimpleName(), e.getMessage());
+          } catch (IllegalStateException e) {
+            Log.d(TAG, e.getClass().getSimpleName(), e.getMessage());
+          }
         }
-      } else {
-        return null;
       }
-
-    } catch (IOException e) {
-      return null;
     }
     return null;
   }
@@ -332,9 +339,8 @@ public class ExoConnectionUtils {
         return ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS;
     }
     /* code 202 */// TODO: check CLDINT-1197 if any change to response code
-    else if (statusCode == HttpStatus.SC_ACCEPTED
-        || (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR && message != null && message.startsWith(SIGNUP_MAX_USERS_MSG
-            + email)))
+    else if (statusCode == HttpStatus.SC_ACCEPTED || (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR && message != null
+        && message.startsWith(SIGNUP_MAX_USERS_MSG + email)))
       return ExoConnectionUtils.SIGNUP_MAX_USERS;
 
     if (statusCode != HttpStatus.SC_OK)
@@ -366,10 +372,12 @@ public class ExoConnectionUtils {
       JSONObject json = (JSONObject) JSONValue.parse(result);
       results[0] = json.get(ExoConstants.USERNAME).toString();
       results[1] = json.get(ExoConstants.TENANT).toString();
-      Log.d(TAG, "user:   " + results[0] + " - tenant: " + results[1]);
+      Log.d(TAG, "user:   ", results[0], " - tenant: ", results[1]);
       return results;
     } catch (RuntimeException e) {
-      Log.d(TAG, "RuntimeException: " + e.getLocalizedMessage());
+      // XXX can not replace because getPLFStream, JSONValue.parse can throw
+      // exceptions.
+      Log.d(TAG, "RuntimeException: ", e.getLocalizedMessage());
       return null;
     }
   }
@@ -389,9 +397,9 @@ public class ExoConnectionUtils {
         return false;
 
       return convertStreamToString(response.getEntity().getContent()).replace("\n", "")
-              .replace("\r", "")
-              .replace("\r\n", "")
-              .equalsIgnoreCase("true");
+                                                                     .replace("\r", "")
+                                                                     .replace("\r\n", "")
+                                                                     .equalsIgnoreCase("true");
     } catch (IOException e) {
       Log.d(TAG, "IOException: " + e.getLocalizedMessage());
       return false;
@@ -418,8 +426,8 @@ public class ExoConnectionUtils {
       /** 200 - tenant exists - check status */
       if (response.getEntity() != null) {
         String tenantStatus = convertStreamToString(response.getEntity().getContent()).replace("\n", "")
-                .replace("\r", "")
-                .replace("\r\n", "");
+                                                                                      .replace("\r", "")
+                                                                                      .replace("\r\n", "");
 
         Log.d(TAG, "tenant status: " + tenantStatus);
         if (tenantStatus.equalsIgnoreCase(ONLINE))
@@ -485,9 +493,9 @@ public class ExoConnectionUtils {
         ipstr = entity.getContent();
       }
     } catch (ClientProtocolException e) {
-      e.getMessage();
+      Log.d(TAG, "sendRequestWithoutAuthen", Log.getStackTraceString(e));
     } catch (IOException e) {
-      e.getMessage();
+      Log.d(TAG, "sendRequestWithoutAuthen", Log.getStackTraceString(e));
     }
     return ipstr;
   }
@@ -547,6 +555,8 @@ public class ExoConnectionUtils {
       } else
         return false;
     } catch (RuntimeException e) {
+      // XXX cannot replace because getPLFStream, JSONValue.parse can throw
+      // exception,
       return false;
     }
 

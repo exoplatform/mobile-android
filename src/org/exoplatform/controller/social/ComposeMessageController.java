@@ -36,6 +36,7 @@ import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Log;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.PostWaitingDialog;
@@ -188,6 +189,8 @@ public class ComposeMessageController {
         activityService.createComment(restActivity, comment);
         return true;
       } catch (SocialClientLibException e) {
+        if (Log.LOGD)
+          Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
         return false;
       }
 

@@ -141,7 +141,7 @@ public class MyActionBar extends FragmentActivity implements ActionBarActivity {
   public void onPreContentChanged() {
     mActionBarHost = (ActionBarHost) findViewById(R.id.gd_action_bar_host);
     if (mActionBarHost == null) {
-      throw new RuntimeException("Your content must have an ActionBarHost whose id attribute is R.id.gd_action_bar_host");
+      throw new UnsupportedOperationException("Your content must have an ActionBarHost whose id attribute is R.id.gd_action_bar_host");
     }
     mActionBarHost.getActionBar().setOnActionBarListener(mActionBarListener);
   }

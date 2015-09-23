@@ -187,9 +187,7 @@ public class WebViewActivity extends MyActionBar {
       break;
 
     case 0:
-      if (item instanceof LoaderActionBarItem) {
-
-      } else {
+      if (!(item instanceof LoaderActionBarItem)) {
         new CompatibleFileOpenDialog(this, contentType, _url, _titlebar).show();
       }
       break;
