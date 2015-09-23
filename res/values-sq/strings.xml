@@ -251,31 +251,31 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
-  <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
-  <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
-  <string name="ShareOperationSuccess">Success</string>
-  <string name="ShareDocumentTitle">Share document</string>
-  <string name="ShareMessageTitle">Share message</string>
-  <string name="ShareDocumentText">Upload in progress</string>
-  <string name="ShareMessageText">Your message will be posted shortly</string>
-  <string name="ShareErrorNoAccountConfigured">No account configured</string>
-  <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
-  <string name="ShareErrorFileTooBig">Cannot share documents more than 10 MB</string>
-  <string name="ShareErrorTooManyFiles">Cannot share more than 10 documents</string>
-  <string name="ShareErrorUploadFailed">Could not share the document</string>
-  <string name="ShareErrorPostFailed">Could not post the message</string>
-  <string name="ShareErrorCommentFailed">Could not comment the message</string>
-  <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
-  <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
-  <string name="ShareErrorSignInFailed">Login failed, please try again</string>
-  <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
-  <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
+  <string name="ShareCannotSelectSpaceBecauseOffline">crwdns6824537:0crwdne6824537:0</string>
+  <string name="ShareCannotPostBecauseOffline">crwdns6824538:0crwdne6824538:0</string>
+  <string name="ShareOperationStarted">crwdns6824539:0crwdne6824539:0</string>
+  <string name="ShareOperationSuccess">crwdns6824540:0crwdne6824540:0</string>
+  <string name="ShareDocumentTitle">crwdns6824541:0crwdne6824541:0</string>
+  <string name="ShareMessageTitle">crwdns6824542:0crwdne6824542:0</string>
+  <string name="ShareDocumentText">crwdns6824543:0crwdne6824543:0</string>
+  <string name="ShareMessageText">crwdns6824544:0crwdne6824544:0</string>
+  <string name="ShareErrorNoAccountConfigured">crwdns6824545:0crwdne6824545:0</string>
+  <string name="ShareErrorCannotReadDoc">crwdns6824546:0crwdne6824546:0</string>
+  <string name="ShareErrorFileTooBig">crwdns6824547:0crwdne6824547:0</string>
+  <string name="ShareErrorTooManyFiles">crwdns6824548:0crwdne6824548:0</string>
+  <string name="ShareErrorUploadFailed">crwdns6824549:0crwdne6824549:0</string>
+  <string name="ShareErrorPostFailed">crwdns6824550:0crwdne6824550:0</string>
+  <string name="ShareErrorCommentFailed">crwdns6824551:0crwdne6824551:0</string>
+  <string name="ShareErrorUploadFolderFailed">crwdns6824552:0crwdne6824552:0</string>
+  <string name="ShareErrorIncorrectAccount">crwdns6824553:0crwdne6824553:0</string>
+  <string name="ShareErrorSignInFailed">crwdns6824554:0crwdne6824554:0</string>
+  <string name="ShareErrorSomeFilesCannotShare">crwdns6824555:0crwdne6824555:0</string>
+  <string name="ShareErrorAllFilesCannotShare">crwdns6824556:0crwdne6824556:0</string>
   
-  <string name="DeleteConfirmFolderTitle">Delete folder</string>
-  <string name="DeleteConfirmFileTitle">Delete file</string>
-  <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
-  <string name="Folder">folder</string>
-  <string name="File">file</string>
+  <string name="DeleteConfirmFolderTitle">crwdns6824557:0crwdne6824557:0</string>
+  <string name="DeleteConfirmFileTitle">crwdns6824558:0crwdne6824558:0</string>
+  <string name="DeleteConfirmMessage">crwdns6824559:0%1$scrwdnd6824559:0%2$scrwdne6824559:0</string>
+  <string name="Folder">crwdns6824560:0crwdne6824560:0</string>
+  <string name="File">crwdns6824561:0crwdne6824561:0</string>
 
 </resources>
