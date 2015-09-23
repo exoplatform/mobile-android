@@ -251,31 +251,31 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
-  <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
-  <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
+  <string name="ShareCannotSelectSpaceBecauseOffline">Veuillez choisir un compte et vous connecter pour accéder à la liste d\'espaces</string>
+  <string name="ShareCannotPostBecauseOffline">Veuillez choisir un compte et vous connecter pour publier votre message</string>
+  <string name="ShareOperationStarted">Le partage est en cours, suivez sa progression dans la barre de notifications</string>
   <string name="ShareOperationSuccess">Succès</string>
-  <string name="ShareDocumentTitle">Share document</string>
-  <string name="ShareMessageTitle">Share message</string>
-  <string name="ShareDocumentText">Upload in progress</string>
-  <string name="ShareMessageText">Your message will be posted shortly</string>
-  <string name="ShareErrorNoAccountConfigured">No account configured</string>
-  <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
-  <string name="ShareErrorFileTooBig">Cannot share documents more than 10 MB</string>
-  <string name="ShareErrorTooManyFiles">Cannot share more than 10 documents</string>
-  <string name="ShareErrorUploadFailed">Could not share the document</string>
-  <string name="ShareErrorPostFailed">Could not post the message</string>
-  <string name="ShareErrorCommentFailed">Could not comment the message</string>
-  <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
-  <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
-  <string name="ShareErrorSignInFailed">Login failed, please try again</string>
-  <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
-  <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
+  <string name="ShareDocumentTitle">Partage de document</string>
+  <string name="ShareMessageTitle">Partage de statut</string>
+  <string name="ShareDocumentText">Envoi en cours</string>
+  <string name="ShareMessageText">Votre message sera publié dans un instant</string>
+  <string name="ShareErrorNoAccountConfigured">Aucun compte n\'est configuré</string>
+  <string name="ShareErrorCannotReadDoc">Impossible d\'accéder au document à partager</string>
+  <string name="ShareErrorFileTooBig">Vous ne pouvez pas partager de documents de plus de 10 Mo</string>
+  <string name="ShareErrorTooManyFiles">Vous ne pouvez pas partager plus de 10 documents</string>
+  <string name="ShareErrorUploadFailed">L\'envoi du document a échoué</string>
+  <string name="ShareErrorPostFailed">La publication du message a échoué</string>
+  <string name="ShareErrorCommentFailed">La publication du commentaire a échoué</string>
+  <string name="ShareErrorUploadFolderFailed">Le répertoire de chargement des documents ne peut être créé</string>
+  <string name="ShareErrorIncorrectAccount">Impossible d\'accéder aux paramètres du compte</string>
+  <string name="ShareErrorSignInFailed">La connexion a échoué, veuillez recommencer</string>
+  <string name="ShareErrorSomeFilesCannotShare">Certains documents ne peuvent pas être partagés</string>
+  <string name="ShareErrorAllFilesCannotShare">Tous les documents ne peuvent pas être partagés</string>
   
-  <string name="DeleteConfirmFolderTitle">Delete folder</string>
-  <string name="DeleteConfirmFileTitle">Delete file</string>
-  <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
-  <string name="Folder">folder</string>
-  <string name="File">file</string>
+  <string name="DeleteConfirmFolderTitle">Suppression du dossier</string>
+  <string name="DeleteConfirmFileTitle">Suppression du fichier</string>
+  <string name="DeleteConfirmMessage">Voulez-vous vraiment supprimer le %1$s %2$s ?</string>
+  <string name="Folder">dossier</string>
+  <string name="File">fichier</string>
 
 </resources>
