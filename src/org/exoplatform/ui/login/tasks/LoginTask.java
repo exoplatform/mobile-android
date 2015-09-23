@@ -18,24 +18,25 @@
  */
 package org.exoplatform.ui.login.tasks;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.IOException;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.conn.HttpHostConnectException;
-import org.exoplatform.utils.*;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Log;
 
-import java.io.IOException;
+import android.os.AsyncTask;
 
 /**
  * Performs login
  */
 public class LoginTask extends AsyncTask<String, Void, Integer> {
 
-  private AsyncTaskListener mListener;
+  private AsyncTaskListener   mListener;
 
   private static final String TAG = "eXo____LoginTask____";
-
 
   @Override
   public void onPreExecute() {
@@ -47,25 +48,28 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
   public Integer doInBackground(String... params) {
     String username = params[0];
     String password = params[1];
-    String domain   = params[2];
-    Log.d(TAG, "logging in with " + username + " at " + domain);
+    String domain = params[2];
+    if (Log.LOGD)
+      Log.d(TAG, "Logging in with " + username + " at " + domain);
 
     try {
-      String versionUrl     = domain + ExoConstants.DOMAIN_PLATFORM_VERSION;
+      String versionUrl = domain + ExoConstants.DOMAIN_PLATFORM_VERSION;
       HttpResponse response = ExoConnectionUtils.getPlatformResponse(username, password, versionUrl);
-      int statusCode        = response.getStatusLine().getStatusCode();
-
-      Log.d(TAG, "response code: " + statusCode);
-      if (statusCode == HttpStatus.SC_NOT_FOUND) return ExoConnectionUtils.SIGNIN_SERVER_NAV;
+      int statusCode = response.getStatusLine().getStatusCode();
+      if (Log.LOGD)
+        Log.d(TAG, "Response code: " + statusCode);
+      if (statusCode == HttpStatus.SC_NOT_FOUND)
+        return ExoConnectionUtils.SIGNIN_SERVER_NAV;
 
       /** Login OK - check mobile compatibility */
       if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
         boolean isCompliant = ExoConnectionUtils.checkPLFVersion(response, domain, username);
-        if (!isCompliant) return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
+        if (!isCompliant)
+          return ExoConnectionUtils.LOGIN_INCOMPATIBLE;
       }
 
       return ExoConnectionUtils.checkPlatformRespose(response);
-    } catch(HttpHostConnectException e) {
+    } catch (HttpHostConnectException e) {
       Log.d(TAG, "HttpHostConnectException: " + e.getLocalizedMessage());
       return ExoConnectionUtils.SIGNIN_SERVER_NAV;
     } catch (IOException e) {
@@ -77,14 +81,17 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
   @Override
   protected void onCancelled() {
     super.onCancelled();
-    if (mListener != null) mListener.onCanceled();
+    if (mListener != null)
+      mListener.onCanceled();
   }
-  
+
   @Override
   public void onPostExecute(Integer result) {
-    Log.d(TAG, "onPostExecute - login result: " + result);
+    if (Log.LOGD)
+      Log.d(TAG, "Login result: " + result);
 
-    if (mListener != null) mListener.onLoggingInFinished(result);
+    if (mListener != null)
+      mListener.onLoggingInFinished(result);
   }
 
   public void setListener(AsyncTaskListener listener) {
@@ -94,6 +101,7 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
   public interface AsyncTaskListener {
 
     void onLoggingInFinished(int result);
+
     void onCanceled();
   }
 }

@@ -23,41 +23,36 @@ import org.exoplatform.utils.ExoConnectionUtils;
 import android.os.AsyncTask;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Philippe Aristote
- *          paristote@exoplatform.com
- * Jun 25, 2014  
+ * Created by The eXo Platform SAS Author : Philippe Aristote
+ * paristote@exoplatform.com Jun 25, 2014
  */
 public class CheckAccountExistsTask extends AsyncTask<String, Void, Boolean> {
 
-  private AsyncTaskListener mListener; 
-  
+  private AsyncTaskListener   mListener;
+
   private static final String TAG = "eXo____CheckAccountExistsTask____";
 
   @Override
   protected Boolean doInBackground(String... params) {
-    
-//    if (params.length != 2)
-          
+
     String username = params[0];
     String tenant = params[1];
-    
+
     Boolean result = Boolean.valueOf(ExoConnectionUtils.requestAccountExistsForUser(username, tenant));
-    
+
     return result;
   }
-  
- 
+
   @Override
   protected void onPostExecute(Boolean result) {
-    if (mListener!= null) mListener.onCheckAccountExistsFinished(result.booleanValue());
+    if (mListener != null)
+      mListener.onCheckAccountExistsFinished(result.booleanValue());
   }
-  
-  
+
   public void setListener(AsyncTaskListener listener) {
     mListener = listener;
   }
-  
+
   public interface AsyncTaskListener {
 
     void onCheckAccountExistsFinished(boolean result);
