@@ -253,16 +253,20 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
 
   /**
    * Figure out tenant based on url of server <br/>
-   * <<<<<<< HEAD Url of cloud server must be in the form of https://<tenant>.
-   * ======= Url of cloud server must be in the form of http://<tenant>. >>>>>>>
-   * 5856d29... Support server URL and HTTP to HTTPS redirections
-   * <exo_cloud_domain> <br/>
-   * For example: http://exoplatform.wks-acc.exoplatform.org
+   * Url of cloud server must be in the form of<br/>
+   * 
+   * <pre>
+   * http[s]://tenant.exo_cloud_domain
+   * </pre>
+   * 
+   * <br/>
+   * For example: http://exoplatform.exoplatform.net
    */
   private String getTenant(String domain) {
-    /** strip off https:// */
+    // strip off http:// or https://
     String cloudDomain = domain.startsWith(ExoConnectionUtils.HTTPS) ? domain.substring(ExoConnectionUtils.HTTPS.length())
-                                                                     : domain;
+                                                                     : domain.startsWith(ExoConnectionUtils.HTTP) ? domain.substring(ExoConnectionUtils.HTTP.length())
+                                                                                                                  : domain;
     int idx = cloudDomain.indexOf(ExoConnectionUtils.EXO_CLOUD_WS_DOMAIN);
     if (idx <= 1)
       return null;
