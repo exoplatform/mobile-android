@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item android:id="@+id/menu_shareextension_post" android:title="@string/StatusUpdate" android:visible="false" android:showAsAction="ifRoom"
+        android:actionLayout="@layout/share_button_wrapper"></item>
+</menu>

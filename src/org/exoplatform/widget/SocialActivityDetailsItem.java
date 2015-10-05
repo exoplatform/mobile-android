@@ -143,7 +143,7 @@ public class SocialActivityDetailsItem extends LinearLayout {
 
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
                                                                 activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
-                                                                                                  : activityInfo.getPostedTime()));
+                                                                                                   : activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());
@@ -302,7 +302,8 @@ public class SocialActivityDetailsItem extends LinearLayout {
     String description = activityInfo.templateParams.get("description").trim();
 
     if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
-      textViewMessage.setText(Html.fromHtml(templateComment, new EmptyImageGetter(mContext), null), TextView.BufferType.SPANNABLE);
+      textViewMessage.setText(Html.fromHtml(templateComment, new EmptyImageGetter(mContext), null),
+                              TextView.BufferType.SPANNABLE);
     }
     if (description != null) {
       textViewCommnet.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);

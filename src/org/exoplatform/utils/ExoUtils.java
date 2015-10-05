@@ -27,7 +27,10 @@ import java.util.regex.Pattern;
 
 import org.apache.http.ParseException;
 
+import org.exoplatform.R;
+
 import android.util.Patterns;
+import android.view.MenuItem;
 
 /**
  * Created by The eXo Platform SAS Author : Philippe Aristote
@@ -222,5 +225,14 @@ public class ExoUtils {
     if (str == null || str.isEmpty())
       return null;
     return Character.toUpperCase(str.charAt(0)) + str.substring(1);
+  }
+  
+  public static void setLoadingItem(MenuItem loadingItem, boolean loading) {
+    if (loadingItem != null) {
+      if (loading)
+        loadingItem.setActionView(R.layout.action_bar_loading_indicator);
+      else 
+        loadingItem.setActionView(null);
+    }
   }
 }

@@ -33,98 +33,99 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Created by The eXo Platform SAS Author : Philippe Aristote
- * paristote@exoplatform.com Sep 10, 2014
+ * Created by The eXo Platform SAS
+ * 
+ * @author Philippe Aristote paristote@exoplatform.com
+ * @since Sep 10, 2014
  */
 public class SignInFragment extends Fragment implements AccountSwitcherListener {
 
-    private ExoAccount         mCurrentAccount;
+  private ExoAccount         mCurrentAccount;
 
-    private TextView           mPassword;
+  private TextView           mPassword;
 
-    private final String       EXO_ACCOUNT     = "exo_account";
+  private final String       EXO_ACCOUNT     = "exo_account";
 
-    private OnClickListener    mSignInListener = new OnClickListener() {
-                                                   @Override
-                                                   public void onClick(View v) {
-                                                       String password = mPassword.getText()
-                                                                                  .toString();
-                                                       if (!password.isEmpty()) {
-                                                           mCurrentAccount.password = password;
-                                                           switchToAccount();
-                                                       } else {
-                                                           Toast.makeText(getActivity(),
-                                                                          R.string.NoPasswordEnter,
-                                                                          Toast.LENGTH_LONG).show();
-                                                       }
-                                                   }
-                                               };
+  private OnClickListener    mSignInListener = new OnClickListener() {
+                                               @Override
+                                               public void onClick(View v) {
+                                                 String password = mPassword.getText().toString();
+                                                 if (!password.isEmpty()) {
+                                                   mCurrentAccount.password = password;
+                                                   switchToAccount();
+                                                 } else {
+                                                   Toast.makeText(getActivity(), R.string.NoPasswordEnter, Toast.LENGTH_LONG)
+                                                        .show();
+                                                 }
+                                               }
+                                             };
 
-    public static final String FRAGMENT_TAG    = "account_switcher_signin_fragment";
+  public static final String FRAGMENT_TAG    = "account_switcher_signin_fragment";
 
-    public static final String TAG             = "eXo____AccountSwitcherSignInFragment____";
+  public static final String TAG             = "eXo____AccountSwitcherSignInFragment____";
 
-    public SignInFragment() {
-        super();
+  public SignInFragment() {
+    super();
+  }
+
+  public SignInFragment(ExoAccount account) {
+    mCurrentAccount = account;
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+    if (savedInstanceState != null && savedInstanceState.containsKey(EXO_ACCOUNT)) {
+      mCurrentAccount = (ExoAccount) savedInstanceState.getParcelable(EXO_ACCOUNT);
     }
 
-    public SignInFragment(ExoAccount account) {
-        mCurrentAccount = account;
-    }
+    View layout = inflater.inflate(R.layout.account_switcher_signin_fragment, container, false);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    // TODO replace by an action bar menu button
+    Button signInBtn = (Button) layout.findViewById(R.id.account_switcher_signin_btn);
+    signInBtn.setOnClickListener(mSignInListener);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(EXO_ACCOUNT)) {
-            mCurrentAccount = (ExoAccount) savedInstanceState.getParcelable(EXO_ACCOUNT);
-        }
+    TextView username = (TextView) layout.findViewById(R.id.account_switcher_signin_user_edit_txt);
+    username.setText(mCurrentAccount.username);
 
-        View layout = inflater.inflate(R.layout.account_switcher_signin_fragment, container, false);
+    mPassword = (TextView) layout.findViewById(R.id.account_switcher_signin_pass_edit_txt);
 
-        Button signInBtn = (Button) layout.findViewById(R.id.account_switcher_signin_btn);
-        signInBtn.setOnClickListener(mSignInListener);
+    return layout;
+  }
 
-        TextView username = (TextView) layout.findViewById(R.id.account_switcher_signin_user_edit_txt);
-        username.setText(mCurrentAccount.username);
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    if (mCurrentAccount != null)
+      outState.putParcelable(EXO_ACCOUNT, mCurrentAccount);
+    super.onSaveInstanceState(outState);
+  }
 
-        mPassword = (TextView) layout.findViewById(R.id.account_switcher_signin_pass_edit_txt);
+  /**
+   * Launches the switching procedure.
+   */
+  private void switchToAccount() {
+    AccountSwitcherProxy controller = new AccountSwitcherProxy(getActivity(), this, true);
+    controller.switchToAccount(mCurrentAccount);
+  }
 
-        return layout;
-    }
+  @Override
+  public void onSwitchAccountFinished(boolean result) {
+    AccountSwitcherActivity parentActivity = (AccountSwitcherActivity) getActivity();
+    if (result)
+      // Login successful
+      parentActivity.redirectToHomeScreenAndFinish();
+    else
+      // Login failed
+      parentActivity.redirectToLoginScreenAndFinish();
+  }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        if (mCurrentAccount != null)
-            outState.putParcelable(EXO_ACCOUNT, mCurrentAccount);
-        super.onSaveInstanceState(outState);
-    }
+  @Override
+  public void onMissingPassword(ExoAccount account) {
+    // nothing to do, the screen should remain the same
+  }
 
-    /**
-     * Launches the switching procedure.
-     */
-    private void switchToAccount() {
-        AccountSwitcherProxy controller = new AccountSwitcherProxy(getActivity(), this, true);
-        controller.switchToAccount(mCurrentAccount);
-    }
-
-    @Override
-    public void onSwitchAccountFinished(boolean result) {
-        AccountSwitcherActivity parentActivity = (AccountSwitcherActivity) getActivity();
-        if (result)
-            // Login successful
-            parentActivity.redirectToHomeScreenAndFinish();
-        else
-            // Login failed
-            parentActivity.redirectToLoginScreenAndFinish();
-    }
-
-    @Override
-    public void onMissingPassword(ExoAccount account) {
-        // nothing to do, the screen should remain the same
-    }
-
-    @Override
-    public void onAccountInvalid(ExoAccount account) {
-        //
-    }
+  @Override
+  public void onAccountInvalid(ExoAccount account) {
+    //
+  }
 }

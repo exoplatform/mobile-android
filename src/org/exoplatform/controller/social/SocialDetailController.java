@@ -18,9 +18,6 @@
  */
 package org.exoplatform.controller.social;
 
-import android.graphics.BitmapFactory;
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -33,18 +30,25 @@ import org.exoplatform.ui.social.LikeListActivity;
 import org.exoplatform.ui.social.SocialDetailActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
+import org.exoplatform.utils.image.ExoPicasso;
 import org.exoplatform.utils.image.PicassoImageGetter;
+import org.exoplatform.utils.image.RoundedCornersTranformer;
 import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.ShaderImageView;
 import org.exoplatform.widget.SocialActivityDetailsItem;
+
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.Html;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -77,6 +81,8 @@ public class SocialDetailController {
 
   private ArrayList<SocialLikeInfo> likeList;
 
+  private MenuItem                  loaderItem;
+
   public SocialDetailController(Context context,
                                 LinearLayout layoutWrap,
                                 LinearLayout likedWrap,
@@ -92,10 +98,18 @@ public class SocialDetailController {
     activityId = SocialDetailHelper.getInstance().getActivityId();
   }
 
-  public void onLoad(LoaderActionBarItem loader, boolean isLikeAction, int postion) {
+  public void setLoaderItem(MenuItem item) {
+    this.loaderItem = item;
+  }
+
+  public void setLoading(boolean loading) {
+    ExoUtils.setLoadingItem(loaderItem, loading);
+  }
+
+  public void onLoad(boolean isLikeAction, int position) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLoadTask == null || mLoadTask.getStatus() == SocialDetailLoadTask.Status.FINISHED) {
-        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this, loader, postion).execute(isLikeAction);
+        mLoadTask = (SocialDetailLoadTask) new SocialDetailLoadTask(mContext, this, position).execute(isLikeAction);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -110,10 +124,10 @@ public class SocialDetailController {
     }
   }
 
-  public void onLikeLoad(LoaderActionBarItem loader, String id, int position) {
+  public void onLikeLoad(String id, int position) {
     if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
       if (mLikeLoadTask == null || mLikeLoadTask.getStatus() == LikeLoadTask.Status.FINISHED) {
-        mLikeLoadTask = (LikeLoadTask) new LikeLoadTask(mContext, this, loader, position).execute(id);
+        mLikeLoadTask = (LikeLoadTask) new LikeLoadTask(mContext, this, position).execute(id);
       }
     } else {
       new ConnectionErrorDialog(mContext).show();
@@ -138,25 +152,23 @@ public class SocialDetailController {
         CommentItemLayout commentItem = new CommentItemLayout(mContext);
         String avatarUrl = comment.getImageUrl();
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4;
-        options.inPurgeable  = true;
-        options.inInputShareable = true;
-        commentItem.comAvatarImage.setOptions(options);
-
         if (avatarUrl == null) {
           commentItem.comAvatarImage.setImageResource(ExoConstants.DEFAULT_AVATAR);
-        } else
-          commentItem.comAvatarImage.setUrl(avatarUrl);
+        } else {
+          ExoPicasso.picasso(mContext)
+                    .load(Uri.parse(avatarUrl))
+                    .transform(new RoundedCornersTranformer(mContext))
+                    .into(commentItem.comAvatarImage);
+        }
         String commentName = comment.getCommentName();
         commentItem.comTextViewName.setText(commentName);
+
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle(),
                                                              new PicassoImageGetter(commentItem.comTextViewMessage),
                                                              null),
                                                TextView.BufferType.SPANNABLE);
         SocialActivityUtil.setTextLinkfy(commentItem.comTextViewMessage);
-        commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
-                                                                                 comment.getPostedTime()));
+        commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(mContext, comment.getPostedTime()));
         commentLayoutWrap.addView(commentItem, params);
 
       }
@@ -205,50 +217,45 @@ public class SocialDetailController {
     /*
      * We only display maximum 4 likers at the detail screen
      */
-    int maxChild = 0;
-    if (size > 4) {
-      maxChild = 4;
-    } else
-      maxChild = size;
+    int maxChild = (size > 4) ? 4 : size;
     /*
      * Set list of likers
      */
     likedLayoutWrap.removeAllViews();
-    likedAvatarSize = mContext.getResources()
-                              .getDimensionPixelSize(R.dimen.social_liked_avatar_size);
+    likedAvatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.social_liked_avatar_size);
     LayoutParams params = new LayoutParams(likedAvatarSize, likedAvatarSize);
     params.setMargins(5, 0, 0, 0);
-    ShaderImageView likedAvatar;
+    ImageView likedAvatar;
     for (int i = 0; i < maxChild; i++) {
-      likedAvatar = new ShaderImageView(mContext, true);
-      BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inSampleSize = 4;
-      options.inPurgeable  = true;
-      options.inInputShareable = true;
-      likedAvatar.setOptions(options);
-      likedAvatar.setDefaultImageResource(R.drawable.default_avatar);
-      likedAvatar.setUrl(likeLinkedList.get(i).likedImageUrl);
+      likedAvatar = new ImageView(mContext);
+      ExoPicasso.picasso(mContext)
+                .load(Uri.parse(likeLinkedList.get(i).likedImageUrl))
+                .placeholder(R.drawable.default_avatar)
+                .transform(new RoundedCornersTranformer(mContext))
+                .into(likedAvatar);
       likedLayoutWrap.addView(likedAvatar, params);
     }
     /*
      * If have more than 4 likers, we put a "more_likers" image icon at the last
      */
     if (size > 4) {
-      likedAvatar = new ShaderImageView(mContext, true);
-      likedAvatar.setDefaultImageDrawable(mContext.getResources()
-                                                  .getDrawable(R.drawable.activity_detail_more_likers));
+      likedAvatar = new ImageView(mContext);
+      Picasso.with(mContext)
+             .load(R.drawable.activity_detail_more_likers)
+             .transform(new RoundedCornersTranformer(mContext))
+             .into(likedAvatar);
       likedLayoutWrap.addView(likedAvatar, params);
     }
-
+    likedLayoutWrap.requestLayout();
   }
 
   /*
-   * Call this method when click on the liked frame
+   * Call this method when click on the likes frame
    */
-  public void onClickLikedFrame() {
+  public void onClickLikesFrame() {
     Intent intent = new Intent(mContext, LikeListActivity.class);
     /*
-     * put liked list intent extra to LikeListActivity
+     * put like list intent extra to LikeListActivity
      */
     intent.putParcelableArrayListExtra(ExoConstants.SOCIAL_LIKED_LIST_EXTRA, likeList);
     mContext.startActivity(intent);
@@ -257,8 +264,8 @@ public class SocialDetailController {
   /*
    * When user click on like button, only update the liker part UI
    */
-  public void onLikePress(LoaderActionBarItem loader, int pos) {
-    onLikeLoad(loader, activityId, pos);
+  public void onLikePress(int pos) {
+    onLikeLoad(activityId, pos);
   }
 
 }

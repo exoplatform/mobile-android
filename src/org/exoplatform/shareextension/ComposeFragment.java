@@ -122,6 +122,7 @@ public class ComposeFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    Log.d("TEST", "onCreateView Compose");
     View layout = inflater.inflate(R.layout.share_extension_compose_fragment, container, false);
     etPostMessage = (EditText) layout.findViewById(R.id.share_post_message);
     etPostMessage.addTextChangedListener(postValidator);
@@ -148,9 +149,9 @@ public class ComposeFragment extends Fragment {
   @Override
   public void onResume() {
     setTouchListener();
-    getShareActivity().toggleMainButtonType(R.attr.share_button_type_post);
-    if (!getShareActivity().getLoadingIndicator().isShown())
-      getShareActivity().getMainButton().setVisibility(View.VISIBLE);
+    getShareActivity().toggleMainButtonType(ShareActivity.BUTTON_TYPE_SHARE);
+    if (!getShareActivity().isProgressVisible())
+      getShareActivity().toggleProgressVisible(false);
     ExoAccount selectedAccount = getShareActivity().getPostInfo().ownerAccount;
     if (selectedAccount != null)
       tvAccount.setText(selectedAccount.accountName + " (" + selectedAccount.username + ")");

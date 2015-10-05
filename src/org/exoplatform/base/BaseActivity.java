@@ -27,20 +27,19 @@ import org.exoplatform.utils.Log;
 import android.support.v4.app.FragmentActivity;
 
 /**
- * Created by The eXo Platform SAS
- * Author :  MinhTDH
- *           MinhTDH@exoplatform.com
- * Jul 20, 2015  
+ * Created by The eXo Platform SAS Author : MinhTDH MinhTDH@exoplatform.com Jul
+ * 20, 2015
  */
-public class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends FragmentActivity {
   /**
-   * same purpose with ActivityLifecycleCallbacks in API 14, 
-   * but only interested in onPaused and onResume.
-   * @author  MinhTDH
-   *
+   * same purpose with ActivityLifecycleCallbacks in API 14, but only interested
+   * in onPaused and onResume.
+   * 
+   * @author MinhTDH
    */
   public interface ActivityLifecycleCallbacks {
     void onResume(BaseActivity act);
+
     void onPause(BaseActivity act);
   }
 
@@ -48,16 +47,16 @@ public class BaseActivity extends FragmentActivity {
 
     @Override
     public void onResume(BaseActivity act) {
-      
+
     }
 
     @Override
     public void onPause(BaseActivity act) {
-      
+
     }
-    
+
   }
-  
+
   private HashSet<WeakReference<BasicActivityLifecycleCallbacks>> mLifeCycleCallbackSet = new HashSet<WeakReference<BasicActivityLifecycleCallbacks>>();
 
   public void addLifeCycleObserverRef(BasicActivityLifecycleCallbacks cbRef) {
@@ -78,26 +77,26 @@ public class BaseActivity extends FragmentActivity {
       }
     }
   }
-  
+
   @Override
   protected void onResume() {
     super.onResume();
     for (WeakReference<BasicActivityLifecycleCallbacks> cbRef : mLifeCycleCallbackSet) {
       BasicActivityLifecycleCallbacks cb = cbRef == null ? null : cbRef.get();
       if (cb != null) {
-       cb.onResume(this);
+        cb.onResume(this);
       }
-    } 
+    }
   }
-  
+
   @Override
   protected void onPause() {
     for (WeakReference<BasicActivityLifecycleCallbacks> cbRef : mLifeCycleCallbackSet) {
       BasicActivityLifecycleCallbacks cb = cbRef == null ? null : cbRef.get();
       if (cb != null) {
-       cb.onPause(this);
+        cb.onPause(this);
       }
-    } 
+    }
     // clear release reference
     removeLifeCycleObserver(null);
     if (Log.LOGD)

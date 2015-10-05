@@ -50,7 +50,7 @@
             android:text="@string/Account"
             android:textSize="@dimen/text_size_medium"
             android:layout_marginRight="@dimen/margin_xs"
-            android:textColor="#000"/>
+            android:textColor="@android:color/black"/>
         
         <TextView
             android:id="@+id/share_account"
@@ -84,7 +84,7 @@
             android:text="@string/PostTo"
             android:textSize="@dimen/text_size_medium"
             android:layout_marginRight="@dimen/margin_xs"
-            android:textColor="#000"/>
+            android:textColor="@android:color/black"/>
 
         <TextView
 	        android:id="@+id/share_space"

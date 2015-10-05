@@ -126,7 +126,7 @@
                 android:layout_marginRight="-2dp"
                 android:background="@drawable/file_item_background_shape"
                 android:textSize="@dimen/label_txt_size"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:text="@string/AddAServer" />
 
@@ -157,7 +157,7 @@
                 android:layout_alignParentLeft="true"
                 android:gravity="center_vertical"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
                 android:textStyle="bold"
                 android:text="@string/ServerEdition"/>
@@ -170,7 +170,7 @@
                 android:layout_alignParentRight="true"
                 android:gravity="center_vertical"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -189,7 +189,7 @@
                 android:layout_alignParentLeft="true"
                 android:gravity="center_vertical"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
                 android:textStyle="bold"
                 android:text="@string/ServerVersion"/>
@@ -202,7 +202,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -221,7 +221,7 @@
                 android:layout_alignParentLeft="true"
                 android:gravity="center_vertical"
                 android:padding="4dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
                 android:textStyle="bold"
                 android:text="@string/ApplicationVersion"/>
@@ -233,7 +233,7 @@
                 android:layout_alignParentRight="true"
                 android:gravity="center_vertical"
                 android:layout_marginRight="10dp"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
                 android:textStyle="bold" />
 

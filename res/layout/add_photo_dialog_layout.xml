@@ -16,7 +16,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:shadowColor="#000000"
+            android:shadowColor="@android:color/black"
             android:shadowDx="1.0"
             android:shadowDy="1.0"
             android:shadowRadius="1.0"
@@ -49,7 +49,7 @@
                 android:shadowDy="1.0"
                 android:shadowRadius="1.0"
                 android:text="@string/TakeAPhoto"
-                android:textColor="#000000" />
+                android:textColor="@android:color/black" />
 
             <Button
                 android:id="@+id/add_photo_library_button"
@@ -62,7 +62,7 @@
                 android:shadowDy="1.0"
                 android:shadowRadius="1.0"
                 android:text="@string/PhotoLibrary"
-                android:textColor="#000000" />
+                android:textColor="@android:color/black" />
 
             <Button
                 android:id="@+id/add_photo_cancel_button"
@@ -70,7 +70,7 @@
                 android:layout_height="42dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/cancel_button_background_shape"
-                android:shadowColor="#000000"
+                android:shadowColor="@android:color/black"
                 android:shadowDx="1.0"
                 android:shadowDy="1.0"
                 android:shadowRadius="1.0"

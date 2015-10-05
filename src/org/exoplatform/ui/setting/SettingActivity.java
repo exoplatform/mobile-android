@@ -18,8 +18,6 @@
  */
 package org.exoplatform.ui.setting;
 
-import greendroid.widget.ActionBarItem;
-
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -31,15 +29,15 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.utils.SocialActivityUtil;
-import org.exoplatform.widget.MyActionBar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -47,7 +45,7 @@ import android.widget.TextView;
  * Represents the setting screen<br/>
  * Requires setting_type
  */
-public class SettingActivity extends MyActionBar implements OnClickListener, CheckBox.ViewListener {
+public class SettingActivity extends Activity implements OnClickListener, CheckBox.ViewListener {
 
   private AccountSetting      mSetting;
 
@@ -58,6 +56,9 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
   private Resources           mResources;
 
   /** === Components === **/
+
+  private TextView            mLoginTitle, mSocialTitle, mDocumentsTitle;
+
   private CheckBox            mRememberMeCbx;
 
   private CheckBox            mAutoLoginCbx;
@@ -76,10 +77,10 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
   /** === State === **/
   private int                 mSettingType;
 
-  /** launch setting without logging in */
+  /** Settings in offline mode */
   public static final int     GLOBAL_TYPE    = 0;
 
-  /** launch setting while logging in */
+  /** Settings in online (logged in) mode */
   public static final int     PERSONAL_TYPE  = 1;
 
   @SuppressWarnings("unused")
@@ -94,12 +95,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
     mSetting = AccountSetting.getInstance();
     mResources = getResources();
 
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-    setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.settings);
-    super.getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    super.getActionBar().setTitle(mResources.getString(R.string.Settings));
+    setContentView(R.layout.settings);
+    setTitle(R.string.Settings);
   }
 
   @Override
@@ -125,6 +122,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
 
   private void initSubViews() {
     /** Login */
+    mLoginTitle = (TextView) findViewById(R.id.setting_login_title_txt);
     mRememberMeCbx = (CheckBox) findViewById(R.id.setting_remember_me_ckb);
     mAutoLoginCbx = (CheckBox) findViewById(R.id.setting_autologin_ckb);
 
@@ -177,6 +175,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
       mElCbx.setChecked(true, false);
 
     /** Social */
+    mSocialTitle = (TextView) findViewById(R.id.setting_social_title);
     mRememberFilterCbx = (CheckBox) findViewById(R.id.setting_remember_filter_ckb);
     mRememberFilterCbx.setText(mResources.getString(R.string.SocialSettingContent))
                       .setChecked(mSharedPerf.getBoolean(mSetting.socialKey, false), false);
@@ -187,6 +186,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
     mListAccounts = (ServerList) findViewById(R.id.setting_list_accounts);
 
     /** Documents */
+    mDocumentsTitle = (TextView) findViewById(R.id.setting_document_title);
     mPrivateDriveCbx = (CheckBox) findViewById(R.id.setting_private_drive_ckb);
     mPrivateDriveCbx.setText(mResources.getString(R.string.DocumentShowPrivateDrive))
                     .setChecked(mSharedPerf.getBoolean(mSetting.documentKey, true), false);
@@ -199,22 +199,24 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
 
   private void initStates() {
     if (mSettingType == GLOBAL_TYPE) {
-      /* disable login section */
-      mRememberMeCbx.enabled(false);
-      mAutoLoginCbx.enabled(false);
+      // Hide Login section
+      mLoginTitle.setVisibility(View.GONE);
+      mRememberMeCbx.setVisibility(View.GONE);
+      mAutoLoginCbx.setVisibility(View.GONE);
 
-      /* disable social and document section */
-      mRememberFilterCbx.enabled(false);
-      mPrivateDriveCbx.enabled(false);
+      // Hide Social section
+      mSocialTitle.setVisibility(View.GONE);
+      mRememberFilterCbx.setVisibility(View.GONE);
+      mPrivateDriveCbx.setVisibility(View.GONE);
     }
-
+    // Hide Document section
     if (SocialActivityUtil.getPlatformVersion() >= 4.0f || mSettingType == GLOBAL_TYPE) {
       /** as for PLF 4, private drive is removed */
+      mDocumentsTitle.setVisibility(View.GONE);
       mPrivateDriveCbx.setVisibility(View.GONE);
-      findViewById(R.id.setting_document_title).setVisibility(View.GONE);
     }
 
-    /** update language */
+    // Update language
     if (!getCurrentLanguage().equalsIgnoreCase(ExoConstants.ENGLISH_LOCALIZATION))
       onChangeLanguage(SettingUtils.getPrefsLanguage(this));
   }
@@ -226,7 +228,7 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
   private void onChangeLanguage(String language) {
     SettingUtils.setLocale(this, language);
 
-    super.getActionBar().setTitle(mResources.getString(R.string.Settings));
+    setTitle(mResources.getString(R.string.Settings));
 
     ((TextView) findViewById(R.id.setting_login_title_txt)).setText(mResources.getString(R.string.LoginTitle));
     mRememberMeCbx.setText(mResources.getString(R.string.RememberMe));
@@ -255,7 +257,8 @@ public class SettingActivity extends MyActionBar implements OnClickListener, Che
     mNewAccountBtn.setText(mResources.getString(R.string.AddAServer));
   }
 
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
     finish();
     return true;
   }

@@ -18,22 +18,20 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
-import greendroid.widget.LoaderActionBarItem;
-
 import org.exoplatform.R;
 import org.exoplatform.controller.social.SocialDetailController;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.widget.MyActionBar;
+import org.exoplatform.utils.ExoUtils;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewStub;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -44,7 +42,7 @@ import android.widget.TextView;
 /**
  * Screen for activity details
  */
-public class SocialDetailActivity extends MyActionBar implements OnClickListener {
+public class SocialDetailActivity extends Activity implements OnClickListener {
   public LinearLayout                startScreen;
 
   private View                       emptyCommentStubView;
@@ -71,29 +69,19 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
 
   public static SocialDetailActivity socialDetailActivity;
 
-  private LoaderActionBarItem        loaderItem;
-
   private int                        currentPosition;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.activity_display_view);
-
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    addActionBarItem(Type.Refresh);
-    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
+    setContentView(R.layout.activity_display_view);
     socialDetailActivity = this;
-    currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION,
-                                              currentPosition);
+    currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, currentPosition);
     changeLanguage();
     if (savedInstanceState != null)
       finish();
     else
       initComponent();
-
   }
 
   private void initComponent() {
@@ -111,7 +99,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
     editTextComment.setOnClickListener(this);
     likeButton = (Button) findViewById(R.id.like_button);
     likeButton.setOnClickListener(this);
-    likedFrame = (RelativeLayout) findViewById(R.id.detail_likers_layout_warpper);
+    likedFrame = (RelativeLayout) findViewById(R.id.detail_likers_layout_wrapper);
     likedFrame.setOnClickListener(this);
     onLoad();
 
@@ -124,8 +112,7 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
                                                   likeButton,
                                                   contentDetailLayout,
                                                   textView_Like_Count);
-    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-    detailController.onLoad(loaderItem, false, currentPosition);
+    detailController.onLoad(false, currentPosition);
   }
 
   @Override
@@ -137,26 +124,22 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
   }
 
   @Override
-  public void onBackPressed() {
-    finish();
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+    case R.id.menu_act_detail_refresh:
+      detailController.onLoad(false, currentPosition);
+      break;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
-    case -1:
-      if (SocialTabsActivity.instance != null) {
-        SocialTabsActivity.instance.finish();
-      }
-      finish();
-      break;
-    case 0:
-      loaderItem = (LoaderActionBarItem) item;
-      detailController.onLoad(loaderItem, false, currentPosition);
-      break;
-
-    }
-
-    return true;
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.activity_detail, menu);
+    MenuItem loader = menu.findItem(R.id.menu_act_detail_refresh);
+    detailController.setLoaderItem(loader);
+    ExoUtils.setLoadingItem(loader, true);
+    return super.onCreateOptionsMenu(menu);
   }
 
   @Override
@@ -169,11 +152,11 @@ public class SocialDetailActivity extends MyActionBar implements OnClickListener
       startActivity(intent);
     }
     if (view.equals(likeButton)) {
-      detailController.onLikePress(loaderItem, currentPosition);
+      detailController.onLikePress(currentPosition);
     }
 
     if (view.equals(likedFrame)) {
-      detailController.onClickLikedFrame();
+      detailController.onClickLikesFrame();
     }
   }
 

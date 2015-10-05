@@ -79,8 +79,8 @@ public class SignInFragment extends Fragment {
     tvUsername.setText(acc.username);
     if (acc.isRememberEnabled)
       etPassword.setText(acc.password);
-    getShareActivity().toggleMainButtonType(R.attr.share_button_type_signin);
-    getShareActivity().getMainButton().setVisibility(View.VISIBLE);
+    getShareActivity().toggleMainButtonType(ShareActivity.BUTTON_TYPE_SIGNIN);
+    getShareActivity().toggleProgressVisible(false);
     enableDisableMainButton();
     super.onResume();
   }

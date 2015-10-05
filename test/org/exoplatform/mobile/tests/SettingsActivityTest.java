@@ -20,7 +20,6 @@ import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.robolectric.Robolectric.shadowOf;
 
 import java.util.ArrayList;
 
@@ -41,8 +40,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.Shadows;
 import org.robolectric.shadows.ShadowActivity;
+import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowIntent;
+import org.robolectric.shadows.ShadowView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -84,7 +86,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
    */
   public void createWithDefaultIntent(boolean online) {
     initSettings();
-    Intent i = new Intent(Robolectric.getShadowApplication().getApplicationContext(), SettingActivity.class);
+    Intent i = new Intent(ShadowApplication.getInstance().getApplicationContext(), SettingActivity.class);
     int settingType = online ? SettingActivity.PERSONAL_TYPE : SettingActivity.GLOBAL_TYPE;
     i.putExtra(ExoConstants.SETTING_TYPE, settingType);
 
@@ -99,7 +101,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     ArrayList<ExoAccount> list = new ArrayList<ExoAccount>();
     list.add(srv);
     srvSettings.setServerInfoList(list);
-    SettingUtils.persistServerSetting(Robolectric.getShadowApplication().getApplicationContext());
+    SettingUtils.persistServerSetting(ShadowApplication.getInstance().getApplicationContext());
     AccountSetting.getInstance().setCurrentAccount(srv);
     AccountSetting.getInstance().setDomainIndex("0");
 
@@ -195,8 +197,8 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     createWithDefaultIntent(false); // offline
 
     // Login section is disabled when user is offline
-    assertThat(mRememberMeCbx).isDisabled();
-    assertThat(mAutoLoginCbx).isDisabled();
+    assertThat(mRememberMeCbx).isGone();
+    assertThat(mAutoLoginCbx).isGone();
 
     // Languages
     assertNotNull(mEnCbx); // checkboxes for EN, FR, DE, ES should exist
@@ -214,7 +216,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     assertThat(mElCbx.isChecked(), equalTo(false));
 
     // Social section is disabled when user is offline
-    assertThat(mRememberFilterCbx).isDisabled();
+    assertThat(mRememberFilterCbx).isGone();
 
     // Server List : should have 1 server
     assertThat(srvSettings.getServerInfoList(activity).size(), equalTo(1));
@@ -242,7 +244,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
 
     createWithDefaultIntent(true);
 
-    Robolectric.clickOn(mRememberMeCbx); // turning on remember me
+    ShadowView.clickOn(mRememberMeCbx); // turning on remember me
 
     assertThat("RM should be checked", mRememberMeCbx.isChecked(), equalTo(true));
   }
@@ -252,7 +254,7 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
 
     createWithDefaultIntent(true);
 
-    Robolectric.clickOn(mRememberMeCbx); // turning on remember me
+    ShadowView.clickOn(mRememberMeCbx); // turning on remember me
 
     assertThat("AL checkbox should be enabled", mAutoLoginCbx.isEnabled(), equalTo(true));
     assertThat("AL should be unchecked", mAutoLoginCbx.isChecked(), equalTo(false));
@@ -264,8 +266,8 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
 
     createWithDefaultIntent(true);
 
-    Robolectric.clickOn(mRememberMeCbx); // turning on remember me
-    Robolectric.clickOn(mAutoLoginCbx); // turning on auto login
+    ShadowView.clickOn(mRememberMeCbx); // turning on remember me
+    ShadowView.clickOn(mAutoLoginCbx); // turning on auto login
 
     assertThat("AL should be checked", mAutoLoginCbx.isChecked(), equalTo(true));
   }
@@ -275,13 +277,13 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
 
     createWithDefaultIntent(true);
 
-    Robolectric.clickOn(mRememberMeCbx); // turning on remember me
-    Robolectric.clickOn(mAutoLoginCbx); // turning on auto login
+    ShadowView.clickOn(mRememberMeCbx); // turning on remember me
+    ShadowView.clickOn(mAutoLoginCbx); // turning on auto login
 
     assertThat(mAutoLoginCbx.isEnabled(), equalTo(true));
     assertThat(mAutoLoginCbx.isChecked(), equalTo(true));
 
-    Robolectric.clickOn(mRememberMeCbx); // turning off remember me
+    ShadowView.clickOn(mRememberMeCbx); // turning off remember me
 
     assertThat("RM should be unchecked", mRememberMeCbx.isChecked(), equalTo(false));
     assertThat("AL should be disabled", mAutoLoginCbx.isEnabled(), equalTo(false));
@@ -294,11 +296,11 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
 
     createWithDefaultIntent(true);
 
-    Robolectric.clickOn(mStartCloudSignUpBtn);
+    ShadowView.clickOn(mStartCloudSignUpBtn);
 
-    ShadowActivity sActivity = shadowOf(activity);
+    ShadowActivity sActivity = Shadows.shadowOf(activity);
     Intent welcomeIntent = sActivity.getNextStartedActivity();
-    ShadowIntent sIntent = shadowOf(welcomeIntent);
+    ShadowIntent sIntent = Shadows.shadowOf(welcomeIntent);
 
     assertThat(sIntent.getComponent().getClassName(), equalTo(WelcomeActivity.class.getName()));
 
@@ -311,37 +313,37 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
 
     SharedPreferences prefs = activity.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
 
-    Robolectric.clickOn(mDeCbx); // turn on German
+    ShadowView.clickOn(mDeCbx); // turn on German
     // English is off
     assertThat("English should be OFF", mEnCbx.isChecked(), equalTo(false));
     assertThat("German should be ON", mDeCbx.isChecked(), equalTo(true));
     assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""), equalTo(ExoConstants.GERMAN_LOCALIZATION));
 
-    Robolectric.clickOn(mFrCbx); // turn on French
+    ShadowView.clickOn(mFrCbx); // turn on French
     // German is off
     assertThat("German should be OFF", mDeCbx.isChecked(), equalTo(false));
     assertThat("French should be ON", mFrCbx.isChecked(), equalTo(true));
     assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""), equalTo(ExoConstants.FRENCH_LOCALIZATION));
 
-    Robolectric.clickOn(mEsCbx); // turn on Spanish
+    ShadowView.clickOn(mEsCbx); // turn on Spanish
     // French is off
     assertThat("French should be OFF", mFrCbx.isChecked(), equalTo(false));
     assertThat("Spanish should be ON", mEsCbx.isChecked(), equalTo(true));
     assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""), equalTo(ExoConstants.SPANISH_LOCALIZATION));
 
-    Robolectric.clickOn(mPtBrCbx); // turn on Portuguese
+    ShadowView.clickOn(mPtBrCbx); // turn on Portuguese
     // Spanish is off
     assertThat("Spanish should be OFF", mEsCbx.isChecked(), equalTo(false));
     assertThat("Portuguese should be ON", mPtBrCbx.isChecked(), equalTo(true));
     assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""), equalTo(ExoConstants.BRAZIL_LOCALIZATION));
 
-    Robolectric.clickOn(mElCbx); // turn on Greek
+    ShadowView.clickOn(mElCbx); // turn on Greek
     // Portuguese is off
     assertThat("Portuguese should be OFF", mPtBrCbx.isChecked(), equalTo(false));
     assertThat("Greek should be ON", mElCbx.isChecked(), equalTo(true));
     assertThat(prefs.getString(ExoConstants.EXO_PRF_LOCALIZE, ""), equalTo(ExoConstants.GREEK_LOCALIZATION));
 
-    Robolectric.clickOn(mEnCbx); // turn on English
+    ShadowView.clickOn(mEnCbx); // turn on English
     // Greek is off
     assertThat("Greek should be OFF", mElCbx.isChecked(), equalTo(false));
     assertThat("English should be ON", mEnCbx.isChecked(), equalTo(true));
@@ -357,11 +359,11 @@ public class SettingsActivityTest extends ExoActivityTestUtils<SettingActivity> 
     // Simulate tap on the account item
     ServerItemLayout item = (ServerItemLayout) serverList.getChildAt(0);
     // Click on item.layout because the OnClickListener is set on the layout
-    Robolectric.clickOn(item.layout);
+    ShadowView.clickOn(item.layout);
 
-    ShadowActivity sActivity = shadowOf(activity);
+    ShadowActivity sActivity = Shadows.shadowOf(activity);
     Intent editAccount = sActivity.getNextStartedActivity();
-    ShadowIntent sIntent = shadowOf(editAccount);
+    ShadowIntent sIntent = Shadows.shadowOf(editAccount);
 
     // Should start the Server Edition activity
     assertThat("Should start the server edition activity",

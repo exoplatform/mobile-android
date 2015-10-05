@@ -19,11 +19,8 @@ package org.exoplatform.mobile.tests;
 import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.robolectric.Robolectric.shadowOf;
-import greendroid.widget.ActionBar;
 
 import java.util.ArrayList;
 
@@ -36,13 +33,17 @@ import org.exoplatform.ui.social.AllUpdatesFragment;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.ui.social.TabPageIndicator;
 import org.robolectric.Robolectric;
+import org.robolectric.Shadows;
 import org.robolectric.shadows.ShadowActivity;
+import org.robolectric.shadows.ShadowLooper;
+import org.robolectric.shadows.ShadowView;
+import org.robolectric.shadows.httpclient.FakeHttp;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -53,164 +54,163 @@ import android.widget.TextView;
 // @RunWith(ExoRobolectricTestRunner.class)
 public class SocialTabsActivityTest extends ExoActivityTestUtils<SocialTabsActivity> {
 
-    private static final String FRAGMENT_TAG = "fragment";
+  private static final String FRAGMENT_TAG = "fragment";
 
-    TabPageIndicator            tabs;
+  TabPageIndicator            tabs;
 
-    ViewPager                   pages;
+  ViewPager                   pages;
 
-    ActionBar                   actionBar;
+  ActionBar                   actionBar;
 
-    ActivityStreamFragment      fragment;
+  ActivityStreamFragment      fragment;
 
-    @Override
-    // @Before
-    public void setup() {
-        controller = Robolectric.buildActivity(SocialTabsActivity.class);
+  @Override
+  // @Before
+  public void setup() {
+    controller = Robolectric.buildActivity(SocialTabsActivity.class);
 
-        // mock response for HTTP GET /rest/api/social/version/latest.json
-        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_VERSION_LATEST),
-                                        getResponseOKForRequest(REQ_SOCIAL_VERSION_LATEST));
-        // mock response for HTTP GET
-        // /rest/private/api/social/v1-alpha3/portal/identity/organization/{testuser}.json
-        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_IDENTITY),
-                                        getResponseOKForRequest(REQ_SOCIAL_IDENTITY));
-        // mock response for HTTP GET
-        // /rest/private/api/social/v1-alpha3/portal/identity/{testidentity}.json
-        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_IDENTITY_2),
-                                        getResponseOKForRequest(REQ_SOCIAL_IDENTITY_2));
-        // mock response for HTTP GET
-        // /rest/private/api/social/v1-alpha3/portal/activity_stream/feed.json?limit=10
-        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_NEWS),
-                                        getResponseOKForRequest(REQ_SOCIAL_NEWS));
-        // mock response for HTTP GET
-        // /rest/private/api/social/v1-alpha3/portal/activity_stream/feed.json?limit=50
-        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_ALL_UPDATES),
-                                        getResponseOKForRequest(REQ_SOCIAL_ALL_UPDATES));
-        // mock response for HTTP GET
-        // /rest/private/api/social/v1-alpha3/portal/activity_stream/connections.json
-        Robolectric.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_MY_CONNECTIONS),
-                                        getResponseOKForRequest(REQ_SOCIAL_MY_CONNECTIONS));
-    }
+    // mock response for HTTP GET /rest/api/social/version/latest.json
+    FakeHttp.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_VERSION_LATEST),
+                                 getResponseOKForRequest(REQ_SOCIAL_VERSION_LATEST));
+    // mock response for HTTP GET
+    // /rest/private/api/social/v1-alpha3/portal/identity/organization/{testuser}.json
+    FakeHttp.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_IDENTITY), getResponseOKForRequest(REQ_SOCIAL_IDENTITY));
+    // mock response for HTTP GET
+    // /rest/private/api/social/v1-alpha3/portal/identity/{testidentity}.json
+    FakeHttp.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_IDENTITY_2), getResponseOKForRequest(REQ_SOCIAL_IDENTITY_2));
+    // mock response for HTTP GET
+    // /rest/private/api/social/v1-alpha3/portal/activity_stream/feed.json?limit=10
+    FakeHttp.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_NEWS), getResponseOKForRequest(REQ_SOCIAL_NEWS));
+    // mock response for HTTP GET
+    // /rest/private/api/social/v1-alpha3/portal/activity_stream/feed.json?limit=50
+    FakeHttp.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_ALL_UPDATES), getResponseOKForRequest(REQ_SOCIAL_ALL_UPDATES));
+    // mock response for HTTP GET
+    // /rest/private/api/social/v1-alpha3/portal/activity_stream/connections.json
+    FakeHttp.addHttpResponseRule(getMatcherForRequest(REQ_SOCIAL_MY_CONNECTIONS),
+                                 getResponseOKForRequest(REQ_SOCIAL_MY_CONNECTIONS));
+  }
 
-    private void init() {
+  private void init() {
 
-        tabs = (TabPageIndicator) activity.findViewById(R.id.indicator);
-        pages = (ViewPager) activity.findViewById(R.id.pager);
-        actionBar = activity.getActionBar();
+    tabs = (TabPageIndicator) activity.findViewById(R.id.indicator);
+    pages = (ViewPager) activity.findViewById(R.id.pager);
+    actionBar = activity.getActionBar();
 
-    }
+  }
 
-    private void startFragment() {
-        FragmentManager manager = activity.getSupportFragmentManager();
-        manager.beginTransaction().add(fragment, FRAGMENT_TAG).commit();
-    }
+  private void startFragment() {
+    FragmentManager manager = activity.getSupportFragmentManager();
+    manager.beginTransaction().add(fragment, FRAGMENT_TAG).commit();
+  }
 
-    private Bundle createBundleWithDefaultSettings() {
-        Bundle b = new Bundle();
-        AccountSetting s = AccountSetting.getInstance();
-        s.setCurrentAccount(getServerWithDefaultValues());
-        s.cookiesList = new ArrayList<String>();
-        b.putParcelable("account_setting", s);
-        return b;
-    }
+  private Bundle createBundleWithDefaultSettings() {
+    Bundle b = new Bundle();
+    AccountSetting s = AccountSetting.getInstance();
+    s.setCurrentAccount(getServerWithDefaultValues());
+    s.cookiesList = new ArrayList<String>();
+    b.putParcelable("account_setting", s);
+    return b;
+  }
 
-    // @Test
-    public void verifyDefaultLayout() {
-        create();
-        init();
+  // @Test
+  public void verifyDefaultLayout() {
+    create();
+    init();
 
-        assertNotNull("Button should exist at pos 0", actionBar.getItem(0)); // Refresh
-        assertNotNull("Button should exist at pos 1", actionBar.getItem(1)); // Compose
-        // ActionBar.getItem() returns null when there is no item at the given
-        // position
-        assertNull("Button should not exist at pos 2", actionBar.getItem(2));
+    // TODO check
+    assertTrue("Action bar should contain 2 menu items", actionBar.getNavigationItemCount() == 2);
+    // assertNotNull("Button should exist at pos 0", actionBar.getItem(0)); //
+    // Refresh
+    // assertNotNull("Button should exist at pos 1", actionBar.getItem(1)); //
+    // Compose
+    // ActionBar.getItem() returns null when there is no item at the given
+    // position
+    // assertNull("Button should not exist at pos 2", actionBar.getItem(2));
 
-        assertThat(pages.getAdapter()).hasCount(4); // Should have 4 pages
-        assertThat("Default tab should be All Updates",
-                   pages.getCurrentItem(),
-                   equalTo(SocialTabsActivity.ALL_UPDATES));
+    assertThat(pages.getAdapter()).hasCount(4); // Should have 4 pages
+    assertThat("Default tab should be All Updates", pages.getCurrentItem(), equalTo(SocialTabsActivity.ALL_UPDATES));
 
-        LinearLayout tabsLayout = (LinearLayout) tabs.getChildAt(0);
-        // check each tab's title
-        String[] tabsTitle = activity.getResources().getStringArray(R.array.SocialTabs);
-        assertThat((TextView) tabsLayout.getChildAt(SocialTabsActivity.ALL_UPDATES)).containsText(tabsTitle[SocialTabsActivity.ALL_UPDATES]);
-        assertThat((TextView) tabsLayout.getChildAt(SocialTabsActivity.MY_CONNECTIONS)).containsText(tabsTitle[SocialTabsActivity.MY_CONNECTIONS]);
-        assertThat((TextView) tabsLayout.getChildAt(SocialTabsActivity.MY_SPACES)).containsText(tabsTitle[SocialTabsActivity.MY_SPACES]);
-        assertThat((TextView) tabsLayout.getChildAt(SocialTabsActivity.MY_STATUS)).containsText(tabsTitle[SocialTabsActivity.MY_STATUS]);
+    LinearLayout tabsLayout = (LinearLayout) tabs.getChildAt(0);
+    // check each tab's title
+    String[] tabsTitle = activity.getResources().getStringArray(R.array.SocialTabs);
+    assertThat((TextView) tabsLayout.getChildAt(SocialTabsActivity.ALL_UPDATES)).containsText(tabsTitle[SocialTabsActivity.ALL_UPDATES]);
+    assertThat((TextView) tabsLayout.getChildAt(SocialTabsActivity.MY_CONNECTIONS)).containsText(tabsTitle[SocialTabsActivity.MY_CONNECTIONS]);
+    assertThat((TextView) tabsLayout.getChildAt(SocialTabsActivity.MY_SPACES)).containsText(tabsTitle[SocialTabsActivity.MY_SPACES]);
+    assertThat((TextView) tabsLayout.getChildAt(SocialTabsActivity.MY_STATUS)).containsText(tabsTitle[SocialTabsActivity.MY_STATUS]);
 
-    }
+  }
 
-    // @Test
-    public void shouldMoveToOtherPage() {
-        create();
-        init();
+  // @Test
+  public void shouldMoveToOtherPage() {
+    create();
+    init();
 
-        tabs.setCurrentItem(SocialTabsActivity.ALL_UPDATES);
-        assertThat("Should be on All Updates tab",
-                   pages.getCurrentItem(),
-                   equalTo(SocialTabsActivity.ALL_UPDATES)); // remains on All
-                                                             // Updates
+    tabs.setCurrentItem(SocialTabsActivity.ALL_UPDATES);
+    assertThat("Should be on All Updates tab", pages.getCurrentItem(), equalTo(SocialTabsActivity.ALL_UPDATES)); // remains
+                                                                                                                 // on
+                                                                                                                 // All
+                                                                                                                 // Updates
 
-        tabs.setCurrentItem(SocialTabsActivity.MY_CONNECTIONS);
-        assertThat("Should be on My Connections tab",
-                   pages.getCurrentItem(),
-                   equalTo(SocialTabsActivity.MY_CONNECTIONS)); // moves to My
-                                                                // Connections
+    tabs.setCurrentItem(SocialTabsActivity.MY_CONNECTIONS);
+    assertThat("Should be on My Connections tab", pages.getCurrentItem(), equalTo(SocialTabsActivity.MY_CONNECTIONS)); // moves
+                                                                                                                       // to
+                                                                                                                       // My
+                                                                                                                       // Connections
 
-        LinearLayout tabsLayout = (LinearLayout) tabs.getChildAt(0);
+    LinearLayout tabsLayout = (LinearLayout) tabs.getChildAt(0);
 
-        Robolectric.clickOn((View) tabsLayout.getChildAt(SocialTabsActivity.MY_SPACES));
-        assertThat("Should be on My Spaces tab",
-                   pages.getCurrentItem(),
-                   equalTo(SocialTabsActivity.MY_SPACES)); // moves to My Spaces
+    ShadowView.clickOn((View) tabsLayout.getChildAt(SocialTabsActivity.MY_SPACES));
+    assertThat("Should be on My Spaces tab", pages.getCurrentItem(), equalTo(SocialTabsActivity.MY_SPACES)); // moves
+                                                                                                             // to
+                                                                                                             // My
+                                                                                                             // Spaces
 
-    }
+  }
 
-    // @Test
-    public void shouldFinishActivity() {
-        create();
-        init();
+  // @Test
+  public void shouldFinishActivity() {
+    create();
+    init();
 
-        // home button is the 1st child of the action bar layout
-        ImageButton homeBtn = (ImageButton) actionBar.getChildAt(0);
-        Robolectric.clickOn(homeBtn);
+    // home button is the 1st child of the action bar layout
+    // TODO check
+    // ImageButton homeBtn = (ImageButton) actionBar.getChildAt(0);
+    View homeBtn = actionBar.getTabAt(0).getCustomView();
+    ShadowView.clickOn(homeBtn);
 
-        ShadowActivity sActivity = shadowOf(activity);
+    ShadowActivity sActivity = Shadows.shadowOf(activity);
 
-        assertTrue("Activity should be finishing", sActivity.isFinishing());
-    }
+    assertTrue("Activity should be finishing", sActivity.isFinishing());
+  }
 
-    /*
-     * TEST FRAGMENTS
-     */
+  /*
+   * TEST FRAGMENTS
+   */
 
-    // @Test
-    public void shouldLoadAllUpdatesFragment() {
-        createWithBundle(createBundleWithDefaultSettings());
-        init();
+  // @Test
+  public void shouldLoadAllUpdatesFragment() {
+    createWithBundle(createBundleWithDefaultSettings());
+    init();
 
-        HomeController c = new HomeController(activity);
-        c.launchNewsService(activity.loaderItem);
+    HomeController c = new HomeController(activity);
+    // TODO check
+    c.launchNewsService();
 
-        fragment = AllUpdatesFragment.getInstance();
+    fragment = AllUpdatesFragment.getInstance();
 
-        // Adding a call to Robolectric.runUiThreadTasksIncludingDelayedTasks()
-        // ensures that the async tasks execute completely
-        Robolectric.runUiThreadTasksIncludingDelayedTasks();
+    // Adding a call to Robolectric.runUiThreadTasksIncludingDelayedTasks()
+    // ensures that the async tasks execute completely
+    ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
 
-        assertThat("Fragment ID should be ALL_UPDATES",
-                   ((AllUpdatesFragment) fragment).getThisTabId(),
-                   equalTo(SocialTabsActivity.ALL_UPDATES));
-        assertNotNull("SocialServiceHelper should not be null", SocialServiceHelper.getInstance());
+    assertThat("Fragment ID should be ALL_UPDATES",
+               ((AllUpdatesFragment) fragment).getThisTabId(),
+               equalTo(SocialTabsActivity.ALL_UPDATES));
+    assertNotNull("SocialServiceHelper should not be null", SocialServiceHelper.getInstance());
 
-        assertNotNull("Social Info List should not be null",
-                      SocialServiceHelper.getInstance().socialInfoList);
-        assertThat("Social Info List should contain 2 items",
-                   SocialServiceHelper.getInstance().socialInfoList.size(),
-                   equalTo(2));
+    assertNotNull("Social Info List should not be null", SocialServiceHelper.getInstance().socialInfoList);
+    assertThat("Social Info List should contain 2 items", SocialServiceHelper.getInstance().socialInfoList.size(), equalTo(2));
 
-        Robolectric.clearPendingHttpResponses();
-    }
+    FakeHttp.clearPendingHttpResponses();
+  }
 
 }

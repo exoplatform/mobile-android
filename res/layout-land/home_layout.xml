@@ -20,7 +20,8 @@
             android:orientation="horizontal"
             android:padding="2dp" >
 
-            <org.exoplatform.widget.ShaderImageView
+            <ImageView
+                android:src="@drawable/default_avatar"
                 android:id="@+id/home_user_avatar"
                 android:layout_width="@dimen/home_profile_avatar_size"
                 android:layout_height="@dimen/home_profile_avatar_size"
@@ -95,7 +96,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="60dp"
-        android:gravity="center" >
+        android:gravity="center"
+        android:background="@android:color/black">
 
         <ViewFlipper
             android:id="@+id/home_social_flipper"

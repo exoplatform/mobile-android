@@ -18,8 +18,6 @@
  */
 package org.exoplatform.utils;
 
-import greendroid.util.Config;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -119,8 +117,8 @@ public class LaunchUtils {
       String appVer = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0).versionName;
       ServerSettingHelper.getInstance().setApplicationVersion(appVer);
     } catch (NameNotFoundException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("NameNotFoundException", "Error of getting package information!");
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e("NameNotFoundException", "Error of getting package information!");
     }
   }
 

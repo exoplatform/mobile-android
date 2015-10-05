@@ -71,7 +71,6 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.Html;
 import android.webkit.MimeTypeMap;
-import greendroid.util.Config;
 
 public class ExoDocumentUtils {
 
@@ -463,8 +462,8 @@ public class ExoDocumentUtils {
               Element itemElement = (Element) itemNode;
               ExoFile file = new ExoFile();
               file.name = itemElement.getAttribute("name");
-              if (Config.GD_INFO_LOGS_ENABLED)
-                Log.i(" Public file name", file.name);
+              // if (Config.GD_INFO_LOGS_ENABLED)
+              Log.i(" Public file name", file.name);
               file.workspaceName = itemElement.getAttribute("workspaceName");
               file.driveName = file.name;
               file.currentFolder = itemElement.getAttribute("currentFolder");

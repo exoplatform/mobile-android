@@ -20,7 +20,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.robolectric.Robolectric.shadowOf;
+import static org.robolectric.Shadows.shadowOf;
 
 import java.util.Locale;
 
@@ -32,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowIntent;
 
@@ -51,7 +52,7 @@ public class LaunchActivityTest extends ExoActivityTestUtils<LaunchActivity> {
   @Before
   public void setup() {
     controller = Robolectric.buildActivity(LaunchActivity.class);
-    ctx = Robolectric.application.getApplicationContext();
+    ctx = RuntimeEnvironment.application.getApplicationContext();
   }
 
   @Test

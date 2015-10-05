@@ -46,7 +46,7 @@ import org.exoplatform.widget.WarningDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import greendroid.widget.LoaderActionBarItem;
+import android.view.MenuItem;
 
 /**
  * Load and connect the app to the Social services and objects:<br/>
@@ -76,11 +76,11 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
 
   private HomeController                homeController;
 
-  private LoaderActionBarItem           loaderItem;
+  private MenuItem                      loaderItem;
 
   private static final String           TAG = "eXo____SocialServiceLoadTask____";
 
-  public SocialServiceLoadTask(Context context, HomeController controller, LoaderActionBarItem loader) {
+  public SocialServiceLoadTask(Context context, HomeController controller, MenuItem loader) {
     mContext = context;
     homeController = controller;
     loaderItem = loader;
@@ -97,7 +97,8 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
 
   @Override
   public void onPreExecute() {
-    loaderItem.setLoading(true);
+    if (loaderItem != null)
+      loaderItem.setActionView(R.layout.action_bar_loading_indicator);
   }
 
   @SuppressWarnings({ "deprecation", "unchecked" })
@@ -110,8 +111,8 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
       String password = AccountSetting.getInstance().getPassword();
       URL url = new URL(SocialActivityUtil.getDomain());
 
-      if (Log.LOGD)
-        Log.d(TAG, "userName: ", userName, " url: ", url.toString());
+      Log.i(TAG, "userName: " + userName);
+      Log.i(TAG, "url: " + url.toString());
 
       SocialClientContext.setProtocol(url.getProtocol());
       SocialClientContext.setHost(url.getHost());
@@ -150,6 +151,13 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
   }
 
   @Override
+  protected void onCancelled(String[] result) {
+    if (loaderItem != null)
+      loaderItem.setActionView(null);
+    onCancelled();
+  }
+
+  @Override
   public void onPostExecute(String[] result) {
 
     if (result != null) {
@@ -169,7 +177,8 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
       homeController.onLoad(ExoConstants.NUMBER_OF_ACTIVITY_HOME, HomeController.FLIPPER_VIEW);
 
     } else {
-      loaderItem.setLoading(false);
+      if (loaderItem != null)
+        loaderItem.setActionView(null);
       WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
       dialog.show();
     }
