@@ -18,7 +18,7 @@
  */
 package org.exoplatform.controller.document;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
@@ -39,13 +39,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DocumentAdapter extends BaseAdapter {
-  private ArrayList<ExoFile>  _documentList;
+  private List<ExoFile>       _documentList;
 
   private DocumentActivity    _mContext;
 
   public DocumentActionDialog _documentActionDialog;
 
-  public DocumentAdapter(DocumentActivity context, ArrayList<ExoFile> list) {
+  public DocumentAdapter(DocumentActivity context, List<ExoFile> list) {
 
     _mContext = context;
     _documentList = list;
@@ -71,8 +71,8 @@ public class DocumentAdapter extends BaseAdapter {
   public View getView(int position, View convertView, ViewGroup parent) {
 
     final int pos = position;
+    // TODO use ViewHolder pattern
     LayoutInflater inflater = (LayoutInflater) _mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    // View rowView = inflater.inflate(R.layout.fileitem, parent, false);
 
     final ExoFile myFile = _documentList.get(pos);
 

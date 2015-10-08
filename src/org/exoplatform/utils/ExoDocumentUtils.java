@@ -300,11 +300,19 @@ public class ExoDocumentUtils {
     }
   }
 
-  // Get file array from URL
-  public static ArrayList<ExoFile> getPersonalDriveContent(Context context, ExoFile file) throws IOException {
+  /**
+   * Get the content (files and folders) of the given folder.
+   * 
+   * @param context
+   * @param file the folder to get content from
+   * @return an ExoFile corresponding to the parent folder with its children
+   *         ExoFile
+   * @throws IOException
+   */
+  public static ExoFile getPersonalDriveContent(Context context, ExoFile file) throws IOException {
     SharedPreferences prefs = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
-    ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
+    ExoFile folder = file;
     String domain = AccountSetting.getInstance().getDomainName();
     HttpResponse response = null;
     String urlStr = null;
@@ -315,8 +323,10 @@ public class ExoDocumentUtils {
       DocumentHelper.getInstance().childFilesMap = new Bundle();
     }
 
+    // We're on the initial screen => list all drives
     if ("".equals(file.name) && "".equals(file.path)) {
       // personal drive
+      ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
       ArrayList<ExoFile> fileList = new ArrayList<ExoFile>();
       StringBuffer buffer = new StringBuffer();
       buffer.append(domain);
@@ -366,20 +376,24 @@ public class ExoDocumentUtils {
         DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
       }
 
+      // create an empty root folder to hold all the drives
+      folder.children = arrFilesTmp;
     } else {
+      // We're in a drive or folder => list its content
       urlStr = getDriverUrl(file);
       urlStr = ExoUtils.encodeDocumentUrl(urlStr);
       response = ExoConnectionUtils.getRequestResponse(urlStr);
-      arrFilesTmp.addAll(getContentOfFolder(response, file));
+      // arrFilesTmp.addAll(getContentOfFolder(response, file));
+      folder = getContentOfFolder(response, file);
       if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
         DocumentHelper.getInstance().childFilesMap.remove(file.path);
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
+        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
       } else
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
+        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
 
     }
 
-    return arrFilesTmp;
+    return folder;
 
   }
 
@@ -551,11 +565,10 @@ public class ExoDocumentUtils {
     }
   }
 
-  public static ArrayList<ExoFile> getContentOfFolder(HttpResponse response, ExoFile file) {
+  public static ExoFile getContentOfFolder(HttpResponse response, ExoFile file) {
 
-    // Initialize the blogEntries MutableArray that we declared in the
-    // header
-    ArrayList<ExoFile> folderArray = new ArrayList<ExoFile>();
+    ExoFile folder = file;
+    ArrayList<ExoFile> childrenArray = new ArrayList<ExoFile>();
 
     Document obj_doc = null;
     DocumentBuilderFactory doc_build_fact = null;
@@ -572,63 +585,84 @@ public class ExoDocumentUtils {
 
           // Get folders
           obj_nod_list = obj_doc.getElementsByTagName("Folder");
-
           for (int i = 0; i < obj_nod_list.getLength(); i++) {
             Node itemNode = obj_nod_list.item(i);
             if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
               Element itemElement = (Element) itemNode;
               if (i > 0) {
-                ExoFile newFile = new ExoFile();
+                // Folders of the root folder
+                ExoFile childFolder = new ExoFile();
                 if (itemElement.hasAttribute("title")) {
-                  newFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
+                  childFolder.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
                 } else {
-                  newFile.name = itemElement.getAttribute("name");
+                  childFolder.name = itemElement.getAttribute("name");
                 }
-                newFile.workspaceName = itemElement.getAttribute("workspaceName");
-                newFile.path = fullURLofFile(newFile.workspaceName, itemElement.getAttribute("path"));
-                newFile.driveName = itemElement.getAttribute("driveName");
-                newFile.currentFolder = itemElement.getAttribute("currentFolder");
-                if (newFile.currentFolder == null)
-                  newFile.currentFolder = "";
-                newFile.isFolder = true;
+                childFolder.workspaceName = itemElement.getAttribute("workspaceName");
+                childFolder.path = fullURLofFile(childFolder.workspaceName, itemElement.getAttribute("path"));
+                childFolder.driveName = itemElement.getAttribute("driveName");
+                childFolder.currentFolder = itemElement.getAttribute("currentFolder");
+                if (childFolder.currentFolder == null)
+                  childFolder.currentFolder = "";
+                childFolder.isFolder = true;
 
                 String canRemove = itemElement.getAttribute("canRemove");
-                newFile.canRemove = Boolean.parseBoolean(canRemove.trim());
-                folderArray.add(newFile);
+                childFolder.canRemove = Boolean.parseBoolean(canRemove.trim());
+                childrenArray.add(childFolder);
+              } else {
+                // Root folder
+                folder.name = itemElement.getAttribute("name");
+                folder.workspaceName = itemElement.getAttribute("workspaceName");
+                folder.path = fullURLofFile(folder.workspaceName, itemElement.getAttribute("path"));
+                folder.driveName = itemElement.getAttribute("driveName");
+                folder.currentFolder = itemElement.getAttribute("currentFolder");
+                if (folder.currentFolder == null)
+                  folder.currentFolder = "";
+                folder.isFolder = true;
+                String canRemove = itemElement.getAttribute("canRemove");
+                folder.canRemove = Boolean.parseBoolean(canRemove.trim());
+                // Cannot delete the root folder of a drive
+                if (folder.isFolder && "".equals(folder.currentFolder))
+                  folder.canRemove = false;
+                // Unfortunate hack
+                // The drive "Personal Documents" is a folder named "Private"
+                // We do this to display the drive name in this case
+                if ("Private".equals(folder.name) && "".equals(folder.currentFolder)
+                    && "Personal Documents".equals(folder.driveName)) {
+                  folder.name = folder.driveName;
+                }
               }
-
             }
           }
 
           // Get files
           obj_nod_list = obj_doc.getElementsByTagName("File");
-
           for (int i = 0; i < obj_nod_list.getLength(); i++) {
             Node itemNode = obj_nod_list.item(i);
             if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
               Element itemElement = (Element) itemNode;
 
-              ExoFile newFile = new ExoFile();
+              ExoFile childFile = new ExoFile();
               if (itemElement.hasAttribute("title")) {
-                newFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
+                childFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
               } else {
-                newFile.name = itemElement.getAttribute("name");
+                childFile.name = itemElement.getAttribute("name");
               }
-              newFile.workspaceName = itemElement.getAttribute("workspaceName");
-              newFile.path = fullURLofFile(newFile.workspaceName, itemElement.getAttribute("path"));
-              newFile.driveName = file.name;
-              newFile.currentFolder = itemElement.getAttribute("currentFolder");
-              newFile.nodeType = itemElement.getAttribute("nodeType");
-              newFile.isFolder = false;
+              childFile.workspaceName = itemElement.getAttribute("workspaceName");
+              childFile.path = fullURLofFile(childFile.workspaceName, itemElement.getAttribute("path"));
+              childFile.driveName = file.name;
+              childFile.currentFolder = itemElement.getAttribute("currentFolder");
+              childFile.nodeType = itemElement.getAttribute("nodeType");
+              childFile.isFolder = false;
               String canRemove = itemElement.getAttribute("canRemove");
-              newFile.canRemove = Boolean.parseBoolean(canRemove.trim());
-              folderArray.add(newFile);
+              childFile.canRemove = Boolean.parseBoolean(canRemove.trim());
+              childrenArray.add(childFile);
             }
           }
 
         }
       }
-      return folderArray;
+      folder.children = childrenArray;
+      return folder;
     } catch (ParserConfigurationException e) {
       return null;
     } catch (SAXException e) {
