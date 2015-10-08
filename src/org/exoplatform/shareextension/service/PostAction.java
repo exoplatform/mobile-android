@@ -30,7 +30,9 @@ import org.exoplatform.social.client.core.service.QueryParamsImpl;
 import android.util.Log;
 
 /**
- * Created by The eXo Platform SAS
+ * Created by The eXo Platform SAS<br/>
+ * An Action for posting an activity on Platform. Supports DEFAULT_ACTIVITY,
+ * LINK_ACTIVITY and DOC_ACTIVITY types.
  * 
  * @author Philippe Aristote paristote@exoplatform.com
  * @since Jun 17, 2015
@@ -38,6 +40,7 @@ import android.util.Log;
 public class PostAction extends Action {
   /**
    * create and execute post action, wait for return result
+   * 
    * @param post
    * @param listener
    * @return just created activity or null if execution failed.
@@ -159,14 +162,14 @@ public class PostAction extends Action {
   }
 
   public static class PostActionListener implements ActionListener {
-    
-    private RestActivity mRestActivity; 
-    
+
+    private RestActivity mRestActivity;
+
     @Override
     public boolean onSuccess(String message) {
       return true;
     }
-    
+
     @Override
     public boolean onError(String error) {
       return false;
@@ -175,7 +178,7 @@ public class PostAction extends Action {
     public RestActivity getRestActivity() {
       return mRestActivity;
     }
-    
+
   }
-  
+
 }

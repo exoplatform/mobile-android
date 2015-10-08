@@ -40,7 +40,8 @@ import android.net.Uri;
 import android.util.Log;
 
 /**
- * Created by The eXo Platform SAS
+ * Created by The eXo Platform SAS<br/>
+ * An Action for uploading a file to Platform. Uses the upload service of ECMS.
  * 
  * @author Philippe Aristote paristote@exoplatform.com
  * @since Jun 17, 2015

@@ -26,10 +26,11 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialPostInfo;
 import org.exoplatform.shareextension.service.Action.ActionListener;
 import org.exoplatform.shareextension.service.PostAction;
+import org.exoplatform.shareextension.service.PostAction.PostActionListener;
+import org.exoplatform.shareextension.service.ShareService;
 import org.exoplatform.shareextension.service.ShareService.UploadInfo;
 import org.exoplatform.shareextension.service.UploadAction;
 import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.social.AllUpdatesFragment;
 import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.utils.ExoConstants;
@@ -45,7 +46,13 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-// TODO replace by ShareService
+/**
+ * A background task that publishes a status with optional attachment. Uses
+ * {@link UploadAction} and {@link PostAction} to not have duplicate activities
+ * (MOB-1384). <br/>
+ * TODO An even better solution would be to use the {@link ShareService}
+ * directly.
+ */
 public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
   private PostWaitingDialog        _progressDialog;
 
@@ -67,7 +74,11 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
 
   private ComposeMessageController messageController;
 
-  public PostStatusTask(Context context, String dir, String content, ComposeMessageController controller, PostWaitingDialog dialog) {
+  public PostStatusTask(Context context,
+                        String dir,
+                        String content,
+                        ComposeMessageController controller,
+                        PostWaitingDialog dialog) {
     mContext = context;
     messageController = controller;
     sdcard_temp_dir = dir;
@@ -100,14 +111,13 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
 
         // Create destination folder
         if (ExoDocumentUtils.createFolder(uploadUrl)) {
-          
+
           // Upload file
           File file = new File(sdcard_temp_dir);
           if (file != null) {
             File tempFile = PhotoUtils.reziseFileImage(file);
             String uploadedFileName = file.getName();
             if (tempFile != null) {
-              // TODO need check and test again after merge with MOB-1874
               uploadInfo.fileToUpload = ExoDocumentUtils.documentInfoFromUri(Uri.fromFile(tempFile),
                                                                              mContext.getApplicationContext());
               uploadInfo.uploadId = Long.toHexString(System.currentTimeMillis());
@@ -117,15 +127,17 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
                 final AtomicBoolean uploaded = new AtomicBoolean(false);
                 // UploadAction.excute is synchronize method
                 UploadAction.execute(postInfo, uploadInfo, new ActionListener() {
-                  
+
                   @Override
-                  public void onSuccess(String message) {
+                  public boolean onSuccess(String message) {
                     uploaded.set(true);
+                    return true;
                   }
-                  
+
                   @Override
-                  public void onError(String error) {
+                  public boolean onError(String error) {
                     uploaded.set(false);
+                    return false;
                   }
                 });
                 if (uploadInfo.fileToUpload.documentData != null) {
@@ -148,21 +160,23 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
       }
       final AtomicBoolean posted = new AtomicBoolean(false);
       // post action execute is synchronize
-      PostAction.execute(postInfo, new ActionListener() {
-        
+      PostAction.execute(postInfo, new PostActionListener() {
+
         @Override
-        public void onSuccess(String message) {
+        public boolean onSuccess(String message) {
           posted.set(true);
+          return true;
         }
-        
+
         @Override
-        public void onError(String error) {
+        public boolean onError(String error) {
           posted.set(false);
+          return false;
         }
       });
       if (posted.get())
         return 1;
-      else 
+      else
         return 0;
     } catch (RuntimeException e) {
       return -2;

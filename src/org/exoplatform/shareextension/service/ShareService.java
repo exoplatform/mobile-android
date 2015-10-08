@@ -52,6 +52,9 @@ import android.support.v4.app.NotificationCompat;
 
 /**
  * Created by The eXo Platform SAS.<br/>
+ * IntentService that publishes a post with optional attachments. If multiple
+ * files are attached, the first one is part of the activity, the other are
+ * added in comments on the activity.
  * 
  * @author Philippe Aristote paristote@exoplatform.com
  * @since Jun 4, 2015
@@ -143,23 +146,6 @@ public class ShareService extends IntentService {
       @Override
       public boolean onSuccess(String message) {
         return true;
-        // =======
-        // public void onSuccess(String message) {
-        //
-        // // Retrieve details of the document to upload
-        // uploadInfo.fileToUpload =
-        // ExoDocumentUtils.documentInfoFromUri(Uri.parse(postInfo.postAttachmentUri),
-        // getBaseContext());
-        //
-        // if (uploadInfo.fileToUpload == null) {
-        // notifyResult(ShareResult.ERROR_INCORRECT_CONTENT_URI);
-        // return;
-        // } else {
-        // uploadInfo.fileToUpload.cleanupFilename(ShareService.this);
-        // }
-        //
-        // doUpload();
-        // >>>>>>> MOB-1384 Use UploadAction and PostAction in PostStatusTask
       }
 
       @Override
@@ -199,13 +185,6 @@ public class ShareService extends IntentService {
         return false;
       } else {
         uploadInfo.fileToUpload.documentName = ExoDocumentUtils.cleanupFilename(uploadInfo.fileToUpload.documentName);
-        // =======
-        //
-        // @Override
-        // public void onSuccess(String message) {
-        // postInfo.builddocParams(uploadInfo);
-        // doPost();
-        // >>>>>>> MOB-1384 Use UploadAction and PostAction in PostStatusTask
       }
       uploadedAll = UploadAction.execute(postInfo, uploadInfo, new ActionListener() {
 
@@ -313,8 +292,6 @@ public class ShareService extends IntentService {
     return ret;
   }
 
-  // <<<<<<<HEAD
-
   private String getDocUrl(UploadInfo pUploadInfo) {
     return pUploadInfo.jcrUrl + "/" + pUploadInfo.folder + "/" + pUploadInfo.fileToUpload.documentName;
   }
@@ -341,8 +318,6 @@ public class ShareService extends IntentService {
 
     return templateParams;
   }
-
-  // ======= >>>>>>>MOB-1384
 
   private Map<String, String> linkParams(String link) {
     // Create and return TemplateParams for a LINK_ACTIVITY
