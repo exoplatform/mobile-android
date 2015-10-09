@@ -88,10 +88,10 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
     cancelButton = (Button) findViewById(R.id.document_extend_cancel);
     cancelButton.setText(cancelStr);
     cancelButton.setOnClickListener(this);
-    initInfomation();
+    initInformation();
   }
 
-  private void initInfomation() {
+  private void initInformation() {
     if (actionId == DocumentActivity.ACTION_RENAME) {
       titleTextView.setText(renameTitleStr);
       actionTitleView.setText(renameActionTitle);

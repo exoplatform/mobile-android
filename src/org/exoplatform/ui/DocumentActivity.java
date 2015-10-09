@@ -20,6 +20,7 @@ package org.exoplatform.ui;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.exoplatform.R;
 import org.exoplatform.controller.document.DocumentAdapter;
@@ -198,7 +199,7 @@ public class DocumentActivity extends Activity {
     } else {
       if (_fileForCurrentActionBar.name == null) {
         mDocAction.setVisible(false);
-      } else if ("".equals(_fileForCurrentActionBar.name) || "".equals(_fileForCurrentActionBar.path)) {
+      } else if ("".equals(_fileForCurrentActionBar.name)) {
         mDocAction.setVisible(false);
       } else {
         mDocAction.setVisible(true);
@@ -234,39 +235,35 @@ public class DocumentActivity extends Activity {
          * Reset ListView
          */
 
-        setDocumentAdapter(getCurrentDocumentList());
+        updateContent(getCurrentDocumentList());
       }
 
     }
 
   }
 
-  private ArrayList<ExoFile> getCurrentDocumentList() {
-    ExoFile parent = null;
+  private ExoFile getCurrentDocumentList() {
     ArrayList<ExoFile> documentList = null;
 
     if ("".equals(_fileForCurrentActionBar.currentFolder)) {
       _fileForCurrentActionBar = new ExoFile();
-      parent = DocumentHelper.getInstance().currentFileMap.getParcelable("");
       documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH);
-
     } else {
-      parent = DocumentHelper.getInstance().currentFileMap.getParcelable(_fileForCurrentActionBar.path);
+      _fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(_fileForCurrentActionBar.path);
       DocumentHelper.getInstance().currentFileMap.remove(_fileForCurrentActionBar.path);
-      _fileForCurrentActionBar = parent;
-      if ("".equals(parent.name)) {
+      if ("".equals(_fileForCurrentActionBar.name)) {
         documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList("");
       } else {
-        documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(parent.path);
+        documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(_fileForCurrentActionBar.path);
       }
     }
-    return documentList;
+    _fileForCurrentActionBar.children = documentList;
+    return _fileForCurrentActionBar;
   }
 
   public void onLoad(String source, String destination, int action) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
-        // if (Config.GD_INFO_LOGS_ENABLED)
         Log.i("DocumentLoadTask", "onLoad");
         mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this, source, destination, action).execute();
       }
@@ -277,7 +274,6 @@ public class DocumentActivity extends Activity {
 
   public void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == DocumentLoadTask.Status.RUNNING) {
-      // if (Config.GD_INFO_LOGS_ENABLED)
       Log.i("DocumentLoadTask", "onCancelLoad");
       mLoadTask.cancel(true);
       mLoadTask = null;
@@ -298,7 +294,9 @@ public class DocumentActivity extends Activity {
 
   }
 
-  public void setDocumentAdapter(ArrayList<ExoFile> documentList) {
+  public void updateContent(ExoFile newFolder) {
+    _fileForCurrentActionBar = newFolder;
+    List<ExoFile> documentList = newFolder.children;
     if ("".equals(_fileForCurrentActionBar.name)) {
       setTitle(getResources().getString(R.string.Documents));
     } else {
@@ -314,10 +312,9 @@ public class DocumentActivity extends Activity {
     addOrRemoveFileActionButton();
   }
 
-  /*
+  /**
    * Take a photo and store it into /sdcard/eXo/DocumentCache
-   */
-
+   **/
   public void takePicture() {
     String parentPath = PhotoUtils.getParentImagePath(this);
     _sdcard_temp_dir = parentPath + "/" + PhotoUtils.getImageFileName();

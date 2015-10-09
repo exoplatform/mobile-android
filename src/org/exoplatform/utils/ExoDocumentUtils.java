@@ -300,11 +300,19 @@ public class ExoDocumentUtils {
     }
   }
 
-  // Get file array from URL
-  public static ArrayList<ExoFile> getPersonalDriveContent(Context context, ExoFile file) throws IOException {
+  /**
+   * Get the content (files and folders) of the given folder.
+   * 
+   * @param context
+   * @param file the folder to get content from
+   * @return an ExoFile corresponding to the parent folder with its children
+   *         ExoFile
+   * @throws IOException
+   */
+  public static ExoFile getPersonalDriveContent(Context context, ExoFile file) throws IOException {
     SharedPreferences prefs = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
-    ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
+    ExoFile folder = file;
     String domain = AccountSetting.getInstance().getDomainName();
     HttpResponse response = null;
     String urlStr = null;
@@ -315,8 +323,10 @@ public class ExoDocumentUtils {
       DocumentHelper.getInstance().childFilesMap = new Bundle();
     }
 
+    // We're on the initial screen => list all drives
     if ("".equals(file.name) && "".equals(file.path)) {
       // personal drive
+      ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
       ArrayList<ExoFile> fileList = new ArrayList<ExoFile>();
       StringBuffer buffer = new StringBuffer();
       buffer.append(domain);
@@ -366,20 +376,24 @@ public class ExoDocumentUtils {
         DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
       }
 
+      // create an empty root folder to hold all the drives
+      folder.children = arrFilesTmp;
     } else {
+      // We're in a drive or folder => list its content
       urlStr = getDriverUrl(file);
       urlStr = ExoUtils.encodeDocumentUrl(urlStr);
       response = ExoConnectionUtils.getRequestResponse(urlStr);
-      arrFilesTmp.addAll(getContentOfFolder(response, file));
+      // arrFilesTmp.addAll(getContentOfFolder(response, file));
+      folder = getContentOfFolder(response, file);
       if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
         DocumentHelper.getInstance().childFilesMap.remove(file.path);
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
+        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
       } else
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
+        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
 
     }
 
-    return arrFilesTmp;
+    return folder;
 
   }
 
@@ -551,11 +565,65 @@ public class ExoDocumentUtils {
     }
   }
 
-  public static ArrayList<ExoFile> getContentOfFolder(HttpResponse response, ExoFile file) {
+  private static ExoFile getFileFromXMLElement(Element element, boolean isFolder) throws NullPointerException {
+    if (element == null)
+      throw new NullPointerException("Given element is null");
 
-    // Initialize the blogEntries MutableArray that we declared in the
-    // header
-    ArrayList<ExoFile> folderArray = new ArrayList<ExoFile>();
+    ExoFile file = new ExoFile();
+    if (element.hasAttribute("title")) {
+      file.name = Html.fromHtml(element.getAttribute("title")).toString();
+    } else {
+      file.name = element.getAttribute("name");
+    }
+    file.workspaceName = element.getAttribute("workspaceName");
+    file.path = fullURLofFile(file.workspaceName, element.getAttribute("path"));
+    if (element.hasAttribute("driveName"))
+      file.driveName = element.getAttribute("driveName");
+    else
+      file.driveName = file.name;
+    file.currentFolder = element.getAttribute("currentFolder");
+    if (file.currentFolder == null)
+      file.currentFolder = "";
+    file.isFolder = isFolder;
+    if (element.hasAttribute("nodeType"))
+      file.nodeType = element.getAttribute("nodeType");
+
+    String canRemove = element.getAttribute("canRemove");
+    file.canRemove = Boolean.parseBoolean(canRemove.trim());
+
+    return file;
+  }
+
+  /**
+   * Get a folder with its sub-files and sub-folders.<br/>
+   * Parse the XML response with format:
+   * 
+   * <pre>
+   * &lt;Folder canAddChild="bool" canRemove="bool" currentFolder="Name" driveName="DriveName" hasChild="bool" name="Name" nodeType="nt" path="..." title="Title" titlePath="Title" workspaceName="Name">
+   *  &lt;Folders>
+   *    &lt;Folder canAddChild="bool" canRemove="bool" currentFolder="Name" driveName="DriveName" hasChild="bool" name="Name" nodeType="nt" path="..." title="Title" titlePath="Title" workspaceName="Name"/>
+   *  &lt;/Folders>
+   *  &lt;Files>
+   *    &lt;File canRemove="bool" creator="username" dateCreated="Date" dateModified="Date" name="doc.jpg" nodeType="nt" path="..." size="0" title="doc.jpg" workspaceName="Name"/>
+   *  &lt;/Files>
+   * &lt;/Folder>
+   * </pre>
+   * 
+   * Example URL:
+   * 
+   * <pre>
+   * https://SERVER/rest/managedocument/getFoldersAndFiles?driveName=Personal%
+   * 20Documents&workspaceName=collaboration&currentFolder=Public
+   * </pre>
+   * 
+   * @param response the response that contains the XML entity
+   * @param file The folder to retrieve the content from
+   * @return an ExoFile that represents the content of the given folder
+   */
+  public static ExoFile getContentOfFolder(HttpResponse response, ExoFile file) {
+
+    ExoFile folder = file;
+    ArrayList<ExoFile> childrenArray = new ArrayList<ExoFile>();
 
     Document obj_doc = null;
     DocumentBuilderFactory doc_build_fact = null;
@@ -572,63 +640,58 @@ public class ExoDocumentUtils {
 
           // Get folders
           obj_nod_list = obj_doc.getElementsByTagName("Folder");
-
           for (int i = 0; i < obj_nod_list.getLength(); i++) {
             Node itemNode = obj_nod_list.item(i);
             if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
               Element itemElement = (Element) itemNode;
-              if (i > 0) {
-                ExoFile newFile = new ExoFile();
-                if (itemElement.hasAttribute("title")) {
-                  newFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
-                } else {
-                  newFile.name = itemElement.getAttribute("name");
-                }
-                newFile.workspaceName = itemElement.getAttribute("workspaceName");
-                newFile.path = fullURLofFile(newFile.workspaceName, itemElement.getAttribute("path"));
-                newFile.driveName = itemElement.getAttribute("driveName");
-                newFile.currentFolder = itemElement.getAttribute("currentFolder");
-                if (newFile.currentFolder == null)
-                  newFile.currentFolder = "";
-                newFile.isFolder = true;
 
-                String canRemove = itemElement.getAttribute("canRemove");
-                newFile.canRemove = Boolean.parseBoolean(canRemove.trim());
-                folderArray.add(newFile);
+              if (i == 0) { // The first element is always the root folder
+
+                // We copy properties from tmp to folder
+                // to keep the pointer to the folder instance
+                ExoFile tmp = getFileFromXMLElement(itemElement, true);
+                // Unfortunate hack
+                // The drive "Personal Documents" is a folder named "Private"
+                // We do this to display the drive name in this case
+                if ("Private".equals(tmp.name) && "".equals(tmp.currentFolder) && "Personal Documents".equals(tmp.driveName))
+                  folder.name = tmp.driveName;
+                else
+                  folder.name = tmp.name;
+
+                folder.workspaceName = tmp.workspaceName;
+                folder.path = tmp.path;
+                folder.driveName = tmp.driveName;
+                folder.currentFolder = tmp.currentFolder;
+                folder.isFolder = true;
+                // Cannot delete the root folder of a drive
+                if (folder.isFolder && "".equals(folder.currentFolder))
+                  folder.canRemove = false;
+                else
+                  folder.canRemove = tmp.canRemove;
+
+              } else { // Folders of the root folder
+
+                ExoFile childFolder = getFileFromXMLElement(itemElement, true);
+                childrenArray.add(childFolder);
               }
-
             }
           }
 
           // Get files
           obj_nod_list = obj_doc.getElementsByTagName("File");
-
           for (int i = 0; i < obj_nod_list.getLength(); i++) {
             Node itemNode = obj_nod_list.item(i);
             if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
               Element itemElement = (Element) itemNode;
-
-              ExoFile newFile = new ExoFile();
-              if (itemElement.hasAttribute("title")) {
-                newFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
-              } else {
-                newFile.name = itemElement.getAttribute("name");
-              }
-              newFile.workspaceName = itemElement.getAttribute("workspaceName");
-              newFile.path = fullURLofFile(newFile.workspaceName, itemElement.getAttribute("path"));
-              newFile.driveName = file.name;
-              newFile.currentFolder = itemElement.getAttribute("currentFolder");
-              newFile.nodeType = itemElement.getAttribute("nodeType");
-              newFile.isFolder = false;
-              String canRemove = itemElement.getAttribute("canRemove");
-              newFile.canRemove = Boolean.parseBoolean(canRemove.trim());
-              folderArray.add(newFile);
+              ExoFile childFile = getFileFromXMLElement(itemElement, false);
+              childrenArray.add(childFile);
             }
           }
 
         }
       }
-      return folderArray;
+      folder.children = childrenArray;
+      return folder;
     } catch (ParserConfigurationException e) {
       return null;
     } catch (SAXException e) {

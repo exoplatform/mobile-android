@@ -20,7 +20,6 @@ package org.exoplatform.controller.document;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
@@ -73,7 +72,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
   private DocumentActivity      documentActivity;
 
-  private ArrayList<ExoFile>    _documentList;
+  private ExoFile               loadedFolder;
 
   private Resources             resource;
 
@@ -102,7 +101,6 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
   @Override
   public Integer doInBackground(Integer... params) {
     boolean result = true;
-    _documentList = new ArrayList<ExoFile>();
     try {
       /*
        * Checking the session status each time we retrieve files/folders. If
@@ -169,7 +167,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
        */
 
       if (result == true) {
-        _documentList = ExoDocumentUtils.getPersonalDriveContent(documentActivity, documentActivity._fileForCurrentActionBar);
+        loadedFolder = ExoDocumentUtils.getPersonalDriveContent(documentActivity, documentActivity._fileForCurrentActionBar);
         return RESULT_OK;
       } else
         return RESULT_FALSE;
@@ -189,7 +187,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
   public void onPostExecute(Integer result) {
     if (result == RESULT_OK) {
 
-      documentActivity.setDocumentAdapter(_documentList);
+      documentActivity.updateContent(loadedFolder);
       /*
        * Set animation for listview when access to folder
        */
