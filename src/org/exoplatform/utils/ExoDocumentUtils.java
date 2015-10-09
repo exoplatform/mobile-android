@@ -565,6 +565,61 @@ public class ExoDocumentUtils {
     }
   }
 
+  private static ExoFile getFileFromXMLElement(Element element, boolean isFolder) throws NullPointerException {
+    if (element == null)
+      throw new NullPointerException("Given element is null");
+
+    ExoFile file = new ExoFile();
+    if (element.hasAttribute("title")) {
+      file.name = Html.fromHtml(element.getAttribute("title")).toString();
+    } else {
+      file.name = element.getAttribute("name");
+    }
+    file.workspaceName = element.getAttribute("workspaceName");
+    file.path = fullURLofFile(file.workspaceName, element.getAttribute("path"));
+    if (element.hasAttribute("driveName"))
+      file.driveName = element.getAttribute("driveName");
+    else
+      file.driveName = file.name;
+    file.currentFolder = element.getAttribute("currentFolder");
+    if (file.currentFolder == null)
+      file.currentFolder = "";
+    file.isFolder = isFolder;
+    if (element.hasAttribute("nodeType"))
+      file.nodeType = element.getAttribute("nodeType");
+
+    String canRemove = element.getAttribute("canRemove");
+    file.canRemove = Boolean.parseBoolean(canRemove.trim());
+
+    return file;
+  }
+
+  /**
+   * Get a folder with its sub-files and sub-folders.<br/>
+   * Parse the XML response with format:
+   * 
+   * <pre>
+   * &lt;Folder canAddChild="bool" canRemove="bool" currentFolder="Name" driveName="DriveName" hasChild="bool" name="Name" nodeType="nt" path="..." title="Title" titlePath="Title" workspaceName="Name">
+   *  &lt;Folders>
+   *    &lt;Folder canAddChild="bool" canRemove="bool" currentFolder="Name" driveName="DriveName" hasChild="bool" name="Name" nodeType="nt" path="..." title="Title" titlePath="Title" workspaceName="Name"/>
+   *  &lt;/Folders>
+   *  &lt;Files>
+   *    &lt;File canRemove="bool" creator="username" dateCreated="Date" dateModified="Date" name="doc.jpg" nodeType="nt" path="..." size="0" title="doc.jpg" workspaceName="Name"/>
+   *  &lt;/Files>
+   * &lt;/Folder>
+   * </pre>
+   * 
+   * Example URL:
+   * 
+   * <pre>
+   * https://SERVER/rest/managedocument/getFoldersAndFiles?driveName=Personal%
+   * 20Documents&workspaceName=collaboration&currentFolder=Public
+   * </pre>
+   * 
+   * @param response the response that contains the XML entity
+   * @param file The folder to retrieve the content from
+   * @return an ExoFile that represents the content of the given folder
+   */
   public static ExoFile getContentOfFolder(HttpResponse response, ExoFile file) {
 
     ExoFile folder = file;
@@ -589,47 +644,35 @@ public class ExoDocumentUtils {
             Node itemNode = obj_nod_list.item(i);
             if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
               Element itemElement = (Element) itemNode;
-              if (i > 0) {
-                // Folders of the root folder
-                ExoFile childFolder = new ExoFile();
-                if (itemElement.hasAttribute("title")) {
-                  childFolder.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
-                } else {
-                  childFolder.name = itemElement.getAttribute("name");
-                }
-                childFolder.workspaceName = itemElement.getAttribute("workspaceName");
-                childFolder.path = fullURLofFile(childFolder.workspaceName, itemElement.getAttribute("path"));
-                childFolder.driveName = itemElement.getAttribute("driveName");
-                childFolder.currentFolder = itemElement.getAttribute("currentFolder");
-                if (childFolder.currentFolder == null)
-                  childFolder.currentFolder = "";
-                childFolder.isFolder = true;
 
-                String canRemove = itemElement.getAttribute("canRemove");
-                childFolder.canRemove = Boolean.parseBoolean(canRemove.trim());
-                childrenArray.add(childFolder);
-              } else {
-                // Root folder
-                folder.name = itemElement.getAttribute("name");
-                folder.workspaceName = itemElement.getAttribute("workspaceName");
-                folder.path = fullURLofFile(folder.workspaceName, itemElement.getAttribute("path"));
-                folder.driveName = itemElement.getAttribute("driveName");
-                folder.currentFolder = itemElement.getAttribute("currentFolder");
-                if (folder.currentFolder == null)
-                  folder.currentFolder = "";
-                folder.isFolder = true;
-                String canRemove = itemElement.getAttribute("canRemove");
-                folder.canRemove = Boolean.parseBoolean(canRemove.trim());
-                // Cannot delete the root folder of a drive
-                if (folder.isFolder && "".equals(folder.currentFolder))
-                  folder.canRemove = false;
+              if (i == 0) { // The first element is always the root folder
+
+                // We copy properties from tmp to folder
+                // to keep the pointer to the folder instance
+                ExoFile tmp = getFileFromXMLElement(itemElement, true);
                 // Unfortunate hack
                 // The drive "Personal Documents" is a folder named "Private"
                 // We do this to display the drive name in this case
-                if ("Private".equals(folder.name) && "".equals(folder.currentFolder)
-                    && "Personal Documents".equals(folder.driveName)) {
-                  folder.name = folder.driveName;
-                }
+                if ("Private".equals(tmp.name) && "".equals(tmp.currentFolder) && "Personal Documents".equals(tmp.driveName))
+                  folder.name = tmp.driveName;
+                else
+                  folder.name = tmp.name;
+
+                folder.workspaceName = tmp.workspaceName;
+                folder.path = tmp.path;
+                folder.driveName = tmp.driveName;
+                folder.currentFolder = tmp.currentFolder;
+                folder.isFolder = true;
+                // Cannot delete the root folder of a drive
+                if (folder.isFolder && "".equals(folder.currentFolder))
+                  folder.canRemove = false;
+                else
+                  folder.canRemove = tmp.canRemove;
+
+              } else { // Folders of the root folder
+
+                ExoFile childFolder = getFileFromXMLElement(itemElement, true);
+                childrenArray.add(childFolder);
               }
             }
           }
@@ -640,21 +683,7 @@ public class ExoDocumentUtils {
             Node itemNode = obj_nod_list.item(i);
             if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
               Element itemElement = (Element) itemNode;
-
-              ExoFile childFile = new ExoFile();
-              if (itemElement.hasAttribute("title")) {
-                childFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
-              } else {
-                childFile.name = itemElement.getAttribute("name");
-              }
-              childFile.workspaceName = itemElement.getAttribute("workspaceName");
-              childFile.path = fullURLofFile(childFile.workspaceName, itemElement.getAttribute("path"));
-              childFile.driveName = file.name;
-              childFile.currentFolder = itemElement.getAttribute("currentFolder");
-              childFile.nodeType = itemElement.getAttribute("nodeType");
-              childFile.isFolder = false;
-              String canRemove = itemElement.getAttribute("canRemove");
-              childFile.canRemove = Boolean.parseBoolean(canRemove.trim());
+              ExoFile childFile = getFileFromXMLElement(itemElement, false);
               childrenArray.add(childFile);
             }
           }

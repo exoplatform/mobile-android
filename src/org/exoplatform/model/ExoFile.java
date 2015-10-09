@@ -26,27 +26,57 @@ import android.os.Parcelable;
 
 public class ExoFile implements Parcelable {
 
-  public String        path;          // File's jcr url
+  /**
+   * File's JCR URL
+   */
+  public String        path;
 
-  public boolean       isFolder;      // Is folder
+  /**
+   * Whether this file is a folder
+   */
+  public boolean       isFolder;
 
+  /**
+   * Whether this file can be deleted, renamed
+   */
   public boolean       canRemove;
 
-  public String        name;          // name of the file/folder
+  /**
+   * Name of the file/folder
+   */
+  public String        name;
 
-  public String        currentFolder; // the path of file
+  /**
+   * The path of file
+   */
+  public String        currentFolder;
 
-  public String        driveName;     // drive name of file
+  /**
+   * The drive name in which this file is
+   */
+  public String        driveName;
 
-  public String        workspaceName; // work space of file
+  /**
+   * The workspace in which this file is
+   */
+  public String        workspaceName;
 
-  public String        nodeType;      // file content type
+  /**
+   * File content type
+   */
+  public String        nodeType;
 
-  private String       naturalName;   // natural name used instead of the
-                                      // technical
-                                      // name when the file is a group folder
+  /**
+   * Natural name used instead of the technical name when the file is a group
+   * folder<br/>
+   * e.g. .space.mobile => Mobile
+   */
+  private String       naturalName;
 
-  public List<ExoFile> children;      // sub-files and sub-folders
+  /**
+   * List of sub-files and sub-folders
+   */
+  public List<ExoFile> children;
 
   // Default constructors
   public ExoFile() {

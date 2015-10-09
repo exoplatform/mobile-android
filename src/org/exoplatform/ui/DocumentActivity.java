@@ -199,9 +199,7 @@ public class DocumentActivity extends Activity {
     } else {
       if (_fileForCurrentActionBar.name == null) {
         mDocAction.setVisible(false);
-      } else if ("".equals(_fileForCurrentActionBar.name)) {// ||
-                                                            // "".equals(_fileForCurrentActionBar.path))
-                                                            // {
+      } else if ("".equals(_fileForCurrentActionBar.name)) {
         mDocAction.setVisible(false);
       } else {
         mDocAction.setVisible(true);

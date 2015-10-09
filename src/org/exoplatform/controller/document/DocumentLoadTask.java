@@ -101,7 +101,6 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
   @Override
   public Integer doInBackground(Integer... params) {
     boolean result = true;
-    // _documentList = new ArrayList<ExoFile>();
     try {
       /*
        * Checking the session status each time we retrieve files/folders. If
