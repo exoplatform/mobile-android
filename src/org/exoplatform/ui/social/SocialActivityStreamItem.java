@@ -25,6 +25,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.EmptyImageGetter;
 import org.exoplatform.utils.image.ExoPicasso;
@@ -348,7 +349,7 @@ public class SocialActivityStreamItem {
       int errorDrawable = isLinkType ? R.drawable.icon_for_unreadable_link : R.drawable.icon_for_placeholder_image;
       int maxHeight = resource.getDimensionPixelSize(R.dimen.attachment_max_height);
       ExoPicasso.picasso(mContext)
-                .load(Uri.parse(url))
+                .load(Uri.parse(ExoUtils.encodeDocumentUrl(url)))
                 .placeholder(R.drawable.loading_rect)
                 .error(errorDrawable)
                 .resize(maxHeight, maxHeight)

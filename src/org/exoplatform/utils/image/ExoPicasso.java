@@ -22,10 +22,11 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookieStore;
 
+import org.exoplatform.utils.Log;
+
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
-import android.util.Log;
 
 /**
  * Created by The eXo Platform SAS <br/>
@@ -51,6 +52,7 @@ public class ExoPicasso {
       Picasso.Builder b = new Picasso.Builder(ctx);
       b.downloader(new ExoPicassoDownloader(ctx));
       sPicasso = b.build();
+      sPicasso.setLoggingEnabled(Log.LOGD);
     }
     return sPicasso;
   }

@@ -25,6 +25,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.EmptyImageGetter;
 import org.exoplatform.utils.image.ExoPicasso;
@@ -349,8 +350,9 @@ public class SocialActivityDetailsItem extends LinearLayout {
 
     if (fileType != null && fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
       int errorDrawable = isLinkType ? R.drawable.icon_for_unreadable_link : R.drawable.icon_for_placeholder_image;
+
       ExoPicasso.picasso(mContext)
-                .load(Uri.parse(url))
+                .load(Uri.parse(ExoUtils.encodeDocumentUrl(url)))
                 .placeholder(R.drawable.loading_rect)
                 .error(errorDrawable)
                 .into(attachImage);
