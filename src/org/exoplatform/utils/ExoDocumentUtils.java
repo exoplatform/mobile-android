@@ -27,6 +27,7 @@ import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -52,13 +53,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -74,37 +74,39 @@ import android.webkit.MimeTypeMap;
 
 public class ExoDocumentUtils {
 
-  private static final String LOG_TAG              = "____eXo____ExoDocumentUtils____";
+  private static final String  LOG_TAG              = "____eXo____ExoDocumentUtils____";
 
-  public static final String  ALL_VIDEO_TYPE       = "video/*";
+  public static final String   ALL_VIDEO_TYPE       = "video/*";
 
-  public static final String  ALL_AUDIO_TYPE       = "audio/*";
+  public static final String   ALL_AUDIO_TYPE       = "audio/*";
 
-  public static final String  ALL_IMAGE_TYPE       = "image/*";
+  public static final String   ALL_IMAGE_TYPE       = "image/*";
 
-  public static final String  ALL_TEXT_TYPE        = "text/*";
+  public static final String   ALL_TEXT_TYPE        = "text/*";
 
-  public static final String  IMAGE_TYPE           = "image";
+  public static final String   IMAGE_TYPE           = "image";
 
-  public static final String  TEXT_TYPE            = "text";
+  public static final String   TEXT_TYPE            = "text";
 
-  public static final String  VIDEO_TYPE           = "video";
+  public static final String   VIDEO_TYPE           = "video";
 
-  public static final String  AUDIO_TYPE           = "audio";
+  public static final String   AUDIO_TYPE           = "audio";
 
-  public static final String  MSWORD_TYPE          = "application/msword";
+  public static final String   MSWORD_TYPE          = "application/msword";
 
-  public static final String  OPEN_MSWORD_TYPE     = "application/vnd.oasis.opendocument.text";
+  public static final String   OPEN_WORD_TYPE       = "application/vnd.oasis.opendocument.text";
 
-  public static final String  PDF_TYPE             = "application/pdf";
+  public static final String   PDF_TYPE             = "application/pdf";
 
-  public static final String  XLS_TYPE             = "application/xls";
+  public static final String   XLS_TYPE             = "application/xls";
 
-  public static final String  OPEN_XLS_TYPE        = "application/vnd.oasis.opendocument.spreadsheet";
+  public static final String   OPEN_XLS_TYPE        = "application/vnd.oasis.opendocument.spreadsheet";
 
-  public static final String  POWERPOINT_TYPE      = "application/vnd.ms-powerpoint";
+  public static final String   POWERPOINT_TYPE      = "application/vnd.ms-powerpoint";
 
-  public static final String  OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
+  public static final String   OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
+
+  public static final String[] FORBIDDEN_TYPES      = new String[] { "application/octet-stream" };
 
   public static boolean isEnoughMemory(int fileSize) {
     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -173,7 +175,7 @@ public class ExoDocumentUtils {
       return;
     }
 
-    if (fileType != null && (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE))) {
+    if (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE)) {
       Intent intent = new Intent(context, WebViewActivity.class);
       intent.putExtra(ExoConstants.WEB_VIEW_URL, filePath);
       intent.putExtra(ExoConstants.WEB_VIEW_TITLE, fileName);
@@ -182,58 +184,72 @@ public class ExoDocumentUtils {
       context.startActivity(intent);
     } else {
       new CompatibleFileOpen(context, fileType, filePath, fileName);
-
     }
 
   }
 
-  /*
-   * Check if device have application to open this type of file or not
+  /**
+   * Check whether the given Mime Type is forbidden. The list of forbidden types
+   * is in {@link ExoDocumentUtils.FORBIDDEN_TYPES}
+   * 
+   * @param mimeType
+   * @return true if the given Mime Type is in the list
    */
+  public static boolean isForbidden(String mimeType) {
+    return Arrays.asList(FORBIDDEN_TYPES).contains(mimeType);
+  }
 
-  public static boolean isCallable(Context context, String url) {
-    String mimeTypeExtension = URLConnection.guessContentTypeFromName(url);
+  /**
+   * Check if the device has an application to open this type of file.
+   * 
+   * @param context Context (mandatory)
+   * @param mimeType Mime Type to check (mandatory)
+   * @param url file url to guess the mime type from (optional)
+   * @return true if an application can open the given Mime Type
+   */
+  public static boolean isCallable(Context context, String mimeType, String url) throws IllegalArgumentException {
+    if (context == null || mimeType == null)
+      throw new IllegalArgumentException("Context or mime-type cannot be null.");
 
     Intent intent = new Intent(Intent.ACTION_VIEW);
-    intent.setDataAndType(Uri.parse(url), mimeTypeExtension);
-    List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-    return list.size() > 0;
+    intent.setType(mimeType.toLowerCase(Locale.US));
+    ComponentName activity = intent.resolveActivity(context.getPackageManager());
+
+    if (activity == null && url != null) {
+      // Fallback on a guessed mime type if the first one doesn't work
+      String guessedMimeType = URLConnection.guessContentTypeFromName(url);
+      intent = new Intent(Intent.ACTION_VIEW);
+      intent.setType(guessedMimeType.toLowerCase(Locale.US));
+
+      activity = intent.resolveActivity(context.getPackageManager());
+    }
+
+    return activity != null;
   }
 
   /*
    * Check if file can readable or not
    */
-  public static boolean isFileReadable(String type) {
-    if (type == null) {
-      return false;
-    }
-
-    if (type.startsWith(TEXT_TYPE) || type.startsWith(IMAGE_TYPE) || type.equals(PDF_TYPE) || type.equals(MSWORD_TYPE)
-        || type.equals(XLS_TYPE) || type.equals(POWERPOINT_TYPE) || type.equals(OPEN_MSWORD_TYPE) || type.equals(OPEN_XLS_TYPE)
-        || type.equals(OPEN_POWERPOINT_TYPE) || type.startsWith(AUDIO_TYPE) || type.startsWith(VIDEO_TYPE)) {
-      return true;
-    }
-
-    return false;
-  }
+  // public static boolean isFileReadable(String type) {
+  // if (type == null) {
+  // return false;
+  // }
+  //
+  // if (type.startsWith(TEXT_TYPE) || type.startsWith(IMAGE_TYPE) ||
+  // type.equals(PDF_TYPE) || type.equals(MSWORD_TYPE)
+  // || type.equals(XLS_TYPE) || type.equals(POWERPOINT_TYPE) ||
+  // type.equals(OPEN_WORD_TYPE) || type.equals(OPEN_XLS_TYPE)
+  // || type.equals(OPEN_POWERPOINT_TYPE) || type.startsWith(AUDIO_TYPE) ||
+  // type.startsWith(VIDEO_TYPE)) {
+  // return true;
+  // }
+  //
+  // return false;
+  // }
 
   public static String getFullFileType(String fileType) {
-    String docFileType = null;
-    if (fileType.equals(ExoDocumentUtils.PDF_TYPE)) {
-      docFileType = ExoDocumentUtils.PDF_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.MSWORD_TYPE)) {
-      docFileType = ExoDocumentUtils.MSWORD_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.XLS_TYPE)) {
-      docFileType = ExoDocumentUtils.XLS_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.POWERPOINT_TYPE)) {
-      docFileType = ExoDocumentUtils.POWERPOINT_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.OPEN_MSWORD_TYPE)) {
-      docFileType = ExoDocumentUtils.OPEN_MSWORD_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.OPEN_XLS_TYPE)) {
-      docFileType = ExoDocumentUtils.OPEN_XLS_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.OPEN_POWERPOINT_TYPE)) {
-      docFileType = ExoDocumentUtils.OPEN_POWERPOINT_TYPE;
-    } else if (fileType.startsWith(ExoDocumentUtils.AUDIO_TYPE)) {
+    String docFileType = fileType;
+    if (fileType.startsWith(ExoDocumentUtils.AUDIO_TYPE)) {
       docFileType = ExoDocumentUtils.ALL_AUDIO_TYPE;
     } else if (fileType.startsWith(ExoDocumentUtils.VIDEO_TYPE)) {
       docFileType = ExoDocumentUtils.ALL_VIDEO_TYPE;
@@ -714,7 +730,7 @@ public class ExoDocumentUtils {
         id = R.drawable.documenticonforvideo;
       else if (contentType.indexOf(AUDIO_TYPE) >= 0)
         id = R.drawable.documenticonformusic;
-      else if (contentType.indexOf(MSWORD_TYPE) >= 0 || contentType.indexOf(OPEN_MSWORD_TYPE) >= 0)
+      else if (contentType.indexOf(MSWORD_TYPE) >= 0 || contentType.indexOf(OPEN_WORD_TYPE) >= 0)
         id = R.drawable.documenticonforword;
       else if (contentType.indexOf(PDF_TYPE) >= 0)
         id = R.drawable.documenticonforpdf;

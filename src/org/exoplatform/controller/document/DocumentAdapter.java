@@ -147,10 +147,10 @@ public class DocumentAdapter extends BaseAdapter {
             /*
              * Open file with compatible application
              */
-            if (ExoDocumentUtils.isFileReadable(myFile.nodeType)) {
-              ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
-            } else {
+            if (ExoDocumentUtils.isForbidden(myFile.nodeType)) {
               new UnreadableFileDialog(_mContext, null).show();
+            } else {
+              ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
             }
           } else {
             DocumentActivity._documentActivityInstance._fileForCurrentActionBar = myFile;
