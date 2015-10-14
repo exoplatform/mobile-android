@@ -167,7 +167,7 @@ public class SocialDetailController {
                                                              new PicassoImageGetter(commentItem.comTextViewMessage),
                                                              null),
                                                TextView.BufferType.SPANNABLE);
-        SocialActivityUtil.setTextLinkfy(commentItem.comTextViewMessage);
+        SocialActivityUtil.setTextLinkify(commentItem.comTextViewMessage);
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(mContext, comment.getPostedTime()));
         commentLayoutWrap.addView(commentItem, params);
 
@@ -191,9 +191,9 @@ public class SocialDetailController {
     LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
     contentDetailLayout.removeAllViews();
     SocialActivityDetailsItem item = new SocialActivityDetailsItem(mContext, streamInfo, true);
-    SocialActivityUtil.setTextLinkfy(item.textViewMessage);
-    SocialActivityUtil.setTextLinkfy(item.textViewName);
-    SocialActivityUtil.setTextLinkfy(item.textViewTempMessage);
+    SocialActivityUtil.setTextLinkify(item.textViewMessage);
+    SocialActivityUtil.setTextLinkify(item.textViewName);
+    SocialActivityUtil.setTextLinkify(item.textViewTempMessage);
     contentDetailLayout.addView(item, params);
   }
 

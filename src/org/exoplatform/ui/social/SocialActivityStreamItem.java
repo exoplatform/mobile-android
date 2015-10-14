@@ -341,7 +341,7 @@ public class SocialActivityStreamItem {
       txtViewFileName.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
 
       if (isDetail) {
-        SocialActivityUtil.setTextLinkfy(txtViewFileName);
+        SocialActivityUtil.setTextLinkify(txtViewFileName);
         txtViewFileName.setMaxLines(100);
       }
     }
