@@ -414,14 +414,14 @@ public class SocialActivityUtil {
       spaceBuffer.append(" ");
       String nameSpace = actStream.getFullName();
       String spaceLink = actStream.getPermaLink();
-      spaceBuffer.append("<a href=");
-      spaceBuffer.append(spaceLink);
-      if (isHomeStyle) {
-        spaceBuffer.append(appendLinkStyleColor());
-      }
-      spaceBuffer.append(">");
+      //spaceBuffer.append("<a href=");
+      //spaceBuffer.append(spaceLink);
+      //if (isHomeStyle) {
+      //  spaceBuffer.append(appendLinkStyleColor());
+      //}
+      //spaceBuffer.append(">");
       spaceBuffer.append(nameSpace);
-      spaceBuffer.append("</a>");
+      //spaceBuffer.append("</a>");
       spaceBuffer.append(" ");
       // spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
       spaceBuffer.append(appendFontColor(fontColor));
@@ -479,14 +479,14 @@ public class SocialActivityUtil {
     forumBuffer.append(actTypeDesc);
     forumBuffer.append("</font>");
     forumBuffer.append("<br>");
-    forumBuffer.append("<a href=");
-    forumBuffer.append(forumLink);
-    if (isHomeStyle) {
-      forumBuffer.append(appendLinkStyleColor());
-    }
-    forumBuffer.append(">");
+    //forumBuffer.append("<a href=");
+    //forumBuffer.append(forumLink);
+    //if (isHomeStyle) {
+    //  forumBuffer.append(appendLinkStyleColor());
+    //}
+    //forumBuffer.append(">");
     forumBuffer.append(forumName);
-    forumBuffer.append("</a>");
+    //forumBuffer.append("</a>");
     forumBuffer.append("</body></html>");
     return forumBuffer.toString();
   }
@@ -550,14 +550,14 @@ public class SocialActivityUtil {
     buffer.append("</font>");
     buffer.append("<br>");
     String page_name = activityInfo.templateParams.get("page_name");
-    buffer.append("<a href=");
-    buffer.append(wiki_url);
-    if (isHomeStyle) {
-      buffer.append(appendLinkStyleColor());
-    }
-    buffer.append(">");
+    //buffer.append("<a href=");
+    //buffer.append(wiki_url);
+    //if (isHomeStyle) {
+    //  buffer.append(appendLinkStyleColor());
+    //}
+    //buffer.append(">");
     buffer.append(page_name);
-    buffer.append("</a>");
+    //buffer.append("</a>");
     buffer.append("</body></html>");
     return buffer.toString();
   }
