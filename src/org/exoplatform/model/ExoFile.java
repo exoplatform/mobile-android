@@ -219,5 +219,4 @@ public class ExoFile implements Parcelable {
     par.writeString(naturalName);
     par.writeList(children);
   }
-
 }

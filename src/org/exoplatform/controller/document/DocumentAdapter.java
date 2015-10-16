@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
 import org.exoplatform.utils.ExoConstants;
@@ -95,7 +94,6 @@ public class DocumentAdapter extends BaseAdapter {
       // using the natural name here is possible
       lb.setText(myFile.getName());
 
-      final ExoFile file = DocumentActivity._documentActivityInstance._fileForCurrentActionBar;
       if ("".equals(myFile.currentFolder)) {
         /*
          * If current folder is null, make the action button is invisible
@@ -153,12 +151,7 @@ public class DocumentAdapter extends BaseAdapter {
               ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
             }
           } else {
-            DocumentActivity._documentActivityInstance._fileForCurrentActionBar = myFile;
-            /*
-             * Put the selected file and its parent to mapping dictionary
-             */
-            DocumentHelper.getInstance().currentFileMap.putParcelable(myFile.path, file);
-            DocumentActivity._documentActivityInstance.onLoad(myFile.path, null, DocumentActivity.ACTION_DEFAULT);
+            DocumentActivity._documentActivityInstance.loadFolderContent(myFile);
           }
         }
       });

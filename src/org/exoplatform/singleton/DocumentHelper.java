@@ -34,7 +34,7 @@ public class DocumentHelper implements Parcelable {
 
   private String                _urlrepositoryHome;
 
-  public ExoFile                _fileCopied    = new ExoFile();        ;
+  public ExoFile                _fileCopied    = new ExoFile();
 
   public ExoFile                _fileMoved     = new ExoFile();
 
@@ -42,16 +42,18 @@ public class DocumentHelper implements Parcelable {
 
   public String                 workspace      = null;
 
-  /*
-   * The dictionary for mapping between parent folder and its child files
+  /**
+   * The dictionary for mapping a folder with its children<br/>
+   * Folder ExoFile.path (key) => List of children ExoFile (val)
    */
-  public Bundle                 childFilesMap;
+  public Bundle                 folderToChildrenMap;
 
-  /*
-   * The dictionary for mapping between the current selected file and its parent
+  /**
+   * The dictionary for mapping a folder with its parent<br/>
+   * Folder ExoFile.path (key) => Parent ExoFile (val)
    */
 
-  public Bundle                 currentFileMap;
+  public Bundle                 folderToParentMap;
 
   private DocumentHelper() {
 
@@ -78,22 +80,22 @@ public class DocumentHelper implements Parcelable {
   }
 
   public static final Parcelable.Creator<DocumentHelper> CREATOR = new Parcelable.Creator<DocumentHelper>() {
-                                                                   public DocumentHelper createFromParcel(Parcel in) {
-                                                                     return new DocumentHelper(in);
-                                                                   }
+    public DocumentHelper createFromParcel(Parcel in) {
+      return new DocumentHelper(in);
+    }
 
-                                                                   public DocumentHelper[] newArray(int size) {
-                                                                     return new DocumentHelper[size];
-                                                                   }
-                                                                 };
+    public DocumentHelper[] newArray(int size) {
+      return new DocumentHelper[size];
+    }
+  };
 
   private void readFromParcel(Parcel in) {
     _urlrepositoryHome = in.readString();
     _fileCopied = in.readParcelable(_fileCopied.getClass().getClassLoader());
     _fileMoved = in.readParcelable(_fileMoved.getClass().getClassLoader());
     repository = in.readString();
-    currentFileMap = in.readBundle();
-    childFilesMap = in.readBundle();
+    folderToParentMap = in.readBundle();
+    folderToChildrenMap = in.readBundle();
   }
 
   /*
@@ -115,8 +117,8 @@ public class DocumentHelper implements Parcelable {
     dest.writeParcelable(_fileCopied, flags);
     dest.writeParcelable(_fileMoved, flags);
     dest.writeString(repository);
-    dest.writeBundle(currentFileMap);
-    dest.writeBundle(childFilesMap);
+    dest.writeBundle(folderToParentMap);
+    dest.writeBundle(folderToChildrenMap);
   }
 
 }

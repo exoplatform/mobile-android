@@ -105,7 +105,7 @@ public class DocumentActionAdapter extends BaseAdapter {
             String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileCopied.path);
             String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-            DocumentActivity._documentActivityInstance.onLoad(_fileCopied.path, destinationUrl, DocumentActivity.ACTION_COPY);
+            DocumentActivity._documentActivityInstance.pasteFile(_fileCopied, destinationUrl, DocumentActivity.ACTION_COPY);
 
           }
           ExoFile _fileMoved = DocumentHelper.getInstance()._fileMoved;
@@ -113,7 +113,7 @@ public class DocumentActionAdapter extends BaseAdapter {
             String lastPathComponent = ExoDocumentUtils.getLastPathComponent(_fileMoved.path);
             String destinationUrl = _selectedFile.path + "/" + lastPathComponent;
 
-            DocumentActivity._documentActivityInstance.onLoad(_fileMoved.path, destinationUrl, DocumentActivity.ACTION_MOVE);
+            DocumentActivity._documentActivityInstance.pasteFile(_fileMoved, destinationUrl, DocumentActivity.ACTION_MOVE);
           }
           DocumentHelper.getInstance()._fileCopied = new ExoFile();
           DocumentHelper.getInstance()._fileMoved = new ExoFile();
@@ -137,12 +137,10 @@ public class DocumentActionAdapter extends BaseAdapter {
               String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
 
               if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder) && _selectedFile.isFolder) {
-                DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
+                DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().folderToParentMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
               }
 
-              DocumentActivity._documentActivityInstance.onLoad(_selectedFile.path,
-                                                                _selectedFile.path,
-                                                                DocumentActivity.ACTION_DELETE);
+              DocumentActivity._documentActivityInstance.deleteFile(_selectedFile);
             }
           });
           bld.setNegativeButton(android.R.string.no, null);

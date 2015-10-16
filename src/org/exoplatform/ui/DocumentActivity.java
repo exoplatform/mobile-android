@@ -130,12 +130,12 @@ public class DocumentActivity extends Activity {
       /*
        * Initialize 2 dictionaries for mapping each time document starting
        */
-      DocumentHelper.getInstance().childFilesMap = new Bundle();
-      DocumentHelper.getInstance().currentFileMap = new Bundle();
+      DocumentHelper.getInstance().folderToChildrenMap = new Bundle();
+      DocumentHelper.getInstance().folderToParentMap = new Bundle();
       _fileForCurrentActionBar = new ExoFile();
       setTitle(R.string.Documents);
     }
-    onLoad(DocumentHelper.getInstance().getRepositoryHomeUrl(), null, ACTION_DEFAULT);
+    onLoad(_fileForCurrentActionBar, null, ACTION_DEFAULT);
 
   }
 
@@ -234,34 +234,64 @@ public class DocumentActivity extends Activity {
         /*
          * Reset ListView
          */
-
-        updateContent(getCurrentDocumentList());
+        updateContent(getParentFolderAndChildren());
       }
 
     }
 
   }
 
-  private ExoFile getCurrentDocumentList() {
+  private ExoFile getParentFolderAndChildren() {
     ArrayList<ExoFile> documentList = null;
 
     if ("".equals(_fileForCurrentActionBar.currentFolder)) {
+      // "" as currentFolder means we're at the root of the drive
+      // so we go back to the list of drives
       _fileForCurrentActionBar = new ExoFile();
-      documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH);
+      documentList = DocumentHelper.getInstance().folderToChildrenMap.getParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH);
     } else {
-      _fileForCurrentActionBar = DocumentHelper.getInstance().currentFileMap.getParcelable(_fileForCurrentActionBar.path);
-      DocumentHelper.getInstance().currentFileMap.remove(_fileForCurrentActionBar.path);
+      String currPath = _fileForCurrentActionBar.path;
+      // replace the current folder by its parent
+      _fileForCurrentActionBar = DocumentHelper.getInstance().folderToParentMap.getParcelable(currPath);
+      // remove the former current folder from memory
+      DocumentHelper.getInstance().folderToParentMap.remove(currPath);
+      // get the list of children of the new current folder
       if ("".equals(_fileForCurrentActionBar.name)) {
-        documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList("");
+        documentList = DocumentHelper.getInstance().folderToChildrenMap.getParcelableArrayList("");
       } else {
-        documentList = DocumentHelper.getInstance().childFilesMap.getParcelableArrayList(_fileForCurrentActionBar.path);
+        documentList = DocumentHelper.getInstance().folderToChildrenMap.getParcelableArrayList(_fileForCurrentActionBar.path);
       }
     }
+    // link the current folder with the list of its children
     _fileForCurrentActionBar.children = documentList;
     return _fileForCurrentActionBar;
   }
 
-  public void onLoad(String source, String destination, int action) {
+  public void loadFolderContent(ExoFile parent) {
+    onLoad(parent, null, DocumentActivity.ACTION_DEFAULT);
+  }
+
+  public void deleteFile(ExoFile fileToDelete) {
+    onLoad(fileToDelete, fileToDelete.path, DocumentActivity.ACTION_DELETE);
+  }
+
+  public void pasteFile(ExoFile fileToPaste, String destination, int action) {
+    onLoad(fileToPaste, destination, action);
+  }
+
+  public void uploadFile() {
+    onLoad(_documentAdapter._documentActionDialog.myFile, null, ACTION_ADD_PHOTO);
+  }
+
+  public void createFile(ExoFile fileToCreate, String destination) {
+    onLoad(fileToCreate, destination, DocumentActivity.ACTION_CREATE);
+  }
+
+  public void renameFile(ExoFile fileToRename, String destination) {
+    onLoad(fileToRename, destination, DocumentActivity.ACTION_RENAME);
+  }
+
+  private void onLoad(ExoFile source, String destination, int action) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
         Log.i("DocumentLoadTask", "onLoad");
@@ -278,10 +308,6 @@ public class DocumentActivity extends Activity {
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
-  }
-
-  public void uploadFile() {
-    onLoad(_documentAdapter._documentActionDialog.myFile.path, null, ACTION_ADD_PHOTO);
   }
 
   private void init() {

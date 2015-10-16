@@ -335,8 +335,8 @@ public class ExoDocumentUtils {
     /*
      * Put the current folder and its child list to mapping dictionary
      */
-    if (DocumentHelper.getInstance().childFilesMap == null) {
-      DocumentHelper.getInstance().childFilesMap = new Bundle();
+    if (DocumentHelper.getInstance().folderToChildrenMap == null) {
+      DocumentHelper.getInstance().folderToChildrenMap = new Bundle();
     }
 
     // We're on the initial screen => list all drives
@@ -384,12 +384,12 @@ public class ExoDocumentUtils {
         arrFilesTmp.addAll(fileList);
       }
 
-      // push information to map
-      if (DocumentHelper.getInstance().childFilesMap.containsKey(ExoConstants.DOCUMENT_JCR_PATH)) {
-        DocumentHelper.getInstance().childFilesMap.remove(ExoConstants.DOCUMENT_JCR_PATH);
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
+      // store the drives root folders
+      if (DocumentHelper.getInstance().folderToChildrenMap.containsKey(ExoConstants.DOCUMENT_JCR_PATH)) {
+        DocumentHelper.getInstance().folderToChildrenMap.remove(ExoConstants.DOCUMENT_JCR_PATH);
+        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
       } else {
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
+        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
       }
 
       // create an empty root folder to hold all the drives
@@ -400,11 +400,12 @@ public class ExoDocumentUtils {
       urlStr = ExoUtils.encodeDocumentUrl(urlStr);
       response = ExoConnectionUtils.getRequestResponse(urlStr);
       folder = getContentOfFolder(response, file);
-      if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
-        DocumentHelper.getInstance().childFilesMap.remove(file.path);
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
+      // store the children of the loaded folder
+      if (DocumentHelper.getInstance().folderToChildrenMap.containsKey(file.path)) {
+        DocumentHelper.getInstance().folderToChildrenMap.remove(file.path);
+        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
       } else
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
+        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
 
     }
 
