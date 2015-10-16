@@ -34,10 +34,8 @@ import org.exoplatform.utils.LaunchUtils;
 import org.exoplatform.utils.Log;
 import org.exoplatform.utils.SettingUtils;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -45,7 +43,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -54,274 +51,266 @@ import android.widget.Toast;
  * panel allows user to enter credentials and a server panel to select a server
  * to connect to. It also contain 2 buttons to switch between panels
  */
-public class LoginActivity extends BaseActivity implements AccountPanel.ViewListener, OnClickListener,
-        LoginProxy.ProxyListener {
+public class LoginActivity extends BaseActivity implements AccountPanel.ViewListener, OnClickListener, LoginProxy.ProxyListener {
 
-    private AccountSetting      mSetting;
+  private AccountSetting      mSetting;
 
-    private Resources           mResources;
+  /** === Components === **/
+  private ImageView           mAccountBtn;
 
-    /** === Components === **/
-    private ImageView           mAccountBtn;
+  private ImageView           mServerBtn;
 
-    private ImageView           mServerBtn;
+  private ServerPanel         mServerPanel;
 
-    private ServerPanel         mServerPanel;
+  private AccountPanel        mAccountPanel;
 
-    private AccountPanel        mAccountPanel;
+  private LoginProxy          mLoginProxy;
 
-    private LoginProxy          mLoginProxy;
+  /** Default is set to show account panel */
+  private String              mPanelMode    = ACCOUNT_PANEL;
 
-    /** Default is set to show account panel */
-    private String              mPanelMode    = ACCOUNT_PANEL;
+  public static final String  ACCOUNT_PANEL = "ACCOUNT_PANEL";
 
-    public static final String  ACCOUNT_PANEL = "ACCOUNT_PANEL";
+  public static final String  SERVER_PANEL  = "SERVER_PANEL";
 
-    public static final String  SERVER_PANEL  = "SERVER_PANEL";
+  /** === Constants === **/
+  public static final String  PANEL_MODE    = "PANEL_MODE";
 
-    /** === Constants === **/
-    public static final String  PANEL_MODE    = "PANEL_MODE";
+  private static final String TAG           = "eXo____LoginActivity____";
 
-    private static final String TAG           = "eXo____LoginActivity____";
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.login);
+    mSetting = AccountSetting.getInstance();
+    initSubViews();
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.login);
-        mResources = getResources();
-        mSetting = AccountSetting.getInstance();
-        initSubViews();
-
-        /* launch app from custom url - need to init setting */
-        boolean isLaunchedFromUrl = (getIntent().getData() != null);
-        if (isLaunchedFromUrl) {
-            new LaunchUtils(this);
-            setUpUserAndServerFromUrl();
-        }
-
-        /* restore previous saved state */
-        if (savedInstanceState != null) {
-            mPanelMode = savedInstanceState.getString(PANEL_MODE);
-            mAccountPanel.onRestoreState(savedInstanceState);
-        }
+    /* launch app from custom url - need to init setting */
+    boolean isLaunchedFromUrl = (getIntent().getData() != null);
+    if (isLaunchedFromUrl) {
+      new LaunchUtils(this);
+      setUpUserAndServerFromUrl();
     }
 
-    /**
-     * Any changes in state should be updated here
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (Log.LOGD)
-          Log.d(TAG, "onResume ", this);
-        SettingUtils.setDefaultLanguage(this);
-        onChangeLanguage();
-        initState();
+    /* restore previous saved state */
+    if (savedInstanceState != null) {
+      mPanelMode = savedInstanceState.getString(PANEL_MODE);
+      mAccountPanel.onRestoreState(savedInstanceState);
+    }
+  }
+
+  /**
+   * Any changes in state should be updated here
+   */
+  @Override
+  protected void onResume() {
+    super.onResume();
+    if (Log.LOGD)
+      Log.d(TAG, "onResume ", this);
+    SettingUtils.setDefaultLanguage(this);
+    onChangeLanguage();
+    initState();
+  }
+
+  private void initSubViews() {
+    /* init account panel */
+    mAccountPanel = (AccountPanel) findViewById(R.id.login_account_panel);
+    mAccountPanel.setViewListener(this);
+
+    /* init server panel */
+    mServerPanel = (ServerPanel) findViewById(R.id.login_server_panel);
+
+    /* init button */
+    mAccountBtn = (ImageView) findViewById(R.id.login_account_btn);
+    mAccountBtn.setOnClickListener(this);
+    mServerBtn = (ImageView) findViewById(R.id.login_server_btn);
+    mServerBtn.setOnClickListener(this);
+  }
+
+  private void hideSwitchPanelIfOneAccountOnlyExists() {
+    if (ServerSettingHelper.getInstance().twoOrMoreAccountsExist(this)) {
+      mServerBtn.setVisibility(View.VISIBLE);
+    } else {
+      mServerBtn.setVisibility(View.INVISIBLE);
+      mPanelMode = ACCOUNT_PANEL; // make sure the panel with credential
+                                  // fields is displayed
+    }
+  }
+
+  private void initState() {
+    hideSwitchPanelIfOneAccountOnlyExists();
+    switchPanel(mPanelMode);
+
+    /* update new server list */
+    mServerPanel.repopulateServerList();
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle saveState) {
+    saveState.putString(PANEL_MODE, mPanelMode);
+
+    mAccountPanel.onSaveState(saveState);
+  }
+
+  /**
+   * Switch between 2 panel mode
+   * 
+   * @param panel
+   */
+  private void switchPanel(String panel) {
+    mPanelMode = panel;
+
+    if (mPanelMode.equals(ACCOUNT_PANEL)) {
+      Log.i(TAG, "switch to account panel");
+      mAccountPanel.turnOn();
+      mServerPanel.turnOff();
+      mAccountBtn.setSelected(true);
+      mServerBtn.setSelected(false);
+    } else {
+      Log.i(TAG, "switch to server panel");
+      mAccountPanel.turnOff();
+      mServerPanel.turnOn();
+      mAccountBtn.setSelected(false);
+      mServerBtn.setSelected(true);
+    }
+  }
+
+  /**
+   * Set up user and server from eXo url scheme Saves this server and make it as
+   * the current server Current support url scheme: exomobile://
+   * exomobile://serverUrl=xxx exomobile://username=xx?serverUrl=xxx
+   */
+  private void setUpUserAndServerFromUrl() {
+    Uri eXoUri = getIntent().getData();
+    /* exomobile:// */
+    if ((eXoUri == null) || (eXoUri.getHost() == null))
+      return;
+
+    String host = eXoUri.getHost();
+    String serverUrl;
+    String username = "";
+
+    /* exomobile://serverUrl=xxx */
+    if (host.contains(ExoConstants.EXO_URL_SERVER)) {
+
+      int equalIdx = host.indexOf("=");
+      if ((equalIdx == -1) || (equalIdx == host.length()))
+        return;
+      serverUrl = host.substring(equalIdx + 1, host.length());
+    }
+    /* exomobile://username=xxx */
+    else if (host.contains(ExoConstants.EXO_URL_USERNAME)) {
+      /* automatic decode URL */
+      serverUrl = eXoUri.getQueryParameter(ExoConstants.EXO_URL_SERVER);
+      if (serverUrl == null)
+        return;
+      int equalIdx = host.indexOf("=");
+      if ((equalIdx != -1) && (equalIdx < host.length()))
+        username = host.substring(equalIdx + 1, host.length());
+    } else
+      return;
+    // Add http protocol to server URL if it is missing
+    if (!serverUrl.startsWith("http"))
+      serverUrl = ExoConnectionUtils.HTTP + serverUrl;
+    /* Add server to server list if server is new */
+    ExoAccount serverObj = new ExoAccount();
+    serverObj.accountName = ExoUtils.getAccountNameFromURL(serverUrl, "My Intranet");
+    serverObj.serverUrl = serverUrl;
+    serverObj.username = username;
+    // activates remember me if a username is provided
+    serverObj.isRememberEnabled = ("".equals(username)) ? false : true;
+
+    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(this);
+    String domainIdx;
+    int serverIdx = serverList.indexOf(serverObj);
+    if (serverIdx > -1) {
+      domainIdx = String.valueOf(serverIdx);
+    } else {
+      serverList.add(serverObj);
+      serverIdx = serverList.size() - 1;
+      domainIdx = String.valueOf(serverIdx);
+
+      // Persist config - TODO: check whether this need to be done in a
+      // separate Thread
+      SettingUtils.persistServerSetting(this);
     }
 
-    private void initSubViews() {
-        /* init account panel */
-        mAccountPanel = (AccountPanel) findViewById(R.id.login_account_panel);
-        mAccountPanel.setViewListener(this);
+    // set current selected server to the new server
+    mSetting.setDomainIndex(String.valueOf(domainIdx));
+    mSetting.setCurrentAccount(serverList.get(serverIdx));
+  }
 
-        /* init server panel */
-        mServerPanel = (ServerPanel) findViewById(R.id.login_server_panel);
+  public void onChangeLanguage() {
+    mAccountPanel.onChangeLanguage();
+  }
 
-        /* init button */
-        mAccountBtn = (ImageView) findViewById(R.id.login_account_btn);
-        mAccountBtn.setOnClickListener(this);
-        mServerBtn = (ImageView) findViewById(R.id.login_server_btn);
-        mServerBtn.setOnClickListener(this);
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.login, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  public boolean onOptionsItemSelected(MenuItem item) {
+
+    int selectedItemIndex = item.getItemId();
+    if (selectedItemIndex == R.id.menu_login_settings) {
+      Intent next = new Intent(this, SettingActivity.class);
+      next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.GLOBAL_TYPE);
+      startActivity(next);
+    }
+    return false;
+  }
+
+  @Override
+  public void onClick(View view) {
+    if (view.equals(mServerBtn))
+      switchPanel(SERVER_PANEL);
+    if (view.equals(mAccountBtn))
+      switchPanel(ACCOUNT_PANEL);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+
+    if (!mSetting.getDomainIndex().equals("-1")) {
+      SharedPreferences.Editor editor = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0).edit();
+      editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, mSetting.getDomainIndex());
+      editor.commit();
+    }
+  }
+
+  @Override
+  public void onBackPressed() {
+    setResult(RESULT_CANCELED);
+    finish();
+  }
+
+  @Override
+  public void onClickLogin(String username, String password) {
+    if (mSetting.getCurrentAccount() == null) {
+      Toast toast = Toast.makeText(this, R.string.NoServerSelected, Toast.LENGTH_LONG);
+      toast.setGravity(Gravity.CENTER, 0, 0);
+      toast.show();
+      return;
     }
 
-    private void hideSwitchPanelIfOneAccountOnlyExists() {
-        if (ServerSettingHelper.getInstance().twoOrMoreAccountsExist(this)) {
-            mServerBtn.setVisibility(View.VISIBLE);
-        } else {
-            mServerBtn.setVisibility(View.INVISIBLE);
-            mPanelMode = ACCOUNT_PANEL; // make sure the panel with credential
-                                        // fields is displayed
-        }
-    }
+    /** performs login */
+    Bundle loginData = new Bundle();
+    loginData.putString(LoginProxy.USERNAME, username);
+    loginData.putString(LoginProxy.PASSWORD, password);
+    loginData.putString(LoginProxy.DOMAIN, mSetting.getDomainName());
 
-    private void initState() {
-        hideSwitchPanelIfOneAccountOnlyExists();
-        switchPanel(mPanelMode);
+    mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EXISTING_ACCOUNT, loginData);
+    mLoginProxy.setListener(this);
+    mLoginProxy.performLogin();
+  }
 
-        /* update new server list */
-        mServerPanel.repopulateServerList();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle saveState) {
-        saveState.putString(PANEL_MODE, mPanelMode);
-
-        mAccountPanel.onSaveState(saveState);
-    }
-
-    /**
-     * Switch between 2 panel mode
-     * 
-     * @param panel
-     */
-    private void switchPanel(String panel) {
-        mPanelMode = panel;
-
-        if (mPanelMode.equals(ACCOUNT_PANEL)) {
-            Log.i(TAG, "switch to account panel");
-            mAccountPanel.turnOn();
-            mServerPanel.turnOff();
-            mAccountBtn.setSelected(true);
-            mServerBtn.setSelected(false);
-        } else {
-            Log.i(TAG, "switch to server panel");
-            mAccountPanel.turnOff();
-            mServerPanel.turnOn();
-            mAccountBtn.setSelected(false);
-            mServerBtn.setSelected(true);
-        }
-    }
-
-    /**
-     * Set up user and server from eXo url scheme Saves this server and make it
-     * as the current server Current support url scheme: exomobile://
-     * exomobile://serverUrl=xxx exomobile://username=xx?serverUrl=xxx
-     */
-    private void setUpUserAndServerFromUrl() {
-        Uri eXoUri = getIntent().getData();
-        /* exomobile:// */
-        if ((eXoUri == null) || (eXoUri.getHost() == null))
-            return;
-
-        String host = eXoUri.getHost();
-        String serverUrl;
-        String username = "";
-
-        /* exomobile://serverUrl=xxx */
-        if (host.contains(ExoConstants.EXO_URL_SERVER)) {
-
-            int equalIdx = host.indexOf("=");
-            if ((equalIdx == -1) || (equalIdx == host.length()))
-                return;
-            serverUrl = host.substring(equalIdx + 1, host.length());
-        }
-        /* exomobile://username=xxx */
-        else if (host.contains(ExoConstants.EXO_URL_USERNAME)) {
-            /* automatic decode URL */
-            serverUrl = eXoUri.getQueryParameter(ExoConstants.EXO_URL_SERVER);
-            if (serverUrl == null)
-                return;
-            int equalIdx = host.indexOf("=");
-            if ((equalIdx != -1) && (equalIdx < host.length()))
-                username = host.substring(equalIdx + 1, host.length());
-        } else
-            return;
-        // Add http protocol to server URL if it is missing
-        if (!serverUrl.startsWith("http"))
-            serverUrl = ExoConnectionUtils.HTTP + serverUrl;
-        /* Add server to server list if server is new */
-        ExoAccount serverObj = new ExoAccount();
-        serverObj.accountName = ExoUtils.getAccountNameFromURL(serverUrl, "My Intranet");
-        serverObj.serverUrl = serverUrl;
-        serverObj.username = username;
-        // activates remember me if a username is provided
-        serverObj.isRememberEnabled = ("".equals(username)) ? false : true;
-
-        ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance()
-                                                              .getServerInfoList(this);
-        String domainIdx;
-        int serverIdx = serverList.indexOf(serverObj);
-        if (serverIdx > -1) {
-            domainIdx = String.valueOf(serverIdx);
-        } else {
-            serverList.add(serverObj);
-            serverIdx = serverList.size() - 1;
-            domainIdx = String.valueOf(serverIdx);
-
-            // Persist config - TODO: check whether this need to be done in a
-            // separate Thread
-            SettingUtils.persistServerSetting(this);
-        }
-
-        // set current selected server to the new server
-        mSetting.setDomainIndex(String.valueOf(domainIdx));
-        mSetting.setCurrentAccount(serverList.get(serverIdx));
-    }
-
-    public void onChangeLanguage() {
-        mAccountPanel.onChangeLanguage();
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.clear();
-        menu.add(0, 1, 0, mResources.getString(R.string.Settings))
-            .setIcon(R.drawable.optionsettingsbutton);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int selectedItemIndex = item.getItemId();
-        if (selectedItemIndex == 1) {
-            Intent next = new Intent(this, SettingActivity.class);
-            next.putExtra(ExoConstants.SETTING_TYPE, SettingActivity.GLOBAL_TYPE);
-            startActivity(next);
-        }
-        return false;
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.equals(mServerBtn))
-            switchPanel(SERVER_PANEL);
-        if (view.equals(mAccountBtn))
-            switchPanel(ACCOUNT_PANEL);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if (!mSetting.getDomainIndex().equals("-1")) {
-            SharedPreferences.Editor editor = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0).edit();
-            editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, mSetting.getDomainIndex());
-            editor.commit();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        setResult(RESULT_CANCELED);
-        finish();
-    }
-
-    @Override
-    public void onClickLogin(String username, String password) {
-        if (mSetting.getCurrentAccount() == null) {
-            Toast toast = Toast.makeText(this, R.string.NoServerSelected, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-            return;
-        }
-
-        /** performs login */
-        Bundle loginData = new Bundle();
-        loginData.putString(LoginProxy.USERNAME, username);
-        loginData.putString(LoginProxy.PASSWORD, password);
-        loginData.putString(LoginProxy.DOMAIN, mSetting.getDomainName());
-
-        mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EXISTING_ACCOUNT, loginData);
-        mLoginProxy.setListener(this);
-        mLoginProxy.performLogin();
-    }
-
-    @Override
-    public void onLoginFinished(boolean result) {
-        if (!result)
-            return;
-        Intent next = new Intent(this, HomeActivity.class);
-        // next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(next);
-    }
+  @Override
+  public void onLoginFinished(boolean result) {
+    if (!result)
+      return;
+    Intent next = new Intent(this, HomeActivity.class);
+    // next.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(next);
+  }
 }
