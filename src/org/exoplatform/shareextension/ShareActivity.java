@@ -274,7 +274,8 @@ public class ShareActivity extends FragmentActivity {
 
   @Override
   protected void onDestroy() {
-    Log.d(LOG_TAG, "Destroyed " + this);
+    if (ComposeFragment.getFragment() != null)
+      ComposeFragment.getFragment().setThumbnailImage(null);
     super.onDestroy();
   }
 
