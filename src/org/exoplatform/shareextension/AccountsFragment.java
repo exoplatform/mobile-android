@@ -55,7 +55,7 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
 
   List<ExoAccount>                accounts;
 
-  private AccountsFragment() {
+  public AccountsFragment() {
     accounts = ServerSettingHelper.getInstance().getServerInfoList(getActivity());
   }
 

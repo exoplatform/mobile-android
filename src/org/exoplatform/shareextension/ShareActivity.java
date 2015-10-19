@@ -167,7 +167,6 @@ public class ShareActivity extends FragmentActivity {
 
       // Create and display the composer, aka ComposeFragment
       ComposeFragment composer = ComposeFragment.getFragment();
-      composer.setNumberOfAttachments(mAttachmentUris == null ? 0 : mAttachmentUris.size());
       openFragment(composer, ComposeFragment.COMPOSE_FRAGMENT, Anim.NO_ANIM);
     } else {
       // We're not supposed to reach this activity by anything else than an
@@ -619,6 +618,8 @@ public class ShareActivity extends FragmentActivity {
     @Override
     protected void onPostExecute(Void result) {
       ComposeFragment.getFragment().setThumbnailImage(thumbnail);
+      if (postInfo.postAttachedFiles != null)
+        ComposeFragment.getFragment().setNumberOfAttachments(postInfo.postAttachedFiles.size());
       if (errorMessage != null)
         Toast.makeText(ShareActivity.this, errorMessage, Toast.LENGTH_LONG).show();
     };

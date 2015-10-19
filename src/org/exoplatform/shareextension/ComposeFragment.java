@@ -60,10 +60,8 @@ public class ComposeFragment extends Fragment {
   private ScrollView             scroller;
 
   private TextWatcher            postValidator;
-  
-  private int                    nbOfAttachments = 0;
 
-  private ComposeFragment() {
+  public ComposeFragment() {
     postValidator = new TextWatcher() {
       @Override
       public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
@@ -123,7 +121,10 @@ public class ComposeFragment extends Fragment {
   }
   
   public void setNumberOfAttachments(int nb) {
-	  nbOfAttachments = nb;
+	if (nb > 1) {
+	    tvMoreAttachments.setText("+ " + (nb-1));
+	    tvMoreAttachments.setVisibility(View.VISIBLE);
+	  }
   }
 
   @Override
@@ -162,10 +163,6 @@ public class ComposeFragment extends Fragment {
     ExoAccount selectedAccount = getShareActivity().getPostInfo().ownerAccount;
     if (selectedAccount != null)
       tvAccount.setText(selectedAccount.accountName + " (" + selectedAccount.username + ")");
-    if (nbOfAttachments > 1) {
-      tvMoreAttachments.setText("+ " + (nbOfAttachments-1));
-      tvMoreAttachments.setVisibility(View.VISIBLE);
-    }
     super.onResume();
   }
 

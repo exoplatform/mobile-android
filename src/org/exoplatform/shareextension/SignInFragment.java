@@ -63,7 +63,7 @@ public class SignInFragment extends Fragment {
                                                     }
                                                   };
 
-  private SignInFragment() {
+  public SignInFragment() {
   }
 
   public static SignInFragment getFragment() {
