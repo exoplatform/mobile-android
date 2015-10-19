@@ -167,6 +167,7 @@ public class ShareActivity extends FragmentActivity {
 
       // Create and display the composer, aka ComposeFragment
       ComposeFragment composer = ComposeFragment.getFragment();
+      composer.setNumberOfAttachments(mAttachmentUris == null ? 0 : mAttachmentUris.size());
       openFragment(composer, ComposeFragment.COMPOSE_FRAGMENT, Anim.NO_ANIM);
     } else {
       // We're not supposed to reach this activity by anything else than an

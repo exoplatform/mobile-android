@@ -53,13 +53,15 @@ public class ComposeFragment extends Fragment {
 
   private EditText               etPostMessage;
 
-  private TextView               tvAccount, tvSpace;
+  private TextView               tvAccount, tvSpace, tvMoreAttachments;
 
   private ImageView              imgThumb;
 
   private ScrollView             scroller;
 
   private TextWatcher            postValidator;
+  
+  private int                    nbOfAttachments = 0;
 
   private ComposeFragment() {
     postValidator = new TextWatcher() {
@@ -119,6 +121,10 @@ public class ComposeFragment extends Fragment {
     if (bm != null)
       imgThumb.setImageBitmap(bm);
   }
+  
+  public void setNumberOfAttachments(int nb) {
+	  nbOfAttachments = nb;
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -140,6 +146,7 @@ public class ComposeFragment extends Fragment {
         getShareActivity().onSelectSpace();
       }
     });
+    tvMoreAttachments = (TextView) layout.findViewById(R.id.share_attachment_more);
     imgThumb = (ImageView) layout.findViewById(R.id.share_attachment_thumbnail);
     scroller = (ScrollView) layout.findViewById(R.id.share_scroll_wrapper);
     init();
@@ -155,6 +162,10 @@ public class ComposeFragment extends Fragment {
     ExoAccount selectedAccount = getShareActivity().getPostInfo().ownerAccount;
     if (selectedAccount != null)
       tvAccount.setText(selectedAccount.accountName + " (" + selectedAccount.username + ")");
+    if (nbOfAttachments > 1) {
+      tvMoreAttachments.setText("+ " + (nbOfAttachments-1));
+      tvMoreAttachments.setVisibility(View.VISIBLE);
+    }
     super.onResume();
   }
 

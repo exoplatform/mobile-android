@@ -5,33 +5,6 @@
     android:background="#DCDCDCDC"
     android:orientation="vertical" >
 
-    <!-- <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/share_activity_title"
-            style="@style/AccountFragmentTitleStyle"
-            android:text="@string/ShareTitle" />
-
-        <ImageView
-            android:id="@+id/separator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/share_button_wrapper_ref"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/margin_xxs"
-            android:contentDescription="@string/StatusUpdate"
-            android:src="@drawable/action_bar_separator_complete" />
-
-        <include
-            android:id="@+id/share_button_wrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            layout="@layout/share_button_wrapper" />
-    </RelativeLayout> -->
-
     <FrameLayout
         android:id="@+id/share_extension_fragment"
         android:layout_width="match_parent"

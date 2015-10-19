@@ -32,6 +32,19 @@
         android:src="@drawable/icon_for_placeholder_image"
         android:contentDescription="@string/AttachedPhoto"/>
     
+    <TextView
+        android:id="@+id/share_attachment_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/share_attachment_thumbnail"
+        android:layout_alignLeft="@+id/share_attachment_thumbnail"
+        android:layout_alignRight="@+id/share_attachment_thumbnail"
+        android:background="#E6FFFFFF"
+        android:gravity="center"
+        android:text="@string/ShareTitle"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:visibility="gone" />
+    
     <LinearLayout 
         android:id="@+id/share_account_wrapper"
         android:orientation="horizontal"
