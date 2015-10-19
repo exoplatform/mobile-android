@@ -251,31 +251,31 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
-  <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
-  <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
+  <string name="ShareCannotSelectSpaceBecauseOffline">Cal seleccionar un compte i iniciar la sessió per a seleccionar un espai</string>
+  <string name="ShareCannotPostBecauseOffline">Cal seleccionar un compte i iniciar la sessió per a publicar</string>
+  <string name="ShareOperationStarted">S\'està compartint, comprovar l\'estat en l\'àrea de notificació</string>
   <string name="ShareOperationSuccess">Èxit</string>
-  <string name="ShareDocumentTitle">Share document</string>
-  <string name="ShareMessageTitle">Share message</string>
-  <string name="ShareDocumentText">Upload in progress</string>
-  <string name="ShareMessageText">Your message will be posted shortly</string>
-  <string name="ShareErrorNoAccountConfigured">No account configured</string>
-  <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
-  <string name="ShareErrorFileTooBig">Cannot share documents more than 10 MB</string>
-  <string name="ShareErrorTooManyFiles">Cannot share more than 10 documents</string>
-  <string name="ShareErrorUploadFailed">Could not share the document</string>
-  <string name="ShareErrorPostFailed">Could not post the message</string>
-  <string name="ShareErrorCommentFailed">Could not comment the message</string>
-  <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
-  <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
-  <string name="ShareErrorSignInFailed">Login failed, please try again</string>
-  <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
-  <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
+  <string name="ShareDocumentTitle">Compartir document</string>
+  <string name="ShareMessageTitle">Compartir missatge</string>
+  <string name="ShareDocumentText">Pujant</string>
+  <string name="ShareMessageText">El teu missatge serà publicat aviat</string>
+  <string name="ShareErrorNoAccountConfigured">Cap compte configurat</string>
+  <string name="ShareErrorCannotReadDoc">No es pot accedir al document per compartir</string>
+  <string name="ShareErrorFileTooBig">No es pot compartir documents de més de 10 MB</string>
+  <string name="ShareErrorTooManyFiles">No es poden compartir més de 10 documents</string>
+  <string name="ShareErrorUploadFailed">L\'enviament del document ha fallat</string>
+  <string name="ShareErrorPostFailed">La publicació del missatge ha fallat</string>
+  <string name="ShareErrorCommentFailed">La publicació del comentari ha fallat</string>
+  <string name="ShareErrorUploadFolderFailed">No s\'ha pogut crear el directori per pujar documents</string>
+  <string name="ShareErrorIncorrectAccount">No pot accedir a la configuració del compte</string>
+  <string name="ShareErrorSignInFailed">L\'inici de sessió ha fallat, si us plau provi una altra vegada</string>
+  <string name="ShareErrorSomeFilesCannotShare">Alguns documents no poden ser compartits</string>
+  <string name="ShareErrorAllFilesCannotShare">No es poden compartir tots els documents</string>
   
-  <string name="DeleteConfirmFolderTitle">Delete folder</string>
-  <string name="DeleteConfirmFileTitle">Delete file</string>
-  <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
-  <string name="Folder">folder</string>
-  <string name="File">file</string>
+  <string name="DeleteConfirmFolderTitle">Suprimeix la carpeta</string>
+  <string name="DeleteConfirmFileTitle">Suprimeix el fitxer</string>
+  <string name="DeleteConfirmMessage">Està segur de voler suprimir aquesta %1$s %2$s ?</string>
+  <string name="Folder">carpeta</string>
+  <string name="File">arxiu</string>
 
 </resources>
