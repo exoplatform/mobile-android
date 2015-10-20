@@ -40,8 +40,6 @@ import android.widget.TextView;
  */
 public class SignInFragment extends Fragment {
 
-  private static SignInFragment instance;
-
   public static final String    SIGN_IN_FRAGMENT  = "sign_in_fragment";
 
   private TextView              tvUsername;
@@ -64,13 +62,6 @@ public class SignInFragment extends Fragment {
   };
 
   public SignInFragment() {
-  }
-
-  public static SignInFragment getFragment() {
-    if (instance == null) {
-      instance = new SignInFragment();
-    }
-    return instance;
   }
 
   @Override

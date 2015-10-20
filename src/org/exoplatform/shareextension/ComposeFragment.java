@@ -21,7 +21,6 @@ package org.exoplatform.shareextension;
 import org.exoplatform.R;
 import org.exoplatform.model.ExoAccount;
 import org.exoplatform.singleton.ServerSettingHelper;
-import org.exoplatform.utils.Log;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -46,8 +45,6 @@ import android.widget.TextView;
  * @since Jun 3, 2015
  */
 public class ComposeFragment extends Fragment {
-
-  private static ComposeFragment instance;
 
   public static final String     COMPOSE_FRAGMENT = "compose_fragment";
 
@@ -85,13 +82,6 @@ public class ComposeFragment extends Fragment {
     };
   }
 
-  public static ComposeFragment getFragment() {
-    if (instance == null) {
-      instance = new ComposeFragment();
-    }
-    return instance;
-  }
-
   private void init() {
     etPostMessage.setText(getShareActivity().getPostInfo().postMessage);
     // Show a > icon on the account selector if 2 or more accounts exist
@@ -121,14 +111,14 @@ public class ComposeFragment extends Fragment {
 
   public void setThumbnailImage(Bitmap bm) {
 	bmThumb = bm;
-    if (bm != null) {
+    if (bm != null && imgThumb != null) {
       imgThumb.setImageBitmap(bm);
     }
   }
   
   public void setNumberOfAttachments(int nb) {
 	nbAttachments = nb;
-	if (nb > 1) {
+	if (nb > 1 && tvMoreAttachments != null) {
 	    tvMoreAttachments.setText("+ " + (nb-1));
 	    tvMoreAttachments.setVisibility(View.VISIBLE);
 	  }
@@ -136,7 +126,6 @@ public class ComposeFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    Log.d("TEST", "onCreateView Compose");
     View layout = inflater.inflate(R.layout.share_extension_compose_fragment, container, false);
     etPostMessage = (EditText) layout.findViewById(R.id.share_post_message);
     etPostMessage.addTextChangedListener(postValidator);
@@ -157,6 +146,7 @@ public class ComposeFragment extends Fragment {
     tvMoreAttachments = (TextView) layout.findViewById(R.id.share_attachment_more);
     imgThumb = (ImageView) layout.findViewById(R.id.share_attachment_thumbnail);
     scroller = (ScrollView) layout.findViewById(R.id.share_scroll_wrapper);
+
     init();
     return layout;
   }

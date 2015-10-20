@@ -132,6 +132,12 @@ public class ShareActivity extends FragmentActivity {
   private boolean                  mMultiFlag               = false;
 
   private List<Uri>                mAttachmentUris;
+  
+  private ComposeFragment          mComposeFragment;
+  
+  private AccountsFragment         mAccountsFragment;
+  
+  private SignInFragment           mSignInFragment;
 
   @Override
   protected void onCreate(Bundle bundle) {
@@ -139,38 +145,48 @@ public class ShareActivity extends FragmentActivity {
 
     setContentView(R.layout.share_extension_activity);
     setTitle(R.string.ShareTitle);
+    
+    String fragToOpen = ComposeFragment.COMPOSE_FRAGMENT;
+    if (bundle != null) {
+      if (bundle.containsKey("CURRENT_FRAGMENT"))
+        fragToOpen = bundle.getString("CURRENT_FRAGMENT");
+    }
+    
     online = false;
     postInfo = new SocialPostInfo();
+    mComposeFragment = new ComposeFragment();
+    mAccountsFragment = new AccountsFragment();
+    mSignInFragment = new SignInFragment();
 
     if (isIntentCorrect()) {
       Intent intent = getIntent();
-      String type = intent.getType();
-      if ("text/plain".equals(type)) {
-        // The share does not contain an attachment
-        // TODO extract the link info - MOB-1866
-        postInfo.postMessage = intent.getStringExtra(Intent.EXTRA_TEXT);
-      } else {
-        // The share contains an attachment
-        if (mMultiFlag) {
-          mAttachmentUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-        } else {
-          Uri contentUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
-          if (contentUri != null) {
-            mAttachmentUris = new ArrayList<Uri>();
-            mAttachmentUris.add(contentUri);
-          }
-          if (Log.LOGD) {
-            Log.d(LOG_TAG, "Number of files to share: ", mAttachmentUris.size());
-          }
-        }
-        prepareAttachmentsAsync();
-      }
+      mMultiFlag = Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction());
+	    String type = intent.getType();
+	    if ("text/plain".equals(type)) {
+	      // The share does not contain an attachment
+	      // TODO extract the link info - MOB-1866
+	      postInfo.postMessage = intent.getStringExtra(Intent.EXTRA_TEXT);
+	    } else {
+	      // The share contains an attachment
+	      if (mMultiFlag) {
+	        mAttachmentUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+	      } else {
+	        Uri contentUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+	        if (contentUri != null) {
+	          mAttachmentUris = new ArrayList<Uri>();
+	          mAttachmentUris.add(contentUri);
+	        }
+	        if (Log.LOGD) {
+	          Log.d(LOG_TAG, "Number of files to share: ", mAttachmentUris.size());
+	        }
+	      }
+	      prepareAttachmentsAsync();
+	    }
 
       init();
 
-      // Create and display the composer, aka ComposeFragment
-      ComposeFragment composer = ComposeFragment.getFragment();
-      openFragment(composer, ComposeFragment.COMPOSE_FRAGMENT, Anim.NO_ANIM);
+      // Display the fragment
+      openFragment(fragToOpen, Anim.NO_ANIM);
     } else {
       // We're not supposed to reach this activity by anything else than an
       // ACTION_SEND intent
@@ -178,13 +194,22 @@ public class ShareActivity extends FragmentActivity {
     }
 
   }
+  
+  @Override
+	protected void onSaveInstanceState(Bundle outState) {
+    // Save the current opened fragment key to restart on this one after a config change
+    outState.putString("CURRENT_FRAGMENT", getCurrentFragmentKey());
+    super.onSaveInstanceState(outState);
+	}
 
   private boolean isIntentCorrect() {
     Intent intent = getIntent();
     String action = intent.getAction();
     String type = intent.getType();
-    mMultiFlag = Intent.ACTION_SEND_MULTIPLE.equals(action);
-    return ((Intent.ACTION_SEND.equals(action) || mMultiFlag) && type != null);
+    return ((Intent.ACTION_SEND.equals(action) || 
+             Intent.ACTION_SEND_MULTIPLE.equals(action)) 
+            && 
+            type != null);
   }
 
   private void init() {
@@ -222,11 +247,10 @@ public class ShareActivity extends FragmentActivity {
     if (requestCode == SELECT_SHARE_DESTINATION) {
       if (resultCode == RESULT_OK) {
         SocialSpaceInfo space = (SocialSpaceInfo) data.getParcelableExtra(SpaceSelectorActivity.SELECTED_SPACE);
-        ComposeFragment composer = ComposeFragment.getFragment();
         if (space != null) {
-          composer.setSpaceSelectorLabel(space.displayName);
+          mComposeFragment.setSpaceSelectorLabel(space.displayName);
         } else {
-          composer.setSpaceSelectorLabel(getResources().getString(R.string.Public));
+          mComposeFragment.setSpaceSelectorLabel(getResources().getString(R.string.Public));
         }
         postInfo.destinationSpace = space;
       }
@@ -236,11 +260,18 @@ public class ShareActivity extends FragmentActivity {
   /**
    * Util method to switch from one fragment to another, with an animation
    * 
-   * @param toOpen The Fragment to open in this transaction
-   * @param key the string key of the fragment
+   * @param fragmentKey the string key of the fragment
    * @param anim the type of animation
    */
-  public void openFragment(Fragment toOpen, String key, Anim anim) {
+  public void openFragment(String fragmentKey, Anim anim) {
+	Fragment toOpen = null;
+	if (ComposeFragment.COMPOSE_FRAGMENT.equals(fragmentKey))
+	  toOpen = mComposeFragment;
+	else if (AccountsFragment.ACCOUNTS_FRAGMENT.equals(fragmentKey))
+	  toOpen = mAccountsFragment;
+	else if (SignInFragment.SIGN_IN_FRAGMENT.equals(fragmentKey))
+	  toOpen = mSignInFragment;
+	
     FragmentTransaction tr = getSupportFragmentManager().beginTransaction();
     switch (anim) {
     case FROM_LEFT:
@@ -253,7 +284,7 @@ public class ShareActivity extends FragmentActivity {
     case NO_ANIM:
       break;
     }
-    tr.replace(R.id.share_extension_fragment, toOpen, key);
+    tr.replace(R.id.share_extension_fragment, toOpen, fragmentKey);
     tr.commit();
   }
 
@@ -261,24 +292,35 @@ public class ShareActivity extends FragmentActivity {
   public void onBackPressed() {
     // Intercept the back button taps to display previous state with animation
     // If we're on the composer, call super to finish the activity
-    ComposeFragment composer = ComposeFragment.getFragment();
-    if (composer.isAdded()) {
+    String currFragment = getCurrentFragmentKey();
+    if (ComposeFragment.COMPOSE_FRAGMENT.equals(currFragment)) {
       if (postInfo != null)
         ExoDocumentUtils.deleteLocalFiles(postInfo.postAttachedFiles);
       super.onBackPressed();
-    } else if (AccountsFragment.getFragment().isAdded()) {
+    } else if (AccountsFragment.ACCOUNTS_FRAGMENT.equals(currFragment)) {
       // close the accounts fragment and reopen the composer fragment
-      openFragment(composer, ComposeFragment.COMPOSE_FRAGMENT, Anim.FROM_LEFT);
-    } else if (SignInFragment.getFragment().isAdded()) {
+      openFragment(ComposeFragment.COMPOSE_FRAGMENT, Anim.FROM_LEFT);
+    } else if (SignInFragment.SIGN_IN_FRAGMENT.equals(currFragment)) {
       // close the sign in fragment and reopen the accounts fragment
-      openFragment(AccountsFragment.getFragment(), AccountsFragment.ACCOUNTS_FRAGMENT, Anim.FROM_LEFT);
+      openFragment(AccountsFragment.ACCOUNTS_FRAGMENT, Anim.FROM_LEFT);
     }
+  }
+  
+  private String getCurrentFragmentKey() {
+    if (mComposeFragment.isAdded())
+      return ComposeFragment.COMPOSE_FRAGMENT;
+    else if (mAccountsFragment.isAdded())
+      return AccountsFragment.ACCOUNTS_FRAGMENT;
+    else if (mSignInFragment.isAdded())
+      return SignInFragment.SIGN_IN_FRAGMENT;
+    
+    return null;
   }
 
   @Override
   protected void onDestroy() {
-    if (ComposeFragment.getFragment() != null)
-      ComposeFragment.getFragment().setThumbnailImage(null);
+    if (mComposeFragment != null)
+      mComposeFragment.setThumbnailImage(null);
     super.onDestroy();
   }
 
@@ -417,21 +459,21 @@ public class ShareActivity extends FragmentActivity {
       finish();
     } else if (id == BUTTON_TYPE_SIGNIN) {
       // Tap on the Sign In button
-      postInfo.ownerAccount.password = SignInFragment.getFragment().getPassword();
-      openFragment(ComposeFragment.getFragment(), ComposeFragment.COMPOSE_FRAGMENT, Anim.FROM_LEFT);
+      postInfo.ownerAccount.password = mSignInFragment.getPassword();
+      openFragment(ComposeFragment.COMPOSE_FRAGMENT, Anim.FROM_LEFT);
       loginWithSelectedAccount();
     }
   }
 
   private void hideSoftKeyboard() {
     InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-    mgr.hideSoftInputFromWindow(ComposeFragment.getFragment().getEditText().getWindowToken(), 0);
+    mgr.hideSoftInputFromWindow(mComposeFragment.getEditText().getWindowToken(), 0);
   }
 
   public void onSelectAccount() {
     // Called when the select account field is tapped
     hideSoftKeyboard();
-    openFragment(AccountsFragment.getFragment(), AccountsFragment.ACCOUNTS_FRAGMENT, Anim.FROM_RIGHT);
+    openFragment(AccountsFragment.ACCOUNTS_FRAGMENT, Anim.FROM_RIGHT);
   }
 
   public void onAccountSelected(ExoAccount account) {
@@ -612,20 +654,19 @@ public class ShareActivity extends FragmentActivity {
           }
           errorMessage = message.toString();
         }
-        while (ComposeFragment.getFragment() == null) {
-          // Wait until the compose fragment is ready
-        }
       }
       return null;
     }
 
     @Override
     protected void onPostExecute(Void result) {
-      ComposeFragment.getFragment().setThumbnailImage(thumbnail);
-      if (postInfo.postAttachedFiles != null)
-        ComposeFragment.getFragment().setNumberOfAttachments(postInfo.postAttachedFiles.size());
-      if (errorMessage != null)
-        Toast.makeText(ShareActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+      if (mComposeFragment != null) {
+        mComposeFragment.setThumbnailImage(thumbnail);
+        if (postInfo.postAttachedFiles != null)
+          mComposeFragment.setNumberOfAttachments(postInfo.postAttachedFiles.size());
+        if (errorMessage != null)
+          Toast.makeText(ShareActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+      }
     };
   }
 
@@ -707,7 +748,7 @@ public class ShareActivity extends FragmentActivity {
         online = false;
       }
       toggleProgressVisible(false);
-      enableDisableMainButton(online && !"".equals(ComposeFragment.getFragment().getPostMessage()));
+      enableDisableMainButton(online && !"".equals(mComposeFragment.getPostMessage()));
     }
   }
 

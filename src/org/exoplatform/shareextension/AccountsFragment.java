@@ -51,19 +51,10 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
 
   public static final String      ACCOUNTS_FRAGMENT = "accounts_fragment";
 
-  private static AccountsFragment instance;
-
   List<ExoAccount>                accounts;
 
   public AccountsFragment() {
     accounts = ServerSettingHelper.getInstance().getServerInfoList(getActivity());
-  }
-
-  public static AccountsFragment getFragment() {
-    if (instance == null) {
-      instance = new AccountsFragment();
-    }
-    return instance;
   }
 
   @Override
@@ -106,13 +97,11 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
       ExoAccount acc = accounts.get(position);
       if (acc.isRememberEnabled && acc.isAutoLoginEnabled && acc.password != null && !"".equals(acc.password)) {
         getShareActivity().onAccountSelected(acc);
-        getShareActivity().openFragment(ComposeFragment.getFragment(),
-                                        ComposeFragment.COMPOSE_FRAGMENT,
+        getShareActivity().openFragment(ComposeFragment.COMPOSE_FRAGMENT,
                                         ShareActivity.Anim.FROM_LEFT);
       } else {
         getShareActivity().getPostInfo().ownerAccount = acc;
-        SignInFragment signIn = SignInFragment.getFragment();
-        getShareActivity().openFragment(signIn, SignInFragment.SIGN_IN_FRAGMENT, ShareActivity.Anim.FROM_RIGHT);
+        getShareActivity().openFragment(SignInFragment.SIGN_IN_FRAGMENT, ShareActivity.Anim.FROM_RIGHT);
       }
     }
   }
