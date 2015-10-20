@@ -251,31 +251,31 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
-  <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
-  <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
-  <string name="ShareOperationSuccess">Success</string>
-  <string name="ShareDocumentTitle">Share document</string>
-  <string name="ShareMessageTitle">Share message</string>
-  <string name="ShareDocumentText">Upload in progress</string>
-  <string name="ShareMessageText">Your message will be posted shortly</string>
-  <string name="ShareErrorNoAccountConfigured">No account configured</string>
-  <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
-  <string name="ShareErrorFileTooBig">Cannot share documents more than 10 MB</string>
-  <string name="ShareErrorTooManyFiles">Cannot share more than 10 documents</string>
-  <string name="ShareErrorUploadFailed">Could not share the document</string>
-  <string name="ShareErrorPostFailed">Could not post the message</string>
-  <string name="ShareErrorCommentFailed">Could not comment the message</string>
-  <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
-  <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
-  <string name="ShareErrorSignInFailed">Login failed, please try again</string>
-  <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
-  <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
+  <string name="ShareCannotSelectSpaceBecauseOffline">Debe seleccionar una cuenta e iniciar sesión para seleccionar un espacio</string>
+  <string name="ShareCannotPostBecauseOffline">Debe seleccionar una cuenta e iniciar sesión para publicar</string>
+  <string name="ShareOperationStarted">Compartiendo, compruebe el estado en el área de notificación</string>
+  <string name="ShareOperationSuccess">Éxito</string>
+  <string name="ShareDocumentTitle">Compartir documento</string>
+  <string name="ShareMessageTitle">Compartir mensaje</string>
+  <string name="ShareDocumentText">Subiendo</string>
+  <string name="ShareMessageText">Su mensaje se publicará pronto</string>
+  <string name="ShareErrorNoAccountConfigured">Ninguna cuenta configurada</string>
+  <string name="ShareErrorCannotReadDoc">No se puede acceder al documento a compartir</string>
+  <string name="ShareErrorFileTooBig">No se pueden compartir documentos de más de 10 MB</string>
+  <string name="ShareErrorTooManyFiles">No se pueden compartir más de 10 documentos</string>
+  <string name="ShareErrorUploadFailed">No se ha podido compartir el documento</string>
+  <string name="ShareErrorPostFailed">No se ha podido enviar el mensaje</string>
+  <string name="ShareErrorCommentFailed">No se ha podido comentar el mensaje</string>
+  <string name="ShareErrorUploadFolderFailed">No se ha podido preparar la carpeta de destino</string>
+  <string name="ShareErrorIncorrectAccount">No se ha podido recuperar la configuración de la cuenta</string>
+  <string name="ShareErrorSignInFailed">Error de inicio de sesión, por favor, inténtelo de nuevo</string>
+  <string name="ShareErrorSomeFilesCannotShare">Algunos documentos no se pueden compartir</string>
+  <string name="ShareErrorAllFilesCannotShare">No se pueden compartir todos los documentos</string>
   
-  <string name="DeleteConfirmFolderTitle">Delete folder</string>
-  <string name="DeleteConfirmFileTitle">Delete file</string>
-  <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
-  <string name="Folder">folder</string>
+  <string name="DeleteConfirmFolderTitle">Eliminar carpeta</string>
+  <string name="DeleteConfirmFileTitle">Eliminar archivo</string>
+  <string name="DeleteConfirmMessage">Está seguro que desea eliminar el %1$s %2$s ?</string>
+  <string name="Folder">carpeta</string>
   <string name="File">archivo</string>
 
 </resources>
