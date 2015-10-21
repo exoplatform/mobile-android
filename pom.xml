@@ -47,6 +47,7 @@
   <properties>
     <jira.project.key>MOB</jira.project.key>
     <jenkins.job.name>mobile-android-master-ci</jenkins.job.name>
+    <project.src.directory>${project.basedir}/app/src/main</project.src.directory>
     <!-- Android -->
     <android.version>5.0.1_r2</android.version>
     <android.sdk.platform>22</android.sdk.platform>
@@ -55,21 +56,21 @@
     <!-- Android Maven Plugin -->
     <android.maven.plugin.version>4.3.0</android.maven.plugin.version>
     <!-- Libraries -->
-    <commons-lang.version>2.4</commons-lang.version>
+    <picasso.version>2.5.2</picasso.version>
     <exo.social.client.version>1.0.3</exo.social.client.version>
     <slf4j-android.version>1.6.1-RC1</slf4j-android.version>
+    <crashlytics.version>1.1.13</crashlytics.version>
     <!-- Test Dependencies  -->
     <fest-android.version>1.0.7</fest-android.version>
     <robolectric.version>3.0</robolectric.version>
-    <junit.version>4.8.2</junit.version>
+    <junit.version>4.12</junit.version>
     <android.test.version>4.2.2_r2</android.test.version>
     <!-- Java version -->
-    <maven.compiler.target>1.6</maven.compiler.target>
-    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.7</maven.compiler.source>
     <!-- Surefire settings (to be compatible with jacoco we should use a property and not the plugin param) -->
     <argLine>-Xmx1024m</argLine>
   </properties>
-
   <dependencies>
     <!-- Dependency With Social Client Library -->
     <dependency>
@@ -112,15 +113,9 @@
       <artifactId>annotations</artifactId>
       <version>${android.annotations.version}</version>
     </dependency>
-    <!-- Commons  -->
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>${commons-lang.version}</version>
-    </dependency>
     <!-- 
     JCIP Annotations are only required during compilation to avoid such warnings:
-    [WARNING] /Users/paristote/.m2/repository/org/apache/httpcomponents/httpclient/4.0/httpclient-4.0.jar!org/apache/http/impl/client/AbstractHttpClient.class: 
+    [WARNING] ~/.m2/repository/org/apache/httpcomponents/httpclient/4.0/httpclient-4.0.jar!org/apache/http/impl/client/AbstractHttpClient.class:
               org/apache/http/impl/client/AbstractHttpClient.class(org/apache/http/impl/client:AbstractHttpClient.class): 
               warning: Cannot find annotation method 'value()' in type 'net.jcip.annotations.GuardedBy'
     They are not needed at run-time nor in the apk, therefore the scope is 'compile'
@@ -132,10 +127,10 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-	  <groupId>com.squareup.picasso</groupId>
-	  <artifactId>picasso</artifactId>
-	  <version>2.5.2</version>
-	</dependency>
+      <groupId>com.squareup.picasso</groupId>
+      <artifactId>picasso</artifactId>
+      <version>${picasso.version}</version>
+    </dependency>
     <!-- Test Dependencies  -->
     <dependency>
       <groupId>com.squareup</groupId>
@@ -185,48 +180,19 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-      <!-- Dependency with Crashlytics -->
-      <dependency>
-          <groupId>com.crashlytics.android</groupId>
-          <artifactId>crashlytics</artifactId>
-          <version>1.1.13</version>
-      </dependency>
+    <!-- Dependency with Crashlytics -->
+    <dependency>
+      <groupId>com.crashlytics.android</groupId>
+      <artifactId>crashlytics</artifactId>
+      <version>${crashlytics.version}</version>
+    </dependency>
   </dependencies>
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>test</testSourceDirectory>
+    <sourceDirectory>app/src/main</sourceDirectory>
+    <!--testSourceDirectory>app/src/test</testSourceDirectory-->
     <pluginManagement>
       <plugins>
-        <!--
-        This plugin's configuration contains Eclipse m2e settings only.
-        It has no influence on the Maven build itself.
-        -->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>com.simpligility.maven.plugins</groupId>
-                    <artifactId>android-maven-plugin</artifactId>
-                    <versionRange>[3.0.0-alpha-14,)</versionRange>
-                    <goals>
-                      <goal>manifest-update</goal>
-                      <goal>proguard</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-        <plugin>
+        <!--plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <configuration>
@@ -235,7 +201,7 @@
               <include>org/exoplatform/*</include>
             </includes>
           </configuration>
-        </plugin>
+        </plugin-->
       </plugins>
     </pluginManagement>
     <plugins>
@@ -245,6 +211,7 @@
         <executions>
           <execution>
             <id>create-version-code</id>
+            <phase>generate-resources</phase>
             <goals>
               <goal>create-timestamp</goal>
             </goals>
@@ -272,6 +239,13 @@
             </configuration>
           </execution>
           <execution>
+            <id>lint</id>
+            <goals>
+              <goal>lint</goal>
+            </goals>
+            <configuration />
+          </execution>
+          <execution>
             <id>alignApk</id>
             <phase>package</phase>
             <goals>
@@ -280,13 +254,13 @@
           </execution>
         </executions>
         <configuration>
-          <androidManifestFile>AndroidManifest.xml</androidManifestFile>
-          <assetsDirectory>assets/</assetsDirectory>
-          <resourceDirectory>res/</resourceDirectory>
+          <androidManifestFile>${project.src.directory}/AndroidManifest.xml</androidManifestFile>
+          <assetsDirectory>${project.src.directory}/assets/</assetsDirectory>
+          <resourceDirectory>${project.src.directory}/res/</resourceDirectory>
           <sourceDirectories>
-            <sourceDirectory>src/</sourceDirectory>
+            <sourceDirectory>${project.src.directory}/java/</sourceDirectory>
           </sourceDirectories>
-          <nativeLibrariesDirectory>libs/</nativeLibrariesDirectory>
+          <nativeLibrariesDirectory>libs</nativeLibrariesDirectory>
           <dexJvmArguments>
             <jvmArgument>-Xshare:auto</jvmArgument>
             <jvmArgument>-Xms128M</jvmArgument>
@@ -299,7 +273,7 @@
           </sdk>
         </configuration>
       </plugin>
-      <plugin>
+      <!--plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
@@ -307,28 +281,32 @@
             <include>**/*TestSuite.java</include>
           </includes>
         </configuration>
+      </plugin-->
+      <!-- Crashlytics maven plugin -->
+      <plugin>
+        <groupId>com.crashlytics</groupId>
+        <artifactId>crashlytics-maven</artifactId>
+        <version>1.12.0</version>
+        <executions>
+          <execution>
+            <id>GenerateResources</id>
+            <goals>
+              <goal>GenerateResources</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>CleanupResources</id>
+            <goals>
+              <goal>CleanupResources</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <androidManifestPath>${project.src.directory}/AndroidManifest.xml</androidManifestPath>
+          <androidAssetsPath>${project.src.directory}/assets</androidAssetsPath>
+          <androidResPath>${project.src.directory}/res</androidResPath>
+        </configuration>
       </plugin>
-
-        <!-- Crashlytics maven plugin -->
-        <plugin>
-            <groupId>com.crashlytics</groupId>
-            <artifactId>crashlytics-maven</artifactId>
-            <version>1.12.0</version>
-            <executions>
-                <execution>
-                    <id>GenerateResources</id>
-                    <goals>
-                        <goal>GenerateResources</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <id>CleanupResources</id>
-                    <goals>
-                        <goal>CleanupResources</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
     </plugins>
   </build>
   <!-- Profiles definition for Android build -->

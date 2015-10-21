@@ -39,6 +39,12 @@
 # Maven 
 target/
 
+# Gradle
+local.properties
+/build/*
+.gradle/
+/app/build/
+
 # IntelliJ project files 
 *.iml
 *.iws
