@@ -24,13 +24,12 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.image.ExoPicasso;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -97,37 +96,13 @@ public class LikeListActivity extends Activity {
 
       @Override
       public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-
       }
     });
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-    case android.R.id.home:
-      if (SocialDetailActivity.socialDetailActivity != null) {
-        SocialDetailActivity.socialDetailActivity.finish();
-      }
-      if (SocialTabsActivity.instance != null) {
-        SocialTabsActivity.instance.finish();
-      }
-
-      finish();
-
-      break;
-
-    default:
-      break;
-    }
-
-    return true;
   }
 
   /*
    * The adapter for liker grid
    */
-
   private class LikedItemAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
@@ -151,13 +126,14 @@ public class LikeListActivity extends Activity {
       return position;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
       ViewHolder viewHolder;
       if (convertView == null) {
-        /*
-         * Inflate layout from layout resource
-         */
+        // Inflate layout from layout resource
+        // Passing parent instead of null ends in java.lang.UnsupportedOperationException:
+        // addView(View, LayoutParams) is not supported in AdapterView
         convertView = mInflater.inflate(R.layout.liked_grid_item, null);
         viewHolder = new ViewHolder();
         viewHolder.imageView = (ImageView) convertView.findViewById(R.id.liked_avatar);
