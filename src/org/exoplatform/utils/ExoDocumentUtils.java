@@ -920,15 +920,26 @@ public class ExoDocumentUtils {
       return null;
 
     if (document.toString().startsWith("content://")) {
-      // In some cases, the content:// URI is fake and embeds a real file://
-      // content://authority/-1/1/file:///sdcard/path/file.jpg/ACTUAL/123
-      // e.g. open ASTRO File Manager > View File > Share
-      // Then we extract the real URI and pass it to documentFromFileUri(...)
-      long id = ContentUris.parseId(document);
-      String dec = Uri.decode(document.toString());
-      int fileIdx = dec.indexOf("file://");
+      /*
+       *  Some apps send fake content:// URI with real file:// URI inside
+       *  E.g. open ASTRO File Manager > View File > Share :
+       *  
+       *  content://authority/-1/1/file:///sdcard/path/file.jpg/ACTUAL/123
+       *  
+       *  Then we extract the real URI and pass it to documentFromFileUri(...)
+       */ 
+      String decodedUri = Uri.decode(document.toString());
+      int fileIdx = decodedUri.indexOf("file://");
       if (fileIdx > -1) {
-        String fileUri = dec.substring(fileIdx);
+        long id = -1;
+        try {
+          id = ContentUris.parseId(document);
+        } catch (NumberFormatException e) {
+          Log.e(LOG_TAG, e.getMessage(), e);
+        } catch (UnsupportedOperationException e) {
+          Log.e(LOG_TAG, e.getMessage(), e);
+        }
+        String fileUri = decodedUri.substring(fileIdx);
         fileUri = fileUri.replaceAll("(/ACTUAL/)(" + id + ")", "");
         return documentFromFileUri(Uri.parse(fileUri));
       } else {
