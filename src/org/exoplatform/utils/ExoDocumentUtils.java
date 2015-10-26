@@ -221,10 +221,11 @@ public class ExoDocumentUtils {
     if (activity == null && url != null) {
       // Fallback on a guessed mime type if the first one doesn't work
       String guessedMimeType = URLConnection.guessContentTypeFromName(url);
-      intent = new Intent(Intent.ACTION_VIEW);
-      intent.setType(guessedMimeType.toLowerCase(Locale.US));
-
-      activity = intent.resolveActivity(context.getPackageManager());
+      if (guessedMimeType != null) {
+        intent = new Intent(Intent.ACTION_VIEW);
+        intent.setType(guessedMimeType.toLowerCase(Locale.US));
+        activity = intent.resolveActivity(context.getPackageManager());
+      }
     }
 
     return activity != null;
