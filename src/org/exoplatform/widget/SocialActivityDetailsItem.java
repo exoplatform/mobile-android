@@ -265,6 +265,10 @@ public class SocialActivityDetailsItem extends LinearLayout {
     textViewName.setText(Html.fromHtml(wikiBuffer), TextView.BufferType.SPANNABLE);
     String wikiBody = activityInfo.getBody();
     if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
+      // use the page excerpt if no body is available
+      wikiBody = activityInfo.templateParams != null ? activityInfo.templateParams.get("page_exceprt") : null;
+    }
+    if (wikiBody == null) {
       textViewMessage.setVisibility(View.GONE);
     } else {
       textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
