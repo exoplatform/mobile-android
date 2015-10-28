@@ -51,7 +51,7 @@
   <string name="Dashboard">Applications</string>
   <string name="Settings">Réglages</string>
   <string name="GadgetsCannotBeRetrieved">Les données des gadgets ne peuvent pas être récupérées.</string>
-  <string name="ActivityStream">Nouvelles</string>
+  <string name="ActivityStream">Flux d\'Activité</string>
   <string name="ActivityDetail">Détails</string>
   <string name="You">Vous</string>
   <string name="Me">Moi</string>
