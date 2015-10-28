@@ -51,7 +51,7 @@
   <string name="Dashboard">Приложения</string>
   <string name="Settings">Параметры</string>
   <string name="GadgetsCannotBeRetrieved">Не удается получить гаджеты.</string>
-  <string name="ActivityStream">Новости</string>
+  <string name="ActivityStream">Лента активности</string>
   <string name="ActivityDetail">Подробная информация</string>
   <string name="You">Вы</string>
   <string name="Me">Я</string>
