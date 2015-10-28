@@ -51,7 +51,7 @@
   <string name="Dashboard">Apps</string>
   <string name="Settings">Configuració</string>
   <string name="GadgetsCannotBeRetrieved">No es poden recuperar els Gàdgets.</string>
-  <string name="ActivityStream">Notícies</string>
+  <string name="ActivityStream">Flux d\'Activitat</string>
   <string name="ActivityDetail">Detalls</string>
   <string name="You">Tu</string>
   <string name="Me">Jo</string>
