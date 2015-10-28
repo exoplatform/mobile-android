@@ -51,7 +51,7 @@
   <string name="Dashboard">Aplikace</string>
   <string name="Settings">Nastavení</string>
   <string name="GadgetsCannotBeRetrieved">Gadgety nelze načíst.</string>
-  <string name="ActivityStream">Novinky</string>
+  <string name="ActivityStream">Sled aktivit</string>
   <string name="ActivityDetail">Podrobnosti</string>
   <string name="You">Vy</string>
   <string name="Me">Já</string>
