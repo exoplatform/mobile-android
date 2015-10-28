@@ -51,7 +51,7 @@
   <string name="Dashboard">Apps</string>
   <string name="Settings">设置</string>
   <string name="GadgetsCannotBeRetrieved">无法检测到设备</string>
-  <string name="ActivityStream">新闻</string>
+  <string name="ActivityStream">活动流</string>
   <string name="ActivityDetail">详细信息</string>
   <string name="You">你</string>
   <string name="Me">我</string>
