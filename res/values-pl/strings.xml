@@ -51,7 +51,7 @@
   <string name="Dashboard">Aplikacje</string>
   <string name="Settings">Ustawienia</string>
   <string name="GadgetsCannotBeRetrieved">Nie można załadować gadżetów.</string>
-  <string name="ActivityStream">Aktualności</string>
+  <string name="ActivityStream">Strumień aktywności</string>
   <string name="ActivityDetail">Szczegóły</string>
   <string name="You">Ty</string>
   <string name="Me">Ja</string>
