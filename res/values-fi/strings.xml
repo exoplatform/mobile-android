@@ -51,7 +51,7 @@
   <string name="Dashboard">Apps</string>
   <string name="Settings">Settings</string>
   <string name="GadgetsCannotBeRetrieved">Gadgets cannot be retrieved.</string>
-  <string name="ActivityStream">News</string>
+  <string name="ActivityStream">Activity Stream</string>
   <string name="ActivityDetail">Details</string>
   <string name="You">You</string>
   <string name="Me">Me</string>
