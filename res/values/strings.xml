@@ -96,7 +96,7 @@
   <string name="ConnectionError">The network can not be reached.</string>
   <string name="LoadingDataError">Error while loading data.</string>
   <string name="DoNotHavePermision">You don\'t have permission for this because no SD-card is available.</string>
-  <string name="WarningServerNameIsEmpty">The account name and server can not be empty</string>
+  <string name="WarningServerNameIsEmpty">Server name or URL can not be empty.</string>
   <string name="WarningServerNameIsExist">This server name already exists in your list</string>
   <string name="WarningServerUrlIsExist">This server URL already exists in your list</string>
   <string name="WarningServerAlreadyExists">This account already exists in your list</string>
