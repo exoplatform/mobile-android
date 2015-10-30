@@ -6,9 +6,7 @@
   <string name="SignInInformation">Connexion</string>
   <string name="SigningIn">Connexion en cours...</string>
   <string name="NoServerSelected">Sélectionnez un serveur</string>
-  <string name="NoUsernameEnter">Entrez votre nom d\'utilisateur</string>
   <string name="NoPasswordEnter">Entrez votre mot de passe</string>
-  <string name="UserNamePasswordFailed">Nom d\'utilisateur et/ou mot de passe invalide.</string>
   <string name="SpecialCharacters">Caractères spéciaux non autorisés.</string>
   <string name="AccountNameInvalid">Seuls les caractères alphanumériques et les espaces sont autorisés dans le nom du compte</string>
   <string name="AccountServerInvalid">Adresse du serveur non valide</string>
@@ -17,10 +15,9 @@
   <string name="AccountPasswordInvalid">Les espaces ne sont pas autorisés dans le mot de passe</string>
   <string name="Connected">Connecté</string>
   <string name="LastLoginDate">Dernière connexion</string>
-  <string name="ServerUnreachable">Le serveur ne peut être contacté</string>
   <string name="UserNameCellTitle">Nom d\'utilisateur</string>
   <string name="PasswordCellTitle">Mot de passe</string>
-  <string name="Language">LANGUE</string>
+  <string name="Language">Langue</string>
   <string name="Server">Comptes</string>
   <string name="ServerList">Liste des serveurs</string>
   <string name="AddAServer">Ajouter un compte</string>
@@ -55,7 +52,6 @@
   <string name="ActivityDetail">Détails</string>
   <string name="You">Vous</string>
   <string name="Me">Moi</string>
-  <string name="MessageFrom">Message de</string>
   <string name="ShowMore">Plus</string>
   <string name="LoadingData">Chargement des données...</string>
   <string name="LoadingImage">Chargement de l\'image...</string>
@@ -109,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Impossible de charger les anciennes activités. La liste est en cours de rafraichissement.</string>
   <string name="LogoutTitle">Déconnexion</string>
   <string name="LogoutContent">Souhaitez-vous quitter l\'application ?</string>
-  <string name="ApplicationInformation">INFORMATIONS DE L\'APPLICATION</string>
+  <string name="ApplicationInformation">Informations de l\'application</string>
   <string name="ServerVersion">Version du serveur</string>
   <string name="ServerEdition">Edition du serveur</string>
   <string name="ApplicationVersion">Version de l\'application</string>
@@ -142,7 +138,7 @@
   <string name="DocumentRenameError">Erreur en renommant le fichier.</string>
   <string name="DocumentCreateFolderError">Impossible de créer un nouveau dossier.</string>
   <string name="DocumentFolderNameEmpty">Veuillez entrer le nom du dossier.</string>
-  <string name="DocumentSettingTitle">DOCUMENTS</string>
+  <string name="DocumentSettingTitle">Documents</string>
   <string name="DocumentShowPrivateDrive">Afficher le lecteur privé</string>
   <string name="CalendarDescription">Description :</string>
   <string name="CalendarLocation">Lieu :</string>
@@ -163,13 +159,10 @@
   <string name="CompatibleFileSuggest">Souhaitez-vous ouvrir ce fichier avec une application installée sur votre terminal ?</string>
   <string name="OpenIn">Ouvrir avec ...</string>
   <string name="DownloadingFile">Téléchargement du fichier...</string>
-  <string name="MemoryWarning">Mémoire indisponible ou insuffisante.</string>
-  <string name="SocialSettingTitle">SOCIAL</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Mémoriser mon filtre</string>
 
     <!-- Welcome screen -->
-  <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Etape</string>
   <string name="SignUp">Sign Up</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
@@ -204,7 +197,6 @@
   <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
   <string name="InvalidCredentials">Impossible to connect, check your username and password.</string>
   <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
-  <string name="NoTenantForEmail">Impossible to find tenant for this email, please check your email</string>
   <string name="DefaultServer">My Intranet</string>
   <string name="ServerResuming">We are restoring your intranet, please retry in few minutes.</string>
 
@@ -220,8 +212,7 @@
     <!-- Setting -->
   <string name="RememberMe">Mémoriser mon login</string>
   <string name="Autologin">Connexion automatique</string>
-    <string name="LoginTitle">LOGIN</string>
-    <string name="EXO">EXO</string>
+  <string name="LoginTitle">Login</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -233,7 +224,6 @@
     <string name="ServerName">Nom du serveur</string>
     <string name="ServerUrl">Url du serveur</string>
     <string name="StartCloudSignUpAssistant">Lancer l\'assistant de configuration</string>
-    <string name="ServerAdded">Serveur ajouté</string>
     <string name="ServerUpdated">Serveur mis à jour</string>
   <string name="ServerDeleted">Serveur supprimé</string>
 
@@ -251,6 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
+  <string name="ShareTitle">Share</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">Veuillez choisir un compte et vous connecter pour accéder à la liste d\'espaces</string>
   <string name="ShareCannotPostBecauseOffline">Veuillez choisir un compte et vous connecter pour publier votre message</string>
   <string name="ShareOperationStarted">Le partage est en cours, suivez sa progression dans la barre de notifications</string>
@@ -278,4 +269,7 @@
   <string name="Folder">dossier</string>
   <string name="File">fichier</string>
 
+  <!-- Action Bar -->
+  <string name="SignOutTitle">Sign Out</string>
+  <string name="RefreshTitle">Refresh</string>
 </resources>
