@@ -6,9 +6,7 @@
   <string name="SignInInformation">Oturum Aç</string>
   <string name="SigningIn">Oturum açılıyor …</string>
   <string name="NoServerSelected">Lütfen bir sunucu seçin</string>
-  <string name="NoUsernameEnter">Lütfen kullanıcı adınızı girin</string>
   <string name="NoPasswordEnter">Lütfen şifrenizi girin</string>
-  <string name="UserNamePasswordFailed">Geçersiz kullanıcı adı / şifre eşleşmesi.</string>
   <string name="SpecialCharacters">Özel karakterlere izin verilmez.</string>
   <string name="AccountNameInvalid">Only alphanumeric characters and spaces are allowed in the account name</string>
   <string name="AccountServerInvalid">Invalid server address</string>
@@ -17,7 +15,6 @@
   <string name="AccountPasswordInvalid">Blanks are not allowed in the password</string>
   <string name="Connected">Bağlandı</string>
   <string name="LastLoginDate">Last login</string>
-  <string name="ServerUnreachable">Sunucu adresine erişilemiyor</string>
   <string name="UserNameCellTitle">Kullanıcı Adı</string>
   <string name="PasswordCellTitle">Şifre</string>
   <string name="Language">DİL</string>
@@ -55,7 +52,6 @@
   <string name="ActivityDetail">Ayrıntılar</string>
   <string name="You">Sen</string>
   <string name="Me">Beni</string>
-  <string name="MessageFrom">İleti kimden</string>
   <string name="ShowMore">Daha fazla göster</string>
   <string name="LoadingData">Veri yükleniyor ...</string>
   <string name="LoadingImage">Resim yükleniyor ...</string>
@@ -163,13 +159,10 @@
   <string name="CompatibleFileSuggest">Yüklü bir uygulama açmak ister misiniz?</string>
   <string name="OpenIn">Aç …</string>
   <string name="DownloadingFile">Dosya yükleniyor …</string>
-  <string name="MemoryWarning">Bellek kullanılamaz veya boş alan yok.</string>
   <string name="SocialSettingTitle">SOSYAL</string>
   <string name="SocialSettingContent">Filtremi hatırla</string>
 
   <!-- Welcome screen -->
-  <string name="Slogan">Sosyal Intranetiniz, her yerde, her zaman!</string>
-  <string name="title_template_step">Adım</string>
   <string name="SignUp">Kaydol</string>
   <string name="LogIn">Oturum Aç</string>
   <string name="SkipStep">ya da şimdilik bu atla</string>
@@ -204,7 +197,6 @@
   <string name="ServerNotAvailable">Intranetinize bağlanmka imkansız, lütfen URL adresini kontrol edin veya sistem yöneticisine başvurun.</string>
   <string name="InvalidCredentials">Bağlanmak imkansız, kullanıcı adınızı ve şifrenizi kontrol edin.</string>
   <string name="NoAccountExists">Bu e-postanın hesabı yoktur, e-postanızı kontrol edin  veya kayıt olun.</string>
-  <string name="NoTenantForEmail">Bu e-postanın sahibi bulunamıyor, lütfen e-postanızı kontrol edin</string>
   <string name="DefaultServer">Intranetim</string>
   <string name="ServerResuming">Intraneti geri yüklüyoruz, lütfen birkaç dakika içinde yeniden deneyin.</string>
 
@@ -221,7 +213,6 @@
   <string name="RememberMe">Beni Hatırla</string>
   <string name="Autologin">Otomatik Oturum Aç</string>
   <string name="LoginTitle">OTURUM AÇ</string>
-  <string name="EXO">EXO</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -233,7 +224,6 @@
   <string name="ServerName">Sunucu Adı</string>
   <string name="ServerUrl">Sunucu URL\'si</string>
   <string name="StartCloudSignUpAssistant">Kayıt yardımcısını başlat</string>
-  <string name="ServerAdded">Sunucu eklendi</string>
   <string name="ServerUpdated">Sunucu güncellendi</string>
   <string name="ServerDeleted">Sunucu silinmiş</string>
 
@@ -251,6 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
+  <string name="ShareTitle">Share</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -278,4 +269,7 @@
   <string name="Folder">folder</string>
   <string name="File">file</string>
 
+  <!-- Action Bar -->
+  <string name="SignOutTitle">Sign Out</string>
+  <string name="RefreshTitle">Refresh</string>
 </resources>
