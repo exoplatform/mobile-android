@@ -6,9 +6,7 @@
   <string name="SignInInformation">Είσοδος</string>
   <string name="SigningIn">Γίνεται σύνδεση…</string>
   <string name="NoServerSelected">Παρακαλώ επιλέξτε ένα διακομιστή</string>
-  <string name="NoUsernameEnter">Παρακαλώ εισάγετε το όνομα χρήστη</string>
   <string name="NoPasswordEnter">Παρακαλώ εισάγετε τον κωδικό σας</string>
-  <string name="UserNamePasswordFailed">Μη έγκυρο όνομα χρήστη ή λάθος κωδικός πρόσβασης.</string>
   <string name="SpecialCharacters">Δεν επιτρέπονται ειδικοί χαρακτήρες.</string>
   <string name="AccountNameInvalid">Επιτρέπονται μόνο αλφαριθμητικοί χαρακτήρες και κενά στο όνομα του λογαριασμού</string>
   <string name="AccountServerInvalid">Μη έγκυρη διεύθυνση διακομιστή</string>
@@ -17,7 +15,6 @@
   <string name="AccountPasswordInvalid">Δεν επιτρέπονται κενά στον κωδικό πρόσβασης</string>
   <string name="Connected">Συνδεδεμένοι</string>
   <string name="LastLoginDate">Τελευταια εισοδος</string>
-  <string name="ServerUnreachable">Δεν είναι δυνατή η επικοινωνία με το διακομιστή</string>
   <string name="UserNameCellTitle">Όνομα χρήστη</string>
   <string name="PasswordCellTitle">Κωδικός πρόσβασης</string>
   <string name="Language">ΓΛΩΣΣΑ</string>
@@ -55,7 +52,6 @@
   <string name="ActivityDetail">Λεπτομέρειες</string>
   <string name="You">Εσύ</string>
   <string name="Me">Εγώ</string>
-  <string name="MessageFrom">Μήνυμα από</string>
   <string name="ShowMore">Εμφάνισε περισσότερα</string>
   <string name="LoadingData">Φόρτωση δεδομένων…</string>
   <string name="LoadingImage">Φόρτωση εικόνας…</string>
@@ -163,13 +159,10 @@
   <string name="CompatibleFileSuggest">Θα θέλατε να ανοίξει σε μια εγκατεστημένη εφαρμογή;</string>
   <string name="OpenIn">Άνοιγμα με…</string>
   <string name="DownloadingFile">Κατέβασμα αρχείου…</string>
-  <string name="MemoryWarning">Μη διαθέσιμη μνήμη ή ανεπαρκής ελεύθερος χώρος.</string>
   <string name="SocialSettingTitle">ΚΟΙΝΩΝΙΚΗ ΔΙΚΤΥΩΣΗ</string>
   <string name="SocialSettingContent">Αποθήκευση φίλτρου</string>
 
   <!-- Welcome screen -->
-  <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Βήμα</string>
   <string name="SignUp">Sign Up</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
@@ -204,7 +197,6 @@
   <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
   <string name="InvalidCredentials">Impossible to connect, check your username and password.</string>
   <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
-  <string name="NoTenantForEmail">Impossible to find tenant for this email, please check your email</string>
   <string name="DefaultServer">My Intranet</string>
   <string name="ServerResuming">We are restoring your intranet, please retry in few minutes.</string>
 
@@ -221,7 +213,6 @@
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
   <string name="LoginTitle">LOGIN</string>
-  <string name="eXo">EXO</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -233,7 +224,6 @@
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
   <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
-  <string name="ServerAdded">Server added</string>
   <string name="ServerUpdated">Server updated</string>
   <string name="ServerDeleted">Server deleted</string>
 
@@ -251,6 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
+  <string name="ShareTitle">Share</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -278,4 +269,7 @@
   <string name="Folder">folder</string>
   <string name="File">file</string>
 
+  <!-- Action Bar -->
+  <string name="SignOutTitle">Sign Out</string>
+  <string name="RefreshTitle">Refresh</string>
 </resources>
