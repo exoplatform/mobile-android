@@ -6,9 +6,7 @@
   <string name="SignInInformation">Aanmelden</string>
   <string name="SigningIn">Inloggen…</string>
   <string name="NoServerSelected">Selecteer een server</string>
-  <string name="NoUsernameEnter">Geef uw gebruikersnaam op</string>
   <string name="NoPasswordEnter">Voer uw wachtwoord in</string>
-  <string name="UserNamePasswordFailed">Ongeldige gebruikersnaam en/of wachtwoord.</string>
   <string name="SpecialCharacters">Speciale tekens zijn niet toegestaan.</string>
   <string name="AccountNameInvalid">Alleen alfanumerieke tekens en spaties zijn toegestaan in naam van de account</string>
   <string name="AccountServerInvalid">Ongeldige serveradres</string>
@@ -17,7 +15,6 @@
   <string name="AccountPasswordInvalid">Spaties zijn niet toegestaan in het wachtwoord</string>
   <string name="Connected">Verbonden</string>
   <string name="LastLoginDate">Laatste login</string>
-  <string name="ServerUnreachable">Adres van de server is onbereikbaar</string>
   <string name="UserNameCellTitle">Gebruikersnaam</string>
   <string name="PasswordCellTitle">#{word.password}</string>
   <string name="Language">Taal</string>
@@ -55,7 +52,6 @@
   <string name="ActivityDetail">Kalender details</string>
   <string name="You">U</string>
   <string name="Me">Ik</string>
-  <string name="MessageFrom">Bericht van</string>
   <string name="ShowMore">Meer tonen</string>
   <string name="LoadingData">Laden van gegevens…</string>
   <string name="LoadingImage">Laden van afbeelding…</string>
@@ -163,13 +159,10 @@
   <string name="CompatibleFileSuggest">Openen met een geïnstalleerde toepassing?</string>
   <string name="OpenIn">Openen in…</string>
   <string name="DownloadingFile">Downloaden van bestand…</string>
-  <string name="MemoryWarning">Geheugen niet beschikbaar of ontoereikend.</string>
   <string name="SocialSettingTitle">SOCIALE</string>
   <string name="SocialSettingContent">Onthoud mijn filter</string>
 
   <!-- Welcome screen -->
-  <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Stap</string>
   <string name="SignUp">Sign Up</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
@@ -204,7 +197,6 @@
   <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
   <string name="InvalidCredentials">Impossible to connect, check your username and password.</string>
   <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
-  <string name="NoTenantForEmail">Impossible to find tenant for this email, please check your email</string>
   <string name="DefaultServer">My Intranet</string>
   <string name="ServerResuming">We are restoring your intranet, please retry in few minutes.</string>
 
@@ -221,7 +213,6 @@
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
   <string name="LoginTitle">LOGIN</string>
-  <string name="EXO">EXO</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -233,7 +224,6 @@
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
   <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
-  <string name="ServerAdded">Server added</string>
   <string name="ServerUpdated">Server updated</string>
   <string name="ServerDeleted">Server deleted</string>
 
@@ -251,6 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
+  <string name="ShareTitle">Share</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">U moet Selecteer een account en log in om te selecteren van een ruimte</string>
   <string name="ShareCannotPostBecauseOffline">U moet Selecteer een account en log in om te posten</string>
   <string name="ShareOperationStarted">Delen in vooruitgang, Controleer de status in notificaties</string>
@@ -278,4 +269,7 @@
   <string name="Folder">map</string>
   <string name="File">bestand</string>
 
+  <!-- Action Bar -->
+  <string name="SignOutTitle">Sign Out</string>
+  <string name="RefreshTitle">Refresh</string>
 </resources>
