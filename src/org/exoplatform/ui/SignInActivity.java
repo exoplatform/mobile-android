@@ -62,6 +62,7 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.signin);
+    setTitle(R.string.GetStarted);
 
     mLoginBtn = (Button) findViewById(R.id.signin_login_btn);
     mLoginBtn.setEnabled(false);
@@ -71,7 +72,6 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
     mEmailTxt.setText(email == null ? "" : email);
     TextWatcher _onEmailOrPasswordChanged = onEmailOrPasswordChanged();
     mEmailTxt.addTextChangedListener(_onEmailOrPasswordChanged);
-    AssetUtils.setContext(this);
     Typeface type = AssetUtils.getCustomTypeface(AssetUtils.ROBOTO_REGULAR);
     if (type != null)
       AssetUtils.setTypeFace(type, mEmailTxt);
@@ -97,7 +97,7 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
 
   private void onChangeLanguage() {
     Resources resources = getResources();
-    ((TextView) findViewById(R.id.signin_title_txt)).setText(resources.getString(R.string.GetStarted));
+    setTitle(R.string.GetStarted);
     ((TextView) findViewById(R.id.signin_email_txt)).setText(resources.getString(R.string.EmailSignIn));
     ((TextView) findViewById(R.id.signin_alert_txt)).setText(resources.getString(R.string.InvalidEmail));
     ((EditText) findViewById(R.id.signin_edit_txt_email)).setHint(resources.getString(R.string.Email));

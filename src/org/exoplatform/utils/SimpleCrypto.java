@@ -6,11 +6,17 @@
 package org.exoplatform.utils;
 
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 
 /**
@@ -24,13 +30,25 @@ import java.security.SecureRandom;
  */
 public class SimpleCrypto {
 
-  public static String encrypt(String seed, String cleartext) throws Exception {
+  public static String encrypt(String seed, String cleartext) throws NoSuchAlgorithmException,
+                                                              NoSuchPaddingException,
+                                                              InvalidKeyException,
+                                                              IllegalBlockSizeException,
+                                                              BadPaddingException,
+                                                              IllegalArgumentException,
+                                                              NoSuchProviderException {
     byte[] rawKey = getRawKey(seed.getBytes());
     byte[] result = encrypt(rawKey, cleartext.getBytes());
     return toHex(result);
   }
 
-  public static String decrypt(String seed, String encrypted) throws Exception {
+  public static String decrypt(String seed, String encrypted) throws NoSuchAlgorithmException,
+                                                              NoSuchPaddingException,
+                                                              InvalidKeyException,
+                                                              IllegalBlockSizeException,
+                                                              BadPaddingException,
+                                                              IllegalArgumentException,
+                                                              NoSuchProviderException {
     byte[] rawKey = getRawKey(seed.getBytes());
     byte[] enc = toByte(encrypted);
     byte[] result = decrypt(rawKey, enc);
@@ -49,12 +67,13 @@ public class SimpleCrypto {
     return key;
   }
 
-  private static byte[] getRawKey1(byte[] seed) throws Exception {
-    byte[] raw = generateKey().getEncoded();
-    return raw;
-  }
-
-    private static byte[] getRawKey(byte[] seed) throws Exception {
+  private static byte[] getRawKey(byte[] seed) throws NoSuchAlgorithmException,
+                                               NoSuchPaddingException,
+                                               InvalidKeyException,
+                                               IllegalBlockSizeException,
+                                               BadPaddingException,
+                                               IllegalArgumentException,
+                                               NoSuchProviderException {
     KeyGenerator kgen = KeyGenerator.getInstance("AES");
     SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "Crypto");
     sr.setSeed(seed);
@@ -65,7 +84,12 @@ public class SimpleCrypto {
   }
 
 
-  private static byte[] encrypt(byte[] raw, byte[] clear) throws Exception {
+  private static byte[] encrypt(byte[] raw, byte[] clear) throws NoSuchAlgorithmException,
+                                                          NoSuchPaddingException,
+                                                          InvalidKeyException,
+                                                          IllegalBlockSizeException,
+                                                          BadPaddingException,
+                                                          IllegalArgumentException {
     SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
     Cipher cipher = Cipher.getInstance("AES");
     cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
@@ -73,7 +97,12 @@ public class SimpleCrypto {
     return encrypted;
   }
 
-  private static byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception {
+  private static byte[] decrypt(byte[] raw, byte[] encrypted) throws NoSuchAlgorithmException,
+                                                              NoSuchPaddingException,
+                                                              InvalidKeyException,
+                                                              IllegalBlockSizeException,
+                                                              BadPaddingException,
+                                                              IllegalArgumentException {
     SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
     Cipher cipher = Cipher.getInstance("AES");
     cipher.init(Cipher.DECRYPT_MODE, skeySpec);

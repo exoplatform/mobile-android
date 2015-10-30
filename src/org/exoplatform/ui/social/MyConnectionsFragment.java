@@ -18,8 +18,6 @@
  */
 package org.exoplatform.ui.social;
 
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.ArrayList;
 
 import org.exoplatform.R;
@@ -31,8 +29,10 @@ import org.exoplatform.social.client.api.common.RealtimeListAccess;
 import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestIdentity;
 import org.exoplatform.social.client.api.service.QueryParams;
+
 import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 /**
@@ -42,11 +42,11 @@ import android.view.View;
 public class MyConnectionsFragment extends ActivityStreamFragment {
 
   public static MyConnectionsFragment instance;
-  
+
   @Override
-	public int getThisTabId() {
-		return SocialTabsActivity.MY_CONNECTIONS;
-	}
+  public int getThisTabId() {
+    return SocialTabsActivity.MY_CONNECTIONS;
+  }
 
   public static MyConnectionsFragment getInstance() {
     MyConnectionsFragment fragment = new MyConnectionsFragment();
@@ -73,55 +73,52 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
     super.onDestroy();
     instance = null;
   }
-  
+
   public boolean isEmpty() {
-	  return (SocialServiceHelper.getInstance().myConnectionsList == null
-	        || SocialServiceHelper.getInstance().myConnectionsList.size() == 0);
+    return (SocialServiceHelper.getInstance().myConnectionsList == null || SocialServiceHelper.getInstance().myConnectionsList.size() == 0);
   }
-  
+
   @Override
   public SocialLoadTask getThisLoadTask() {
-  	return new MyConnectionLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
+    return new MyConnectionLoadTask(getActivity(), SocialTabsActivity.instance.loaderItem);
   }
 
   public void setListAdapter() {
-	  super.setListAdapter(SocialServiceHelper.getInstance().myConnectionsList);
+    super.setListAdapter(SocialServiceHelper.getInstance().myConnectionsList);
   }
 
   public class MyConnectionLoadTask extends SocialLoadTask {
 
-    public MyConnectionLoadTask(Context context, LoaderActionBarItem loader) {
+    public MyConnectionLoadTask(Context context, MenuItem loader) {
       super(context, loader);
     }
 
     @Override
     public void setResult(ArrayList<SocialActivityInfo> result) {
-    	setActivityList(result);
-    	setListAdapter();
-    	listview.getAutoLoadProgressBar().setVisibility(View.GONE);
-    	super.setResult(result);
+      setActivityList(result);
+      setListAdapter();
+      listview.getAutoLoadProgressBar().setVisibility(View.GONE);
+      super.setResult(result);
     }
 
-	@Override
-	protected RealtimeListAccess<RestActivity> getRestActivityList(
-			RestIdentity identity, QueryParams params)
-			throws SocialClientLibException {
-		return activityService.getConnectionsActivityStream(identity, params);
-	}
+    @Override
+    protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
+      return activityService.getConnectionsActivityStream(identity, params);
+    }
 
-	@Override
-	protected ArrayList<SocialActivityInfo> getSocialActivityList() {
-		return SocialServiceHelper.getInstance().myConnectionsList;
-	}
+    @Override
+    protected ArrayList<SocialActivityInfo> getSocialActivityList() {
+      return SocialServiceHelper.getInstance().myConnectionsList;
+    }
 
   }
 
-	@Override
-	public void setActivityList(ArrayList<SocialActivityInfo> list) {
-		if (!isLoadingMoreActivities)
-			SocialServiceHelper.getInstance().myConnectionsList = list;
-		else
-			SocialServiceHelper.getInstance().myConnectionsList.addAll(list);
-	}
+  @Override
+  public void setActivityList(ArrayList<SocialActivityInfo> list) {
+    if (!isLoadingMoreActivities)
+      SocialServiceHelper.getInstance().myConnectionsList = list;
+    else
+      SocialServiceHelper.getInstance().myConnectionsList.addAll(list);
+  }
 
 }

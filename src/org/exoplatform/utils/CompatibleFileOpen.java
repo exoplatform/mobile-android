@@ -93,10 +93,13 @@ public class CompatibleFileOpen {
     fileType = fType;
     filePath = fPath;
     fileName = fName;
-    if (ExoDocumentUtils.isFileReadable(fileType)) {
-      onLoad(filePath);
-    } else {
+
+    if (ExoDocumentUtils.isForbidden(fileType)) {
       new UnreadableFileDialog(mContext, fileNotSupport).show();
+    } else if (!ExoDocumentUtils.isCallable(mContext, fileType, filePath)) {
+      new UnreadableFileDialog(mContext, noAppFound).show();
+    } else {
+      onLoad(filePath);
     }
 
   }
@@ -192,6 +195,8 @@ public class CompatibleFileOpen {
         }
         return RESULT_OK;
       } catch (IOException e) {
+        if (Log.LOGD)
+          Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
         if (file != null) {
           file.delete();
         }

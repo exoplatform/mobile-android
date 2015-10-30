@@ -18,17 +18,16 @@
  */
 package org.exoplatform.ui.setting;
 
+import org.exoplatform.R;
+
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import org.exoplatform.R;
 
 /**
  * A checkbox that has a text and a image<br/>
@@ -38,8 +37,6 @@ import org.exoplatform.R;
  */
 public class CheckBox extends RelativeLayout implements
     View.OnClickListener {
-
-  private Context   mContext;
 
   /** state: checked or not */
   protected boolean mChecked = false;
@@ -65,17 +62,14 @@ public class CheckBox extends RelativeLayout implements
 
   public CheckBox(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
-    mContext = context;
   }
 
   public CheckBox(Context context, AttributeSet attrs) {
     super(context, attrs);
-    mContext = context;
   }
 
   public CheckBox(Context context) {
     super(context);
-    mContext = context;
   }
 
 

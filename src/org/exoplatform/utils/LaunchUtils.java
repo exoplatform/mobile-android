@@ -18,8 +18,6 @@
  */
 package org.exoplatform.utils;
 
-import greendroid.util.Config;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -54,21 +52,12 @@ public class LaunchUtils {
     mContext = context;
     mSharedPreference = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     mSetting = AccountSetting.getInstance();
-
-    initAssets();
     setLocalize();
     String oldConfigFile = ServerConfigurationUtils.checkPreviousAppConfig(mContext);
     if (oldConfigFile != null)
       setOldServerList(oldConfigFile);
     else
       setServerList();
-  }
-
-  /**
-   * Init assets utils
-   */
-  private void initAssets() {
-    AssetUtils.setContext(mContext);
   }
 
   /**
@@ -83,7 +72,7 @@ public class LaunchUtils {
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
     mSetting.setCurrentAccount((selectedServerIdx == -1 || selectedServerIdx >= _serverList.size()) ? null
-                                                                                                   : _serverList.get(selectedServerIdx));
+        : _serverList.get(selectedServerIdx));
   }
 
   /**
@@ -119,8 +108,8 @@ public class LaunchUtils {
       String appVer = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0).versionName;
       ServerSettingHelper.getInstance().setApplicationVersion(appVer);
     } catch (NameNotFoundException e) {
-      if (Config.GD_ERROR_LOGS_ENABLED)
-        Log.e("NameNotFoundException", "Error of getting package information!");
+      // if (Config.GD_ERROR_LOGS_ENABLED)
+      Log.e("NameNotFoundException", "Error of getting package information!");
     }
   }
 

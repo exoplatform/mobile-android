@@ -9,8 +9,9 @@
     <dimen name="social_liked_list_item_width">85dp</dimen>
     <dimen name="social_liked_list_item_height">85dp</dimen>
     <dimen name="social_avatar_size">43dp</dimen>
+    <dimen name="social_buttons_min_height">30dp</dimen>
     <dimen name="unreadable_file_size">75dp</dimen>
-    <dimen name="attachment_max_height">320dp</dimen>
+    <dimen name="attachment_max_height">160dp</dimen>
 
     <!-- text size -->
     <dimen name="text_size_smallest">13sp</dimen>

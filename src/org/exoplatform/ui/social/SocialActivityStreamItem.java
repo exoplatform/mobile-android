@@ -25,6 +25,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.EmptyImageGetter;
 import org.exoplatform.utils.image.ExoPicasso;
@@ -129,8 +130,9 @@ public class SocialActivityStreamItem {
                             TextView.BufferType.SPANNABLE);
     textViewMessage.setVisibility(View.VISIBLE);
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
-                                                                activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
-                                                                                                  : activityInfo.getPostedTime()));
+                            activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
+                                                               : activityInfo.getPostedTime()));
+
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
     textViewTempMessage.setVisibility(View.GONE);
@@ -263,6 +265,10 @@ public class SocialActivityStreamItem {
     textViewName.setText(Html.fromHtml(wikiBuffer), TextView.BufferType.SPANNABLE);
     String wikiBody = activityInfo.getBody();
     if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
+      // use the page excerpt if no body is available
+      wikiBody = activityInfo.templateParams != null ? activityInfo.templateParams.get("page_exceprt") : null;
+    }
+    if (wikiBody == null) {
       textViewMessage.setVisibility(View.GONE);
     } else {
       textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
@@ -302,7 +308,8 @@ public class SocialActivityStreamItem {
     String description = activityInfo.templateParams.get("description");
 
     if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
-      textViewMessage.setText(Html.fromHtml(templateComment, new EmptyImageGetter(mContext), null), TextView.BufferType.SPANNABLE);
+      textViewMessage.setText(Html.fromHtml(templateComment, new EmptyImageGetter(mContext), null),
+                              TextView.BufferType.SPANNABLE);
     }
     if (description != null) {
       textViewCommnet.setText(Html.fromHtml(description.trim()), TextView.BufferType.SPANNABLE);
@@ -338,7 +345,7 @@ public class SocialActivityStreamItem {
       txtViewFileName.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
 
       if (isDetail) {
-        SocialActivityUtil.setTextLinkfy(txtViewFileName);
+        SocialActivityUtil.setTextLinkify(txtViewFileName);
         txtViewFileName.setMaxLines(100);
       }
     }
@@ -347,7 +354,7 @@ public class SocialActivityStreamItem {
       int errorDrawable = isLinkType ? R.drawable.icon_for_unreadable_link : R.drawable.icon_for_placeholder_image;
       int maxHeight = resource.getDimensionPixelSize(R.dimen.attachment_max_height);
       ExoPicasso.picasso(mContext)
-                .load(Uri.parse(url))
+                .load(Uri.parse(ExoUtils.encodeDocumentUrl(url)))
                 .placeholder(R.drawable.loading_rect)
                 .error(errorDrawable)
                 .resize(maxHeight, maxHeight)

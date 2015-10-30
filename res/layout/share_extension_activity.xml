@@ -2,60 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#DCDCDCDC">
-    
-    <RelativeLayout
+    android:background="#DCDCDCDC"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/share_extension_fragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        
-        <TextView
-            android:id="@+id/share_activity_title"
-            style="@style/AccountFragmentTitleStyle"
-            android:text="Share"/>
-        
-        <ImageView
-            android:id="@+id/separator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/share_button_wrapper"
-            android:layout_centerVertical="true"
-            android:src="@drawable/action_bar_separator_complete"
-            android:layout_marginRight="@dimen/margin_xxs"
-            android:contentDescription="@string/StatusUpdate" />
-        
-        <RelativeLayout
-            android:id="@+id/share_button_wrapper" 
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_alignParentRight="true">
-            
-            <Button
-                android:id="@+id/share_button"
-                style="@style/AccountSwitcherSignInButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:onClick="onMainButtonClicked"
-                android:text="@string/StatusUpdate" />
+        android:layout_height="match_parent"
+        android:layout_gravity="top" />
 
-	        <ProgressBar
-	            android:id="@+id/share_progress_indicator"
-	            style="?android:attr/progressBarStyleSmall"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_centerHorizontal="true"
-	            android:layout_centerVertical="true"
-	            android:visibility="gone" />
-            
-        </RelativeLayout>
-
-    </RelativeLayout>
-    
-    <FrameLayout android:id="@+id/share_extension_fragment"
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 android:layout_gravity="top"/>
-    
 </LinearLayout>

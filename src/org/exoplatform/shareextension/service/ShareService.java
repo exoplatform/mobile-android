@@ -52,6 +52,9 @@ import android.support.v4.app.NotificationCompat;
 
 /**
  * Created by The eXo Platform SAS.<br/>
+ * IntentService that publishes a post with optional attachments. If multiple
+ * files are attached, the first one is part of the activity, the other are
+ * added in comments on the activity.
  * 
  * @author Philippe Aristote paristote@exoplatform.com
  * @since Jun 4, 2015
@@ -126,34 +129,11 @@ public class ShareService extends IntentService {
    */
   private UploadInfo initUpload() {
     postInfo.activityType = SocialPostInfo.TYPE_DOC;
-
     UploadInfo uploadInfo = new UploadInfo();
-    uploadInfo.uploadId = Long.toHexString(System.currentTimeMillis());
-    uploadInfo.repository = DocumentHelper.getInstance().repository;
-    uploadInfo.workspace = DocumentHelper.getInstance().workspace;
+    uploadInfo.init(postInfo);
 
-    if (postInfo.isPublic()) {
-      // File will be uploaded in the Public folder of the user's drive
-      // e.g. /Users/u___/us___/use___/user/Public/Mobile
-      uploadInfo.drive = ExoConstants.DOCUMENT_PERSONAL_DRIVE_NAME;
-      uploadInfo.folder = "Public/Mobile";
-      uploadInfo.jcrUrl = DocumentHelper.getInstance().getRepositoryHomeUrl();
-    } else {
-      // File will be uploaded in the Documents folder of the space's drive
-      // e.g. /Groups/spaces/the_space/Documents/Mobile
-      uploadInfo.drive = ".spaces." + postInfo.destinationSpace.getOriginalName();
-      uploadInfo.folder = "Mobile";
-      StringBuffer url = new StringBuffer(postInfo.ownerAccount.serverUrl).append(ExoConstants.DOCUMENT_JCR_PATH)
-                                                                          .append("/")
-                                                                          .append(uploadInfo.repository)
-                                                                          .append("/")
-                                                                          .append(uploadInfo.workspace)
-                                                                          .append("/Groups/spaces/")
-                                                                          .append(postInfo.destinationSpace.getOriginalName())
-                                                                          .append("/Documents");
-      uploadInfo.jcrUrl = url.toString();
-    }
     return uploadInfo;
+
   }
 
   /**
@@ -195,6 +175,7 @@ public class ShareService extends IntentService {
         uploadInfo = new UploadInfo(uploadInfo);
       }
 
+      // <<<<<<< HEAD
       String fileUri = "file://" + postInfo.postAttachedFiles.get(i);
       Uri uri = Uri.parse(fileUri);
       uploadInfo.fileToUpload = ExoDocumentUtils.documentInfoFromUri(uri, getBaseContext());
@@ -241,6 +222,7 @@ public class ShareService extends IntentService {
         Log.d(LOG_TAG, "File " + f.getName() + " deleted: " + (f.delete() ? "YES" : "NO"));
     }
     return uploadedAll;
+
   }
 
   /**
@@ -488,5 +470,33 @@ public class ShareService extends IntentService {
       this.jcrUrl = another.jcrUrl;
     }
 
+    public void init(SocialPostInfo postInfo) {
+
+      uploadId = Long.toHexString(System.currentTimeMillis());
+      repository = DocumentHelper.getInstance().repository;
+      workspace = DocumentHelper.getInstance().workspace;
+
+      if (postInfo.isPublic()) {
+        // File will be uploaded in the Public folder of the user's drive
+        // e.g. /Users/u___/us___/use___/user/Public/Mobile
+        drive = ExoConstants.DOCUMENT_PERSONAL_DRIVE_NAME;
+        folder = "Public/Mobile";
+        jcrUrl = DocumentHelper.getInstance().getRepositoryHomeUrl();
+      } else {
+        // File will be uploaded in the Documents folder of the space's drive
+        // e.g. /Groups/spaces/the_space/Documents/Mobile
+        drive = ".spaces." + postInfo.destinationSpace.getOriginalName();
+        folder = "Mobile";
+        StringBuffer url = new StringBuffer(postInfo.ownerAccount.serverUrl).append(ExoConstants.DOCUMENT_JCR_PATH)
+                                                                            .append("/")
+                                                                            .append(repository)
+                                                                            .append("/")
+                                                                            .append(workspace)
+                                                                            .append("/Groups/spaces/")
+                                                                            .append(postInfo.destinationSpace.getOriginalName())
+                                                                            .append("/Documents");
+        jcrUrl = url.toString();
+      }
+    }
   }
 }

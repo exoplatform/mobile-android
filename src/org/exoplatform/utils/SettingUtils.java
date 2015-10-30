@@ -123,6 +123,7 @@ public class SettingUtils {
      * @param ctx
      */
     public static void disableAutoLogin(Context ctx) {
+      // Jul 21, 2015, should use application context?
         int currentAccountIdx = Integer.parseInt(AccountSetting.getInstance().getDomainIndex());
         int numberOfAccounts = ServerSettingHelper.getInstance().getServerInfoList(ctx).size();
         if (currentAccountIdx >= 0 && currentAccountIdx < numberOfAccounts)

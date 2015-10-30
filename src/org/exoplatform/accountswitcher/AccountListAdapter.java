@@ -48,12 +48,10 @@ import com.squareup.picasso.Picasso;
 public class AccountListAdapter extends BaseAdapter {
   
   private ArrayList<ExoAccount> mAccountList;
-  private Context mContext;
   
   private final String TAG = "eXo____AccountListAdapter____";
   
   public AccountListAdapter(Context ctx) {
-    mContext = ctx;
     mAccountList = ServerSettingHelper.getInstance().getServerInfoList(ctx);
   }
 
@@ -75,6 +73,7 @@ public class AccountListAdapter extends BaseAdapter {
   @Override
   public View getView(int index, View convertView, ViewGroup parent) {
     ViewHolder holder;
+    Context mContext = parent.getContext();
     if (convertView == null) {
       LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
       convertView = inflater.inflate(R.layout.account_switcher_item_layout, parent, false);
@@ -106,10 +105,12 @@ public class AccountListAdapter extends BaseAdapter {
         connStatus = "";
         holder.connectionStatus.setVisibility(View.GONE);
       } else {
+        StringBuilder statusBld = new StringBuilder();
         // load 'LastLoginDate' label from resources
-        connStatus = mContext.getResources().getString(R.string.LastLoginDate);
+        statusBld.append(mContext.getResources().getString(R.string.LastLoginDate));
         // append the date written in words
-        connStatus = connStatus+": "+SocialActivityUtil.getPostedTimeString(mContext, account.lastLoginDate);
+        statusBld.append(": ").append(SocialActivityUtil.getPostedTimeString(mContext, account.lastLoginDate));
+        connStatus = statusBld.toString();
         holder.connectionStatus.setVisibility(View.VISIBLE);
       }
     }
@@ -117,10 +118,14 @@ public class AccountListAdapter extends BaseAdapter {
     
     if ("".equalsIgnoreCase(account.avatarUrl)) {
       // no avatar URL, load a standard image
-      Picasso.with(mContext).load(R.drawable.default_avatar).resizeDimen(R.dimen.account_list_avatar_size,R.dimen.account_list_avatar_size).centerCrop().into(holder.userAvatar);
+      Picasso.with(mContext).load(R.drawable.default_avatar)
+             .resizeDimen(R.dimen.account_list_avatar_size, R.dimen.account_list_avatar_size).centerCrop()
+             .into(holder.userAvatar);
     } else {
       // load the avatar from its URL
-      Picasso.with(mContext).load(account.avatarUrl).resizeDimen(R.dimen.account_list_avatar_size,R.dimen.account_list_avatar_size).centerCrop().into(holder.userAvatar);
+      Picasso.with(mContext).load(account.avatarUrl)
+             .resizeDimen(R.dimen.account_list_avatar_size, R.dimen.account_list_avatar_size).centerCrop()
+             .into(holder.userAvatar);
     }
     
     return convertView;

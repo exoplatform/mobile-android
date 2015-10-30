@@ -25,6 +25,7 @@ import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.utils.SocialActivityUtil;
 import org.exoplatform.utils.image.EmptyImageGetter;
 import org.exoplatform.utils.image.ExoPicasso;
@@ -35,7 +36,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.Html;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
@@ -93,11 +93,6 @@ public class SocialActivityDetailsItem extends LinearLayout {
 
   private static final String TAG            = "eXo____SocialActivityStreamItem____";
 
-  public SocialActivityDetailsItem(Context context, AttributeSet attrs) {
-    super(context, attrs);
-
-  }
-
   public SocialActivityDetailsItem(Context context, SocialActivityInfo info, boolean is) {
     super(context);
 
@@ -142,8 +137,8 @@ public class SocialActivityDetailsItem extends LinearLayout {
                             TextView.BufferType.SPANNABLE);
 
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
-                                                                activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
-                                                                                                  : activityInfo.getPostedTime()));
+                           activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
+                                                              : activityInfo.getPostedTime()));
     buttonComment.setText("" + activityInfo.getCommentNumber());
     buttonLike.setText("" + activityInfo.getLikeNumber());
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());
@@ -270,6 +265,10 @@ public class SocialActivityDetailsItem extends LinearLayout {
     textViewName.setText(Html.fromHtml(wikiBuffer), TextView.BufferType.SPANNABLE);
     String wikiBody = activityInfo.getBody();
     if (wikiBody == null || wikiBody.equalsIgnoreCase("body")) {
+      // use the page excerpt if no body is available
+      wikiBody = activityInfo.templateParams != null ? activityInfo.templateParams.get("page_exceprt") : null;
+    }
+    if (wikiBody == null) {
       textViewMessage.setVisibility(View.GONE);
     } else {
       textViewMessage.setText(Html.fromHtml(wikiBody), TextView.BufferType.SPANNABLE);
@@ -302,7 +301,8 @@ public class SocialActivityDetailsItem extends LinearLayout {
     String description = activityInfo.templateParams.get("description").trim();
 
     if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
-      textViewMessage.setText(Html.fromHtml(templateComment, new EmptyImageGetter(mContext), null), TextView.BufferType.SPANNABLE);
+      textViewMessage.setText(Html.fromHtml(templateComment, new EmptyImageGetter(mContext), null),
+                              TextView.BufferType.SPANNABLE);
     }
     if (description != null) {
       textViewCommnet.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
@@ -341,15 +341,16 @@ public class SocialActivityDetailsItem extends LinearLayout {
       txtViewFileName.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
 
       if (isDetail) {
-        SocialActivityUtil.setTextLinkfy(txtViewFileName);
+        SocialActivityUtil.setTextLinkify(txtViewFileName);
         txtViewFileName.setMaxLines(100);
       }
     }
 
     if (fileType != null && fileType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
       int errorDrawable = isLinkType ? R.drawable.icon_for_unreadable_link : R.drawable.icon_for_placeholder_image;
+
       ExoPicasso.picasso(mContext)
-                .load(Uri.parse(url))
+                .load(Uri.parse(ExoUtils.encodeDocumentUrl(url)))
                 .placeholder(R.drawable.loading_rect)
                 .error(errorDrawable)
                 .into(attachImage);

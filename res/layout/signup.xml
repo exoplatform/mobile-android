@@ -7,10 +7,6 @@
               android:layout_height="match_parent"
               android:background="@drawable/welcome_bg_repeat">
 
-    <TextView
-            style="@style/SignUpBlueHeaderStyle"
-            android:text="@string/GetStarted"/>
-
     <FrameLayout android:id="@+id/share_extension_fragment"
                  android:layout_width="@dimen/signup_frame_width"
                  android:layout_height="wrap_content"

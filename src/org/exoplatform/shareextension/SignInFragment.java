@@ -49,21 +49,21 @@ public class SignInFragment extends Fragment {
   private EditText              etPassword;
 
   private TextWatcher           passwordValidator = new TextWatcher() {
-                                                    @Override
-                                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                                      enableDisableMainButton();
-                                                    }
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+      enableDisableMainButton();
+    }
 
-                                                    @Override
-                                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                                    }
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
-                                                    @Override
-                                                    public void afterTextChanged(Editable s) {
-                                                    }
-                                                  };
+    @Override
+    public void afterTextChanged(Editable s) {
+    }
+  };
 
-  private SignInFragment() {
+  public SignInFragment() {
   }
 
   public static SignInFragment getFragment() {
@@ -79,8 +79,8 @@ public class SignInFragment extends Fragment {
     tvUsername.setText(acc.username);
     if (acc.isRememberEnabled)
       etPassword.setText(acc.password);
-    getShareActivity().toggleMainButtonType(R.attr.share_button_type_signin);
-    getShareActivity().getMainButton().setVisibility(View.VISIBLE);
+    getShareActivity().toggleMainButtonType(ShareActivity.BUTTON_TYPE_SIGNIN);
+    getShareActivity().toggleProgressVisible(false);
     enableDisableMainButton();
     super.onResume();
   }
@@ -120,7 +120,8 @@ public class SignInFragment extends Fragment {
     if (getActivity() instanceof ShareActivity) {
       return (ShareActivity) getActivity();
     } else {
-      throw new RuntimeException("This fragment is only valid in the activity org.exoplatform.shareextension.ShareActivity");
+      throw new UnsupportedOperationException(new StringBuilder("This fragment is only valid in the activity")
+          .append(ShareActivity.class.getName()).toString());
     }
   }
 }

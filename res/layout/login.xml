@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:padding="5dp"
+        android:layout_marginTop="@dimen/margin_xl"
+        android:layout_marginBottom="@dimen/margin_xxs"
+        android:padding="@dimen/margin_xxs"
         android:contentDescription="@string/ImageDesc"
         android:src="@drawable/exo_logo_large" >
         <requestFocus/>
@@ -59,7 +59,8 @@
                     android:textColor="#FFFFFF"
                     android:textColorHint="#AAAAAAAA"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:inputType="textEmailAddress" />
 
                 <EditText
                     android:id="@+id/EditText_Password"
@@ -90,7 +91,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/login_button_background_shape"
                 android:text="@string/SignInButton"
-                android:textColor="#000000"
+                android:textColor="@android:color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

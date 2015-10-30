@@ -16,7 +16,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:shadowColor="#000000"
+                android:shadowColor="@android:color/black"
                 android:shadowDx="1.0"
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"
@@ -54,7 +54,7 @@
                     android:paddingLeft="8dip"
                     android:paddingRight="8dip"
                     android:paddingTop="3dip"
-                    android:textColor="#000000"
+                    android:textColor="@android:color/black"
                     android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>
@@ -73,7 +73,7 @@
                 android:layout_margin="5dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/cancel_button_background_shape"
-                android:shadowColor="#000000"
+                android:shadowColor="@android:color/black"
                 android:shadowDx="1.0"
                 android:shadowDy="2.0"
                 android:shadowRadius="1.0"

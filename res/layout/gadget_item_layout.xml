@@ -7,7 +7,7 @@
     android:orientation="horizontal"
     android:padding="5dip" >
 
-    <org.exoplatform.widget.ShaderImageView
+    <ImageView
         android:id="@+id/gadget_image"
         android:layout_width="@dimen/social_avatar_size"
         android:layout_height="@dimen/social_avatar_size"

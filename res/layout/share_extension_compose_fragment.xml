@@ -32,6 +32,19 @@
         android:src="@drawable/icon_for_placeholder_image"
         android:contentDescription="@string/AttachedPhoto"/>
     
+    <TextView
+        android:id="@+id/share_attachment_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/share_attachment_thumbnail"
+        android:layout_alignLeft="@+id/share_attachment_thumbnail"
+        android:layout_alignRight="@+id/share_attachment_thumbnail"
+        android:background="#E6FFFFFF"
+        android:gravity="center"
+        android:text="@string/ShareTitle"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:visibility="gone" />
+    
     <LinearLayout 
         android:id="@+id/share_account_wrapper"
         android:orientation="horizontal"
@@ -50,7 +63,7 @@
             android:text="@string/Account"
             android:textSize="@dimen/text_size_medium"
             android:layout_marginRight="@dimen/margin_xs"
-            android:textColor="#000"/>
+            android:textColor="@android:color/black"/>
         
         <TextView
             android:id="@+id/share_account"
@@ -84,7 +97,7 @@
             android:text="@string/PostTo"
             android:textSize="@dimen/text_size_medium"
             android:layout_marginRight="@dimen/margin_xs"
-            android:textColor="#000"/>
+            android:textColor="@android:color/black"/>
 
         <TextView
 	        android:id="@+id/share_space"

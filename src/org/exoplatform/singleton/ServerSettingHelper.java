@@ -95,6 +95,7 @@ public class ServerSettingHelper implements Parcelable {
    */
   public ArrayList<ExoAccount> getServerInfoList(Context context) {
     if (serverInfoList == null) {
+      // Jul 21, 2015, should use application context here?
       serverInfoList =
           ServerConfigurationUtils.getServerListFromFile(context, ExoConstants.EXO_SERVER_SETTING_FILE);
       ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
@@ -109,15 +110,6 @@ public class ServerSettingHelper implements Parcelable {
    */
   public boolean twoOrMoreAccountsExist(Context ctx) {
 	  return (getServerInfoList(ctx).size() > 1);
-  }
-
-  @Deprecated
-  /**
-   * Use getServerInfoList(Context) instead
-   * @return the list of servers
-   */
-  public ArrayList<ExoAccount> getServerInfoList() {
-    return serverInfoList;
   }
 
   private ServerSettingHelper(Parcel in) {

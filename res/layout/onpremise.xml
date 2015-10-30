@@ -7,18 +7,6 @@
               android:layout_height="match_parent"
               android:background="@drawable/welcome_bg_repeat">
 
-    <TextView
-            android:id="@+id/onpremise_title_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="?attr/gdActionBarTitleColor"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold"
-            android:text="@string/OnPremise"
-            android:background="@drawable/action_bar_background_repeate"/>
-
     <RelativeLayout android:layout_width="@dimen/signup_frame_width"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

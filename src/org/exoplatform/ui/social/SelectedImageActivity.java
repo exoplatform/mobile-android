@@ -27,9 +27,9 @@ import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.MyActionBar;
 import org.exoplatform.widget.WaitingDialog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -41,12 +41,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import greendroid.widget.ActionBarItem;
 
-public class SelectedImageActivity extends MyActionBar implements OnClickListener {
+public class SelectedImageActivity extends Activity implements OnClickListener {
 
   private static final int    SCALE_WIDTH  = 1024;
 
@@ -87,9 +85,7 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setTheme(R.style.Theme_eXo);
-    setActionBarContentView(R.layout.social_selected_image_layout);
+    setContentView(R.layout.social_selected_image_layout);
     if (savedInstanceState != null)
       finish();
     else {
@@ -102,8 +98,6 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    this.getContentView().removeAllViews();
-    this.setActionBarContentView(R.layout.social_selected_image_layout);
     init();
     onLoad(modeId);
   }
@@ -141,26 +135,6 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
-  }
-
-  @Override
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
-    case -1:
-      finish();
-      if (ComposeMessageActivity.composeMessageActivity != null)
-        ComposeMessageActivity.composeMessageActivity.finish();
-      if (SocialTabsActivity.instance != null)
-        SocialTabsActivity.instance.finish();
-      if (DocumentActivity._documentActivityInstance != null) {
-        DocumentActivity._documentActivityInstance.finish();
-      }
-      break;
-
-    case 0:
-      break;
-    }
-    return true;
   }
 
   @Override
@@ -253,15 +227,14 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
         filePath = getIntent().getStringExtra(ExoConstants.SELECTED_IMAGE_EXTRA);
       }
 
-      try {
-        Log.i(TAG, "[Photo Picker] Image File Path: " + filePath);
+      if (filePath != null) {
+        Log.i("PHOTO_PICKER", "Image File Path: " + filePath);
         file = new File(filePath);
         Bitmap bm = PhotoUtils.shrinkBitmap(filePath, SCALE_WIDTH, SCALE_HEIGHT);
         return ExoDocumentUtils.rotateBitmapToNormal(filePath, bm);
-      } catch (NullPointerException e) {
+      } else {
         return null;
       }
-
     }
 
     @Override
@@ -272,6 +245,13 @@ public class SelectedImageActivity extends MyActionBar implements OnClickListene
         okButton.setClickable(false);
       }
       _progressDialog.dismiss();
+    }
+
+    @Override
+    protected void onCancelled(Bitmap result) {
+      if (_progressDialog != null)
+        _progressDialog.dismiss();
+      onCancelled();
     }
 
   }

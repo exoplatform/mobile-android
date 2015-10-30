@@ -55,7 +55,7 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
 
   List<ExoAccount>                accounts;
 
-  private AccountsFragment() {
+  public AccountsFragment() {
     accounts = ServerSettingHelper.getInstance().getServerInfoList(getActivity());
   }
 
@@ -104,7 +104,7 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
   public void onListItemClick(ListView l, View v, int position, long id) {
     if (accounts != null && position >= 0 && position < accounts.size()) {
       ExoAccount acc = accounts.get(position);
-      if (acc.password != null && !"".equals(acc.password)) {
+      if (acc.isRememberEnabled && acc.isAutoLoginEnabled && acc.password != null && !"".equals(acc.password)) {
         getShareActivity().onAccountSelected(acc);
         getShareActivity().openFragment(ComposeFragment.getFragment(),
                                         ComposeFragment.COMPOSE_FRAGMENT,
@@ -126,7 +126,7 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
 
   @Override
   public void onResume() {
-    getShareActivity().getMainButton().setVisibility(View.INVISIBLE);
+    getShareActivity().toggleMainButtonType(ShareActivity.BUTTON_TYPE_INVISIBLE);
     super.onResume();
   }
 
@@ -144,7 +144,7 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
     if (getActivity() instanceof ShareActivity) {
       return (ShareActivity) getActivity();
     } else {
-      throw new RuntimeException("This fragment is only valid in the activity org.exoplatform.shareextension.ShareActivity");
+      throw new UnsupportedOperationException("This fragment is only valid in the activity org.exoplatform.shareextension.ShareActivity");
     }
   }
 

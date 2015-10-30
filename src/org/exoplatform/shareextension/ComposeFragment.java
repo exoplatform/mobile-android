@@ -53,15 +53,19 @@ public class ComposeFragment extends Fragment {
 
   private EditText               etPostMessage;
 
-  private TextView               tvAccount, tvSpace;
+  private TextView               tvAccount, tvSpace, tvMoreAttachments;
 
   private ImageView              imgThumb;
+  
+  private Bitmap                 bmThumb;
+  
+  private int                    nbAttachments;
 
   private ScrollView             scroller;
 
   private TextWatcher            postValidator;
 
-  private ComposeFragment() {
+  public ComposeFragment() {
     postValidator = new TextWatcher() {
       @Override
       public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
@@ -116,12 +120,23 @@ public class ComposeFragment extends Fragment {
   }
 
   public void setThumbnailImage(Bitmap bm) {
-    if (bm != null)
+	bmThumb = bm;
+    if (bm != null) {
       imgThumb.setImageBitmap(bm);
+    }
+  }
+  
+  public void setNumberOfAttachments(int nb) {
+	nbAttachments = nb;
+	if (nb > 1) {
+	    tvMoreAttachments.setText("+ " + (nb-1));
+	    tvMoreAttachments.setVisibility(View.VISIBLE);
+	  }
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    Log.d("TEST", "onCreateView Compose");
     View layout = inflater.inflate(R.layout.share_extension_compose_fragment, container, false);
     etPostMessage = (EditText) layout.findViewById(R.id.share_post_message);
     etPostMessage.addTextChangedListener(postValidator);
@@ -139,6 +154,7 @@ public class ComposeFragment extends Fragment {
         getShareActivity().onSelectSpace();
       }
     });
+    tvMoreAttachments = (TextView) layout.findViewById(R.id.share_attachment_more);
     imgThumb = (ImageView) layout.findViewById(R.id.share_attachment_thumbnail);
     scroller = (ScrollView) layout.findViewById(R.id.share_scroll_wrapper);
     init();
@@ -148,19 +164,15 @@ public class ComposeFragment extends Fragment {
   @Override
   public void onResume() {
     setTouchListener();
-    getShareActivity().toggleMainButtonType(R.attr.share_button_type_post);
-    if (!getShareActivity().getLoadingIndicator().isShown())
-      getShareActivity().getMainButton().setVisibility(View.VISIBLE);
+    getShareActivity().toggleMainButtonType(ShareActivity.BUTTON_TYPE_SHARE);
+    if (!getShareActivity().isProgressVisible())
+      getShareActivity().toggleProgressVisible(false);
     ExoAccount selectedAccount = getShareActivity().getPostInfo().ownerAccount;
     if (selectedAccount != null)
       tvAccount.setText(selectedAccount.accountName + " (" + selectedAccount.username + ")");
+    setThumbnailImage(bmThumb);
+    setNumberOfAttachments(nbAttachments);
     super.onResume();
-  }
-
-  @Override
-  public void onDestroy() {
-    Log.d(COMPOSE_FRAGMENT, "Destroyed " + this);
-    super.onDestroy();
   }
 
   /*
@@ -175,7 +187,7 @@ public class ComposeFragment extends Fragment {
     if (getActivity() instanceof ShareActivity) {
       return (ShareActivity) getActivity();
     } else {
-      throw new RuntimeException("This fragment is only valid in the activity org.exoplatform.shareextension.ShareActivity");
+      throw new UnsupportedOperationException("This fragment is only valid in the activity org.exoplatform.shareextension.ShareActivity");
     }
   }
 

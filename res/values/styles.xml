@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+Copyright (C) 2003-2014 eXo Platform SAS.
+ 
+This is free software; you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License as
+published by the Free Software Foundation; either version 3 of
+the License, or (at your option) any later version.
+
+This software is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this software; if not, write to the Free
+Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="background_color">
         <item name="android:background">#dcdcdc</item>
     </style>
+    
+    <style name="ActionBarTitleStyle" parent="@style/TextAppearanceLarge">
+        <item name="android:textColor">#ffffff</item>
+    </style>
 
-    <style name="TextAppearanceLarge" parent="@style/TextAppearance.Large">
+    <style name="TextAppearanceLarge" parent="@android:style/TextAppearance.Large">
         <item name="android:textSize">18sp</item>
     </style>
 
     <style name="TitleTextAppearance">
-        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowColor">@android:color/black</item>
         <item name="android:shadowDx">1.0</item>
         <item name="android:shadowDy">2.0</item>
         <item name="android:shadowRadius">1.0</item>
@@ -44,7 +66,8 @@
 
     <style name="textview_number">
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:minHeight">@dimen/social_buttons_min_height</item>
     </style>
 
     <style name="textview_like">
@@ -164,7 +187,7 @@
     <style name="SignUpAlertTxtStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:drawableLeft">@drawable/icon_warning</item>
         <item name="android:visibility">invisible</item>
         <item name="android:layout_alignParentLeft">true</item>
@@ -178,7 +201,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textColor">?attr/gdActionBarTitleColor</item>
+        <item name="android:textColor">#fff</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/action_bar_background_repeate</item>
@@ -233,7 +256,7 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">14dp</item>
         <item name="android:layout_marginTop">10dp</item>
-        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowColor">@android:color/black</item>
         <item name="android:shadowDx">1.0</item>
         <item name="android:shadowDy">2.0</item>
         <item name="android:shadowRadius">1.0</item>
@@ -274,13 +297,13 @@
     </style>
     
     <style name="AccountListItemBodyFullnameStyle">
-        <item name="android:textColor">#000</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/AccountListItemTextSmallSize</item>
     </style>
     
     <style name="AccountListItemBodyUsernameStyle">
-        <item name="android:textColor">#000</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">@dimen/AccountListItemTextSmallSize</item>
     </style>
     
@@ -293,7 +316,7 @@
     <style name="AccountSwitcherSignInButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:background">@drawable/action_bar_item_background</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/text_selector</item>
         <item name="android:textSize">@dimen/AccountListItemTextSmallSize</item>
         <item name="android:textStyle">bold</item>
         <item name="android:padding">10dp</item>

@@ -27,7 +27,10 @@ import java.util.regex.Pattern;
 
 import org.apache.http.ParseException;
 
+import org.exoplatform.R;
+
 import android.util.Patterns;
+import android.view.MenuItem;
 
 /**
  * Created by The eXo Platform SAS Author : Philippe Aristote
@@ -56,8 +59,12 @@ public class ExoUtils {
       url.toURI();
       return true;
     } catch (MalformedURLException e) {
+      if (Log.LOGD)
+        Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     } catch (URISyntaxException e) {
+      if (Log.LOGD)
+        Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     }
   }
@@ -77,8 +84,12 @@ public class ExoUtils {
       return uri.toASCIIString();
 
     } catch (MalformedURLException e) {
+      if (Log.LOGD)
+        Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     } catch (URISyntaxException e) {
+      if (Log.LOGD)
+        Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     }
 
@@ -193,8 +204,12 @@ public class ExoUtils {
         }
         // else, URL is an IP address, return it as is
       } catch (URISyntaxException e) {
+        if (Log.LOGD)
+          Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
         finalName = defaultName;
       } catch (IndexOutOfBoundsException e) {
+        if (Log.LOGD)
+          Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
         finalName = defaultName;
       }
     }
@@ -222,5 +237,14 @@ public class ExoUtils {
     if (str == null || str.isEmpty())
       return null;
     return Character.toUpperCase(str.charAt(0)) + str.substring(1);
+  }
+  
+  public static void setLoadingItem(MenuItem loadingItem, boolean loading) {
+    if (loadingItem != null) {
+      if (loading)
+        loadingItem.setActionView(R.layout.action_bar_loading_indicator);
+      else 
+        loadingItem.setActionView(null);
+    }
   }
 }

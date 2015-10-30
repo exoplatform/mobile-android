@@ -18,8 +18,6 @@
  */
 package org.exoplatform.controller.social;
 
-import greendroid.widget.LoaderActionBarItem;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,6 +38,7 @@ import org.exoplatform.ui.social.MySpacesFragment;
 import org.exoplatform.ui.social.MyStatusFragment;
 import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.Log;
 import org.exoplatform.widget.SocialDetailsWarningDialog;
 
 import android.content.Context;
@@ -64,24 +63,18 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
 
   private SocialDetailController detailController;
 
-  private LoaderActionBarItem    loaderItem;
-
   private int                    currentPosition;
 
-  public LikeLoadTask(Context context,
-                      SocialDetailController controller,
-                      LoaderActionBarItem loader,
-                      int pos) {
+  public LikeLoadTask(Context context, SocialDetailController controller, int pos) {
     mContext = context;
     detailController = controller;
-    loaderItem = loader;
     currentPosition = pos;
     changeLanguage();
   }
 
   @Override
   protected void onPreExecute() {
-    loaderItem.setLoading(true);
+    detailController.setLoading(true);
   }
 
   @Override
@@ -127,13 +120,15 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
       }
       return likeLinkedList;
     } catch (SocialClientLibException e) {
+      if (Log.LOGD)
+        Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     }
   }
 
   @Override
   protected void onCancelled() {
-    loaderItem.setLoading(false);
+    detailController.setLoading(false);
   }
 
   @Override
@@ -146,36 +141,24 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
         int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
         switch (tabId) {
         case SocialTabsActivity.ALL_UPDATES:
-          AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                    true,
-                                                    currentPosition);
+          AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
           break;
         case SocialTabsActivity.MY_CONNECTIONS:
-          MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                       true,
-                                                       currentPosition);
+          MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
           break;
         case SocialTabsActivity.MY_SPACES:
-          MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                  true,
-                                                  currentPosition);
+          MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
           break;
         case SocialTabsActivity.MY_STATUS:
-          MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY,
-                                                  true,
-                                                  currentPosition);
+          MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
           break;
         }
       }
     } else {
-      SocialDetailsWarningDialog dialog = new SocialDetailsWarningDialog(mContext,
-                                                                         titleString,
-                                                                         detailsErrorStr,
-                                                                         okString,
-                                                                         false);
+      SocialDetailsWarningDialog dialog = new SocialDetailsWarningDialog(mContext, titleString, detailsErrorStr, okString, false);
       dialog.show();
     }
-    loaderItem.setLoading(false);
+    detailController.setLoading(false);
   }
 
   private void changeLanguage() {

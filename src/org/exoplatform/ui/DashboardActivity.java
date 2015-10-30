@@ -26,23 +26,22 @@ import org.exoplatform.controller.dashboard.DashboardLoadTask;
 import org.exoplatform.model.GadgetInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
-import org.exoplatform.widget.MyActionBar;
 
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
-import greendroid.widget.LoaderActionBarItem;
 
-public class DashboardActivity extends MyActionBar {
+public class DashboardActivity extends FragmentActivity {
   private static final String     ACCOUNT_SETTING = "account_setting";
 
   private ListView                listView;
@@ -57,34 +56,27 @@ public class DashboardActivity extends MyActionBar {
 
   private DashboardLoadTask       mLoadTask;
 
-  private LoaderActionBarItem     loaderItem;
+  private MenuItem                loaderItem;
 
   @Override
   public void onCreate(Bundle bundle) {
     super.onCreate(bundle);
-    requestWindowFeature(Window.FEATURE_NO_TITLE);
-    setActionBarContentView(R.layout.dashboard_layout);
+    setContentView(R.layout.dashboard_layout);
     changeLanguage();
     dashboardActivity = this;
-
-    getActionBar().setType(greendroid.widget.ActionBar.Type.Normal);
-    addActionBarItem(Type.Refresh);
-    getActionBar().getItem(0).setDrawable(R.drawable.action_bar_icon_refresh);
 
     listView = (ListView) findViewById(R.id.dashboard_listview);
     listView.setCacheColorHint(Color.TRANSPARENT);
     listView.setFadingEdgeLength(0);
     listView.setScrollbarFadingEnabled(true);
     listView.setDivider(null);
-    // listView.setDividerHeight(-1);
     if (bundle != null) {
       AccountSetting accountSetting = bundle.getParcelable(ACCOUNT_SETTING);
       AccountSetting.getInstance().setInstance(accountSetting);
       ArrayList<String> cookieList = AccountSetting.getInstance().cookiesList;
       ExoConnectionUtils.setCookieStore(ExoConnectionUtils.cookiesStore, cookieList);
     }
-    loaderItem = (LoaderActionBarItem) getActionBar().getItem(0);
-
+    setTitle(R.string.Dashboard);
     onLoad(loaderItem);
   }
 
@@ -94,7 +86,7 @@ public class DashboardActivity extends MyActionBar {
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
   }
 
-  public void onLoad(LoaderActionBarItem loader) {
+  public void onLoad(MenuItem loader) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (mLoadTask == null || mLoadTask.getStatus() == DashboardLoadTask.Status.FINISHED) {
         mLoadTask = (DashboardLoadTask) new DashboardLoadTask(this, loader).execute();
@@ -132,14 +124,25 @@ public class DashboardActivity extends MyActionBar {
   }
 
   @Override
-  public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-    switch (position) {
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.dashboard, menu);
+    loaderItem = menu.findItem(R.id.menu_dashboard_refresh);
+    mLoadTask.setLoaderItem(loaderItem);
+    // we're already loading the gadgets
+    // so we start the loading indicator now
+    ExoUtils.setLoadingItem(loaderItem, true);
+    return true;
+  }
 
-    case -1:
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+
+    switch (item.getItemId()) {
+
+    case android.R.id.home:
       finish();
       break;
-    case 0:
-      loaderItem = (LoaderActionBarItem) item;
+    case R.id.menu_dashboard_refresh:
       onLoad(loaderItem);
 
       break;
@@ -148,7 +151,6 @@ public class DashboardActivity extends MyActionBar {
 
     }
     return true;
-
   }
 
   @Override

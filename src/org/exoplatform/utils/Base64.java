@@ -1,6 +1,4 @@
-package org.exoplatform.utils;  import android.util.Log;
-
-import java.io.IOException;
+package org.exoplatform.utils;
 
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>
@@ -553,17 +551,14 @@ public class Base64
         
         // Isolate options
         int gzip           = (options & GZIP);
-        int dontBreakLines = (options & DONT_BREAK_LINES);
         
-        try
-        {
+        try {
             // ObjectOutputStream -> (GZIP) -> Base64 -> ByteArrayOutputStream
             baos  = new java.io.ByteArrayOutputStream();
             b64os = new Base64.OutputStream( baos, ENCODE | options );
     
             // GZip?
-            if( gzip == GZIP )
-            {
+            if( gzip == GZIP ) {
                 gzos = new java.util.zip.GZIPOutputStream( b64os );
                 oos  = new java.io.ObjectOutputStream( gzos );
             }   // end if: gzip
@@ -571,27 +566,30 @@ public class Base64
                 oos   = new java.io.ObjectOutputStream( b64os );
             
             oos.writeObject( serializableObject );
+            oos.flush();
         }   // end try
-        catch( java.io.IOException e )
-        {
-          Log.d(TAG, "IOException : " + e.getLocalizedMessage());
+        catch( java.io.IOException e ) {
+          Log.d(TAG, "IOException : ", e.getLocalizedMessage());
           return null;
         }   // end catch
-        finally
-        {
-            try{ oos.close();   } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
-            try{ gzos.close();  } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
-            try{ b64os.close(); } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
-            try{ baos.close();  } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+        finally {
+          if (oos != null)
+            try{ oos.close();   } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
+          if (gzos != null)
+            try{ gzos.close();  } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
+          if (b64os != null)
+            try{ b64os.close(); } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
+          if (baos != null)
+            try{ baos.close();  } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
         }   // end finally
         
         // Return value according to relevant encoding.
-        try 
-        {
+        try  {
             return new String( baos.toByteArray(), PREFERRED_ENCODING );
         }   // end try
-        catch (java.io.UnsupportedEncodingException uue)
-        {
+        catch (java.io.UnsupportedEncodingException e) {
+          if (Log.LOGD)
+            Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
             return new String( baos.toByteArray() );
         }   // end catch
         
@@ -685,49 +683,42 @@ public class Base64
         int gzip           = ( options & GZIP   );
         
         // Compress?
-        if( gzip == GZIP )
-        {
+        if( gzip == GZIP ) {
             java.io.ByteArrayOutputStream  baos  = null;
             java.util.zip.GZIPOutputStream gzos  = null;
             Base64.OutputStream            b64os = null;
             
     
-            try
-            {
+            try {
                 // GZip -> Base64 -> ByteArray
                 baos = new java.io.ByteArrayOutputStream();
                 b64os = new Base64.OutputStream( baos, ENCODE | options );
                 gzos  = new java.util.zip.GZIPOutputStream( b64os ); 
             
                 gzos.write( source, off, len );
-                gzos.close();
+                gzos.flush();
             }   // end try
-            catch( java.io.IOException e )
-            {
+            catch( java.io.IOException e ) {
               Log.d(TAG, "IOException : " + e.getLocalizedMessage());
               return null;
             }   // end catch
-            finally
-            {
-                try{ gzos.close();  } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
-                try{ b64os.close(); } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
-                try{ baos.close();  } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+            finally {
+                try{ gzos.close();  } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
+                try{ b64os.close(); } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
+                try{ baos.close();  } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
             }   // end finally
 
             // Return value according to relevant encoding.
-            try
-            {
+            try {
                 return new String( baos.toByteArray(), PREFERRED_ENCODING );
             }   // end try
-            catch (java.io.UnsupportedEncodingException uue)
-            {
+            catch (java.io.UnsupportedEncodingException uue) {
                 return new String( baos.toByteArray() );
             }   // end catch
         }   // end if: compress
         
         // Else, don't compress. Better not to use streams at all then.
-        else
-        {
+        else {
             // Convert option to boolean in way that code likes it.
             boolean breakLines = dontBreakLines == 0;
             
@@ -739,8 +730,7 @@ public class Base64
             int e = 0;
             int len2 = len - 2;
             int lineLength = 0;
-            for( ; d < len2; d+=3, e+=4 )
-            {
+            for( ; d < len2; d+=3, e+=4 ) {
                 encode3to4( source, d+off, 3, outBuff, e, options );
 
                 lineLength += 4;
@@ -858,11 +848,11 @@ public class Base64
             destination[ destOffset + 2 ] = (byte)( outBuff       );
 
             return 3;
-            }catch( Exception e){
-                Log.i(TAG, ""+source[srcOffset]+ ": " + ( DECODABET[ source[ srcOffset     ] ]  ) );
-                Log.i(TAG, ""+source[srcOffset+1]+  ": " + ( DECODABET[ source[ srcOffset + 1 ] ]  ) );
-                Log.i(TAG, ""+source[srcOffset+2]+  ": " + ( DECODABET[ source[ srcOffset + 2 ] ]  ) );
-                Log.i(TAG, ""+source[srcOffset+3]+  ": " + ( DECODABET[ source[ srcOffset + 3 ] ]  ) );
+            }catch( IndexOutOfBoundsException e){
+                Log.i(TAG, "", source[srcOffset],": ", ( DECODABET[ source[ srcOffset     ] ]  ) );
+                Log.i(TAG, "", source[srcOffset+1],  ": ", ( DECODABET[ source[ srcOffset + 1 ] ]  ) );
+                Log.i(TAG, "", source[srcOffset+2],  ": ", ( DECODABET[ source[ srcOffset + 2 ] ]  ) );
+                Log.i(TAG, "", source[srcOffset+3],  ": ", ( DECODABET[ source[ srcOffset + 3 ] ]  ) );
                 return -1;
             }   // end catch
         }
@@ -902,11 +892,9 @@ public class Base64
             
             if( sbiDecode >= WHITE_SPACE_ENC ) // White space, Equals sign or better
             {
-                if( sbiDecode >= EQUALS_SIGN_ENC )
-                {
+                if( sbiDecode >= EQUALS_SIGN_ENC ) {
                     b4[ b4Posn++ ] = sbiCrop;
-                    if( b4Posn > 3 )
-                    {
+                    if( b4Posn > 3 ) {
                         outBuffPosn += decode4to3( b4, 0, outBuff, outBuffPosn, options );
                         b4Posn = 0;
                         
@@ -918,9 +906,8 @@ public class Base64
                 }   // end if: equals sign or better
                 
             }   // end if: white space, equals sign or better
-            else
-            {
-                Log.d(TAG, "Bad Base64 input character at " + i + ": " + source[i] + "(decimal)" );
+            else {
+                Log.d(TAG, "Bad Base64 input character at ", i, ": " , source[i], "(decimal)" );
                 return null;
             }   // end else: 
         }   // each input character
@@ -959,12 +946,12 @@ public class Base64
     public static byte[] decode( String s, int options )
     {   
         byte[] bytes;
-        try
-        {
+        try {
             bytes = s.getBytes( PREFERRED_ENCODING );
         }   // end try
-        catch( java.io.UnsupportedEncodingException uee )
-        {
+        catch( java.io.UnsupportedEncodingException e ) {
+          if (Log.LOGD)
+            Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
             bytes = s.getBytes();
         }   // end catch
 		//</change>
@@ -975,40 +962,38 @@ public class Base64
         
         // Check to see if it's gzip-compressed
         // GZIP Magic Two-Byte Number: 0x8b1f (35615)
-        if( bytes != null && bytes.length >= 4 )
-        {
+        if( bytes != null && bytes.length >= 4 ) {
             
             int head = ((int)bytes[0] & 0xff) | ((bytes[1] << 8) & 0xff00);       
-            if( java.util.zip.GZIPInputStream.GZIP_MAGIC == head ) 
-            {
+            if( java.util.zip.GZIPInputStream.GZIP_MAGIC == head ) {
                 java.io.ByteArrayInputStream  bais = null;
                 java.util.zip.GZIPInputStream gzis = null;
                 java.io.ByteArrayOutputStream baos = null;
                 byte[] buffer = new byte[2048];
                 int    length = 0;
 
-                try
-                {
+                try {
                     baos = new java.io.ByteArrayOutputStream();
                     bais = new java.io.ByteArrayInputStream( bytes );
                     gzis = new java.util.zip.GZIPInputStream( bais );
 
-                    while( ( length = gzis.read( buffer ) ) >= 0 )
-                    {
+                    while( ( length = gzis.read( buffer ) ) >= 0 ) {
                         baos.write(buffer,0,length);
                     }   // end while: reading input
                     // No error? Get new bytes.
                     bytes = baos.toByteArray();
                 }   // end try
-                catch( java.io.IOException e )
-                {    Log.d(TAG, "IOException : " + e.getLocalizedMessage());
+                catch( java.io.IOException e ) {
+                  Log.d(TAG, "IOException : ", e.getLocalizedMessage());
                     // Just return originally-decoded bytes
                 }   // end catch
-                finally
-                {
-                    try{ baos.close(); } catch( Exception e ){ Log.d(TAG, "IOException : " + e.getLocalizedMessage()); }
-                    try{ gzis.close(); } catch( Exception e ){ Log.d(TAG, "IOException : " + e.getLocalizedMessage()); }
-                    try{ bais.close(); } catch( Exception e ){ Log.d(TAG, "IOException : " + e.getLocalizedMessage()); }
+                finally {
+                  if  (baos != null)
+                    try{ baos.close(); } catch( java.io.IOException e ){ Log.d(TAG, "IOException : ", e.getLocalizedMessage()); }
+                  if (gzis != null)
+                    try{ gzis.close(); } catch( java.io.IOException e ){ Log.d(TAG, "IOException : ", e.getLocalizedMessage()); }
+                  if (bais != null)
+                    try{ bais.close(); } catch( java.io.IOException e ){ Log.d(TAG, "IOException : ", e.getLocalizedMessage()); }
                 }   // end finally
 
             }   // end if: gzipped
@@ -1037,27 +1022,25 @@ public class Base64
         java.io.ObjectInputStream     ois  = null;
         Object obj = null;
         
-        try
-        {
+        try {
             bais = new java.io.ByteArrayInputStream( objBytes );
             ois  = new java.io.ObjectInputStream( bais );
         
             obj = ois.readObject();
         }   // end try
-        catch( java.io.IOException e )
-        {
+        catch( java.io.IOException e ) {
           Log.d(TAG, "IOException : " + e.getLocalizedMessage());
           obj = null;
         }   // end catch
-        catch( java.lang.ClassNotFoundException e )
-        {
+        catch( java.lang.ClassNotFoundException e ) {
             Log.d(TAG, "ClassNotFoundException : " + e.getLocalizedMessage());
             obj = null;
         }   // end catch
-        finally
-        {
-            try{ bais.close(); } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
-            try{ ois.close();  } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+        finally {
+          if (bais != null)
+            try{ bais.close(); } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
+          if  (ois != null)
+            try{ ois.close();  } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
         }   // end finally
         
         return obj;
@@ -1078,21 +1061,19 @@ public class Base64
     {
         boolean success = false;
         Base64.OutputStream bos = null;
-        try
-        {
+        try {
             bos = new Base64.OutputStream( 
                       new java.io.FileOutputStream( filename ), Base64.ENCODE );
             bos.write( dataToEncode );
             success = true;
         }   // end try
-        catch( java.io.IOException e )
-        {
+        catch( java.io.IOException e ) {
             
             success = false;
         }   // end catch: IOException
-        finally
-        {
-            try{ bos.close(); } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+        finally {
+          if (bos != null)
+            try{ bos.close(); } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
         }   // end finally
         
         return success;
@@ -1112,20 +1093,18 @@ public class Base64
     {
         boolean success = false;
         Base64.OutputStream bos = null;
-        try
-        {
+        try {
                 bos = new Base64.OutputStream( 
                           new java.io.FileOutputStream( filename ), Base64.DECODE );
                 bos.write( dataToDecode.getBytes( PREFERRED_ENCODING ) );
                 success = true;
         }   // end try
-        catch( java.io.IOException e )
-        {
+        catch( java.io.IOException e ) {
             success = false;
         }   // end catch: IOException
-        finally
-        {
-                try{ bos.close(); } catch( Exception e ){ Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+        finally {
+          if (bos != null) 
+                try{ bos.close(); } catch( java.io.IOException e ){ Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
         }   // end finally
         
         return success;
@@ -1147,8 +1126,7 @@ public class Base64
     {
         byte[] decodedData = null;
         Base64.InputStream bis = null;
-        try
-        {
+        try {
             // Set up some useful variables
             java.io.File file = new java.io.File( filename );
             byte[] buffer = null;
@@ -1177,13 +1155,12 @@ public class Base64
             System.arraycopy( buffer, 0, decodedData, 0, length );
             
         }   // end try
-        catch( java.io.IOException e )
-        {
+        catch( java.io.IOException e ) {
             Log.d(TAG, "Error decoding from file " + filename + " - IOException : " + e.getLocalizedMessage());
         }   // end catch: IOException
-        finally
-        {
-            try{ bis.close(); } catch( Exception e) { Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+        finally {
+          if (bis != null)
+            try{ bis.close(); } catch( java.io.IOException e) { Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
         }   // end finally
         
         return decodedData;
@@ -1204,8 +1181,7 @@ public class Base64
     {
         String encodedData = null;
         Base64.InputStream bis = null;
-        try
-        {
+        try {
             // Set up some useful variables
             java.io.File file = new java.io.File( filename );
             byte[] buffer = new byte[ Math.max((int)(file.length() * 1.4),40) ]; // Need max() for math on small files (v2.2.1)
@@ -1225,13 +1201,12 @@ public class Base64
             encodedData = new String( buffer, 0, length, Base64.PREFERRED_ENCODING );
                 
         }   // end try
-        catch( java.io.IOException e )
-        {
-            Log.d(TAG, "Error encoding from file " + filename + " - IOException : " + e.getLocalizedMessage());
+        catch( java.io.IOException e ) {
+            Log.d(TAG, "Error encoding from file ", filename, " - IOException : ", e.getLocalizedMessage());
         }   // end catch: IOException
-        finally
-        {
-            try{ bis.close(); } catch( Exception e) { Log.d(TAG, "Exception : " + e.getLocalizedMessage()); }
+        finally {
+          if (bis != null)
+            try{ bis.close(); } catch( java.io.IOException e) { Log.d(TAG, "Exception : ", e.getLocalizedMessage()); }
         }   // end finally
         
         return encodedData;
@@ -1248,17 +1223,19 @@ public class Base64
     {
         String encoded = Base64.encodeFromFile( infile );
         java.io.OutputStream out = null;
-        try{
+        try {
             out = new java.io.BufferedOutputStream(
                   new java.io.FileOutputStream( outfile ) );
             out.write( encoded.getBytes("US-ASCII") ); // Strict, 7-bit output.
+            out.flush();
         }   // end try
         catch( java.io.IOException ex ) {
             Log.d(TAG, "IOException : " + ex.getLocalizedMessage());
         }   // end catch
         finally {
+          if (out != null)
             try { out.close(); }
-            catch( Exception ex ){ Log.d(TAG, "Exception : " + ex.getLocalizedMessage()); }
+            catch( java.io.IOException ex ){ Log.d(TAG, "Exception : ", ex.getLocalizedMessage()); }
         }   // end finally    
     }   // end encodeFileToFile
 
@@ -1278,13 +1255,15 @@ public class Base64
             out = new java.io.BufferedOutputStream(
                   new java.io.FileOutputStream( outfile ) );
             out.write( decoded );
+            out.flush();
         }   // end try
         catch( java.io.IOException ex ) {
             Log.d(TAG, "IOException : " + ex.getLocalizedMessage());
         }   // end catch
         finally {
+          if (out != null)
             try { out.close(); }
-            catch( Exception ex ){ Log.d(TAG, "Exception : " + ex.getLocalizedMessage()); }
+            catch( java.io.IOException ex ){ Log.d(TAG, "Exception : ", ex.getLocalizedMessage()); }
         }   // end finally    
     }   // end decodeFileToFile
     

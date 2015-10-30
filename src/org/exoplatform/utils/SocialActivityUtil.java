@@ -18,8 +18,6 @@
  */
 package org.exoplatform.utils;
 
-import greendroid.util.Config;
-
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -38,7 +36,6 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -357,7 +354,7 @@ public class SocialActivityUtil {
     imageView.setImageResource(returnType);
   }
 
-  public static void setTextLinkfy(TextView textView) {
+  public static void setTextLinkify(TextView textView) {
     URLSpan[] list = textView.getUrls();
     if (list != null) {
       try {
@@ -366,6 +363,7 @@ public class SocialActivityUtil {
 
           int start = spannable.getSpanStart(span);
           int stop = spannable.getSpanEnd(span);
+          // TODO error here? should be spannable getSpanFlag ? 
           int flags = spannable.getSpanEnd(span);
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
@@ -380,9 +378,10 @@ public class SocialActivityUtil {
           textView.setText(spannable);
           textView.setMovementMethod(LinkMovementMethod.getInstance());
         }
-      } catch (Exception e) {
-        if (Config.GD_ERROR_LOGS_ENABLED)
-          Log.e("Exception", "LinkMovementMethod error!");
+      } catch (ClassCastException e) {
+        // textView.getText() can fail to be casted to Spannable
+        if (Log.LOGE)
+          Log.e("eXo__SocialActivityUtil__", e.getMessage(), e);
       }
     }
   }
@@ -407,24 +406,14 @@ public class SocialActivityUtil {
     String spaceType = actStream.getType();
     StringBuffer spaceBuffer = new StringBuffer();
     if (spaceType.equalsIgnoreCase(ExoConstants.SOCIAL_SPACE)) {
-      // spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-      spaceBuffer.append(appendFontColor(fontColor));
+      spaceBuffer.append(appendFontColor(fontColor)); // opens a <font> tag
       spaceBuffer.append(resource.getString(R.string.In));
       spaceBuffer.append("</font>");
       spaceBuffer.append(" ");
       String nameSpace = actStream.getFullName();
-      String spaceLink = actStream.getPermaLink();
-      spaceBuffer.append("<a href=");
-      spaceBuffer.append(spaceLink);
-      if (isHomeStyle) {
-        spaceBuffer.append(appendLinkStyleColor());
-      }
-      spaceBuffer.append(">");
       spaceBuffer.append(nameSpace);
-      spaceBuffer.append("</a>");
       spaceBuffer.append(" ");
-      // spaceBuffer.append("<font style=\"font-style:normal\" color=\"#696969\">");
-      spaceBuffer.append(appendFontColor(fontColor));
+      spaceBuffer.append(appendFontColor(fontColor)); // opens a <font> tag
       spaceBuffer.append(resource.getString(R.string.Space));
       spaceBuffer.append("</font>");
       return spaceBuffer.toString();
@@ -438,7 +427,6 @@ public class SocialActivityUtil {
                                             Resources resource,
                                             String fontColor,
                                             boolean isHomeStyle) {
-    String forumLink = null;
     StringBuffer forumBuffer = new StringBuffer();
     forumBuffer.append("<html><body>");
     forumBuffer.append(userName);
@@ -453,25 +441,20 @@ public class SocialActivityUtil {
     if (getPlatformVersion() >= 4.0f) {
       // on PLF4.0 only AddTopic action creates an activity
       actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
-      forumLink = activityInfo.templateParams.get("TopicLink");
       forumName = activityInfo.templateParams.get("RESOURCE_BUNDLE_VALUES_PARAM");
     } else {
       String actType = activityInfo.templateParams.get("ActivityType");
       forumBuffer.append(appendFontColor(fontColor));
       if (actType.equalsIgnoreCase("AddPost")) {
-        forumLink = activityInfo.templateParams.get("PostLink");
         actTypeDesc = resource.getString(R.string.HasAddANewPost);
         forumName = activityInfo.templateParams.get("PostName");
       } else if (actType.equalsIgnoreCase("UpdatePost")) {
-        forumLink = activityInfo.templateParams.get("PostLink");
         actTypeDesc = resource.getString(R.string.HasUpdateANewPost);
         forumName = activityInfo.templateParams.get("PostName");
       } else if (actType.equalsIgnoreCase("AddTopic")) {
-        forumLink = activityInfo.templateParams.get("TopicLink");
         actTypeDesc = resource.getString(R.string.HasPostedAnewTopic);
         forumName = activityInfo.templateParams.get("TopicName");
       } else if (actType.equalsIgnoreCase("UpdateTopic")) {
-        forumLink = activityInfo.templateParams.get("TopicLink");
         actTypeDesc = resource.getString(R.string.HasUpdateAnewTopic);
         forumName = activityInfo.templateParams.get("TopicName");
       }
@@ -479,14 +462,7 @@ public class SocialActivityUtil {
     forumBuffer.append(actTypeDesc);
     forumBuffer.append("</font>");
     forumBuffer.append("<br>");
-    forumBuffer.append("<a href=");
-    forumBuffer.append(forumLink);
-    if (isHomeStyle) {
-      forumBuffer.append(appendLinkStyleColor());
-    }
-    forumBuffer.append(">");
     forumBuffer.append(forumName);
-    forumBuffer.append("</a>");
     forumBuffer.append("</body></html>");
     return forumBuffer.toString();
   }
@@ -506,7 +482,6 @@ public class SocialActivityUtil {
                                            Resources resource,
                                            String fontColor,
                                            boolean isHomeStyle) {
-    String wiki_url = null;
     StringBuffer buffer = new StringBuffer();
     buffer.append("<html><body>");
     buffer.append("<a>");
@@ -517,8 +492,7 @@ public class SocialActivityUtil {
       buffer.append(spaceInfo);
     }
     buffer.append(" ");
-    // buffer.append("<font color=\"#696969\">");
-    buffer.append(appendFontColor(fontColor));
+    buffer.append(appendFontColor(fontColor)); // opens a <font> tag
     String act_key = activityInfo.templateParams.get("act_key");
 
     String act_key_des = "";
@@ -530,18 +504,15 @@ public class SocialActivityUtil {
          * update_page
          */
         if (act_key.equalsIgnoreCase("editPageContent") || act_key.equalsIgnoreCase("editPageTitle")) {
-          wiki_url = activityInfo.templateParams.get("view_change_url");
           act_key_des = resource.getString(R.string.HasEditWikiPage);
         }
       } else {
         if (act_key.equalsIgnoreCase("update_page")) {
-          wiki_url = activityInfo.templateParams.get("view_change_url");
           act_key_des = resource.getString(R.string.HasEditWikiPage);
         }
       }
 
       if (act_key.equalsIgnoreCase("add_page")) {
-        wiki_url = activityInfo.templateParams.get("page_url");
         act_key_des = resource.getString(R.string.HasCreatWikiPage);
       }
     }
@@ -550,14 +521,7 @@ public class SocialActivityUtil {
     buffer.append("</font>");
     buffer.append("<br>");
     String page_name = activityInfo.templateParams.get("page_name");
-    buffer.append("<a href=");
-    buffer.append(wiki_url);
-    if (isHomeStyle) {
-      buffer.append(appendLinkStyleColor());
-    }
-    buffer.append(">");
     buffer.append(page_name);
-    buffer.append("</a>");
     buffer.append("</body></html>");
     return buffer.toString();
   }
@@ -578,8 +542,7 @@ public class SocialActivityUtil {
       answerBuffer.append(spaceInfo);
     }
     answerBuffer.append(" ");
-    // answerBuffer.append("<font color=\"#696969\">");
-    answerBuffer.append(appendFontColor(fontColor));
+    answerBuffer.append(appendFontColor(fontColor)); // opens a <font> tag
 
     String act_key_des = "";
     String page_name = "";
@@ -639,8 +602,7 @@ public class SocialActivityUtil {
     String actType = activityInfo.templateParams.get("EventType");
     String actTypeDesc = null;
     String forumName = null;
-    // forumBuffer.append("<font color=\"#696969\">");
-    forumBuffer.append(appendFontColor(fontColor));
+    forumBuffer.append(appendFontColor(fontColor)); // opens a <font> tag
     if (actType.equalsIgnoreCase("EventAdded")) {
       actTypeDesc = resource.getString(R.string.AddedAnEvent);
     } else if (actType.equalsIgnoreCase("EventUpdated")) {
@@ -681,7 +643,10 @@ public class SocialActivityUtil {
     return buffer.toString();
   }
 
-  public static String getActivityTypeLink(String userName, SocialActivityInfo activityInfo, String fontColor, boolean isHomeStyle) {
+  public static String getActivityTypeLink(String userName,
+                                           SocialActivityInfo activityInfo,
+                                           String fontColor,
+                                           boolean isHomeStyle) {
     String linkUrl = activityInfo.templateParams.get("link");
     if (linkUrl == null)
       return "";

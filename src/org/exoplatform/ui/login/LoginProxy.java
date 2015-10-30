@@ -64,42 +64,45 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
     LoginTask.AsyncTaskListener, CheckAccountExistsTask.AsyncTaskListener {
 
   // connection status of the app
-  public static boolean       userIsLoggedIn;
+  public static boolean                   userIsLoggedIn;
 
   /*** === Data === ***/
-  private String              mNewUserName;
+  private String                          mNewUserName;
 
-  private String              mNewPassword;
+  private String                          mNewPassword;
 
-  private String              mTenant;
+  private String                          mTenant;
 
-  private String              mAccountName;
+  private String                          mAccountName;
 
-  private String              mDomain;
+  private String                          mDomain;
 
-  private String              mEmail;
+  private String                          mUpdatedDomain;
 
-  private Context             mContext;
+  private String                          mEmail;
 
-  private AccountSetting      mSetting;
+  private Context                         mContext;
 
-  private Resources           mResource;
+  private AccountSetting                  mSetting;
+
+  private Resources                       mResource;
 
   /** === Async Tasks === **/
-  private LoginTask           mLoginTask;
+  private LoginTask                       mLoginTask;
 
-  private RequestTenantTask   mRequestTenantTask;
+  private RequestTenantTask               mRequestTenantTask;
 
   /** the warning dialog that shows error */
-  private LoginWarningDialog  mWarningDialog;
+  private LoginWarningDialog              mWarningDialog;
 
-  private LoginWaitingDialog  mProgressDialog;
-  
-  private BasicActivityLifecycleCallbacks mLifecycleCallback = new BasicActivityLifecycleCallbacks() {
-    
+  private LoginWaitingDialog              mProgressDialog;
+
+  private BasicActivityLifecycleCallbacks mLifecycleCallback    = new BasicActivityLifecycleCallbacks() {
+
     public void onPause(org.exoplatform.base.BaseActivity act) {
       if (act == mContext) {
-        // TODO implement correct behavior, current only dismissUI and cancel current task
+        // TODO implement correct behavior, current only dismissUI and cancel
+        // current task
         if (Log.LOGD)
           Log.d(TAG, "onPause cancel task");
         setListener(null);
@@ -112,35 +115,35 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
   };
 
   /** === States === **/
-  private int                 mLaunchMode;
+  private int                             mLaunchMode;
 
-  private int                 mState                = WORKING;
+  private int                             mState                = WORKING;
 
-  public static final int     WITH_EXISTING_ACCOUNT = 0;
+  public static final int                 WITH_EXISTING_ACCOUNT = 0;
 
-  public static final int     WITH_USERNAME         = 10;
+  public static final int                 WITH_USERNAME         = 10;
 
-  public static final int     WITH_EMAIL            = 11;
+  public static final int                 WITH_EMAIL            = 11;
 
-  public static final int     SWITCH_ACCOUNT        = 12;
+  public static final int                 SWITCH_ACCOUNT        = 12;
 
-  public static final String  USERNAME              = "USERNAME";
+  public static final String              USERNAME              = "USERNAME";
 
-  public static final String  PASSWORD              = "PASSWORD";
+  public static final String              PASSWORD              = "PASSWORD";
 
-  public static final String  EMAIL                 = "EMAIL";
+  public static final String              EMAIL                 = "EMAIL";
 
-  public static final String  DOMAIN                = "DOMAIN";
+  public static final String              DOMAIN                = "DOMAIN";
 
-  public static final String  ACCOUNT_NAME          = "ACCOUNT_NAME";
+  public static final String              ACCOUNT_NAME          = "ACCOUNT_NAME";
 
-  public static final String  SHOW_PROGRESS         = "SHOW_PROGRESS";
+  public static final String              SHOW_PROGRESS         = "SHOW_PROGRESS";
 
-  private static final int    WORKING               = 100;
+  private static final int                WORKING               = 100;
 
-  private static final int    FINISHED              = 101;
+  private static final int                FINISHED              = 101;
 
-  private static final String TAG                   = "eXo____LoginProxy____";
+  private static final String             TAG                   = "eXo____LoginProxy____";
 
   /** data should be verified before entering LoginProxy */
   public LoginProxy(Context context, int state, Bundle loginData) {
@@ -149,6 +152,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
     mResource = mContext.getResources();
     mSetting = AccountSetting.getInstance();
     mLaunchMode = state;
+    mUpdatedDomain = null;
     if (mContext instanceof BaseActivity) {
       ((BaseActivity) mContext).addLifeCycleObserverRef(mLifecycleCallback);
     }
@@ -162,7 +166,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
    * @param loginData
    */
   private void initStates(Bundle loginData) {
-    
+
     mWarningDialog = new LoginWarningDialog(mContext);
     mProgressDialog = new LoginWaitingDialog(mContext, null, mResource.getString(R.string.SigningIn));
 
@@ -181,10 +185,9 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
       // warning
       mEmail = mNewUserName + "@" + mTenant + ".com";
 
-      mProgressDialog = loginData.getBoolean(SHOW_PROGRESS, true) ? new LoginWaitingDialog(mContext,
-                                                                                           null,
-                                                                                           mResource.getString(R.string.SigningIn))
-                                                                 : null;
+      mProgressDialog = loginData.getBoolean(SHOW_PROGRESS, true) 
+                                  ? new LoginWaitingDialog(mContext,null,mResource.getString(R.string.SigningIn))
+                                  : null;
       break;
 
     /**
@@ -241,20 +244,30 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
 
     mNewUserName = userAndTenant[0];
     mTenant = userAndTenant[1];
-    mDomain = ExoConnectionUtils.HTTP + mTenant + "." + ExoConnectionUtils.EXO_CLOUD_WS_DOMAIN;
+    mDomain = ExoConnectionUtils.HTTPS + mTenant + "." + ExoConnectionUtils.EXO_CLOUD_WS_DOMAIN;
 
     performLogin();
   }
 
   /**
    * Figure out tenant based on url of server <br/>
-   * Url of cloud server must be in the form of
-   * http://<tenant>.<exo_cloud_domain> <br/>
-   * For example: http://exoplatform.wks-acc.exoplatform.org
+   * <<<<<<< HEAD Url of cloud server must be in the form of<br/>
+   * 
+   * <pre>
+   * http[s]://tenant.exo_cloud_domain
+   * </pre>
+   * 
+   * <br/>
+   * For example: http://exoplatform.exoplatform.net ======= Url of cloud server
+   * must be in the form of http://<tenant>. <exo_cloud_domain> <br/>
+   * For example: http://exoplatform.wks-acc.exoplatform.org >>>>>>> Fix likers
+   * element in activity details screen
    */
   private String getTenant(String domain) {
-    /** strip off http */
-    String cloudDomain = domain.startsWith(ExoConnectionUtils.HTTP) ? domain.substring(ExoConnectionUtils.HTTP.length()) : domain;
+    // strip off http:// or https://
+    String cloudDomain = domain.startsWith(ExoConnectionUtils.HTTPS) ? domain.substring(ExoConnectionUtils.HTTPS.length())
+                                                                     : domain.startsWith(ExoConnectionUtils.HTTP) ? domain.substring(ExoConnectionUtils.HTTP.length())
+                                                                                                                  : domain;
     int idx = cloudDomain.indexOf(ExoConnectionUtils.EXO_CLOUD_WS_DOMAIN);
     if (idx <= 1)
       return null;
@@ -276,8 +289,6 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
     if (!checkNetworkConnection())
       return;
 
-    if (Log.LOGD)
-      Log.d(TAG, "performLogin ", this, " ", mContext);
     if (mProgressDialog != null && !mProgressDialog.isShowing())
       mProgressDialog.show();
 
@@ -323,9 +334,8 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
   }
 
   private void launchLoginTask() {
-    mDomain = !(mDomain.startsWith(ExoConnectionUtils.HTTP) || mDomain.startsWith(ExoConnectionUtils.HTTPS)) ? ExoConnectionUtils.HTTP
-                                                                                                                + mDomain
-                                                                                                            : mDomain;
+    mDomain = !(mDomain.startsWith(ExoConnectionUtils.HTTP) || mDomain.startsWith(ExoConnectionUtils.HTTPS))
+        ? ExoConnectionUtils.HTTP + mDomain : mDomain;
     mLoginTask = new LoginTask();
     mLoginTask.setListener(this);
     mLoginTask.execute(mNewUserName, mNewPassword, mDomain);
@@ -353,7 +363,14 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
     }
 
   }
-  
+
+  @Override
+  public void onUpdateDomain(String newDomain) {
+    if (newDomain != null && !newDomain.equalsIgnoreCase(mDomain)) {
+      mUpdatedDomain = newDomain;
+    }
+  }
+
   @Override
   public void onCanceled() {
     dismissDialog();
@@ -363,7 +380,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
     if (mProgressDialog != null && mProgressDialog.isShowing())
       mProgressDialog.dismiss();
   }
-  
+
   /**
    * Handling final result of login operation
    * 
@@ -463,6 +480,10 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
         // The password property is updated if it changed
         if (!duplicatedServer.password.equals(newAccountObj.password)) {
           duplicatedServer.password = newAccountObj.password;
+        }
+        // The server's URL is updated if it changed (e.g. from a 301 redir)
+        if (mUpdatedDomain != null) {
+          duplicatedServer.serverUrl = mUpdatedDomain;
         }
         duplicatedServer.lastLoginDate = newAccountObj.lastLoginDate;
       }

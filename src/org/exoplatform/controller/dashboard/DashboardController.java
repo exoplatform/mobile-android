@@ -74,24 +74,32 @@ public class DashboardController {
   }
 
   // Get Gadget in Dashboard
-  public ArrayList<GadgetInfo> getGadgetInTab(HttpResponse response,String tabName, String url) {
+  public ArrayList<GadgetInfo> getGadgetInTab(HttpResponse response, String tabName, String url) {
+    InputStream input = ExoConnectionUtils.sendRequest(response);
+    if (input == null) {
+      addErrorDashboard(tabName);
+      return null;
+    } else {
 
-    try {
-
-      InputStream input = ExoConnectionUtils.sendRequest(response);
-      ArrayList<GadgetInfo> gadgets = new ArrayList<GadgetInfo>();
-      if (input != null) {
-
-        String result = ExoConnectionUtils.convertStreamToString(input);
+      String result = ExoConnectionUtils.convertStreamToString(input);
+      if (result == null) {
+        addErrorDashboard(tabName);
+        return null;
+      } else {
 
         JSONArray array = (JSONArray) JSONValue.parse(result);
-
+        if (array == null) {
+          addErrorDashboard(tabName);
+          return null;
+        }
         int count = 0;
-
+        ArrayList<GadgetInfo> gadgets = new ArrayList<GadgetInfo>();
         for (Object obj : array) {
 
           JSONObject json = (JSONObject) obj;
-
+          if (json == null) {
+            continue;
+          }
           String gadgetIcon = "";
           String gadgetUrl = "";
           String gadgetName = "";
@@ -107,31 +115,22 @@ public class DashboardController {
           if (json.get("gadgetDescription") != null)
             gadgetDescription = json.get("gadgetDescription").toString();
 
-          GadgetInfo gadget = new GadgetInfo(gadgetName,
-                                             gadgetDescription,
-                                             gadgetUrl,
-                                             gadgetIcon,
-                                             null,
-                                             count);
+          GadgetInfo gadget = new GadgetInfo(gadgetName, gadgetDescription, gadgetUrl, gadgetIcon, null, count);
 
           gadgets.add(gadget);
 
           count++;
         }
+        return gadgets;
       }
-
-      return gadgets;
-
-    } catch (Exception e) {
-
-      if (dashboardsCannotBeRetrieved.length() == 0)
-        dashboardsCannotBeRetrieved += tabName;
-      else
-        dashboardsCannotBeRetrieved += ", " + tabName;
-
-      return null;
     }
+  }
 
+  private void addErrorDashboard(String tabName) {
+    if (dashboardsCannotBeRetrieved.length() == 0)
+      dashboardsCannotBeRetrieved += tabName;
+    else
+      dashboardsCannotBeRetrieved = new StringBuilder(dashboardsCannotBeRetrieved).append(", ").append(tabName).toString();
   }
 
   public String getGadgetsErrorList() {

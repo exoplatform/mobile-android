@@ -20,13 +20,16 @@ package org.exoplatform.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -40,25 +43,25 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.FileEntity;
-import org.exoplatform.R;
-import org.exoplatform.model.ExoFile;
-import org.exoplatform.singleton.AccountSetting;
-import org.exoplatform.singleton.DocumentHelper;
-import org.exoplatform.ui.WebViewActivity;
-import org.exoplatform.widget.UnreadableFileDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import org.exoplatform.R;
+import org.exoplatform.model.ExoFile;
+import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.singleton.DocumentHelper;
+import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.widget.UnreadableFileDialog;
+
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -71,41 +74,42 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.Html;
 import android.webkit.MimeTypeMap;
-import greendroid.util.Config;
 
 public class ExoDocumentUtils {
 
-  private static final String LOG_TAG              = "____eXo____ExoDocumentUtils____";
+  private static final String  LOG_TAG              = "____eXo____ExoDocumentUtils____";
 
-  public static final String  ALL_VIDEO_TYPE       = "video/*";
+  public static final String   ALL_VIDEO_TYPE       = "video/*";
 
-  public static final String  ALL_AUDIO_TYPE       = "audio/*";
+  public static final String   ALL_AUDIO_TYPE       = "audio/*";
 
-  public static final String  ALL_IMAGE_TYPE       = "image/*";
+  public static final String   ALL_IMAGE_TYPE       = "image/*";
 
-  public static final String  ALL_TEXT_TYPE        = "text/*";
+  public static final String   ALL_TEXT_TYPE        = "text/*";
 
-  public static final String  IMAGE_TYPE           = "image";
+  public static final String   IMAGE_TYPE           = "image";
 
-  public static final String  TEXT_TYPE            = "text";
+  public static final String   TEXT_TYPE            = "text";
 
-  public static final String  VIDEO_TYPE           = "video";
+  public static final String   VIDEO_TYPE           = "video";
 
-  public static final String  AUDIO_TYPE           = "audio";
+  public static final String   AUDIO_TYPE           = "audio";
 
-  public static final String  MSWORD_TYPE          = "application/msword";
+  public static final String   MSWORD_TYPE          = "application/msword";
 
-  public static final String  OPEN_MSWORD_TYPE     = "application/vnd.oasis.opendocument.text";
+  public static final String   OPEN_WORD_TYPE       = "application/vnd.oasis.opendocument.text";
 
-  public static final String  PDF_TYPE             = "application/pdf";
+  public static final String   PDF_TYPE             = "application/pdf";
 
-  public static final String  XLS_TYPE             = "application/xls";
+  public static final String   XLS_TYPE             = "application/xls";
 
-  public static final String  OPEN_XLS_TYPE        = "application/vnd.oasis.opendocument.spreadsheet";
+  public static final String   OPEN_XLS_TYPE        = "application/vnd.oasis.opendocument.spreadsheet";
 
-  public static final String  POWERPOINT_TYPE      = "application/vnd.ms-powerpoint";
+  public static final String   POWERPOINT_TYPE      = "application/vnd.ms-powerpoint";
 
-  public static final String  OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
+  public static final String   OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
+
+  public static final String[] FORBIDDEN_TYPES      = new String[] { "application/octet-stream" };
 
   public static boolean isEnoughMemory(int fileSize) {
     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -174,7 +178,7 @@ public class ExoDocumentUtils {
       return;
     }
 
-    if (fileType != null && (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE))) {
+    if (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE)) {
       Intent intent = new Intent(context, WebViewActivity.class);
       intent.putExtra(ExoConstants.WEB_VIEW_URL, filePath);
       intent.putExtra(ExoConstants.WEB_VIEW_TITLE, fileName);
@@ -183,58 +187,73 @@ public class ExoDocumentUtils {
       context.startActivity(intent);
     } else {
       new CompatibleFileOpen(context, fileType, filePath, fileName);
-
     }
 
   }
 
-  /*
-   * Check if device have application to open this type of file or not
+  /**
+   * Check whether the given Mime Type is forbidden. The list of forbidden types
+   * is in {@link ExoDocumentUtils.FORBIDDEN_TYPES}
+   * 
+   * @param mimeType
+   * @return true if the given Mime Type is in the list
    */
+  public static boolean isForbidden(String mimeType) {
+    return Arrays.asList(FORBIDDEN_TYPES).contains(mimeType);
+  }
 
-  public static boolean isCallable(Context context, String url) {
-    String mimeTypeExtension = URLConnection.guessContentTypeFromName(url);
+  /**
+   * Check if the device has an application to open this type of file.
+   * 
+   * @param context Context (mandatory)
+   * @param mimeType Mime Type to check (mandatory)
+   * @param url file url to guess the mime type from (optional)
+   * @return true if an application can open the given Mime Type
+   */
+  public static boolean isCallable(Context context, String mimeType, String url) throws IllegalArgumentException {
+    if (context == null || mimeType == null)
+      throw new IllegalArgumentException("Context or mime-type cannot be null.");
 
     Intent intent = new Intent(Intent.ACTION_VIEW);
-    intent.setDataAndType(Uri.parse(url), mimeTypeExtension);
-    List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-    return list.size() > 0;
+    intent.setType(mimeType.toLowerCase(Locale.US));
+    ComponentName activity = intent.resolveActivity(context.getPackageManager());
+
+    if (activity == null && url != null) {
+      // Fallback on a guessed mime type if the first one doesn't work
+      String guessedMimeType = URLConnection.guessContentTypeFromName(url);
+      if (guessedMimeType != null) {
+        intent = new Intent(Intent.ACTION_VIEW);
+        intent.setType(guessedMimeType.toLowerCase(Locale.US));
+        activity = intent.resolveActivity(context.getPackageManager());
+      }
+    }
+
+    return activity != null;
   }
 
   /*
    * Check if file can readable or not
    */
-  public static boolean isFileReadable(String type) {
-    if (type == null) {
-      return false;
-    }
-
-    if (type.startsWith(TEXT_TYPE) || type.startsWith(IMAGE_TYPE) || type.equals(PDF_TYPE) || type.equals(MSWORD_TYPE)
-        || type.equals(XLS_TYPE) || type.equals(POWERPOINT_TYPE) || type.equals(OPEN_MSWORD_TYPE) || type.equals(OPEN_XLS_TYPE)
-        || type.equals(OPEN_POWERPOINT_TYPE) || type.startsWith(AUDIO_TYPE) || type.startsWith(VIDEO_TYPE)) {
-      return true;
-    }
-
-    return false;
-  }
+  // public static boolean isFileReadable(String type) {
+  // if (type == null) {
+  // return false;
+  // }
+  //
+  // if (type.startsWith(TEXT_TYPE) || type.startsWith(IMAGE_TYPE) ||
+  // type.equals(PDF_TYPE) || type.equals(MSWORD_TYPE)
+  // || type.equals(XLS_TYPE) || type.equals(POWERPOINT_TYPE) ||
+  // type.equals(OPEN_WORD_TYPE) || type.equals(OPEN_XLS_TYPE)
+  // || type.equals(OPEN_POWERPOINT_TYPE) || type.startsWith(AUDIO_TYPE) ||
+  // type.startsWith(VIDEO_TYPE)) {
+  // return true;
+  // }
+  //
+  // return false;
+  // }
 
   public static String getFullFileType(String fileType) {
-    String docFileType = null;
-    if (fileType.equals(ExoDocumentUtils.PDF_TYPE)) {
-      docFileType = ExoDocumentUtils.PDF_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.MSWORD_TYPE)) {
-      docFileType = ExoDocumentUtils.MSWORD_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.XLS_TYPE)) {
-      docFileType = ExoDocumentUtils.XLS_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.POWERPOINT_TYPE)) {
-      docFileType = ExoDocumentUtils.POWERPOINT_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.OPEN_MSWORD_TYPE)) {
-      docFileType = ExoDocumentUtils.OPEN_MSWORD_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.OPEN_XLS_TYPE)) {
-      docFileType = ExoDocumentUtils.OPEN_XLS_TYPE;
-    } else if (fileType.equals(ExoDocumentUtils.OPEN_POWERPOINT_TYPE)) {
-      docFileType = ExoDocumentUtils.OPEN_POWERPOINT_TYPE;
-    } else if (fileType.startsWith(ExoDocumentUtils.AUDIO_TYPE)) {
+    String docFileType = fileType;
+    if (fileType.startsWith(ExoDocumentUtils.AUDIO_TYPE)) {
       docFileType = ExoDocumentUtils.ALL_AUDIO_TYPE;
     } else if (fileType.startsWith(ExoDocumentUtils.VIDEO_TYPE)) {
       docFileType = ExoDocumentUtils.ALL_VIDEO_TYPE;
@@ -267,6 +286,8 @@ public class ExoDocumentUtils {
         return false;
       }
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     } finally {
       fileManager.delete();
@@ -296,28 +317,40 @@ public class ExoDocumentUtils {
       }
 
     } catch (Exception e) {
-      Log.e(LOG_TAG, e.getMessage(), e);
+      // XXX cannot replace because WebdavMethod, httpclient.execute can throw
+      // exception
+      Log.e(LOG_TAG, e.getMessage(), Log.getStackTraceString(e));
       DocumentHelper.getInstance().setRepositoryHomeUrl(null);
     }
   }
 
-  // Get file array from URL
-  public static ArrayList<ExoFile> getPersonalDriveContent(Context context, ExoFile file) throws IOException {
+  /**
+   * Get the content (files and folders) of the given folder.
+   * 
+   * @param context
+   * @param file the folder to get content from
+   * @return an ExoFile corresponding to the parent folder with its children
+   *         ExoFile
+   * @throws IOException
+   */
+  public static ExoFile getPersonalDriveContent(Context context, ExoFile file) throws IOException {
     SharedPreferences prefs = context.getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0);
     boolean isShowHidden = prefs.getBoolean(AccountSetting.getInstance().documentKey, true);
-    ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
+    ExoFile folder = file;
     String domain = AccountSetting.getInstance().getDomainName();
     HttpResponse response = null;
     String urlStr = null;
     /*
      * Put the current folder and its child list to mapping dictionary
      */
-    if (DocumentHelper.getInstance().childFilesMap == null) {
-      DocumentHelper.getInstance().childFilesMap = new Bundle();
+    if (DocumentHelper.getInstance().folderToChildrenMap == null) {
+      DocumentHelper.getInstance().folderToChildrenMap = new Bundle();
     }
 
+    // We're on the initial screen => list all drives
     if ("".equals(file.name) && "".equals(file.path)) {
       // personal drive
+      ArrayList<ExoFile> arrFilesTmp = new ArrayList<ExoFile>();
       ArrayList<ExoFile> fileList = new ArrayList<ExoFile>();
       StringBuffer buffer = new StringBuffer();
       buffer.append(domain);
@@ -359,28 +392,32 @@ public class ExoDocumentUtils {
         arrFilesTmp.addAll(fileList);
       }
 
-      // push information to map
-      if (DocumentHelper.getInstance().childFilesMap.containsKey(ExoConstants.DOCUMENT_JCR_PATH)) {
-        DocumentHelper.getInstance().childFilesMap.remove(ExoConstants.DOCUMENT_JCR_PATH);
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
+      // store the drives root folders
+      if (DocumentHelper.getInstance().folderToChildrenMap.containsKey(ExoConstants.DOCUMENT_JCR_PATH)) {
+        DocumentHelper.getInstance().folderToChildrenMap.remove(ExoConstants.DOCUMENT_JCR_PATH);
+        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
       } else {
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
+        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(ExoConstants.DOCUMENT_JCR_PATH, arrFilesTmp);
       }
 
+      // create an empty root folder to hold all the drives
+      folder.children = arrFilesTmp;
     } else {
+      // We're in a drive or folder => list its content
       urlStr = getDriverUrl(file);
       urlStr = ExoUtils.encodeDocumentUrl(urlStr);
       response = ExoConnectionUtils.getRequestResponse(urlStr);
-      arrFilesTmp.addAll(getContentOfFolder(response, file));
-      if (DocumentHelper.getInstance().childFilesMap.containsKey(file.path)) {
-        DocumentHelper.getInstance().childFilesMap.remove(file.path);
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
+      folder = getContentOfFolder(response, file);
+      // store the children of the loaded folder
+      if (DocumentHelper.getInstance().folderToChildrenMap.containsKey(file.path)) {
+        DocumentHelper.getInstance().folderToChildrenMap.remove(file.path);
+        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
       } else
-        DocumentHelper.getInstance().childFilesMap.putParcelableArrayList(file.path, arrFilesTmp);
+        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
 
     }
 
-    return arrFilesTmp;
+    return folder;
 
   }
 
@@ -463,8 +500,8 @@ public class ExoDocumentUtils {
               Element itemElement = (Element) itemNode;
               ExoFile file = new ExoFile();
               file.name = itemElement.getAttribute("name");
-              if (Config.GD_INFO_LOGS_ENABLED)
-                Log.i(" Public file name", file.name);
+              // if (Config.GD_INFO_LOGS_ENABLED)
+              Log.i(" Public file name", file.name);
               file.workspaceName = itemElement.getAttribute("workspaceName");
               file.driveName = file.name;
               file.currentFolder = itemElement.getAttribute("currentFolder");
@@ -552,11 +589,65 @@ public class ExoDocumentUtils {
     }
   }
 
-  public static ArrayList<ExoFile> getContentOfFolder(HttpResponse response, ExoFile file) {
+  private static ExoFile getFileFromXMLElement(Element element, boolean isFolder) throws NullPointerException {
+    if (element == null)
+      throw new NullPointerException("Given element is null");
 
-    // Initialize the blogEntries MutableArray that we declared in the
-    // header
-    ArrayList<ExoFile> folderArray = new ArrayList<ExoFile>();
+    ExoFile file = new ExoFile();
+    if (element.hasAttribute("title")) {
+      file.name = Html.fromHtml(element.getAttribute("title")).toString();
+    } else {
+      file.name = element.getAttribute("name");
+    }
+    file.workspaceName = element.getAttribute("workspaceName");
+    file.path = fullURLofFile(file.workspaceName, element.getAttribute("path"));
+    if (element.hasAttribute("driveName"))
+      file.driveName = element.getAttribute("driveName");
+    else
+      file.driveName = file.name;
+    file.currentFolder = element.getAttribute("currentFolder");
+    if (file.currentFolder == null)
+      file.currentFolder = "";
+    file.isFolder = isFolder;
+    if (element.hasAttribute("nodeType"))
+      file.nodeType = element.getAttribute("nodeType");
+
+    String canRemove = element.getAttribute("canRemove");
+    file.canRemove = Boolean.parseBoolean(canRemove.trim());
+
+    return file;
+  }
+
+  /**
+   * Get a folder with its sub-files and sub-folders.<br/>
+   * Parse the XML response with format:
+   * 
+   * <pre>
+   * &lt;Folder canAddChild="bool" canRemove="bool" currentFolder="Name" driveName="DriveName" hasChild="bool" name="Name" nodeType="nt" path="..." title="Title" titlePath="Title" workspaceName="Name">
+   *  &lt;Folders>
+   *    &lt;Folder canAddChild="bool" canRemove="bool" currentFolder="Name" driveName="DriveName" hasChild="bool" name="Name" nodeType="nt" path="..." title="Title" titlePath="Title" workspaceName="Name"/>
+   *  &lt;/Folders>
+   *  &lt;Files>
+   *    &lt;File canRemove="bool" creator="username" dateCreated="Date" dateModified="Date" name="doc.jpg" nodeType="nt" path="..." size="0" title="doc.jpg" workspaceName="Name"/>
+   *  &lt;/Files>
+   * &lt;/Folder>
+   * </pre>
+   * 
+   * Example URL:
+   * 
+   * <pre>
+   * https://SERVER/rest/managedocument/getFoldersAndFiles?driveName=Personal%
+   * 20Documents&workspaceName=collaboration&currentFolder=Public
+   * </pre>
+   * 
+   * @param response the response that contains the XML entity
+   * @param file The folder to retrieve the content from
+   * @return an ExoFile that represents the content of the given folder
+   */
+  public static ExoFile getContentOfFolder(HttpResponse response, ExoFile file) {
+
+    ExoFile folder = file;
+    ArrayList<ExoFile> childrenArray = new ArrayList<ExoFile>();
 
     Document obj_doc = null;
     DocumentBuilderFactory doc_build_fact = null;
@@ -573,63 +664,58 @@ public class ExoDocumentUtils {
 
           // Get folders
           obj_nod_list = obj_doc.getElementsByTagName("Folder");
-
           for (int i = 0; i < obj_nod_list.getLength(); i++) {
             Node itemNode = obj_nod_list.item(i);
             if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
               Element itemElement = (Element) itemNode;
-              if (i > 0) {
-                ExoFile newFile = new ExoFile();
-                if (itemElement.hasAttribute("title")) {
-                  newFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
-                } else {
-                  newFile.name = itemElement.getAttribute("name");
-                }
-                newFile.workspaceName = itemElement.getAttribute("workspaceName");
-                newFile.path = fullURLofFile(newFile.workspaceName, itemElement.getAttribute("path"));
-                newFile.driveName = itemElement.getAttribute("driveName");
-                newFile.currentFolder = itemElement.getAttribute("currentFolder");
-                if (newFile.currentFolder == null)
-                  newFile.currentFolder = "";
-                newFile.isFolder = true;
 
-                String canRemove = itemElement.getAttribute("canRemove");
-                newFile.canRemove = Boolean.parseBoolean(canRemove.trim());
-                folderArray.add(newFile);
+              if (i == 0) { // The first element is always the root folder
+
+                // We copy properties from tmp to folder
+                // to keep the pointer to the folder instance
+                ExoFile tmp = getFileFromXMLElement(itemElement, true);
+                // Unfortunate hack
+                // The drive "Personal Documents" is a folder named "Private"
+                // We do this to display the drive name in this case
+                if ("Private".equals(tmp.name) && "".equals(tmp.currentFolder) && "Personal Documents".equals(tmp.driveName))
+                  folder.name = tmp.driveName;
+                else
+                  folder.name = tmp.name;
+
+                folder.workspaceName = tmp.workspaceName;
+                folder.path = tmp.path;
+                folder.driveName = tmp.driveName;
+                folder.currentFolder = tmp.currentFolder;
+                folder.isFolder = true;
+                // Cannot delete the root folder of a drive
+                if (folder.isFolder && "".equals(folder.currentFolder))
+                  folder.canRemove = false;
+                else
+                  folder.canRemove = tmp.canRemove;
+
+              } else { // Folders of the root folder
+
+                ExoFile childFolder = getFileFromXMLElement(itemElement, true);
+                childrenArray.add(childFolder);
               }
-
             }
           }
 
           // Get files
           obj_nod_list = obj_doc.getElementsByTagName("File");
-
           for (int i = 0; i < obj_nod_list.getLength(); i++) {
             Node itemNode = obj_nod_list.item(i);
             if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
               Element itemElement = (Element) itemNode;
-
-              ExoFile newFile = new ExoFile();
-              if (itemElement.hasAttribute("title")) {
-                newFile.name = Html.fromHtml(itemElement.getAttribute("title")).toString();
-              } else {
-                newFile.name = itemElement.getAttribute("name");
-              }
-              newFile.workspaceName = itemElement.getAttribute("workspaceName");
-              newFile.path = fullURLofFile(newFile.workspaceName, itemElement.getAttribute("path"));
-              newFile.driveName = file.name;
-              newFile.currentFolder = itemElement.getAttribute("currentFolder");
-              newFile.nodeType = itemElement.getAttribute("nodeType");
-              newFile.isFolder = false;
-              String canRemove = itemElement.getAttribute("canRemove");
-              newFile.canRemove = Boolean.parseBoolean(canRemove.trim());
-              folderArray.add(newFile);
+              ExoFile childFile = getFileFromXMLElement(itemElement, false);
+              childrenArray.add(childFile);
             }
           }
 
         }
       }
-      return folderArray;
+      folder.children = childrenArray;
+      return folder;
     } catch (ParserConfigurationException e) {
       return null;
     } catch (SAXException e) {
@@ -653,7 +739,7 @@ public class ExoDocumentUtils {
         id = R.drawable.documenticonforvideo;
       else if (contentType.indexOf(AUDIO_TYPE) >= 0)
         id = R.drawable.documenticonformusic;
-      else if (contentType.indexOf(MSWORD_TYPE) >= 0 || contentType.indexOf(OPEN_MSWORD_TYPE) >= 0)
+      else if (contentType.indexOf(MSWORD_TYPE) >= 0 || contentType.indexOf(OPEN_WORD_TYPE) >= 0)
         id = R.drawable.documenticonforword;
       else if (contentType.indexOf(PDF_TYPE) >= 0)
         id = R.drawable.documenticonforpdf;
@@ -737,6 +823,8 @@ public class ExoDocumentUtils {
         return false;
 
     } catch (IOException e) {
+      if (Log.LOGD)
+        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     }
   }
@@ -813,6 +901,8 @@ public class ExoDocumentUtils {
       }
 
     } catch (Exception e) {
+      // XXX catch null of destination, WebdavMethod initial, httpclient
+      // exception
       Log.e(LOG_TAG, e.getMessage(), e);
       return false;
     }
@@ -830,15 +920,26 @@ public class ExoDocumentUtils {
       return null;
 
     if (document.toString().startsWith("content://")) {
-      // In some cases, the content:// URI is fake and embeds a real file://
-      // content://authority/-1/1/file:///sdcard/path/file.jpg/ACTUAL/123
-      // e.g. open ASTRO File Manager > View File > Share
-      // Then we extract the real URI and pass it to documentFromFileUri(...)
-      long id = ContentUris.parseId(document);
-      String dec = Uri.decode(document.toString());
-      int fileIdx = dec.indexOf("file://");
+      /*
+       *  Some apps send fake content:// URI with real file:// URI inside
+       *  E.g. open ASTRO File Manager > View File > Share :
+       *  
+       *  content://authority/-1/1/file:///sdcard/path/file.jpg/ACTUAL/123
+       *  
+       *  Then we extract the real URI and pass it to documentFromFileUri(...)
+       */ 
+      String decodedUri = Uri.decode(document.toString());
+      int fileIdx = decodedUri.indexOf("file://");
       if (fileIdx > -1) {
-        String fileUri = dec.substring(fileIdx);
+        long id = -1;
+        try {
+          id = ContentUris.parseId(document);
+        } catch (NumberFormatException e) {
+          Log.e(LOG_TAG, e.getMessage(), e);
+        } catch (UnsupportedOperationException e) {
+          Log.e(LOG_TAG, e.getMessage(), e);
+        }
+        String fileUri = decodedUri.substring(fileIdx);
         fileUri = fileUri.replaceAll("(/ACTUAL/)(" + id + ")", "");
         return documentFromFileUri(Uri.parse(fileUri));
       } else {
@@ -879,6 +980,8 @@ public class ExoDocumentUtils {
         document.orientationAngle = c.getInt(orientIndex);
       }
       return document;
+    } catch (FileNotFoundException e) {
+      Log.d(LOG_TAG, e.getClass().getSimpleName(), e.getLocalizedMessage());
     } catch (Exception e) {
       Log.e(LOG_TAG, "Cannot retrieve the content at " + contentUri);
       if (Log.LOGD)
@@ -925,7 +1028,11 @@ public class ExoDocumentUtils {
       if ("image/jpeg".equals(document.documentMimeType))
         document.orientationAngle = getExifOrientationAngleFromFile(file.getAbsolutePath());
       return document;
-    } catch (Exception e) {
+    } catch (URISyntaxException e) {
+      Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
+      if (Log.LOGD)
+        Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
+    } catch (FileNotFoundException e) {
       Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
       if (Log.LOGD)
         Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
@@ -1093,6 +1200,38 @@ public class ExoDocumentUtils {
           if (Log.LOGD)
             Log.d(LOG_TAG, Log.getStackTraceString(e));
         }
+    }
+
+    /**
+     * On Platform 4.1-M2, the upload service renames the uploaded file.
+     * Therefore the link to this file in the activity becomes incorrect. To fix
+     * this, we rename the file before upload so the same name is used in the
+     * activity.
+     */
+    public void cleanupFilename(Context context) {
+      final String TILDE_HYPHENS_COLONS_SPACES = "[~_:\\s]";
+      final String MULTIPLE_HYPHENS = "-{2,}";
+      final String FORBIDDEN_CHARS = "[`!@#\\$%\\^&\\*\\|;\"'<>/\\\\\\[\\]\\{\\}\\(\\)\\?,=\\+\\.]+";
+      String name = documentName;
+      String ext = "";
+      int lastDot = name.lastIndexOf('.');
+      if (lastDot > 0 && lastDot < name.length()) {
+        ext = name.substring(lastDot); // the ext with the dot
+        name = name.substring(0, lastDot); // the name before the ext
+      }
+      // [~_:\s] Replaces ~ _ : and spaces by -
+      name = Pattern.compile(TILDE_HYPHENS_COLONS_SPACES).matcher(name).replaceAll("-");
+      // [`!@#\$%\^&\*\|;"'<>/\\\[\]\{\}\(\)\?,=\+\.]+ Deletes forbidden chars
+      name = Pattern.compile(FORBIDDEN_CHARS).matcher(name).replaceAll("");
+      // Converts accents to regular letters
+      name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+      // Replaces upper case characters by lower case
+      Locale loc = new Locale(SettingUtils.getPrefsLanguage(context.getApplicationContext()));
+      name = name.toLowerCase(loc == null ? Locale.getDefault() : loc);
+      // Remove consecutive -
+      name = Pattern.compile(MULTIPLE_HYPHENS).matcher(name).replaceAll("-");
+      // Save
+      documentName = name + ext;
     }
   }
 }
