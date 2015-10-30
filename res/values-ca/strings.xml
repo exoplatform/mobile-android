@@ -6,9 +6,7 @@
   <string name="SignInInformation">Registrar-se</string>
   <string name="SigningIn">Iniciant sessió …</string>
   <string name="NoServerSelected">Si us plau, seleccioni un servidor</string>
-  <string name="NoUsernameEnter">Si us plau, introdueix el teu nom d\'usuari</string>
   <string name="NoPasswordEnter">Si us plau, introdueix la teva contrasenya</string>
-  <string name="UserNamePasswordFailed">Combinació de nom d\'usuari/contrasenya no vàlida.</string>
   <string name="SpecialCharacters">No es permeten caràcters especials.</string>
   <string name="AccountNameInvalid">Només s\'admeten caràcters alfanumèrics i espais al nom del compte</string>
   <string name="AccountServerInvalid">Adreça del servidor no vàlida</string>
@@ -17,7 +15,6 @@
   <string name="AccountPasswordInvalid">No es permeten els espais en blanc en la contrasenya</string>
   <string name="Connected">Connectat</string>
   <string name="LastLoginDate">Últim accés</string>
-  <string name="ServerUnreachable">L\'adreça del servidor és inaccessible</string>
   <string name="UserNameCellTitle">Nom d\'usuari</string>
   <string name="PasswordCellTitle">Contrasenya</string>
   <string name="Language">IDIOMA</string>
@@ -55,7 +52,6 @@
   <string name="ActivityDetail">Detalls</string>
   <string name="You">Tu</string>
   <string name="Me">Jo</string>
-  <string name="MessageFrom">Missatge de</string>
   <string name="ShowMore">Mostra\'n més</string>
   <string name="LoadingData">Carregant dades …</string>
   <string name="LoadingImage">Carregant imatge …</string>
@@ -163,13 +159,10 @@
   <string name="CompatibleFileSuggest">Vol obrir-ho a una aplicació instal·lada?</string>
   <string name="OpenIn">Obre a …</string>
   <string name="DownloadingFile">Descarregant fitxer …</string>
-  <string name="MemoryWarning">Memòria no disponible o insuficient.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Recorda el meu filtre</string>
 
   <!-- Welcome screen -->
-  <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Pas</string>
   <string name="SignUp">Sign Up</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
@@ -204,7 +197,6 @@
   <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
   <string name="InvalidCredentials">Impossible to connect, check your username and password.</string>
   <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
-  <string name="NoTenantForEmail">Impossible to find tenant for this email, please check your email</string>
   <string name="DefaultServer">My Intranet</string>
   <string name="ServerResuming">We are restoring your intranet, please retry in few minutes.</string>
 
@@ -221,7 +213,6 @@
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
   <string name="LoginTitle">LOGIN</string>
-  <string name="EXO">EXO</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -233,7 +224,6 @@
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
   <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
-  <string name="ServerAdded">Server added</string>
   <string name="ServerUpdated">Server updated</string>
   <string name="ServerDeleted">Server deleted</string>
 
@@ -251,6 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
+  <string name="ShareTitle">Share</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">Cal seleccionar un compte i iniciar la sessió per a seleccionar un espai</string>
   <string name="ShareCannotPostBecauseOffline">Cal seleccionar un compte i iniciar la sessió per a publicar</string>
   <string name="ShareOperationStarted">S\'està compartint, comprovar l\'estat en l\'àrea de notificació</string>
@@ -278,4 +269,7 @@
   <string name="Folder">carpeta</string>
   <string name="File">arxiu</string>
 
+  <!-- Action Bar -->
+  <string name="SignOutTitle">Sign Out</string>
+  <string name="RefreshTitle">Refresh</string>
 </resources>
