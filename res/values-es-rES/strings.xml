@@ -6,9 +6,7 @@
   <string name="SignInInformation">Ingresar</string>
   <string name="SigningIn">Iniciando sesión…</string>
   <string name="NoServerSelected">Por favor, seleccione un servidor</string>
-  <string name="NoUsernameEnter">Por favor introduzca su nombre de usuario</string>
   <string name="NoPasswordEnter">Por favor introduzca su contraseña</string>
-  <string name="UserNamePasswordFailed">Combinación de nombre de usuario/contraseña no válida.</string>
   <string name="SpecialCharacters">No se permiten caracteres especiales.</string>
   <string name="AccountNameInvalid">Sólo los caracteres alfanuméricos y los espacios están permitidos en el nombre de la cuenta</string>
   <string name="AccountServerInvalid">Dirección de servidor incorrecta.</string>
@@ -17,7 +15,6 @@
   <string name="AccountPasswordInvalid">No se permiten espacios en blanco en la contraseña</string>
   <string name="Connected">Conectado</string>
   <string name="LastLoginDate">Ultimo Inicio de sesion</string>
-  <string name="ServerUnreachable">La dirección del servidor no está disponible</string>
   <string name="UserNameCellTitle">Nombre de usuario</string>
   <string name="PasswordCellTitle">Contraseña</string>
   <string name="Language">IDIOMA</string>
@@ -55,7 +52,6 @@
   <string name="ActivityDetail">Detalles</string>
   <string name="You">Usted</string>
   <string name="Me">Yo</string>
-  <string name="MessageFrom">Mensaje de</string>
   <string name="ShowMore">Ver más</string>
   <string name="LoadingData">Cargando datos …</string>
   <string name="LoadingImage">Cargando imagen …</string>
@@ -163,13 +159,10 @@
   <string name="CompatibleFileSuggest">¿Quieres abrirlo en una aplicación instalada?</string>
   <string name="OpenIn">Abrir en …</string>
   <string name="DownloadingFile">Descargando el archivo …</string>
-  <string name="MemoryWarning">La memoria no está disponible o no tiene suficiente espacio libre.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Recordar mi filtro</string>
 
   <!-- Welcome screen -->
-  <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Paso</string>
   <string name="SignUp">Sign Up</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
@@ -204,7 +197,6 @@
   <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
   <string name="InvalidCredentials">Impossible to connect, check your username and password.</string>
   <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
-  <string name="NoTenantForEmail">Impossible to find tenant for this email, please check your email</string>
   <string name="DefaultServer">My Intranet</string>
   <string name="ServerResuming">We are restoring your intranet, please retry in few minutes.</string>
 
@@ -221,7 +213,6 @@
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
   <string name="LoginTitle">LOGIN</string>
-  <string name="EXO">EXO</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -233,7 +224,6 @@
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
   <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
-  <string name="ServerAdded">Server added</string>
   <string name="ServerUpdated">Server updated</string>
   <string name="ServerDeleted">Server deleted</string>
 
@@ -251,6 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
+  <string name="ShareTitle">Share</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">Debe seleccionar una cuenta e iniciar sesión para seleccionar un espacio</string>
   <string name="ShareCannotPostBecauseOffline">Debe seleccionar una cuenta e iniciar sesión para publicar</string>
   <string name="ShareOperationStarted">Compartiendo, compruebe el estado en el área de notificación</string>
@@ -278,4 +269,7 @@
   <string name="Folder">carpeta</string>
   <string name="File">archivo</string>
 
+  <!-- Action Bar -->
+  <string name="SignOutTitle">Sign Out</string>
+  <string name="RefreshTitle">Refresh</string>
 </resources>
