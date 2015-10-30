@@ -6,9 +6,7 @@
   <string name="SignInInformation">Conectar</string>
   <string name="SigningIn">Conectando ...</string>
   <string name="NoServerSelected">Por favor, selecione um servidor</string>
-  <string name="NoUsernameEnter">Por favor, digite seu nome de usuário</string>
   <string name="NoPasswordEnter">Por favor, digite sua senha</string>
-  <string name="UserNamePasswordFailed">Combinação de nome de usuário/senha inválida.</string>
   <string name="SpecialCharacters">Caracteres especiais não são permitidos.</string>
   <string name="AccountNameInvalid">Only alphanumeric characters and spaces are allowed in the account name</string>
   <string name="AccountServerInvalid">Invalid server address</string>
@@ -17,7 +15,6 @@
   <string name="AccountPasswordInvalid">Blanks are not allowed in the password</string>
   <string name="Connected">Connected</string>
   <string name="LastLoginDate">Last login</string>
-  <string name="ServerUnreachable">Endereço do servidor é inacessível</string>
   <string name="UserNameCellTitle">Nome do usuário</string>
   <string name="PasswordCellTitle">Senha</string>
   <string name="Language">IDIOMA</string>
@@ -55,7 +52,6 @@
   <string name="ActivityDetail">Detalhes</string>
   <string name="You">Você</string>
   <string name="Me">Eu</string>
-  <string name="MessageFrom">Mensagem de</string>
   <string name="ShowMore">Mostrar mais</string>
   <string name="LoadingData">Carregando dados...</string>
   <string name="LoadingImage">Carregando imagem...</string>
@@ -163,13 +159,10 @@
   <string name="CompatibleFileSuggest">Gostaria de abrir em um aplicativo instalado?</string>
   <string name="OpenIn">Abrir com…</string>
   <string name="DownloadingFile">Baixando arquivo …</string>
-  <string name="MemoryWarning">A memória não está disponível ou não tem espaço livre suficiente.</string>
   <string name="SocialSettingTitle">SOCIAL</string>
   <string name="SocialSettingContent">Lembrar meu filtro</string>
 
   <!-- Welcome screen -->
-  <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">Passo</string>
   <string name="SignUp">Sign Up</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
@@ -204,7 +197,6 @@
   <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
   <string name="InvalidCredentials">Impossible to connect, check your username and password.</string>
   <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
-  <string name="NoTenantForEmail">Impossible to find tenant for this email, please check your email</string>
   <string name="DefaultServer">My Intranet</string>
   <string name="ServerResuming">We are restoring your intranet, please retry in few minutes.</string>
 
@@ -221,7 +213,6 @@
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
   <string name="LoginTitle">LOGIN</string>
-  <string name="eXo">EXO</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -233,7 +224,6 @@
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
   <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
-  <string name="ServerAdded">Server added</string>
   <string name="ServerUpdated">Server updated</string>
   <string name="ServerDeleted">Server deleted</string>
 
@@ -251,6 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
+  <string name="ShareTitle">Share</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -278,4 +269,7 @@
   <string name="Folder">folder</string>
   <string name="File">file</string>
 
+  <!-- Action Bar -->
+  <string name="SignOutTitle">Sign Out</string>
+  <string name="RefreshTitle">Refresh</string>
 </resources>
