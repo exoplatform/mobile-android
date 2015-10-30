@@ -6,9 +6,7 @@
   <string name="SignInInformation">登入</string>
   <string name="SigningIn">登入中…</string>
   <string name="NoServerSelected">請選擇伺服器</string>
-  <string name="NoUsernameEnter">請輸入您的使用者名稱</string>
   <string name="NoPasswordEnter">請輸入您的密碼</string>
-  <string name="UserNamePasswordFailed">不正確使用者名稱/密碼組合。</string>
   <string name="SpecialCharacters">不允許使用特殊字元。</string>
   <string name="AccountNameInvalid">Only alphanumeric characters and spaces are allowed in the account name</string>
   <string name="AccountServerInvalid">Invalid server address</string>
@@ -17,7 +15,6 @@
   <string name="AccountPasswordInvalid">Blanks are not allowed in the password</string>
   <string name="Connected">連接</string>
   <string name="LastLoginDate">Last login</string>
-  <string name="ServerUnreachable">伺服器位址不可訪問</string>
   <string name="UserNameCellTitle">使用者名稱</string>
   <string name="PasswordCellTitle">密碼</string>
   <string name="Language">語言</string>
@@ -55,7 +52,6 @@
   <string name="ActivityDetail">詳細資料</string>
   <string name="You">你</string>
   <string name="Me">我</string>
-  <string name="MessageFrom">訊息從</string>
   <string name="ShowMore">顯示更多</string>
   <string name="LoadingData">載取資料...</string>
   <string name="LoadingImage">載入圖片......</string>
@@ -164,13 +160,10 @@
   <string name="CompatibleFileSuggest">你想安裝完將應用程式打開嗎？</string>
   <string name="OpenIn">打開中......</string>
   <string name="DownloadingFile">下載檔案...</string>
-  <string name="MemoryWarning">記憶體無法使用或沒有足夠的可用空間。</string>
   <string name="SocialSettingTitle">社會</string>
   <string name="SocialSettingContent">記得我的篩選器</string>
 
   <!-- Welcome screen -->
-  <string name="Slogan">Your social intranet, anywhere, anytime!</string>
-  <string name="title_template_step">步驟</string>
   <string name="SignUp">Sign Up</string>
   <string name="LogIn">Log In</string>
   <string name="SkipStep">or skip this for now</string>
@@ -205,7 +198,6 @@
   <string name="ServerNotAvailable">Impossible to connect to your intranet, please check its URL or contact your administrator.</string>
   <string name="InvalidCredentials">Impossible to connect, check your username and password.</string>
   <string name="NoAccountExists">No account exists for this email, check your email or signup.</string>
-  <string name="NoTenantForEmail">Impossible to find tenant for this email, please check your email</string>
   <string name="DefaultServer">My Intranet</string>
   <string name="ServerResuming">We are restoring your intranet, please retry in few minutes.</string>
 
@@ -222,7 +214,6 @@
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
   <string name="LoginTitle">LOGIN</string>
-  <string name="EXO">EXO</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -234,7 +225,6 @@
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
   <string name="StartCloudSignUpAssistant">Start the sign-up Assistant</string>
-  <string name="ServerAdded">Server added</string>
   <string name="ServerUpdated">Server updated</string>
   <string name="ServerDeleted">Server deleted</string>
 
@@ -252,6 +242,7 @@
   </string-array>
   
   <!-- Share Extension -->
+  <string name="ShareTitle">Share</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -280,4 +271,7 @@
   <string name="Folder">folder</string>
   <string name="File">file</string>
 
+  <!-- Action Bar -->
+  <string name="SignOutTitle">Sign Out</string>
+  <string name="RefreshTitle">Refresh</string>
 </resources>
