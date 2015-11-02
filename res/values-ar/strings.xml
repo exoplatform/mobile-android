@@ -18,7 +18,7 @@
   <string name="UserNameCellTitle">اسم المستخدم</string>
   <string name="PasswordCellTitle">كلمة السر</string>
   <string name="Language">اللغة</string>
-  <string name="Server">المزوّد</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">قائمة المزوّدين</string>
   <string name="AddAServer">إضافة مزوّد</string>
   <string name="ModifyServerList">تغيير القائمة</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">لا يمكن تحميل الأنشطة القديمة. يتمّ الآن تحديث القائمة.</string>
   <string name="LogoutTitle">تسجيل الخروج</string>
   <string name="LogoutContent">هل تريد مغادرة التطبيق؟</string>
-  <string name="ApplicationInformation"> معلومات التطبيق</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">إصدار المزوّد</string>
   <string name="ServerEdition">تغيير المزوّد</string>
   <string name="ApplicationVersion">الاصدار الخاصّ بالتطبيق</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">هل ترغب في فتحه ضمن تطبيق مثبّت؟</string>
   <string name="OpenIn">فتح في...</string>
   <string name="DownloadingFile">تحميل الملف...</string>
-  <string name="SocialSettingTitle">اجتماعي</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">تذكر الفلتر الخاصّ بي</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">دخول</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">شارك</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">تحديث الصفحة</string>
 </resources>
