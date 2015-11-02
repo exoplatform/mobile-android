@@ -17,8 +17,8 @@
   <string name="LastLoginDate">crwdns6812277:0crwdne6812277:0</string>
   <string name="UserNameCellTitle">crwdns6795695:0crwdne6795695:0</string>
   <string name="PasswordCellTitle">crwdns6795696:0crwdne6795696:0</string>
-  <string name="Language">crwdns6795697:0crwdne6795697:0</string>
-  <string name="Server">crwdns6795698:0crwdne6795698:0</string>
+  <string name="Language">crwdns6824991:0crwdne6824991:0</string>
+  <string name="Server">crwdns6824992:0crwdne6824992:0</string>
   <string name="ServerList">crwdns6795699:0crwdne6795699:0</string>
   <string name="AddAServer">crwdns6795700:0crwdne6795700:0</string>
   <string name="ModifyServerList">crwdns6795701:0crwdne6795701:0</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">crwdns6795776:0crwdne6795776:0</string>
   <string name="LogoutTitle">crwdns6795777:0crwdne6795777:0</string>
   <string name="LogoutContent">crwdns6795778:0crwdne6795778:0</string>
-  <string name="ApplicationInformation">crwdns6795779:0crwdne6795779:0</string>
+  <string name="ApplicationInformation">crwdns6824993:0crwdne6824993:0</string>
   <string name="ServerVersion">crwdns6795780:0crwdne6795780:0</string>
   <string name="ServerEdition">crwdns6795781:0crwdne6795781:0</string>
   <string name="ApplicationVersion">crwdns6795782:0crwdne6795782:0</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">crwdns6795809:0crwdne6795809:0</string>
   <string name="DocumentCreateFolderError">crwdns6795810:0crwdne6795810:0</string>
   <string name="DocumentFolderNameEmpty">crwdns6795811:0crwdne6795811:0</string>
-  <string name="DocumentSettingTitle">crwdns6795812:0crwdne6795812:0</string>
+  <string name="DocumentSettingTitle">crwdns6824994:0crwdne6824994:0</string>
   <string name="DocumentShowPrivateDrive">crwdns6795813:0crwdne6795813:0</string>
   <string name="CalendarDescription">crwdns6795814:0crwdne6795814:0</string>
   <string name="CalendarLocation">crwdns6795815:0crwdne6795815:0</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">crwdns6795831:0crwdne6795831:0</string>
   <string name="OpenIn">crwdns6795832:0crwdne6795832:0</string>
   <string name="DownloadingFile">crwdns6795833:0crwdne6795833:0</string>
-  <string name="SocialSettingTitle">crwdns6795835:0crwdne6795835:0</string>
+  <string name="SocialSettingTitle">crwdns6824995:0crwdne6824995:0</string>
   <string name="SocialSettingContent">crwdns6795836:0crwdne6795836:0</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">crwdns6795877:0crwdne6795877:0</string>
   <string name="Autologin">crwdns6795878:0crwdne6795878:0</string>
-  <string name="LoginTitle">crwdns6795879:0crwdne6795879:0</string>
+  <string name="LoginTitle">crwdns6824996:0crwdne6824996:0</string>
   <string name="Number1">crwdns6795881:0crwdne6795881:0</string>
   <string name="Number2">crwdns6795882:0crwdne6795882:0</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">crwdns6824997:0crwdne6824997:0</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">crwdns6824537:0crwdne6824537:0</string>
   <string name="ShareCannotPostBecauseOffline">crwdns6824538:0crwdne6824538:0</string>
   <string name="ShareOperationStarted">crwdns6824539:0crwdne6824539:0</string>
@@ -270,6 +270,6 @@
   <string name="File">crwdns6824561:0crwdne6824561:0</string>
 
   <!-- Action Bar -->
-  <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="SignOutTitle">crwdns6824998:0crwdne6824998:0</string>
+  <string name="RefreshTitle">crwdns6824999:0crwdne6824999:0</string>
 </resources>
