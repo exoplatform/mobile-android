@@ -17,8 +17,8 @@
   <string name="LastLoginDate">Last login</string>
   <string name="UserNameCellTitle">Kullanıcı Adı</string>
   <string name="PasswordCellTitle">Şifre</string>
-  <string name="Language">DİL</string>
-  <string name="Server">SUNUCU</string>
+  <string name="Language">Dil</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Sunucu Listesi</string>
   <string name="AddAServer">Sunucu Ekle</string>
   <string name="ModifyServerList">Listeyi değiştir</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Eski etkinlikleri yüklenemiyor. Liste yenilenir.</string>
   <string name="LogoutTitle">Oturum Kapatma Penceresi</string>
   <string name="LogoutContent">Çıkmak istediğinizden emin misiniz?</string>
-  <string name="ApplicationInformation"> UYGULAMA BİLGİLERİ</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Sunucu Sürümü</string>
   <string name="ServerEdition">Sunucu Yayını</string>
   <string name="ApplicationVersion">Uygulama Sürümü</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Bu dosyayı yeniden adlandırılırken hata oluştu.</string>
   <string name="DocumentCreateFolderError">Bu klasör oluşturulurken hata oluştu.</string>
   <string name="DocumentFolderNameEmpty">Lütfen klasör adını girin.</string>
-  <string name="DocumentSettingTitle">BELGELER</string>
+  <string name="DocumentSettingTitle">Belgeler</string>
   <string name="DocumentShowPrivateDrive">Özel sürücüyü göster</string>
   <string name="CalendarDescription">Açıklama:</string>
   <string name="CalendarLocation">Yer:</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Yüklü bir uygulama açmak ister misiniz?</string>
   <string name="OpenIn">Aç …</string>
   <string name="DownloadingFile">Dosya yükleniyor …</string>
-  <string name="SocialSettingTitle">SOSYAL</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Filtremi hatırla</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Beni Hatırla</string>
   <string name="Autologin">Otomatik Oturum Aç</string>
-  <string name="LoginTitle">OTURUM AÇ</string>
+  <string name="LoginTitle">Uturum Aç</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Paylaş</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Yenile</string>
 </resources>
