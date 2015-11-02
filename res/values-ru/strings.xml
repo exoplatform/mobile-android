@@ -17,8 +17,8 @@
   <string name="LastLoginDate">Last login</string>
   <string name="UserNameCellTitle">Имя пользователя</string>
   <string name="PasswordCellTitle">Пароль</string>
-  <string name="Language">ЯЗЫК</string>
-  <string name="Server">СЕРВЕР</string>
+  <string name="Language">Язык</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Список серверов</string>
   <string name="AddAServer">Добавить сервер</string>
   <string name="ModifyServerList">Изменить список</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Не удается загрузить более старые сообщения ленты активности. Список обновляется.</string>
   <string name="LogoutTitle">Выйти из диалогового окна</string>
   <string name="LogoutContent">Вы действительно хотите выйти?</string>
-  <string name="ApplicationInformation">ИНФОРМАЦИЯ О ПРИЛОЖЕНИИ </string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Версия сервера</string>
   <string name="ServerEdition">Серверная редакция</string>
   <string name="ApplicationVersion">Версия приложения</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Ошибка при переименовании этого файла.</string>
   <string name="DocumentCreateFolderError">Ошибка при создании этой папки.</string>
   <string name="DocumentFolderNameEmpty">Пожалуйста, введите имя папки.</string>
-  <string name="DocumentSettingTitle">ДОКУМЕНТЫ</string>
+  <string name="DocumentSettingTitle">Документы</string>
   <string name="DocumentShowPrivateDrive">Показать личный диск</string>
   <string name="CalendarDescription">Описание:</string>
   <string name="CalendarLocation">Расположение</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Вы хотели бы открыть в установленном приложении?</string>
   <string name="OpenIn">Открыть в …</string>
   <string name="DownloadingFile">Загрузка файла …</string>
-  <string name="SocialSettingTitle">СОЦИАЛЬНЫЕ</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Запомнить мой фильтр</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">Авторизация</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Поделиться</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Обновить</string>
 </resources>
