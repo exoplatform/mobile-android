@@ -17,8 +17,8 @@
   <string name="LastLoginDate">Last login</string>
   <string name="UserNameCellTitle">Username</string>
   <string name="PasswordCellTitle">Password</string>
-  <string name="Language">LINGUA</string>
-  <string name="Server">SERVER</string>
+  <string name="Language">Lingua</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Lista dei server</string>
   <string name="AddAServer">Aggiungere un Server</string>
   <string name="ModifyServerList">Modificare Lista</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Non è possibile caricare attività più anziani . L\'elenco si sta rinfrescando.</string>
   <string name="LogoutTitle">Disconnessione Dal Dialogo</string>
   <string name="LogoutContent">Vuole uscire?</string>
-  <string name="ApplicationInformation"> INFORMAZIONI APPLICAZIONE</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Versione Server</string>
   <string name="ServerEdition">Edizione Server</string>
   <string name="ApplicationVersion">Versione Applicazione</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Errore durante la ridenominazione di questo file.</string>
   <string name="DocumentCreateFolderError">Errore durante la creazione di questa cartella.</string>
   <string name="DocumentFolderNameEmpty">Inserisci un nome di cartella.</string>
-  <string name="DocumentSettingTitle">DOCUMENTI</string>
+  <string name="DocumentSettingTitle">Documenti</string>
   <string name="DocumentShowPrivateDrive">Visualizza drive privato</string>
   <string name="CalendarDescription">Descrizione:</string>
   <string name="CalendarLocation">Luogo:</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Vorrebbe aprire in un\'applicazione installata?</string>
   <string name="OpenIn">Aprire dentro...</string>
   <string name="DownloadingFile">Download file...</string>
-  <string name="SocialSettingTitle">SOCIALE</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Ricordarsi il mio filtro</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">Login</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Condividi</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Aggiorna</string>
 </resources>
