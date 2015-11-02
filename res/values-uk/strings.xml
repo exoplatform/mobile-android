@@ -17,8 +17,8 @@
   <string name="LastLoginDate">Last login</string>
   <string name="UserNameCellTitle">Ім’я користувача</string>
   <string name="PasswordCellTitle">Пароль</string>
-  <string name="Language">МОВА</string>
-  <string name="Server">СЕРВЕР</string>
+  <string name="Language">Мова</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Перелік серверів</string>
   <string name="AddAServer">Додати сервер</string>
   <string name="ModifyServerList">Редагувати список</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Неможливо завантажити старі повідомлення стрічки активності. Список в даний час оновлюється.</string>
   <string name="LogoutTitle">Вийти з діалогового вікна</string>
   <string name="LogoutContent">Ви дійсно бажаєте вийти?</string>
-  <string name="ApplicationInformation"> ІНФОРМАЦІЯ ПРО ДОДАТКИ</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Версія серверу</string>
   <string name="ServerEdition">Редакція серверу</string>
   <string name="ApplicationVersion">Версія додатку</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Помилка при перейменуванні цього файлу.</string>
   <string name="DocumentCreateFolderError">Помилка при створенні цієї папки.</string>
   <string name="DocumentFolderNameEmpty">Будь ласка, введіть ім\'я папки.</string>
-  <string name="DocumentSettingTitle">ДОКУМЕНТИ</string>
+  <string name="DocumentSettingTitle">Документи</string>
   <string name="DocumentShowPrivateDrive">Показати особистий диск</string>
   <string name="CalendarDescription">Опис:</string>
   <string name="CalendarLocation">Розташування:</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Відкрити у встановленому додатку?</string>
   <string name="OpenIn">Відкрити у …</string>
   <string name="DownloadingFile">Завантаження файлу …</string>
-  <string name="SocialSettingTitle">СОЦІАЛЬНІ</string>
+  <string name="SocialSettingTitle">Соціальна</string>
   <string name="SocialSettingContent">Пам\'ятати мій фільтр</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">Логін</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Поділитися</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Оновити</string>
 </resources>
