@@ -18,7 +18,7 @@
   <string name="UserNameCellTitle">Nume de utilizator</string>
   <string name="PasswordCellTitle">Parola</string>
   <string name="Language">Limba</string>
-  <string name="Server">Server</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Listă de servere</string>
   <string name="AddAServer">Adăugaţi un server</string>
   <string name="ModifyServerList">Modifică lista</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Imposibil de încărcat activităţi mai vechi. Se reîmprospătează lista.</string>
   <string name="LogoutTitle">Dialog ieşire</string>
   <string name="LogoutContent">Doriţi să ieşiţi?</string>
-  <string name="ApplicationInformation"> INFORMAŢII APLICAŢIE</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Versiune server</string>
   <string name="ServerEdition">Ediţie server</string>
   <string name="ApplicationVersion">Versiunea aplicaţiei</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Eroare la redenumirea acestui fişier.</string>
   <string name="DocumentCreateFolderError">Eroare la crearea acestui folder.</string>
   <string name="DocumentFolderNameEmpty">Vă rugăm să introduceti un nume de folder.</string>
-  <string name="DocumentSettingTitle">DOCUMENTE</string>
+  <string name="DocumentSettingTitle">Documente</string>
   <string name="DocumentShowPrivateDrive">Arată unitatea privată</string>
   <string name="CalendarDescription">Descriere:</string>
   <string name="CalendarLocation">Locaţie:</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Doriţi să deschideţi într-o aplicație instalată?</string>
   <string name="OpenIn">Deschis în ...</string>
   <string name="DownloadingFile">Descărcare fişier ...</string>
-  <string name="SocialSettingTitle">SOCIALE</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Ține minte filtrul meu</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">Autentificare</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Distribuie</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Reîncarcă</string>
 </resources>
