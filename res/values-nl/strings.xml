@@ -18,7 +18,7 @@
   <string name="UserNameCellTitle">Gebruikersnaam</string>
   <string name="PasswordCellTitle">#{word.password}</string>
   <string name="Language">Taal</string>
-  <string name="Server">SERVER</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Serverlijst</string>
   <string name="AddAServer">Een Server toevoegen</string>
   <string name="ModifyServerList">Wijzig de lijst</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Kan oudere activiteiten niet laden. De lijst wordt vernieuwd.</string>
   <string name="LogoutTitle">Afmeldvenster</string>
   <string name="LogoutContent">Wilt u afsluiten?</string>
-  <string name="ApplicationInformation"> APPLICATIE INFORMATIE</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Serverversie</string>
   <string name="ServerEdition">Server Editie</string>
   <string name="ApplicationVersion">Versie van toepassing</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Fout tijdens het hernoemen van dit bestand.</string>
   <string name="DocumentCreateFolderError">Fout tijdens het maken van deze map.</string>
   <string name="DocumentFolderNameEmpty">Geef a. u. b. een folder-naam in.</string>
-  <string name="DocumentSettingTitle">DOCUMENTEN</string>
+  <string name="DocumentSettingTitle">Documenten</string>
   <string name="DocumentShowPrivateDrive">Toon private drive</string>
   <string name="CalendarDescription">Beschrijving:</string>
   <string name="CalendarLocation">Plaats:</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Openen met een geïnstalleerde toepassing?</string>
   <string name="OpenIn">Openen in…</string>
   <string name="DownloadingFile">Downloaden van bestand…</string>
-  <string name="SocialSettingTitle">SOCIALE</string>
+  <string name="SocialSettingTitle">Sociale</string>
   <string name="SocialSettingContent">Onthoud mijn filter</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">Inloggen</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Delen</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">U moet Selecteer een account en log in om te selecteren van een ruimte</string>
   <string name="ShareCannotPostBecauseOffline">U moet Selecteer een account en log in om te posten</string>
   <string name="ShareOperationStarted">Delen in vooruitgang, Controleer de status in notificaties</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Verversen</string>
 </resources>
