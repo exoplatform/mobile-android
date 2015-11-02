@@ -17,8 +17,8 @@
   <string name="LastLoginDate">Last login</string>
   <string name="UserNameCellTitle">Vartotojo vardas</string>
   <string name="PasswordCellTitle">Slaptažodis</string>
-  <string name="Language">KALBA</string>
-  <string name="Server">SERVERIS</string>
+  <string name="Language">Kalba</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Serverių sąrašas</string>
   <string name="AddAServer">Pridėti serverį</string>
   <string name="ModifyServerList">Redaguoti sąrašą</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Negalima įkelti senesnių veiklų. Sąrašas yra atnaujinamas.</string>
   <string name="LogoutTitle">Atsijungimo langas</string>
   <string name="LogoutContent">Ar jūs tikrai norite išeiti?</string>
-  <string name="ApplicationInformation"> PROGRAMOS INFORMACIJA</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Serverio versija</string>
   <string name="ServerEdition">Serverio leidinys</string>
   <string name="ApplicationVersion">Programos versija</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Klaida pervadinant šį failą.</string>
   <string name="DocumentCreateFolderError">Klaida sukuriant šį aplanką.</string>
   <string name="DocumentFolderNameEmpty">Prašome įvesti aplanko pavadinimą.</string>
-  <string name="DocumentSettingTitle">DOKUMENTAI</string>
+  <string name="DocumentSettingTitle">Dokumentai</string>
   <string name="DocumentShowPrivateDrive">Rodyti privatų diską</string>
   <string name="CalendarDescription">Aprašymas:</string>
   <string name="CalendarLocation">Vieta:</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Ar jūs norite atidaryti įdiegtoje programoje?</string>
   <string name="OpenIn">Atidaryti su…</string>
   <string name="DownloadingFile">Atsiunčiamas failas…</string>
-  <string name="SocialSettingTitle">SOCIALINIS</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Atsiminti mano filtrą</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">Prisijungti</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Dalintis</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Atnaujinti</string>
 </resources>
