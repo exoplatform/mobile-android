@@ -18,7 +18,7 @@
   <string name="UserNameCellTitle">使用者名稱</string>
   <string name="PasswordCellTitle">密碼</string>
   <string name="Language">語言</string>
-  <string name="Server">伺服器</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">伺服器清單</string>
   <string name="AddAServer">增加伺服器</string>
   <string name="ModifyServerList">修改清單</string>
@@ -106,7 +106,7 @@
   <string name="CannotLoadMoreActivities">無法載入舊的活動，清單已被更新。</string>
   <string name="LogoutTitle">登出對話方塊</string>
   <string name="LogoutContent">您要退出嗎？</string>
-  <string name="ApplicationInformation">應用程式資訊</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">伺服器版本</string>
   <string name="ServerEdition">伺服器版</string>
   <string name="ApplicationVersion">應用程式版本</string>
@@ -213,7 +213,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">登錄</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -242,7 +242,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">分享</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -273,5 +273,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">重新整理</string>
 </resources>
