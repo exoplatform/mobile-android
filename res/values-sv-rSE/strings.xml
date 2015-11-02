@@ -17,8 +17,8 @@
   <string name="LastLoginDate">Last login</string>
   <string name="UserNameCellTitle">Användarnamn</string>
   <string name="PasswordCellTitle">Lösenord</string>
-  <string name="Language">LANGUAGE</string>
-  <string name="Server">SERVER</string>
+  <string name="Language">Språk</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Server List</string>
   <string name="AddAServer">Add a Server</string>
   <string name="ModifyServerList">Modify the List</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Cannot load older activities. The list is being refreshed.</string>
   <string name="LogoutTitle">Logout Dialog</string>
   <string name="LogoutContent">Do you want to exit?</string>
-  <string name="ApplicationInformation"> APPLICATION INFORMATIONS</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Server Version</string>
   <string name="ServerEdition">Server Edition</string>
   <string name="ApplicationVersion">Application Version</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Error while renaming this file.</string>
   <string name="DocumentCreateFolderError">Error while creating this folder.</string>
   <string name="DocumentFolderNameEmpty">Please input a folder name.</string>
-  <string name="DocumentSettingTitle">DOCUMENTS</string>
+  <string name="DocumentSettingTitle">Dokument</string>
   <string name="DocumentShowPrivateDrive">Show private drive</string>
   <string name="CalendarDescription">Beskrivning:</string>
   <string name="CalendarLocation">Plats:</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Would you like to open in an installed application?</string>
   <string name="OpenIn">Open in …</string>
   <string name="DownloadingFile">Downloading file …</string>
-  <string name="SocialSettingTitle">SOCIAL</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Remember my filter</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">Logga in</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Dela</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Uppdatera</string>
 </resources>
