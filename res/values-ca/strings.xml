@@ -17,8 +17,8 @@
   <string name="LastLoginDate">Últim accés</string>
   <string name="UserNameCellTitle">Nom d\'usuari</string>
   <string name="PasswordCellTitle">Contrasenya</string>
-  <string name="Language">IDIOMA</string>
-  <string name="Server">SERVIDOR</string>
+  <string name="Language">Idioma</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Llista de servidors</string>
   <string name="AddAServer">Afegeix un servidor</string>
   <string name="ModifyServerList">Modifica la llista</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">No es poden carregar més activitats. S\'esta recarregant la llista.</string>
   <string name="LogoutTitle">Diàleg de tancament de sessió</string>
   <string name="LogoutContent">Vol sortir?</string>
-  <string name="ApplicationInformation"> INFORMACIONS DE L\'APLICACIÓ</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Versió del servidor</string>
   <string name="ServerEdition">Edició del servidor</string>
   <string name="ApplicationVersion">Versió de l\'Aplicació</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Error reanomenant el fitxer.</string>
   <string name="DocumentCreateFolderError">Error creant el fitxer.</string>
   <string name="DocumentFolderNameEmpty">Si us plau, introduïu el nom de la carpeta.</string>
-  <string name="DocumentSettingTitle">DOCUMENTS</string>
+  <string name="DocumentSettingTitle">Documents</string>
   <string name="DocumentShowPrivateDrive">Veure la unitat privada</string>
   <string name="CalendarDescription">Descripció:</string>
   <string name="CalendarLocation">Ubicació:</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Vol obrir-ho a una aplicació instal·lada?</string>
   <string name="OpenIn">Obre a …</string>
   <string name="DownloadingFile">Descarregant fitxer …</string>
-  <string name="SocialSettingTitle">SOCIAL</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Recorda el meu filtre</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">Inicia la sessió</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Compartir</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">Cal seleccionar un compte i iniciar la sessió per a seleccionar un espai</string>
   <string name="ShareCannotPostBecauseOffline">Cal seleccionar un compte i iniciar la sessió per a publicar</string>
   <string name="ShareOperationStarted">S\'està compartint, comprovar l\'estat en l\'àrea de notificació</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Recarrega</string>
 </resources>
