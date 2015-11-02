@@ -17,8 +17,8 @@
   <string name="LastLoginDate">Last login</string>
   <string name="UserNameCellTitle">Tên người dùng</string>
   <string name="PasswordCellTitle">Mật khẩu</string>
-  <string name="Language">NGÔN NGỮ</string>
-  <string name="Server">MÁY CHỦ</string>
+  <string name="Language">Ngôn ngữ</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Danh sách máy chủ</string>
   <string name="AddAServer">Thêm một máy chủ</string>
   <string name="ModifyServerList">Sửa đổi danh sách</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Cannot load older activities. The list is being refreshed.</string>
   <string name="LogoutTitle">Logout Dialog</string>
   <string name="LogoutContent">Bạn có muốn thoát?</string>
-  <string name="ApplicationInformation"> APPLICATION INFORMATIONS</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Phiên bản máy chủ</string>
   <string name="ServerEdition">Server Edition</string>
   <string name="ApplicationVersion">Phiên bản ứng dụng</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Error while renaming this file.</string>
   <string name="DocumentCreateFolderError">Error while creating this folder.</string>
   <string name="DocumentFolderNameEmpty">Please input a folder name.</string>
-  <string name="DocumentSettingTitle">DOCUMENTS</string>
+  <string name="DocumentSettingTitle">Tài liệu</string>
   <string name="DocumentShowPrivateDrive">Show private drive</string>
   <string name="CalendarDescription">Mô tả:</string>
   <string name="CalendarLocation">Địa điểm:</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Would you like to open in an installed application?</string>
   <string name="OpenIn">Open in …</string>
   <string name="DownloadingFile">Downloading file …</string>
-  <string name="SocialSettingTitle">SOCIAL</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Remember my filter</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">Đăng nhập</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Chia sẻ</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Tải lại</string>
 </resources>
