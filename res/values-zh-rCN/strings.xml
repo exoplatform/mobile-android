@@ -18,7 +18,7 @@
   <string name="UserNameCellTitle">用户名</string>
   <string name="PasswordCellTitle">密码</string>
   <string name="Language">语言</string>
-  <string name="Server">服务器</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">服务器列表</string>
   <string name="AddAServer">添加服务器</string>
   <string name="ModifyServerList">修改列表</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">无法加载旧的活动。正在刷新列表。</string>
   <string name="LogoutTitle">退出会话</string>
   <string name="LogoutContent">您要退出吗？</string>
-  <string name="ApplicationInformation">应用程序信息</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">服务器版本</string>
   <string name="ServerEdition">服务器版本</string>
   <string name="ApplicationVersion">应用程序版本</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">在已安装的应用程序中打开？</string>
   <string name="OpenIn">在……中打开</string>
   <string name="DownloadingFile">正在下载文件...</string>
-  <string name="SocialSettingTitle">社交</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">记住此选项</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">登录</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">分享</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">刷新</string>
 </resources>
