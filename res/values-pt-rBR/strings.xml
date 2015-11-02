@@ -17,8 +17,8 @@
   <string name="LastLoginDate">Last login</string>
   <string name="UserNameCellTitle">Nome do usuário</string>
   <string name="PasswordCellTitle">Senha</string>
-  <string name="Language">IDIOMA</string>
-  <string name="Server">SERVIDOR</string>
+  <string name="Language">Sobrenome</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Lista de servidores</string>
   <string name="AddAServer">Adicionar um servidor</string>
   <string name="ModifyServerList">Modificar a lista</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Não é possível carregar antigas atividades. A lista está sendo atualizada.</string>
   <string name="LogoutTitle">Sair do Diálogo</string>
   <string name="LogoutContent">Deseja sair?</string>
-  <string name="ApplicationInformation"> INFORMAÇÕES DO APLICATIVO</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Versão do servidor</string>
   <string name="ServerEdition">Edição do Servidor</string>
   <string name="ApplicationVersion">Versão do aplicativo</string>
@@ -138,7 +138,7 @@
   <string name="DocumentRenameError">Erro ao renomear este arquivo.</string>
   <string name="DocumentCreateFolderError">Erro ao criar esta pasta.</string>
   <string name="DocumentFolderNameEmpty">Por favor, insira um nome da pasta.</string>
-  <string name="DocumentSettingTitle">DOCUMENTOS</string>
+  <string name="DocumentSettingTitle">Documentos</string>
   <string name="DocumentShowPrivateDrive">Mostrar unidade privada</string>
   <string name="CalendarDescription">Descrição:</string>
   <string name="CalendarLocation">Local:</string>
@@ -159,7 +159,7 @@
   <string name="CompatibleFileSuggest">Gostaria de abrir em um aplicativo instalado?</string>
   <string name="OpenIn">Abrir com…</string>
   <string name="DownloadingFile">Baixando arquivo …</string>
-  <string name="SocialSettingTitle">SOCIAL</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Lembrar meu filtro</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Remember Me</string>
   <string name="Autologin">Auto login</string>
-  <string name="LoginTitle">LOGIN</string>
+  <string name="LoginTitle">Conectar</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Compartilhar</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Atualizar</string>
 </resources>
