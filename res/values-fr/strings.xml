@@ -18,7 +18,7 @@
   <string name="UserNameCellTitle">Nom d\'utilisateur</string>
   <string name="PasswordCellTitle">Mot de passe</string>
   <string name="Language">Langue</string>
-  <string name="Server">Comptes</string>
+  <string name="Server">Accounts</string>
   <string name="ServerList">Liste des serveurs</string>
   <string name="AddAServer">Ajouter un compte</string>
   <string name="ModifyServerList">Modifier la liste</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Impossible de charger les anciennes activités. La liste est en cours de rafraichissement.</string>
   <string name="LogoutTitle">Déconnexion</string>
   <string name="LogoutContent">Souhaitez-vous quitter l\'application ?</string>
-  <string name="ApplicationInformation">Informations de l\'application</string>
+  <string name="ApplicationInformation">Application Information</string>
   <string name="ServerVersion">Version du serveur</string>
   <string name="ServerEdition">Edition du serveur</string>
   <string name="ApplicationVersion">Version de l\'application</string>
@@ -212,7 +212,7 @@
     <!-- Setting -->
   <string name="RememberMe">Mémoriser mon login</string>
   <string name="Autologin">Connexion automatique</string>
-  <string name="LoginTitle">Login</string>
+  <string name="LoginTitle">Connexion</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -241,7 +241,7 @@
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Share</string>
+  <string name="ShareTitle">Partager</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">Veuillez choisir un compte et vous connecter pour accéder à la liste d\'espaces</string>
   <string name="ShareCannotPostBecauseOffline">Veuillez choisir un compte et vous connecter pour publier votre message</string>
   <string name="ShareOperationStarted">Le partage est en cours, suivez sa progression dans la barre de notifications</string>
@@ -271,5 +271,5 @@
 
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
-  <string name="RefreshTitle">Refresh</string>
+  <string name="RefreshTitle">Actualiser</string>
 </resources>
