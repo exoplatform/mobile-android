@@ -269,7 +269,7 @@
         <artifactId>android-maven-plugin</artifactId>
         <extensions>true</extensions>
         <executions>
-          <execution>
+          <!-- execution>
             <id>manifestUpdate</id>
             <phase>process-resources</phase>
             <goals>
@@ -278,7 +278,7 @@
             <configuration>
               <manifestVersionCode>${version.code}</manifestVersionCode>
             </configuration>
-          </execution>
+          </execution -->
           <execution>
             <id>alignApk</id>
             <phase>package</phase>
