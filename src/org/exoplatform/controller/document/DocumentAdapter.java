@@ -24,6 +24,8 @@ import org.exoplatform.R;
 import org.exoplatform.model.ExoFile;
 import org.exoplatform.ui.DocumentActionDialog;
 import org.exoplatform.ui.DocumentActivity;
+import org.exoplatform.utils.CompatibleFileOpen.FileOpenRequest;
+import org.exoplatform.utils.CompatibleFileOpen.FileOpenRequestResult;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.widget.UnreadableFileDialog;
@@ -146,7 +148,10 @@ public class DocumentAdapter extends BaseAdapter {
             if (ExoDocumentUtils.isForbidden(myFile.nodeType)) {
               new UnreadableFileDialog(_mContext, null).show();
             } else {
-              ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
+              FileOpenRequest fileOpenReq = ExoDocumentUtils.fileOpen(_mContext, myFile.nodeType, myFile.path, myFile.name);
+              if (fileOpenReq.mResult == FileOpenRequestResult.EXTERNAL) {
+                DocumentActivity._documentActivityInstance.mFileOpenController = fileOpenReq.mFileOpenController;
+              }
             }
           } else {
             DocumentActivity._documentActivityInstance.loadFolderContent(myFile);

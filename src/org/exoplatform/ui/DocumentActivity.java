@@ -29,6 +29,8 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.social.SelectedImageActivity;
+import org.exoplatform.utils.CompatibleFileOpen;
+import org.exoplatform.utils.CrashUtils;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
@@ -100,6 +102,8 @@ public class DocumentActivity extends Activity {
   public DocumentAdapter         _documentAdapter;
 
   private DocumentLoadTask       mLoadTask;
+  
+  public CompatibleFileOpen      mFileOpenController;
 
   private View                   empty_stub;
 
@@ -149,7 +153,6 @@ public class DocumentActivity extends Activity {
     outState.putParcelable(DOCUMENT_HELPER, DocumentHelper.getInstance());
     outState.putParcelable(ACCOUNT_SETTING, AccountSetting.getInstance());
     outState.putParcelable(CURRENT_FILE, _fileForCurrentActionBar);
-
   }
 
   @Override
@@ -221,8 +224,7 @@ public class DocumentActivity extends Activity {
        * @param: parent The parent folder
        * @param: documentList The parents list file
        */
-
-      if (_fileForCurrentActionBar.name.equals("")) {
+      if ("".equals(_fileForCurrentActionBar.name)) {
         _documentActivityInstance = null;
         finish();
       } else {
@@ -236,9 +238,7 @@ public class DocumentActivity extends Activity {
          */
         updateContent(getParentFolderAndChildren());
       }
-
     }
-
   }
 
   private ExoFile getParentFolderAndChildren() {
@@ -294,7 +294,7 @@ public class DocumentActivity extends Activity {
   private void onLoad(ExoFile source, String destination, int action) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
       if (mLoadTask == null || mLoadTask.getStatus() == DocumentLoadTask.Status.FINISHED) {
-        Log.i("DocumentLoadTask", "onLoad");
+        Log.i(TAG, "Starting Document Load Task");
         mLoadTask = (DocumentLoadTask) new DocumentLoadTask(this, source, destination, action).execute();
       }
     } else {
@@ -304,10 +304,25 @@ public class DocumentActivity extends Activity {
 
   public void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == DocumentLoadTask.Status.RUNNING) {
-      Log.i("DocumentLoadTask", "onCancelLoad");
+      Log.i(TAG, "Canceling Document Load Task");
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
+    if (mFileOpenController != null) {
+      mFileOpenController.onCancelLoad();
+    }
+  }
+  
+  @Override
+  protected void onPause() {
+    onCancelLoad();
+    super.onPause();
+  }
+  
+  @Override
+  protected void onDestroy() {
+    _documentActivityInstance = null;
+    super.onDestroy();
   }
 
   private void init() {
@@ -322,11 +337,15 @@ public class DocumentActivity extends Activity {
 
   public void updateContent(ExoFile newFolder) {
     _fileForCurrentActionBar = newFolder;
-    List<ExoFile> documentList = newFolder.children;
     if ("".equals(_fileForCurrentActionBar.name)) {
       setTitle(getResources().getString(R.string.Documents));
     } else {
       setTitle(_fileForCurrentActionBar.getName());
+    }
+    List<ExoFile> documentList = newFolder.children;
+    if (documentList == null) {
+      CrashUtils.loge(TAG, String.format("Null list of children for folder '%s'", newFolder.path));
+      documentList = new ArrayList<ExoFile>(0);
     }
     if (documentList.size() == 0) {
       setEmptyView(View.VISIBLE);

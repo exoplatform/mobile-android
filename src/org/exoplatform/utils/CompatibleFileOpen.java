@@ -31,7 +31,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+
 import org.exoplatform.R;
+import org.exoplatform.ui.WebViewActivity;
 import org.exoplatform.utils.image.FileCache;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.UnreadableFileDialog;
@@ -44,6 +46,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
+
 
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
@@ -99,6 +102,7 @@ public class CompatibleFileOpen {
     } else if (!ExoDocumentUtils.isCallable(mContext, fileType, filePath)) {
       new UnreadableFileDialog(mContext, noAppFound).show();
     } else {
+      CrashUtils.setOpenFileType(fileType);
       onLoad(filePath);
     }
 
@@ -114,8 +118,9 @@ public class CompatibleFileOpen {
     }
   }
 
-  private void onCancelLoad() {
+  public void onCancelLoad() {
     if (mLoadTask != null && mLoadTask.getStatus() == FileDownloadTask.Status.RUNNING) {
+      Log.i(getClass().getSimpleName(), "Canceling File Download Task");
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
@@ -130,6 +135,41 @@ public class CompatibleFileOpen {
     fileNotSupport = resource.getString(R.string.FileNotSupported);
     memoryWarning = resource.getString(R.string.FileNotSupported);
   }
+  
+  public static enum FileOpenRequestResult {
+    /**
+     * The file type is unknown
+     */
+    ERROR,
+    
+    /**
+     * The file is opened internally in {@link WebViewActivity}
+     */
+    WEBVIEW,
+    
+    /**
+     * The file is opened by another app installed on the device
+     */
+    EXTERNAL
+  }
+  
+  /**
+   * Represents a request to open a file. Possible {@code mResult} values are:
+   * <ul>
+   * <li>{@link FileOpenRequestResult#ERROR} if the file format is unknown</li>
+   * <li>{@link FileOpenRequestResult#WEBVIEW} if the file can be opened in a webview</li>
+   * <li>{@link FileOpenRequestResult#EXTERNAL} if the file can be opened by an external app</li>
+   * </ul>
+   * If result is {@link FileOpenRequestResult#EXTERNAL} then the property {@code mFileOpenController} 
+   * contains the {@link CompatibleFileOpen} object controlling the download and opening of the file.
+   * 
+   * @author paristote
+   *
+   */
+  public static class FileOpenRequest {
+    public FileOpenRequestResult mResult;
+    public CompatibleFileOpen    mFileOpenController;
+  }
 
   private class FileDownloadTask extends AsyncTask<String, String, Integer> {
 
@@ -139,7 +179,6 @@ public class CompatibleFileOpen {
     protected void onPreExecute() {
       mProgressDialog = (DownloadProgressDialog) onCreateDialog(DIALOG_DOWNLOAD_PROGRESS);
       mProgressDialog.show();
-
     }
 
     @Override
@@ -204,7 +243,6 @@ public class CompatibleFileOpen {
       } finally {
         httpClient.getConnectionManager().shutdown();
       }
-
     }
 
     /*
@@ -215,7 +253,8 @@ public class CompatibleFileOpen {
       if (file.exists()) {
         file.delete();
       }
-      mProgressDialog.dismiss();
+      if (mProgressDialog.isAttachedToWindow())
+        mProgressDialog.dismiss();
       super.onCancelled();
     }
 
@@ -253,11 +292,12 @@ public class CompatibleFileOpen {
       } else if (result == RESULT_CANCEL) {
         new UnreadableFileDialog(mContext, memoryWarning).show();
       }
-      mProgressDialog.dismiss();
+      if (mProgressDialog.isAttachedToWindow())
+        mProgressDialog.dismiss();
     }
 
   }
-
+  
   private Dialog onCreateDialog(int id) {
     switch (id) {
     case DIALOG_DOWNLOAD_PROGRESS: // we set this to 0
@@ -275,19 +315,36 @@ public class CompatibleFileOpen {
 
   private class DownloadProgressDialog extends ProgressDialog {
 
+    private boolean mIsAttached;
+    
     public DownloadProgressDialog(Context context) {
       super(context);
     }
 
-    /*
+    /**
      * Override onBackPressed() method to call onCancelLoad() to cancel
      * downloading file task and delete the downloading file
      */
-
     @Override
     public void onBackPressed() {
       onCancelLoad();
       super.onBackPressed();
+    }
+    
+    @Override
+    public void onAttachedToWindow() {
+      mIsAttached = true;
+      super.onAttachedToWindow();
+    }
+    
+    @Override
+    public void onDetachedFromWindow() {
+      mIsAttached = false;
+      super.onDetachedFromWindow();
+    }
+    
+    public boolean isAttachedToWindow() {
+      return mIsAttached;
     }
   }
 

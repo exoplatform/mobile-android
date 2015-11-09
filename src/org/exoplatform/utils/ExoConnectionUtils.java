@@ -44,16 +44,15 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.singleton.SocialServiceHelper;
 import org.exoplatform.ui.login.tasks.LogoutTask;
 import org.exoplatform.utils.image.ExoPicasso;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
-import com.crashlytics.android.Crashlytics;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -576,13 +575,15 @@ public class ExoConnectionUtils {
 
   public static void setCookieStore(CookieStore cookieStore, ArrayList<String> list) {
     cookieStore = new BasicCookieStore();
-    for (String cookieStr : list) {
-      String[] keyValue = cookieStr.split("=");
-      String key = keyValue[0];
-      String value = "";
-      if (keyValue.length > 1)
-        value = keyValue[1];
-      cookieStore.addCookie(new BasicClientCookie(key, value));
+    if (list != null) {
+      for (String cookieStr : list) {
+        String[] keyValue = cookieStr.split("=");
+        String key = keyValue[0];
+        String value = "";
+        if (keyValue.length > 1)
+          value = keyValue[1];
+        cookieStore.addCookie(new BasicClientCookie(key, value));
+      }
     }
   }
 
@@ -604,8 +605,8 @@ public class ExoConnectionUtils {
     // Clear all social service data
     SocialServiceHelper.getInstance().clearData();
     // Remove Crashlytics user information
-    Crashlytics.setUserName("");
-    Crashlytics.setString("ServerDomain", "");
+    CrashUtils.setUsername("");
+    CrashUtils.setServerInfo("", "");
   }
 
 }

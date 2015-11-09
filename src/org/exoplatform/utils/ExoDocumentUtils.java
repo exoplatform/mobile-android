@@ -54,6 +54,8 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.utils.CompatibleFileOpen.FileOpenRequest;
+import org.exoplatform.utils.CompatibleFileOpen.FileOpenRequestResult;
 import org.exoplatform.widget.UnreadableFileDialog;
 
 import android.content.ComponentName;
@@ -172,23 +174,26 @@ public class ExoDocumentUtils {
    * installed application
    */
 
-  public static void fileOpen(Context context, String fileType, String filePath, String fileName) {
+  public static FileOpenRequest fileOpen(Context context, String fileType, String filePath, String fileName) {
+    FileOpenRequest result = new FileOpenRequest();
     if (fileType == null) {
       new UnreadableFileDialog(context, null).show();
-      return;
-    }
-
-    if (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE)) {
+      result.mResult = FileOpenRequestResult.ERROR;
+    } else if (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE)) {
       Intent intent = new Intent(context, WebViewActivity.class);
       intent.putExtra(ExoConstants.WEB_VIEW_URL, filePath);
       intent.putExtra(ExoConstants.WEB_VIEW_TITLE, fileName);
       intent.putExtra(ExoConstants.WEB_VIEW_MIME_TYPE, fileType);
       intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "false");
       context.startActivity(intent);
+      result.mResult = FileOpenRequestResult.WEBVIEW;
     } else {
-      new CompatibleFileOpen(context, fileType, filePath, fileName);
+      result.mFileOpenController = new CompatibleFileOpen(context, fileType, filePath, fileName);
+      result.mResult = FileOpenRequestResult.EXTERNAL;
     }
-
+    if (Log.LOGD)
+      Log.d(LOG_TAG, "File Open Result: "+result.mResult);
+    return result;
   }
 
   /**

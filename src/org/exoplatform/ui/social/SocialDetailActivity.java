@@ -43,6 +43,7 @@ import android.widget.TextView;
  * Screen for activity details
  */
 public class SocialDetailActivity extends Activity implements OnClickListener {
+  
   public LinearLayout                startScreen;
 
   private View                       emptyCommentStubView;
@@ -78,17 +79,22 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
     socialDetailActivity = this;
     currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, currentPosition);
     changeLanguage();
-    if (savedInstanceState != null)
-      finish();
-    else
-      initComponent();
+    initComponent();
+    onLoad();
+  }
+  
+  @Override
+  protected void onDestroy() {
+    if (detailController != null) {
+      detailController.onCancelLoad();
+    }
+    socialDetailActivity = null;
+    super.onDestroy();
   }
 
   private void initComponent() {
-
     startScreen = (LinearLayout) findViewById(R.id.details_start_screen);
     commentLayoutWrap = (LinearLayout) findViewById(R.id.activity_display_comment_wrap);
-
     contentDetailLayout = (LinearLayout) findViewById(R.id.social_detail_wrap_layout);
     likedLayoutWrap = (LinearLayout) findViewById(R.id.social_detail_like_wrap);
     textView_Like_Count = (TextView) findViewById(R.id.textView_Like_Count);
@@ -101,8 +107,6 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
     likeButton.setOnClickListener(this);
     likedFrame = (RelativeLayout) findViewById(R.id.detail_likers_layout_wrapper);
     likedFrame.setOnClickListener(this);
-    onLoad();
-
   }
 
   public void onLoad() {
@@ -113,14 +117,6 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
                                                   contentDetailLayout,
                                                   textView_Like_Count);
     detailController.onLoad(false, currentPosition);
-  }
-
-  @Override
-  public void finish() {
-    if (detailController != null) {
-      detailController.onCancelLoad();
-    }
-    super.finish();
   }
 
   @Override
@@ -137,7 +133,8 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.activity_detail, menu);
     MenuItem loader = menu.findItem(R.id.menu_act_detail_refresh);
-    detailController.setLoaderItem(loader);
+    if (detailController != null)
+      detailController.setLoaderItem(loader);
     ExoUtils.setLoadingItem(loader, true);
     return super.onCreateOptionsMenu(menu);
   }
@@ -154,7 +151,6 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
     if (view.equals(likeButton)) {
       detailController.onLikePress(currentPosition);
     }
-
     if (view.equals(likedFrame)) {
       detailController.onClickLikesFrame();
     }
@@ -183,5 +179,4 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
     yourCommentText = resource.getString(R.string.YourComment);
     commentEmptyString = resource.getString(R.string.EmptyComment);
   }
-
 }

@@ -360,11 +360,9 @@ public class SocialActivityUtil {
       try {
         Spannable spannable = (Spannable) textView.getText();
         for (URLSpan span : list) {
-
           int start = spannable.getSpanStart(span);
           int stop = spannable.getSpanEnd(span);
-          // TODO error here? should be spannable getSpanFlag ? 
-          int flags = spannable.getSpanEnd(span);
+          int flags = spannable.getSpanFlags(span);
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
           TextUrlSpan myUrlSpan = null;
@@ -380,8 +378,8 @@ public class SocialActivityUtil {
         }
       } catch (ClassCastException e) {
         // textView.getText() can fail to be casted to Spannable
-        if (Log.LOGE)
-          Log.e("eXo__SocialActivityUtil__", e.getMessage(), e);
+        if (Log.LOGD)
+          Log.d("eXo__SocialActivityUtil__", e.getMessage());
       }
     }
   }

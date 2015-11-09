@@ -53,6 +53,7 @@ import android.os.AsyncTask;
 import android.view.View;
 
 public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
+  
   private RestActivity                 selectedRestActivity;
 
   private LinkedList<SocialLikeInfo>   likeLinkedList    = new LinkedList<SocialLikeInfo>();
@@ -86,7 +87,6 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
     detailController = controller;
     currentPosition = pos;
     changeLanguage();
-
   }
 
   @Override
@@ -146,7 +146,6 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
             socialLike.setLikeName(likeName);
             likeLinkedList.add(socialLike);
           }
-
         }
       }
 
@@ -212,13 +211,11 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
     }
     detailController.setLoading(false);
     SocialDetailActivity.socialDetailActivity.startScreen.setVisibility(View.GONE);
-
   }
 
   @Override
-  protected void onCancelled() {
+  protected void onCancelled(Integer result) {
     detailController.setLoading(false);
-    super.onCancelled();
   }
 
   private void changeLanguage() {
@@ -227,7 +224,5 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
     detailsErrorStr = resource.getString(R.string.DetailsNotAvaiable);
-
   }
-
 }

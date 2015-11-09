@@ -20,8 +20,6 @@ package org.exoplatform.ui.login;
 
 import java.util.ArrayList;
 
-import com.crashlytics.android.Crashlytics;
-
 import org.exoplatform.R;
 import org.exoplatform.base.BaseActivity;
 import org.exoplatform.base.BaseActivity.BasicActivityLifecycleCallbacks;
@@ -32,6 +30,7 @@ import org.exoplatform.ui.login.tasks.CheckAccountExistsTask;
 import org.exoplatform.ui.login.tasks.CheckingTenantStatusTask;
 import org.exoplatform.ui.login.tasks.LoginTask;
 import org.exoplatform.ui.login.tasks.RequestTenantTask;
+import org.exoplatform.utils.CrashUtils;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.ExoUtils;
@@ -496,8 +495,9 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
       SettingUtils.persistServerSetting(mContext);
 
       // Set Crashlytics user information
-      Crashlytics.setUserName(mNewUserName);
-      Crashlytics.setString("ServerDomain", mDomain);
+      CrashUtils.setUsername(mNewUserName);
+      CrashUtils.setServerInfo(mDomain, ServerSettingHelper.getInstance().getServerVersion());
+      
       break;
     }
 

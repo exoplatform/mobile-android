@@ -21,6 +21,8 @@ package org.exoplatform.controller.social;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import com.squareup.picasso.Picasso;
+
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
 import org.exoplatform.model.SocialCommentInfo;
@@ -38,8 +40,6 @@ import org.exoplatform.utils.image.RoundedCornersTranformer;
 import org.exoplatform.widget.CommentItemLayout;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.SocialActivityDetailsItem;
-
-import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.content.Intent;
@@ -145,13 +145,12 @@ public class SocialDetailController {
     int commentListSize = commentList.size();
     if (commentListSize > 0) {
       SocialDetailActivity.socialDetailActivity.setEmptyView(View.GONE);
-      LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+      LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
       commentLayoutWrap.removeAllViews();
       for (int i = 0; i < commentListSize; i++) {
         SocialCommentInfo comment = commentList.get(i);
         CommentItemLayout commentItem = new CommentItemLayout(mContext);
         String avatarUrl = comment.getImageUrl();
-
         if (avatarUrl == null) {
           commentItem.comAvatarImage.setImageResource(ExoConstants.DEFAULT_AVATAR);
         } else {
@@ -175,7 +174,6 @@ public class SocialDetailController {
     } else {
       SocialDetailActivity.socialDetailActivity.setEmptyView(View.VISIBLE);
     }
-
   }
 
   public void setLikedState() {
@@ -188,7 +186,7 @@ public class SocialDetailController {
 
   public void setComponentInfo(SocialActivityInfo streamInfo) {
     setLikedState();
-    LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+    LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
     contentDetailLayout.removeAllViews();
     SocialActivityDetailsItem item = new SocialActivityDetailsItem(mContext, streamInfo, true);
     SocialActivityUtil.setTextLinkify(item.textViewMessage);
@@ -267,5 +265,4 @@ public class SocialDetailController {
   public void onLikePress(int pos) {
     onLikeLoad(activityId, pos);
   }
-
 }

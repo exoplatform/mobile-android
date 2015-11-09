@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1511031052" android:versionName="2.9-SNAPSHOT" package="org.exoplatform">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1511131411" android:versionName="2.9-SNAPSHOT" package="org.exoplatform">
     <supports-screens android:smallScreens="false"/>
 
     <!-- Application Permissions -->
@@ -93,11 +93,11 @@
         <!--
            Social (Activity Stream, Details, Composer, Likers)
           -->
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialTabsActivity" android:parentActivityName=".ui.HomeActivity" android:theme="@style/Theme.PageIndicatorDefaults">
+        <activity android:name=".ui.social.SocialTabsActivity" android:parentActivityName=".ui.HomeActivity" android:theme="@style/Theme.PageIndicatorDefaults">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.HomeActivity"/>
         </activity>
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.SocialDetailActivity" android:parentActivityName=".ui.social.SocialTabsActivity">
+        <activity android:name=".ui.social.SocialDetailActivity" android:parentActivityName=".ui.social.SocialTabsActivity">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.social.SocialTabsActivity"/>
         </activity>

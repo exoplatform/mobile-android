@@ -31,7 +31,8 @@ public class DocumentWaitingDialog extends WaitingDialog {
   @Override
   public void onBackPressed() {
     super.onBackPressed();
-    DocumentActivity._documentActivityInstance.onCancelLoad();
+    if (DocumentActivity._documentActivityInstance != null)
+      DocumentActivity._documentActivityInstance.onCancelLoad();
   }
 
 }
