@@ -3,7 +3,7 @@
 <resources>
   <string name="SignInButton">Connecta</string>
   <string name="SignInButton_In">a</string>
-  <string name="SignInInformation">Registrar-se</string>
+  <string name="SignInInformation">Accedeix</string>
   <string name="SigningIn">Iniciant sessió …</string>
   <string name="NoServerSelected">Si us plau, seleccioni un servidor</string>
   <string name="NoPasswordEnter">Si us plau, introdueix la teva contrasenya</string>
@@ -18,7 +18,7 @@
   <string name="UserNameCellTitle">Nom d\'usuari</string>
   <string name="PasswordCellTitle">Contrasenya</string>
   <string name="Language">Idioma</string>
-  <string name="Server">Accounts</string>
+  <string name="Server">Comptes</string>
   <string name="ServerList">Llista de servidors</string>
   <string name="AddAServer">Afegeix un servidor</string>
   <string name="ModifyServerList">Modifica la llista</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">No es poden carregar més activitats. S\'esta recarregant la llista.</string>
   <string name="LogoutTitle">Diàleg de tancament de sessió</string>
   <string name="LogoutContent">Vol sortir?</string>
-  <string name="ApplicationInformation">Application Information</string>
+  <string name="ApplicationInformation">Informació de l\'aplicació</string>
   <string name="ServerVersion">Versió del servidor</string>
   <string name="ServerEdition">Edició del servidor</string>
   <string name="ApplicationVersion">Versió de l\'Aplicació</string>
@@ -270,6 +270,6 @@
   <string name="File">arxiu</string>
 
   <!-- Action Bar -->
-  <string name="SignOutTitle">Sign Out</string>
+  <string name="SignOutTitle">Tanca la sessió</string>
   <string name="RefreshTitle">Recarrega</string>
 </resources>
