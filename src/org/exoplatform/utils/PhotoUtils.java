@@ -35,6 +35,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+
 import org.exoplatform.utils.image.FileCache;
 
 import android.app.Activity;
@@ -138,14 +139,14 @@ public class PhotoUtils {
   }
 
   public static Bitmap shrinkBitmap(String file, int width, int height) {
-
+    
     BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
     bmpFactoryOptions.inJustDecodeBounds = true;
     Bitmap bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
-
+    
     int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float) height);
     int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth / (float) width);
-
+    
     if (heightRatio > 1 || widthRatio > 1) {
       if (heightRatio > widthRatio) {
         bmpFactoryOptions.inSampleSize = heightRatio;
@@ -154,8 +155,19 @@ public class PhotoUtils {
       }
     }
 
+    if ("image/jpeg".equalsIgnoreCase(bmpFactoryOptions.outMimeType)) {
+      bmpFactoryOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+      bmpFactoryOptions.inDither = true;
+    } else {
+      bmpFactoryOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
+    }
     bmpFactoryOptions.inJustDecodeBounds = false;
+    
+    CrashUtils.setShrinkInfo(bmpFactoryOptions);
+    
     bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
+    
+    CrashUtils.setShrinkInfo(null);
     return bitmap;
   }
 
@@ -172,6 +184,8 @@ public class PhotoUtils {
       float scaleWidth = ((float) newW) / width;
 
       float scaleHeight = scaleWidth;
+      
+      CrashUtils.setResizeInfo(originalImage.getByteCount());
 
       Matrix matrix = new Matrix();
 
@@ -180,12 +194,11 @@ public class PhotoUtils {
       resizedBitmap = Bitmap.createBitmap(originalImage,
                                           0,
                                           0,
-
                                           width,
                                           height,
                                           matrix,
                                           true);
-
+      CrashUtils.setResizeInfo(-1);
     } else
       return originalImage;
     return resizedBitmap;
