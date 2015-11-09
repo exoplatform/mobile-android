@@ -574,14 +574,16 @@ public class ExoConnectionUtils {
   }
 
   public static void setCookieStore(CookieStore cookieStore, ArrayList<String> list) {
-    cookieStore = new BasicCookieStore();
-    for (String cookieStr : list) {
-      String[] keyValue = cookieStr.split("=");
-      String key = keyValue[0];
-      String value = "";
-      if (keyValue.length > 1)
-        value = keyValue[1];
-      cookieStore.addCookie(new BasicClientCookie(key, value));
+    if (list != null) {
+      cookieStore = new BasicCookieStore();
+      for (String cookieStr : list) {
+        String[] keyValue = cookieStr.split("=");
+        String key = keyValue[0];
+        String value = "";
+        if (keyValue.length > 1)
+          value = keyValue[1];
+        cookieStore.addCookie(new BasicClientCookie(key, value));
+      }
     }
   }
 
