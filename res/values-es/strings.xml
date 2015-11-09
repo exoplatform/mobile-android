@@ -18,7 +18,7 @@
   <string name="UserNameCellTitle">Nombre de usuario</string>
   <string name="PasswordCellTitle">Contraseña</string>
   <string name="Language">idioma</string>
-  <string name="Server">Accounts</string>
+  <string name="Server">Cuentas</string>
   <string name="ServerList">Lista de servidores</string>
   <string name="AddAServer">Agregar un servidor</string>
   <string name="ModifyServerList">Modificar la lista</string>
@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">No se pueden cargar actividades anteriores. La lista está siendo renovada.</string>
   <string name="LogoutTitle">cerrar la sesión de diálogo</string>
   <string name="LogoutContent">¿Desea salir?</string>
-  <string name="ApplicationInformation">Application Information</string>
+  <string name="ApplicationInformation">Información de la aplicación</string>
   <string name="ServerVersion">Versión del Servidor</string>
   <string name="ServerEdition">Edición Servidor</string>
   <string name="ApplicationVersion">Versión Aplicación</string>
@@ -270,6 +270,6 @@
   <string name="File">archivo</string>
 
   <!-- Action Bar -->
-  <string name="SignOutTitle">Sign Out</string>
+  <string name="SignOutTitle">Desconectar</string>
   <string name="RefreshTitle">Actualizar</string>
 </resources>
