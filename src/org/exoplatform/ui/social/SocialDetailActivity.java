@@ -137,7 +137,8 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.activity_detail, menu);
     MenuItem loader = menu.findItem(R.id.menu_act_detail_refresh);
-    detailController.setLoaderItem(loader);
+    if (detailController != null)
+      detailController.setLoaderItem(loader);
     ExoUtils.setLoadingItem(loader, true);
     return super.onCreateOptionsMenu(menu);
   }
