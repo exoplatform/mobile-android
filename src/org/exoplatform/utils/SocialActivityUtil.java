@@ -360,11 +360,9 @@ public class SocialActivityUtil {
       try {
         Spannable spannable = (Spannable) textView.getText();
         for (URLSpan span : list) {
-
           int start = spannable.getSpanStart(span);
           int stop = spannable.getSpanEnd(span);
-          // TODO error here? should be spannable getSpanFlag ? 
-          int flags = spannable.getSpanEnd(span);
+          int flags = spannable.getSpanFlags(span);
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
           TextUrlSpan myUrlSpan = null;
