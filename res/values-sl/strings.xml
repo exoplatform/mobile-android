@@ -255,7 +255,7 @@
   <string name="ShareErrorFileTooBig">Skupna raba dokumentov, večjih od 10 MB, ni mogoča</string>
   <string name="ShareErrorTooManyFiles">Skupna raba več kot 10 dokumentov ni mogoča</string>
   <string name="ShareErrorUploadFailed">Skupna raba dokumenta ni uspela</string>
-  <string name="ShareErrorPostFailed">Ni mogoče objaviti sporočila</string>
+  <string name="ShareErrorPostFailed">Sporočila ni mogoče objaviti</string>
   <string name="ShareErrorCommentFailed">Sporočilo ne more komentirati</string>
   <string name="ShareErrorUploadFolderFailed">Ciljne mape ni mogoče pripraviti</string>
   <string name="ShareErrorIncorrectAccount">Nastvitve računa ni mogoče pridobiti</string>
