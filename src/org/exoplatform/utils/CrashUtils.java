@@ -21,6 +21,8 @@ public class CrashUtils {
   
   private static final String KEY_IMAGE_SIZE = "Resize Image With Size KB";
   
+  private static final String KEY_OPEN_FILE_TYPE = "File Open Type";
+  
   public static void setUsername(String username) {
     Crashlytics.setString(KEY_USERNAME, username);
   }
@@ -45,6 +47,14 @@ public class CrashUtils {
   public static void setResizeInfo(int imageSize) {
     Crashlytics.setInt(KEY_IMAGE_SIZE, imageSize / 1024);
   }
+  
+  public static void setOpenFileType(String mimeType) {
+    Crashlytics.setString(KEY_OPEN_FILE_TYPE, mimeType);
+  }
+  
+  /*
+   * Generic Methods
+   */
   
   public static void setString(String key, String value) {
     Crashlytics.setString(key, value);
