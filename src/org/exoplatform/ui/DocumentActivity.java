@@ -222,8 +222,7 @@ public class DocumentActivity extends Activity {
        * @param: parent The parent folder
        * @param: documentList The parents list file
        */
-
-      if (_fileForCurrentActionBar.name.equals("")) {
+      if ("".equals(_fileForCurrentActionBar.name)) {
         _documentActivityInstance = null;
         finish();
       } else {
@@ -237,9 +236,7 @@ public class DocumentActivity extends Activity {
          */
         updateContent(getParentFolderAndChildren());
       }
-
     }
-
   }
 
   private ExoFile getParentFolderAndChildren() {
@@ -309,6 +306,18 @@ public class DocumentActivity extends Activity {
       mLoadTask.cancel(true);
       mLoadTask = null;
     }
+  }
+  
+  @Override
+  protected void onPause() {
+    onCancelLoad();
+    super.onPause();
+  }
+  
+  @Override
+  protected void onDestroy() {
+    _documentActivityInstance = null;
+    super.onDestroy();
   }
 
   private void init() {
