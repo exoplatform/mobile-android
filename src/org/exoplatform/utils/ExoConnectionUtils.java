@@ -606,7 +606,7 @@ public class ExoConnectionUtils {
     SocialServiceHelper.getInstance().clearData();
     // Remove Crashlytics user information
     CrashUtils.setUsername("");
-    CrashUtils.setServerDomain("");
+    CrashUtils.setServerInfo("", "");
   }
 
 }

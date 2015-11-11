@@ -29,6 +29,7 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.social.SelectedImageActivity;
+import org.exoplatform.utils.CrashUtils;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.PhotoUtils;
@@ -322,11 +323,15 @@ public class DocumentActivity extends Activity {
 
   public void updateContent(ExoFile newFolder) {
     _fileForCurrentActionBar = newFolder;
-    List<ExoFile> documentList = newFolder.children;
     if ("".equals(_fileForCurrentActionBar.name)) {
       setTitle(getResources().getString(R.string.Documents));
     } else {
       setTitle(_fileForCurrentActionBar.getName());
+    }
+    List<ExoFile> documentList = newFolder.children;
+    if (documentList == null) {
+      CrashUtils.loge(TAG, String.format("Null list of children for folder '%s'", newFolder.path));
+      documentList = new ArrayList<ExoFile>(0);
     }
     if (documentList.size() == 0) {
       setEmptyView(View.VISIBLE);

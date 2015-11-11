@@ -496,7 +496,8 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
 
       // Set Crashlytics user information
       CrashUtils.setUsername(mNewUserName);
-      CrashUtils.setServerDomain(mDomain);
+      CrashUtils.setServerInfo(mDomain, ServerSettingHelper.getInstance().getServerVersion());
+      
       break;
     }
 
