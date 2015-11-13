@@ -216,7 +216,6 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
   @Override
   protected void onCancelled(Integer result) {
     detailController.setLoading(false);
-    super.onCancelled(result);
   }
 
   private void changeLanguage() {
