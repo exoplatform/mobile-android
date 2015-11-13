@@ -378,8 +378,8 @@ public class SocialActivityUtil {
         }
       } catch (ClassCastException e) {
         // textView.getText() can fail to be casted to Spannable
-        if (Log.LOGE)
-          Log.e("eXo__SocialActivityUtil__", e.getMessage(), e);
+        if (Log.LOGD)
+          Log.d("eXo__SocialActivityUtil__", e.getMessage());
       }
     }
   }

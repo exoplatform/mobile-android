@@ -122,6 +122,7 @@ public abstract class ActivityStreamFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    setRetainInstance(true);
     onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, false, 0);
   }
 
@@ -197,10 +198,7 @@ public abstract class ActivityStreamFragment extends Fragment {
         ArrayList<SocialActivityInfo> list = SocialServiceHelper.getInstance().getSocialListForTab(currentTab);
         mLoadTask = getThisLoadTask();
 
-        Log.d(TAG, "loading more data - flush image cache");
-        // ((SocialTabsActivity)
-        // getActivity()).getGDApplication().getImageCache().flush();
-        System.gc();
+        Log.i(TAG, "Loading more activities");
 
         if (list != null) { // if we can identify the last activity, we load the
                             // previous/older ones

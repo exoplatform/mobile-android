@@ -118,7 +118,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
    * </ul>
    */
   public ArrayList<SocialActivityInfo> doInBackground(Integer... params) {
-    Log.i(TAG, "load social activities - number: " + params[0] + " - type: " + params[1]);
+    Log.i(TAG, "Loading Social activities - number: " + params[0] + " - type: " + params[1]);
 
     try {
       ArrayList<SocialActivityInfo> listActivity = new ArrayList<SocialActivityInfo>();
@@ -177,11 +177,11 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
       return listActivity;
     } catch (SocialClientLibException e) {
-      Log.d(TAG, "SocialClientLibException: ", e.getLocalizedMessage());
+      Log.d(TAG, e.getLocalizedMessage());
       return null;
     } catch (RuntimeException e) {
       // Cannot replace because SocialClientLib can throw many kind of exceptions like ServerException, UnsupportMethod, etc
-      Log.d(TAG, "RuntimeException: ", e.getLocalizedMessage());
+      Log.d(TAG, e.getLocalizedMessage());
       return null;
     }
   }
@@ -204,6 +204,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
   }
 
   private void stopLoadingIndicator() {
+    // get the loading indicator of the SocialTabsActivity
     if (loaderItem == null && feedType != HomeController.FLIPPER_VIEW && SocialTabsActivity.instance != null)
       loaderItem = SocialTabsActivity.instance.loaderItem;
 
