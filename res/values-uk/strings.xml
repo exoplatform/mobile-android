@@ -8,17 +8,17 @@
   <string name="NoServerSelected">Будь ласка, виберіть сервер</string>
   <string name="NoPasswordEnter">Будь ласка, введіть пароль</string>
   <string name="SpecialCharacters">Спеціальні символи не допускаються.</string>
-  <string name="AccountNameInvalid">Only alphanumeric characters and spaces are allowed in the account name</string>
-  <string name="AccountServerInvalid">Invalid server address</string>
-  <string name="AccountServerForbidden">This server URL is not allowed</string>
-  <string name="AccountUsernameInvalid">Only alphanumeric characters, dashes, underscores, dots and pluses are allowed in the username</string>
-  <string name="AccountPasswordInvalid">Blanks are not allowed in the password</string>
+  <string name="AccountNameInvalid">В імені облікового запису дозволяються тільки буквено-цифрові символи та пробіли</string>
+  <string name="AccountServerInvalid">Неприпустима адреса серверу</string>
+  <string name="AccountServerForbidden">Ця URL-адреса сервера не допускається</string>
+  <string name="AccountUsernameInvalid">Тільки алфавітно-цифрові символи, тире, підкреслювання, крапки і плюси дозволено в імені користувача</string>
+  <string name="AccountPasswordInvalid">Пробіли не допускаються в паролі</string>
   <string name="Connected">В контактах</string>
-  <string name="LastLoginDate">Last login</string>
+  <string name="LastLoginDate">Останній вхід в систему</string>
   <string name="UserNameCellTitle">Ім’я користувача</string>
   <string name="PasswordCellTitle">Пароль</string>
   <string name="Language">Мова</string>
-  <string name="Server">Accounts</string>
+  <string name="Server">Облікові записи</string>
   <string name="ServerList">Перелік серверів</string>
   <string name="AddAServer">Додати сервер</string>
   <string name="ModifyServerList">Редагувати список</string>
@@ -31,8 +31,8 @@
   <string name="French">Французька</string>
   <string name="German">Німецька</string>
   <string name="Spanish">іспанська</string>
-  <string name="PortugueseBrazil">Portuguese (Brazil)</string>
-  <string name="Greek">Greek</string>
+  <string name="PortugueseBrazil">Португальська (Бразилія)</string>
+  <string name="Greek">Грецька</string>
   <string name="CompliantMessage">Не вдалося підключитися до сумісні версії платформи за цією URL-адресою, будь ласка, зверніться до адміністратора.</string>
   <string name="Delete">Видалити</string>
   <string name="Copy">Копіювати</string>
@@ -61,9 +61,9 @@
   <string name="StatusUpdate">Розмістити</string>
   <string name="PostTo">До:</string>
   <string name="Public">Мої діяльності</string>
-  <string name="NoSpaces">You are not in any space</string>
+  <string name="NoSpaces">Ви не перебуваєте в будь-якому просторі</string>
   <string name="ComposerPlaceHolder">Над чим ви працюєте?</string>
-  <string name="ShareWithWhom">Select who will see this post</string>
+  <string name="ShareWithWhom">Виберіть, хто зможе бачити цей пост</string>
   <string name="NoLike">Нема лайків на даний момент</string>
   <string name="LikedThis"> Це подобається</string>
   <string name="And"> і</string>
@@ -99,13 +99,13 @@
   <string name="WarningServerNameIsEmpty">Ім\'я сервера або URL-адреса не може бути порожнім.</string>
   <string name="WarningServerNameIsExist">Ім\'я цього серверу вже існує у вашому списку</string>
   <string name="WarningServerUrlIsExist">Ця URL-адреса сервера уже існує у вашому списку</string>
-  <string name="WarningServerAlreadyExists">This account already exists in your list</string>
+  <string name="WarningServerAlreadyExists">Цей обліковий запис уже існує у вашому списку</string>
   <string name="DetailsNotAvaiable">Докладна інформація про новини недоступна</string>
   <string name="ErrorOnComment">Ви не можете прокоментувати цю діяльність.</string>
   <string name="CannotLoadMoreActivities">Неможливо завантажити старі повідомлення стрічки активності. Список в даний час оновлюється.</string>
   <string name="LogoutTitle">Вийти з діалогового вікна</string>
   <string name="LogoutContent">Ви дійсно бажаєте вийти?</string>
-  <string name="ApplicationInformation">Application Information</string>
+  <string name="ApplicationInformation">Інформація про додаток</string>
   <string name="ServerVersion">Версія серверу</string>
   <string name="ServerEdition">Редакція серверу</string>
   <string name="ApplicationVersion">Версія додатку</string>
@@ -219,7 +219,7 @@
   <!-- Server edition -->
   <string name="OptionalHint">Optional</string>
   <string name="RequiredHint">Required</string>
-  <string name="Account">Account</string>
+  <string name="Account">Аккаунт</string>
   <string name="YourCredentials">Your credentials</string>
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
@@ -242,34 +242,34 @@
   
   <!-- Share Extension -->
   <string name="ShareTitle">Поділитися</string>
-  <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
-  <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
-  <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
+  <string name="ShareCannotSelectSpaceBecauseOffline">Слід вибрати обліковий запис і ввійти в систему для вибору групи</string>
+  <string name="ShareCannotPostBecauseOffline">Слід вибрати обліковий запис і ввійти в систему, щоб написати</string>
+  <string name="ShareOperationStarted">Затвердження права на перегляд в процесі, перевірте стан в області сповіщень</string>
   <string name="ShareOperationSuccess">Успішно</string>
-  <string name="ShareDocumentTitle">Share document</string>
-  <string name="ShareMessageTitle">Share message</string>
-  <string name="ShareDocumentText">Upload in progress</string>
-  <string name="ShareMessageText">Your message will be posted shortly</string>
-  <string name="ShareErrorNoAccountConfigured">No account configured</string>
-  <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
-  <string name="ShareErrorFileTooBig">Cannot share documents more than 10 MB</string>
-  <string name="ShareErrorTooManyFiles">Cannot share more than 10 documents</string>
-  <string name="ShareErrorUploadFailed">Could not share the document</string>
-  <string name="ShareErrorPostFailed">Could not post the message</string>
-  <string name="ShareErrorCommentFailed">Could not comment the message</string>
-  <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
-  <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
-  <string name="ShareErrorSignInFailed">Login failed, please try again</string>
-  <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
-  <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
+  <string name="ShareDocumentTitle">Поділитися документом</string>
+  <string name="ShareMessageTitle">Поділитись повідомленням</string>
+  <string name="ShareDocumentText">Йде завантаження</string>
+  <string name="ShareMessageText">Ваше повідомлення буде опубліковано незабаром</string>
+  <string name="ShareErrorNoAccountConfigured">Немає облікового запису</string>
+  <string name="ShareErrorCannotReadDoc">Неможливо отримати доступ до документа, щоб поділитися</string>
+  <string name="ShareErrorFileTooBig">Не можна поділитись документом більше, ніж 10 МБ</string>
+  <string name="ShareErrorTooManyFiles">Не можна поділитися більше, ніж 10 документами</string>
+  <string name="ShareErrorUploadFailed">Не можна поділитися документом</string>
+  <string name="ShareErrorPostFailed">Не можна надіслати повідомлення</string>
+  <string name="ShareErrorCommentFailed">Не вдалося прокоментувати повідомлення</string>
+  <string name="ShareErrorUploadFolderFailed">Не вдалося підготувати папку</string>
+  <string name="ShareErrorIncorrectAccount">Не вдалося отримати настройки облікового запису</string>
+  <string name="ShareErrorSignInFailed">Помилка входу, будь ласка, повторіть спробу</string>
+  <string name="ShareErrorSomeFilesCannotShare">Деякі документи не можна використовувати спільно</string>
+  <string name="ShareErrorAllFilesCannotShare">Всі документи не можна використовувати спільно</string>
   
-  <string name="DeleteConfirmFolderTitle">Delete folder</string>
-  <string name="DeleteConfirmFileTitle">Delete file</string>
-  <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
-  <string name="Folder">folder</string>
-  <string name="File">file</string>
+  <string name="DeleteConfirmFolderTitle">Видалити папку</string>
+  <string name="DeleteConfirmFileTitle">Видалити файл</string>
+  <string name="DeleteConfirmMessage">Ви дійсно бажаєте видалити %1$s \'%2$s\' ?</string>
+  <string name="Folder">Папка</string>
+  <string name="File">файл</string>
 
   <!-- Action Bar -->
-  <string name="SignOutTitle">Sign Out</string>
+  <string name="SignOutTitle">Вихід</string>
   <string name="RefreshTitle">Оновити</string>
 </resources>
