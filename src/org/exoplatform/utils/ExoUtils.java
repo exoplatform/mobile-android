@@ -25,9 +25,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import org.apache.http.ParseException;
-
 import org.exoplatform.R;
+import org.exoplatform.utils.ExoWebAddress.ParseException;
 
 import android.util.Patterns;
 import android.view.MenuItem;

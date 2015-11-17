@@ -20,7 +20,6 @@ package org.exoplatform.utils;
 
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import java.util.Locale;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -28,6 +27,7 @@ import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.social.client.api.model.RestActivityStream;
+import org.exoplatform.utils.ExoWebAddress.ParseException;
 import org.exoplatform.widget.TextUrlSpan;
 
 import android.content.Context;
@@ -36,6 +36,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -366,9 +367,21 @@ public class SocialActivityUtil {
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
           TextUrlSpan myUrlSpan = null;
-          if (spanUrl.toLowerCase(Locale.US).startsWith(ExoConstants.HTTP_PROTOCOL)) {
+          // check the link URL format
+          ExoWebAddress addr = null;
+          try {
+            addr = new ExoWebAddress(spanUrl);
+          } catch (ParseException e) {
+            if (Log.LOGI)
+              Log.i(SocialActivityUtil.class.getName(), e.getMessage());
+          }
+          if (addr != null && !addr.isRelativeURL()) {
+            // absolute URI => use as is (add protocol if missing)
+            if (!URLUtil.isNetworkUrl(spanUrl))
+              spanUrl = ExoConnectionUtils.HTTP + spanUrl;
             myUrlSpan = new TextUrlSpan(spanUrl);
           } else {
+            // relative URI => prefix with current server URL
             String link = AccountSetting.getInstance().getDomainName() + spanUrl;
             myUrlSpan = new TextUrlSpan(link);
           }

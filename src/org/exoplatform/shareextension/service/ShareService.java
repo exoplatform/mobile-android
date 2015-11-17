@@ -20,6 +20,8 @@ package org.exoplatform.shareextension.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -267,17 +269,28 @@ public class ShareService extends IntentService {
     String mimeType = (commentInfo == null ? null
                                            : (commentInfo.fileToUpload == null ? null
                                                                                : commentInfo.fileToUpload.documentMimeType));
+    String urlWithoutServer = null;
+    try {
+      URL url = new URL(commentInfo.uploadedUrl);
+      urlWithoutServer = url.getPath();
+      if (urlWithoutServer != null && !urlWithoutServer.startsWith("/"))
+        urlWithoutServer = "/" + urlWithoutServer;
+    } catch (MalformedURLException e) {
+      if (Log.LOGW)
+        Log.w(LOG_TAG, e.getMessage());
+      return false;
+    }
     StringBuilder bld = new StringBuilder();
     // append link
     bld.append("<a href=\"")
-       .append(commentInfo.uploadedUrl)
+       .append(urlWithoutServer)
        .append("\">")
        .append(commentInfo.fileToUpload.documentName)
        .append("</a>");
     // add image in the comment's body
     if (mimeType != null && mimeType.startsWith("image/")) {
-      String src = commentInfo.uploadedUrl.replace("/jcr/", "/thumbnailImage/large/");
-      bld.append("<br/><a href=\"").append(commentInfo.uploadedUrl).append("\"><img src=\"").append(src).append("\" /></a>");
+      String thumbnailUrl = urlWithoutServer.replace("/jcr/", "/thumbnailImage/large/");
+      bld.append("<br/><a href=\"").append(urlWithoutServer).append("\"><img src=\"").append(thumbnailUrl).append("\" /></a>");
     }
 
     ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
