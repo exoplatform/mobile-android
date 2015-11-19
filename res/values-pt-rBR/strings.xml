@@ -17,7 +17,7 @@
   <string name="LastLoginDate">Last login</string>
   <string name="UserNameCellTitle">Nome do usuário</string>
   <string name="PasswordCellTitle">Senha</string>
-  <string name="Language">Sobrenome</string>
+  <string name="Language">Language</string>
   <string name="Server">Accounts</string>
   <string name="ServerList">Lista de servidores</string>
   <string name="AddAServer">Adicionar um servidor</string>
@@ -245,7 +245,7 @@
   <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
   <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
   <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
-  <string name="ShareOperationSuccess">Successo</string>
+  <string name="ShareOperationSuccess">Success</string>
   <string name="ShareDocumentTitle">Share document</string>
   <string name="ShareMessageTitle">Share message</string>
   <string name="ShareDocumentText">Upload in progress</string>
