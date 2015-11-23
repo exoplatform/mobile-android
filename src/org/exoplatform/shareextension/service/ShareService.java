@@ -381,7 +381,7 @@ public class ShareService extends IntentService {
     String title = postInfo.hasAttachment() ? getString(R.string.ShareDocumentTitle) : getString(R.string.ShareMessageTitle);
     String text = postInfo.hasAttachment() ? getString(R.string.ShareDocumentText) : getString(R.string.ShareMessageText);
     NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-    builder.setSmallIcon(R.drawable.application_icon);
+    builder.setSmallIcon(R.drawable.icon_share_notif);
     builder.setContentTitle(title);
     builder.setContentText(text);
     builder.setAutoCancel(true);
@@ -400,7 +400,7 @@ public class ShareService extends IntentService {
   private void notifyProgress(int current, int total) {
     String text = String.format(Locale.US, "%s (%d/%d)", getString(R.string.ShareDocumentText), current, total);
     NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-    builder.setSmallIcon(R.drawable.application_icon);
+    builder.setSmallIcon(R.drawable.icon_share_notif);
     builder.setContentTitle(getString(R.string.ShareDocumentTitle));
     builder.setContentText(text);
     builder.setAutoCancel(true);
@@ -443,7 +443,7 @@ public class ShareService extends IntentService {
     }
     String title = postInfo.hasAttachment() ? getString(R.string.ShareDocumentTitle) : getString(R.string.ShareMessageTitle);
     NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-    builder.setSmallIcon(R.drawable.application_icon);
+    builder.setSmallIcon(R.drawable.icon_share_notif);
     builder.setContentTitle(title);
     builder.setContentText(text);
     builder.setAutoCancel(true);
