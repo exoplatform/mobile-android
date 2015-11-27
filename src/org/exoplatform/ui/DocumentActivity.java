@@ -18,7 +18,6 @@
  */
 package org.exoplatform.ui;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,16 +32,18 @@ import org.exoplatform.utils.CompatibleFileOpen;
 import org.exoplatform.utils.CrashUtils;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,8 +53,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class DocumentActivity extends Activity {
+public class DocumentActivity extends Activity implements OnRequestPermissionsResultCallback {
   // add photo
   public static final int        ACTION_ADD_PHOTO = 0;
 
@@ -361,26 +363,48 @@ public class DocumentActivity extends Activity {
    * Take a photo and store it into /sdcard/eXo/DocumentCache
    **/
   public void takePicture() {
-    String parentPath = PhotoUtils.getParentImagePath(this);
-    _sdcard_temp_dir = parentPath + "/" + PhotoUtils.getImageFileName();
-
-    Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(_sdcard_temp_dir)));
-    startActivityForResult(takePictureFromCameraIntent, ExoConstants.TAKE_PICTURE_WITH_CAMERA);
-
+    _sdcard_temp_dir = PhotoUtils.startImageCapture(this);
+  }
+  
+  @SuppressLint("Override")
+  @Override
+  public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
+    if (results.length > 0
+        && results[0] == PackageManager.PERMISSION_GRANTED) {  
+        // permission granted
+        switch (reqCode) {
+        case ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY:
+          PhotoUtils.pickPhotoForActivity(this);
+          break;
+        case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
+          takePicture();
+          break;
+        default:
+          break;
+        }
+    } else {
+        // permission denied
+      if (ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY) ||
+          ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA) ) {
+        PhotoUtils.alertNeedStoragePermission(this);
+      } else {
+        Toast.makeText(this, R.string.PermissionStorageDeniedToast, Toast.LENGTH_LONG).show();
+      }
+    }
+    return;
   }
 
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     super.onActivityResult(requestCode, resultCode, intent);
     if (resultCode == RESULT_OK) {
       switch (requestCode) {
-      case ExoConstants.TAKE_PICTURE_WITH_CAMERA:
+      case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
         Intent intent1 = new Intent(_documentActivityInstance, SelectedImageActivity.class);
         intent1.putExtra(ExoConstants.SELECTED_IMAGE_EXTRA, _sdcard_temp_dir);
         startActivity(intent1);
         break;
 
-      case ExoConstants.REQUEST_ADD_PHOTO:
+      case ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY:
         Intent intent2 = new Intent(this, SelectedImageActivity.class);
         intent.putExtra(ExoConstants.SELECTED_IMAGE_MODE, 2);
         intent2.setData(intent.getData());

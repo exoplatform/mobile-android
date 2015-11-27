@@ -36,10 +36,13 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import org.exoplatform.R;
 import org.exoplatform.utils.image.FileCache;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -61,7 +64,6 @@ import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 
 public class PhotoUtils {
-  private static final String[] suffix         = { ".jpeg", ".jpg", ".png", ".bmp", ".gif" };
 
   private static final String   dotSign        = ".";
 
@@ -74,20 +76,62 @@ public class PhotoUtils {
   private static final String   TEMP_FILE_NAME = "tempfile";
 
   private static final String   MOBILE_IMAGE   = "MobileImage_";
-
+  
   public static String getParentImagePath(Context context) {
     FileCache cache = new FileCache(context, ExoConstants.DOCUMENT_FILE_CACHE);
     return cache.getCachePath();
   }
-
-  public static boolean isImages(File file) {
-
-    String name = file.getName();
-    for (int i = 0; i < suffix.length; i++) {
-      if (name.endsWith(suffix[i]))
-        return true;
+  
+  /**
+   * Take a photo and store it into /sdcard/eXo/DocumentCache
+   * 
+   * @param caller the activity requesting an image capture
+   * @return the path to the captured image
+   */
+  public static String startImageCapture(Activity caller) {
+    if (caller == null)
+      throw new IllegalArgumentException("Activity requesting to capture an image cannot be null");
+    
+    String imagePath = String.format("%s/%s", getParentImagePath(caller), getImageFileName());
+    if (ExoDocumentUtils.didRequestPermission(caller, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA)) {
+      return "";
     }
-    return false;
+    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(imagePath)));
+    caller.startActivityForResult(intent, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA);
+    return imagePath;
+  }
+  
+  /**
+   * Send a pick photo intent on behalf of the given activity.<br/>
+   * The result is passed to the calling activity via onActivityResult with the requestCode  {@link ExoConstants.REQUEST_ADD_PHOTO}.
+   * 
+   * @param caller the activity requesting a photo
+   */
+  public static void pickPhotoForActivity(Activity caller) {
+    if (caller == null)
+      throw new IllegalArgumentException("Activity requesting to pick photo cannot be null");
+    
+    if (ExoDocumentUtils.didRequestPermission(caller, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY)) {
+      return;
+    }
+    
+    Intent intent = new Intent(Intent.ACTION_PICK,
+                               android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    intent.setType(ExoConstants.PHOTO_ALBUM_IMAGE_TYPE);
+    caller.startActivityForResult(intent, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY);
+  }
+  
+  /**
+   * 
+   * @param ctx
+   */
+  public static void alertNeedStoragePermission(Context ctx) {
+    AlertDialog.Builder db = new AlertDialog.Builder(ctx);
+    db.setMessage(R.string.PermissionStorageRationale)
+      .setPositiveButton(R.string.OK, null);
+    AlertDialog dialog = db.create();
+    dialog.show();
   }
 
   /**

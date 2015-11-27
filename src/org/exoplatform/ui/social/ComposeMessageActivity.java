@@ -36,15 +36,17 @@ import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.RectangleImageView;
 import org.exoplatform.widget.RemoveAttachedPhotoDialog;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -59,8 +61,9 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class ComposeMessageActivity extends Activity implements View.OnClickListener {
+public class ComposeMessageActivity extends Activity implements View.OnClickListener, OnRequestPermissionsResultCallback {
 
   private PostWaitingDialog            _progressDialog;
 
@@ -212,13 +215,42 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
     }
     return true;
   }
+  
+
+  @SuppressLint("Override")
+  @Override
+  public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
+    if (results.length > 0
+        && results[0] == PackageManager.PERMISSION_GRANTED) {  
+        // permission granted
+      switch (reqCode) {
+      case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
+        messageController.initCamera();
+        break;
+      case ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY:
+        PhotoUtils.pickPhotoForActivity(this);
+        break;
+      default:
+        break;
+      }
+    } else {
+        // permission denied
+      if (ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY) ||
+          ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA) ) {
+        PhotoUtils.alertNeedStoragePermission(this);
+      } else {
+        Toast.makeText(this, R.string.PermissionStorageDeniedToast, Toast.LENGTH_LONG).show();
+      }
+    }
+    return;
+  }
 
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     super.onActivityResult(requestCode, resultCode, intent);
     if (resultCode == RESULT_OK) {
       switch (requestCode) {
       // Add image after capturing photo from camera
-      case ExoConstants.TAKE_PICTURE_WITH_CAMERA:
+      case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
         String sdcard_dir = messageController.getSdCardTempDir();
         File file = new File(sdcard_dir);
         addImageToMessage(file);
@@ -226,7 +258,7 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
 
       // Get the pick image action result from native photo album and send
       // it to SelectedImageActivity class
-      case ExoConstants.REQUEST_ADD_PHOTO:
+      case ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY:
         Intent intent2 = new Intent(this, SelectedImageActivity.class);
         Uri uri = intent.getData();
         intent.putExtra(ExoConstants.SELECTED_IMAGE_MODE, 2);

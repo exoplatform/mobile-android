@@ -18,8 +18,6 @@
  */
 package org.exoplatform.controller.social;
 
-import java.io.File;
-
 import org.exoplatform.R;
 import org.exoplatform.model.SocialSpaceInfo;
 import org.exoplatform.singleton.SocialDetailHelper;
@@ -29,6 +27,7 @@ import org.exoplatform.social.client.api.model.RestActivity;
 import org.exoplatform.social.client.api.model.RestComment;
 import org.exoplatform.social.client.api.service.ActivityService;
 import org.exoplatform.ui.social.AllUpdatesFragment;
+import org.exoplatform.ui.social.ComposeMessageActivity;
 import org.exoplatform.ui.social.MyConnectionsFragment;
 import org.exoplatform.ui.social.MySpacesFragment;
 import org.exoplatform.ui.social.MyStatusFragment;
@@ -43,12 +42,8 @@ import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -58,7 +53,7 @@ public class ComposeMessageController {
 
   private int               composeType;
 
-  private Context           mContext;
+  private ComposeMessageActivity mComposeActivity;
 
   private PostStatusTask    mPostTask;
 
@@ -79,8 +74,8 @@ public class ComposeMessageController {
    */
   private SocialSpaceInfo   postDestination;
 
-  public ComposeMessageController(Context context, int type, PostWaitingDialog dialog) {
-    mContext = context;
+  public ComposeMessageController(ComposeMessageActivity activity, int type, PostWaitingDialog dialog) {
+    mComposeActivity = activity;
     composeType = type;
     postDestination = null;
     _progressDialog = dialog;
@@ -109,29 +104,23 @@ public class ComposeMessageController {
   /*
    * Take a photo and store it into /sdcard/eXo/DocumentCache
    */
-
   public void initCamera() {
-    String parentPath = PhotoUtils.getParentImagePath(mContext);
-    sdcard_temp_dir = parentPath + "/" + PhotoUtils.getImageFileName();
-
-    Intent takePictureFromCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    takePictureFromCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(sdcard_temp_dir)));
-    ((Activity) mContext).startActivityForResult(takePictureFromCameraIntent, ExoConstants.TAKE_PICTURE_WITH_CAMERA);
+    sdcard_temp_dir = PhotoUtils.startImageCapture(mComposeActivity);
   }
 
   public void onSendMessage(String composeMessage, String sdcard, int position) {
     if ((composeMessage != null) && (composeMessage.length() > 0)) {
-      if (ExoConnectionUtils.isNetworkAvailableExt(mContext)) {
+      if (ExoConnectionUtils.isNetworkAvailableExt(mComposeActivity)) {
         if (composeType == ExoConstants.COMPOSE_POST_TYPE) {
           onPostTask(composeMessage, sdcard);
         } else {
           onCommentTask(composeMessage, position);
         }
       } else {
-        new ConnectionErrorDialog(mContext).show();
+        new ConnectionErrorDialog(mComposeActivity).show();
       }
     } else {
-      Toast toast = Toast.makeText(mContext, inputTextWarning, Toast.LENGTH_LONG);
+      Toast toast = Toast.makeText(mComposeActivity, inputTextWarning, Toast.LENGTH_LONG);
       toast.setGravity(Gravity.BOTTOM, 0, 0);
       toast.show();
     }
@@ -139,7 +128,7 @@ public class ComposeMessageController {
 
   private void onPostTask(String composeMessage, String sdcard) {
     if (mPostTask == null || mPostTask.getStatus() == PostStatusTask.Status.FINISHED) {
-      mPostTask = (PostStatusTask) new PostStatusTask(mContext, sdcard, composeMessage, this, _progressDialog).execute();
+      mPostTask = (PostStatusTask) new PostStatusTask(mComposeActivity, sdcard, composeMessage, this, _progressDialog).execute();
     }
   }
 
@@ -161,7 +150,7 @@ public class ComposeMessageController {
   }
 
   private void changeLanguage() {
-    Resources resource = mContext.getResources();
+    Resources resource = mComposeActivity.getResources();
     inputTextWarning = resource.getString(R.string.InputTextWarning);
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
@@ -199,7 +188,7 @@ public class ComposeMessageController {
     @Override
     protected void onPostExecute(Boolean result) {
       if (result) {
-        ((Activity) mContext).finish();
+        ((Activity) mComposeActivity).finish();
         if (SocialDetailActivity.socialDetailActivity != null) {
           SocialDetailActivity.socialDetailActivity.onLoad();
         }
@@ -222,11 +211,10 @@ public class ComposeMessageController {
           }
         }
       } else {
-        WarningDialog dialog = new WarningDialog(mContext, titleString, contentString, okString);
+        WarningDialog dialog = new WarningDialog(mComposeActivity, titleString, contentString, okString);
         dialog.show();
       }
     }
 
   }
-
 }

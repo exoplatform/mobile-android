@@ -45,7 +45,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   public ExoFile                               _selectedFile;
 
-  private DocumentActivity                     _mContext;
+  private DocumentActivity                     mDocumentActivity;
 
   private DocumentActionDialog                 _delegate;
 
@@ -57,7 +57,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   public DocumentActionAdapter(DocumentActivity context, DocumentActionDialog parent, ExoFile file, boolean isActionBar) {
 
-    _mContext = context;
+    mDocumentActivity = context;
     _delegate = parent;
     _selectedFile = file;
     changeLanguage(isActionBar);
@@ -65,18 +65,17 @@ public class DocumentActionAdapter extends BaseAdapter {
   }
 
   public void setSelectedFile(ExoFile file) {
-
     _selectedFile = file;
   }
 
   public void initCamera() {
-    _mContext.takePicture();
+    mDocumentActivity.takePicture();
   }
 
   public View getView(int position, View convertView, ViewGroup parent) {
 
     final int pos = position;
-    LayoutInflater inflater = (LayoutInflater) _mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    LayoutInflater inflater = (LayoutInflater) mDocumentActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     // TODO use ViewHolder pattern
     View rowView = inflater.inflate(R.layout.fileactionitem, parent, false);
     rowView.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +86,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
         switch (pos) {
         case DocumentActivity.ACTION_ADD_PHOTO:
-          new AddPhotoDialog(_mContext, _delegate).show();
+          new AddPhotoDialog(mDocumentActivity, _delegate).show();
           break;
         case DocumentActivity.ACTION_COPY:
           DocumentHelper.getInstance()._fileCopied = _selectedFile;
@@ -146,17 +145,17 @@ public class DocumentActionAdapter extends BaseAdapter {
 
           break;
         case DocumentActivity.ACTION_RENAME:
-          extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, DocumentActivity.ACTION_RENAME);
+          extendDialog = new DocumentExtendDialog(mDocumentActivity, _selectedFile, DocumentActivity.ACTION_RENAME);
           extendDialog.show();
 
           break;
         case DocumentActivity.ACTION_CREATE:
-          extendDialog = new DocumentExtendDialog(_mContext, _selectedFile, DocumentActivity.ACTION_CREATE);
+          extendDialog = new DocumentExtendDialog(mDocumentActivity, _selectedFile, DocumentActivity.ACTION_CREATE);
 
           extendDialog.show();
           break;
         case DocumentActivity.ACTION_OPEN_IN:
-          ExoDocumentUtils.fileOpen(_mContext, _selectedFile.nodeType, _selectedFile.path, _selectedFile.name);
+          ExoDocumentUtils.fileOpen(mDocumentActivity, _selectedFile.nodeType, _selectedFile.path, _selectedFile.name);
           break;
 
         }
@@ -225,7 +224,7 @@ public class DocumentActionAdapter extends BaseAdapter {
 
   // Set language
   public void changeLanguage(boolean isAct) {
-    Resources resource = _mContext.getResources();
+    Resources resource = mDocumentActivity.getResources();
 
     String strAddAPhoto = resource.getString(R.string.AddAPhoto);
     String strCopy = resource.getString(R.string.Copy);
