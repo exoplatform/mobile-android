@@ -29,6 +29,7 @@ import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.utils.ServerConfigurationUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 import org.robolectric.shadows.httpclient.FakeHttpLayer.RequestMatcherBuilder;
 import org.robolectric.shadows.httpclient.RequestMatcher;
@@ -38,13 +39,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.media.VolumeProviderCompat.ControlType;
 import android.util.Log;
 
 /**
  * Created by The eXo Platform SAS Author : Philippe Aristote
  * paristote@exoplatform.com Apr 15, 2014
  */
+@Config(sdk=Build.VERSION_CODES.LOLLIPOP) // API LEVEL 21
 public abstract class ExoActivityTestUtils<A extends Activity> {
 
   final String          TAG_TEST                   = "eXo____Test____";
