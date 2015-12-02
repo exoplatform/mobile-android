@@ -71,7 +71,7 @@ public class PhotoUtils {
 
   private static final int      IMAGE_QUALITY  = 100;
 
-  private static final String   TEMP_FILE_NAME = "temfile.png";
+  private static final String   TEMP_FILE_NAME = "tempfile";
 
   private static final String   MOBILE_IMAGE   = "MobileImage_";
 
@@ -90,24 +90,16 @@ public class PhotoUtils {
     return false;
   }
 
-  public static boolean isImages(String fileName) {
-    for (int i = 0; i < suffix.length; i++) {
-      if (fileName.endsWith(suffix[i]))
-        return true;
-    }
-    return false;
-  }
-
+  /**
+   * Extract the extension from the given filename
+   * @param name File's name
+   * @return the part after the last dot (.) or an empty string if no dot is found
+   */
   public static String getExtension(String name) {
-    int index = name.indexOf(dotSign);
+    int index = name.lastIndexOf(dotSign);
+    if (index == -1) return "";
     String extension = name.substring(index + 1, name.length());
     return extension;
-  }
-
-  public static String getFileName(String name) {
-    int index = name.indexOf(dotSign);
-    String fileName = name.substring(0, index);
-    return fileName;
   }
 
   private static String getDateFormat() {
@@ -119,7 +111,12 @@ public class PhotoUtils {
     return dateFormat;
   }
 
-  public static String getDateFromString(String value) {
+  /**
+   * Creates a date with format dd/MM/yyyy hh:mm from the given timestamp
+   * @param value the time, as a String
+   * @return the date, as a String
+   */
+  public static String getDateFromTime(String value) {
     String dateFormat = null;
     if (value != null) {
       long minus = Long.valueOf(value);
@@ -130,11 +127,17 @@ public class PhotoUtils {
     return dateFormat;
   }
 
+  /**
+   * Name the image captured when posting an activity<br/>
+   * {@link PhotoUtils.MOBILE_IMAGE} + date + .jpg
+   * 
+   * @return the name
+   */
   public static String getImageFileName() {
     StringBuffer buffer = new StringBuffer();
     buffer.append(MOBILE_IMAGE);
     buffer.append(getDateFormat());
-    buffer.append(".png");
+    buffer.append(".jpg");
     return buffer.toString();
   }
 
@@ -211,8 +214,15 @@ public class PhotoUtils {
       Bitmap bitmap = shrinkBitmap(file.getPath(), IMAGE_WIDTH, IMAGE_HEIGH);
       bitmap = ExoDocumentUtils.rotateBitmapToNormal(file.getAbsolutePath(), bitmap);
       ByteArrayOutputStream output = new ByteArrayOutputStream();
-      bitmap.compress(CompressFormat.PNG, IMAGE_QUALITY, output);
-      File tempFile = new File(parentPath + TEMP_FILE_NAME);
+      String ext = getExtension(file.getName());
+      if ("jpg".equalsIgnoreCase(ext) || "jpeg".equalsIgnoreCase(ext)) {
+        bitmap.compress(CompressFormat.JPEG, IMAGE_QUALITY, output);
+        ext = "." + ext;
+      } else {
+        bitmap.compress(CompressFormat.PNG, IMAGE_QUALITY, output);
+        ext = ".png";
+      }
+      File tempFile = new File(parentPath + TEMP_FILE_NAME + ext);
       FileOutputStream out = new FileOutputStream(tempFile);
       output.writeTo(out);
       return tempFile;

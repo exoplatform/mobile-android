@@ -48,8 +48,6 @@ public class SocialPostInfo implements Parcelable {
 
   public String              postMessage;
 
-  // public List<String> postAttachmentUri;
-
   public List<String>        postAttachedFiles;
 
   public SocialSpaceInfo     destinationSpace;
@@ -84,7 +82,6 @@ public class SocialPostInfo implements Parcelable {
   public void writeToParcel(Parcel out, int flags) {
     out.writeParcelable(ownerAccount, flags);
     out.writeString(postMessage);
-    // out.writeStringList(postAttachmentUri);
     out.writeStringList(postAttachedFiles);
     out.writeParcelable(destinationSpace, flags);
     out.writeMap(templateParams);
@@ -95,8 +92,6 @@ public class SocialPostInfo implements Parcelable {
   public void readFromParcel(Parcel in) {
     ownerAccount = in.readParcelable(SocialPostInfo.class.getClassLoader());
     postMessage = in.readString();
-    // postAttachmentUri = new ArrayList<String>();
-    // in.readStringList(postAttachmentUri);
     postAttachedFiles = new ArrayList<String>();
     in.readStringList(postAttachedFiles);
     destinationSpace = in.readParcelable(SocialPostInfo.class.getClassLoader());
@@ -149,9 +144,12 @@ public class SocialPostInfo implements Parcelable {
     return templateParams.get(name);
   }
 
-  public void builddocParams(UploadInfo uploadInfo) {
-    // Create and return TemplateParams for a DOC_ACTIVITY
-    String docUrl = uploadInfo.jcrUrl + "/" + uploadInfo.folder + "/" + uploadInfo.fileToUpload.documentName;
+  /**
+   * Create TemplateParams for a DOC_ACTIVITY
+   * @param uploadInfo Info about the uploaded DOC
+   */
+  public void buildTemplateParams(UploadInfo uploadInfo) {
+    String docUrl = uploadInfo.getUploadedUrl();
     templateParams = new HashMap<String, String>();
     templateParams.put("WORKSPACE", uploadInfo.workspace);
     templateParams.put("REPOSITORY", uploadInfo.repository);
@@ -164,8 +162,8 @@ public class SocialPostInfo implements Parcelable {
     String docPath = docLink.substring(beginPath.length());
     templateParams.put("DOCPATH", docPath);
     templateParams.put("DOCNAME", uploadInfo.fileToUpload.documentName);
-
-    if (!isPublic()) {
+    String mimeType = uploadInfo.fileToUpload.documentMimeType;
+    if (mimeType != null && !mimeType.trim().isEmpty()) {
       templateParams.put("mimeType", uploadInfo.fileToUpload.documentMimeType);
     }
   }

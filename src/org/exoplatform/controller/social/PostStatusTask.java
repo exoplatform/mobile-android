@@ -154,7 +154,7 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
               }
             }
             // build post param
-            postInfo.builddocParams(uploadInfo);
+            postInfo.buildTemplateParams(uploadInfo);
           }
         }
       }

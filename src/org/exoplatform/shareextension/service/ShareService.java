@@ -177,7 +177,6 @@ public class ShareService extends IntentService {
         uploadInfo = new UploadInfo(uploadInfo);
       }
 
-      // <<<<<<< HEAD
       String fileUri = "file://" + postInfo.postAttachedFiles.get(i);
       Uri uri = Uri.parse(fileUri);
       uploadInfo.fileToUpload = ExoDocumentUtils.documentInfoFromUri(uri, getBaseContext());
@@ -209,11 +208,10 @@ public class ShareService extends IntentService {
         break;
       }
       if (uploadedAll) {
-        uploadInfo.uploadedUrl = getDocUrl(uploadInfo);
         if (Log.LOGD)
           Log.d(LOG_TAG, String.format("Uploaded file %d/%d OK %s (doUpload)", i + 1, numberOfFiles, fileUri));
         if (i == 0)
-          postInfo.templateParams = docParams(uploadInfo);
+          postInfo.buildTemplateParams(uploadInfo);
         else {
           uploadedMap.add(uploadInfo);
         }
@@ -271,7 +269,7 @@ public class ShareService extends IntentService {
                                                                                : commentInfo.fileToUpload.documentMimeType));
     String urlWithoutServer = null;
     try {
-      URL url = new URL(commentInfo.uploadedUrl);
+      URL url = new URL(commentInfo.getUploadedUrl());
       urlWithoutServer = url.getPath();
       if (urlWithoutServer != null && !urlWithoutServer.startsWith("/"))
         urlWithoutServer = "/" + urlWithoutServer;
@@ -303,33 +301,6 @@ public class ShareService extends IntentService {
         Log.e(LOG_TAG, Log.getStackTraceString(e));
     }
     return ret;
-  }
-
-  private String getDocUrl(UploadInfo pUploadInfo) {
-    return pUploadInfo.jcrUrl + "/" + pUploadInfo.folder + "/" + pUploadInfo.fileToUpload.documentName;
-  }
-
-  private Map<String, String> docParams(UploadInfo pUploadInfo) {
-    // Create and return TemplateParams for a DOC_ACTIVITY
-    String docUrl = pUploadInfo.uploadedUrl;
-    Map<String, String> templateParams = new HashMap<String, String>();
-    templateParams.put("WORKSPACE", pUploadInfo.workspace);
-    templateParams.put("REPOSITORY", pUploadInfo.repository);
-    String docLink = docUrl.substring(postInfo.ownerAccount.serverUrl.length());
-    templateParams.put("DOCLINK", docLink);
-    StringBuffer beginPath = new StringBuffer(ExoConstants.DOCUMENT_JCR_PATH).append("/")
-                                                                             .append(pUploadInfo.repository)
-                                                                             .append("/")
-                                                                             .append(pUploadInfo.workspace);
-    String docPath = docLink.substring(beginPath.length());
-    templateParams.put("DOCPATH", docPath);
-    templateParams.put("DOCNAME", pUploadInfo.fileToUpload.documentName);
-
-    if (!postInfo.isPublic()) {
-      templateParams.put("mimeType", pUploadInfo.fileToUpload.documentMimeType);
-    }
-
-    return templateParams;
   }
 
   private Map<String, String> linkParams(String link) {
@@ -468,8 +439,6 @@ public class ShareService extends IntentService {
 
     public String       jcrUrl;
 
-    public String       uploadedUrl;
-
     public UploadInfo() {
       super();
     }
@@ -510,6 +479,10 @@ public class ShareService extends IntentService {
                                                                             .append("/Documents");
         jcrUrl = url.toString();
       }
+    }
+    
+    public String getUploadedUrl() {
+      return new StringBuffer(jcrUrl).append("/").append(folder).append("/").append(fileToUpload.documentName).toString();
     }
   }
 }

@@ -729,13 +729,13 @@ public class SocialActivityUtil {
     caledarBuffer.append(resource.getString(R.string.CalendarStart));
     caledarBuffer.append(" ");
     String startTime = activityInfo.templateParams.get("EventStartTime");
-    startTime = PhotoUtils.getDateFromString(startTime);
+    startTime = PhotoUtils.getDateFromTime(startTime);
     caledarBuffer.append(startTime);
     caledarBuffer.append("<br>");
     caledarBuffer.append(resource.getString(R.string.CalendarEnd));
     caledarBuffer.append(" ");
     String endTime = activityInfo.templateParams.get("EventEndTime");
-    endTime = PhotoUtils.getDateFromString(endTime);
+    endTime = PhotoUtils.getDateFromTime(endTime);
     caledarBuffer.append(endTime);
     caledarBuffer.append("</body></html>");
     textView.setText(Html.fromHtml(caledarBuffer.toString()));
