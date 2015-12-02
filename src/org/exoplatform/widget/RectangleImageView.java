@@ -35,20 +35,22 @@ import android.util.Log;
 import android.widget.ImageView;
 
 /**
- * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jan
- * 16, 2012 This image view for attached image view in compose message activity
+ * This image view for attached image in compose message activity
+ * 
+ * @since Jan 16, 2012 
+ * @author Created by The eXo Platform SAS 
  */
-public class RetangleImageView extends ImageView {
+public class RectangleImageView extends ImageView {
 
-  public RetangleImageView(Context context, AttributeSet attrs, int defStyle) {
+  public RectangleImageView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
   }
 
-  public RetangleImageView(Context context, AttributeSet attrs) {
+  public RectangleImageView(Context context, AttributeSet attrs) {
     super(context, attrs);
   }
 
-  public RetangleImageView(Context context) {
+  public RectangleImageView(Context context) {
     super(context);
   }
 
@@ -93,7 +95,7 @@ public class RetangleImageView extends ImageView {
     Bitmap maskBm = BitmapFactory.decodeResource(getResources(), R.drawable.social_attached_image_border);
     // Create nine patch drawable from image bitmap frame
     byte[] chunk = maskBm.getNinePatchChunk();
-    _nicepatchDrawable = new NinePatchDrawable(maskBm, chunk, new Rect(), null);
+    _nicepatchDrawable = new NinePatchDrawable(getResources(), maskBm, chunk, new Rect(), null);
     _nicepatchDrawable.setBounds(0, 0, width, height);
     return _nicepatchDrawable;
   }
