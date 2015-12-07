@@ -105,7 +105,7 @@
   <string name="CannotLoadMoreActivities">Kan oudere activiteiten niet laden. De lijst wordt vernieuwd.</string>
   <string name="LogoutTitle">Afmeldvenster</string>
   <string name="LogoutContent">Wilt u afsluiten?</string>
-  <string name="ApplicationInformation">Application Information</string>
+  <string name="ApplicationInformation">Applicatie informatie</string>
   <string name="ServerVersion">Serverversie</string>
   <string name="ServerEdition">Server Editie</string>
   <string name="ApplicationVersion">Versie van toepassing</string>
@@ -270,6 +270,6 @@
   <string name="File">bestand</string>
 
   <!-- Action Bar -->
-  <string name="SignOutTitle">Sign Out</string>
+  <string name="SignOutTitle">Uitloggen</string>
   <string name="RefreshTitle">Verversen</string>
 </resources>
