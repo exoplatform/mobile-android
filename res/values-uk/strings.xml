@@ -262,7 +262,11 @@
   <string name="ShareErrorSignInFailed">Помилка входу, будь ласка, повторіть спробу</string>
   <string name="ShareErrorSomeFilesCannotShare">Деякі документи не можна використовувати спільно</string>
   <string name="ShareErrorAllFilesCannotShare">Всі документи не можна використовувати спільно</string>
+  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorDialogLeave">Leave</string>
+  <string name="ShareErrorDialogAppSettings">Open App Settings</string>
   
+  <!-- Documents -->
   <string name="DeleteConfirmFolderTitle">Видалити папку</string>
   <string name="DeleteConfirmFileTitle">Видалити файл</string>
   <string name="DeleteConfirmMessage">Ви дійсно бажаєте видалити %1$s \'%2$s\' ?</string>
@@ -272,4 +276,8 @@
   <!-- Action Bar -->
   <string name="SignOutTitle">Вихід</string>
   <string name="RefreshTitle">Оновити</string>
+  
+  <!-- Permission Requests -->
+  <string name="PermissionStorageRationale">The Storage access permission is needed to capture a photo or pick an image.</string>
+  <string name="PermissionStorageDeniedToast">Operation stopped: Storage permission denied</string>
 </resources>
