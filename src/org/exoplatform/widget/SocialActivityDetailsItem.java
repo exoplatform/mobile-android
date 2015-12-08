@@ -297,6 +297,11 @@ public class SocialActivityDetailsItem extends LinearLayout {
   }
 
   private void setActivityTypeLink() {
+    // Display the activity's author name
+    // If the activity is published in a space, display the space name too
+    String info = SocialActivityUtil.getLinkActivityInfo(activityInfo, FONT_COLOR, resource);
+    textViewName.setText(Html.fromHtml(info), TextView.BufferType.SPANNABLE);
+    
     String templateComment = activityInfo.templateParams.get("comment");
     String description = activityInfo.templateParams.get("description").trim();
 
