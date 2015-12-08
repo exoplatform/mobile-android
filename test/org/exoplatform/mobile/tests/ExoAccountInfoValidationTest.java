@@ -25,6 +25,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.exoplatform.model.ExoAccount;
 import org.exoplatform.utils.ExoUtils;
+import org.robolectric.annotation.Config;
+
+import android.os.Build;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +40,7 @@ import org.robolectric.RobolectricTestRunner;
  * paristote@exoplatform.com May 13, 2014
  */
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk=Build.VERSION_CODES.LOLLIPOP) // API LEVEL 21
 public class ExoAccountInfoValidationTest {
 
     @Before

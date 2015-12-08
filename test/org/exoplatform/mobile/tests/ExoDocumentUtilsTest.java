@@ -21,6 +21,10 @@ package org.exoplatform.mobile.tests;
 import static org.junit.Assert.assertEquals;
 
 import org.exoplatform.model.ExoFile;
+import org.robolectric.annotation.Config;
+
+import android.os.Build;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +36,7 @@ import org.robolectric.RobolectricTestRunner;
  * paristote@exoplatform.com Apr 17, 2015
  */
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk=Build.VERSION_CODES.LOLLIPOP) // API LEVEL 21
 public class ExoDocumentUtilsTest {
 
     @Before

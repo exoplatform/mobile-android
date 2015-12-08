@@ -54,24 +54,34 @@ import org.exoplatform.model.ExoFile;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.DocumentHelper;
 import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.utils.CompatibleFileOpen.FileOpenRequest;
+import org.exoplatform.utils.CompatibleFileOpen.FileOpenRequestResult;
 import org.exoplatform.widget.UnreadableFileDialog;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.webkit.MimeTypeMap;
 
@@ -110,7 +120,7 @@ public class ExoDocumentUtils {
   public static final String   OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
 
   public static final String[] FORBIDDEN_TYPES      = new String[] { "application/octet-stream" };
-
+  
   public static boolean isEnoughMemory(int fileSize) {
     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
       int freeSpace = getFreeMemory(Environment.getExternalStorageDirectory().getAbsolutePath());
@@ -172,23 +182,26 @@ public class ExoDocumentUtils {
    * installed application
    */
 
-  public static void fileOpen(Context context, String fileType, String filePath, String fileName) {
+  public static FileOpenRequest fileOpen(Context context, String fileType, String filePath, String fileName) {
+    FileOpenRequest result = new FileOpenRequest();
     if (fileType == null) {
       new UnreadableFileDialog(context, null).show();
-      return;
-    }
-
-    if (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE)) {
+      result.mResult = FileOpenRequestResult.ERROR;
+    } else if (fileType.startsWith(IMAGE_TYPE) || fileType.startsWith(TEXT_TYPE)) {
       Intent intent = new Intent(context, WebViewActivity.class);
       intent.putExtra(ExoConstants.WEB_VIEW_URL, filePath);
       intent.putExtra(ExoConstants.WEB_VIEW_TITLE, fileName);
       intent.putExtra(ExoConstants.WEB_VIEW_MIME_TYPE, fileType);
       intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "false");
       context.startActivity(intent);
+      result.mResult = FileOpenRequestResult.WEBVIEW;
     } else {
-      new CompatibleFileOpen(context, fileType, filePath, fileName);
+      result.mFileOpenController = new CompatibleFileOpen(context, fileType, filePath, fileName);
+      result.mResult = FileOpenRequestResult.EXTERNAL;
     }
-
+    if (Log.LOGD)
+      Log.d(LOG_TAG, "File Open Result: "+result.mResult);
+    return result;
   }
 
   /**
@@ -231,26 +244,6 @@ public class ExoDocumentUtils {
     return activity != null;
   }
 
-  /*
-   * Check if file can readable or not
-   */
-  // public static boolean isFileReadable(String type) {
-  // if (type == null) {
-  // return false;
-  // }
-  //
-  // if (type.startsWith(TEXT_TYPE) || type.startsWith(IMAGE_TYPE) ||
-  // type.equals(PDF_TYPE) || type.equals(MSWORD_TYPE)
-  // || type.equals(XLS_TYPE) || type.equals(POWERPOINT_TYPE) ||
-  // type.equals(OPEN_WORD_TYPE) || type.equals(OPEN_XLS_TYPE)
-  // || type.equals(OPEN_POWERPOINT_TYPE) || type.startsWith(AUDIO_TYPE) ||
-  // type.startsWith(VIDEO_TYPE)) {
-  // return true;
-  // }
-  //
-  // return false;
-  // }
-
   public static String getFullFileType(String fileType) {
     String docFileType = fileType;
     if (fileType.startsWith(ExoDocumentUtils.AUDIO_TYPE)) {
@@ -268,11 +261,6 @@ public class ExoDocumentUtils {
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
     try {
       url = url.replaceAll(" ", "%20");
-      // if (ExoConnectionUtils.getResponseCode(url) != 1) {
-      // if (!ExoConnectionUtils.onReLogin()) {
-      // return false;
-      // }
-      // }
 
       HttpPut put = new HttpPut(url);
       FileEntity fileEntity = new FileEntity(fileManager, fileType);
@@ -1174,6 +1162,71 @@ public class ExoDocumentUtils {
     }
     return ret;
   }
+  
+  private static String permissionForCode(int permCode) {
+    String permission = null;
+    switch (permCode) {
+    case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
+      // We store the captured image on disk, so we need the WRITE_EXTERNAL_STORAGE permission
+      permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+      break;
+    case ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY:
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+        // On Jelly Bean and after, return the actual READ_EXTERNAL_STORAGE permission 
+        permission = permissionReadExternalStorage();
+      else
+        // Otherwise returning WRITE_EXTERNAL_STORAGE implicitly grants READ_EXTERNAL_STORAGE
+        permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+      break;
+      default:
+        throw new IllegalArgumentException("Given permission code is incorrect: "+permCode);
+    }
+    return permission;
+  }
+  
+  @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+  private static String permissionReadExternalStorage() {
+    return Manifest.permission.READ_EXTERNAL_STORAGE;
+  }
+  
+  /**
+   * Check whether the application needs to request the permission required by the activity.
+   * If yes, then the permission is requested (via {@link ActivityCompat#requestPermissions(Activity, String[], int)}).
+   * 
+   * @param caller The activity that requires the permission. Must implement {@link OnRequestPermissionsResultCallback}.
+   * @param permissionCode The code defined internally, e.g. {@link ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY}.
+   * @return true if the permission has been requested <br/>
+   *         false if the permission was already granted
+   */
+  public static boolean didRequestPermission(Activity caller, int permissionCode) {
+    if (caller == null || !(caller instanceof OnRequestPermissionsResultCallback)) 
+      throw new IllegalArgumentException("Caller activity must implement OnRequestPermissionsResultCallback");
+    
+    boolean res = false;
+    String permission = permissionForCode(permissionCode);
+    int check = ContextCompat.checkSelfPermission(caller, permission);
+    if (check != PackageManager.PERMISSION_GRANTED) {
+      res = true;
+      ActivityCompat.requestPermissions(caller, new String[]{permission}, permissionCode);
+    }
+    return res;
+  }
+  
+  /**
+   * Check whether the request for the specified permission should be explained to the user.
+   * Calls {@link ActivityCompat#shouldShowRequestPermissionRationale(Activity, String)}.
+   * 
+   * @param activity The activity that requires the permission.
+   * @param permCode The code defined internally, e.g. {@link ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY}.
+   * @return true if the user should receive more information about the permission request
+   */
+  public static boolean shouldDisplayExplanation(Activity activity, int permCode) {
+    if (activity == null)
+      throw new IllegalArgumentException("Caller activity must not be null");
+    String permission = permissionForCode(permCode);
+    return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
+  }
+
 
   public static class DocumentInfo {
 

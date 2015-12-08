@@ -137,7 +137,6 @@ public class WebViewActivity extends Activity {
             documentItem.setVisible(true);
         }
       }
-
     });
     _wvGadget.setWebViewClient(new NewsWebviewClient());
     onLoad();
@@ -291,7 +290,6 @@ public class WebViewActivity extends Activity {
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
       view.loadUrl(url);
       return true;
-
     }
 
     @Override

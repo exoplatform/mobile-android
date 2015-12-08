@@ -22,8 +22,6 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.http.ParseException;
-
 /**
  *
  * Web Address Parser
@@ -42,6 +40,18 @@ import org.apache.http.ParseException;
  *
  */
 public class ExoWebAddress {
+  
+  public static class ParseException extends Exception {
+    private static final long serialVersionUID = 1L;
+    
+    public ParseException(String message) {
+      super(message);
+    }
+    
+    public ParseException(String message, Throwable source) {
+      super(message, source);
+    }
+  }
 
     private String mScheme;
     private String mHost;
@@ -63,10 +73,11 @@ public class ExoWebAddress {
             /* path      */ "(\\/?[^#]*)?" +
             /* anchor    */ ".*", Pattern.CASE_INSENSITIVE);
 
-    /** parses given uriString. */
-    public ExoWebAddress(String address) {
+    /** parses given uriString. 
+     * @throws ParseException */
+    public ExoWebAddress(String address) throws ParseException {
         if (address == null) {
-            throw new ParseException("Input address is null");
+            throw new ParseException("Cannot create ExoWebAddress from null address parameter");
         }
 
         mScheme = "";
@@ -90,7 +101,7 @@ public class ExoWebAddress {
                 try {
                     mPort = Integer.parseInt(t);
                 } catch (NumberFormatException ex) {
-                    throw new ParseException("Incorrect port number");
+                    throw new ParseException("Incorrect port number", ex);
                 }
             }
             t = m.group(MATCH_GROUP_PATH);
@@ -115,8 +126,11 @@ public class ExoWebAddress {
     @Override
     public String toString() {
         String port = "";
-        if ((mPort != 443 && mScheme.equals(ExoConstants.HTTPS_PROTOCOL)) ||
-            (mPort != 80 && mScheme.equals(ExoConstants.HTTP_PROTOCOL))) {
+
+        if (mPort != -1 &&
+            ((mPort != 443 && mScheme.equals(ExoConstants.HTTPS_PROTOCOL)) ||
+             (mPort != 80 && mScheme.equals(ExoConstants.HTTP_PROTOCOL))
+            )) {
             port = ":" + Integer.toString(mPort);
         }
         String authInfo = "";
@@ -165,5 +179,12 @@ public class ExoWebAddress {
 
     public String getAuthInfo() {
       return mAuthInfo;
+    }
+    
+    /**
+     * @return true if this address has an empty host, false otherwise
+     */
+    public boolean isRelativeURL() {
+      return "".equals(mHost);
     }
 }

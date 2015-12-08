@@ -29,7 +29,7 @@
   </parent>
   <groupId>org.exoplatform.mobile.platform</groupId>
   <artifactId>exo-mobile-android</artifactId>
-  <version>2.8-SNAPSHOT</version>
+  <version>2.9-SNAPSHOT</version>
   <packaging>apk</packaging>
   <name>eXo Mobile Android</name>
   <description>eXo Mobile Android project.</description>
@@ -48,12 +48,12 @@
     <jira.project.key>MOB</jira.project.key>
     <jenkins.job.name>mobile-android-master-ci</jenkins.job.name>
     <!-- Android -->
-    <android.version>4.1.1.4</android.version>
-    <android.sdk.platform>21</android.sdk.platform>
-    <!-- Lib support available via maven-android-sdk-deployer  -->
-    <android.support.version>20.0.0</android.support.version>
-    <!-- March 2012 -->
-    <android.annotations.version>4.1.1.4</android.annotations.version>
+    <android.version>5.0.1_r2</android.version>
+    <android.sdk.platform>22</android.sdk.platform>
+    <android.support.version>23.1.1</android.support.version>
+    <android.annotations.version>24.4.1</android.annotations.version>
+    <!-- Android Maven Plugin -->
+    <android.maven.plugin.version>4.3.0</android.maven.plugin.version>
     <!-- Libraries -->
     <commons-lang.version>2.4</commons-lang.version>
     <exo.social.client.version>1.0.3</exo.social.client.version>
@@ -66,8 +66,6 @@
     <!-- Java version -->
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
-    <!-- Upgrade must be studied - will be required to upgrade to maven 3.1+ -->
-    <version.android.plugin>3.8.0</version.android.plugin>
     <!-- Surefire settings (to be compatible with jacoco we should use a property and not the plugin param) -->
     <argLine>-Xmx1024m</argLine>
   </properties>
@@ -99,7 +97,7 @@
     </dependency>
     <!-- Dependency With Android -->
     <dependency>
-      <groupId>com.google.android</groupId>
+      <groupId>android</groupId>
       <artifactId>android</artifactId>
       <version>${android.version}</version>
       <scope>provided</scope>
@@ -110,7 +108,7 @@
       <version>${android.support.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.google.android</groupId>
+      <groupId>com.google.android.annotations</groupId>
       <artifactId>annotations</artifactId>
       <version>${android.annotations.version}</version>
     </dependency>
@@ -187,13 +185,6 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>android</groupId>
-      <artifactId>android</artifactId>
-      <version>${android.test.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
       <!-- Dependency with Crashlytics -->
       <dependency>
           <groupId>com.crashlytics.android</groupId>
@@ -219,7 +210,7 @@
               <pluginExecutions>
                 <pluginExecution>
                   <pluginExecutionFilter>
-                    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                    <groupId>com.simpligility.maven.plugins</groupId>
                     <artifactId>android-maven-plugin</artifactId>
                     <versionRange>[3.0.0-alpha-14,)</versionRange>
                     <goals>
@@ -265,15 +256,16 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+        <groupId>com.simpligility.maven.plugins</groupId>
         <artifactId>android-maven-plugin</artifactId>
+        <version>${android.maven.plugin.version}</version>
         <extensions>true</extensions>
         <executions>
           <execution>
-            <id>manifestUpdate</id>
+            <id>merge-version-code</id>
             <phase>process-resources</phase>
             <goals>
-              <goal>manifest-update</goal>
+              <goal>manifest-merger</goal>
             </goals>
             <configuration>
               <manifestVersionCode>${version.code}</manifestVersionCode>
@@ -288,6 +280,13 @@
           </execution>
         </executions>
         <configuration>
+          <androidManifestFile>AndroidManifest.xml</androidManifestFile>
+          <assetsDirectory>assets/</assetsDirectory>
+          <resourceDirectory>res/</resourceDirectory>
+          <sourceDirectories>
+            <sourceDirectory>src/</sourceDirectory>
+          </sourceDirectories>
+          <nativeLibrariesDirectory>libs/</nativeLibrariesDirectory>
           <dexJvmArguments>
             <jvmArgument>-Xshare:auto</jvmArgument>
             <jvmArgument>-Xms128M</jvmArgument>

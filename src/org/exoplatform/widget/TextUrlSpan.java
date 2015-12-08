@@ -68,9 +68,21 @@ public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
     context.startActivity(intent);
   }
 
-  // @Override
+  @Override
   public int getSpanTypeId() {
     return 11;
   }
-
+  
+  // Workaround needed to work on Android 6.0
+  // cf https://jira.exoplatform.org/browse/MOB-1974
+  
+  public int getSpanTypeIdInternal() {
+    return getSpanTypeId();
+  }
+  
+  public void writeToParcelInternal(Parcel dest, int flags) {
+    writeToParcel(dest, flags);
+  }
+  
+  //
 }

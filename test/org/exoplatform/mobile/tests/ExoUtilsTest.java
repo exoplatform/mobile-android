@@ -18,21 +18,27 @@
  */
 package org.exoplatform.mobile.tests;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.exoplatform.utils.ExoUtils;
+import org.robolectric.annotation.Config;
+
+import android.os.Build;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 /**
  * Created by The eXo Platform SAS Author : Philippe Aristote
  * paristote@exoplatform.com Oct 28, 2014
  */
-@RunWith(ExoRobolectricTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk=Build.VERSION_CODES.LOLLIPOP) // API LEVEL 21
 public class ExoUtilsTest {
 
     @Before

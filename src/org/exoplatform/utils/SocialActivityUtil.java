@@ -20,7 +20,6 @@ package org.exoplatform.utils;
 
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import java.util.Locale;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialActivityInfo;
@@ -28,6 +27,7 @@ import org.exoplatform.model.SocialLikeInfo;
 import org.exoplatform.singleton.AccountSetting;
 import org.exoplatform.singleton.ServerSettingHelper;
 import org.exoplatform.social.client.api.model.RestActivityStream;
+import org.exoplatform.utils.ExoWebAddress.ParseException;
 import org.exoplatform.widget.TextUrlSpan;
 
 import android.content.Context;
@@ -36,6 +36,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -360,17 +361,27 @@ public class SocialActivityUtil {
       try {
         Spannable spannable = (Spannable) textView.getText();
         for (URLSpan span : list) {
-
           int start = spannable.getSpanStart(span);
           int stop = spannable.getSpanEnd(span);
-          // TODO error here? should be spannable getSpanFlag ? 
-          int flags = spannable.getSpanEnd(span);
+          int flags = spannable.getSpanFlags(span);
           String spanUrl = span.getURL();
           spannable.removeSpan(span);
           TextUrlSpan myUrlSpan = null;
-          if (spanUrl.toLowerCase(Locale.US).startsWith(ExoConstants.HTTP_PROTOCOL)) {
+          // check the link URL format
+          ExoWebAddress addr = null;
+          try {
+            addr = new ExoWebAddress(spanUrl);
+          } catch (ParseException e) {
+            if (Log.LOGI)
+              Log.i(SocialActivityUtil.class.getName(), e.getMessage());
+          }
+          if (addr != null && !addr.isRelativeURL()) {
+            // absolute URI => use as is (add protocol if missing)
+            if (!URLUtil.isNetworkUrl(spanUrl))
+              spanUrl = ExoConnectionUtils.HTTP + spanUrl;
             myUrlSpan = new TextUrlSpan(spanUrl);
           } else {
+            // relative URI => prefix with current server URL
             String link = AccountSetting.getInstance().getDomainName() + spanUrl;
             myUrlSpan = new TextUrlSpan(link);
           }
@@ -380,8 +391,8 @@ public class SocialActivityUtil {
         }
       } catch (ClassCastException e) {
         // textView.getText() can fail to be casted to Spannable
-        if (Log.LOGE)
-          Log.e("eXo__SocialActivityUtil__", e.getMessage(), e);
+        if (Log.LOGD)
+          Log.d("eXo__SocialActivityUtil__", e.getMessage());
       }
     }
   }
@@ -718,13 +729,13 @@ public class SocialActivityUtil {
     caledarBuffer.append(resource.getString(R.string.CalendarStart));
     caledarBuffer.append(" ");
     String startTime = activityInfo.templateParams.get("EventStartTime");
-    startTime = PhotoUtils.getDateFromString(startTime);
+    startTime = PhotoUtils.getDateFromTime(startTime);
     caledarBuffer.append(startTime);
     caledarBuffer.append("<br>");
     caledarBuffer.append(resource.getString(R.string.CalendarEnd));
     caledarBuffer.append(" ");
     String endTime = activityInfo.templateParams.get("EventEndTime");
-    endTime = PhotoUtils.getDateFromString(endTime);
+    endTime = PhotoUtils.getDateFromTime(endTime);
     caledarBuffer.append(endTime);
     caledarBuffer.append("</body></html>");
     textView.setText(Html.fromHtml(caledarBuffer.toString()));

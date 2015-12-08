@@ -53,8 +53,13 @@ import org.exoplatform.utils.ExoDocumentUtils;
 import org.exoplatform.utils.ExoDocumentUtils.DocumentInfo;
 import org.exoplatform.utils.Log;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -62,6 +67,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -465,7 +471,42 @@ public class ShareActivity extends FragmentActivity {
   }
 
   private void prepareAttachmentsAsync() {
-    new PrepareAttachmentsTask().execute();
+    if (!ExoDocumentUtils.didRequestPermission(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY)) {
+      new PrepareAttachmentsTask().execute();
+    }
+  }
+  
+  @SuppressLint("Override")
+  @Override
+  public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
+    if (reqCode == ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY) {
+      if (results.length > 0
+          && results[0] == PackageManager.PERMISSION_GRANTED) {  
+          // permission granted
+          prepareAttachmentsAsync();
+      } else {
+          // permission denied
+        AlertDialog.Builder db = new AlertDialog.Builder(this);
+        DialogInterface.OnClickListener dialogInterface = new OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            if (which == DialogInterface.BUTTON_NEUTRAL) {
+              Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                         Uri.fromParts("package", getPackageName(), null));
+              intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+              startActivity(intent);
+            }
+            finish();
+          }
+        };
+        db.setMessage(R.string.ShareErrorStoragePermissionDenied)
+          .setNegativeButton(R.string.ShareErrorDialogLeave, dialogInterface)
+          .setNeutralButton(R.string.ShareErrorDialogAppSettings, dialogInterface);
+        AlertDialog dialog = db.create();
+        dialog.show();
+      }
+      return;
+    }
   }
 
   /**

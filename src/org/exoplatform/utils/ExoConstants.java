@@ -78,9 +78,9 @@ public class ExoConstants {
 
   public static final int    AVATAR_DEFAULT_SIZE                   = 130;
 
-  public static final int    TAKE_PICTURE_WITH_CAMERA              = 7;
+  public static final int    REQUEST_TAKE_PICTURE_WITH_CAMERA      = 7;
 
-  public static final int    REQUEST_ADD_PHOTO                     = 8;
+  public static final int    REQUEST_PICK_IMAGE_FROM_GALLERY       = 8;
 
   public static final String PHOTO_ALBUM_IMAGE_TYPE                = "image/*";
 

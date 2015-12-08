@@ -20,18 +20,23 @@ package org.exoplatform.utils.image;
 
 import java.lang.ref.WeakReference;
 
+import com.squareup.picasso.Picasso.LoadedFrom;
+import com.squareup.picasso.Target;
+
+import org.exoplatform.singleton.AccountSetting;
+import org.exoplatform.utils.ExoConnectionUtils;
+import org.exoplatform.utils.ExoWebAddress;
+import org.exoplatform.utils.ExoWebAddress.ParseException;
 import org.exoplatform.utils.Log;
 import org.exoplatform.utils.Utils;
 import org.exoplatform.widget.PicassoTextView;
-
-import com.squareup.picasso.Picasso.LoadedFrom;
-import com.squareup.picasso.Target;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Html.ImageGetter;
+import android.webkit.URLUtil;
 import android.widget.TextView;
 
 /**
@@ -60,8 +65,25 @@ public class PicassoImageGetter implements ImageGetter {
       if (tv instanceof PicassoTextView) {
         ((PicassoTextView) tv).addTarget(target);
       }
+      String imageUrl = paramString;
+      // Check the image URL format
+      ExoWebAddress imageAddr = null;
+      try {
+        imageAddr = new ExoWebAddress(imageUrl);
+      } catch (ParseException e) {
+        if (Log.LOGI)
+          Log.i(getClass().getName(), e.getMessage());
+      }
+      if (imageAddr == null || imageAddr.isRelativeURL()) {
+        // relative URL => prefix with current server URL
+        imageUrl = AccountSetting.getInstance().getDomainName() + imageUrl;
+      }
+      // add http protocol if the URL has none
+      if (!URLUtil.isNetworkUrl(imageUrl))
+        imageUrl = ExoConnectionUtils.HTTP + imageUrl;
+      // load the image
       ExoPicasso.picasso(tv.getContext())
-                .load(paramString)
+                .load(imageUrl)
                 .resize(PLACEHOLDER_SIZE, PLACEHOLDER_SIZE)
                 .centerInside()
                 .into(target);

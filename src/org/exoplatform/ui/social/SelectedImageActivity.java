@@ -29,22 +29,26 @@ import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-public class SelectedImageActivity extends Activity implements OnClickListener {
+public class SelectedImageActivity extends Activity implements OnClickListener, OnRequestPermissionsResultCallback {
 
   private static final int    SCALE_WIDTH  = 1024;
 
@@ -119,10 +123,32 @@ public class SelectedImageActivity extends Activity implements OnClickListener {
     removeButton.setOnClickListener(this);
 
   }
+  
+  @SuppressLint("Override")
+  @Override
+  public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
+    if (reqCode == ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY) {
+      if (results.length > 0
+          && results[0] == PackageManager.PERMISSION_GRANTED) {  
+          // permission granted
+          onLoad(modeId);
+      } else {
+          // permission denied
+        if (ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY)) {
+          PhotoUtils.alertNeedStoragePermission(this);
+        } else {
+          Toast.makeText(this, R.string.PermissionStorageDeniedToast, Toast.LENGTH_LONG).show();
+        }
+        finish();
+      }
+      return;
+    }
+  }
 
   private void onLoad(int id) {
     if (ExoConnectionUtils.isNetworkAvailableExt(this)) {
-      if (mLoadTask == null || mLoadTask.getStatus() == DisplayImageTask.Status.FINISHED) {
+      boolean hasPermission = !ExoDocumentUtils.didRequestPermission(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY);
+      if (hasPermission && (mLoadTask == null || mLoadTask.getStatus() == DisplayImageTask.Status.FINISHED)) {
         mLoadTask = (DisplayImageTask) new DisplayImageTask().execute(id);
       }
     } else {
@@ -174,9 +200,9 @@ public class SelectedImageActivity extends Activity implements OnClickListener {
     Intent intent = new Intent(Intent.ACTION_PICK);
     intent.setType(ExoConstants.PHOTO_ALBUM_IMAGE_TYPE);
     if (DocumentActivity._documentActivityInstance != null) {
-      DocumentActivity._documentActivityInstance.startActivityForResult(intent, ExoConstants.REQUEST_ADD_PHOTO);
+      DocumentActivity._documentActivityInstance.startActivityForResult(intent, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY);
     } else if (ComposeMessageActivity.composeMessageActivity != null) {
-      ComposeMessageActivity.composeMessageActivity.startActivityForResult(intent, ExoConstants.REQUEST_ADD_PHOTO);
+      ComposeMessageActivity.composeMessageActivity.startActivityForResult(intent, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY);
     }
   }
 

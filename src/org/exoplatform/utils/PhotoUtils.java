@@ -35,10 +35,14 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+
+import org.exoplatform.R;
 import org.exoplatform.utils.image.FileCache;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -60,7 +64,6 @@ import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 
 public class PhotoUtils {
-  private static final String[] suffix         = { ".jpeg", ".jpg", ".png", ".bmp", ".gif" };
 
   private static final String   dotSign        = ".";
 
@@ -70,43 +73,77 @@ public class PhotoUtils {
 
   private static final int      IMAGE_QUALITY  = 100;
 
-  private static final String   TEMP_FILE_NAME = "temfile.png";
+  private static final String   TEMP_FILE_NAME = "tempfile";
 
   private static final String   MOBILE_IMAGE   = "MobileImage_";
-
+  
   public static String getParentImagePath(Context context) {
     FileCache cache = new FileCache(context, ExoConstants.DOCUMENT_FILE_CACHE);
     return cache.getCachePath();
   }
-
-  public static boolean isImages(File file) {
-
-    String name = file.getName();
-    for (int i = 0; i < suffix.length; i++) {
-      if (name.endsWith(suffix[i]))
-        return true;
+  
+  /**
+   * Take a photo and store it into /sdcard/eXo/DocumentCache
+   * 
+   * @param caller the activity requesting an image capture
+   * @return the path to the captured image
+   */
+  public static String startImageCapture(Activity caller) {
+    if (caller == null)
+      throw new IllegalArgumentException("Activity requesting to capture an image cannot be null");
+    
+    String imagePath = String.format("%s/%s", getParentImagePath(caller), getImageFileName());
+    if (ExoDocumentUtils.didRequestPermission(caller, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA)) {
+      return "";
     }
-    return false;
+    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(imagePath)));
+    caller.startActivityForResult(intent, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA);
+    return imagePath;
+  }
+  
+  /**
+   * Send a pick photo intent on behalf of the given activity.<br/>
+   * The result is passed to the calling activity via onActivityResult with the requestCode  {@link ExoConstants.REQUEST_ADD_PHOTO}.
+   * 
+   * @param caller the activity requesting a photo
+   */
+  public static void pickPhotoForActivity(Activity caller) {
+    if (caller == null)
+      throw new IllegalArgumentException("Activity requesting to pick photo cannot be null");
+    
+    if (ExoDocumentUtils.didRequestPermission(caller, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY)) {
+      return;
+    }
+    
+    Intent intent = new Intent(Intent.ACTION_PICK,
+                               android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    intent.setType(ExoConstants.PHOTO_ALBUM_IMAGE_TYPE);
+    caller.startActivityForResult(intent, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY);
+  }
+  
+  /**
+   * 
+   * @param ctx
+   */
+  public static void alertNeedStoragePermission(Context ctx) {
+    AlertDialog.Builder db = new AlertDialog.Builder(ctx);
+    db.setMessage(R.string.PermissionStorageRationale)
+      .setPositiveButton(R.string.OK, null);
+    AlertDialog dialog = db.create();
+    dialog.show();
   }
 
-  public static boolean isImages(String fileName) {
-    for (int i = 0; i < suffix.length; i++) {
-      if (fileName.endsWith(suffix[i]))
-        return true;
-    }
-    return false;
-  }
-
+  /**
+   * Extract the extension from the given filename
+   * @param name File's name
+   * @return the part after the last dot (.) or an empty string if no dot is found
+   */
   public static String getExtension(String name) {
-    int index = name.indexOf(dotSign);
+    int index = name.lastIndexOf(dotSign);
+    if (index == -1) return "";
     String extension = name.substring(index + 1, name.length());
     return extension;
-  }
-
-  public static String getFileName(String name) {
-    int index = name.indexOf(dotSign);
-    String fileName = name.substring(0, index);
-    return fileName;
   }
 
   private static String getDateFormat() {
@@ -118,7 +155,12 @@ public class PhotoUtils {
     return dateFormat;
   }
 
-  public static String getDateFromString(String value) {
+  /**
+   * Creates a date with format dd/MM/yyyy hh:mm from the given timestamp
+   * @param value the time, as a String
+   * @return the date, as a String
+   */
+  public static String getDateFromTime(String value) {
     String dateFormat = null;
     if (value != null) {
       long minus = Long.valueOf(value);
@@ -129,23 +171,29 @@ public class PhotoUtils {
     return dateFormat;
   }
 
+  /**
+   * Name the image captured when posting an activity<br/>
+   * {@link PhotoUtils.MOBILE_IMAGE} + date + .jpg
+   * 
+   * @return the name
+   */
   public static String getImageFileName() {
     StringBuffer buffer = new StringBuffer();
     buffer.append(MOBILE_IMAGE);
     buffer.append(getDateFormat());
-    buffer.append(".png");
+    buffer.append(".jpg");
     return buffer.toString();
   }
 
   public static Bitmap shrinkBitmap(String file, int width, int height) {
-
+    
     BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
     bmpFactoryOptions.inJustDecodeBounds = true;
     Bitmap bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
-
+    
     int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float) height);
     int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth / (float) width);
-
+    
     if (heightRatio > 1 || widthRatio > 1) {
       if (heightRatio > widthRatio) {
         bmpFactoryOptions.inSampleSize = heightRatio;
@@ -154,8 +202,19 @@ public class PhotoUtils {
       }
     }
 
+    if ("image/jpeg".equalsIgnoreCase(bmpFactoryOptions.outMimeType)) {
+      bmpFactoryOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+      bmpFactoryOptions.inDither = true;
+    } else {
+      bmpFactoryOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
+    }
     bmpFactoryOptions.inJustDecodeBounds = false;
+    
+    CrashUtils.setShrinkInfo(bmpFactoryOptions);
+    
     bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
+    
+    CrashUtils.setShrinkInfo(null);
     return bitmap;
   }
 
@@ -172,6 +231,8 @@ public class PhotoUtils {
       float scaleWidth = ((float) newW) / width;
 
       float scaleHeight = scaleWidth;
+      
+      CrashUtils.setResizeInfo(originalImage.getByteCount());
 
       Matrix matrix = new Matrix();
 
@@ -180,12 +241,11 @@ public class PhotoUtils {
       resizedBitmap = Bitmap.createBitmap(originalImage,
                                           0,
                                           0,
-
                                           width,
                                           height,
                                           matrix,
                                           true);
-
+      CrashUtils.setResizeInfo(-1);
     } else
       return originalImage;
     return resizedBitmap;
@@ -198,8 +258,15 @@ public class PhotoUtils {
       Bitmap bitmap = shrinkBitmap(file.getPath(), IMAGE_WIDTH, IMAGE_HEIGH);
       bitmap = ExoDocumentUtils.rotateBitmapToNormal(file.getAbsolutePath(), bitmap);
       ByteArrayOutputStream output = new ByteArrayOutputStream();
-      bitmap.compress(CompressFormat.PNG, IMAGE_QUALITY, output);
-      File tempFile = new File(parentPath + TEMP_FILE_NAME);
+      String ext = getExtension(file.getName());
+      if ("jpg".equalsIgnoreCase(ext) || "jpeg".equalsIgnoreCase(ext)) {
+        bitmap.compress(CompressFormat.JPEG, IMAGE_QUALITY, output);
+        ext = "." + ext;
+      } else {
+        bitmap.compress(CompressFormat.PNG, IMAGE_QUALITY, output);
+        ext = ".png";
+      }
+      File tempFile = new File(parentPath + TEMP_FILE_NAME + ext);
       FileOutputStream out = new FileOutputStream(tempFile);
       output.writeTo(out);
       return tempFile;

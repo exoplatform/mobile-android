@@ -26,7 +26,10 @@ import android.view.Window;
 import android.widget.TextView;
 
 public class WaitingDialog extends Dialog {
-  private TextView contentView;
+  
+  private boolean mIsAttachedToWindow;
+  
+  private TextView mContentView;
 
   public WaitingDialog(Context context, String titleString, String contentString) {
     super(context);
@@ -36,8 +39,24 @@ public class WaitingDialog extends Dialog {
       setTitle(titleString);
     }
     setContentView(R.layout.waiting_dialog_layout);
-    contentView = (TextView) findViewById(R.id.waiting_content);
-    contentView.setText(contentString);
+    mContentView = (TextView) findViewById(R.id.waiting_content);
+    mContentView.setText(contentString);
+  }
+  
+  public boolean isAttachedToWindow() {
+    return mIsAttachedToWindow;
+  }
+
+  @Override
+  public void onDetachedFromWindow() {
+    mIsAttachedToWindow = false;
+    super.onDetachedFromWindow();
+  }
+  
+  @Override
+  public void onAttachedToWindow() {
+    mIsAttachedToWindow = true;
+    super.onAttachedToWindow();
   }
 
   @Override
@@ -47,6 +66,6 @@ public class WaitingDialog extends Dialog {
   }
 
   public void setMessage(String message) {
-    contentView.setText(message);
+    mContentView.setText(message);
   }
 }

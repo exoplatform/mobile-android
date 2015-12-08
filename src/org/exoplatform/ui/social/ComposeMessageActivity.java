@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import com.squareup.picasso.Picasso;
+
 import org.exoplatform.R;
 import org.exoplatform.controller.social.ComposeMessageController;
 import org.exoplatform.model.SocialSpaceInfo;
@@ -32,19 +34,19 @@ import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.utils.SettingUtils;
 import org.exoplatform.widget.AddPhotoDialog;
 import org.exoplatform.widget.PostWaitingDialog;
+import org.exoplatform.widget.RectangleImageView;
 import org.exoplatform.widget.RemoveAttachedPhotoDialog;
-import org.exoplatform.widget.RetangleImageView;
-
-import com.squareup.picasso.Picasso;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -59,20 +61,19 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class ComposeMessageActivity extends Activity implements View.OnClickListener {
+public class ComposeMessageActivity extends Activity implements View.OnClickListener, OnRequestPermissionsResultCallback {
 
   private PostWaitingDialog            _progressDialog;
 
-  private int                          composeType;
+  private int                          composeType             = -1;
 
   private EditText                     composeEditText;
 
   private ScrollView                   textFieldScrollView;
 
-  private static LinearLayout          fileAttachWrap;
-
-  private LinearLayout                 postDestinationWrapper;
+  private LinearLayout                 fileAttachWrap;
 
   private TextView                     postDestinationView;
 
@@ -98,40 +99,62 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
 
   private String                       sdcard_temp_dir         = null;
 
-  private int                          currentPosition;
+  private int                          currentPosition         = -1;
 
   private static final String          TAG                     = "eXo____ComposeMessageActivity____";
 
   private static final int             SELECT_POST_DESTINATION = 10;
+  
+  private final String KEY_COMPOSE_TYPE                        = "COMPOSE_TYPE";
+  
+  private final String KEY_CURRENT_POSITION                    = "CURRENT_POSITION";
+  
+  private final String KEY_TEMP_IMAGE                          = "TEMP_IMAGE";
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.compose_message_layout);
     changeLanguage();
+    initLayout();
     composeMessageActivity = this;
-    if (savedInstanceState != null)
-      finish();
-    else {
-      composeType = getIntent().getIntExtra(ExoConstants.COMPOSE_TYPE, composeType);
-      if (composeType == ExoConstants.COMPOSE_POST_TYPE) {
-        setTitle(statusUpdate);
-      } else {
-        currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, currentPosition);
-        setTitle(comment);
+    if (savedInstanceState != null) {
+      composeType = savedInstanceState.getInt(KEY_COMPOSE_TYPE);
+      currentPosition = savedInstanceState.getInt(KEY_CURRENT_POSITION);
+      String tmpImage = savedInstanceState.getString(KEY_TEMP_IMAGE, null);
+      if (tmpImage != null) {
+        addImageToMessage(new File(tmpImage));
       }
-      initComponents();
+    } else {
+      composeType = getIntent().getIntExtra(ExoConstants.COMPOSE_TYPE, composeType);
+      if (composeType == ExoConstants.COMPOSE_COMMENT_TYPE) {
+        currentPosition = getIntent().getIntExtra(ExoConstants.ACTIVITY_CURRENT_POSITION, currentPosition);
+      }
+    }
+    setActivityTitle(composeType);
+    messageController = new ComposeMessageController(this, composeType, _progressDialog);
+    if (composeType == ExoConstants.COMPOSE_COMMENT_TYPE) {
+      ((LinearLayout) postDestinationView.getParent()).setVisibility(View.GONE);
     }
   }
+  
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    outState.putInt(KEY_COMPOSE_TYPE, composeType);
+    outState.putInt(KEY_CURRENT_POSITION, currentPosition);
+    outState.putString(KEY_TEMP_IMAGE, sdcard_temp_dir);
+    super.onSaveInstanceState(outState);
+  }
+  
+  @Override
+  protected void onDestroy() {
+    composeMessageActivity = null;
+    super.onDestroy();
+  }
 
-  private void initComponents() {
-    messageController = new ComposeMessageController(this, composeType, _progressDialog);
+  private void initLayout() {
     postDestinationView = (TextView) findViewById(R.id.post_destination_text_view);
     postDestinationIcon = (ImageView) findViewById(R.id.post_destination_image);
-    postDestinationWrapper = (LinearLayout) postDestinationView.getParent();
-    if (composeType == ExoConstants.COMPOSE_COMMENT_TYPE) {
-      postDestinationWrapper.setVisibility(View.GONE);
-    }
     composeEditText = (EditText) findViewById(R.id.compose_text_view);
     textFieldScrollView = (ScrollView) findViewById(R.id.compose_textfield_scroll);
     textFieldScrollView.setOnTouchListener(new View.OnTouchListener() {
@@ -152,7 +175,14 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
     cancelButton = (Button) findViewById(R.id.compose_cancel_button);
     cancelButton.setText(cancelText);
     cancelButton.setOnClickListener(this);
-
+  }
+  
+  private void setActivityTitle(int compType) {
+    if (compType == ExoConstants.COMPOSE_POST_TYPE) {
+      setTitle(statusUpdate);
+    } else {
+      setTitle(comment);
+    }
   }
 
   @Override
@@ -185,13 +215,42 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
     }
     return true;
   }
+  
+
+  @SuppressLint("Override")
+  @Override
+  public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
+    if (results.length > 0
+        && results[0] == PackageManager.PERMISSION_GRANTED) {  
+        // permission granted
+      switch (reqCode) {
+      case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
+        messageController.initCamera();
+        break;
+      case ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY:
+        PhotoUtils.pickPhotoForActivity(this);
+        break;
+      default:
+        break;
+      }
+    } else {
+        // permission denied
+      if (ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY) ||
+          ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA) ) {
+        PhotoUtils.alertNeedStoragePermission(this);
+      } else {
+        Toast.makeText(this, R.string.PermissionStorageDeniedToast, Toast.LENGTH_LONG).show();
+      }
+    }
+    return;
+  }
 
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     super.onActivityResult(requestCode, resultCode, intent);
     if (resultCode == RESULT_OK) {
       switch (requestCode) {
       // Add image after capturing photo from camera
-      case ExoConstants.TAKE_PICTURE_WITH_CAMERA:
+      case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
         String sdcard_dir = messageController.getSdCardTempDir();
         File file = new File(sdcard_dir);
         addImageToMessage(file);
@@ -199,7 +258,7 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
 
       // Get the pick image action result from native photo album and send
       // it to SelectedImageActivity class
-      case ExoConstants.REQUEST_ADD_PHOTO:
+      case ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY:
         Intent intent2 = new Intent(this, SelectedImageActivity.class);
         Uri uri = intent.getData();
         intent.putExtra(ExoConstants.SELECTED_IMAGE_MODE, 2);
@@ -249,7 +308,7 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
       bitmap = PhotoUtils.resizeImageBitmap(composeMessageActivity, bitmap);
       bitmap = ExoDocumentUtils.rotateBitmapToNormal(filePath, bitmap);
 
-      RetangleImageView image = new RetangleImageView(composeMessageActivity);
+      RectangleImageView image = new RectangleImageView(composeMessageActivity);
       image.setPadding(1, 1, 1, 1);
       image.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
       image.setImageBitmap(bitmap);
@@ -271,8 +330,8 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
         }
       });
       LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-      fileAttachWrap.removeAllViews();
-      fileAttachWrap.addView(image, params);
+      composeMessageActivity.fileAttachWrap.removeAllViews();
+      composeMessageActivity.fileAttachWrap.addView(image, params);
     } catch (IOException e) {
       if (Log.LOGD)
         Log.e(TAG, "Error when adding image to message", e);
@@ -280,8 +339,10 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
   }
 
   public static void removeImageFromMessage() {
-    fileAttachWrap.removeAllViews();
-    composeMessageActivity.sdcard_temp_dir = null;
+    if (composeMessageActivity != null) {
+      composeMessageActivity.fileAttachWrap.removeAllViews();
+      composeMessageActivity.sdcard_temp_dir = null;
+    }
   }
 
   @Override
