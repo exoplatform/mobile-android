@@ -262,9 +262,9 @@
   <string name="ShareErrorSignInFailed">La connexion a échoué, veuillez recommencer</string>
   <string name="ShareErrorSomeFilesCannotShare">Certains documents ne peuvent pas être partagés</string>
   <string name="ShareErrorAllFilesCannotShare">Tous les documents ne peuvent pas être partagés</string>
-  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\nTo allow it, open the App Settings and enable the Storage permission.</string>
-  <string name="ShareErrorDialogLeave">Leave</string>
-  <string name="ShareErrorDialogAppSettings">Open App Settings</string>
+  <string name="ShareErrorStoragePermissionDenied">Le partage doit s\'interrompre parce que l\'accès au stockage est interdit pour cette application.\\nPour l\'autoriser, ouvrez les Réglages et activez l\'autorisation de stockage.</string>
+  <string name="ShareErrorDialogLeave">Quitter</string>
+  <string name="ShareErrorDialogAppSettings">Ouvrez les Réglages de l\'Application</string>
   
   <!-- Documents -->
   <string name="DeleteConfirmFolderTitle">Suppression du dossier</string>
@@ -278,6 +278,6 @@
   <string name="RefreshTitle">Actualiser</string>
   
   <!-- Permission Requests -->
-  <string name="PermissionStorageRationale">The Storage access permission is needed to capture a photo or pick an image.</string>
-  <string name="PermissionStorageDeniedToast">Operation stopped: Storage permission denied</string>
+  <string name="PermissionStorageRationale">L\'autorisation d\'accès de stockage est nécessaire pour capturer une photo ou de choisir une image.</string>
+  <string name="PermissionStorageDeniedToast">Opération interrompue : autorisation de stockage refusée</string>
 </resources>
