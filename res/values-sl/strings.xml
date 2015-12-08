@@ -262,7 +262,11 @@
   <string name="ShareErrorSignInFailed">Prijava ni uspela, poskusite znova</string>
   <string name="ShareErrorSomeFilesCannotShare">Skupna raba nekaterih dokumentov ni mogoča</string>
   <string name="ShareErrorAllFilesCannotShare">Ni mogoča skupna raba vseh dokumentov</string>
+  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorDialogLeave">Leave</string>
+  <string name="ShareErrorDialogAppSettings">Open App Settings</string>
   
+  <!-- Documents -->
   <string name="DeleteConfirmFolderTitle">Izbriši mapo</string>
   <string name="DeleteConfirmFileTitle">Izbriši datoteko</string>
   <string name="DeleteConfirmMessage">Ali ste prepričani, da želite izbrisati %1$s \"%2$s\" ?</string>
@@ -272,4 +276,8 @@
   <!-- Action Bar -->
   <string name="SignOutTitle">Izpis</string>
   <string name="RefreshTitle">Osveži</string>
+  
+  <!-- Permission Requests -->
+  <string name="PermissionStorageRationale">The Storage access permission is needed to capture a photo or pick an image.</string>
+  <string name="PermissionStorageDeniedToast">Operation stopped: Storage permission denied</string>
 </resources>
