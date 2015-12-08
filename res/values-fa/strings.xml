@@ -262,7 +262,11 @@
   <string name="ShareErrorSignInFailed">Login failed, please try again</string>
   <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
   <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
+  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorDialogLeave">Leave</string>
+  <string name="ShareErrorDialogAppSettings">Open App Settings</string>
   
+  <!-- Documents -->
   <string name="DeleteConfirmFolderTitle">Delete folder</string>
   <string name="DeleteConfirmFileTitle">Delete file</string>
   <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
@@ -272,4 +276,8 @@
   <!-- Action Bar -->
   <string name="SignOutTitle">Sign Out</string>
   <string name="RefreshTitle">تازه سازی</string>
+  
+  <!-- Permission Requests -->
+  <string name="PermissionStorageRationale">The Storage access permission is needed to capture a photo or pick an image.</string>
+  <string name="PermissionStorageDeniedToast">Operation stopped: Storage permission denied</string>
 </resources>
