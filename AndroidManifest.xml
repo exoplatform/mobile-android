@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1511271548" android:versionName="2.9-SNAPSHOT" package="org.exoplatform">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="20" android:versionName="2.9" package="org.exoplatform">
     <supports-screens android:smallScreens="false"/>
 
     <!-- Dangerous Permissions -->
@@ -17,7 +17,7 @@
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22"/>
 
     <!-- Application Information -->
-    <application android:allowBackup="true" android:icon="@drawable/application_icon" android:label="eXo" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
+    <application android:debuggable="false" android:allowBackup="true" android:icon="@drawable/application_icon" android:label="eXo" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
 
         <!-- First Activity of the Application -->
         <activity android:name=".ui.LaunchActivity" android:theme="@android:style/Theme.Holo.Light.NoActionBar">
