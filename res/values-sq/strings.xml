@@ -262,7 +262,11 @@
   <string name="ShareErrorSignInFailed">crwdns6824554:0crwdne6824554:0</string>
   <string name="ShareErrorSomeFilesCannotShare">crwdns6824555:0crwdne6824555:0</string>
   <string name="ShareErrorAllFilesCannotShare">crwdns6824556:0crwdne6824556:0</string>
+  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorDialogLeave">Leave</string>
+  <string name="ShareErrorDialogAppSettings">Open App Settings</string>
   
+  <!-- Documents -->
   <string name="DeleteConfirmFolderTitle">crwdns6824557:0crwdne6824557:0</string>
   <string name="DeleteConfirmFileTitle">crwdns6824558:0crwdne6824558:0</string>
   <string name="DeleteConfirmMessage">crwdns6824559:0%1$scrwdnd6824559:0%2$scrwdne6824559:0</string>
@@ -272,4 +276,8 @@
   <!-- Action Bar -->
   <string name="SignOutTitle">crwdns6824998:0crwdne6824998:0</string>
   <string name="RefreshTitle">crwdns6824999:0crwdne6824999:0</string>
+  
+  <!-- Permission Requests -->
+  <string name="PermissionStorageRationale">The Storage access permission is needed to capture a photo or pick an image.</string>
+  <string name="PermissionStorageDeniedToast">Operation stopped: Storage permission denied</string>
 </resources>
