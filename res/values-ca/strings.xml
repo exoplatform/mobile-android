@@ -262,8 +262,8 @@
   <string name="ShareErrorSignInFailed">L\'inici de sessió ha fallat, si us plau provi una altra vegada</string>
   <string name="ShareErrorSomeFilesCannotShare">Alguns documents no poden ser compartits</string>
   <string name="ShareErrorAllFilesCannotShare">No es poden compartir tots els documents</string>
-  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\nTo allow it, open the App Settings and enable the Storage permission.</string>
-  <string name="ShareErrorDialogLeave">Leave</string>
+  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorDialogLeave">Deixa</string>
   <string name="ShareErrorDialogAppSettings">Open App Settings</string>
   
   <!-- Documents -->
