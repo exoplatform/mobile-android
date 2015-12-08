@@ -262,7 +262,11 @@
   <string name="ShareErrorSignInFailed">L\'inici de sessió ha fallat, si us plau provi una altra vegada</string>
   <string name="ShareErrorSomeFilesCannotShare">Alguns documents no poden ser compartits</string>
   <string name="ShareErrorAllFilesCannotShare">No es poden compartir tots els documents</string>
+  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorDialogLeave">Leave</string>
+  <string name="ShareErrorDialogAppSettings">Open App Settings</string>
   
+  <!-- Documents -->
   <string name="DeleteConfirmFolderTitle">Suprimeix la carpeta</string>
   <string name="DeleteConfirmFileTitle">Suprimeix el fitxer</string>
   <string name="DeleteConfirmMessage">Està segur de voler suprimir aquesta %1$s %2$s ?</string>
@@ -272,4 +276,8 @@
   <!-- Action Bar -->
   <string name="SignOutTitle">Tanca la sessió</string>
   <string name="RefreshTitle">Recarrega</string>
+  
+  <!-- Permission Requests -->
+  <string name="PermissionStorageRationale">The Storage access permission is needed to capture a photo or pick an image.</string>
+  <string name="PermissionStorageDeniedToast">Operation stopped: Storage permission denied</string>
 </resources>
