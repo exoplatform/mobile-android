@@ -35,7 +35,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -80,6 +82,16 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
 
     mPassTxt = (EditText) findViewById(R.id.signin_edit_txt_pass);
     mPassTxt.addTextChangedListener(_onEmailOrPasswordChanged);
+    mPassTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+      @Override
+      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+          mLoginBtn.performClick();
+          return true;
+        }
+        return false;
+      }
+    });
     if (type != null)
       AssetUtils.setTypeFace(type, mPassTxt);
 

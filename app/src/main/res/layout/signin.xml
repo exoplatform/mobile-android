@@ -41,7 +41,8 @@
                 android:hint="@string/Email"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/form_email"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp"
+                android:imeOptions="actionNext"/>
 
         <!-- Edit password -->
         <EditText
@@ -51,7 +52,8 @@
                 android:hint="@string/PasswordHint"
                 android:inputType="textPassword"
                 android:background="@drawable/form_lock"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp"
+                android:imeOptions="actionGo"/>
 
         <!-- Log In button -->
         <Button

@@ -31,15 +31,15 @@
            Configuration Assistant
           -->
         <activity android:name=".ui.WelcomeActivity" android:theme="@android:style/Theme.Holo.Light.NoActionBar"/>
-        <activity android:name=".ui.SignUpActivity" android:parentActivityName=".ui.WelcomeActivity">
+        <activity android:name=".ui.SignUpActivity" android:parentActivityName=".ui.WelcomeActivity" android:windowSoftInputMode="stateVisible">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.WelcomeActivity"/>
         </activity>
-        <activity android:name=".ui.SignInActivity" android:parentActivityName=".ui.WelcomeActivity">
+        <activity android:name=".ui.SignInActivity" android:parentActivityName=".ui.WelcomeActivity" android:windowSoftInputMode="stateVisible">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.WelcomeActivity"/>
         </activity>
-        <activity android:name=".ui.SignInOnPremiseActivity" android:parentActivityName=".ui.SignInActivity">
+        <activity android:name=".ui.SignInOnPremiseActivity" android:parentActivityName=".ui.SignInActivity" android:windowSoftInputMode="stateVisible">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.SignInActivity"/>
         </activity>

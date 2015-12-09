@@ -57,7 +57,8 @@
                 android:hint="@string/YourIntranetHint"
                 android:inputType="textUri"
                 android:background="@drawable/form_link"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp"
+                android:imeOptions="actionNext"/>
 
         <!-- Enter credential text -->
         <TextView
@@ -104,7 +105,8 @@
                 android:hint="@string/UserNameHint"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/form_user"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:imeOptions="actionNext"/>
 
         <!-- Edit password text -->
         <EditText
@@ -114,7 +116,8 @@
                 android:hint="@string/PasswordHint"
                 android:inputType="textPassword"
                 android:background="@drawable/form_lock"
-                android:layout_marginBottom="15dp"/>
+                android:layout_marginBottom="15dp"
+                android:imeOptions="actionGo"/>
 
         <!-- Log In button -->
         <Button
