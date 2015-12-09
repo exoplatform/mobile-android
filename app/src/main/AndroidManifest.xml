@@ -78,7 +78,6 @@
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.HomeActivity"/>
         </activity>
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DocumentActionDialog"/>
         
         <!--
            Gadgets (Apps)

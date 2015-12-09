@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/login_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/login_background_land"
     android:gravity="center"
     android:orientation="horizontal" >
@@ -12,7 +12,7 @@
         android:id="@+id/login_exo_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/margin_xxl"
         android:layout_marginLeft="7dp"
         android:layout_gravity="top"
         android:contentDescription="@string/ImageDesc"
@@ -20,21 +20,22 @@
 
     <RelativeLayout
         android:id="@+id/login_frame"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="10dp" >
 
         <!-- Account panel -->
         <org.exoplatform.ui.login.AccountPanel
             android:id="@+id/login_account_panel"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/login_server_btn"
-            android:layout_marginTop="-4dp"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:layout_marginTop="-5dp"
+            >
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -44,7 +45,7 @@
 
                 <EditText
                     android:id="@+id/EditText_UserName"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_m"
                     android:layout_marginRight="@dimen/margin_m"
@@ -61,7 +62,7 @@
 
                 <EditText
                     android:id="@+id/EditText_Password"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_m"
                     android:layout_marginRight="@dimen/margin_m"
@@ -75,12 +76,13 @@
                     android:textColor="#FFFFFF"
                     android:textColorHint="#AAAAAAAA"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:imeOptions="actionGo"/>
             </LinearLayout>
 
             <Button
                 android:id="@+id/Button_Login"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
@@ -95,20 +97,20 @@
         <!-- Server panel -->
         <org.exoplatform.ui.login.ServerPanel
             android:id="@+id/login_server_panel"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="239dp"
             android:layout_below="@+id/login_server_btn"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="-4dp"
+            android:layout_marginTop="-5dp"
             android:background="@drawable/authenticate_panel_bg"
             android:padding="10dp"
-            android:visibility="gone" >
+            android:visibility="gone"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <ListView
                 android:id="@+id/ListView_Servers"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="30dp"
                 android:layout_marginLeft="@dimen/margin_xxs"
                 android:layout_marginRight="@dimen/margin_xxs"
@@ -122,7 +124,6 @@
             android:id="@+id/login_account_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="-2dp"
             android:layout_marginLeft="60dp"
             android:scaleType="fitCenter"
             android:paddingTop="8dp"
@@ -136,15 +137,14 @@
             android:id="@+id/login_server_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="-2dp"
-            android:layout_marginLeft="-5dp"
             android:scaleType="fitCenter"
             android:paddingTop="8dp"
             android:paddingBottom="5dp"
             android:contentDescription="@string/ImageDesc"
             android:layout_toRightOf="@id/login_account_btn"
-            android:src="@drawable/icon_server"
-            android:background="@drawable/bg_tab" />
+            android:src="@drawable/icon_switcher"
+            android:background="@drawable/bg_tab"
+            />
 
     </RelativeLayout>
 

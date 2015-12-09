@@ -26,10 +26,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * Represents the account panel in login screen that contains 2 edit input and a
@@ -78,6 +81,17 @@ public class AccountPanel extends LinearLayout implements View.OnClickListener {
 
         mLoginBtn = (Button) findViewById(R.id.Button_Login);
         mLoginBtn.setOnClickListener(this);
+
+        mPassEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    mLoginBtn.performClick();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     /**
