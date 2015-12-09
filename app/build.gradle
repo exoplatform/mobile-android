@@ -18,13 +18,14 @@ repositories {
 android {
     signingConfigs {
     }
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
         applicationId "org.exoplatform"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
     }
+    useLibrary 'org.apache.http.legacy'
     lintOptions {
         abortOnError false
     }
@@ -48,7 +49,9 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.3@aar') {
         transitive = true
     }
-    compile 'org.exoplatform.social:social-client-java:1.0.3'
+    compile('org.exoplatform.social:social-client-java:1.0.3') {
+        exclude group: 'org.apache.httpcomponents'
+    }
 
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup:fest-android:1.0.7'
