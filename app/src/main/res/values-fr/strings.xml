@@ -262,7 +262,7 @@
   <string name="ShareErrorSignInFailed">La connexion a échoué, veuillez recommencer</string>
   <string name="ShareErrorSomeFilesCannotShare">Certains documents ne peuvent pas être partagés</string>
   <string name="ShareErrorAllFilesCannotShare">Tous les documents ne peuvent pas être partagés</string>
-  <string name="ShareErrorStoragePermissionDenied">Le partage doit s\'interrompre parce que l\'accès au stockage est interdit pour cette application.\\nPour l\'autoriser, ouvrez les Réglages et activez l\'autorisation de stockage.</string>
+  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
   <string name="ShareErrorDialogLeave">Quitter</string>
   <string name="ShareErrorDialogAppSettings">Ouvrez les Réglages de l\'Application</string>
   
