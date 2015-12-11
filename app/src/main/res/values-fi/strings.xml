@@ -262,7 +262,7 @@
   <string name="ShareErrorSignInFailed">Login failed, please try again</string>
   <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
   <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
-  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\\\\\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
   <string name="ShareErrorDialogLeave">Leave</string>
   <string name="ShareErrorDialogAppSettings">Open App Settings</string>
   
