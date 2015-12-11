@@ -262,7 +262,7 @@
   <string name="ShareErrorSignInFailed">Prijava ni uspela, poskusite znova</string>
   <string name="ShareErrorSomeFilesCannotShare">Skupna raba nekaterih dokumentov ni mogoča</string>
   <string name="ShareErrorAllFilesCannotShare">Ni mogoča skupna raba vseh dokumentov</string>
-  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorStoragePermissionDenied">Skupno rabo moramo ustaviti, ker je dostop do shrambe tej aplikaciji prepovedan.\\\\\\\\nDa bi jo omogočili, odprite nastavitve aplikacije in omogočite uporabo shrambe.</string>
   <string name="ShareErrorDialogLeave">Zapusti</string>
   <string name="ShareErrorDialogAppSettings">Odprite nastavitve aplikacije</string>
   
