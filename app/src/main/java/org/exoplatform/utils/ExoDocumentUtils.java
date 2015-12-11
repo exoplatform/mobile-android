@@ -258,6 +258,18 @@ public class ExoDocumentUtils {
     return docFileType;
   }
 
+  /**
+   * Returns the mimetype of the document located at the given URL.<br/>
+   * Returns null if the mimetype is unknown (e.g. the URL points to a page).
+   *
+   * @param url the URL to check
+   * @return
+   */
+  public static String mimeTypeFromUrl(String url) {
+    String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+    return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+  }
+
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
     try {
       url = url.replaceAll(" ", "%20");
@@ -751,6 +763,16 @@ public class ExoDocumentUtils {
     return "";
   }
 
+  /**
+   * Get the last path part of the given URL.<br/>
+   * Example:
+   * <ul>
+   *     <li>URL = http://my.server.com/path/to/file.png</li>
+   *     <li>Returns file.png</li>
+   * </ul>
+   * @param url
+   * @return
+   */
   public static String getLastPathComponent(String url) {
 
     int index = url.lastIndexOf("/");

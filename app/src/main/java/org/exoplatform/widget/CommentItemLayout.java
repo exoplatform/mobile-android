@@ -42,7 +42,6 @@ public class CommentItemLayout extends RelativeLayout {
     LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View view = inflate.inflate(R.layout.activitydisplayviewcell, this);
     comAvatarImage = (ImageView) view.findViewById(R.id.imageView_Avatar);
-    // comAvatarImage.setDefaultImageResource(R.drawable.default_avatar);
     comTextViewName = (TextView) view.findViewById(R.id.textView_Name);
     comTextViewMessage = (TextView) view.findViewById(R.id.textView_Message);
     comPostedTime = (TextView) view.findViewById(R.id.textView_Time);

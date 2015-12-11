@@ -108,20 +108,16 @@ public class WebViewActivity extends Activity {
       setJavascript(false);
     }
 
-    // _wvGadget.getSettings().setPluginsEnabled(true);
+    // TODO: plugins should be disabled
     _wvGadget.getSettings().setPluginState(PluginState.ON);
-    // TODO check the deprecated method
     _wvGadget.getSettings().setLoadsImagesAutomatically(true);
-    // _wvGadget.addJavascriptInterface(this, "MainScreen");
-    // TODO check javascript interface annotation
     _wvGadget.getSettings().setBuiltInZoomControls(true);
-    /*
-     * the method for controlling the layout of html. SINGLE_COLUMN moves all
-     * content into one column that is the width of the view.
-     */
+
     if (contentType != null && contentType.startsWith(ExoDocumentUtils.IMAGE_TYPE)) {
+      // Display images fully in the screen by default
       _wvGadget.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
-      _wvGadget.getSettings().setUseWideViewPort(false);
+      _wvGadget.getSettings().setUseWideViewPort(true);
+      _wvGadget.getSettings().setLoadWithOverviewMode(true);
     }
     final Activity activity = this;
 

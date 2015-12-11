@@ -19,14 +19,18 @@
 package org.exoplatform.widget;
 
 import org.exoplatform.ui.WebViewActivity;
+import org.exoplatform.utils.CompatibleFileOpen;
 import org.exoplatform.utils.ExoConstants;
+import org.exoplatform.utils.ExoDocumentUtils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Parcel;
 import android.text.ParcelableSpan;
 import android.text.style.ClickableSpan;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 
 public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
   private String mURL;
@@ -58,14 +62,38 @@ public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
 
   }
 
+  /**
+   * Check if the document should be opened in a webview or not, based on its mimetype.
+   * Open in a WebView if
+   * <ul>
+   * <li>mimetype is unknown (null)</li>
+   * <li>mimetype is image/*</li>
+   * <li>mimetype is text/* except text/rtf</li>
+   * </ul>
+   *
+   * @param mimeType the document's mime type to check
+   * @return
+   */
+  private boolean openInWebView(String mimeType) {
+    return ( mimeType == null ||
+             mimeType.startsWith(ExoDocumentUtils.IMAGE_TYPE) ||
+             (mimeType.startsWith(ExoDocumentUtils.TEXT_TYPE) && !mimeType.equalsIgnoreCase("text/rtf")) );
+  }
+
   @Override
   public void onClick(View widget) {
     Context context = widget.getContext();
-    Intent intent = new Intent(context, WebViewActivity.class);
-    intent.putExtra(ExoConstants.WEB_VIEW_URL, getURL());
-    intent.putExtra(ExoConstants.WEB_VIEW_TITLE, getURL());
-    intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "false");
-    context.startActivity(intent);
+    String mimeType = ExoDocumentUtils.mimeTypeFromUrl(getURL());
+    if (openInWebView(mimeType)) {
+      Intent intent = new Intent(context, WebViewActivity.class);
+      intent.putExtra(ExoConstants.WEB_VIEW_URL, getURL());
+      intent.putExtra(ExoConstants.WEB_VIEW_TITLE, getURL());
+      intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "false");
+      if (mimeType != null) intent.putExtra(ExoConstants.WEB_VIEW_MIME_TYPE, mimeType);
+      context.startActivity(intent);
+    } else {
+      new CompatibleFileOpen(context, mimeType, getURL(), ExoDocumentUtils.getLastPathComponent(getURL()));
+    }
   }
 
   @Override
