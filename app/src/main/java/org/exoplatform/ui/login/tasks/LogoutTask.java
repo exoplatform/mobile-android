@@ -24,38 +24,35 @@ import org.exoplatform.ui.login.LoginProxy;
 import android.os.AsyncTask;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Philippe Aristote
- *          paristote@exoplatform.com
- * May 12, 2014
- * 
- * Logout async task performs Logout action on a background thread
- *   
+ * Created by The eXo Platform SAS Author : Philippe Aristote
+ * paristote@exoplatform.com May 12, 2014 Logout async task performs Logout
+ * action on a background thread
  */
 public class LogoutTask extends AsyncTask<Void, Void, Void> {
 
   private HttpClient httpClient;
-  
+
   /**
-   * Calls getConnectionManager().shutdown() on the given HttpClient, in a background thread
+   * Calls getConnectionManager().shutdown() on the given HttpClient, in a
+   * background thread
+   * 
    * @param _client the HttpClient to shutdown
    */
   public LogoutTask(HttpClient _client) {
     httpClient = _client;
   }
-  
+
   @Override
   protected Void doInBackground(Void... params) {
     httpClient.getConnectionManager().shutdown();
     return null;
   }
-  
+
   @Override
   protected void onPostExecute(Void result) {
     httpClient = null;
     LoginProxy.userIsLoggedIn = false;
     super.onPostExecute(result);
   }
-  
 
 }

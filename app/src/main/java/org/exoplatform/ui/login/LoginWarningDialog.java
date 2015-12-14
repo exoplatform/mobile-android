@@ -32,13 +32,13 @@ import android.widget.TextView;
  */
 public class LoginWarningDialog extends Dialog implements android.view.View.OnClickListener {
 
-  private   TextView    mTitleTxt;
+  private TextView mTitleTxt;
 
-  private   TextView    mMessageTxt;
+  private TextView mMessageTxt;
 
-  protected Button      mBtn;
+  protected Button mBtn;
 
-  private   int         mWindowsAnim = 0;
+  private int      mWindowsAnim = 0;
 
   public LoginWarningDialog(Context context) {
     super(context);
@@ -61,9 +61,9 @@ public class LoginWarningDialog extends Dialog implements android.view.View.OnCl
   }
 
   private void initSubViews() {
-    mTitleTxt   = (TextView) findViewById(R.id.warning_dialog_title_txt);
+    mTitleTxt = (TextView) findViewById(R.id.warning_dialog_title_txt);
     mMessageTxt = (TextView) findViewById(R.id.warning_dialog_message_txt);
-    mBtn        = (Button)   findViewById(R.id.warning_dialog_btn);
+    mBtn = (Button) findViewById(R.id.warning_dialog_btn);
     mBtn.setOnClickListener(this);
   }
 
@@ -89,8 +89,7 @@ public class LoginWarningDialog extends Dialog implements android.view.View.OnCl
 
   @Override
   public void show() {
-    getWindow().getAttributes().windowAnimations = mWindowsAnim != 0
-        ? mWindowsAnim : R.style.Animations_Window;
+    getWindow().getAttributes().windowAnimations = mWindowsAnim != 0 ? mWindowsAnim : R.style.Animations_Window;
     super.show();
   }
 
@@ -98,7 +97,8 @@ public class LoginWarningDialog extends Dialog implements android.view.View.OnCl
     if (view.equals(mBtn)) {
       dismiss();
 
-      if (mViewListener != null) mViewListener.onClickOk(this);
+      if (mViewListener != null)
+        mViewListener.onClickOk(this);
     }
   }
 

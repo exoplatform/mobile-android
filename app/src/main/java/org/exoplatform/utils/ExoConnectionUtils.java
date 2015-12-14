@@ -136,6 +136,7 @@ public class ExoConnectionUtils {
 
   /** eXo cloud workspace url */
   public static final String      EXO_CLOUD_WS_DOMAIN        = "exoplatform.net";
+
   // "wks-acc.exoplatform.org";
   // "netstg.exoplatform.org";
 
@@ -144,55 +145,44 @@ public class ExoConnectionUtils {
 
   public static final String      MARKETO_URL                = "learn.exoplatform.com/index.php/leadCapture/save";
 
-  private static final String     TAG                        = "ExoConnectionUtils";
+  private static final String     TAG                        = ExoConnectionUtils.class.getName();
 
   /**
    * Check mobile network and wireless status
    */
   public static boolean isNetworkAvailableExt(Context paramContext) {
-    ConnectivityManager localConnectivityManager = (ConnectivityManager) paramContext.getSystemService("connectivity");
-    if (localConnectivityManager == null) {
+    ConnectivityManager localConnectivityManager = (ConnectivityManager) paramContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+    if (localConnectivityManager == null)
       return false;
-    }
-    while (true) {
-      //
-      NetworkInfo localNetworkInfo = localConnectivityManager.getActiveNetworkInfo();
-      if ((localNetworkInfo == null) || (localNetworkInfo.getState() != NetworkInfo.State.CONNECTED))
-        return false;
-      if (localNetworkInfo.getType() == 1) {
-        return true;
-      }
-      if (localNetworkInfo.getType() == 0) {
-        return true;
-      }
-      return true;
-    }
+
+    NetworkInfo localNetworkInfo = localConnectivityManager.getActiveNetworkInfo();
+    return !((localNetworkInfo == null) || (localNetworkInfo.getState() != NetworkInfo.State.CONNECTED));
+
   }
 
   // Convert stream to String
   public static String convertStreamToString(InputStream is) {
     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-    StringBuilder sb = new StringBuilder();
 
     String line = null;
     try {
+      StringBuilder sb = new StringBuilder();
       while ((line = reader.readLine()) != null) {
         sb.append(line + "\n");
       }
+      return sb.toString();
     } catch (IOException e) {
       if (Log.LOGD)
         Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
-      return null;
     } finally {
       try {
         is.close();
       } catch (IOException e) {
         if (Log.LOGD)
           Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
-        return null;
       }
     }
-    return sb.toString();
+    return null;
   }
 
   /*
@@ -234,7 +224,7 @@ public class ExoConnectionUtils {
 
   }
 
-  public static final String getUserAgent() {
+  public static String getUserAgent() {
     if (USER_AGENT == null) {
       USER_AGENT = new StringBuilder("eXo/").append(ServerSettingHelper.getInstance().getApplicationVersion())
                                             .append(" (Android)")
@@ -338,8 +328,9 @@ public class ExoConnectionUtils {
         return ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS;
     }
     /* code 202 */// TODO: check CLDINT-1197 if any change to response code
-    else if (statusCode == HttpStatus.SC_ACCEPTED || (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR && message != null
-        && message.startsWith(SIGNUP_MAX_USERS_MSG + email)))
+    else if (statusCode == HttpStatus.SC_ACCEPTED
+        || (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR && message != null && message.startsWith(SIGNUP_MAX_USERS_MSG
+            + email)))
       return ExoConnectionUtils.SIGNUP_MAX_USERS;
 
     if (statusCode != HttpStatus.SC_OK)

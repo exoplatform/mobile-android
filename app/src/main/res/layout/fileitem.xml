@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center" >
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
 
     <ImageView
         android:id="@+id/icon"
@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:paddingBottom="0dip"
-        android:paddingTop="0dip" 
+        android:paddingTop="0dip"
         android:contentDescription="@string/ImageDesc"/>
 
     <RelativeLayout
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginLeft="5dip"
-        android:layout_toRightOf="@id/icon" >
+        android:layout_toRightOf="@id/icon">
 
         <ImageButton
             android:id="@+id/Button_FileAction"
@@ -29,8 +29,9 @@
             android:layout_centerVertical="true"
             android:layout_centerInParent="true"
             android:background="@android:color/transparent"
-            android:src="@drawable/documentdisclosureactionbutton" />
-        
+            android:src="@drawable/documentdisclosureactionbutton"
+            android:contentDescription="@string/File"/>
+
         <TextView
             android:id="@+id/label"
             android:layout_width="fill_parent"
@@ -40,7 +41,7 @@
             android:gravity="center_vertical"
             android:padding="3dp"
             android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
     </RelativeLayout>
 

@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<declare-styleable name="HelloGallery">
-		<attr name="android:galleryItemBackground" />
-	</declare-styleable>
-	<declare-styleable name="LabelView">
-		<attr name="textStr" format="string" />
-		<attr name="textColor" format="color" />
-		<attr name="textSize" format="dimension" />
-	</declare-styleable>
+    <declare-styleable name="HelloGallery">
+        <attr name="android:galleryItemBackground"/>
+    </declare-styleable>
+    <declare-styleable name="LabelView">
+        <attr name="textStr" format="string"/>
+        <attr name="textColor" format="color"/>
+        <attr name="textSize" format="dimension"/>
+    </declare-styleable>
 
-	<!-- Share Extension -->
-	<item name="share_button_type_post" type="attr" />
-	<item name="share_button_type_signin" type="attr" />
-	
 </resources>

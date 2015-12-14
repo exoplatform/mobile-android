@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="#DCDCDCDC">
-    
+
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -18,35 +18,36 @@
         android:textStyle="bold"
         android:text="@string/Account"/>
 
-    <TableLayout style="@style/ServerSettingTableStyle"
-                 android:layout_marginBottom="10dp">
+    <TableLayout
+        style="@style/ServerSettingTableStyle"
+        android:layout_marginBottom="10dp">
 
         <!-- 1st row -->
         <TableRow
-                style="@style/ServerSettingTableFirstRowStyle">
+            style="@style/ServerSettingTableFirstRowStyle">
 
             <TextView
-                    android:id="@+id/server_setting_server_name_txt"
-                    style="@style/ServerSettingTextViewStyle"
-                    android:text="@string/ServerName"/>
+                android:id="@+id/server_setting_server_name_txt"
+                style="@style/ServerSettingTextViewStyle"
+                android:text="@string/ServerName"/>
 
             <EditText
-                    android:id="@+id/server_setting_server_name_edit_txt"
-                    style="@style/ServerSettingEditTextStyle"
-                    android:hint="@string/RequiredHint"/>
+                android:id="@+id/server_setting_server_name_edit_txt"
+                style="@style/ServerSettingEditTextStyle"
+                android:hint="@string/RequiredHint"/>
 
         </TableRow>
 
         <!-- 2nd row -->
         <TableRow
-                style="@style/ServerSettingTableRowStyle">
+            style="@style/ServerSettingTableRowStyle">
 
-        <TextView
+            <TextView
                 android:id="@+id/server_setting_server_url_txt"
                 style="@style/ServerSettingTextViewStyle"
                 android:text="@string/ServerUrl"/>
 
-        <EditText
+            <EditText
                 android:id="@+id/server_setting_server_url_edit_txt"
                 style="@style/ServerSettingEditTextStyle"
                 android:inputType="textUri"
@@ -68,76 +69,77 @@
         android:textStyle="bold"
         android:text="@string/YourCredentials"/>
 
-    <TableLayout style="@style/ServerSettingTableStyle"
-                 android:layout_marginBottom="20dp">
+    <TableLayout
+        style="@style/ServerSettingTableStyle"
+        android:layout_marginBottom="20dp">
 
-    <TableRow
+        <TableRow
             style="@style/ServerSettingTableFirstRowStyle">
 
-        <!-- 3rd row -->
-        <TextView
+            <!-- 3rd row -->
+            <TextView
                 android:id="@+id/server_setting_user_txt"
                 style="@style/ServerSettingTextViewStyle"
                 android:text="@string/UserNameCellTitle"/>
 
-        <EditText
+            <EditText
                 android:id="@+id/server_setting_user_edit_txt"
                 style="@style/ServerSettingEditTextStyle"
                 android:hint="@string/OptionalHint"/>
 
-    </TableRow>
+        </TableRow>
 
-    <TableRow
+        <TableRow
             style="@style/ServerSettingTableRowStyle">
 
-        <!-- 4th row -->
-        <TextView
+            <!-- 4th row -->
+            <TextView
                 android:id="@+id/server_setting_pass_txt"
                 style="@style/ServerSettingTextViewStyle"
                 android:text="@string/PasswordCellTitle"/>
 
-        <EditText
+            <EditText
                 android:id="@+id/server_setting_pass_edit_txt"
                 style="@style/ServerSettingEditTextStyle"
                 android:inputType="textPassword"
                 android:hint="@string/OptionalHint"/>
 
-    </TableRow>
+        </TableRow>
 
     </TableLayout>
 
     <Button
-            android:id="@+id/server_setting_ok_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/OK"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/send_button_background_shape"
-            android:shadowColor="@android:color/black"
-            android:shadowDx="1.0"
-            android:shadowDy="2.0"
-            android:shadowRadius="1.0"/>
+        android:id="@+id/server_setting_ok_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/OK"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/send_button_background_shape"
+        android:shadowColor="@android:color/black"
+        android:shadowDx="1.0"
+        android:shadowDy="2.0"
+        android:shadowRadius="1.0"/>
 
     <Button
-            android:id="@+id/server_setting_delete_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/Delete"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@drawable/cancel_button_background_shape"
-            android:shadowColor="#888888"
-            android:shadowDx="1.0"
-            android:shadowDy="2.0"
-            android:shadowRadius="1.0"
-            android:textColor="#ffffff"/>
+        android:id="@+id/server_setting_delete_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/Delete"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@drawable/cancel_button_background_shape"
+        android:shadowColor="#888888"
+        android:shadowDx="1.0"
+        android:shadowDy="2.0"
+        android:shadowRadius="1.0"
+        android:textColor="#ffffff"/>
 
 </LinearLayout>

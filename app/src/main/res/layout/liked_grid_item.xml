@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="center_horizontal"
-    android:gravity="center_horizontal"
-    android:orientation="vertical" >
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_gravity="center_horizontal"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
 
     <ImageView
         android:id="@+id/liked_avatar"
         android:src="@drawable/default_avatar"
         android:layout_width="@dimen/social_liked_list_item_width"
         android:layout_height="@dimen/social_liked_list_item_height"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:contentDescription="@string/LikedThis"/>
 
     <TextView
         android:id="@+id/liked_name"
@@ -22,6 +23,6 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
         android:textColor="#2D60A2"
-        android:textSize="12sp" />
+        android:textSize="12sp"/>
 
 </LinearLayout>

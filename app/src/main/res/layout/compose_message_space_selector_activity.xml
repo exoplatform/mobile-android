@@ -1,65 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="#DCDCDCDC"
-    android:padding="6dp" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#DCDCDCDC"
+              android:orientation="vertical"
+              android:padding="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/compose_textfield_background"
-        android:orientation="horizontal"
-        android:onClick="selectPublicDestination">
+        android:onClick="selectPublicDestination"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textView1"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/margin_xs"
+            android:paddingRight="@dimen/margin_xxs"
             android:text="@string/PostTo"
-            android:textColor="#888"
-            android:paddingLeft="10dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#888"/>
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_gravity="center_vertical"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:paddingLeft="10dp"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/Public"
-            android:src="@drawable/icon_post_public" />
+            android:paddingLeft="@dimen/margin_xxs"
+            android:paddingRight="@dimen/margin_xxs"
+            android:src="@drawable/icon_post_public"/>
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/margin_xxs"
+            android:paddingRight="@dimen/margin_xxs"
             android:text="@string/Public"
-            android:paddingLeft="10dp"
-            android:textColor="#888"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#888"/>
 
     </LinearLayout>
 
     <ListView
         android:id="@+id/list_spaces"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:background="@drawable/compose_textfield_background"
         android:scrollingCache="false"/>
-    
+
     <TextView
         android:id="@+id/list_spaces_empty_view"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:background="@drawable/compose_textfield_background"
+        android:padding="16dp"
         android:text="@string/NoSpaces"
         android:textColor="#888"
-        android:padding="16dp"
-        android:layout_gravity="center_vertical"
-        android:visibility="gone" />
-    
+        android:visibility="gone"/>
+
 </LinearLayout>

@@ -49,7 +49,7 @@ public class SocialActivityInfo {
   private int                nbComments;
 
   private String             type;
-  
+
   private String             attachImageUrl;
 
   public Map<String, String> templateParams;
@@ -128,7 +128,9 @@ public class SocialActivityInfo {
     return postedTime;
   }
 
-  public long getUpdatedTime() { return updatedTime; }
+  public long getUpdatedTime() {
+    return updatedTime;
+  }
 
   public void setUpdatedTime(long time) {
     updatedTime = time;
@@ -173,6 +175,5 @@ public class SocialActivityInfo {
   public String getAttachedImageUrl() {
     return attachImageUrl;
   }
-  
 
 }

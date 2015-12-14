@@ -49,8 +49,7 @@ public class MyConnectionsFragment extends ActivityStreamFragment {
   }
 
   public static MyConnectionsFragment getInstance() {
-    MyConnectionsFragment fragment = new MyConnectionsFragment();
-    return fragment;
+    return new MyConnectionsFragment();
   }
 
   @Override

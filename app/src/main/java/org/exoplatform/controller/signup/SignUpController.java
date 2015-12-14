@@ -18,7 +18,6 @@
  */
 package org.exoplatform.controller.signup;
 
-
 // this sign up controller will handle the making request and response to
 // the cloud workspace
 
@@ -38,7 +37,6 @@ import org.exoplatform.ui.SignUpActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
 import org.exoplatform.utils.SettingUtils;
-import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.WaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
@@ -47,41 +45,38 @@ import java.io.UnsupportedEncodingException;
 
 public class SignUpController {
 
-  private Context    mContext;
+  private Context             mContext;
 
-  private SignUpActivity mSignUpActivity;
+  private SignUpActivity      mSignUpActivity;
 
-  private String     mEmail;
+  private String              mEmail;
 
-  private SignUpTask mSignUpTask;
+  private SignUpTask          mSignUpTask;
 
   private SignUpWaitingDialog mProgressDialog;
 
-  private Resources mResource;
-
-  private HttpResponse mResponse;
+  private Resources           mResource;
 
   private SignUpWarningDialog mWarningDialog;
 
   /* Sign Up messages */
-  private String signUpMess;
+  private String              signUpMess;
 
-  private String warningTitle;
+  private String              warningTitle;
 
-  private String invalidMess;
+  private String              invalidMess;
 
-  private String wrongEmailDomainMess;
+  private String              wrongEmailDomainMess;
 
-  private String accountExistsMess;
+  private String              accountExistsMess;
 
-  private String maxUsersMess;
+  private String              maxUsersMess;
 
-  private String OkMess;
+  private String              OkMess;
 
-  private String serverNotAvailableMess;
+  private String              serverNotAvailableMess;
 
-  private static final String TAG = "eXoSignUpController";
-
+  private static final String TAG = SignUpController.class.getName();
 
   public SignUpController(SignUpActivity context, String email) {
     mContext = context;
@@ -107,14 +102,14 @@ public class SignUpController {
   }
 
   private void getSignUpMessages() {
-    signUpMess   = mResource.getString(R.string.SigningUp);
+    signUpMess = mResource.getString(R.string.SigningUp);
     warningTitle = mResource.getString(R.string.Warning);
-    invalidMess  = mResource.getString(R.string.InvalidSignUp);
-    OkMess       = mResource.getString(R.string.OK);
+    invalidMess = mResource.getString(R.string.InvalidSignUp);
+    OkMess = mResource.getString(R.string.OK);
 
-    wrongEmailDomainMess   = mResource.getString(R.string.WrongEmailDomain);
-    accountExistsMess      = mResource.getString(R.string.AccountExists);
-    maxUsersMess           = mResource.getString(R.string.MaxUsers);
+    wrongEmailDomainMess = mResource.getString(R.string.WrongEmailDomain);
+    accountExistsMess = mResource.getString(R.string.AccountExists);
+    maxUsersMess = mResource.getString(R.string.MaxUsers);
     serverNotAvailableMess = mResource.getString(R.string.ServerNotAvailable);
   }
 
@@ -130,7 +125,7 @@ public class SignUpController {
     public Integer doInBackground(Void... params) {
 
       try {
-        mResponse = ExoConnectionUtils.makeCloudSignUpRequest(mEmail);
+        HttpResponse mResponse = ExoConnectionUtils.makeCloudSignUpRequest(mEmail);
         // response 400 - invalid format for email address - do not handle
         return ExoConnectionUtils.checkSignUpResponse(mResponse, mEmail);
       } catch (UnsupportedEncodingException e) {
@@ -157,52 +152,51 @@ public class SignUpController {
       };
 
       switch (result) {
-        case ExoConnectionUtils.SIGNUP_INVALID:
-          mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, invalidMess, OkMess);
-          mWarningDialog.getOkButton().setOnClickListener(closeDialog);
-          mWarningDialog.show();
-          break;
-        case ExoConnectionUtils.SIGNUP_WRONG_DOMAIN:
-          mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, wrongEmailDomainMess, OkMess);
-          mWarningDialog.getOkButton().setOnClickListener(closeDialog);
-          mWarningDialog.show();
-          break;
-        case ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS:
-          mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, accountExistsMess, OkMess);
-          mWarningDialog.show();
-          mWarningDialog.getOkButton().setOnClickListener(new Button.OnClickListener() {
+      case ExoConnectionUtils.SIGNUP_INVALID:
+        mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, invalidMess, OkMess);
+        mWarningDialog.getOkButton().setOnClickListener(closeDialog);
+        mWarningDialog.show();
+        break;
+      case ExoConnectionUtils.SIGNUP_WRONG_DOMAIN:
+        mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, wrongEmailDomainMess, OkMess);
+        mWarningDialog.getOkButton().setOnClickListener(closeDialog);
+        mWarningDialog.show();
+        break;
+      case ExoConnectionUtils.SIGNUP_ACCOUNT_EXISTS:
+        mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, accountExistsMess, OkMess);
+        mWarningDialog.show();
+        mWarningDialog.getOkButton().setOnClickListener(new Button.OnClickListener() {
 
-            public void onClick(View view) {
-              mWarningDialog.dismiss();
-              // fires up activity for log in screen
-              Intent next = new Intent(mContext, SignInActivity.class);
-              next.putExtra(ExoConstants.EXO_EMAIL, mEmail);
-              mContext.startActivity(next);
-            }
-          });
-          break;
-        case ExoConnectionUtils.SIGNUP_SERVER_NAV:
-          mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, serverNotAvailableMess, OkMess);
-          mWarningDialog.getOkButton().setOnClickListener(closeDialog);
-          mWarningDialog.show();
-          break;
-        case ExoConnectionUtils.SIGNUP_MAX_USERS:
-          mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, maxUsersMess, OkMess);
-          mWarningDialog.getOkButton().setOnClickListener(closeDialog);
-          mWarningDialog.show();
-          new CreatingMarketoTask().execute();
-          break;
-        case ExoConnectionUtils.SIGNUP_OK:
-          // swipe view to account creation in progress
-          mSignUpActivity.flipToGreetingsPanel();
-          new CreatingMarketoTask().execute();
-          break;
+          public void onClick(View view) {
+            mWarningDialog.dismiss();
+            // fires up activity for log in screen
+            Intent next = new Intent(mContext, SignInActivity.class);
+            next.putExtra(ExoConstants.EXO_EMAIL, mEmail);
+            mContext.startActivity(next);
+          }
+        });
+        break;
+      case ExoConnectionUtils.SIGNUP_SERVER_NAV:
+        mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, serverNotAvailableMess, OkMess);
+        mWarningDialog.getOkButton().setOnClickListener(closeDialog);
+        mWarningDialog.show();
+        break;
+      case ExoConnectionUtils.SIGNUP_MAX_USERS:
+        mWarningDialog = new SignUpWarningDialog(mContext, warningTitle, maxUsersMess, OkMess);
+        mWarningDialog.getOkButton().setOnClickListener(closeDialog);
+        mWarningDialog.show();
+        new CreatingMarketoTask().execute();
+        break;
+      case ExoConnectionUtils.SIGNUP_OK:
+        // swipe view to account creation in progress
+        mSignUpActivity.flipToGreetingsPanel();
+        new CreatingMarketoTask().execute();
+        break;
       }
 
       mProgressDialog.dismiss();
     }
   }
-
 
   public class CreatingMarketoTask extends AsyncTask<Void, Void, Void> {
 
@@ -214,7 +208,8 @@ public class SignUpController {
         int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode == HttpStatus.SC_MOVED_TEMPORARILY || statusCode == HttpStatus.SC_OK)
           Log.d(TAG, "creating marketo for " + mEmail + " ok");
-        else Log.d(TAG, "creating marketo fails");
+        else
+          Log.d(TAG, "creating marketo fails");
       } catch (UnsupportedEncodingException e) {
         Log.d(TAG, "UnsupportedEncodingException: " + e.getLocalizedMessage());
       } catch (ClientProtocolException e) {
@@ -231,12 +226,6 @@ public class SignUpController {
 
     public SignUpWaitingDialog(Context context, String titleString, String contentString) {
       super(context, titleString, contentString);
-    }
-
-    @Override
-    public void onBackPressed() {
-      super.onBackPressed();
-      //onCancelLoad();
     }
 
   }

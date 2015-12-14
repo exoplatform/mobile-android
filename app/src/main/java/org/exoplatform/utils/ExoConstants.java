@@ -67,7 +67,7 @@ public class ExoConstants {
   public static final int    NUMBER_OF_ACTIVITY                    = 25;
 
   public static final int    NUMBER_OF_MORE_ACTIVITY               = 25;
-  
+
   public static final int    NUMBER_OF_ACTIVITY_HOME               = 10;
 
   public static final int    NUMBER_OF_LIKES_PARAM                 = 50;

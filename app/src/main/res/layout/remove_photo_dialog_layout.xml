@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="#DCDCDCDC"
-    android:minWidth="200dip"
-    android:orientation="vertical" >
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:background="#DCDCDCDC"
+              android:minWidth="200dip"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="40dip"
         android:background="#4E4E4E"
-        android:gravity="center" >
+        android:gravity="center">
 
         <TextView
             android:id="@+id/remove_photo_dialog_title_view"
@@ -23,7 +23,7 @@
             android:shadowRadius="1.0"
             android:text="@string/AttachedPhoto"
             android:textColor="#FFFFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
     </LinearLayout>
 
     <Button
@@ -37,6 +37,6 @@
         android:shadowDy="2.0"
         android:shadowRadius="1.0"
         android:text="@string/Remove"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"/>
 
 </LinearLayout>

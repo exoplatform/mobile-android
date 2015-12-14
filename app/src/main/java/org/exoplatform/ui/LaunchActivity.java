@@ -35,13 +35,9 @@ import android.os.Bundle;
  */
 public class LaunchActivity extends BaseActivity implements LoginProxy.ProxyListener {
 
-  private static final String TAG = "eXo____LaunchActivity____";
+  private AccountSetting mSetting;
 
-  private AccountSetting      mSetting;
-
-  private LoginProxy          mLoginProxy;
-
-  private Resources           mResources;
+  private Resources      mResources;
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -71,28 +67,27 @@ public class LaunchActivity extends BaseActivity implements LoginProxy.ProxyList
       loginData.putString(LoginProxy.PASSWORD, mSetting.getPassword());
       loginData.putString(LoginProxy.DOMAIN, mSetting.getDomainName());
       loginData.putBoolean(LoginProxy.SHOW_PROGRESS, false);
-      mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EXISTING_ACCOUNT, loginData);
-      mLoginProxy.setListener(this);
+      LoginProxy loginProxy = new LoginProxy(this, LoginProxy.WITH_EXISTING_ACCOUNT, loginData);
+      loginProxy.setListener(this);
 
       /** if some errors raise up, we'll redirect to login screen */
-      mLoginProxy.getWarningDialog()
-                 .setTitle(mResources.getString(R.string.LoginWarningMsg))
-                 .setButtonText(mResources.getString(R.string.RedirectToLogin))
-                 .setViewListener(new LoginWarningDialog.ViewListener() {
-                   @Override
-                   public void onClickOk(LoginWarningDialog dialog) {
-                     /** redirect to login screen */
-                     Intent next = new Intent(LaunchActivity.this, LoginActivity.class);
-                     startActivity(next);
-                     /** don't come back to Launch */
-                     finish();
-                   }
-                 });
+      loginProxy.getWarningDialog()
+                .setTitle(mResources.getString(R.string.LoginWarningMsg))
+                .setButtonText(mResources.getString(R.string.RedirectToLogin))
+                .setViewListener(new LoginWarningDialog.ViewListener() {
+                  @Override
+                  public void onClickOk(LoginWarningDialog dialog) {
+                    /** redirect to login screen */
+                    Intent next = new Intent(LaunchActivity.this, LoginActivity.class);
+                    startActivity(next);
+                    /** don't come back to Launch */
+                    finish();
+                  }
+                });
 
-      mLoginProxy.performLogin();
+      loginProxy.performLogin();
 
       return;
-      // new LoginController(this, username, password);
     }
 
     /** redirect to login screen */

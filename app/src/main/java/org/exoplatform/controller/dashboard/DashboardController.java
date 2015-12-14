@@ -39,7 +39,6 @@ public class DashboardController {
   // Get Dashboards
   public ArrayList<DashboardItem> getDashboards(HttpResponse response) {
 
-   
     InputStream input = ExoConnectionUtils.sendRequest(response);
     ArrayList<DashboardItem> dashboards = new ArrayList<DashboardItem>();
     if (input != null) {

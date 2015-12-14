@@ -25,8 +25,8 @@ import org.exoplatform.ExoApplication;
  */
 public class TestExoApplication extends ExoApplication {
 
-    @Override
-    protected void initCrashlytics() {
-        // Do not initialize Crashlytics during tests
-    }
+  @Override
+  protected void initCrashlytics() {
+    // Do not initialize Crashlytics during tests
+  }
 }

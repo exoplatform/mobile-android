@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" 
-	android:layout_height="fill_parent"
-	android:background="#DCDCDCDC">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#DCDCDCDC">
 
-	<ListView android:id="@+id/dashboard_listview"
-		android:paddingLeft="5dp" android:scrollbarStyle="outsideInset"
-		android:layout_width="fill_parent" android:layout_height="fill_parent" />
-	<ViewStub android:id="@+id/dashboard_empty_stub"
-		android:inflatedId="@+id/dashboard_empty_stub_inflated"
-		android:layout="@layout/empty_screen" android:visibility="gone"
-		android:layout_centerInParent="true" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" />
+    <ListView
+        android:id="@+id/dashboard_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="@dimen/margin_xxs"
+        android:paddingRight="@dimen/margin_xxs"
+        android:scrollbarStyle="outsideInset"/>
+
+    <ViewStub
+        android:id="@+id/dashboard_empty_stub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:inflatedId="@+id/dashboard_empty_stub_inflated"
+        android:layout="@layout/empty_screen"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -34,6 +34,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +49,6 @@ public class DocumentActionAdapter extends BaseAdapter {
   private DocumentActivity                     mDocumentActivity;
 
   private DocumentActionDialog                 _delegate;
-
-  private DocumentActionDescription[]          fileActions = null;
 
   private ArrayList<DocumentActionDescription> fileActionList;
 
@@ -73,12 +72,18 @@ public class DocumentActionAdapter extends BaseAdapter {
   }
 
   public View getView(int position, View convertView, ViewGroup parent) {
-
     final int pos = position;
-    LayoutInflater inflater = (LayoutInflater) mDocumentActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    // TODO use ViewHolder pattern
-    View rowView = inflater.inflate(R.layout.fileactionitem, parent, false);
-    rowView.setOnClickListener(new View.OnClickListener() {
+
+    if (convertView == null) {
+      LayoutInflater inflater = (LayoutInflater) mDocumentActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      convertView = inflater.inflate(R.layout.fileactionitem, parent, false);
+      ViewHolder holder = new ViewHolder();
+      holder.imageView = (ImageView) convertView.findViewById(R.id.icon);
+      holder.textView = (TextView) convertView.findViewById(R.id.label);
+      convertView.setTag(holder);
+    }
+
+    convertView.setOnClickListener(new View.OnClickListener() {
 
       public void onClick(View v) {
 
@@ -133,8 +138,7 @@ public class DocumentActionAdapter extends BaseAdapter {
             public void onClick(DialogInterface dialog, int which) {
               String currentFolder = DocumentActivity._documentActivityInstance._fileForCurrentActionBar.currentFolder;
               if (currentFolder.equalsIgnoreCase(_selectedFile.currentFolder) && _selectedFile.isFolder) {
-                DocumentActivity._documentActivityInstance._fileForCurrentActionBar = 
-                    DocumentHelper.getInstance().folderToParentMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
+                DocumentActivity._documentActivityInstance._fileForCurrentActionBar = DocumentHelper.getInstance().folderToParentMap.getParcelable(DocumentActivity._documentActivityInstance._fileForCurrentActionBar.path);
               }
 
               DocumentActivity._documentActivityInstance.deleteFile(_selectedFile);
@@ -164,47 +168,46 @@ public class DocumentActionAdapter extends BaseAdapter {
 
     });
 
-    bindView(rowView, fileActionList.get(position), position);
-    return (rowView);
+    bindView(convertView, fileActionList.get(position), position);
+    return convertView;
 
   }
 
   private void bindView(View view, DocumentActionDescription fileAction, int position) {
-    TextView label = (TextView) view.findViewById(R.id.label);
+    ViewHolder holder = (ViewHolder) view.getTag();
+    TextView label = holder.textView;
     label.setText(fileAction.actionName);
-    ImageView icon = (ImageView) view.findViewById(R.id.icon);
+    ImageView icon = holder.imageView;
     icon.setImageResource(fileAction.imageID);
+    label.setTextColor(Color.BLACK);
+    view.setEnabled(true);
     /*
      * Disable action view if it can not be removed || position ==
      * DocumentActivity.ACTION_COPY
      */
-    if (!_selectedFile.canRemove && (position == DocumentActivity.ACTION_MOVE || position == DocumentActivity.ACTION_DELETE
-        || position == DocumentActivity.ACTION_RENAME
-        || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path)
-            && "".equals(DocumentHelper.getInstance()._fileMoved.path))))) {
-      label.setTextColor(android.graphics.Color.GRAY);
+    if (!_selectedFile.canRemove
+        && (position == DocumentActivity.ACTION_MOVE || position == DocumentActivity.ACTION_DELETE
+            || position == DocumentActivity.ACTION_RENAME || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path))))) {
+      label.setTextColor(Color.GRAY);
       view.setEnabled(false);
       return;
     }
 
     if (_selectedFile.isFolder) {
       if (position == DocumentActivity.ACTION_OPEN_IN
-          || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path)
-              && "".equals(DocumentHelper.getInstance()._fileMoved.path)))) {
+          || (position == DocumentActivity.ACTION_PASTE && ("".equals(DocumentHelper.getInstance()._fileCopied.path) && "".equals(DocumentHelper.getInstance()._fileMoved.path)))) {
 
-        label.setTextColor(android.graphics.Color.GRAY);
+        label.setTextColor(Color.GRAY);
         view.setEnabled(false);
       }
     } else {
       if (position == DocumentActivity.ACTION_ADD_PHOTO || position == DocumentActivity.ACTION_PASTE
           || position == DocumentActivity.ACTION_RENAME || position == DocumentActivity.ACTION_CREATE) {
 
-        label.setTextColor(android.graphics.Color.GRAY);
+        label.setTextColor(Color.GRAY);
         view.setEnabled(false);
       }
-
     }
-
   }
 
   public long getItemId(int position) {
@@ -235,7 +238,7 @@ public class DocumentActionAdapter extends BaseAdapter {
     String strCreateFolder = resource.getString(R.string.CreateFolder);
     String strOpenIn = resource.getString(R.string.OpenIn);
 
-    fileActions = new DocumentActionDescription[] {
+    DocumentActionDescription[] fileActions = new DocumentActionDescription[] {
         new DocumentActionDescription(strAddAPhoto, R.drawable.documentactionpopupphotoicon),
         new DocumentActionDescription(strCopy, R.drawable.documentactionpopupcopyicon),
         new DocumentActionDescription(strMove, R.drawable.documentactionpopupcuticon),
@@ -258,6 +261,11 @@ public class DocumentActionAdapter extends BaseAdapter {
     for (int i = 0; i < maxChildren; i++) {
       fileActionList.add(fileActions[i]);
     }
+  }
 
+  static class ViewHolder {
+    ImageView imageView;
+
+    TextView  textView;
   }
 }

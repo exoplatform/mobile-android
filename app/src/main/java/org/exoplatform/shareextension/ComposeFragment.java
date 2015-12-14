@@ -56,9 +56,9 @@ public class ComposeFragment extends Fragment {
   private TextView               tvAccount, tvSpace, tvMoreAttachments;
 
   private ImageView              imgThumb;
-  
+
   private Bitmap                 bmThumb;
-  
+
   private int                    nbAttachments;
 
   private ScrollView             scroller;
@@ -120,18 +120,18 @@ public class ComposeFragment extends Fragment {
   }
 
   public void setThumbnailImage(Bitmap bm) {
-	bmThumb = bm;
+    bmThumb = bm;
     if (bm != null) {
       imgThumb.setImageBitmap(bm);
     }
   }
-  
+
   public void setNumberOfAttachments(int nb) {
-	nbAttachments = nb;
-	if (nb > 1) {
-	    tvMoreAttachments.setText("+ " + (nb-1));
-	    tvMoreAttachments.setVisibility(View.VISIBLE);
-	  }
+    nbAttachments = nb;
+    if (nb > 1) {
+      tvMoreAttachments.setText(String.format("+ %d",(nb - 1)));
+      tvMoreAttachments.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override
@@ -169,7 +169,7 @@ public class ComposeFragment extends Fragment {
       getShareActivity().toggleProgressVisible(false);
     ExoAccount selectedAccount = getShareActivity().getPostInfo().ownerAccount;
     if (selectedAccount != null)
-      tvAccount.setText(selectedAccount.accountName + " (" + selectedAccount.username + ")");
+      tvAccount.setText(String.format("%s (%s)", selectedAccount.accountName, selectedAccount.username));
     setThumbnailImage(bmThumb);
     setNumberOfAttachments(nbAttachments);
     super.onResume();

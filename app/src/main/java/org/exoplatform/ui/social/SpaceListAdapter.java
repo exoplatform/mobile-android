@@ -39,61 +39,61 @@ import com.squareup.picasso.Picasso;
  */
 public class SpaceListAdapter extends BaseAdapter {
 
-    private Context               mContext;
+  private Context               mContext;
 
-    private List<SocialSpaceInfo> mSpaceList;
+  private List<SocialSpaceInfo> mSpaceList;
 
-    public SpaceListAdapter(Context ctx) {
-        mContext = ctx;
+  public SpaceListAdapter(Context ctx) {
+    mContext = ctx;
+  }
+
+  public void setSpaceList(List<SocialSpaceInfo> list) {
+    mSpaceList = list;
+  }
+
+  @Override
+  public int getCount() {
+    return mSpaceList == null ? 0 : mSpaceList.size();
+  }
+
+  @Override
+  public Object getItem(int pos) {
+    return mSpaceList == null ? null : mSpaceList.get(pos);
+  }
+
+  @Override
+  public long getItemId(int pos) {
+    return pos;
+  }
+
+  @Override
+  public View getView(int index, View convertView, ViewGroup parent) {
+    ViewHolder holder;
+    if (convertView == null) {
+      LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      convertView = inflater.inflate(R.layout.compose_message_space_item, parent, false);
+      holder = new ViewHolder();
+      holder.spaceName = (TextView) convertView.findViewById(R.id.item_space_name);
+      holder.spaceAvatar = (ImageView) convertView.findViewById(R.id.item_space_avatar);
+      convertView.setTag(holder);
+    } else {
+      holder = (ViewHolder) convertView.getTag();
     }
 
-    public void setSpaceList(List<SocialSpaceInfo> list) {
-        mSpaceList = list;
-    }
+    SocialSpaceInfo space = (SocialSpaceInfo) getItem(index);
+    holder.spaceName.setText(space.displayName);
+    Picasso.with(mContext)
+           .load(space.avatarUrl)
+           .placeholder(R.drawable.icon_space_default)
+           .error(R.drawable.icon_space_default)
+           .into(holder.spaceAvatar);
+    return convertView;
+  }
 
-    @Override
-    public int getCount() {
-        return mSpaceList == null ? 0 : mSpaceList.size();
-    }
+  static class ViewHolder {
+    ImageView spaceAvatar;
 
-    @Override
-    public Object getItem(int pos) {
-        return mSpaceList == null ? null : mSpaceList.get(pos);
-    }
-
-    @Override
-    public long getItemId(int pos) {
-        return pos;
-    }
-
-    @Override
-    public View getView(int index, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.compose_message_space_item, parent, false);
-            holder = new ViewHolder();
-            holder.spaceName = (TextView) convertView.findViewById(R.id.item_space_name);
-            holder.spaceAvatar = (ImageView) convertView.findViewById(R.id.item_space_avatar);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        SocialSpaceInfo space = (SocialSpaceInfo) getItem(index);
-        holder.spaceName.setText(space.displayName);
-        Picasso.with(mContext)
-               .load(space.avatarUrl)
-               .placeholder(R.drawable.icon_space_default)
-               .error(R.drawable.icon_space_default)
-               .into(holder.spaceAvatar);
-        return convertView;
-    }
-
-    static class ViewHolder {
-        ImageView spaceAvatar;
-
-        TextView  spaceName;
-    }
+    TextView  spaceName;
+  }
 
 }

@@ -22,6 +22,7 @@ import org.exoplatform.R;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -38,13 +39,17 @@ public class UnreadableFileDialog extends Dialog implements android.view.View.On
     setContentView(R.layout.warning_dialog_layout);
     TextView titleView = (TextView) findViewById(R.id.warning_dialog_title_view);
     titleView.setText(context.getResources().getString(R.string.UnreachableFileTitle));
-    ImageView imageView = (ImageView) findViewById(R.id.warning_image);
-    imageView.setImageResource(R.drawable.icon_for_unreadable_file);
+    // ImageView imageView = (ImageView) findViewById(R.id.warning_image);
+    // imageView.setImageResource(R.drawable.icon_for_unreadable_file);
     TextView contentView = (TextView) findViewById(R.id.warning_content);
     if (content == null) {
       contentView.setText(context.getResources().getString(R.string.UnreachableFile));
     } else
       contentView.setText(content);
+
+    Drawable icon = context.getResources().getDrawable(R.drawable.icon_for_unreadable_file);
+    icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+    contentView.setCompoundDrawables(null, icon, null, null);
 
     okButton = (Button) findViewById(R.id.warning_ok_button);
     okButton.setOnClickListener(this);

@@ -40,157 +40,145 @@ import android.widget.TextView;
  */
 public class AccountPanel extends LinearLayout implements View.OnClickListener {
 
-    private AccountSetting      mSetting;
+  private AccountSetting     mSetting;
 
-    /** === Components === **/
-    private EditText            mUserEditTxt;
+  /** === Components === **/
+  private EditText           mUserEditTxt;
 
-    private EditText            mPassEditTxt;
+  private EditText           mPassEditTxt;
 
-    private Button              mLoginBtn;
+  private Button             mLoginBtn;
 
-    /** === Constants === **/
-    public static final String  USERNAME = "USERNAME";
+  /** === Constants === **/
+  public static final String USERNAME = "USERNAME";
 
-    public static final String  PASSWORD = "PASSWORD";
+  public static final String PASSWORD = "PASSWORD";
 
-    private static final String TAG      = "eXo____AccountPanel____";
+  public AccountPanel(Context context) {
+    super(context);
+  }
 
-    public AccountPanel(Context context) {
-        super(context);
-    }
+  public AccountPanel(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    public AccountPanel(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+  @Override
+  protected void onFinishInflate() {
+    super.onFinishInflate();
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
+    mSetting = AccountSetting.getInstance();
 
-        mSetting = AccountSetting.getInstance();
+    initSubViews();
+  }
 
-        initSubViews();
-    }
+  private void initSubViews() {
+    mUserEditTxt = (EditText) findViewById(R.id.EditText_UserName);
+    mPassEditTxt = (EditText) findViewById(R.id.EditText_Password);
+    mUserEditTxt.addTextChangedListener(mOnEditCredentials);
+    mPassEditTxt.addTextChangedListener(mOnEditCredentials);
 
-    private void initSubViews() {
-        mUserEditTxt = (EditText) findViewById(R.id.EditText_UserName);
-        mPassEditTxt = (EditText) findViewById(R.id.EditText_Password);
-        mUserEditTxt.addTextChangedListener(mOnEditCredentials);
-        mPassEditTxt.addTextChangedListener(mOnEditCredentials);
+    mLoginBtn = (Button) findViewById(R.id.Button_Login);
+    mLoginBtn.setOnClickListener(this);
 
-        mLoginBtn = (Button) findViewById(R.id.Button_Login);
-        mLoginBtn.setOnClickListener(this);
-
-        mPassEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    mLoginBtn.performClick();
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    /**
-     * Make this panel visible
-     */
-    public void turnOn() {
-        setVisibility(View.VISIBLE);
-
-        if (mSetting.getCurrentAccount() != null) {
-            // if a server is selected
-            // 1) set username if remember me is enabled otherwise set nothing
-            mUserEditTxt.setText(mSetting.isRememberMeEnabled()
-                    && !mSetting.getUsername().isEmpty() ? mSetting.getUsername() : "");
-            // 2) set password if remember me is enabled otherwise set nothing
-            mPassEditTxt.setText(mSetting.isRememberMeEnabled()
-                    && !mSetting.getPassword().isEmpty() ? mSetting.getPassword() : "");
-            // 3) append the server name to the login button label
-            String to = getResources().getString(R.string.SignInButton_In);
-            String connect = getResources().getString(R.string.SignInButton);
-            String loginButtonLabel = connect + " " + to + " " + mSetting.getServerName();
-            mLoginBtn.setText(loginButtonLabel);
+    mPassEditTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+      @Override
+      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+          mLoginBtn.performClick();
+          return true;
         }
+        return false;
+      }
+    });
+  }
 
-        changeStateOfLoginBtn();
+  /**
+   * Make this panel visible
+   */
+  public void turnOn() {
+    setVisibility(View.VISIBLE);
+
+    if (mSetting.getCurrentAccount() != null) {
+      // if a server is selected
+      // 1) set username if remember me is enabled otherwise set nothing
+      mUserEditTxt.setText(mSetting.isRememberMeEnabled() && !mSetting.getUsername().isEmpty() ? mSetting.getUsername() : "");
+      // 2) set password if remember me is enabled otherwise set nothing
+      mPassEditTxt.setText(mSetting.isRememberMeEnabled() && !mSetting.getPassword().isEmpty() ? mSetting.getPassword() : "");
+      // 3) append the server name to the login button label
+      String to = getResources().getString(R.string.SignInButton_In);
+      String connect = getResources().getString(R.string.SignInButton);
+      String loginButtonLabel = connect + " " + to + " " + mSetting.getServerName();
+      mLoginBtn.setText(loginButtonLabel);
     }
 
-    /**
-     * Make this panel invisible
-     */
-    public void turnOff() {
-        setVisibility(View.INVISIBLE);
+    changeStateOfLoginBtn();
+  }
+
+  /**
+   * Make this panel invisible
+   */
+  public void turnOff() {
+    setVisibility(View.INVISIBLE);
+  }
+
+  public void onSaveState(Bundle saveState) {
+    saveState.putString(USERNAME, mUserEditTxt.getText().toString());
+    saveState.putString(PASSWORD, mPassEditTxt.getText().toString());
+  }
+
+  public void onRestoreState(Bundle saveState) {
+    mUserEditTxt.setText(saveState.getString(USERNAME));
+    mPassEditTxt.setText(saveState.getString(PASSWORD));
+  }
+
+  public void onChangeLanguage() {
+    mUserEditTxt.setHint(getResources().getString(R.string.UserNameCellTitle));
+    mPassEditTxt.setHint(getResources().getString(R.string.PasswordCellTitle));
+    mLoginBtn.setText(getResources().getString(R.string.SignInButton));
+  }
+
+  /**
+   * Listens for login click Forward click event to controller
+   * 
+   * @param view
+   */
+  @Override
+  public void onClick(View view) {
+
+    if (view.equals(mLoginBtn)) {
+      mViewListener.onClickLogin(mUserEditTxt.getText().toString(), mPassEditTxt.getText().toString());
     }
 
-    public void onSaveState(Bundle saveState) {
-        saveState.putString(USERNAME, mUserEditTxt.getText().toString());
-        saveState.putString(PASSWORD, mPassEditTxt.getText().toString());
-    }
+  }
 
-    public void onRestoreState(Bundle saveState) {
-        mUserEditTxt.setText(saveState.getString(USERNAME));
-        mPassEditTxt.setText(saveState.getString(PASSWORD));
-    }
+  private void changeStateOfLoginBtn() {
+    boolean isCredentialsEntered = !mUserEditTxt.getText().toString().isEmpty() && !mPassEditTxt.getText().toString().isEmpty();
+    mLoginBtn.setEnabled(isCredentialsEntered);
+  }
 
-    public void onChangeLanguage() {
-        mUserEditTxt.setHint(getResources().getString(R.string.UserNameCellTitle));
-        mPassEditTxt.setHint(getResources().getString(R.string.PasswordCellTitle));
-        mLoginBtn.setText(getResources().getString(R.string.SignInButton));
-    }
+  private TextWatcher  mOnEditCredentials = new TextWatcher() {
+                                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                            }
 
-    /**
-     * Listens for login click Forward click event to controller
-     * 
-     * @param view
-     */
-    @Override
-    public void onClick(View view) {
+                                            public void afterTextChanged(Editable s) {
+                                            }
 
-        if (view.equals(mLoginBtn)) {
-            mViewListener.onClickLogin(mUserEditTxt.getText().toString(), mPassEditTxt.getText()
-                                                                                      .toString());
-        }
+                                            @Override
+                                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                              changeStateOfLoginBtn();
+                                            }
 
-    }
+                                          };
 
-    private void changeStateOfLoginBtn() {
-        boolean isCredentialsEntered = !mUserEditTxt.getText().toString().isEmpty()
-                && !mPassEditTxt.getText().toString().isEmpty();
-        mLoginBtn.setEnabled(isCredentialsEntered);
-    }
+  private ViewListener mViewListener;
 
-    private TextWatcher  mOnEditCredentials = new TextWatcher() {
-                                                public void beforeTextChanged(CharSequence s,
-                                                                              int start,
-                                                                              int count,
-                                                                              int after) {
-                                                }
+  /* interface to listen to view event */
+  public interface ViewListener {
 
-                                                public void afterTextChanged(Editable s) {
-                                                }
+    void onClickLogin(String username, String password);
+  }
 
-                                                @Override
-                                                public void onTextChanged(CharSequence s,
-                                                                          int start,
-                                                                          int before,
-                                                                          int count) {
-                                                    changeStateOfLoginBtn();
-                                                }
-
-                                            };
-
-    private ViewListener mViewListener;
-
-    /* interface to listen to view event */
-    public interface ViewListener {
-
-        void onClickLogin(String username, String password);
-    }
-
-    public void setViewListener(ViewListener l) {
-        mViewListener = l;
-    }
+  public void setViewListener(ViewListener l) {
+    mViewListener = l;
+  }
 }

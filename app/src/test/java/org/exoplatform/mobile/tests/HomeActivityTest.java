@@ -64,9 +64,9 @@ import android.widget.ViewFlipper;
  */
 public class HomeActivityTest extends ExoActivityTestUtils<HomeActivity> {
 
-  ViewFlipper  flipper;
+  ViewFlipper flipper;
 
-  TextView     activitiesTV, documentsTV, appsTV, userNameTV;
+  TextView    activitiesTV, documentsTV, appsTV, userNameTV;
 
   LinearLayout activitiesBtn, documentsBtn, appsBtn;
 

@@ -55,15 +55,16 @@ public class CheckBoxWithImage extends CheckBox {
   }
 
   /**
-   * Behavior is different with normal checkbox, once this view is checked
-   * click on it won't change it to unchecked
+   * Behavior is different with normal checkbox, once this view is checked click
+   * on it won't change it to unchecked
    *
    * @param view
    */
   @Override
   public void onClick(View view) {
     if (view.equals(this)) {
-      if (mChecked) return;
+      if (mChecked)
+        return;
       setChecked(!mChecked, true);
     }
   }

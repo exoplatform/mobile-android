@@ -65,23 +65,23 @@ import android.util.DisplayMetrics;
 
 public class PhotoUtils {
 
-  private static final String   dotSign        = ".";
+  private static final String dotSign        = ".";
 
-  private static final int      IMAGE_WIDTH    = 1024;
+  private static final int    IMAGE_WIDTH    = 1024;
 
-  private static final int      IMAGE_HEIGH    = 860;
+  private static final int    IMAGE_HEIGH    = 860;
 
-  private static final int      IMAGE_QUALITY  = 100;
+  private static final int    IMAGE_QUALITY  = 100;
 
-  private static final String   TEMP_FILE_NAME = "tempfile";
+  private static final String TEMP_FILE_NAME = "tempfile";
 
-  private static final String   MOBILE_IMAGE   = "MobileImage_";
-  
+  private static final String MOBILE_IMAGE   = "MobileImage_";
+
   public static String getParentImagePath(Context context) {
     FileCache cache = new FileCache(context, ExoConstants.DOCUMENT_FILE_CACHE);
     return cache.getCachePath();
   }
-  
+
   /**
    * Take a photo and store it into /sdcard/eXo/DocumentCache
    * 
@@ -91,7 +91,7 @@ public class PhotoUtils {
   public static String startImageCapture(Activity caller) {
     if (caller == null)
       throw new IllegalArgumentException("Activity requesting to capture an image cannot be null");
-    
+
     String imagePath = String.format("%s/%s", getParentImagePath(caller), getImageFileName());
     if (ExoDocumentUtils.didRequestPermission(caller, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA)) {
       return "";
@@ -101,49 +101,49 @@ public class PhotoUtils {
     caller.startActivityForResult(intent, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA);
     return imagePath;
   }
-  
+
   /**
    * Send a pick photo intent on behalf of the given activity.<br/>
-   * The result is passed to the calling activity via onActivityResult with the requestCode  {@link ExoConstants.REQUEST_ADD_PHOTO}.
+   * The result is passed to the calling activity via onActivityResult with the
+   * requestCode {@link ExoConstants#REQUEST_PICK_IMAGE_FROM_GALLERY}.
    * 
    * @param caller the activity requesting a photo
    */
   public static void pickPhotoForActivity(Activity caller) {
     if (caller == null)
       throw new IllegalArgumentException("Activity requesting to pick photo cannot be null");
-    
+
     if (ExoDocumentUtils.didRequestPermission(caller, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY)) {
       return;
     }
-    
-    Intent intent = new Intent(Intent.ACTION_PICK,
-                               android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
     intent.setType(ExoConstants.PHOTO_ALBUM_IMAGE_TYPE);
     caller.startActivityForResult(intent, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY);
   }
-  
+
   /**
-   * 
    * @param ctx
    */
   public static void alertNeedStoragePermission(Context ctx) {
     AlertDialog.Builder db = new AlertDialog.Builder(ctx);
-    db.setMessage(R.string.PermissionStorageRationale)
-      .setPositiveButton(R.string.OK, null);
+    db.setMessage(R.string.PermissionStorageRationale).setPositiveButton(R.string.OK, null);
     AlertDialog dialog = db.create();
     dialog.show();
   }
 
   /**
    * Extract the extension from the given filename
+   * 
    * @param name File's name
-   * @return the part after the last dot (.) or an empty string if no dot is found
+   * @return the part after the last dot (.) or an empty string if no dot is
+   *         found
    */
   public static String getExtension(String name) {
     int index = name.lastIndexOf(dotSign);
-    if (index == -1) return "";
-    String extension = name.substring(index + 1, name.length());
-    return extension;
+    if (index == -1)
+      return "";
+    return name.substring(index + 1, name.length());
   }
 
   private static String getDateFormat() {
@@ -157,6 +157,7 @@ public class PhotoUtils {
 
   /**
    * Creates a date with format dd/MM/yyyy hh:mm from the given timestamp
+   * 
    * @param value the time, as a String
    * @return the date, as a String
    */
@@ -173,7 +174,7 @@ public class PhotoUtils {
 
   /**
    * Name the image captured when posting an activity<br/>
-   * {@link PhotoUtils.MOBILE_IMAGE} + date + .jpg
+   * {@link PhotoUtils#MOBILE_IMAGE} + date + .jpg
    * 
    * @return the name
    */
@@ -186,14 +187,14 @@ public class PhotoUtils {
   }
 
   public static Bitmap shrinkBitmap(String file, int width, int height) {
-    
+
     BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
     bmpFactoryOptions.inJustDecodeBounds = true;
     Bitmap bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
-    
+
     int heightRatio = (int) Math.ceil(bmpFactoryOptions.outHeight / (float) height);
     int widthRatio = (int) Math.ceil(bmpFactoryOptions.outWidth / (float) width);
-    
+
     if (heightRatio > 1 || widthRatio > 1) {
       if (heightRatio > widthRatio) {
         bmpFactoryOptions.inSampleSize = heightRatio;
@@ -209,11 +210,11 @@ public class PhotoUtils {
       bmpFactoryOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
     }
     bmpFactoryOptions.inJustDecodeBounds = false;
-    
+
     CrashUtils.setShrinkInfo(bmpFactoryOptions);
-    
+
     bitmap = BitmapFactory.decodeFile(file, bmpFactoryOptions);
-    
+
     CrashUtils.setShrinkInfo(null);
     return bitmap;
   }
@@ -230,21 +231,13 @@ public class PhotoUtils {
 
       float scaleWidth = ((float) newW) / width;
 
-      float scaleHeight = scaleWidth;
-      
       CrashUtils.setResizeInfo(originalImage.getByteCount());
 
       Matrix matrix = new Matrix();
 
-      matrix.postScale(scaleWidth, scaleHeight);
+      matrix.postScale(scaleWidth, scaleWidth);
 
-      resizedBitmap = Bitmap.createBitmap(originalImage,
-                                          0,
-                                          0,
-                                          width,
-                                          height,
-                                          matrix,
-                                          true);
+      resizedBitmap = Bitmap.createBitmap(originalImage, 0, 0, width, height, matrix, true);
       CrashUtils.setResizeInfo(-1);
     } else
       return originalImage;
@@ -291,12 +284,11 @@ public class PhotoUtils {
       final Paint paint = new Paint();
       final Rect rect = new Rect(0, 0, width, heigth);
       final RectF rectF = new RectF(rect);
-      final float roundPx = pixels;
 
       paint.setAntiAlias(true);
       canvas.drawARGB(0, 0, 0, 0);
       paint.setColor(color);
-      canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+      canvas.drawRoundRect(rectF, (float) pixels, (float) pixels, paint);
       paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
       canvas.drawBitmap(bitmap, rect, rect, paint);
       bitmap.recycle();
@@ -313,7 +305,7 @@ public class PhotoUtils {
    */
   public static String getFileFromUri(Uri uri, Activity activity) {
     String filePath = null;
-    String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */ };
+    String[] projection = { MediaStore.Images.ImageColumns.DATA /* col1 */};
     Cursor c = activity.managedQuery(uri, projection, null, null, null);
     if (c != null && c.moveToFirst()) {
       int columnIndex = c.getColumnIndex(MediaColumns.DATA);

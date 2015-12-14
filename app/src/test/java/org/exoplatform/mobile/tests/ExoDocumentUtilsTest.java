@@ -37,46 +37,42 @@ import org.robolectric.RobolectricTestRunner;
  * paristote@exoplatform.com Apr 17, 2015
  */
 // API LEVEL 21
-@Config(constants = BuildConfig.class, sdk=Build.VERSION_CODES.LOLLIPOP)
+@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricTestRunner.class)
 public class ExoDocumentUtilsTest {
 
-    @Before
-    public void setup() {
+  @Before
+  public void setup() {
+  }
+
+  @After
+  public void teardown() {
+  }
+
+  @Test
+  public void testConvertTechnicalToNaturalNames() {
+
+    final String[] technicalNames = { ".organization.employees", ".spaces.exo_fr", ".spaces.exo_mobile",
+        ".platform.web-contributors", ".platform.users.managers", ".spaces.thu_muc_tieng_viet_100", ".spaces.aađoiec",
+        "Âã-đô-ịẻç", ".élus.députés", ".spaces.my-spaces", ".spaces.spaces-for-admins", "日本語", "عربي عربى", "指事字", "λάμβδα",
+        "אותיות השימוש" };
+
+    final String[] naturalNames = { "Organization Employees", "eXo Fr", "eXo Mobile", "Platform Web Contributors",
+        "Platform Users Managers", "Thu Muc Tieng Viet 100", "Aađoiec", "Âã Đô Ịẻç", "Élus Députés", "My Spaces",
+        "Spaces For Admins", "日本語", "عربي عربى", "指事字", "Λάμβδα", "אותיות השימוש" };
+
+    for (int i = 0; i < technicalNames.length; i++) {
+      String name = technicalNames[i];
+      ExoFile file = new ExoFile();
+      file.name = name;
+      file.createNaturalName();
+      assertEquals("Incorrect technical -> natural name conversion.", naturalNames[i], file.getName());
     }
 
-    @After
-    public void teardown() {
-    }
+  }
 
-    @Test
-    public void testConvertTechnicalToNaturalNames() {
-
-        final String[] technicalNames = { ".organization.employees", ".spaces.exo_fr",
-                ".spaces.exo_mobile", ".platform.web-contributors", ".platform.users.managers",
-                ".spaces.thu_muc_tieng_viet_100", ".spaces.aađoiec", "Âã-đô-ịẻç", ".élus.députés",
-                ".spaces.my-spaces", ".spaces.spaces-for-admins", "日本語", "عربي عربى", "指事字",
-                "λάμβδα", "אותיות השימוש" };
-
-        final String[] naturalNames = { "Organization Employees", "eXo Fr", "eXo Mobile",
-                "Platform Web Contributors", "Platform Users Managers", "Thu Muc Tieng Viet 100",
-                "Aađoiec", "Âã Đô Ịẻç", "Élus Députés", "My Spaces", "Spaces For Admins", "日本語",
-                "عربي عربى", "指事字", "Λάμβδα", "אותיות השימוש" };
-
-        for (int i = 0; i < technicalNames.length; i++) {
-            String name = technicalNames[i];
-            ExoFile file = new ExoFile();
-            file.name = name;
-            file.createNaturalName();
-            assertEquals("Incorrect technical -> natural name conversion.",
-                         naturalNames[i],
-                         file.getName());
-        }
-
-    }
-
-    public void testGetDrivesFromHttpResponse() {
-        // TODO
-        // Test ExoDocumentUtils.getDrives(HttpResponse, boolean)
-    }
+  public void testGetDrivesFromHttpResponse() {
+    // TODO
+    // Test ExoDocumentUtils.getDrives(HttpResponse, boolean)
+  }
 }

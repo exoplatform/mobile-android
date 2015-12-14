@@ -65,8 +65,7 @@ public class MySpacesFragment extends ActivityStreamFragment {
   }
 
   public static MySpacesFragment getInstance() {
-    MySpacesFragment fragment = new MySpacesFragment();
-    return fragment;
+    return new MySpacesFragment();
   }
 
   @Override

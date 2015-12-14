@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="8dp"
-    android:background="#fff">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#fff"
+              android:orientation="horizontal"
+              android:padding="8dp">
 
     <ImageView
         android:id="@+id/item_space_avatar"
@@ -12,17 +12,17 @@
         android:layout_height="48dp"
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/Space"
-        android:src="@drawable/icon_space_default"
-        />
+        android:src="@drawable/icon_space_default"/>
 
     <TextView
         android:id="@+id/item_space_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Space"
         android:layout_gravity="center_vertical"
-        android:textColor="#888"
-        android:paddingLeft="10dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
+        android:paddingLeft="@dimen/margin_xs"
+        android:paddingRight="@dimen/margin_xs"
+        android:text="@string/Space"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#888"/>
+
 </LinearLayout>

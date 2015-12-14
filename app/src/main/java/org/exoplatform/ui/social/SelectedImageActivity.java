@@ -50,41 +50,37 @@ import android.widget.Toast;
 
 public class SelectedImageActivity extends Activity implements OnClickListener, OnRequestPermissionsResultCallback {
 
-  private static final int    SCALE_WIDTH  = 1024;
+  private static final int SCALE_WIDTH  = 1024;
 
-  private static final int    SCALE_HEIGHT = 860;
+  private static final int SCALE_HEIGHT = 860;
 
-  private static final int    SELECT_MODE  = 2;
+  private static final int SELECT_MODE  = 2;
 
-  private static final int    EDIT_MODE    = 1;
+  private static final int EDIT_MODE    = 1;
 
-  private ImageView           imageView;
+  private ImageView        imageView;
 
-  private Button              okButton;
+  private Button           okButton;
 
-  private Button              removeButton;
+  private Button           removeButton;
 
-  private String              filePath     = null;
+  private String           filePath     = null;
 
-  private File                file;
+  private File             file;
 
-  private String              okText;
+  private String           okText;
 
-  private String              removeText;
+  private String           removeText;
 
-  private String              cancelText;
+  private String           cancelText;
 
-  private String              loadingData;
+  private String           loadingData;
 
-  private String              title;
+  private String           title;
 
-  private int                 modeId;
+  private int              modeId;
 
-  private Uri                 mImageUri;
-
-  private DisplayImageTask    mLoadTask;
-
-  private static final String TAG          = "eXo____SelectedImageActivity____";
+  private DisplayImageTask mLoadTask;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -123,17 +119,16 @@ public class SelectedImageActivity extends Activity implements OnClickListener, 
     removeButton.setOnClickListener(this);
 
   }
-  
+
   @SuppressLint("Override")
   @Override
   public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
     if (reqCode == ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY) {
-      if (results.length > 0
-          && results[0] == PackageManager.PERMISSION_GRANTED) {  
-          // permission granted
-          onLoad(modeId);
+      if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED) {
+        // permission granted
+        onLoad(modeId);
       } else {
-          // permission denied
+        // permission denied
         if (ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY)) {
           PhotoUtils.alertNeedStoragePermission(this);
         } else {
@@ -141,7 +136,6 @@ public class SelectedImageActivity extends Activity implements OnClickListener, 
         }
         finish();
       }
-      return;
     }
   }
 
@@ -229,23 +223,23 @@ public class SelectedImageActivity extends Activity implements OnClickListener, 
     public Bitmap doInBackground(Integer... params) {
       int modeId = params[0];
       if (modeId == SELECT_MODE) {
-        mImageUri = getIntent().getData();
-        String host = mImageUri.getHost();
-        String scheme = mImageUri.getScheme();
+        Uri imageUri = getIntent().getData();
+        String host = imageUri.getHost();
+        String scheme = imageUri.getScheme();
         // check if the image is stored on the device (host = media)
         // or if it's available with a content provider (scheme =
         // content)
         if ("media".equals(host) || "content".equals(scheme)) {
-          filePath = PhotoUtils.getFileFromUri(mImageUri, SelectedImageActivity.this);
+          filePath = PhotoUtils.getFileFromUri(imageUri, SelectedImageActivity.this);
         } else {
           // get the full image url and download it to sdcard
-          String path = mImageUri.getPath();
+          String path = imageUri.getPath();
           StringBuffer buffer = new StringBuffer(scheme);
           buffer.append("://");
           buffer.append(host);
           buffer.append(path);
-          Log.i("PHOTO_PICKER", "Image mImageUri getHost(): " + buffer.toString());
-          String fileName = mImageUri.getLastPathSegment();
+          Log.i("PHOTO_PICKER", "Image imageUri getHost(): " + buffer.toString());
+          String fileName = imageUri.getLastPathSegment();
           filePath = PhotoUtils.downloadFile(buffer.toString(), fileName);
         }
 

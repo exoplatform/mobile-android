@@ -41,7 +41,6 @@ import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.PostWaitingDialog;
 import org.exoplatform.widget.WarningDialog;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.view.Gravity;
@@ -49,30 +48,30 @@ import android.widget.Toast;
 
 public class ComposeMessageController {
 
-  private PostWaitingDialog _progressDialog;
+  private PostWaitingDialog      _progressDialog;
 
-  private int               composeType;
+  private int                    composeType;
 
   private ComposeMessageActivity mComposeActivity;
 
-  private PostStatusTask    mPostTask;
+  private PostStatusTask         mPostTask;
 
-  private CommentTask       mCommetnTask;
+  private CommentTask            mCommetnTask;
 
-  private String            sdcard_temp_dir = null;
+  private String                 sdcard_temp_dir = null;
 
-  private String            inputTextWarning;
+  private String                 inputTextWarning;
 
-  private String            okString;
+  private String                 okString;
 
-  private String            titleString;
+  private String                 titleString;
 
-  private String            contentString;
+  private String                 contentString;
 
   /**
    * Either null (public) or the space name
    */
-  private SocialSpaceInfo   postDestination;
+  private SocialSpaceInfo        postDestination;
 
   public ComposeMessageController(ComposeMessageActivity activity, int type, PostWaitingDialog dialog) {
     mComposeActivity = activity;
@@ -173,7 +172,7 @@ public class ComposeMessageController {
         comment.setText(composeMessage);
         String selectedId = SocialDetailHelper.getInstance().getActivityId();
         ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
-        RestActivity restActivity = (RestActivity) activityService.get(selectedId);
+        RestActivity restActivity = activityService.get(selectedId);
 
         activityService.createComment(restActivity, comment);
         return true;
@@ -188,7 +187,7 @@ public class ComposeMessageController {
     @Override
     protected void onPostExecute(Boolean result) {
       if (result) {
-        ((Activity) mComposeActivity).finish();
+        mComposeActivity.finish();
         if (SocialDetailActivity.socialDetailActivity != null) {
           SocialDetailActivity.socialDetailActivity.onLoad();
         }

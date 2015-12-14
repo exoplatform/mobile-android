@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="280dip"
-    android:layout_height="wrap_content" >
+                android:layout_width="280dip"
+                android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ImageView_Navigationbar"
         android:layout_width="fill_parent"
         android:layout_height="40dip"
         android:background="#4E4E4E"
-        android:contentDescription="@string/DocumentRenameContent" />
+        android:contentDescription="@string/DocumentRenameContent"/>
 
     <TextView
         android:id="@+id/document_extend_dialog_title"
@@ -20,7 +20,7 @@
         android:shadowDy="2.0"
         android:shadowRadius="1.0"
         android:textColor="#FFFFFFFF"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
     <RelativeLayout
         android:id="@+id/RelativeLayout_TextfieldPanel"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ImageView_Navigationbar"
         android:background="#DCDCDCDC"
-        android:paddingBottom="15dp" >
+        android:paddingBottom="15dp">
 
         <TextView
             android:id="@+id/document_extend_textview"
@@ -38,7 +38,7 @@
             android:layout_marginTop="10dip"
             android:padding="5dp"
             android:textColor="#FF000000"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <EditText
             android:id="@+id/document_extend_edittext"
@@ -52,7 +52,7 @@
             android:background="@drawable/settingcellstreachablebackground"
             android:inputType="textNoSuggestions"
             android:textColor="#FF000000"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -61,7 +61,7 @@
         android:layout_height="60dip"
         android:layout_below="@id/RelativeLayout_TextfieldPanel"
         android:background="@drawable/serveraddbuttonpanelbackground"
-        android:gravity="center" >
+        android:gravity="center">
 
         <Button
             android:id="@+id/document_extend_cancel"
@@ -73,7 +73,7 @@
             android:shadowDx="1.0"
             android:shadowDy="2.0"
             android:shadowRadius="1.0"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"/>
 
         <Button
             android:id="@+id/document_extend_ok"
@@ -85,7 +85,7 @@
             android:shadowColor="#888888"
             android:shadowDx="1.0"
             android:shadowDy="2.0"
-            android:shadowRadius="1.0" />
+            android:shadowRadius="1.0"/>
     </RelativeLayout>
 
 </RelativeLayout>

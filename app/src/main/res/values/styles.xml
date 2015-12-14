@@ -22,7 +22,7 @@ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     <style name="background_color">
         <item name="android:background">#dcdcdc</item>
     </style>
-    
+
     <style name="ActionBarTitleStyle" parent="@style/TextAppearanceLarge">
         <item name="android:textColor">#ffffff</item>
     </style>
@@ -146,10 +146,12 @@ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     <style name="SignUpEditTxtStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">42dp</item>
-        <item name="android:gravity">center|left</item> <!-- center text vertically and left -->
+        <item name="android:gravity">center|left</item>
+        <!-- center text vertically and left -->
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColorHint">#B3B3B3</item>
-        <item name="android:paddingLeft">60dp</item> <!-- push text behind the icon -->
+        <item name="android:paddingLeft">60dp</item>
+        <!-- push text behind the icon -->
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
     </style>
@@ -264,55 +266,56 @@ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
         <item name="android:textSize">@dimen/title_txt_size</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <!-- Account Switcher styles  -->
     <style name="AccountFragmentTitleStyle">
-		<item name="android:background">@drawable/action_bar_background_repeate</item>
-		<item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-		<item name="android:textColor">@android:color/white</item>
-		<item name="android:layout_width">match_parent</item>
+        <item name="android:background">@drawable/action_bar_background_repeate</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
-	</style>
-    
+    </style>
+
     <style name="AccountListItemHeaderStyle">
         <item name="android:background">@color/AccountListItemHeaderColor</item>
     </style>
+
     <style name="AccountListItemHeaderNameStyle">
         <item name="android:textColor">#333333</item>
         <item name="android:textSize">@dimen/AccountListItemTextBigSize</item>
         <item name="android:gravity">center</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="AccountListItemHeaderServerStyle">
         <item name="android:textColor">#2f5e92</item>
         <item name="android:textSize">@dimen/AccountListItemTextSmallSize</item>
         <item name="android:gravity">center</item>
     </style>
-    
+
     <style name="AccountListItemBodyStyle">
         <item name="android:background">@android:color/white</item>
         <item name="android:gravity">center_vertical</item>
     </style>
-    
+
     <style name="AccountListItemBodyFullnameStyle">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/AccountListItemTextSmallSize</item>
     </style>
-    
+
     <style name="AccountListItemBodyUsernameStyle">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">@dimen/AccountListItemTextSmallSize</item>
     </style>
-    
+
     <style name="AccountListItemBodyConnectionStatusStyle">
         <item name="android:textColor">#999999</item>
         <item name="android:textStyle">italic</item>
         <item name="android:textSize">@dimen/AccountListItemTextSmallSize</item>
     </style>
-    
+
     <style name="AccountSwitcherSignInButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:background">@drawable/action_bar_item_background</item>
@@ -325,7 +328,8 @@ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
     </style>
 
     <!-- Animations  -->
-    <style name="Animations" />
+    <style name="Animations"/>
+
     <style name="Animations.Window">
         <item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
     </style>

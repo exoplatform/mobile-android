@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/AccountListBackgroundColor"
-    android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/AccountListBackgroundColor"
+              android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
@@ -15,39 +15,40 @@
         android:text="@string/YourCredentials"
         android:textColor="#535353"
         android:textSize="@dimen/title_txt_size"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <TableLayout
         style="@style/ServerSettingTableStyle"
-        android:layout_marginBottom="20dp" >
+        android:layout_marginBottom="20dp">
 
-        <TableRow style="@style/ServerSettingTableFirstRowStyle" >
+        <TableRow style="@style/ServerSettingTableFirstRowStyle">
 
             <!-- 3rd row -->
 
             <TextView
                 android:id="@+id/account_switcher_signin_user_txt"
                 style="@style/ServerSettingTextViewStyle"
-                android:text="@string/UserNameCellTitle" />
+                android:text="@string/UserNameCellTitle"/>
 
             <EditText
                 android:id="@+id/account_switcher_signin_user_edit_txt"
-                style="@style/ServerSettingEditTextStyle" />
+                style="@style/ServerSettingEditTextStyle"
+                android:inputType="textPersonName"/>
         </TableRow>
 
-        <TableRow style="@style/ServerSettingTableRowStyle" >
+        <TableRow style="@style/ServerSettingTableRowStyle">
 
             <!-- 4th row -->
 
             <TextView
                 android:id="@+id/account_switcher_signin_pass_txt"
                 style="@style/ServerSettingTextViewStyle"
-                android:text="@string/PasswordCellTitle" />
+                android:text="@string/PasswordCellTitle"/>
 
             <EditText
                 android:id="@+id/account_switcher_signin_pass_edit_txt"
                 style="@style/ServerSettingEditTextStyle"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"/>
         </TableRow>
     </TableLayout>
 
@@ -56,6 +57,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/SignInInformation"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"/>
 
 </LinearLayout>

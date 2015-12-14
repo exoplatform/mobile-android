@@ -28,7 +28,7 @@ import org.exoplatform.model.SocialPostInfo;
  */
 public abstract class Action {
 
-  protected final String   LOG_TAG = "____eXo_Action_" + this.getClass().getName() + "____";
+  protected final String   LOG_TAG = this.getClass().getName();
 
   protected SocialPostInfo postInfo;
 
@@ -48,11 +48,11 @@ public abstract class Action {
     return doExecute();
   }
 
-  public static interface ActionListener {
+  public interface ActionListener {
 
-    public boolean onSuccess(String message);
+    boolean onSuccess(String message);
 
-    public boolean onError(String error);
+    boolean onError(String error);
 
   }
 

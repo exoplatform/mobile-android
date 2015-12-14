@@ -24,37 +24,35 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by The eXo Platform SAS
- * Author :  MinhTDH
- *           MinhTDH@exoplatform.com
- * Jul 31, 2015  
+ * Created by The eXo Platform SAS Author : MinhTDH MinhTDH@exoplatform.com Jul
+ * 31, 2015
  */
 public class Utils {
 
   public static boolean isEmpty(@SuppressWarnings("rawtypes") Collection list) {
     return list == null || list.isEmpty();
   }
-  
+
   public static boolean notEmpty(@SuppressWarnings("rawtypes") Collection list) {
     return list != null && list.size() > 0;
   }
-  
+
   public static boolean isEmpty(@SuppressWarnings("rawtypes") Map map) {
     return map == null || map.isEmpty();
   }
-  
+
   public static boolean notEmpty(@SuppressWarnings("rawtypes") Map map) {
     return map != null && map.size() > 0;
   }
-  
+
   public static int getSize(@SuppressWarnings("rawtypes") Collection list) {
-      return list != null ? list.size() : 0 ;
+    return list != null ? list.size() : 0;
   }
 
   public static <E> E getItem(List<E> list, int pos) {
-      return list == null ? null : list.get(pos);
+    return list == null ? null : list.get(pos);
   }
-  
+
   public static <T> T getVal(WeakReference<T> ref) {
     return ref == null ? null : ref.get();
   }

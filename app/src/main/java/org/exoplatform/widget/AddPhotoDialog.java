@@ -82,22 +82,22 @@ public class AddPhotoDialog extends Dialog implements android.view.View.OnClickL
       if (view.equals(takePhotoButton)) {
         // take photo
         dismiss();
-          startCapture();
+        startCapture();
       } else if (view.equals(libraryButton)) {
         // pick photo from gallery
         dismiss();
-          pickPhoto();
+        pickPhoto();
       }
     }
   }
-  
+
   private void startCapture() {
     if (messageController == null)
       fileActionDialog._documentActionAdapter.initCamera();
     else
       messageController.initCamera();
   }
-  
+
   private void pickPhoto() {
     PhotoUtils.pickPhotoForActivity(mActivity);
   }

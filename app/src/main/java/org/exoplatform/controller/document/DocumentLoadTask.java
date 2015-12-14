@@ -44,18 +44,18 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
   /*
    * Result status
    */
-  private static final int      RESULT_OK      = 1;
+  private static final int      RESULT_OK       = 1;
 
-  private static final int      RESULT_ERROR   = 2;
+  private static final int      RESULT_ERROR    = 2;
 
-  private static final int      RESULT_TIMEOUT = 3;
+  private static final int      RESULT_TIMEOUT  = 3;
 
-  private static final int      RESULT_FALSE   = 4;
-  
-  private static final int      RESULT_CANCELED   = 5;
+  private static final int      RESULT_FALSE    = 4;
+
+  private static final int      RESULT_CANCELED = 5;
 
   // LOG TAG
-  private static final String   LOG_TAG        = "eXo____DocumentLoadTask____";
+  private static final String   LOG_TAG         = DocumentLoadTask.class.getName();
 
   private DocumentWaitingDialog _progressDialog;
 
@@ -172,12 +172,12 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
 
       }
 
-//    Stop execution if the task was canceled
+      // Stop execution if the task was canceled
       if (isCancelled())
         return RESULT_CANCELED;
-      
-//    Get folder content
-      if (result == true) {
+
+      // Get folder content
+      if (result) {
         loadedFolder = ExoDocumentUtils.getPersonalDriveContent(documentActivity, sourceFile);
         return RESULT_OK;
       } else {

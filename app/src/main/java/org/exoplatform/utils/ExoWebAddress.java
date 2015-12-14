@@ -23,168 +23,183 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
- * Web Address Parser
- *
- * This is called WebAddress, rather than URL or URI, because it
- * attempts to parse the stuff that a user will actually type into a
- * browser address widget.
- *
- * Unlike java.net.uri, this parser will not choke on URIs missing
- * schemes.  It will only throw a ParseException if the input is
- * really hosed.
- *
- * If given an https scheme but no port, fills in port
- * 
- * cf https://github.com/android/platform_frameworks_base/blob/master/core/java/android/net/WebAddress.java
- *
+ * Web Address Parser This is called WebAddress, rather than URL or URI, because
+ * it attempts to parse the stuff that a user will actually type into a browser
+ * address widget. Unlike java.net.uri, this parser will not choke on URIs
+ * missing schemes. It will only throw a ParseException if the input is really
+ * hosed. If given an https scheme but no port, fills in port cf
+ * https://github.com
+ * /android/platform_frameworks_base/blob/master/core/java/android
+ * /net/WebAddress.java
  */
 public class ExoWebAddress {
-  
+
   public static class ParseException extends Exception {
     private static final long serialVersionUID = 1L;
-    
+
     public ParseException(String message) {
       super(message);
     }
-    
+
     public ParseException(String message, Throwable source) {
       super(message, source);
     }
   }
 
-    private String mScheme;
-    private String mHost;
-    private int mPort;
-    private String mPath;
-    private String mAuthInfo;
+  private String   mScheme;
 
-    static final int MATCH_GROUP_SCHEME = 1;
-    static final int MATCH_GROUP_AUTHORITY = 2;
-    static final int MATCH_GROUP_HOST = 3;
-    static final int MATCH_GROUP_PORT = 4;
-    static final int MATCH_GROUP_PATH = 5;
+  private String   mHost;
 
-    static Pattern sAddressPattern = Pattern.compile(
-            /* scheme    */ "(?:(" + ExoConstants.HTTP_PROTOCOL + "|" + ExoConstants.HTTPS_PROTOCOL + ")\\:\\/\\/)?" +
-            /* authority */ "(?:([-A-Za-z0-9$_.+!*'(),;?&=]+(?:\\:[-A-Za-z0-9$_.+!*'(),;?&=]+)?)@)?" +
-            /* host      */ "([" + GOOD_IRI_CHAR + "%_-][" + GOOD_IRI_CHAR + "%_\\.-]*|\\[[0-9a-fA-F:\\.]+\\])?" +
-            /* port      */ "(?:\\:([0-9]*))?" +
-            /* path      */ "(\\/?[^#]*)?" +
-            /* anchor    */ ".*", Pattern.CASE_INSENSITIVE);
+  private int      mPort;
 
-    /** parses given uriString. 
-     * @throws ParseException */
-    public ExoWebAddress(String address) throws ParseException {
-        if (address == null) {
-            throw new ParseException("Cannot create ExoWebAddress from null address parameter");
+  private String   mPath;
+
+  private String   mAuthInfo;
+
+  static final int MATCH_GROUP_SCHEME    = 1;
+
+  static final int MATCH_GROUP_AUTHORITY = 2;
+
+  static final int MATCH_GROUP_HOST      = 3;
+
+  static final int MATCH_GROUP_PORT      = 4;
+
+  static final int MATCH_GROUP_PATH      = 5;
+
+  static Pattern   sAddressPattern       = Pattern.compile(
+                                                           /* scheme */"(?:("
+                                                               + ExoConstants.HTTP_PROTOCOL
+                                                               + "|"
+                                                               + ExoConstants.HTTPS_PROTOCOL
+                                                               + ")\\:\\/\\/)?"
+                                                               +
+                                                               /* authority */"(?:([-A-Za-z0-9$_.+!*'(),;?&=]+(?:\\:[-A-Za-z0-9$_.+!*'(),;?&=]+)?)@)?"
+                                                               +
+                                                               /* host */"([" + GOOD_IRI_CHAR + "%_-][" + GOOD_IRI_CHAR
+                                                               + "%_\\.-]*|\\[[0-9a-fA-F:\\.]+\\])?" +
+                                                               /* port */"(?:\\:([0-9]*))?" +
+                                                               /* path */"(\\/?[^#]*)?" +
+                                                               /* anchor */".*",
+                                                           Pattern.CASE_INSENSITIVE);
+
+  /**
+   * parses given uriString.
+   * 
+   * @throws ParseException
+   */
+  public ExoWebAddress(String address) throws ParseException {
+    if (address == null) {
+      throw new ParseException("Cannot create ExoWebAddress from null address parameter");
+    }
+
+    mScheme = "";
+    mHost = "";
+    mPort = -1;
+    mPath = "/";
+    mAuthInfo = "";
+
+    Matcher m = sAddressPattern.matcher(address);
+    String t;
+    if (m.matches()) {
+      t = m.group(MATCH_GROUP_SCHEME);
+      if (t != null)
+        mScheme = t.toLowerCase(Locale.ROOT);
+      t = m.group(MATCH_GROUP_AUTHORITY);
+      if (t != null)
+        mAuthInfo = t;
+      t = m.group(MATCH_GROUP_HOST);
+      if (t != null)
+        mHost = t;
+      t = m.group(MATCH_GROUP_PORT);
+      if (t != null && t.length() > 0) {
+        // The ':' character is not returned by the regex.
+        try {
+          mPort = Integer.parseInt(t);
+        } catch (NumberFormatException ex) {
+          throw new ParseException("Incorrect port number", ex);
         }
-
-        mScheme = "";
-        mHost = "";
-        mPort = -1;
-        mPath = "/";
-        mAuthInfo = "";
-
-        Matcher m = sAddressPattern.matcher(address);
-        String t;
-        if (m.matches()) {
-            t = m.group(MATCH_GROUP_SCHEME);
-            if (t != null) mScheme = t.toLowerCase(Locale.ROOT);
-            t = m.group(MATCH_GROUP_AUTHORITY);
-            if (t != null) mAuthInfo = t;
-            t = m.group(MATCH_GROUP_HOST);
-            if (t != null) mHost = t;
-            t = m.group(MATCH_GROUP_PORT);
-            if (t != null && t.length() > 0) {
-                // The ':' character is not returned by the regex.
-                try {
-                    mPort = Integer.parseInt(t);
-                } catch (NumberFormatException ex) {
-                    throw new ParseException("Incorrect port number", ex);
-                }
-            }
-            t = m.group(MATCH_GROUP_PATH);
-            if (t != null && t.length() > 0) {
-                /* handle busted myspace frontpage redirect with
-                   missing initial "/" */
-                if (t.charAt(0) == '/') {
-                    mPath = t;
-                } else {
-                    mPath = "/" + t;
-                }
-            }
-
+      }
+      t = m.group(MATCH_GROUP_PATH);
+      if (t != null && t.length() > 0) {
+        /*
+         * handle busted myspace frontpage redirect with missing initial "/"
+         */
+        if (t.charAt(0) == '/') {
+          mPath = t;
         } else {
-            // nothing found... outa here
-            throw new ParseException("Incorrect address");
+          mPath = "/" + t;
         }
+      }
 
-        if ("".equals(mScheme)) mScheme = ExoConstants.HTTP_PROTOCOL;
+    } else {
+      // nothing found... outa here
+      throw new ParseException("Incorrect address");
     }
 
-    @Override
-    public String toString() {
-        String port = "";
+    if ("".equals(mScheme))
+      mScheme = ExoConstants.HTTP_PROTOCOL;
+  }
 
-        if (mPort != -1 &&
-            ((mPort != 443 && mScheme.equals(ExoConstants.HTTPS_PROTOCOL)) ||
-             (mPort != 80 && mScheme.equals(ExoConstants.HTTP_PROTOCOL))
-            )) {
-            port = ":" + Integer.toString(mPort);
-        }
-        String authInfo = "";
-        if (mAuthInfo.length() > 0) {
-            authInfo = mAuthInfo + "@";
-        }
+  @Override
+  public String toString() {
+    String port = "";
 
-        return mScheme + "://" + authInfo + mHost + port + mPath;
+    if (mPort != -1
+        && ((mPort != 443 && mScheme.equals(ExoConstants.HTTPS_PROTOCOL)) || (mPort != 80 && mScheme.equals(ExoConstants.HTTP_PROTOCOL)))) {
+      port = ":" + Integer.toString(mPort);
+    }
+    String authInfo = "";
+    if (mAuthInfo.length() > 0) {
+      authInfo = mAuthInfo + "@";
     }
 
-    public void setScheme(String scheme) {
-      mScheme = scheme;
-    }
+    return mScheme + "://" + authInfo + mHost + port + mPath;
+  }
 
-    public String getScheme() {
-      return mScheme;
-    }
+  public void setScheme(String scheme) {
+    mScheme = scheme;
+  }
 
-    public void setHost(String host) {
-      mHost = host;
-    }
+  public String getScheme() {
+    return mScheme;
+  }
 
-    public String getHost() {
-      return mHost;
-    }
+  public void setHost(String host) {
+    mHost = host;
+  }
 
-    public void setPort(int port) {
-      mPort = port;
-    }
+  public String getHost() {
+    return mHost;
+  }
 
-    public int getPort() {
-      return mPort;
-    }
+  public void setPort(int port) {
+    mPort = port;
+  }
 
-    public void setPath(String path) {
-      mPath = path;
-    }
+  public int getPort() {
+    return mPort;
+  }
 
-    public String getPath() {
-      return mPath;
-    }
+  public void setPath(String path) {
+    mPath = path;
+  }
 
-    public void setAuthInfo(String authInfo) {
-      mAuthInfo = authInfo;
-    }
+  public String getPath() {
+    return mPath;
+  }
 
-    public String getAuthInfo() {
-      return mAuthInfo;
-    }
-    
-    /**
-     * @return true if this address has an empty host, false otherwise
-     */
-    public boolean isRelativeURL() {
-      return "".equals(mHost);
-    }
+  public void setAuthInfo(String authInfo) {
+    mAuthInfo = authInfo;
+  }
+
+  public String getAuthInfo() {
+    return mAuthInfo;
+  }
+
+  /**
+   * @return true if this address has an empty host, false otherwise
+   */
+  public boolean isRelativeURL() {
+    return "".equals(mHost);
+  }
 }

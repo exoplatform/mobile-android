@@ -29,37 +29,37 @@ import io.fabric.sdk.android.Fabric;
 
 public class CrashUtils {
 
-  private static final String LOG_TAG = "CrashUtils";
+  private static final String LOG_TAG            = CrashUtils.class.getName();
 
-  private static final String KEY_USERNAME = "UserName";
-  
-  private static final String KEY_SERVER_DOMAIN = "Server Domain";
-  
+  private static final String KEY_USERNAME       = "UserName";
+
+  private static final String KEY_SERVER_DOMAIN  = "Server Domain";
+
   private static final String KEY_SERVER_VERSION = "Server Version";
-  
-  private static final String KEY_IMAGE_HEIGHT = "Height Before Shrink";
-  
-  private static final String KEY_IMAGE_WIDTH = "Width Before Shrink";
-  
-  private static final String KEY_SHRINK_RATIO = "Shrink Ratio";
-  
-  private static final String KEY_IMAGE_SIZE = "Resize Image With Size KB";
-  
+
+  private static final String KEY_IMAGE_HEIGHT   = "Height Before Shrink";
+
+  private static final String KEY_IMAGE_WIDTH    = "Width Before Shrink";
+
+  private static final String KEY_SHRINK_RATIO   = "Shrink Ratio";
+
+  private static final String KEY_IMAGE_SIZE     = "Resize Image With Size KB";
+
   private static final String KEY_OPEN_FILE_TYPE = "File Open Type";
 
   public static void initialize(Context ctx) {
     Fabric.with(ctx, new Crashlytics());
   }
-  
+
   public static void setUsername(String username) {
     setString(KEY_USERNAME, username);
   }
-  
+
   public static void setServerInfo(String domain, String version) {
     setString(KEY_SERVER_DOMAIN, domain);
     setString(KEY_SERVER_VERSION, version);
   }
-  
+
   public static void setShrinkInfo(BitmapFactory.Options options) {
     if (options != null) {
       setString(KEY_IMAGE_HEIGHT, String.valueOf(options.outHeight));
@@ -71,30 +71,31 @@ public class CrashUtils {
       setString(KEY_SHRINK_RATIO, "");
     }
   }
-  
+
   public static void setResizeInfo(int imageSize) {
     setString(KEY_IMAGE_SIZE, String.valueOf(imageSize / 1024));
   }
-  
+
   public static void setOpenFileType(String mimeType) {
     setString(KEY_OPEN_FILE_TYPE, mimeType);
   }
-  
+
   /*
    * Generic Methods
    */
-  
+
   public static void setString(String key, String value) {
     try {
       Crashlytics.setString(key, value);
     } catch (Exception e) {
-      // TODO: Remove this hack that was added so Robolectric wouldn't crash during tests
+      // TODO: Remove this hack that was added so Robolectric wouldn't crash
+      // during tests
       Log.d(LOG_TAG, String.format("Error with %s : %s (%s)", key, value, e.getMessage()));
     }
   }
-  
+
   public static void loge(String tag, String message) {
     Crashlytics.log(Log.ERROR, tag, message);
   }
-  
+
 }

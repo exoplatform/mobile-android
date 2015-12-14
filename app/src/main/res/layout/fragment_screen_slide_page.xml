@@ -1,25 +1,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              tools:ignore="UseCompoundDrawables">
+    <!-- We don't use a compound drawable because we don't know the bounds of the image -->
 
-        <TextView
-                android:id="@+id/slider_txt_description"
-                style="@style/ShadowTxtStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="@dimen/text_size_small"
-                android:textColor="@color/gray"
-                android:layout_marginTop="@dimen/margin_xs"
-                android:layout_marginBottom="@dimen/margin_xs"/>
+    <TextView
+        android:id="@+id/slider_txt_description"
+        style="@style/ShadowTxtStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_xs"
+        android:layout_marginTop="@dimen/margin_xs"
+        android:gravity="center"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_size_small"
+        tools:text="@string/SliderDesc1"/>
 
-        <ImageView
-                android:id="@+id/slider_img"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:contentDescription="@string/ImageDesc"
-                android:layout_marginBottom="@dimen/margin_m"/>
+    <ImageView
+        android:id="@+id/slider_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/margin_m"
+        android:contentDescription="@string/ImageDesc"
+        tools:src="@drawable/slide_activity_details"/>
 
 </LinearLayout>

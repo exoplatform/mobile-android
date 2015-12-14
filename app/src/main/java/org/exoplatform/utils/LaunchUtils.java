@@ -46,7 +46,7 @@ public class LaunchUtils {
 
   private AccountSetting      mSetting;
 
-  private static final String TAG = "eXoLaunchController";
+  private static final String TAG = LaunchUtils.class.getName();
 
   public LaunchUtils(Activity context) {
     mContext = context;
@@ -72,7 +72,7 @@ public class LaunchUtils {
     int selectedServerIdx = Integer.parseInt(mSharedPreference.getString(ExoConstants.EXO_PRF_DOMAIN_INDEX, "-1"));
     mSetting.setDomainIndex(String.valueOf(selectedServerIdx));
     mSetting.setCurrentAccount((selectedServerIdx == -1 || selectedServerIdx >= _serverList.size()) ? null
-        : _serverList.get(selectedServerIdx));
+                                                                                                   : _serverList.get(selectedServerIdx));
   }
 
   /**

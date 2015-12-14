@@ -33,8 +33,7 @@ public class FileCache {
 
   public FileCache(Context context, String folder) {
     // Find the dir to save cached images
-    if (android.os.Environment.getExternalStorageState()
-                              .equals(android.os.Environment.MEDIA_MOUNTED))
+    if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
       cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "eXo/" + folder);
     else
       cacheDir = context.getCacheDir();
@@ -48,14 +47,12 @@ public class FileCache {
 
   public File getFile(String url) {
     String filename = String.valueOf(url.hashCode());
-    File f = new File(cacheDir, filename);
-    return f;
+    return new File(cacheDir, filename);
 
   }
 
   public File getFileFromName(String filename) {
-    File f = new File(cacheDir, filename);
-    return f;
+    return new File(cacheDir, filename);
   }
 
   public void clear() {

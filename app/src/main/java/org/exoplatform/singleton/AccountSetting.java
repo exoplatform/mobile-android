@@ -33,167 +33,167 @@ import android.os.Parcelable;
  */
 public class AccountSetting implements Parcelable {
 
-    private static AccountSetting accountSetting = new AccountSetting();
+  private static AccountSetting accountSetting = new AccountSetting();
 
-    /**
-     * The index of checked server, in case no server selected, index = -1
-     */
-    private String                domainIndex;
+  /**
+   * The index of checked server, in case no server selected, index = -1
+   */
+  private String                domainIndex;
 
-    /*
-     * SETTING_SOCIAL_FILTER
-     */
-    public String                 socialKey;
+  /*
+   * SETTING_SOCIAL_FILTER
+   */
+  public String                 socialKey;
 
-    /*
-     * SETTING_SOCIAL_FILTER_INDEX
-     */
-    public String                 socialKeyIndex;
+  /*
+   * SETTING_SOCIAL_FILTER_INDEX
+   */
+  public String                 socialKeyIndex;
 
-    /*
-     * SETTING_DOCUMENT_SHOW_HIDDEN_FILE
-     */
-    public String                 documentKey;
+  /*
+   * SETTING_DOCUMENT_SHOW_HIDDEN_FILE
+   */
+  public String                 documentKey;
 
-    public ArrayList<String>      cookiesList;
+  public ArrayList<String>      cookiesList;
 
-    /** current server */
-    private ExoAccount            mCurrentAccount;
+  /** current server */
+  private ExoAccount            mCurrentAccount;
 
-    private AccountSetting() {
+  private AccountSetting() {
+  }
+
+  public static AccountSetting getInstance() {
+    return accountSetting;
+  }
+
+  public void setInstance(AccountSetting instance) {
+    accountSetting = instance;
+  }
+
+  public ExoAccount getCurrentAccount() {
+    return mCurrentAccount;
+  }
+
+  public void setCurrentAccount(ExoAccount acc) {
+    mCurrentAccount = acc;
+  }
+
+  public String getUsername() {
+    return (mCurrentAccount != null) ? mCurrentAccount.username : "";
+  }
+
+  public String getPassword() {
+    return (mCurrentAccount != null) ? mCurrentAccount.password : "";
+  }
+
+  public String getDomainName() {
+    return (mCurrentAccount != null) ? mCurrentAccount.serverUrl : "";
+  }
+
+  public String getServerName() {
+    return (mCurrentAccount != null) ? mCurrentAccount.accountName : "";
+  }
+
+  public String getUserFullName() {
+    return (mCurrentAccount != null) ? mCurrentAccount.userFullName : "";
+  }
+
+  public String getUserAvatarUrl() {
+    return (mCurrentAccount != null) ? mCurrentAccount.avatarUrl : "";
+  }
+
+  public boolean shouldSaveProfileInfo(String newUserFullName, String newUserAvatarUrl) {
+    boolean shouldSave = false;
+    if (!getUserFullName().equalsIgnoreCase(newUserFullName)) {
+      mCurrentAccount.userFullName = newUserFullName;
+      shouldSave = true;
     }
-
-    public static AccountSetting getInstance() {
-        return accountSetting;
+    if (!getUserAvatarUrl().equalsIgnoreCase(newUserAvatarUrl)) {
+      mCurrentAccount.avatarUrl = newUserAvatarUrl;
+      shouldSave = true;
     }
+    return shouldSave;
+  }
 
-    public void setInstance(AccountSetting instance) {
-        accountSetting = instance;
-    }
+  /**
+   * Whether auto-login is enabled or not if no server defined then disable
+   * auto-login
+   * 
+   * @return
+   */
+  public boolean isAutoLoginEnabled() {
+    return (mCurrentAccount != null) && mCurrentAccount.isAutoLoginEnabled;
+  }
 
-    public ExoAccount getCurrentAccount() {
-        return mCurrentAccount;
-    }
+  /**
+   * Whether remember-me is enabled or not if no server defined then disable
+   * remember-me
+   * 
+   * @return
+   */
+  public boolean isRememberMeEnabled() {
+    return (mCurrentAccount != null) && mCurrentAccount.isRememberEnabled;
+  }
 
-    public void setCurrentAccount(ExoAccount acc) {
-        mCurrentAccount = acc;
-    }
+  public String getDomainIndex() {
+    return (domainIndex == null) ? "-1" : domainIndex;
+  }
 
-    public String getUsername() {
-        return (mCurrentAccount != null) ? mCurrentAccount.username : "";
-    }
+  public void setDomainIndex(String index) {
+    domainIndex = index;
+  }
 
-    public String getPassword() {
-        return (mCurrentAccount != null) ? mCurrentAccount.password : "";
-    }
+  /**
+   * Set all internal properties to null except domainIndex and currentAccount
+   */
+  public void clear() {
+    socialKey = null;
+    socialKeyIndex = null;
+    documentKey = null;
+    cookiesList = null;
+  }
 
-    public String getDomainName() {
-        return (mCurrentAccount != null) ? mCurrentAccount.serverUrl : "";
-    }
+  private AccountSetting(Parcel in) {
+    readFromParcel(in);
+  }
 
-    public String getServerName() {
-        return (mCurrentAccount != null) ? mCurrentAccount.accountName : "";
-    }
+  public void readFromParcel(Parcel in) {
+    domainIndex = in.readString();
+    mCurrentAccount = in.readParcelable(ExoAccount.class.getClassLoader());
+    cookiesList = new ArrayList<String>();
+    in.readStringList(cookiesList);
 
-    public String getUserFullName() {
-        return (mCurrentAccount != null) ? mCurrentAccount.userFullName : "";
-    }
+  }
 
-    public String getUserAvatarUrl() {
-        return (mCurrentAccount != null) ? mCurrentAccount.avatarUrl : "";
-    }
+  public static final Parcelable.Creator<AccountSetting> CREATOR = new Parcelable.Creator<AccountSetting>() {
+                                                                   public AccountSetting createFromParcel(Parcel in) {
+                                                                     return new AccountSetting(in);
+                                                                   }
 
-    public boolean shouldSaveProfileInfo(String newUserFullName, String newUserAvatarUrl) {
-        boolean shouldSave = false;
-        if (!getUserFullName().equalsIgnoreCase(newUserFullName)) {
-            mCurrentAccount.userFullName = newUserFullName;
-            shouldSave = true;
-        }
-        if (!getUserAvatarUrl().equalsIgnoreCase(newUserAvatarUrl)) {
-            mCurrentAccount.avatarUrl = newUserAvatarUrl;
-            shouldSave = true;
-        }
-        return shouldSave;
-    }
+                                                                   public AccountSetting[] newArray(int size) {
+                                                                     return new AccountSetting[size];
+                                                                   }
+                                                                 };
 
-    /**
-     * Whether auto-login is enabled or not if no server defined then disable
-     * auto-login
-     * 
-     * @return
-     */
-    public boolean isAutoLoginEnabled() {
-        return (mCurrentAccount != null) ? mCurrentAccount.isAutoLoginEnabled : false;
-    }
+  /*
+   * (non-Javadoc)
+   * @see android.os.Parcelable#describeContents()
+   */
+  @Override
+  public int describeContents() {
+    return 0;
+  }
 
-    /**
-     * Whether remember-me is enabled or not if no server defined then disable
-     * remember-me
-     * 
-     * @return
-     */
-    public boolean isRememberMeEnabled() {
-        return (mCurrentAccount != null) ? mCurrentAccount.isRememberEnabled : false;
-    }
-
-    public String getDomainIndex() {
-        return (domainIndex == null) ? "-1" : domainIndex;
-    }
-
-    public void setDomainIndex(String index) {
-        domainIndex = index;
-    }
-
-    /**
-     * Set all internal properties to null except domainIndex and currentAccount
-     */
-    public void clear() {
-        socialKey = null;
-        socialKeyIndex = null;
-        documentKey = null;
-        cookiesList = null;
-    }
-
-    private AccountSetting(Parcel in) {
-        readFromParcel(in);
-    }
-
-    public void readFromParcel(Parcel in) {
-        domainIndex = in.readString();
-        mCurrentAccount = in.readParcelable(ExoAccount.class.getClassLoader());
-        cookiesList = new ArrayList<String>();
-        in.readStringList(cookiesList);
-
-    }
-
-    public static final Parcelable.Creator<AccountSetting> CREATOR = new Parcelable.Creator<AccountSetting>() {
-                                                                       public AccountSetting createFromParcel(Parcel in) {
-                                                                           return new AccountSetting(in);
-                                                                       }
-
-                                                                       public AccountSetting[] newArray(int size) {
-                                                                           return new AccountSetting[size];
-                                                                       }
-                                                                   };
-
-    /*
-     * (non-Javadoc)
-     * @see android.os.Parcelable#describeContents()
-     */
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
-     */
-    @Override
-    public void writeToParcel(Parcel par, int flags) {
-        par.writeString(domainIndex);
-        par.writeParcelable(mCurrentAccount, flags);
-        par.writeStringList(cookiesList);
-    }
+  /*
+   * (non-Javadoc)
+   * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+   */
+  @Override
+  public void writeToParcel(Parcel par, int flags) {
+    par.writeString(domainIndex);
+    par.writeParcelable(mCurrentAccount, flags);
+    par.writeStringList(cookiesList);
+  }
 
 }

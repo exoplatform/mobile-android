@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Activity details layout-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#DCDCDCDC"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:fadingEdge="none"
-            android:fillViewport="true" >
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:id="@+id/social_detail_wrap_layout"
@@ -51,7 +51,7 @@
                         android:paddingBottom="2dp"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:paddingTop="5dp" >
+                        android:paddingTop="5dp">
 
                         <TextView
                             android:id="@+id/textView_Like_Count"
@@ -60,7 +60,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_s"
                             android:padding="@dimen/margin_xxs"
-                            android:text="@string/NoLike" />
+                            android:text="@string/NoLike"/>
 
                         <LinearLayout
                             android:id="@+id/social_detail_like_wrap"
@@ -69,7 +69,7 @@
                             android:layout_below="@id/textView_Like_Count"
                             android:layout_marginLeft="3dp"
                             android:layout_marginStart="3dp"
-                            android:orientation="horizontal" >
+                            android:orientation="horizontal">
                         </LinearLayout>
 
                         <LinearLayout
@@ -97,7 +97,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:contentDescription="@string/ImageDesc"
-                                android:background="@drawable/activity_detail_like_row" />
+                                android:background="@drawable/activity_detail_like_row"/>
                         </LinearLayout>
                     </RelativeLayout>
                 </LinearLayout>
@@ -111,14 +111,14 @@
                     android:layout_weight="1"
                     android:inflatedId="@+id/social_empty_stub_inflted"
                     android:layout="@layout/empty_screen"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:id="@+id/activity_display_comment_wrap"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="2dp" >
+                    android:padding="2dp">
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
@@ -131,8 +131,8 @@
             android:background="@drawable/comment_textfield_background"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
-            android:textSize="12sp" 
-            android:inputType="text" />
+            android:textSize="12sp"
+            android:inputType="text"/>
     </LinearLayout>
 
     <LinearLayout

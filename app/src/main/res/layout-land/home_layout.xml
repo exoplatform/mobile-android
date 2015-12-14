@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/MainLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+              android:id="@+id/MainLayout"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="#DCDCDCDC"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -18,7 +18,7 @@
             android:background="@drawable/home_profile_bg"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="2dp" >
+            android:padding="2dp">
 
             <ImageView
                 android:src="@drawable/default_avatar"
@@ -26,7 +26,8 @@
                 android:layout_width="@dimen/home_profile_avatar_size"
                 android:layout_height="@dimen/home_profile_avatar_size"
                 android:layout_marginLeft="7dp"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:contentDescription=""/>
 
             <TextView
                 android:id="@+id/home_textview_name"
@@ -36,7 +37,7 @@
                 android:layout_marginLeft="10dip"
                 android:gravity="center_vertical"
                 android:padding="2dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <org.exoplatform.widget.HomeLandscapeLayout
@@ -44,7 +45,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="#1e1e1e"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -52,13 +53,13 @@
                 android:layout_weight="1"
                 android:background="@drawable/home_item_background_shape"
                 android:gravity="center"
-                android:onClick="onNewsClick" >
+                android:onClick="onNewsClick">
 
                 <TextView
                     android:id="@+id/home_btn_activity"
                     style="@style/HomeButtonStyle"
                     android:drawableTop="@drawable/home_btn_activity"
-                    android:text="@string/ActivityStream" />
+                    android:text="@string/ActivityStream"/>
             </LinearLayout>
 
             <LinearLayout
@@ -67,13 +68,13 @@
                 android:layout_weight="1"
                 android:background="@drawable/home_item_background_shape"
                 android:gravity="center"
-                android:onClick="onDocumentClick" >
+                android:onClick="onDocumentClick">
 
                 <TextView
                     android:id="@+id/home_btn_document"
                     style="@style/HomeButtonStyle"
                     android:drawableTop="@drawable/home_btn_document"
-                    android:text="@string/Documents" />
+                    android:text="@string/Documents"/>
             </LinearLayout>
 
             <LinearLayout
@@ -82,13 +83,13 @@
                 android:layout_weight="1"
                 android:background="@drawable/home_item_background_shape"
                 android:gravity="center"
-                android:onClick="onDashboardClick" >
+                android:onClick="onDashboardClick">
 
                 <TextView
                     android:id="@+id/home_btn_apps"
                     style="@style/HomeButtonStyle"
                     android:drawableTop="@drawable/home_btn_apps"
-                    android:text="@string/Dashboard" />
+                    android:text="@string/Dashboard"/>
             </LinearLayout>
         </org.exoplatform.widget.HomeLandscapeLayout>
     </LinearLayout>
@@ -105,7 +106,7 @@
             android:layout_height="wrap_content"
             android:flipInterval="5000"
             android:gravity="center_vertical"
-            android:onClick="onNewsClick" >
+            android:onClick="onNewsClick">
         </ViewFlipper>
     </LinearLayout>
 

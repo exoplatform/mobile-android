@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#DCDCDCDC"
-    android:fadingEdge="none" >
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#DCDCDCDC"
+            android:fadingEdge="none">
 
     <LinearLayout
         android:id="@+id/setting_layout"
-        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <!-- Login Setting -->
 
         <!-- Login title -->
         <TextView
-                android:id="@+id/setting_login_title_txt"
-                style="@style/ServerSettingTitleTextStyle"
-                android:text="@string/LoginTitle" />
+            android:id="@+id/setting_login_title_txt"
+            style="@style/ServerSettingTitleTextStyle"
+            android:text="@string/LoginTitle"/>
 
         <!--<include layout="@layout/separator_line" /> !-->
 
 
         <!-- Remember me checkbox -->
-        <include layout="@layout/setting_checkbox_item" android:id="@+id/setting_remember_me_ckb" />
+        <include
+            android:id="@+id/setting_remember_me_ckb"
+            layout="@layout/setting_checkbox_item"/>
 
         <!-- Auto-login checkbox -->
-        <include layout="@layout/setting_checkbox_item" android:id="@+id/setting_autologin_ckb" />
+        <include
+            android:id="@+id/setting_autologin_ckb"
+            layout="@layout/setting_checkbox_item"/>
 
         <!--<include layout="@layout/separator_line" /> -->
 
@@ -37,64 +41,78 @@
         <TextView
             android:id="@+id/setting_language_title"
             style="@style/ServerSettingTitleTextStyle"
-            android:text="@string/Language" />
+            android:text="@string/Language"/>
 
         <!--<include layout="@layout/separator_line" />-->
 
 
         <!-- English checkbox -->
-        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_en_ckb" />
+        <include
+            android:id="@+id/setting_en_ckb"
+            layout="@layout/setting_checkbox_item_with_image"/>
 
         <!-- French checkbox -->
-        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_fr_ckb" />
+        <include
+            android:id="@+id/setting_fr_ckb"
+            layout="@layout/setting_checkbox_item_with_image"/>
 
         <!-- German checkbox -->
-        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_de_ckb" />
+        <include
+            android:id="@+id/setting_de_ckb"
+            layout="@layout/setting_checkbox_item_with_image"/>
 
         <!-- Spain checkbox -->
-        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_es_ckb" />
+        <include
+            android:id="@+id/setting_es_ckb"
+            layout="@layout/setting_checkbox_item_with_image"/>
 
         <!-- Portuguese (Brazil) checkbox -->
-        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_pt_br_ckb" />
-        
+        <include
+            android:id="@+id/setting_pt_br_ckb"
+            layout="@layout/setting_checkbox_item_with_image"/>
+
         <!-- Greek checkbox -->
-        <include layout="@layout/setting_checkbox_item_with_image" android:id="@+id/setting_el_ckb" />
+        <include
+            android:id="@+id/setting_el_ckb"
+            layout="@layout/setting_checkbox_item_with_image"/>
 
         <!--<include layout="@layout/separator_line" /> -->
-
 
 
         <!-- Social Settings -->
 
         <!-- Social title -->
         <TextView
-                android:id="@+id/setting_social_title"
-                style="@style/ServerSettingTitleTextStyle"
-                android:text="@string/SocialSettingTitle" />
+            android:id="@+id/setting_social_title"
+            style="@style/ServerSettingTitleTextStyle"
+            android:text="@string/SocialSettingTitle"/>
 
         <!--<include layout="@layout/separator_line" />-->
 
 
         <!-- Remember my filter checkbox -->
-        <include layout="@layout/setting_checkbox_item" android:id="@+id/setting_remember_filter_ckb" />
+        <include
+            android:id="@+id/setting_remember_filter_ckb"
+            layout="@layout/setting_checkbox_item"/>
 
         <!--<include layout="@layout/separator_line" />-->
-
 
 
         <!-- Document Settings -->
 
         <!-- Document title -->
         <TextView
-                android:id="@+id/setting_document_title"
-                style="@style/ServerSettingTitleTextStyle"
-                android:text="@string/DocumentSettingTitle" />
+            android:id="@+id/setting_document_title"
+            style="@style/ServerSettingTitleTextStyle"
+            android:text="@string/DocumentSettingTitle"/>
 
         <!--<include layout="@layout/separator_line" android:id="@+id/setting_document_separator_1" /> -->
 
 
         <!-- Document show private drive checkbox -->
-        <include layout="@layout/setting_checkbox_item" android:id="@+id/setting_private_drive_ckb" />
+        <include
+            android:id="@+id/setting_private_drive_ckb"
+            layout="@layout/setting_checkbox_item"/>
 
         <!--<include layout="@layout/separator_line" android:id="@+id/setting_document_separator_2" /> -->
 
@@ -102,33 +120,33 @@
         <!-- Server List Settings -->
         <!-- Server title -->
         <TextView
-                android:id="@+id/setting_accounts_title"
-                style="@style/ServerSettingTitleTextStyle"
-                android:text="@string/Server" />
+            android:id="@+id/setting_accounts_title"
+            style="@style/ServerSettingTitleTextStyle"
+            android:text="@string/Server"/>
 
         <!--<include layout="@layout/separator_line" />-->
 
 
         <!-- List of servers -->
         <org.exoplatform.ui.setting.ServerList
-                android:id="@+id/setting_list_accounts"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:orientation="vertical" />
+            android:id="@+id/setting_list_accounts"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:orientation="vertical"/>
 
         <!-- Add account button -->
         <Button
-                android:id="@+id/setting_new_account_btn"
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:layout_marginLeft="-2dp"
-                android:layout_marginRight="-2dp"
-                android:background="@drawable/file_item_background_shape"
-                android:textSize="@dimen/label_txt_size"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:text="@string/AddAServer" />
+            android:id="@+id/setting_new_account_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="-2dp"
+            android:layout_marginRight="-2dp"
+            android:background="@drawable/file_item_background_shape"
+            android:text="@string/AddAServer"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/label_txt_size"
+            android:textStyle="bold"/>
 
 
         <!--<include layout="@layout/separator_line" />-->
@@ -137,9 +155,9 @@
         <!-- Application information -->
         <!-- Title -->
         <TextView
-                android:id="@+id/setting_app_info_title"
-                style="@style/ServerSettingTitleTextStyle"
-                android:text="@string/ApplicationInformation" />
+            android:id="@+id/setting_app_info_title"
+            style="@style/ServerSettingTitleTextStyle"
+            android:text="@string/ApplicationInformation"/>
 
         <!--<include layout="@layout/separator_line" />-->
 
@@ -148,31 +166,32 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/settingcellstreachablebackground"
-            android:paddingLeft="10dp">
+            android:paddingLeft="@dimen/margin_xs"
+            android:paddingRight="@dimen/margin_xs">
 
             <TextView
                 android:id="@+id/setting_server_edition_txt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:gravity="center_vertical"
                 android:padding="4dp"
+                android:text="@string/ServerEdition"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
-                android:textStyle="bold"
-                android:text="@string/ServerEdition"/>
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/setting_server_edition_value_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
                 android:gravity="center_vertical"
                 android:padding="4dp"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </RelativeLayout>
 
         <!-- Server Version Info -->
@@ -180,31 +199,32 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/settingcellstreachablebackground"
-            android:paddingLeft="10dp">
+            android:paddingLeft="@dimen/margin_xs"
+            android:paddingRight="@dimen/margin_xs">
 
             <TextView
                 android:id="@+id/setting_server_version_txt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:gravity="center_vertical"
                 android:padding="4dp"
+                android:text="@string/ServerVersion"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
-                android:textStyle="bold"
-                android:text="@string/ServerVersion"/>
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/setting_server_version_value_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:gravity="center_vertical"
                 android:layout_marginRight="10dp"
+                android:gravity="center_vertical"
                 android:padding="4dp"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </RelativeLayout>
 
         <!-- Application Version Info -->
@@ -212,34 +232,33 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/settingcellstreachablebackground"
-            android:paddingLeft="10dp">
+            android:paddingLeft="@dimen/margin_xs"
+            android:paddingRight="@dimen/margin_xs">
 
             <TextView
                 android:id="@+id/setting_app_version_txt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:gravity="center_vertical"
                 android:padding="4dp"
+                android:text="@string/ApplicationVersion"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
-                android:textStyle="bold"
-                android:text="@string/ApplicationVersion"/>
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/setting_app_version_value_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:gravity="center_vertical"
                 android:layout_marginRight="10dp"
+                android:gravity="center_vertical"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/label_txt_size"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
         </RelativeLayout>
-
-        <!--<include layout="@layout/separator_line" />-->
 
     </LinearLayout>
 

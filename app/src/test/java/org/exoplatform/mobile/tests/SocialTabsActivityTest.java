@@ -158,7 +158,7 @@ public class SocialTabsActivityTest extends ExoActivityTestUtils<SocialTabsActiv
 
     LinearLayout tabsLayout = (LinearLayout) tabs.getChildAt(0);
 
-    ShadowView.clickOn((View) tabsLayout.getChildAt(SocialTabsActivity.MY_SPACES));
+    ShadowView.clickOn(tabsLayout.getChildAt(SocialTabsActivity.MY_SPACES));
     assertThat("Should be on My Spaces tab", pages.getCurrentItem(), equalTo(SocialTabsActivity.MY_SPACES)); // moves
                                                                                                              // to
                                                                                                              // My
@@ -201,9 +201,7 @@ public class SocialTabsActivityTest extends ExoActivityTestUtils<SocialTabsActiv
     // ensures that the async tasks execute completely
     ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
 
-    assertThat("Fragment ID should be ALL_UPDATES",
-               ((AllUpdatesFragment) fragment).getThisTabId(),
-               equalTo(SocialTabsActivity.ALL_UPDATES));
+    assertThat("Fragment ID should be ALL_UPDATES", fragment.getThisTabId(), equalTo(SocialTabsActivity.ALL_UPDATES));
     assertNotNull("SocialServiceHelper should not be null", SocialServiceHelper.getInstance());
 
     assertNotNull("Social Info List should not be null", SocialServiceHelper.getInstance().socialInfoList);

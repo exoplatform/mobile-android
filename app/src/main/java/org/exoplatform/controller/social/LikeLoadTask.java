@@ -84,7 +84,7 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
       boolean liked = SocialDetailHelper.getInstance().getLiked();
       RestActivity activity = SocialServiceHelper.getInstance().activityService.get(activityId);
 
-      if (liked == true) {
+      if (liked) {
         SocialServiceHelper.getInstance().activityService.unlike(activity);
         SocialDetailHelper.getInstance().setLiked(false);
       } else {

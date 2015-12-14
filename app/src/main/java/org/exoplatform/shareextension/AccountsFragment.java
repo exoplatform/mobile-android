@@ -88,7 +88,7 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
     TextView name = (TextView) view.findViewById(R.id.share_account_item_name);
     name.setText(acc.accountName);
     TextView username = (TextView) view.findViewById(R.id.share_account_item_username);
-    username.setText(acc.username + " ");
+    username.setText(String.format("%s ", acc.username));
     TextView server = (TextView) view.findViewById(R.id.share_account_item_server_url);
     server.setText(acc.serverUrl);
     ImageView icon = (ImageView) view.findViewById(R.id.share_account_item_icon);
@@ -119,8 +119,7 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View layout = inflater.inflate(R.layout.share_extension_accounts_fragment, container, false);
-    return layout;
+    return inflater.inflate(R.layout.share_extension_accounts_fragment, container, false);
 
   }
 

@@ -83,9 +83,6 @@ public class SettingActivity extends Activity implements OnClickListener, CheckB
   /** Settings in online (logged in) mode */
   public static final int     PERSONAL_TYPE  = 1;
 
-  @SuppressWarnings("unused")
-  private static final String TAG            = "eXo____SettingActivity____";
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -288,7 +285,7 @@ public class SettingActivity extends Activity implements OnClickListener, CheckB
     SharedPreferences.Editor editor = mSharedPerf.edit();
     editor.putBoolean(mSetting.socialKey, mRememberFilterCbx.isChecked());
     editor.putBoolean(mSetting.documentKey, mPrivateDriveCbx.isChecked());
-    editor.commit();
+    editor.apply();
 
     ServerConfigurationUtils.generateXmlFileWithServerList(this,
                                                            ServerSettingHelper.getInstance().getServerInfoList(this),

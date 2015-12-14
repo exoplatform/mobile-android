@@ -44,15 +44,14 @@ import android.util.Log;
  * <ul>
  * <li>uses the cookies synchronized from {@link ExoConnectionUtils} to get
  * permissions/restrictions about targeted resources</li>
- * <li>sets the custom eXo/$version (Android) User-Agent header in the request
- * </li>
+ * <li>sets the custom eXo/$version (Android) User-Agent header in the request</li>
  * </ul>
  * 
  * @author Philippe Aristote paristote@exoplatform.com May 13, 2015
  */
 public class ExoPicassoDownloader extends UrlConnectionDownloader {
 
-  private static final String TAG = "eXo___ExoPicassoDownloader___";
+  private static final String TAG = ExoPicassoDownloader.class.getName();
 
   // private static final String RESPONSE_SOURCE = "X-Android-Response-Source";
 

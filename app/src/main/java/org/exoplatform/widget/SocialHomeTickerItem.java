@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.text.Html;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,13 +49,9 @@ public class SocialHomeTickerItem extends LinearLayout {
    */
   private final boolean       IS_HOME_STREAM = true;
 
-  private Context             mContext;
-
   private TextView            textViewName;
 
   private TextView            textViewMessage;
-
-  private ImageView           activityAvatar;
 
   private String              userName;
 
@@ -62,23 +59,34 @@ public class SocialHomeTickerItem extends LinearLayout {
 
   private SocialActivityInfo  activityInfo;
 
-  private static final String TAG            = "eXo____HomeSocialItem____";
+  private static final String TAG            = SocialHomeTickerItem.class.getName();
+
+  public SocialHomeTickerItem(Context ctx) {
+    super(ctx);
+  }
+
+  public SocialHomeTickerItem(Context ctx, AttributeSet attrs) {
+    super(ctx, attrs);
+  }
+
+  public SocialHomeTickerItem(Context ctx, AttributeSet attrs, int defStyle) {
+    super(ctx, attrs, defStyle);
+  }
 
   public SocialHomeTickerItem(Context context, SocialActivityInfo info) {
     super(context);
-    mContext = context;
     userName = info.getUserName();
     resource = context.getResources();
     activityInfo = info;
     LayoutInflater inflate = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View view = inflate.inflate(R.layout.home_social_item_layout, this);
-    activityAvatar = (ImageView) view.findViewById(R.id.home_activity_avatar);
+    ImageView activityAvatar = (ImageView) view.findViewById(R.id.home_activity_avatar);
     textViewName = (TextView) view.findViewById(R.id.home_activity_name_txt);
     textViewMessage = (TextView) view.findViewById(R.id.home_activity_message_txt);
 
-    ExoPicasso.picasso(mContext)
+    ExoPicasso.picasso(context)
               .load(Uri.parse(info.getImageUrl()))
-              .transform(new RoundedCornersTranformer(mContext))
+              .transform(new RoundedCornersTranformer(context))
               .placeholder(R.drawable.default_avatar)
               .error(R.drawable.default_avatar)
               .fit()
@@ -166,8 +174,7 @@ public class SocialHomeTickerItem extends LinearLayout {
       break;
 
     case SocialActivityUtil.ACTIVITY_TYPE_ANSWER:
-      String answerBuffer =
-          SocialActivityUtil.getActivityTypeAnswer(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
+      String answerBuffer = SocialActivityUtil.getActivityTypeAnswer(userName, activityInfo, resource, FONT_COLOR, IS_HOME_STREAM);
 
       textViewName.setText(Html.fromHtml(answerBuffer));
 

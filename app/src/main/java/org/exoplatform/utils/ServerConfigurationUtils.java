@@ -56,7 +56,7 @@ public class ServerConfigurationUtils {
 
   public static String        version;
 
-  private static final String TAG = "eXo____ServerConfigUtils___";
+  private static final String TAG = ServerConfigurationUtils.class.getName();
 
   public ServerConfigurationUtils(Context context) {
   }
@@ -125,7 +125,7 @@ public class ServerConfigurationUtils {
       Log.i(TAG, "File not found");
       return arrServerList;
     } catch (IOException e) {
-//       if (Config.GD_ERROR_LOGS_ENABLED)
+      // if (Config.GD_ERROR_LOGS_ENABLED)
       Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
       return arrServerList;
     } catch (ParserConfigurationException e) {
@@ -139,7 +139,7 @@ public class ServerConfigurationUtils {
     } catch (Exception e) {
       Log.e(TAG, "getServerListWithFileName - " + e.getLocalizedMessage());
       return arrServerList;
-    }  finally {
+    } finally {
       if (fis != null)
         try {
           fis.close();

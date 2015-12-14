@@ -46,13 +46,12 @@ import android.widget.ListView;
  * @author Philippe Aristote paristote@exoplatform.com
  * @since Apr 21, 2015
  */
-public class SpaceSelectorActivity extends FragmentActivity implements LoaderCallbacks<List<SocialSpaceInfo>>, OnItemClickListener {
+public class SpaceSelectorActivity extends FragmentActivity implements LoaderCallbacks<List<SocialSpaceInfo>>,
+    OnItemClickListener {
 
-  private static final String   LOG_TAG        = "____eXo_SpaceSelectorActivity____";
+  private static final String   LOG_TAG        = SpaceSelectorActivity.class.getName();
 
   public static final String    SELECTED_SPACE = "SelectedSpace";
-
-  private ListView              listViewSpaces;
 
   private SpaceListAdapter      listAdapterSpaces;
 
@@ -64,7 +63,7 @@ public class SpaceSelectorActivity extends FragmentActivity implements LoaderCal
     setContentView(R.layout.compose_message_space_selector_activity);
     setTitle(R.string.ShareWithWhom);
 
-    listViewSpaces = (ListView) findViewById(R.id.list_spaces);
+    ListView listViewSpaces = (ListView) findViewById(R.id.list_spaces);
     listViewSpaces.setOnItemClickListener(this);
     listAdapterSpaces = new SpaceListAdapter(this);
     listViewSpaces.setAdapter(listAdapterSpaces);
@@ -103,7 +102,7 @@ public class SpaceSelectorActivity extends FragmentActivity implements LoaderCal
 
     return true;
   }
-  
+
   /**
    * Called when an item of the spaces list is tapped.<br/>
    * Results in a call to

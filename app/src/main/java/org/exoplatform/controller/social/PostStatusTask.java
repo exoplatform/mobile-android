@@ -70,15 +70,9 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
 
   private String                   warningTitle;
 
-  private String                   uploadUrl;
-
   private ComposeMessageController messageController;
 
-  public PostStatusTask(Context context,
-                        String dir,
-                        String content,
-                        ComposeMessageController controller,
-                        PostWaitingDialog dialog) {
+  public PostStatusTask(Context context, String dir, String content, ComposeMessageController controller, PostWaitingDialog dialog) {
     mContext = context;
     messageController = controller;
     sdcard_temp_dir = dir;
@@ -107,7 +101,7 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
         postInfo.activityType = SocialPostInfo.TYPE_DOC;
         UploadInfo uploadInfo = new UploadInfo();
         uploadInfo.init(postInfo);
-        uploadUrl = uploadInfo.jcrUrl + "/" + uploadInfo.folder;
+        String uploadUrl = uploadInfo.jcrUrl + "/" + uploadInfo.folder;
 
         // Create destination folder
         if (ExoDocumentUtils.createFolder(uploadUrl)) {
@@ -179,7 +173,8 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
       else
         return 0;
     } catch (RuntimeException e) {
-      // Cannot replace because SocialClientLib can throw exceptions like ServerException, UnsupportMethod, etc
+      // Cannot replace because SocialClientLib can throw exceptions like
+      // ServerException, UnsupportMethod, etc
       if (Log.LOGD)
         Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return -2;

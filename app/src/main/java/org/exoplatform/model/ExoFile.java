@@ -184,14 +184,14 @@ public class ExoFile implements Parcelable {
   }
 
   public static final Parcelable.Creator<ExoFile> CREATOR = new Parcelable.Creator<ExoFile>() {
-    public ExoFile createFromParcel(Parcel in) {
-      return new ExoFile(in);
-    }
+                                                            public ExoFile createFromParcel(Parcel in) {
+                                                              return new ExoFile(in);
+                                                            }
 
-    public ExoFile[] newArray(int size) {
-      return new ExoFile[size];
-    }
-  };
+                                                            public ExoFile[] newArray(int size) {
+                                                              return new ExoFile[size];
+                                                            }
+                                                          };
 
   /*
    * (non-Javadoc)

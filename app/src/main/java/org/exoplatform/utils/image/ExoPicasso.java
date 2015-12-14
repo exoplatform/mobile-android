@@ -37,7 +37,7 @@ import android.content.Context;
  */
 public class ExoPicasso {
 
-  private static final String TAG = "eXo___ExoPicasso___";
+  private static final String TAG = ExoPicasso.class.getName();
 
   private static Picasso      sPicasso;
 

@@ -67,7 +67,7 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
 
   private LikeLoadTask                        mLoadTask;
 
-  private static final String                 TAG    = "eXo____StandardArrayAdapter____";
+  private static final String                 TAG    = StandardArrayAdapter.class.getName();
 
   public StandardArrayAdapter(Context context, ArrayList<SocialActivityInfo> items) {
     super(context, R.layout.activitybrowserviewcell, items);
@@ -211,7 +211,8 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
           Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
         return false;
       } catch (RuntimeException e) {
-        // XXX cannot replace because SocialClientLib can throw exceptions like ServerException, UnsupportMethod ,..
+        // XXX cannot replace because SocialClientLib can throw exceptions like
+        // ServerException, UnsupportMethod ,..
         if (Log.LOGD)
           Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
         return false;

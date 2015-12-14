@@ -45,7 +45,6 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.view.MenuItem;
 
-
 /**
  * The asynchronous task that loads activities from the Social REST service.
  */
@@ -67,7 +66,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
 
   protected ActivityService<RestActivity> activityService;
 
-  private static final String             TAG                     = "eXo____SocialLoadTask____";
+  private static final String             TAG                     = SocialLoadTask.class.getName();
 
   public SocialLoadTask(Context context, MenuItem loader) {
     mContext = context;
@@ -97,8 +96,8 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
    * @return The list of RestActivity.
    * @throws SocialClientLibException
    */
-  protected abstract RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity,
-                                                                          QueryParams params) throws SocialClientLibException;
+  protected abstract RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException;
+
   /**
    * Get the list of SocialActivity for the current stream.
    * 
@@ -151,7 +150,7 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
         SocialActivityInfo streamInfo = null;
         RestProfile profile = null;
         for (RestActivity act : activityList) {
-          if (act == null) 
+          if (act == null)
             continue;
           streamInfo = new SocialActivityInfo();
           profile = act.getPosterIdentity().getProfile();
@@ -180,7 +179,8 @@ public abstract class SocialLoadTask extends AsyncTask<Integer, Void, ArrayList<
       Log.d(TAG, e.getLocalizedMessage());
       return null;
     } catch (RuntimeException e) {
-      // Cannot replace because SocialClientLib can throw many kind of exceptions like ServerException, UnsupportMethod, etc
+      // Cannot replace because SocialClientLib can throw many kind of
+      // exceptions like ServerException, UnsupportMethod, etc
       Log.d(TAG, e.getLocalizedMessage());
       return null;
     }

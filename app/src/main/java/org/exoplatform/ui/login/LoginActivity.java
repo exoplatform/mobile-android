@@ -64,8 +64,6 @@ public class LoginActivity extends BaseActivity implements AccountPanel.ViewList
 
   private AccountPanel        mAccountPanel;
 
-  private LoginProxy          mLoginProxy;
-
   /** Default is set to show account panel */
   private String              mPanelMode    = ACCOUNT_PANEL;
 
@@ -76,7 +74,7 @@ public class LoginActivity extends BaseActivity implements AccountPanel.ViewList
   /** === Constants === **/
   public static final String  PANEL_MODE    = "PANEL_MODE";
 
-  private static final String TAG           = "eXo____LoginActivity____";
+  private static final String TAG           = LoginActivity.class.getName();
 
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -217,10 +215,9 @@ public class LoginActivity extends BaseActivity implements AccountPanel.ViewList
     serverObj.serverUrl = serverUrl;
     serverObj.username = username;
     // activates remember me if a username is provided
-    serverObj.isRememberEnabled = ("".equals(username)) ? false : true;
+    serverObj.isRememberEnabled = (!"".equals(username));
 
-    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance()
-                                                          .getServerInfoList(this);
+    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(this);
     String domainIdx;
     int serverIdx = serverList.indexOf(serverObj);
     if (serverIdx > -1) {
@@ -276,7 +273,7 @@ public class LoginActivity extends BaseActivity implements AccountPanel.ViewList
     if (!mSetting.getDomainIndex().equals("-1")) {
       SharedPreferences.Editor editor = getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0).edit();
       editor.putString(ExoConstants.EXO_PRF_DOMAIN_INDEX, mSetting.getDomainIndex());
-      editor.commit();
+      editor.apply();
     }
   }
 
@@ -301,9 +298,9 @@ public class LoginActivity extends BaseActivity implements AccountPanel.ViewList
     loginData.putString(LoginProxy.PASSWORD, password);
     loginData.putString(LoginProxy.DOMAIN, mSetting.getDomainName());
 
-    mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EXISTING_ACCOUNT, loginData);
-    mLoginProxy.setListener(this);
-    mLoginProxy.performLogin();
+    LoginProxy loginProxy = new LoginProxy(this, LoginProxy.WITH_EXISTING_ACCOUNT, loginData);
+    loginProxy.setListener(this);
+    loginProxy.performLogin();
   }
 
   @Override

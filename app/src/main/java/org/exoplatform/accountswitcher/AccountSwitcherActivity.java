@@ -33,8 +33,6 @@ import android.support.v4.content.IntentCompat;
  */
 public class AccountSwitcherActivity extends BaseActivity {
 
-  private static final String TAG = "eXo____AccountSwitcherActivity____";
-
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 

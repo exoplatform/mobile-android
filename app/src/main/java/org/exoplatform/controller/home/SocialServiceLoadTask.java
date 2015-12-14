@@ -78,7 +78,7 @@ public class SocialServiceLoadTask extends AsyncTask<Void, Void, String[]> {
 
   private MenuItem                      loaderItem;
 
-  private static final String           TAG = "eXo____SocialServiceLoadTask____";
+  private static final String           TAG = SocialServiceLoadTask.class.getName();
 
   public SocialServiceLoadTask(Context context, HomeController controller, MenuItem loader) {
     mContext = context;

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:minWidth="280dip"
-    android:orientation="vertical" >
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:minWidth="280dip"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -13,7 +14,7 @@
         android:paddingBottom="7dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:paddingTop="7dp" >
+        android:paddingTop="7dp">
 
         <TextView
             android:id="@+id/com_dialog_title_view"
@@ -25,44 +26,22 @@
             android:shadowDy="2.0"
             android:shadowRadius="1.0"
             android:textColor="#FFFFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="@string/File"/>
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:background="@drawable/serveraddingbackgroundtextfieldspanel"
-        android:fadingEdge="none"
-        android:padding="10dp" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical" >
-
-            <ImageView
-                android:id="@+id/com_warning_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/icon_for_unreadable_file"
-                android:contentDescription="@string/CompatibleFileSuggest" />
-
-            <TextView
-                android:id="@+id/com_warning_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center_horizontal"
-                android:paddingBottom="3dip"
-                android:paddingLeft="8dip"
-                android:paddingRight="8dip"
-                android:paddingTop="3dip"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
-        </LinearLayout>
-    </ScrollView>
+    <TextView
+        android:id="@+id/com_warning_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:drawablePadding="@dimen/margin_xs"
+        android:drawableTop="@drawable/icon_for_unreadable_file"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/margin_xs"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:text="@string/CompatibleFileSuggest"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -70,7 +49,7 @@
         android:background="@drawable/serveraddbuttonpanelbackground"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="5dp" >
+        android:padding="5dp">
 
         <Button
             android:id="@+id/com_cancel_button"
@@ -84,7 +63,7 @@
             android:shadowRadius="1.0"
             android:text="@string/Cancel"
             android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <Button
             android:id="@+id/com_ok_button"
@@ -99,7 +78,7 @@
             android:shadowRadius="1.0"
             android:text="@string/OK"
             android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1511271548" android:versionName="2.10-SNAPSHOT" package="org.exoplatform">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="auto" android:versionCode="1511271548" android:versionName="2.10-SNAPSHOT" package="org.exoplatform">
     <supports-screens android:smallScreens="false"/>
 
     <!-- Dangerous Permissions -->
@@ -17,7 +19,7 @@
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="23"/>
 
     <!-- Application Information -->
-    <application android:allowBackup="true" android:icon="@drawable/application_icon" android:label="eXo" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
+    <application android:allowBackup="true" android:icon="@mipmap/application_icon" android:label="eXo" android:name=".ExoApplication" android:theme="@style/Theme.eXo">
 
         <!-- First Activity of the Application -->
         <activity android:name=".ui.LaunchActivity" android:theme="@android:style/Theme.Holo.Light.NoActionBar">
@@ -31,15 +33,24 @@
            Configuration Assistant
           -->
         <activity android:name=".ui.WelcomeActivity" android:theme="@android:style/Theme.Holo.Light.NoActionBar"/>
-        <activity android:name=".ui.SignUpActivity" android:parentActivityName=".ui.WelcomeActivity" android:windowSoftInputMode="stateVisible">
+        <activity android:name=".ui.SignUpActivity"
+            android:parentActivityName=".ui.WelcomeActivity"
+            android:windowSoftInputMode="stateVisible"
+            tools:ignore="UnusedAttribute">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.WelcomeActivity"/>
         </activity>
-        <activity android:name=".ui.SignInActivity" android:parentActivityName=".ui.WelcomeActivity" android:windowSoftInputMode="stateVisible">
+        <activity android:name=".ui.SignInActivity"
+            android:parentActivityName=".ui.WelcomeActivity"
+            android:windowSoftInputMode="stateVisible"
+            tools:ignore="UnusedAttribute">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.WelcomeActivity"/>
         </activity>
-        <activity android:name=".ui.SignInOnPremiseActivity" android:parentActivityName=".ui.SignInActivity" android:windowSoftInputMode="stateVisible">
+        <activity android:name=".ui.SignInOnPremiseActivity"
+            android:parentActivityName=".ui.SignInActivity"
+            android:windowSoftInputMode="stateVisible"
+            tools:ignore="UnusedAttribute">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.SignInActivity"/>
         </activity>
@@ -47,7 +58,9 @@
         <!--
            Authentication
           -->
-        <activity android:name=".ui.login.LoginActivity" android:theme="@style/Theme.OverlayActionBar" android:windowSoftInputMode="adjustResize|stateHidden">
+        <activity android:name=".ui.login.LoginActivity"
+            android:theme="@style/Theme.OverlayActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <!-- custom URL scheme -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -60,13 +73,17 @@
         <!--
            Home Dashboard
           -->
-        <activity android:configChanges="keyboardHidden|orientation" android:logo="@drawable/exo_logo_large" android:name=".ui.HomeActivity"/>
+        <activity android:configChanges="keyboardHidden|orientation"
+            android:logo="@drawable/exo_logo_large"
+            android:name=".ui.HomeActivity"/>
         
         <!--
            Settings
           -->
         <activity android:name=".ui.setting.SettingActivity"/>
-        <activity android:name=".ui.setting.ServerEditionActivity" android:parentActivityName=".ui.setting.SettingActivity">
+        <activity android:name=".ui.setting.ServerEditionActivity"
+            android:parentActivityName=".ui.setting.SettingActivity"
+            tools:ignore="UnusedAttribute">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.setting.SettingActivity"/>
         </activity>
@@ -74,7 +91,10 @@
         <!--
            Documents
           -->
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DocumentActivity" android:parentActivityName=".ui.HomeActivity">
+        <activity android:configChanges="keyboardHidden|orientation"
+            android:name=".ui.DocumentActivity"
+            android:parentActivityName=".ui.HomeActivity"
+            tools:ignore="UnusedAttribute">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.HomeActivity"/>
         </activity>
@@ -82,7 +102,10 @@
         <!--
            Gadgets (Apps)
           -->
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.DashboardActivity" android:parentActivityName=".ui.HomeActivity">
+        <activity android:configChanges="keyboardHidden|orientation"
+            android:name=".ui.DashboardActivity"
+            android:parentActivityName=".ui.HomeActivity"
+            tools:ignore="UnusedAttribute">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.HomeActivity"/>
         </activity>
@@ -91,20 +114,30 @@
         <!--
            Social (Activity Stream, Details, Composer, Likers)
           -->
-        <activity android:name=".ui.social.SocialTabsActivity" android:parentActivityName=".ui.HomeActivity" android:theme="@style/Theme.PageIndicatorDefaults">
+        <activity android:name=".ui.social.SocialTabsActivity"
+            android:parentActivityName=".ui.HomeActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults"
+            tools:ignore="UnusedAttribute">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.HomeActivity"/>
         </activity>
-        <activity android:name=".ui.social.SocialDetailActivity" android:parentActivityName=".ui.social.SocialTabsActivity">
+        <activity android:name=".ui.social.SocialDetailActivity"
+            android:parentActivityName=".ui.social.SocialTabsActivity"
+            tools:ignore="UnusedAttribute">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.social.SocialTabsActivity"/>
         </activity>
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.LikeListActivity" android:parentActivityName=".ui.social.SocialDetailActivity">
+        <activity android:configChanges="keyboardHidden|orientation"
+            android:name=".ui.social.LikeListActivity"
+            android:parentActivityName=".ui.social.SocialDetailActivity"
+            tools:ignore="UnusedAttribute">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.social.SocialDetailActivity"/>
         </activity>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".ui.social.ComposeMessageActivity"/>
-        <activity android:name=".ui.social.SpaceSelectorActivity" android:parentActivityName=".ui.social.ComposeMessageActivity">
+        <activity android:name=".ui.social.SpaceSelectorActivity"
+            android:parentActivityName=".ui.social.ComposeMessageActivity"
+            tools:ignore="UnusedAttribute">
             <!-- For API v14 & 15 -->
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".ui.social.ComposeMessageActivity"/>
             
@@ -120,8 +153,9 @@
         <!--
            Share Extension
           -->
-        <activity android:configChanges="keyboardHidden|orientation" android:label="eXo" android:name=".shareextension.ShareActivity">
-
+        <activity android:configChanges="keyboardHidden|orientation"
+            android:label="eXo"
+            android:name=".shareextension.ShareActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>

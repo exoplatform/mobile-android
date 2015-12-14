@@ -32,7 +32,7 @@ public class CheckingTenantStatusTask extends AsyncTask<String, Void, Integer> {
 
   private AsyncTaskListener   mListener;
 
-  private static final String TAG = "eXo____CheckingTenantStatusTask____";
+  private static final String TAG = CheckingTenantStatusTask.class.getName();
 
   @Override
   protected Integer doInBackground(String... params) {
