@@ -262,7 +262,7 @@
   <string name="ShareErrorSignInFailed">Помилка входу, будь ласка, повторіть спробу</string>
   <string name="ShareErrorSomeFilesCannotShare">Деякі документи не можна використовувати спільно</string>
   <string name="ShareErrorAllFilesCannotShare">Всі документи не можна використовувати спільно</string>
-  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorStoragePermissionDenied">The sharing must stop because storage access is forbidden for this app.\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
   <string name="ShareErrorDialogLeave">Залишити</string>
   <string name="ShareErrorDialogAppSettings">Open App Settings</string>
   
