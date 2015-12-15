@@ -262,7 +262,7 @@
   <string name="ShareErrorSignInFailed">Inloggen is mislukt. Probeer opnieuw</string>
   <string name="ShareErrorSomeFilesCannotShare">Sommige documenten kunnen niet worden gedeeld</string>
   <string name="ShareErrorAllFilesCannotShare">Alle documenten kunnen niet worden gedeeld</string>
-  <string name="ShareErrorStoragePermissionDenied">The share must stop because storage access is forbidden for this app.\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorStoragePermissionDenied">The sharing must stop because storage access is forbidden for this app.\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
   <string name="ShareErrorDialogLeave">Verlof</string>
   <string name="ShareErrorDialogAppSettings">Open App Settings</string>
   
