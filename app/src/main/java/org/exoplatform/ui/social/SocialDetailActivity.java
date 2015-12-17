@@ -26,6 +26,7 @@ import org.exoplatform.utils.ExoUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +44,7 @@ import android.widget.TextView;
  * Screen for activity details
  */
 public class SocialDetailActivity extends Activity implements OnClickListener {
-  
+
   public LinearLayout                startScreen;
 
   private View                       emptyCommentStubView;
@@ -82,7 +83,7 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
     initComponent();
     onLoad();
   }
-  
+
   @Override
   protected void onDestroy() {
     if (detailController != null) {
@@ -165,11 +166,12 @@ public class SocialDetailActivity extends Activity implements OnClickListener {
 
   private void initStubView() {
     emptyCommentStubView = ((ViewStub) findViewById(R.id.comment_details_empty_stub)).inflate();
-    ImageView emptyImage = (ImageView) emptyCommentStubView.findViewById(R.id.empty_image);
-    emptyImage.setBackgroundResource(R.drawable.icon_for_no_comment);
     TextView emptyStatus = (TextView) emptyCommentStubView.findViewById(R.id.empty_status);
     emptyStatus.setTextSize(14);
     emptyStatus.setText(commentEmptyString);
+    Drawable icon = getResources().getDrawable(R.drawable.icon_for_no_comment);
+    icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+    emptyStatus.setCompoundDrawables(null, icon, null, null);
   }
 
   private void changeLanguage() {

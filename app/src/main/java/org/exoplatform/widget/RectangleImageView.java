@@ -37,8 +37,8 @@ import android.widget.ImageView;
 /**
  * This image view for attached image in compose message activity
  * 
- * @since Jan 16, 2012 
- * @author Created by The eXo Platform SAS 
+ * @since Jan 16, 2012
+ * @author Created by The eXo Platform SAS
  */
 public class RectangleImageView extends ImageView {
 

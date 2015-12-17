@@ -24,6 +24,7 @@ import org.exoplatform.utils.ExoDocumentUtils;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -32,15 +33,15 @@ import android.widget.TextView;
 
 public class CompatibleFileOpenDialog extends Dialog implements android.view.View.OnClickListener {
 
-  private Button  okButton;
+  private Button okButton;
 
-  private Button  cancelButton;
+  private Button cancelButton;
 
-  private String  fileType;
+  private String fileType;
 
-  private String  filePath;
+  private String filePath;
 
-  private String  fileName;
+  private String fileName;
 
   public CompatibleFileOpenDialog(Context context, String fType, String fPath, String fName) {
     super(context);
@@ -54,8 +55,9 @@ public class CompatibleFileOpenDialog extends Dialog implements android.view.Vie
     okButton.setOnClickListener(this);
     cancelButton = (Button) findViewById(R.id.com_cancel_button);
     cancelButton.setOnClickListener(this);
-    ImageView iconView = (ImageView) findViewById(R.id.com_warning_image);
-    iconView.setBackgroundResource(ExoDocumentUtils.getIconFromType(fType));
+    Drawable icon = context.getResources().getDrawable(ExoDocumentUtils.getIconFromType(fType));
+    icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+    contentView.setCompoundDrawables(null, icon, null, null);
     fileType = fType;
     filePath = fPath;
     fileName = fName;

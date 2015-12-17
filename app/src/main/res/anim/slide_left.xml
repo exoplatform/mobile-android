@@ -16,11 +16,11 @@
 -->
 
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@android:anim/accelerate_interpolator" >
+     android:interpolator="@android:anim/accelerate_interpolator">
 
     <translate
         android:duration="@android:integer/config_mediumAnimTime"
         android:fromXDelta="100%p"
-        android:toXDelta="0" />
+        android:toXDelta="0"/>
 
 </set>

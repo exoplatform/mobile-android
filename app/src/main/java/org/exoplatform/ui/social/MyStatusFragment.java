@@ -49,8 +49,7 @@ public class MyStatusFragment extends ActivityStreamFragment {
   }
 
   public static MyStatusFragment getInstance() {
-    MyStatusFragment fragment = new MyStatusFragment();
-    return fragment;
+    return new MyStatusFragment();
   }
 
   @Override

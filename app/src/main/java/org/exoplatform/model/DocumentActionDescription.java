@@ -18,7 +18,7 @@
  */
 package org.exoplatform.model;
 
-public class DocumentActionDescription extends Object {
+public class DocumentActionDescription {
 
   public String actionName;
 

@@ -55,7 +55,7 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
                                                             public void onInvalidated() {
                                                               super.onInvalidated();
                                                               updateSessionCache();
-                                                            };
+                                                            }
                                                           };
 
   /**
@@ -69,14 +69,16 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
   private final Map<Integer, String>  sectionPositions    = new LinkedHashMap<Integer, String>();
 
   /**
-   * Map the position of each item after adding the sections with the actual position in the adapter
+   * Map the position of each item after adding the sections with the actual
+   * position in the adapter
    */
   private final Map<Integer, Integer> itemPositions       = new LinkedHashMap<Integer, Integer>();
 
   private final Map<View, String>     currentViewSections = new HashMap<View, String>();
 
   /**
-   * Returns the number of types of Views that will be created by getView(int, View, ViewGroup).
+   * Returns the number of types of Views that will be created by getView(int,
+   * View, ViewGroup).
    */
   private int                         viewTypeCount;
 
@@ -91,9 +93,7 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
 
   private Context                     mContext;
 
-  public SectionListAdapter(Context context,
-                            final LayoutInflater inflater,
-                            final ListAdapter linkedAdapter) {
+  public SectionListAdapter(Context context, final LayoutInflater inflater, final ListAdapter linkedAdapter) {
     mContext = context;
     this.linkedAdapter = linkedAdapter;
     this.inflater = inflater;
@@ -122,9 +122,11 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
       final SocialActivityInfo item = (SocialActivityInfo) linkedAdapter.getItem(i);
       // a label that indicates when this activity was created (approximatively)
       section = SocialActivityUtil.getActivityStreamHeader(mContext,
-        item.getUpdatedTime() != 0 ? item.getUpdatedTime() : item.getPostedTime());
+                                                           item.getUpdatedTime() != 0 ? item.getUpdatedTime()
+                                                                                     : item.getPostedTime());
       if (!isTheSame(currentSection, section)) {
-    	// we're entering a new section (activities were created at a different date)
+        // we're entering a new section (activities were created at a different
+        // date)
         sectionPositions.put(currentPosition, section);
         currentSection = section;
         currentPosition++;
@@ -211,6 +213,7 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
 
   /**
    * Writes <code>section</code> on the view <code>sectionView</code>.
+   * 
    * @param section The label to write for this section.
    * @param sectionView The view on which the label is set.
    */
@@ -276,15 +279,14 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
 
   @Override
   public boolean isEnabled(final int position) {
-    if (isSection(position)) {
-      return true;
-    }
-    return linkedAdapter.isEnabled(getLinkedPosition(position));
+    return isSection(position) || linkedAdapter.isEnabled(getLinkedPosition(position));
   }
 
   /**
    * Hide the section header when it reaches the top of the list.
-   * @param firstVisibleItem The position of the item currently at the top of the list.
+   * 
+   * @param firstVisibleItem The position of the item currently at the top of
+   *          the list.
    */
   public void makeSectionInvisibleIfFirstInList(final int firstVisibleItem) {
     final String section = getSectionName(firstVisibleItem);
@@ -308,7 +310,8 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
   }
 
   /**
-   * @return The fixed section header view. Inflate it first if it doesn't exist.
+   * @return The fixed section header view. Inflate it first if it doesn't
+   *         exist.
    */
   public synchronized View getTransparentSectionView() {
     if (transparentSectionView == null) {
@@ -322,10 +325,7 @@ public class SectionListAdapter extends BaseAdapter implements ListAdapter, OnIt
   }
 
   @Override
-  public void onItemClick(final AdapterView<?> parent,
-                          final View view,
-                          final int position,
-                          final long id) {
+  public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
     if (isSection(position)) {
       sectionClicked(getSectionName(position));
     } else if (linkedListener != null) {

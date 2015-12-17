@@ -25,19 +25,11 @@ import org.junit.runners.Suite;
  * @author Arnaud Heritier <aheritier@exoplatform.com>
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ 
-  // Activities
-  WelcomeActivityTest.class, 
-  LoginActivityTest.class,
-  SignInOnPremiseActivityTest.class, 
-  LaunchActivityTest.class, 
-  SettingsActivityTest.class, 
-  HomeActivityTest.class,
-  ServerEditionActivityTest.class, 
-  AccountSwitcherTest.class, 
-  // Utils
-  ExoUtilsTest.class,
-  ExoAccountInfoValidationTest.class,
-  ExoDocumentUtilsTest.class })
+@Suite.SuiteClasses({
+    // Activities
+    WelcomeActivityTest.class, LoginActivityTest.class, SignInOnPremiseActivityTest.class, LaunchActivityTest.class,
+    SettingsActivityTest.class, HomeActivityTest.class, ServerEditionActivityTest.class, AccountSwitcherTest.class,
+    // Utils
+    ExoUtilsTest.class, ExoAccountInfoValidationTest.class, ExoDocumentUtilsTest.class })
 public class TestSuite {
 }

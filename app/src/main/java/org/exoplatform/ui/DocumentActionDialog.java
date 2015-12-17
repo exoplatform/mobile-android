@@ -32,13 +32,13 @@ import android.widget.TextView;
 public class DocumentActionDialog extends Dialog {
 
   private ListView             _listViewFileAction;   // List of
-                                                      // action
+                                                       // action
 
   private TextView             _txtvFileName;         // File's
-                                                      // name
+                                                       // name
 
   public ExoFile               myFile;                // Current
-                                                      // file
+                                                       // file
 
   public DocumentActionAdapter _documentActionAdapter;
 

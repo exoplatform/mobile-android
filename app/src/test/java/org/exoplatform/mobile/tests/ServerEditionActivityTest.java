@@ -47,13 +47,13 @@ import android.widget.TextView;
 
 public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditionActivity> {
 
-  TextView /* mTitleTxt, */ mServerName, mServerURL, mUsername, mPassword;
+  TextView  /* mTitleTxt, */mServerName, mServerURL, mUsername, mPassword;
 
-  EditText                  mServerNameEditTxt, mServerUrlEditTxt, mUserEditTxt, mPassEditTxt;
+  EditText   mServerNameEditTxt, mServerUrlEditTxt, mUserEditTxt, mPassEditTxt;
 
-  Button                    mOkBtn, mDeleteBtn;
+  Button     mOkBtn, mDeleteBtn;
 
-  ExoAccount                thisServer = null;
+  ExoAccount thisServer = null;
 
   @Override
   @Before
@@ -286,7 +286,7 @@ public class ServerEditionActivityTest extends ExoActivityTestUtils<ServerEditio
     // Select the 1st account
     SharedPreferences.Editor prefs = ctx.getSharedPreferences("exo_preference", 0).edit();
     prefs.putString("exo_prf_domain_index", "0");
-    prefs.commit();
+    prefs.apply();
 
     // Start activity with thisServer (the 1st account)
     Intent i = new Intent(ctx, ServerEditionActivity.class);

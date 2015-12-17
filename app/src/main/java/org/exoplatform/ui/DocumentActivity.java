@@ -42,6 +42,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.util.Log;
@@ -104,14 +105,14 @@ public class DocumentActivity extends Activity implements OnRequestPermissionsRe
   public DocumentAdapter         _documentAdapter;
 
   private DocumentLoadTask       mLoadTask;
-  
+
   public CompatibleFileOpen      mFileOpenController;
 
   private View                   empty_stub;
 
   public ExoFile                 _fileForCurrentActionBar;
 
-  private static final String    TAG              = "eXo____DocumentActivity____";
+  private static final String    TAG              = DocumentActivity.class.getName();
 
   @Override
   public void onCreate(Bundle bundle) {
@@ -314,13 +315,13 @@ public class DocumentActivity extends Activity implements OnRequestPermissionsRe
       mFileOpenController.onCancelLoad();
     }
   }
-  
+
   @Override
   protected void onPause() {
     onCancelLoad();
     super.onPause();
   }
-  
+
   @Override
   protected void onDestroy() {
     _documentActivityInstance = null;
@@ -365,27 +366,26 @@ public class DocumentActivity extends Activity implements OnRequestPermissionsRe
   public void takePicture() {
     _sdcard_temp_dir = PhotoUtils.startImageCapture(this);
   }
-  
+
   @SuppressLint("Override")
   @Override
   public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
-    if (results.length > 0
-        && results[0] == PackageManager.PERMISSION_GRANTED) {  
-        // permission granted
-        switch (reqCode) {
-        case ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY:
-          PhotoUtils.pickPhotoForActivity(this);
-          break;
-        case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
-          takePicture();
-          break;
-        default:
-          break;
-        }
+    if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED) {
+      // permission granted
+      switch (reqCode) {
+      case ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY:
+        PhotoUtils.pickPhotoForActivity(this);
+        break;
+      case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
+        takePicture();
+        break;
+      default:
+        break;
+      }
     } else {
-        // permission denied
-      if (ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY) ||
-          ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA) ) {
+      // permission denied
+      if (ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY)
+          || ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA)) {
         PhotoUtils.alertNeedStoragePermission(this);
       } else {
         Toast.makeText(this, R.string.PermissionStorageDeniedToast, Toast.LENGTH_LONG).show();
@@ -430,10 +430,11 @@ public class DocumentActivity extends Activity implements OnRequestPermissionsRe
 
   private void initStubView() {
     empty_stub = ((ViewStub) findViewById(R.id.file_empty_stub)).inflate();
-    ImageView emptyImage = (ImageView) empty_stub.findViewById(R.id.empty_image);
-    emptyImage.setBackgroundResource(R.drawable.icon_for_empty_folder);
     TextView emptyStatus = (TextView) empty_stub.findViewById(R.id.empty_status);
     emptyStatus.setText(emptyFolderString);
+    Drawable icon = getResources().getDrawable(R.drawable.icon_for_empty_folder);
+    icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+    emptyStatus.setCompoundDrawables(null, icon, null, null);
   }
 
   // Set language

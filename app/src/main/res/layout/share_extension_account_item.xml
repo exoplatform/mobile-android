@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/share_account_item_layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_m"
-    android:padding="@dimen/margin_m"
-    android:background="#fff">
+                android:id="@+id/share_account_item_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_m"
+                android:padding="@dimen/margin_m"
+                android:background="#fff">
 
     <TextView
         android:id="@+id/share_account_item_name"
@@ -15,16 +14,17 @@
         android:layout_toRightOf="@+id/share_account_item_icon"
         android:text="@string/Account"
         android:textColor="@android:color/primary_text_light"
-        android:textSize="@dimen/text_size_large" />
+        android:textSize="@dimen/text_size_large"/>
 
     <TextView
         android:id="@+id/share_account_item_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@id/share_account_item_name"
         android:text="@string/UserNameHint"
         android:textColor="@android:color/primary_text_light"
-        android:textSize="@dimen/text_size_large" />
+        android:textSize="@dimen/text_size_large"/>
 
     <TextView
         android:id="@+id/share_account_item_server_url"
@@ -35,7 +35,7 @@
         android:ellipsize="marquee"
         android:lines="1"
         android:text="@string/ServerUrl"
-        android:textSize="@dimen/text_size_medium" />
+        android:textSize="@dimen/text_size_medium"/>
 
     <ImageView
         android:id="@+id/share_account_item_icon"
@@ -45,6 +45,6 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/margin_m"
         android:src="@drawable/icon_check_circle_grey"
-        android:contentDescription="@string/Account" />
+        android:contentDescription="@string/Account"/>
 
 </RelativeLayout>

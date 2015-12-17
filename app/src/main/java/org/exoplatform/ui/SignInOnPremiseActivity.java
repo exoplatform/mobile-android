@@ -53,11 +53,7 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
 
   private EditText            mPassTxt;
 
-  private TextView            mAlertTxt;
-
-  private LoginProxy          mLoginProxy;
-
-  private static final String TAG = "eXo____SignInOnPremiseActivity____";
+  private static final String TAG = SignInOnPremiseActivity.class.getName();
 
   public void onCreate(Bundle savedInstanceState) {
     if (!WelcomeActivity.mIsTablet)
@@ -156,9 +152,9 @@ public class SignInOnPremiseActivity extends Activity implements LoginProxy.Prox
     loginData.putString(LoginProxy.PASSWORD, pass);
     loginData.putString(LoginProxy.DOMAIN, url);
 
-    mLoginProxy = new LoginProxy(this, LoginProxy.WITH_USERNAME, loginData);
-    mLoginProxy.setListener(this);
-    mLoginProxy.performLogin();
+    LoginProxy loginProxy = new LoginProxy(this, LoginProxy.WITH_USERNAME, loginData);
+    loginProxy.setListener(this);
+    loginProxy.performLogin();
   }
 
   @Override

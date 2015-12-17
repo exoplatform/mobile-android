@@ -89,8 +89,6 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
   /** === Async Tasks === **/
   private LoginTask                       mLoginTask;
 
-  private RequestTenantTask               mRequestTenantTask;
-
   /** the warning dialog that shows error */
   private LoginWarningDialog              mWarningDialog;
 
@@ -98,20 +96,30 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
 
   private BasicActivityLifecycleCallbacks mLifecycleCallback    = new BasicActivityLifecycleCallbacks() {
 
-    public void onPause(org.exoplatform.base.BaseActivity act) {
-      if (act == mContext) {
-        // TODO implement correct behavior, current only dismissUI and cancel
-        // current task
-        if (Log.LOGD)
-          Log.d(TAG, "onPause cancel task");
-        setListener(null);
-        if (mLoginTask != null && mLoginTask.getStatus() == Status.RUNNING) {
-          mLoginTask.cancel(true);
-        }
-        dismissDialog();
-      }
-    };
-  };
+                                                                  public void onPause(org.exoplatform.base.BaseActivity act) {
+                                                                    if (act == mContext) {
+                                                                      // TODO
+                                                                      // implement
+                                                                      // correct
+                                                                      // behavior,
+                                                                      // current
+                                                                      // only
+                                                                      // dismissUI
+                                                                      // and
+                                                                      // cancel
+                                                                      // current
+                                                                      // task
+                                                                      if (Log.LOGD)
+                                                                        Log.d(TAG, "onPause cancel task");
+                                                                      setListener(null);
+                                                                      if (mLoginTask != null
+                                                                          && mLoginTask.getStatus() == Status.RUNNING) {
+                                                                        mLoginTask.cancel(true);
+                                                                      }
+                                                                      dismissDialog();
+                                                                    }
+                                                                  }
+                                                                };
 
   /** === States === **/
   private int                             mLaunchMode;
@@ -142,7 +150,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
 
   private static final int                FINISHED              = 101;
 
-  private static final String             TAG                   = "eXo____LoginProxy____";
+  private static final String             TAG                   = LoginProxy.class.getName();
 
   /** data should be verified before entering LoginProxy */
   public LoginProxy(Context context, int state, Bundle loginData) {
@@ -184,9 +192,10 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
       // warning
       mEmail = mNewUserName + "@" + mTenant + ".com";
 
-      mProgressDialog = loginData.getBoolean(SHOW_PROGRESS, true) 
-                                  ? new LoginWaitingDialog(mContext,null,mResource.getString(R.string.SigningIn))
-                                  : null;
+      mProgressDialog = loginData.getBoolean(SHOW_PROGRESS, true) ? new LoginWaitingDialog(mContext,
+                                                                                           null,
+                                                                                           mResource.getString(R.string.SigningIn))
+                                                                 : null;
       break;
 
     /**
@@ -201,7 +210,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
       mProgressDialog.show();
 
       /** figure out which tenant is */
-      mRequestTenantTask = new RequestTenantTask();
+      RequestTenantTask mRequestTenantTask = new RequestTenantTask();
       mRequestTenantTask.setListener(this);
       mRequestTenantTask.execute(mEmail);
       break;
@@ -265,8 +274,8 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
   private String getTenant(String domain) {
     // strip off http:// or https://
     String cloudDomain = domain.startsWith(ExoConnectionUtils.HTTPS) ? domain.substring(ExoConnectionUtils.HTTPS.length())
-                                                                     : domain.startsWith(ExoConnectionUtils.HTTP) ? domain.substring(ExoConnectionUtils.HTTP.length())
-                                                                                                                  : domain;
+                                                                    : domain.startsWith(ExoConnectionUtils.HTTP) ? domain.substring(ExoConnectionUtils.HTTP.length())
+                                                                                                                : domain;
     int idx = cloudDomain.indexOf(ExoConnectionUtils.EXO_CLOUD_WS_DOMAIN);
     if (idx <= 1)
       return null;
@@ -333,8 +342,9 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
   }
 
   private void launchLoginTask() {
-    mDomain = !(mDomain.startsWith(ExoConnectionUtils.HTTP) || mDomain.startsWith(ExoConnectionUtils.HTTPS))
-        ? ExoConnectionUtils.HTTP + mDomain : mDomain;
+    mDomain = !(mDomain.startsWith(ExoConnectionUtils.HTTP) || mDomain.startsWith(ExoConnectionUtils.HTTPS)) ? ExoConnectionUtils.HTTP
+                                                                                                                + mDomain
+                                                                                                            : mDomain;
     mLoginTask = new LoginTask();
     mLoginTask.setListener(this);
     mLoginTask.execute(mNewUserName, mNewPassword, mDomain);
@@ -497,7 +507,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
       // Set Crashlytics user information
       CrashUtils.setUsername(mNewUserName);
       CrashUtils.setServerInfo(mDomain, ServerSettingHelper.getInstance().getServerVersion());
-      
+
       break;
     }
 

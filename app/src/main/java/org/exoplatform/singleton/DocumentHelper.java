@@ -80,14 +80,14 @@ public class DocumentHelper implements Parcelable {
   }
 
   public static final Parcelable.Creator<DocumentHelper> CREATOR = new Parcelable.Creator<DocumentHelper>() {
-    public DocumentHelper createFromParcel(Parcel in) {
-      return new DocumentHelper(in);
-    }
+                                                                   public DocumentHelper createFromParcel(Parcel in) {
+                                                                     return new DocumentHelper(in);
+                                                                   }
 
-    public DocumentHelper[] newArray(int size) {
-      return new DocumentHelper[size];
-    }
-  };
+                                                                   public DocumentHelper[] newArray(int size) {
+                                                                     return new DocumentHelper[size];
+                                                                   }
+                                                                 };
 
   private void readFromParcel(Parcel in) {
     _urlrepositoryHome = in.readString();

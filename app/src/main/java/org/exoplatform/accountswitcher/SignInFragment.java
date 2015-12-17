@@ -62,13 +62,13 @@ public class SignInFragment extends Fragment implements AccountSwitcherListener 
 
   public static final String FRAGMENT_TAG    = "account_switcher_signin_fragment";
 
-  public static final String TAG             = "eXo____AccountSwitcherSignInFragment____";
+  public static final String TAG             = SignInFragment.class.getName();
 
   public SignInFragment() {
     super();
   }
 
-  public SignInFragment(ExoAccount account) {
+  public void setAccount(ExoAccount account) {
     mCurrentAccount = account;
   }
 

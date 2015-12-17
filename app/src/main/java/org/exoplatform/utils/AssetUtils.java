@@ -33,22 +33,22 @@ import java.util.HashMap;
  */
 public class AssetUtils {
 
-  private static AssetManager mAssetManager;
+  private static AssetManager              mAssetManager;
 
   /* simple caching of typefaces */
   private static HashMap<String, Typeface> mFontMaps;
 
-  public static final String ROBOTO_BOLD    = "typefaces/Roboto-Bold.ttf";
+  public static final String               ROBOTO_BOLD    = "typefaces/Roboto-Bold.ttf";
 
-  public static final String ROBOTO_REGULAR = "typefaces/Roboto-Regular.ttf";
+  public static final String               ROBOTO_REGULAR = "typefaces/Roboto-Regular.ttf";
 
-  public static final String ROBOTO_MEDIUM  = "typefaces/Roboto-Medium.ttf";
+  public static final String               ROBOTO_MEDIUM  = "typefaces/Roboto-Medium.ttf";
 
-  public static final String ROBOTO_BLACK   = "typefaces/Roboto-Black.ttf";
+  public static final String               ROBOTO_BLACK   = "typefaces/Roboto-Black.ttf";
 
   public static void setContext(Context context) {
     mAssetManager = context.getAssets();
-    mFontMaps     = new HashMap<String, Typeface>();
+    mFontMaps = new HashMap<String, Typeface>();
   }
 
   /**
@@ -70,10 +70,11 @@ public class AssetUtils {
    * @param typeFace
    * @param parent
    */
-  public static void setTypeFace(Typeface typeFace, ViewGroup parent){
+  public static void setTypeFace(Typeface typeFace, ViewGroup parent) {
     for (int i = 0; i < parent.getChildCount(); i++) {
       View v = parent.getChildAt(i);
-      if (v instanceof ViewGroup) setTypeFace(typeFace, (ViewGroup) v);
+      if (v instanceof ViewGroup)
+        setTypeFace(typeFace, (ViewGroup) v);
       else if (v instanceof TextView)
         setTypeFace(typeFace, (TextView) v);
     }

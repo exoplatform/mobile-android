@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:minWidth="280dip"
-    android:orientation="vertical" >
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:minWidth="280dip"
+              android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="40dip"
         android:background="#4E4E4E"
-        android:gravity="center" >
+        android:gravity="center">
 
         <TextView
             android:id="@+id/add_photo_dialog_title_view"
@@ -22,7 +22,7 @@
             android:shadowRadius="1.0"
             android:text="@string/AddAPhoto"
             android:textColor="#FFFFFFFF"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
     </LinearLayout>
 
     <ScrollView
@@ -30,13 +30,13 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="#DCDCDCDC"
-        android:fadingEdge="none" >
+        android:fadingEdge="none">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp" >
+            android:padding="5dp">
 
             <Button
                 android:id="@+id/add_photo_take_button"
@@ -49,7 +49,7 @@
                 android:shadowDy="1.0"
                 android:shadowRadius="1.0"
                 android:text="@string/TakeAPhoto"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"/>
 
             <Button
                 android:id="@+id/add_photo_library_button"
@@ -62,7 +62,7 @@
                 android:shadowDy="1.0"
                 android:shadowRadius="1.0"
                 android:text="@string/PhotoLibrary"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"/>
 
             <Button
                 android:id="@+id/add_photo_cancel_button"
@@ -75,7 +75,7 @@
                 android:shadowDy="1.0"
                 android:shadowRadius="1.0"
                 android:text="@string/Cancel"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"/>
         </LinearLayout>
     </ScrollView>
 

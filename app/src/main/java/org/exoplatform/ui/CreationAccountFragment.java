@@ -42,21 +42,20 @@ import android.widget.TextView;
 @SuppressLint("ValidFragment")
 public class CreationAccountFragment extends Fragment {
 
-  private TextView mAlertText;
+  private TextView            mAlertText;
 
-  private EditText mEmailEditTxt;
+  private EditText            mEmailEditTxt;
 
-  private Button   mCreateAccBtn;
+  private Button              mCreateAccBtn;
 
-  private static final String TAG = "CreationAccountFragment";
+  private static final String TAG = CreationAccountFragment.class.getName();
 
   public CreationAccountFragment() {
     super();
   }
-  
+
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View layout = inflater.inflate(R.layout.account_creation_panel, container, false);
     mAlertText = (TextView) layout.findViewById(R.id.signup_alert_txt);
 
@@ -85,8 +84,10 @@ public class CreationAccountFragment extends Fragment {
         Log.i(TAG, "createAccount");
 
         String email = mEmailEditTxt.getText().toString();
-        if (!ExoUtils.isEmailValid(email)) showAlertMessage();
-        else makeRequestCreatingAccount(email);
+        if (!ExoUtils.isEmailValid(email))
+          showAlertMessage();
+        else
+          makeRequestCreatingAccount(email);
       }
     };
   }
@@ -110,7 +111,8 @@ public class CreationAccountFragment extends Fragment {
   private TextWatcher createTextWatcher() {
     return new TextWatcher() {
       @Override
-      public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+      public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+      }
 
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -119,7 +121,7 @@ public class CreationAccountFragment extends Fragment {
         String email = mEmailEditTxt.getText().toString();
         if (email.isEmpty()) {
           mCreateAccBtn.setEnabled(false);
-          return ;
+          return;
         }
 
         mCreateAccBtn.setEnabled(true);
@@ -127,10 +129,10 @@ public class CreationAccountFragment extends Fragment {
       }
 
       @Override
-      public void afterTextChanged(Editable editable) { }
+      public void afterTextChanged(Editable editable) {
+      }
     };
   }
-
 
   private void showAlertMessage() {
     Log.i(TAG, "showAlertMessage");

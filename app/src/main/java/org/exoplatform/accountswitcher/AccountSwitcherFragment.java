@@ -41,18 +41,13 @@ import android.widget.ListView;
 public class AccountSwitcherFragment extends Fragment implements AccountSwitcherListener {
 
   /**
-   * ListView that contains account items
-   */
-  private ListView            mAccountListView;
-
-  /**
    * Listener that is called when an account item is tapped
    */
   private OnItemClickListener mOnItemClickListener;
 
   public static final String  FRAGMENT_TAG = "account_switcher_fragment_dialog";
 
-  public static final String  TAG          = "eXo____AccountSwitcherFragment____";
+  public static final String  TAG          = AccountSwitcherFragment.class.getName();
 
   public AccountSwitcherFragment() {
     mOnItemClickListener = new OnItemClickListener() {
@@ -77,7 +72,10 @@ public class AccountSwitcherFragment extends Fragment implements AccountSwitcher
 
     View layout = inflater.inflate(R.layout.account_switcher_fragment, container, false);
 
-    mAccountListView = (ListView) layout.findViewById(R.id.account_list_view);
+    /*
+     * ListView that contains account items
+     */
+    ListView mAccountListView = (ListView) layout.findViewById(R.id.account_list_view);
     AccountListAdapter accountsAdapter = new AccountListAdapter(getActivity());
     mAccountListView.setAdapter(accountsAdapter);
     mAccountListView.setOnItemClickListener(mOnItemClickListener);
@@ -115,7 +113,8 @@ public class AccountSwitcherFragment extends Fragment implements AccountSwitcher
 
     Log.i(TAG, "Open the sign in form to get username and password of the account " + account.accountName);
 
-    SignInFragment signInFragment = new SignInFragment(account);
+    SignInFragment signInFragment = new SignInFragment();
+    signInFragment.setAccount(account);
 
     // TODO handle animation on returning from signin fragment to this fragment
     getActivity().getSupportFragmentManager()

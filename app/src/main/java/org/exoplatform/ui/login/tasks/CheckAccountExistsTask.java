@@ -28,9 +28,7 @@ import android.os.AsyncTask;
  */
 public class CheckAccountExistsTask extends AsyncTask<String, Void, Boolean> {
 
-  private AsyncTaskListener   mListener;
-
-  private static final String TAG = "eXo____CheckAccountExistsTask____";
+  private AsyncTaskListener mListener;
 
   @Override
   protected Boolean doInBackground(String... params) {
@@ -38,15 +36,13 @@ public class CheckAccountExistsTask extends AsyncTask<String, Void, Boolean> {
     String username = params[0];
     String tenant = params[1];
 
-    Boolean result = Boolean.valueOf(ExoConnectionUtils.requestAccountExistsForUser(username, tenant));
-
-    return result;
+    return Boolean.valueOf(ExoConnectionUtils.requestAccountExistsForUser(username, tenant));
   }
 
   @Override
   protected void onPostExecute(Boolean result) {
     if (mListener != null)
-      mListener.onCheckAccountExistsFinished(result.booleanValue());
+      mListener.onCheckAccountExistsFinished(result);
   }
 
   public void setListener(AsyncTaskListener listener) {

@@ -40,17 +40,13 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Philippe Aristote
- *          paristote@exoplatform.com
- * Sep 3, 2014  
+ * Created by The eXo Platform SAS Author : Philippe Aristote
+ * paristote@exoplatform.com Sep 3, 2014
  */
 public class AccountListAdapter extends BaseAdapter {
-  
+
   private ArrayList<ExoAccount> mAccountList;
-  
-  private final String TAG = "eXo____AccountListAdapter____";
-  
+
   public AccountListAdapter(Context ctx) {
     mAccountList = ServerSettingHelper.getInstance().getServerInfoList(ctx);
   }
@@ -78,15 +74,15 @@ public class AccountListAdapter extends BaseAdapter {
       LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
       convertView = inflater.inflate(R.layout.account_switcher_item_layout, parent, false);
       holder = new ViewHolder();
-      holder.accountName = (TextView)convertView.findViewById(R.id.account_name_textview);
-      holder.accountServerURL = (TextView)convertView.findViewById(R.id.account_server_textview);
-      holder.userFullName = (TextView)convertView.findViewById(R.id.account_user_fullname_textview);
-      holder.accountUsername = (TextView)convertView.findViewById(R.id.account_username_textview);
-      holder.connectionStatus = (TextView)convertView.findViewById(R.id.account_connection_status_textview);
-      holder.userAvatar = (ImageView)convertView.findViewById(R.id.account_avatar_imageview);
+      holder.accountName = (TextView) convertView.findViewById(R.id.account_name_textview);
+      holder.accountServerURL = (TextView) convertView.findViewById(R.id.account_server_textview);
+      holder.userFullName = (TextView) convertView.findViewById(R.id.account_user_fullname_textview);
+      holder.accountUsername = (TextView) convertView.findViewById(R.id.account_username_textview);
+      holder.connectionStatus = (TextView) convertView.findViewById(R.id.account_connection_status_textview);
+      holder.userAvatar = (ImageView) convertView.findViewById(R.id.account_avatar_imageview);
       convertView.setTag(holder);
     } else {
-      holder = (ViewHolder)convertView.getTag();
+      holder = (ViewHolder) convertView.getTag();
     }
 
     ExoAccount account = mAccountList.get(index);
@@ -115,29 +111,39 @@ public class AccountListAdapter extends BaseAdapter {
       }
     }
     holder.connectionStatus.setText(connStatus);
-    
+
     if ("".equalsIgnoreCase(account.avatarUrl)) {
       // no avatar URL, load a standard image
-      Picasso.with(mContext).load(R.drawable.default_avatar)
-             .resizeDimen(R.dimen.account_list_avatar_size, R.dimen.account_list_avatar_size).centerCrop()
+      Picasso.with(mContext)
+             .load(R.drawable.default_avatar)
+             .resizeDimen(R.dimen.account_list_avatar_size, R.dimen.account_list_avatar_size)
+             .centerCrop()
              .into(holder.userAvatar);
     } else {
       // load the avatar from its URL
-      Picasso.with(mContext).load(account.avatarUrl)
-             .resizeDimen(R.dimen.account_list_avatar_size, R.dimen.account_list_avatar_size).centerCrop()
+      Picasso.with(mContext)
+             .load(account.avatarUrl)
+             .resizeDimen(R.dimen.account_list_avatar_size, R.dimen.account_list_avatar_size)
+             .centerCrop()
              .into(holder.userAvatar);
     }
-    
+
     return convertView;
   }
-  
+
   static class ViewHolder {
-    TextView accountName;
-    TextView accountServerURL;
-    TextView userFullName;
-    TextView accountUsername;
-    TextView connectionStatus; // contains either the last login date or the label 'connected'
+    TextView  accountName;
+
+    TextView  accountServerURL;
+
+    TextView  userFullName;
+
+    TextView  accountUsername;
+
+    TextView  connectionStatus; // contains either the last login date or the
+                                // label 'connected'
+
     ImageView userAvatar;
   }
-  
+
 }

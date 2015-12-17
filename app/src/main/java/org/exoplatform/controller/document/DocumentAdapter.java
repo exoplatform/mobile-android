@@ -81,12 +81,17 @@ public class DocumentAdapter extends BaseAdapter {
     if ("".equals(myFile.name) && "".equals(myFile.path)) {
       convertView = inflater.inflate(R.layout.gadget_tab_layout, parent, false);
       TextView textViewTabTitle = (TextView) convertView.findViewById(R.id.textView_Tab_Title);
-      if (myFile.driveName.equals(ExoConstants.DOCUMENT_PERSONAL_DRIVER))
+      switch (myFile.driveName) {
+      case ExoConstants.DOCUMENT_PERSONAL_DRIVER:
         textViewTabTitle.setText(_mContext.getResources().getString(R.string.Personal));
-      else if (myFile.driveName.equals(ExoConstants.DOCUMENT_GROUP_DRIVER))
+        break;
+      case ExoConstants.DOCUMENT_GROUP_DRIVER:
         textViewTabTitle.setText(_mContext.getResources().getString(R.string.Group));
-      else if (myFile.driveName.equals(ExoConstants.DOCUMENT_GENERAL_DRIVER))
+        break;
+      case ExoConstants.DOCUMENT_GENERAL_DRIVER:
         textViewTabTitle.setText(_mContext.getResources().getString(R.string.General));
+        break;
+      }
       return (convertView);
     } else {
       convertView = inflater.inflate(R.layout.fileitem, parent, false);

@@ -25,12 +25,10 @@ import org.exoplatform.utils.ExoDocumentUtils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Parcel;
 import android.text.ParcelableSpan;
 import android.text.style.ClickableSpan;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 
 public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
   private String mURL;
@@ -63,8 +61,8 @@ public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
   }
 
   /**
-   * Check if the document should be opened in a webview or not, based on its mimetype.
-   * Open in a WebView if
+   * Check if the document should be opened in a webview or not, based on its
+   * mimetype. Open in a WebView if
    * <ul>
    * <li>mimetype is unknown (null)</li>
    * <li>mimetype is image/*</li>
@@ -75,9 +73,7 @@ public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
    * @return
    */
   private boolean openInWebView(String mimeType) {
-    return ( mimeType == null ||
-             mimeType.startsWith(ExoDocumentUtils.IMAGE_TYPE) ||
-             (mimeType.startsWith(ExoDocumentUtils.TEXT_TYPE) && !mimeType.equalsIgnoreCase("text/rtf")) );
+    return (mimeType == null || mimeType.startsWith(ExoDocumentUtils.IMAGE_TYPE) || (mimeType.startsWith(ExoDocumentUtils.TEXT_TYPE) && !mimeType.equalsIgnoreCase("text/rtf")));
   }
 
   @Override
@@ -89,7 +85,8 @@ public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
       intent.putExtra(ExoConstants.WEB_VIEW_URL, getURL());
       intent.putExtra(ExoConstants.WEB_VIEW_TITLE, getURL());
       intent.putExtra(ExoConstants.WEB_VIEW_ALLOW_JS, "false");
-      if (mimeType != null) intent.putExtra(ExoConstants.WEB_VIEW_MIME_TYPE, mimeType);
+      if (mimeType != null)
+        intent.putExtra(ExoConstants.WEB_VIEW_MIME_TYPE, mimeType);
       context.startActivity(intent);
     } else {
       new CompatibleFileOpen(context, mimeType, getURL(), ExoDocumentUtils.getLastPathComponent(getURL()));
@@ -100,17 +97,17 @@ public class TextUrlSpan extends ClickableSpan implements ParcelableSpan {
   public int getSpanTypeId() {
     return 11;
   }
-  
+
   // Workaround needed to work on Android 6.0
   // cf https://jira.exoplatform.org/browse/MOB-1974
-  
+
   public int getSpanTypeIdInternal() {
     return getSpanTypeId();
   }
-  
+
   public void writeToParcelInternal(Parcel dest, int flags) {
     writeToParcel(dest, flags);
   }
-  
+
   //
 }

@@ -34,7 +34,7 @@ import android.widget.LinearLayout;
  * 8, 2012
  */
 public class HomeLandscapeLayout extends LinearLayout {
-  private Paint            paint           = new Paint();
+  private Paint paint = new Paint();
 
   public HomeLandscapeLayout(Context context) {
     super(context, null);

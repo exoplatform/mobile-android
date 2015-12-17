@@ -31,6 +31,7 @@ import org.exoplatform.widget.ConnectionErrorDialog;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -47,8 +48,6 @@ public class DashboardActivity extends FragmentActivity {
   private ListView                listView;
 
   private View                    empty_stub;
-
-  private String                  title;
 
   private String                  dashboardEmptyString;
 
@@ -117,10 +116,11 @@ public class DashboardActivity extends FragmentActivity {
 
   private void initStubView() {
     empty_stub = ((ViewStub) findViewById(R.id.dashboard_empty_stub)).inflate();
-    ImageView emptyImage = (ImageView) empty_stub.findViewById(R.id.empty_image);
-    emptyImage.setBackgroundResource(R.drawable.icon_for_no_gadgets);
     TextView emptyStatus = (TextView) empty_stub.findViewById(R.id.empty_status);
     emptyStatus.setText(dashboardEmptyString);
+    Drawable icon = getResources().getDrawable(R.drawable.icon_for_no_gadgets);
+    icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+    emptyStatus.setCompoundDrawables(null, icon, null, null);
   }
 
   @Override
@@ -161,8 +161,7 @@ public class DashboardActivity extends FragmentActivity {
 
   private void changeLanguage() {
     Resources resource = getResources();
-    title = resource.getString(R.string.Dashboard);
-    setTitle(title);
+    setTitle(resource.getString(R.string.Dashboard));
     dashboardEmptyString = resource.getString(R.string.EmptyDashboard);
   }
 

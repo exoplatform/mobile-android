@@ -80,17 +80,13 @@ public class HomeActivity extends Activity {
 
   private TextView            homeUserName;
 
-  private int                 defaultAvatar = R.drawable.default_avatar;
-
   private ViewFlipper         viewFlipper;
 
   public static HomeActivity  homeActivity;
 
-  private static final String TAG           = "eXo____HomeActivity____";
+  private static final String TAG = HomeActivity.class.getName();
 
   private AccountSetting      mSetting;
-
-  private MenuItem            loaderItem;
 
   @Override
   public void onCreate(Bundle bundle) {
@@ -150,7 +146,7 @@ public class HomeActivity extends Activity {
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.home, menu);
     // keep an instance of the refresh button to display a loading indicator
-    loaderItem = menu.findItem(R.id.menu_home_refresh);
+    MenuItem loaderItem = menu.findItem(R.id.menu_home_refresh);
     homeController.setLoader(loaderItem);
     // we're already loading the profile and activities,
     // so we start the loading indicator now
@@ -243,7 +239,7 @@ public class HomeActivity extends Activity {
     ExoPicasso.picasso(this)
               .load(Uri.parse(profile[0]))
               .transform(new RoundedCornersTranformer(this))
-              .error(defaultAvatar)
+              .error(R.drawable.default_avatar)
               .into(homeUserAvatar);
     // e.g. John Smith (Intranet)
     String userAndAccount = String.format("%s (%s)", profile[1], mSetting.getCurrentAccount().accountName);

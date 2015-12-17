@@ -53,7 +53,7 @@
     <!-- setting -->
     <dimen name="title_txt_size">16sp</dimen>
     <dimen name="label_txt_size">14sp</dimen>
-    
+
     <!-- Account Switcher -->
     <dimen name="AccountListItemTextBigSize">20sp</dimen>
     <dimen name="AccountListItemTextSmallSize">16sp</dimen>

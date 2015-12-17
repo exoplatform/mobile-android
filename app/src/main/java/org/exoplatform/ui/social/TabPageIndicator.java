@@ -57,19 +57,18 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 
   private Runnable                       mTabSelector;
 
-  private final OnClickListener          mTabClickListener = 
-		  new OnClickListener() {
-             @Override
-             public void onClick(View view) {
-               TabView tabView = (TabView) view;
-               final int oldSelected = mViewPager.getCurrentItem();
-               final int newSelected = tabView.getIndex();
-               mViewPager.setCurrentItem(newSelected);
-               if (oldSelected == newSelected && mTabReselectedListener != null) {
-                 mTabReselectedListener.onTabReselected(newSelected);
-               }
-             }
-           };
+  private final OnClickListener          mTabClickListener = new OnClickListener() {
+                                                             @Override
+                                                             public void onClick(View view) {
+                                                               TabView tabView = (TabView) view;
+                                                               final int oldSelected = mViewPager.getCurrentItem();
+                                                               final int newSelected = tabView.getIndex();
+                                                               mViewPager.setCurrentItem(newSelected);
+                                                               if (oldSelected == newSelected && mTabReselectedListener != null) {
+                                                                 mTabReselectedListener.onTabReselected(newSelected);
+                                                               }
+                                                             }
+                                                           };
 
   private final LinearLayout             mTabLayout;
 
@@ -274,8 +273,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 
       // Re-measure if we went beyond our maximum size.
       if (mMaxTabWidth > 0 && getMeasuredWidth() > mMaxTabWidth) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(mMaxTabWidth, MeasureSpec.EXACTLY),
-                        heightMeasureSpec);
+        super.onMeasure(MeasureSpec.makeMeasureSpec(mMaxTabWidth, MeasureSpec.EXACTLY), heightMeasureSpec);
       }
     }
 

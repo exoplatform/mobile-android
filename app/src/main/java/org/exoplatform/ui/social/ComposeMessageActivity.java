@@ -71,8 +71,6 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
 
   private EditText                     composeEditText;
 
-  private ScrollView                   textFieldScrollView;
-
   private LinearLayout                 fileAttachWrap;
 
   private TextView                     postDestinationView;
@@ -82,8 +80,6 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
   private Button                       sendButton;
 
   private Button                       cancelButton;
-
-  private String                       composeMessage;
 
   private String                       comment;
 
@@ -101,15 +97,15 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
 
   private int                          currentPosition         = -1;
 
-  private static final String          TAG                     = "eXo____ComposeMessageActivity____";
+  private static final String          TAG                     = ComposeMessageActivity.class.getName();
 
   private static final int             SELECT_POST_DESTINATION = 10;
-  
-  private final String KEY_COMPOSE_TYPE                        = "COMPOSE_TYPE";
-  
-  private final String KEY_CURRENT_POSITION                    = "CURRENT_POSITION";
-  
-  private final String KEY_TEMP_IMAGE                          = "TEMP_IMAGE";
+
+  private final String                 KEY_COMPOSE_TYPE        = "COMPOSE_TYPE";
+
+  private final String                 KEY_CURRENT_POSITION    = "CURRENT_POSITION";
+
+  private final String                 KEY_TEMP_IMAGE          = "TEMP_IMAGE";
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -137,7 +133,7 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
       ((LinearLayout) postDestinationView.getParent()).setVisibility(View.GONE);
     }
   }
-  
+
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     outState.putInt(KEY_COMPOSE_TYPE, composeType);
@@ -145,7 +141,7 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
     outState.putString(KEY_TEMP_IMAGE, sdcard_temp_dir);
     super.onSaveInstanceState(outState);
   }
-  
+
   @Override
   protected void onDestroy() {
     composeMessageActivity = null;
@@ -156,7 +152,7 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
     postDestinationView = (TextView) findViewById(R.id.post_destination_text_view);
     postDestinationIcon = (ImageView) findViewById(R.id.post_destination_image);
     composeEditText = (EditText) findViewById(R.id.compose_text_view);
-    textFieldScrollView = (ScrollView) findViewById(R.id.compose_textfield_scroll);
+    ScrollView textFieldScrollView = (ScrollView) findViewById(R.id.compose_textfield_scroll);
     textFieldScrollView.setOnTouchListener(new View.OnTouchListener() {
       @Override
       public boolean onTouch(View v, MotionEvent event) {
@@ -176,7 +172,7 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
     cancelButton.setText(cancelText);
     cancelButton.setOnClickListener(this);
   }
-  
+
   private void setActivityTitle(int compType) {
     if (compType == ExoConstants.COMPOSE_POST_TYPE) {
       setTitle(statusUpdate);
@@ -215,14 +211,12 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
     }
     return true;
   }
-  
 
   @SuppressLint("Override")
   @Override
   public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
-    if (results.length > 0
-        && results[0] == PackageManager.PERMISSION_GRANTED) {  
-        // permission granted
+    if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED) {
+      // permission granted
       switch (reqCode) {
       case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
         messageController.initCamera();
@@ -234,15 +228,14 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
         break;
       }
     } else {
-        // permission denied
-      if (ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY) ||
-          ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA) ) {
+      // permission denied
+      if (ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY)
+          || ExoDocumentUtils.shouldDisplayExplanation(this, ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA)) {
         PhotoUtils.alertNeedStoragePermission(this);
       } else {
         Toast.makeText(this, R.string.PermissionStorageDeniedToast, Toast.LENGTH_LONG).show();
       }
     }
-    return;
   }
 
   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -362,7 +355,7 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
   public void onClick(View view) {
 
     if (view.equals(sendButton)) {
-      composeMessage = composeEditText.getText().toString();
+      String composeMessage = composeEditText.getText().toString();
       messageController.onSendMessage(composeMessage, sdcard_temp_dir, currentPosition);
     }
     if (view.equals(cancelButton)) {

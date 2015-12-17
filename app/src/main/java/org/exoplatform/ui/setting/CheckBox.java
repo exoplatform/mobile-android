@@ -33,16 +33,14 @@ import android.widget.TextView;
  * A checkbox that has a text and a image<br/>
  * The checkbox will change state when being clicked upon<br/>
  * It can be disabled, in that case, it will not be clicked<br/>
- *
  */
-public class CheckBox extends RelativeLayout implements
-    View.OnClickListener {
+public class CheckBox extends RelativeLayout implements View.OnClickListener {
 
   /** state: checked or not */
-  protected boolean mChecked = false;
+  protected boolean mChecked      = false;
 
   /** state: enabled or disabled */
-  private boolean   mEnabled = true;
+  private boolean   mEnabled      = true;
 
   private TextView  mText;
 
@@ -57,9 +55,6 @@ public class CheckBox extends RelativeLayout implements
 
   private int       mUncheckedImg = R.drawable.authenticate_checkmark_off;
 
-  private static final String TAG = "eXo____CheckBox____";
-
-
   public CheckBox(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
   }
@@ -72,7 +67,6 @@ public class CheckBox extends RelativeLayout implements
     super(context);
   }
 
-
   @Override
   protected void onFinishInflate() {
     super.onFinishInflate();
@@ -82,7 +76,7 @@ public class CheckBox extends RelativeLayout implements
   }
 
   private void initSubViews() {
-    mText  = (TextView)  findViewById(R.id.checkbox_txt);
+    mText = (TextView) findViewById(R.id.checkbox_txt);
     mImage = (ImageView) findViewById(R.id.checkbox_img);
 
     setOnClickListener(this);
@@ -90,7 +84,7 @@ public class CheckBox extends RelativeLayout implements
     mDisabledAnim.setDuration(0);
     mDisabledAnim.setFillAfter(true);
 
-    mEnabledAnim  = new AlphaAnimation(1.0f, 1.0f);
+    mEnabledAnim = new AlphaAnimation(1.0f, 1.0f);
     mEnabledAnim.setDuration(0);
     mEnabledAnim.setFillAfter(true);
   }
@@ -106,17 +100,21 @@ public class CheckBox extends RelativeLayout implements
   }
 
   public CheckBox setChecked(boolean isChecked, boolean triggerListener) {
-    if (mChecked == isChecked) return this;
+    if (mChecked == isChecked)
+      return this;
     mChecked = isChecked;
     mImage.setBackgroundResource(mChecked ? mCheckedImg : mUncheckedImg);
-    if (mViewListener != null && triggerListener) mViewListener.onClickCheckBox(this, mChecked);
+    if (mViewListener != null && triggerListener)
+      mViewListener.onClickCheckBox(this, mChecked);
     return this;
   }
 
   public CheckBox enabled(boolean isEnabled) {
     mEnabled = isEnabled;
-    if (mEnabled) startAnimation(mEnabledAnim);
-    else startAnimation(mDisabledAnim);
+    if (mEnabled)
+      startAnimation(mEnabledAnim);
+    else
+      startAnimation(mDisabledAnim);
     setEnabled(mEnabled);
     return this;
   }
@@ -135,13 +133,14 @@ public class CheckBox extends RelativeLayout implements
 
   @Override
   public void onClick(View view) {
-    if (view.equals(this)) setChecked(!mChecked, true);
+    if (view.equals(this))
+      setChecked(!mChecked, true);
   }
 
   /* interface to listen to view event */
   public interface ViewListener {
 
-    void onClickCheckBox(CheckBox checkBox,boolean isChecked);
+    void onClickCheckBox(CheckBox checkBox, boolean isChecked);
   }
 
   public void setViewListener(ViewListener l) {

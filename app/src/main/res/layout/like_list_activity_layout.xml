@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#D4D4D4D4" >
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="#D4D4D4D4">
 
     <GridView
         android:id="@+id/like_list_gridview"
@@ -16,6 +16,6 @@
         android:numColumns="auto_fit"
         android:scrollbars="none"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp" />
+        android:verticalSpacing="10dp"/>
 
 </LinearLayout>

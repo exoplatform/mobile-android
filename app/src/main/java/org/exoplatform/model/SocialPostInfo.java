@@ -64,14 +64,14 @@ public class SocialPostInfo implements Parcelable {
   }
 
   public static final Parcelable.Creator<SocialPostInfo> CREATOR = new Parcelable.Creator<SocialPostInfo>() {
-    public SocialPostInfo createFromParcel(Parcel in) {
-      return new SocialPostInfo(in);
-    }
+                                                                   public SocialPostInfo createFromParcel(Parcel in) {
+                                                                     return new SocialPostInfo(in);
+                                                                   }
 
-    public SocialPostInfo[] newArray(int size) {
-      return new SocialPostInfo[size];
-    }
-  };
+                                                                   public SocialPostInfo[] newArray(int size) {
+                                                                     return new SocialPostInfo[size];
+                                                                   }
+                                                                 };
 
   @Override
   public int describeContents() {
@@ -146,6 +146,7 @@ public class SocialPostInfo implements Parcelable {
 
   /**
    * Create TemplateParams for a DOC_ACTIVITY
+   * 
    * @param uploadInfo Info about the uploaded DOC
    */
   public void buildTemplateParams(UploadInfo uploadInfo) {

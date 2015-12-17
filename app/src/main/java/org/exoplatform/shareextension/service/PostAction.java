@@ -145,7 +145,8 @@ public class PostAction extends Action {
         }
       }
     } catch (Exception e) {
-     // XXX cannot replace because SocialClientLib can throw exceptions like ServerException, UnsupportMethod ,..
+      // XXX cannot replace because SocialClientLib can throw exceptions like
+      // ServerException, UnsupportMethod ,..
       Log.e(LOG_TAG, "Post message failed", e);
     }
     return false;

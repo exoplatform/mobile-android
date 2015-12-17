@@ -52,10 +52,6 @@ public class LikeListActivity extends Activity {
 
   private ArrayList<SocialLikeInfo> likeList;
 
-  private GridView                  likedGridView;
-
-  private StringBuffer              title;
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -81,7 +77,7 @@ public class LikeListActivity extends Activity {
     } else {
       liker = getResources().getString(R.string.Likers);
     }
-    title = new StringBuffer();
+    StringBuffer title = new StringBuffer();
     title.append(size);
     title.append(" ");
     title.append(liker);
@@ -90,7 +86,7 @@ public class LikeListActivity extends Activity {
   }
 
   private void initUI() {
-    likedGridView = (GridView) findViewById(R.id.like_list_gridview);
+    GridView likedGridView = (GridView) findViewById(R.id.like_list_gridview);
     likedGridView.setAdapter(new LikedItemAdapter(this));
     likedGridView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -132,7 +128,8 @@ public class LikeListActivity extends Activity {
       ViewHolder viewHolder;
       if (convertView == null) {
         // Inflate layout from layout resource
-        // Passing parent instead of null ends in java.lang.UnsupportedOperationException:
+        // Passing parent instead of null ends in
+        // java.lang.UnsupportedOperationException:
         // addView(View, LayoutParams) is not supported in AdapterView
         convertView = mInflater.inflate(R.layout.liked_grid_item, null);
         viewHolder = new ViewHolder();

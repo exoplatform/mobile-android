@@ -89,7 +89,7 @@ public class ServerEditionActivity extends Activity {
 
   public static final String  SERVER_IDX        = "SERVER_IDX";
 
-  private static final String TAG               = "eXo____ServerEditionActivity____";
+  private static final String TAG               = ServerEditionActivity.class.getName();
 
   public void onCreate(Bundle savedInstanceState) {
     requestScreenOrientation();

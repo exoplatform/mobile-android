@@ -45,10 +45,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class DashboardItemAdapter extends
-                                  BaseAdapter /*
-                                               * implements ImageProcessor
-                                               */ {
+public class DashboardItemAdapter extends BaseAdapter /*
+                                                       * implements
+                                                       * ImageProcessor
+                                                       */{
 
   private ArrayList<GadgetInfo> _arrayOfItems;
 
@@ -67,7 +67,8 @@ public class DashboardItemAdapter extends
   private LayoutInflater        mInflater;
 
   public DashboardItemAdapter(Context context, ArrayList<GadgetInfo> items) {
-    // Jul 21, 2015, shouldn't store layout inflater here because it's can be get in getView
+    // Jul 21, 2015, shouldn't store layout inflater here because it's can be
+    // get in getView
     mInflater = LayoutInflater.from(context);
 
     mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));

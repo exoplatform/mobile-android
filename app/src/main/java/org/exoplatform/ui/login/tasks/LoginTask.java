@@ -41,7 +41,7 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
 
   private AsyncTaskListener   mListener;
 
-  private static final String TAG = "eXo____LoginTask____";
+  private static final String TAG = LoginTask.class.getName();
 
   @Override
   public void onPreExecute() {

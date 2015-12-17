@@ -67,17 +67,11 @@ public class SocialDetailController {
 
   private TextView                  textView_Like_Count;
 
-  private int                       likeDrawable    = R.drawable.activity_like_button_background_shape;
-
-  private int                       disLikeDrawable = R.drawable.activity_dislike_button_background_shape;
-
   private SocialDetailLoadTask      mLoadTask;
 
   private LikeLoadTask              mLikeLoadTask;
 
   private String                    activityId;
-
-  private int                       likedAvatarSize;
 
   private ArrayList<SocialLikeInfo> likeList;
 
@@ -164,8 +158,7 @@ public class SocialDetailController {
 
         commentItem.comTextViewMessage.setText(Html.fromHtml(comment.getCommentTitle(),
                                                              new PicassoImageGetter(commentItem.comTextViewMessage),
-                                                             null),
-                                               TextView.BufferType.SPANNABLE);
+                                                             null), TextView.BufferType.SPANNABLE);
         SocialActivityUtil.setTextLinkify(commentItem.comTextViewMessage);
         commentItem.comPostedTime.setText(SocialActivityUtil.getPostedTimeString(mContext, comment.getPostedTime()));
         commentLayoutWrap.addView(commentItem, params);
@@ -178,7 +171,9 @@ public class SocialDetailController {
 
   public void setLikedState() {
     boolean liked = SocialDetailHelper.getInstance().getLiked();
+    int likeDrawable = R.drawable.activity_like_button_background_shape;
     if (liked) {
+      int disLikeDrawable = R.drawable.activity_dislike_button_background_shape;
       likeButton.setBackgroundResource(disLikeDrawable);
     } else
       likeButton.setBackgroundResource(likeDrawable);
@@ -220,7 +215,7 @@ public class SocialDetailController {
      * Set list of likers
      */
     likedLayoutWrap.removeAllViews();
-    likedAvatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.social_liked_avatar_size);
+    int likedAvatarSize = mContext.getResources().getDimensionPixelSize(R.dimen.social_liked_avatar_size);
     LayoutParams params = new LayoutParams(likedAvatarSize, likedAvatarSize);
     params.setMargins(5, 0, 0, 0);
     ImageView likedAvatar;

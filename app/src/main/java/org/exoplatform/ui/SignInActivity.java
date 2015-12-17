@@ -53,9 +53,7 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
 
   private TextView            mAlertTxt;
 
-  private LoginProxy          mLoginProxy;
-
-  private static final String TAG = "eXoSignInActivity";
+  private static final String TAG = SignInActivity.class.getName();
 
   public void onCreate(Bundle savedInstanceState) {
     if (!WelcomeActivity.mIsTablet)
@@ -144,14 +142,13 @@ public class SignInActivity extends Activity implements LoginProxy.ProxyListener
   private void makeRequestSigningIn(String email, String password) {
     Log.i(TAG, "makeRequestSigningIn");
 
-    // new SignInController(this, email, password);
-
     Bundle loginData = new Bundle();
     loginData.putString(LoginProxy.EMAIL, email);
     loginData.putString(LoginProxy.PASSWORD, password);
-    mLoginProxy = new LoginProxy(this, LoginProxy.WITH_EMAIL, loginData);
-    mLoginProxy.setListener(this);
-    // mLoginProxy.performLogin(); // do not call perform login when logging in
+    LoginProxy loginProxy = new LoginProxy(this, LoginProxy.WITH_EMAIL, loginData);
+    loginProxy.setListener(this);
+    // TODO: Check loginProxy.performLogin(); // do not call perform login when
+    // logging in
     // by email
   }
 

@@ -30,11 +30,9 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 /**
- * Custom layout for home screen
- * drawing a gradient bitmap at the center of the background
- *
- * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com May
- * 23, 2012
+ * Custom layout for home screen drawing a gradient bitmap at the center of the
+ * background Created by The eXo Platform SAS Author : eXoPlatform
+ * exo@exoplatform.com May 23, 2012
  */
 public class HomeLinearLayout extends LinearLayout {
   private Paint paint = new Paint();

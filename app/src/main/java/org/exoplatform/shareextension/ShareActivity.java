@@ -91,11 +91,11 @@ public class ShareActivity extends FragmentActivity {
   /**
    * Direction of the animation to switch from one fragment to another
    */
-  public static enum Anim {
+  public enum Anim {
     NO_ANIM, FROM_LEFT, FROM_RIGHT
   }
 
-  public static final String       LOG_TAG                  = "____eXo____Share_Extension____";
+  public static final String       LOG_TAG                  = ShareActivity.class.getName();
 
   public static final String       DEFAULT_CONTENT_NAME     = "TEMP_FILE_TO_SHARE";
 
@@ -206,12 +206,12 @@ public class ShareActivity extends FragmentActivity {
         Toast.makeText(this, R.string.ShareErrorNoAccountConfigured, Toast.LENGTH_LONG).show();
         finish();
       }
-      int selectedServerIdx = Integer.parseInt(getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0).getString(
-                                                                                                              ExoConstants.EXO_PRF_DOMAIN_INDEX,
+      int selectedServerIdx = Integer.parseInt(getSharedPreferences(ExoConstants.EXO_PREFERENCE, 0).getString(ExoConstants.EXO_PRF_DOMAIN_INDEX,
                                                                                                               "-1"));
       AccountSetting.getInstance().setDomainIndex(String.valueOf(selectedServerIdx));
-      AccountSetting.getInstance().setCurrentAccount((selectedServerIdx == -1
-          || selectedServerIdx >= serverList.size()) ? null : serverList.get(selectedServerIdx));
+      AccountSetting.getInstance()
+                    .setCurrentAccount((selectedServerIdx == -1 || selectedServerIdx >= serverList.size()) ? null
+                                                                                                          : serverList.get(selectedServerIdx));
       postInfo.ownerAccount = AccountSetting.getInstance().getCurrentAccount();
     }
     ExoAccount acc = postInfo.ownerAccount;
@@ -475,24 +475,24 @@ public class ShareActivity extends FragmentActivity {
       new PrepareAttachmentsTask().execute();
     }
   }
-  
+
   @SuppressLint("Override")
   @Override
   public void onRequestPermissionsResult(int reqCode, String[] permissions, int[] results) {
     if (reqCode == ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY) {
-      if (results.length > 0
-          && results[0] == PackageManager.PERMISSION_GRANTED) {  
-          // permission granted
-          prepareAttachmentsAsync();
+      if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED) {
+        // permission granted
+        prepareAttachmentsAsync();
       } else {
-          // permission denied
+        // permission denied
         AlertDialog.Builder db = new AlertDialog.Builder(this);
         DialogInterface.OnClickListener dialogInterface = new OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
             if (which == DialogInterface.BUTTON_NEUTRAL) {
-              Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                         Uri.fromParts("package", getPackageName(), null));
+              Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package",
+                                                                                                     getPackageName(),
+                                                                                                     null));
               intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
               startActivity(intent);
             }
@@ -505,7 +505,6 @@ public class ShareActivity extends FragmentActivity {
         AlertDialog dialog = db.create();
         dialog.show();
       }
-      return;
     }
   }
 
@@ -531,8 +530,7 @@ public class ShareActivity extends FragmentActivity {
       BitmapFactory.Options opts = new BitmapFactory.Options();
       opts.inSampleSize = 4;
       opts.inPreferredConfig = Bitmap.Config.RGB_565;
-      Bitmap thumbnail = BitmapFactory.decodeFile(origin.getAbsolutePath(), opts);
-      return thumbnail;
+      return BitmapFactory.decodeFile(origin.getAbsolutePath(), opts);
     }
 
     private File getFileWithRotatedBitmap(DocumentInfo info, String filename) throws IOException {
@@ -554,7 +552,7 @@ public class ShareActivity extends FragmentActivity {
           // try..catch here to not break the process if close() fails
           if (fos != null)
             fos.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
       }
     }
@@ -571,8 +569,7 @@ public class ShareActivity extends FragmentActivity {
         while ((len = buffInput.read(buf)) != -1) {
           fileOutput.write(buf, 0, len);
         }
-        File file = new File(getFilesDir(), filename);
-        return file;
+        return new File(getFilesDir(), filename);
       } finally {
         try {
           // try..catch here to not break the process if close() fails
@@ -580,7 +577,7 @@ public class ShareActivity extends FragmentActivity {
             buffInput.close();
           if (fileOutput != null)
             fileOutput.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
       }
     }
@@ -667,7 +664,7 @@ public class ShareActivity extends FragmentActivity {
         ComposeFragment.getFragment().setNumberOfAttachments(postInfo.postAttachedFiles.size());
       if (errorMessage != null)
         Toast.makeText(ShareActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-    };
+    }
   }
 
   /**
@@ -716,7 +713,7 @@ public class ShareActivity extends FragmentActivity {
           SocialServiceHelper.getInstance().spaceService = clientServiceFactory.createSpaceService();
           SocialServiceHelper.getInstance().identityService = clientServiceFactory.createIdentityService();
         }
-        return Integer.valueOf(result);
+        return result;
       } catch (MalformedURLException e) {
         Log.e(LOG_TAG, "Login task failed", e);
       } catch (IOException e) {
@@ -728,7 +725,7 @@ public class ShareActivity extends FragmentActivity {
         // ServerException, UnsupportMethod ,..
         Log.e(LOG_TAG, "Login task failed", e);
       }
-      return Integer.valueOf(ExoConnectionUtils.LOGIN_FAILED);
+      return ExoConnectionUtils.LOGIN_FAILED;
     }
 
     @Override
@@ -740,7 +737,7 @@ public class ShareActivity extends FragmentActivity {
     @Override
     protected void onPostExecute(Integer result) {
       Log.d(LOG_TAG, String.format("Received login response %s", result));
-      if (ExoConnectionUtils.LOGIN_SUCCESS == result.intValue()) {
+      if (ExoConnectionUtils.LOGIN_SUCCESS == result) {
         online = true;
       } else {
         Toast.makeText(getApplicationContext(), R.string.ShareErrorSignInFailed, Toast.LENGTH_LONG).show();

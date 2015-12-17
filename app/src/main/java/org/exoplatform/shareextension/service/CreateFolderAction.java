@@ -38,6 +38,7 @@ public class CreateFolderAction extends Action {
       throw new IllegalArgumentException("Cannot pass null as the UploadInfo argument");
     super.check();
   }
+
   // create and execute create folder request, wait for result
   public static boolean execute(SocialPostInfo post, UploadInfo upload, ActionListener listener) {
 

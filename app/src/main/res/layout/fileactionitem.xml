@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/document_action_popup_background_shape" >
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/document_action_popup_background_shape">
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dip" 
-        android:contentDescription="@string/ImageDesc" />
+        android:padding="5dip"
+        android:contentDescription="@string/ImageDesc"/>
 
     <TextView
         android:id="@+id/label"
@@ -19,6 +19,6 @@
         android:layout_marginLeft="5dip"
         android:layout_toRightOf="@id/icon"
         android:textColor="@android:color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
 </RelativeLayout>

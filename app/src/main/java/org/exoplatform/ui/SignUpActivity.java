@@ -26,8 +26,6 @@ import android.support.v4.app.FragmentActivity;
 
 public class SignUpActivity extends FragmentActivity {
 
-  private static final String TAG = "eXo____SignUpActivity____";
-
   public void onCreate(Bundle savedInstanceState) {
     if (!WelcomeActivity.mIsTablet)
       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -37,10 +35,7 @@ public class SignUpActivity extends FragmentActivity {
     setContentView(R.layout.signup);
     setTitle(R.string.GetStarted);
 
-    getSupportFragmentManager()
-        .beginTransaction()
-        .add(R.id.share_extension_fragment, new CreationAccountFragment())
-        .commit();
+    getSupportFragmentManager().beginTransaction().add(R.id.share_extension_fragment, new CreationAccountFragment()).commit();
   }
 
   public void flipToGreetingsPanel() {

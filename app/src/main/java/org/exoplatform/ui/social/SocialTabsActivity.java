@@ -55,10 +55,6 @@ public class SocialTabsActivity extends FragmentActivity {
 
   public ViewPager                     mPager;
 
-  private PageIndicator                mIndicator;
-
-  private SocialTabsAdapter            mAdapter;
-
   private static String[]              TAB_NAMES;
 
   private static final String          NUMBER_OF_ACTIVITY      = "NUMBER_OF_ACTIVITY";
@@ -82,8 +78,6 @@ public class SocialTabsActivity extends FragmentActivity {
   private boolean                      isSocialFilterEnable    = false;
 
   public static SocialTabsActivity     instance;
-
-  private static final String          TAG                     = "eXo____SocialTabsActivity____";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -109,9 +103,9 @@ public class SocialTabsActivity extends FragmentActivity {
 
     TAB_NAMES = getResources().getStringArray(R.array.SocialTabs);
     mPager = (ViewPager) findViewById(R.id.pager);
-    mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
+    PageIndicator mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
 
-    mAdapter = new SocialTabsAdapter(getSupportFragmentManager());
+    SocialTabsAdapter mAdapter = new SocialTabsAdapter(getSupportFragmentManager());
     mPager.setAdapter(mAdapter);
     mIndicator.setViewPager(mPager);
 
@@ -173,7 +167,7 @@ public class SocialTabsActivity extends FragmentActivity {
       int tabId = mPager.getCurrentItem();
       Editor editor = prefs.edit();
       editor.putInt(AccountSetting.getInstance().socialKeyIndex, tabId);
-      editor.commit();
+      editor.apply();
     }
   }
 

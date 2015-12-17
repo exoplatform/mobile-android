@@ -27,13 +27,11 @@ import org.exoplatform.R;
 
 public class GreetingsFragment extends Fragment {
 
-  private static final String TAG = "eXoGreetingsFragment";
-
-  public GreetingsFragment() {}
+  public GreetingsFragment() {
+  }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.greetings_panel, container, false);
   }
 }

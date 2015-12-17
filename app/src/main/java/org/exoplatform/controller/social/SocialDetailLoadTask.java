@@ -53,8 +53,6 @@ import android.os.AsyncTask;
 import android.view.View;
 
 public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
-  
-  private RestActivity                 selectedRestActivity;
 
   private LinkedList<SocialLikeInfo>   likeLinkedList    = new LinkedList<SocialLikeInfo>();
 
@@ -71,8 +69,6 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
   private String                       detailsErrorStr;
 
   private SocialDetailController       detailController;
-
-  private String                       activityType;
 
   private SocialActivityInfo           streamInfo;
 
@@ -106,7 +102,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
       queryParams.append(QueryParams.NUMBER_OF_LIKES_PARAM.setValue(ExoConstants.NUMBER_OF_LIKES_PARAM));
       queryParams.append(QueryParams.NUMBER_OF_COMMENTS_PARAM.setValue(ExoConstants.NUMBER_OF_COMMENTS_PARAM));
       queryParams.append(QueryParams.POSTER_IDENTITY_PARAM.setValue(true));
-      selectedRestActivity = activityService.get(activityId, queryParams);
+      RestActivity selectedRestActivity = activityService.get(activityId, queryParams);
       SocialDetailHelper.getInstance().setLiked(false);
 
       streamInfo = new SocialActivityInfo();
@@ -124,8 +120,7 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
       streamInfo.setLikeNumber(selectedRestActivity.getTotalNumberOfLikes());
       streamInfo.setCommentNumber(selectedRestActivity.getTotalNumberOfComments());
-      activityType = selectedRestActivity.getType();
-      streamInfo.setType(activityType);
+      streamInfo.setType(selectedRestActivity.getType());
       streamInfo.restActivityStream = selectedRestActivity.getActivityStream();
       streamInfo.templateParams = selectedRestActivity.getTemplateParams();
 

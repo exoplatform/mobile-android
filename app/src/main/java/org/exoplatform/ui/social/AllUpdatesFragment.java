@@ -49,8 +49,7 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
   }
 
   public static AllUpdatesFragment getInstance() {
-    AllUpdatesFragment fragment = new AllUpdatesFragment();
-    return fragment;
+    return new AllUpdatesFragment();
   }
 
   @Override
@@ -79,8 +78,7 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
   }
 
   public boolean isEmpty() {
-    return (SocialServiceHelper.getInstance().socialInfoList == null
-        || SocialServiceHelper.getInstance().socialInfoList.size() == 0);
+    return (SocialServiceHelper.getInstance().socialInfoList == null || SocialServiceHelper.getInstance().socialInfoList.size() == 0);
   }
 
   @Override
@@ -111,8 +109,7 @@ public class AllUpdatesFragment extends ActivityStreamFragment {
     }
 
     @Override
-    protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity,
-                                                                   QueryParams params) throws SocialClientLibException {
+    protected RealtimeListAccess<RestActivity> getRestActivityList(RestIdentity identity, QueryParams params) throws SocialClientLibException {
       return activityService.getFeedActivityStream(identity, params);
     }
 

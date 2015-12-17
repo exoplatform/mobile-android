@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="220dip"
-    android:layout_height="wrap_content"
-    android:background="#ffffff" >
+                android:layout_width="220dip"
+                android:layout_height="wrap_content"
+                android:background="#ffffff">
 
     <RelativeLayout
         android:id="@+id/Navigation_Bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dip" >
+        android:layout_marginLeft="5dip">
 
         <TextView
             android:id="@+id/TextView_Title"
@@ -22,7 +22,7 @@
             android:shadowRadius="1.0"
             android:textColor="@android:color/black"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
     </RelativeLayout>
 
     <ImageView
@@ -32,12 +32,12 @@
         android:layout_below="@id/Navigation_Bar"
         android:layout_marginTop="05dip"
         android:contentDescription="@string/ImageDesc"
-        android:background="@drawable/serversectionseparator" />
+        android:background="@drawable/serversectionseparator"/>
 
     <ListView
         android:id="@+id/ListView0_FileAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ImageView_Separator" />
+        android:layout_below="@id/ImageView_Separator"/>
 
 </RelativeLayout>

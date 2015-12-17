@@ -61,8 +61,6 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
 
   private EditText actionEditText;
 
-  private String   folderName;
-
   private Button   okButton;
 
   private Button   cancelButton;
@@ -102,7 +100,7 @@ public class DocumentExtendDialog extends Dialog implements android.view.View.On
 
   public void onClick(View view) {
     if (view.equals(okButton)) {
-      folderName = actionEditText.getText().toString();
+      String folderName = actionEditText.getText().toString();
 
       if ((folderName != null) && (folderName.length() > 0)) {
 

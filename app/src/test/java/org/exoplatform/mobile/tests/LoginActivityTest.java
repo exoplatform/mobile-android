@@ -212,8 +212,7 @@ public class LoginActivityTest extends ExoActivityTestUtils<LoginActivity> {
     Context ctx = ShadowApplication.getInstance().getApplicationContext();
 
     Intent i = new Intent(ctx, LoginActivity.class);
-    Uri uri = new Uri.Builder().scheme("exomobile")
-                               . // exomobile://
+    Uri uri = new Uri.Builder().scheme("exomobile"). // exomobile://
                                encodedAuthority(ExoConstants.EXO_URL_USERNAME + "=" + TEST_USER_NAME)
                                . // username=testuser
                                appendQueryParameter(ExoConstants.EXO_URL_SERVER, TEST_SERVER_URL)

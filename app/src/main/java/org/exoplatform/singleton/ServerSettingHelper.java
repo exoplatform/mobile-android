@@ -29,8 +29,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Used for storing the list of server url and the index of the selected
- * which is used for adding/repairing/deleting function in setting
+ * Used for storing the list of server url and the index of the selected which
+ * is used for adding/repairing/deleting function in setting
  */
 public class ServerSettingHelper implements Parcelable {
 
@@ -43,7 +43,7 @@ public class ServerSettingHelper implements Parcelable {
   private String                     serverEdition;
 
   /** List of server url */
-  private ArrayList<ExoAccount> serverInfoList;
+  private ArrayList<ExoAccount>      serverInfoList;
 
   private static ServerSettingHelper helper = new ServerSettingHelper();
 
@@ -89,27 +89,29 @@ public class ServerSettingHelper implements Parcelable {
 
   /**
    * Returns the list of server objects configured in the app.<br/>
-   * If the property has not yet been set, the list is retrieved from storage lazily.
+   * If the property has not yet been set, the list is retrieved from storage
+   * lazily.
+   * 
    * @param context
    * @return The list of server objects
    */
   public ArrayList<ExoAccount> getServerInfoList(Context context) {
     if (serverInfoList == null) {
       // Jul 21, 2015, should use application context here?
-      serverInfoList =
-          ServerConfigurationUtils.getServerListFromFile(context, ExoConstants.EXO_SERVER_SETTING_FILE);
+      serverInfoList = ServerConfigurationUtils.getServerListFromFile(context, ExoConstants.EXO_SERVER_SETTING_FILE);
       ServerSettingHelper.getInstance().setServerInfoList(serverInfoList);
     }
     return serverInfoList;
   }
-  
+
   /**
    * Checks whether two or more accounts are configured on the app
+   * 
    * @param ctx
    * @return true if two or more accounts exist, false otherwise
    */
   public boolean twoOrMoreAccountsExist(Context ctx) {
-	  return (getServerInfoList(ctx).size() > 1);
+    return (getServerInfoList(ctx).size() > 1);
   }
 
   private ServerSettingHelper(Parcel in) {

@@ -36,6 +36,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.Html;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
@@ -57,8 +58,6 @@ public class SocialActivityDetailsItem extends LinearLayout {
 
   public LinearLayout         contentLayoutWrap;
 
-  private View                view;
-
   private ImageView           imageViewAvatar;
 
   public TextView             textViewName;
@@ -67,7 +66,7 @@ public class SocialActivityDetailsItem extends LinearLayout {
 
   public TextView             textViewTempMessage;
 
-  private TextView            textViewCommnet;
+  private TextView            textViewComment;
 
   public Button               buttonComment;
 
@@ -91,7 +90,17 @@ public class SocialActivityDetailsItem extends LinearLayout {
 
   private Resources           resource;
 
-  private static final String TAG            = "eXo____SocialActivityStreamItem____";
+  public SocialActivityDetailsItem(Context ctx) {
+    super(ctx);
+  }
+
+  public SocialActivityDetailsItem(Context ctx, AttributeSet attrs) {
+    super(ctx, attrs);
+  }
+
+  public SocialActivityDetailsItem(Context ctx, AttributeSet attrs, int defStyle) {
+    super(ctx, attrs, defStyle);
+  }
 
   public SocialActivityDetailsItem(Context context, SocialActivityInfo info, boolean is) {
     super(context);
@@ -102,14 +111,14 @@ public class SocialActivityDetailsItem extends LinearLayout {
     isDetail = is;
     LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     domain = SocialActivityUtil.getDomain();
-    view = inflate.inflate(R.layout.activitybrowserviewcell, this);
+    View view = inflate.inflate(R.layout.activitybrowserviewcell, this);
     imageViewAvatar = (ImageView) view.findViewById(R.id.imageView_Avatar);
     contentLayoutWrap = (LinearLayout) view.findViewById(R.id.relativeLayout_Content);
     textViewName = (TextView) view.findViewById(R.id.textView_Name);
     textViewName.setLinkTextColor(Color.rgb(21, 94, 173));
     textViewMessage = (TextView) view.findViewById(R.id.textView_Message);
     textViewTempMessage = (TextView) view.findViewById(R.id.textview_temp_message);
-    textViewCommnet = (TextView) view.findViewById(R.id.activity_comment_view);
+    textViewComment = (TextView) view.findViewById(R.id.activity_comment_view);
     buttonComment = (Button) view.findViewById(R.id.button_Comment);
     buttonLike = (Button) view.findViewById(R.id.button_Like);
     typeImageView = (ImageView) view.findViewById(R.id.activity_image_type);
@@ -137,10 +146,10 @@ public class SocialActivityDetailsItem extends LinearLayout {
                             TextView.BufferType.SPANNABLE);
 
     textViewTime.setText(SocialActivityUtil.getPostedTimeString(mContext,
-                           activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
-                                                              : activityInfo.getPostedTime()));
-    buttonComment.setText("" + activityInfo.getCommentNumber());
-    buttonLike.setText("" + activityInfo.getLikeNumber());
+                                                                activityInfo.getUpdatedTime() != 0 ? activityInfo.getUpdatedTime()
+                                                                                                  : activityInfo.getPostedTime()));
+    buttonComment.setText(String.valueOf(activityInfo.getCommentNumber()));
+    buttonLike.setText(String.valueOf(activityInfo.getLikeNumber()));
     int imageId = SocialActivityUtil.getActivityTypeId(activityInfo.getType());
     SocialActivityUtil.setImageType(imageId, typeImageView);
     setViewByType(imageId);
@@ -157,7 +166,7 @@ public class SocialActivityDetailsItem extends LinearLayout {
       textViewName.setMaxLines(100);
       textViewMessage.setMaxLines(100);
       textViewTempMessage.setMaxLines(100);
-      textViewCommnet.setMaxLines(100);
+      textViewComment.setMaxLines(100);
     }
   }
 
@@ -301,17 +310,16 @@ public class SocialActivityDetailsItem extends LinearLayout {
     // If the activity is published in a space, display the space name too
     String info = SocialActivityUtil.getLinkActivityInfo(activityInfo, FONT_COLOR, resource);
     textViewName.setText(Html.fromHtml(info), TextView.BufferType.SPANNABLE);
-    
+
     String templateComment = activityInfo.templateParams.get("comment");
     String description = activityInfo.templateParams.get("description").trim();
 
     if (templateComment != null && !templateComment.equalsIgnoreCase("")) {
-      textViewMessage.setText(Html.fromHtml(templateComment, new EmptyImageGetter(mContext), null),
-                              TextView.BufferType.SPANNABLE);
+      textViewMessage.setText(Html.fromHtml(templateComment, new EmptyImageGetter(mContext), null), TextView.BufferType.SPANNABLE);
     }
     if (description != null) {
-      textViewCommnet.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
-      textViewCommnet.setVisibility(View.VISIBLE);
+      textViewComment.setText(Html.fromHtml(description), TextView.BufferType.SPANNABLE);
+      textViewComment.setVisibility(View.VISIBLE);
     }
 
     String linkBuffer = SocialActivityUtil.getActivityTypeLink(description, activityInfo, FONT_COLOR, false);

@@ -18,7 +18,6 @@
  */
 package org.exoplatform;
 
-
 import org.exoplatform.social.client.api.SocialClientContext;
 import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.CrashUtils;
@@ -28,6 +27,7 @@ import org.exoplatform.utils.LaunchUtils;
 import android.app.Application;
 
 public class ExoApplication extends Application {
+
   @Override
   public void onCreate() {
     super.onCreate();

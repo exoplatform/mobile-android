@@ -32,9 +32,7 @@ import org.exoplatform.singleton.ServerSettingHelper;
 import java.util.ArrayList;
 
 /**
- * Represents the server panel in login screen
- * contains a list of server
- *
+ * Represents the server panel in login screen contains a list of server
  */
 public class ServerPanel extends LinearLayout implements AdapterView.OnItemClickListener {
 
@@ -97,21 +95,19 @@ public class ServerPanel extends LinearLayout implements AdapterView.OnItemClick
 
     if (selectedIdx == position) {
 
-      rowView.findViewById(R.id.ImageView_Checked)
-             .setBackgroundResource(R.drawable.authenticate_checkmark_off);
+      rowView.findViewById(R.id.ImageView_Checked).setBackgroundResource(R.drawable.authenticate_checkmark_off);
       mSetting.setDomainIndex(String.valueOf(-1));
       mSetting.setCurrentAccount(null);
-      return ;
+      return;
     }
 
     int firstVisiblePosition = parent.getFirstVisiblePosition();
     if ((firstVisiblePosition <= selectedIdx) && (selectedIdx <= parent.getLastVisiblePosition()))
       parent.getChildAt(selectedIdx - firstVisiblePosition)
-          .findViewById(R.id.ImageView_Checked)
-          .setBackgroundResource(R.drawable.authenticate_checkmark_off);
+            .findViewById(R.id.ImageView_Checked)
+            .setBackgroundResource(R.drawable.authenticate_checkmark_off);
 
-    rowView.findViewById(R.id.ImageView_Checked)
-           .setBackgroundResource(R.drawable.authenticate_checkmark_on);
+    rowView.findViewById(R.id.ImageView_Checked).setBackgroundResource(R.drawable.authenticate_checkmark_on);
 
     ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
     mSetting.setDomainIndex(String.valueOf(position));

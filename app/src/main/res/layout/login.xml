@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/login_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/login_background"
-    android:orientation="vertical" >
+              android:id="@+id/login_layout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/login_background"
+              android:orientation="vertical">
 
     <!-- eXo logo -->
     <ImageView
@@ -16,7 +16,8 @@
         android:layout_marginBottom="@dimen/margin_xxs"
         android:padding="@dimen/margin_xxs"
         android:contentDescription="@string/ImageDesc"
-        android:src="@drawable/authenticate_logo" >
+        android:src="@drawable/authenticate_logo">
+
         <requestFocus/>
     </ImageView>
 
@@ -34,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/login_server_btn"
             android:layout_marginTop="-4dp"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,7 +44,7 @@
                 android:layout_marginRight="10dp"
                 android:background="@drawable/authenticate_panel_bg"
                 android:orientation="vertical"
-                android:padding="10dp" >
+                android:padding="10dp">
 
                 <EditText
                     android:id="@+id/EditText_UserName"
@@ -95,7 +96,7 @@
                 android:text="@string/SignInButton"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
         </org.exoplatform.ui.login.AccountPanel>
 
@@ -134,7 +135,7 @@
             android:clickable="true"
             android:contentDescription="@string/ImageDesc"
             android:src="@drawable/icon_credentials"
-            android:background="@drawable/bg_tab" />
+            android:background="@drawable/bg_tab"/>
 
         <!-- Switcher button -->
         <ImageView
@@ -148,7 +149,7 @@
             android:contentDescription="@string/ImageDesc"
             android:layout_toRightOf="@id/login_account_btn"
             android:src="@drawable/icon_switcher"
-            android:background="@drawable/bg_tab" />
+            android:background="@drawable/bg_tab"/>
 
     </RelativeLayout>
 

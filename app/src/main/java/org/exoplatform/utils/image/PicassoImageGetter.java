@@ -82,11 +82,7 @@ public class PicassoImageGetter implements ImageGetter {
       if (!URLUtil.isNetworkUrl(imageUrl))
         imageUrl = ExoConnectionUtils.HTTP + imageUrl;
       // load the image
-      ExoPicasso.picasso(tv.getContext())
-                .load(imageUrl)
-                .resize(PLACEHOLDER_SIZE, PLACEHOLDER_SIZE)
-                .centerInside()
-                .into(target);
+      ExoPicasso.picasso(tv.getContext()).load(imageUrl).resize(PLACEHOLDER_SIZE, PLACEHOLDER_SIZE).centerInside().into(target);
     }
     // TODO add loading placeholder
     return ret;

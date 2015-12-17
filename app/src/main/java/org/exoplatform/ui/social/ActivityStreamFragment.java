@@ -31,7 +31,9 @@ import org.exoplatform.widget.SectionListAdapter;
 import org.exoplatform.widget.SectionListView;
 import org.exoplatform.widget.StandardArrayAdapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -79,7 +81,7 @@ public abstract class ActivityStreamFragment extends Fragment {
    */
   protected int                  fragment_list_view_id;
 
-  private static final String    TAG                     = "eXo____ActivityStreamFragment____";
+  private static final String    TAG                     = ActivityStreamFragment.class.getName();
 
   /**
    * Returns whether the current stream's activity list is empty.
@@ -136,11 +138,11 @@ public abstract class ActivityStreamFragment extends Fragment {
     listview.setCacheColorHint(Color.TRANSPARENT);
     listview.setParentFragment(this);
     emptyStubView = ((ViewStub) view.findViewById(fragment_empty_view_id)).inflate();
-    ImageView emptyImage = (ImageView) emptyStubView.findViewById(R.id.empty_image);
-    emptyImage.setBackgroundResource(R.drawable.icon_for_no_activities);
     TextView emptyStatus = (TextView) emptyStubView.findViewById(R.id.empty_status);
     emptyStatus.setText(getActivity().getString(R.string.EmptyActivity));
-
+    Drawable icon = getResources().getDrawable(R.drawable.icon_for_no_activities);
+    icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+    emptyStatus.setCompoundDrawables(null, icon, null, null);
     return view;
   }
 
@@ -158,7 +160,6 @@ public abstract class ActivityStreamFragment extends Fragment {
     currentPosition = position;
     if (isRefresh || isEmpty()) {
       onLoad(actNums);
-      return;
     }
   }
 
@@ -241,6 +242,8 @@ public abstract class ActivityStreamFragment extends Fragment {
    * 
    * @param activityList The list of activities that the list adapter uses.
    */
+  @SuppressLint("NewApi")
+  // lint warns that listview.setSelectionFromTop is from API 21 but it's 1
   public void setListAdapter(ArrayList<SocialActivityInfo> activityList) {
     if (activityList == null || activityList.size() == 0) {
       emptyStubView.setVisibility(View.VISIBLE);

@@ -237,12 +237,12 @@ public class ExoUtils {
       return null;
     return Character.toUpperCase(str.charAt(0)) + str.substring(1);
   }
-  
+
   public static void setLoadingItem(MenuItem loadingItem, boolean loading) {
     if (loadingItem != null) {
       if (loading)
         loadingItem.setActionView(R.layout.action_bar_loading_indicator);
-      else 
+      else
         loadingItem.setActionView(null);
     }
   }

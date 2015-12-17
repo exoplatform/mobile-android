@@ -87,7 +87,7 @@ import android.webkit.MimeTypeMap;
 
 public class ExoDocumentUtils {
 
-  private static final String  LOG_TAG              = "____eXo____ExoDocumentUtils____";
+  private static final String  LOG_TAG              = ExoDocumentUtils.class.getName();
 
   public static final String   ALL_VIDEO_TYPE       = "video/*";
 
@@ -120,15 +120,11 @@ public class ExoDocumentUtils {
   public static final String   OPEN_POWERPOINT_TYPE = "application/vnd.oasis.opendocument.presentation";
 
   public static final String[] FORBIDDEN_TYPES      = new String[] { "application/octet-stream" };
-  
+
   public static boolean isEnoughMemory(int fileSize) {
     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
       int freeSpace = getFreeMemory(Environment.getExternalStorageDirectory().getAbsolutePath());
-      if (freeSpace > fileSize) {
-        return true;
-      } else
-        return false;
-
+      return (freeSpace > fileSize);
     } else
       return false;
   }
@@ -200,13 +196,13 @@ public class ExoDocumentUtils {
       result.mResult = FileOpenRequestResult.EXTERNAL;
     }
     if (Log.LOGD)
-      Log.d(LOG_TAG, "File Open Result: "+result.mResult);
+      Log.d(LOG_TAG, "File Open Result: " + result.mResult);
     return result;
   }
 
   /**
    * Check whether the given Mime Type is forbidden. The list of forbidden types
-   * is in {@link ExoDocumentUtils.FORBIDDEN_TYPES}
+   * is in {@link ExoDocumentUtils#FORBIDDEN_TYPES}
    * 
    * @param mimeType
    * @return true if the given Mime Type is in the list
@@ -267,7 +263,10 @@ public class ExoDocumentUtils {
    */
   public static String mimeTypeFromUrl(String url) {
     String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-    return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+    if (extension != null) {
+      return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase(Locale.US));
+    }
+    return null;
   }
 
   public static boolean putFileToServerFromLocal(String url, File fileManager, String fileType) {
@@ -280,11 +279,7 @@ public class ExoDocumentUtils {
       fileEntity.setContentType(fileType);
       HttpResponse response = ExoConnectionUtils.httpClient.execute(put);
       int status = response.getStatusLine().getStatusCode();
-      if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
-        return true;
-      } else {
-        return false;
-      }
+      return status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES;
     } catch (IOException e) {
       if (Log.LOGD)
         Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
@@ -411,9 +406,11 @@ public class ExoDocumentUtils {
       // store the children of the loaded folder
       if (DocumentHelper.getInstance().folderToChildrenMap.containsKey(file.path)) {
         DocumentHelper.getInstance().folderToChildrenMap.remove(file.path);
-        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
+        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(file.path,
+                                                                                new ArrayList<ExoFile>(folder.children));
       } else
-        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(file.path, new ArrayList<ExoFile>(folder.children));
+        DocumentHelper.getInstance().folderToChildrenMap.putParcelableArrayList(file.path,
+                                                                                new ArrayList<ExoFile>(folder.children));
 
     }
 
@@ -456,7 +453,7 @@ public class ExoDocumentUtils {
    * 
    * @param response the HttpResponse from where to extract the list of folders
    * @return an ArrayList of ExoFile or an empty ArrayList if a problem happens
-   * @see ExoDocumentUtils.getDrives(HttpResponse response, boolean
+   * @see ExoDocumentUtils#getDrives(HttpResponse response, boolean
    *      isGroupDrive)
    */
   public static ArrayList<ExoFile> getDrives(HttpResponse response) {
@@ -767,9 +764,10 @@ public class ExoDocumentUtils {
    * Get the last path part of the given URL.<br/>
    * Example:
    * <ul>
-   *     <li>URL = http://my.server.com/path/to/file.png</li>
-   *     <li>Returns file.png</li>
+   * <li>URL = http://my.server.com/path/to/file.png</li>
+   * <li>Returns file.png</li>
    * </ul>
+   * 
    * @param url
    * @return
    */
@@ -803,15 +801,11 @@ public class ExoDocumentUtils {
       WebdavMethod delete = new WebdavMethod("DELETE", url);
       response = ExoConnectionUtils.httpClient.execute(delete);
       int status = response.getStatusLine().getStatusCode();
-      if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
-        return true;
-      } else
-        return false;
+      return status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES;
 
     } catch (IOException e) {
       return false;
     }
-
   }
 
   // Copy file/folder method
@@ -827,10 +821,7 @@ public class ExoDocumentUtils {
       WebdavMethod copy = new WebdavMethod("COPY", source, destination);
       response = ExoConnectionUtils.httpClient.execute(copy);
       int status = response.getStatusLine().getStatusCode();
-      if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
-        return true;
-      } else
-        return false;
+      return status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES;
 
     } catch (IOException e) {
       if (Log.LOGD)
@@ -851,10 +842,7 @@ public class ExoDocumentUtils {
       WebdavMethod move = new WebdavMethod("MOVE", source, destination);
       response = ExoConnectionUtils.httpClient.execute(move);
       int status = response.getStatusLine().getStatusCode();
-      if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
-        return true;
-      } else
-        return false;
+      return status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES;
 
     } catch (IOException e) {
       return false;
@@ -876,11 +864,7 @@ public class ExoDocumentUtils {
         WebdavMethod move = new WebdavMethod("MOVE", source, destination);
         response = ExoConnectionUtils.httpClient.execute(move);
         status = response.getStatusLine().getStatusCode();
-        if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
-          return true;
-        } else {
-          return false;
-        }
+        return status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES;
 
       }
     } catch (IOException e) {
@@ -904,10 +888,7 @@ public class ExoDocumentUtils {
         response = ExoConnectionUtils.httpClient.execute(create);
         status = response.getStatusLine().getStatusCode();
 
-        if (status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES) {
-          return true;
-        } else
-          return false;
+        return status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES;
       }
 
     } catch (Exception e) {
@@ -931,13 +912,11 @@ public class ExoDocumentUtils {
 
     if (document.toString().startsWith("content://")) {
       /*
-       *  Some apps send fake content:// URI with real file:// URI inside
-       *  E.g. open ASTRO File Manager > View File > Share :
-       *  
-       *  content://authority/-1/1/file:///sdcard/path/file.jpg/ACTUAL/123
-       *  
-       *  Then we extract the real URI and pass it to documentFromFileUri(...)
-       */ 
+       * Some apps send fake content:// URI with real file:// URI inside E.g.
+       * open ASTRO File Manager > View File > Share :
+       * content://authority/-1/1/file:///sdcard/path/file.jpg/ACTUAL/123 Then
+       * we extract the real URI and pass it to documentFromFileUri(...)
+       */
       String decodedUri = Uri.decode(document.toString());
       int fileIdx = decodedUri.indexOf("file://");
       if (fileIdx > -1) {
@@ -989,6 +968,7 @@ public class ExoDocumentUtils {
       if (orientIndex != -1) { // if found orientation column
         document.orientationAngle = c.getInt(orientIndex);
       }
+      c.close();
       return document;
     } catch (FileNotFoundException e) {
       Log.d(LOG_TAG, e.getClass().getSimpleName(), e.getLocalizedMessage());
@@ -1148,7 +1128,7 @@ public class ExoDocumentUtils {
    * @param filePath the file where the bitmap is stored
    * @param source the bitmap itself
    * @return the bitmap rotated with
-   *         {@link ExoDocumentUtils.rotateBitmapByAngle(Bitmap, int)}
+   *         {@link ExoDocumentUtils#rotateBitmapByAngle(Bitmap, int)}
    */
   public static Bitmap rotateBitmapToNormal(String filePath, Bitmap source) {
     Bitmap ret = source;
@@ -1164,7 +1144,7 @@ public class ExoDocumentUtils {
   }
 
   /**
-   * Rotate the bitmap by a certain angle. Uses {@link Matrix#postRotate(int)}
+   * Rotate the bitmap by a certain angle. Uses {@link Matrix#postRotate(float)}
    * 
    * @param source the bitmap to rotate
    * @param angle the rotation angle
@@ -1184,63 +1164,73 @@ public class ExoDocumentUtils {
     }
     return ret;
   }
-  
+
   private static String permissionForCode(int permCode) {
     String permission = null;
     switch (permCode) {
     case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
-      // We store the captured image on disk, so we need the WRITE_EXTERNAL_STORAGE permission
+      // We store the captured image on disk, so we need the
+      // WRITE_EXTERNAL_STORAGE permission
       permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
       break;
     case ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY:
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-        // On Jelly Bean and after, return the actual READ_EXTERNAL_STORAGE permission 
+        // On Jelly Bean and after, return the actual READ_EXTERNAL_STORAGE
+        // permission
         permission = permissionReadExternalStorage();
       else
-        // Otherwise returning WRITE_EXTERNAL_STORAGE implicitly grants READ_EXTERNAL_STORAGE
+        // Otherwise returning WRITE_EXTERNAL_STORAGE implicitly grants
+        // READ_EXTERNAL_STORAGE
         permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
       break;
-      default:
-        throw new IllegalArgumentException("Given permission code is incorrect: "+permCode);
+    default:
+      throw new IllegalArgumentException("Given permission code is incorrect: " + permCode);
     }
     return permission;
   }
-  
+
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
   private static String permissionReadExternalStorage() {
     return Manifest.permission.READ_EXTERNAL_STORAGE;
   }
-  
+
   /**
-   * Check whether the application needs to request the permission required by the activity.
-   * If yes, then the permission is requested (via {@link ActivityCompat#requestPermissions(Activity, String[], int)}).
+   * Check whether the application needs to request the permission required by
+   * the activity. If yes, then the permission is requested (via
+   * {@link ActivityCompat#requestPermissions(Activity, String[], int)}).
    * 
-   * @param caller The activity that requires the permission. Must implement {@link OnRequestPermissionsResultCallback}.
-   * @param permissionCode The code defined internally, e.g. {@link ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY}.
+   * @param caller The activity that requires the permission. Must implement
+   *          {@link OnRequestPermissionsResultCallback}.
+   * @param permissionCode The code defined internally, e.g.
+   *          {@link ExoConstants#REQUEST_PICK_IMAGE_FROM_GALLERY}.
    * @return true if the permission has been requested <br/>
    *         false if the permission was already granted
    */
   public static boolean didRequestPermission(Activity caller, int permissionCode) {
-    if (caller == null || !(caller instanceof OnRequestPermissionsResultCallback)) 
+    if (caller == null || !(caller instanceof OnRequestPermissionsResultCallback))
       throw new IllegalArgumentException("Caller activity must implement OnRequestPermissionsResultCallback");
-    
+
     boolean res = false;
     String permission = permissionForCode(permissionCode);
     int check = ContextCompat.checkSelfPermission(caller, permission);
     if (check != PackageManager.PERMISSION_GRANTED) {
       res = true;
-      ActivityCompat.requestPermissions(caller, new String[]{permission}, permissionCode);
+      ActivityCompat.requestPermissions(caller, new String[] { permission }, permissionCode);
     }
     return res;
   }
-  
+
   /**
-   * Check whether the request for the specified permission should be explained to the user.
-   * Calls {@link ActivityCompat#shouldShowRequestPermissionRationale(Activity, String)}.
+   * Check whether the request for the specified permission should be explained
+   * to the user. Calls
+   * {@link ActivityCompat#shouldShowRequestPermissionRationale(Activity, String)}
+   * .
    * 
    * @param activity The activity that requires the permission.
-   * @param permCode The code defined internally, e.g. {@link ExoConstants.REQUEST_PICK_IMAGE_FROM_GALLERY}.
-   * @return true if the user should receive more information about the permission request
+   * @param permCode The code defined internally, e.g.
+   *          {@link ExoConstants#REQUEST_PICK_IMAGE_FROM_GALLERY}.
+   * @return true if the user should receive more information about the
+   *         permission request
    */
   public static boolean shouldDisplayExplanation(Activity activity, int permCode) {
     if (activity == null)
@@ -1248,7 +1238,6 @@ public class ExoDocumentUtils {
     String permission = permissionForCode(permCode);
     return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
   }
-
 
   public static class DocumentInfo {
 

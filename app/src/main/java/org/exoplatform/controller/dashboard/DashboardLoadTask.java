@@ -41,7 +41,6 @@ import android.os.AsyncTask;
 import android.view.MenuItem;
 import android.view.View;
 
-
 public class DashboardLoadTask extends AsyncTask<Void, Void, Integer> {
   private static final int         RESULT_OK      = 1;
 

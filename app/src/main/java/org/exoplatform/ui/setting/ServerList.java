@@ -41,116 +41,110 @@ import android.widget.LinearLayout;
  */
 public class ServerList extends LinearLayout {
 
-    private Handler mHandler = new Handler();
+  private Handler mHandler = new Handler();
 
-    public ServerList(Context context, AttributeSet attrs) {
-        super(context, attrs);
+  public ServerList(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
+
+  public ServerList(Context context) {
+    super(context);
+  }
+
+  @Override
+  protected void onFinishInflate() {
+    super.onFinishInflate();
+    setServerList();
+  }
+
+  /**
+   * Populate server list Run only in case of updating new list of server
+   */
+  public void setServerList() {
+    removeAllViews();
+
+    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(getContext());
+    LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+    layoutParams.setMargins(0, 0, 0, -1);
+
+    ServerItemLayout serverItemLayout;
+    for (int i = 0; i < serverList.size(); i++) {
+      serverItemLayout = initServerItem(serverList.get(i), i);
+      addView(serverItemLayout, i, layoutParams);
     }
+  }
 
-    public ServerList(Context context) {
-        super(context);
-    }
+  /**
+   * Simply update the newly changed server instead of the whole list of servers
+   * 
+   * @param operation
+   * @param serverIdx
+   */
+  public void updateServerList(int operation, int serverIdx) {
+    if (operation == -1 || serverIdx == -1)
+      return;
+    Context mContext = getContext();
+    ServerItemLayout serverItemLayout;
+    LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+    layoutParams.setMargins(0, 0, 0, -1);
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        setServerList();
-    }
+    ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance().getServerInfoList(mContext);
 
-    /**
-     * Populate server list Run only in case of updating new list of server
-     */
-    public void setServerList() {
-        removeAllViews();
+    switch (operation) {
 
-        ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance()
-                                                              .getServerInfoList(getContext());
-        LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT,
-                                                     LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 0, 0, -1);
+    case ServerEditionActivity.SETTING_UPDATE:
+      serverItemLayout = initServerItem(serverList.get(serverIdx), serverIdx);
 
-        ServerItemLayout serverItemLayout;
-        for (int i = 0; i < serverList.size(); i++) {
-            serverItemLayout = initServerItem(serverList.get(i), i);
-            addView(serverItemLayout, i, layoutParams);
+      removeViewAt(serverIdx);
+      addView(serverItemLayout, serverIdx, layoutParams);
+      Animation updateAnim = new AlphaAnimation(0.4f, 1.0f);
+      updateAnim.setDuration(1000);
+      updateAnim.setFillAfter(true);
+      serverItemLayout.layout.startAnimation(updateAnim);
+      break;
+
+    case ServerEditionActivity.SETTING_DELETE:
+
+      final int _serverIdx = serverIdx;
+      serverItemLayout = (ServerItemLayout) getChildAt(serverIdx);
+      Animation deleteAnim = AnimationUtils.loadAnimation(mContext, R.anim.anim_right_to_left_reverse);
+      deleteAnim.setDuration(1000);
+      deleteAnim.setFillAfter(true);
+      serverItemLayout.layout.startAnimation(deleteAnim);
+
+      mHandler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          removeViewAt(_serverIdx);
         }
+      }, deleteAnim.getDuration());
+      break;
     }
+  }
 
-    /**
-     * Simply update the newly changed server instead of the whole list of
-     * servers
-     * 
-     * @param operation
-     * @param serverIdx
-     */
-    public void updateServerList(int operation, int serverIdx) {
-        if (operation == -1 || serverIdx == -1)
-            return;
-        Context mContext = getContext();
-        ServerItemLayout serverItemLayout;
-        LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT,
-                                                     LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 0, 0, -1);
+  /**
+   * Generate layout for a server item
+   * 
+   * @param _serverObj
+   * @param serverIdx
+   * @return
+   */
+  private ServerItemLayout initServerItem(ExoAccount _serverObj, int serverIdx) {
+    final ExoAccount serverObj = _serverObj;
+    ServerItemLayout serverItem = new ServerItemLayout(getContext());
+    serverItem.serverName.setText(serverObj.accountName);
+    serverItem.serverUrl.setText(serverObj.serverUrl);
 
-        ArrayList<ExoAccount> serverList = ServerSettingHelper.getInstance()
-                                                              .getServerInfoList(mContext);
+    serverItem.layout.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent next = new Intent(getContext(), ServerEditionActivity.class);
+        next.putExtra(ExoConstants.EXO_SERVER_OBJ, serverObj);
+        getContext().startActivity(next);
+      }
+    });
 
-        switch (operation) {
-
-        case ServerEditionActivity.SETTING_UPDATE:
-            serverItemLayout = initServerItem(serverList.get(serverIdx), serverIdx);
-
-            removeViewAt(serverIdx);
-            addView(serverItemLayout, serverIdx, layoutParams);
-            Animation updateAnim = new AlphaAnimation(0.4f, 1.0f);
-            updateAnim.setDuration(1000);
-            updateAnim.setFillAfter(true);
-            serverItemLayout.layout.startAnimation(updateAnim);
-            break;
-
-        case ServerEditionActivity.SETTING_DELETE:
-
-            final int _serverIdx = serverIdx;
-            serverItemLayout = (ServerItemLayout) getChildAt(serverIdx);
-            Animation deleteAnim = AnimationUtils.loadAnimation(mContext,
-                                                                R.anim.anim_right_to_left_reverse);
-            deleteAnim.setDuration(1000);
-            deleteAnim.setFillAfter(true);
-            serverItemLayout.layout.startAnimation(deleteAnim);
-
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    removeViewAt(_serverIdx);
-                }
-            }, deleteAnim.getDuration());
-            break;
-        }
-    }
-
-    /**
-     * Generate layout for a server item
-     * 
-     * @param _serverObj
-     * @param serverIdx
-     * @return
-     */
-    private ServerItemLayout initServerItem(ExoAccount _serverObj, int serverIdx) {
-        final ExoAccount serverObj = _serverObj;
-        ServerItemLayout serverItem = new ServerItemLayout(getContext());
-        serverItem.serverName.setText(serverObj.accountName);
-        serverItem.serverUrl.setText(serverObj.serverUrl);
-
-        serverItem.layout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(getContext(), ServerEditionActivity.class);
-                next.putExtra(ExoConstants.EXO_SERVER_OBJ, serverObj);
-                getContext().startActivity(next);
-            }
-        });
-
-        return serverItem;
-    }
+    return serverItem;
+  }
 
 }

@@ -47,7 +47,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-
 /**
  * Created by The eXo Platform SAS Author : eXoPlatform exo@exoplatform.com Jul
  * 6, 2012
@@ -62,8 +61,6 @@ public class CompatibleFileOpen {
   private Context                mContext;
 
   private String                 fileType;
-
-  private String                 filePath;
 
   private String                 fileName;
 
@@ -85,8 +82,6 @@ public class CompatibleFileOpen {
 
   private String                 memoryWarning;
 
-  private Resources              resource;
-
   private FileCache              fileCache;
 
   public CompatibleFileOpen(Context context, String fType, String fPath, String fName) {
@@ -94,16 +89,15 @@ public class CompatibleFileOpen {
     changeLanguage();
     fileCache = new FileCache(context, ExoConstants.DOCUMENT_FILE_CACHE);
     fileType = fType;
-    filePath = fPath;
     fileName = fName;
 
     if (ExoDocumentUtils.isForbidden(fileType)) {
       new UnreadableFileDialog(mContext, fileNotSupport).show();
-    } else if (!ExoDocumentUtils.isCallable(mContext, fileType, filePath)) {
+    } else if (!ExoDocumentUtils.isCallable(mContext, fileType, fPath)) {
       new UnreadableFileDialog(mContext, noAppFound).show();
     } else {
       CrashUtils.setOpenFileType(fileType);
-      onLoad(filePath);
+      onLoad(fPath);
     }
 
   }
@@ -127,7 +121,7 @@ public class CompatibleFileOpen {
   }
 
   private void changeLanguage() {
-    resource = mContext.getResources();
+    Resources resource = mContext.getResources();
     downLoadingFile = resource.getString(R.string.DownloadingFile);
     noAppFound = resource.getString(R.string.NoAppFound);
     cannotOpenFile = resource.getString(R.string.CannotOpenFile);
@@ -135,39 +129,42 @@ public class CompatibleFileOpen {
     fileNotSupport = resource.getString(R.string.FileNotSupported);
     memoryWarning = resource.getString(R.string.FileNotSupported);
   }
-  
-  public static enum FileOpenRequestResult {
+
+  public enum FileOpenRequestResult {
     /**
      * The file type is unknown
      */
     ERROR,
-    
+
     /**
      * The file is opened internally in {@link WebViewActivity}
      */
     WEBVIEW,
-    
+
     /**
      * The file is opened by another app installed on the device
      */
     EXTERNAL
   }
-  
+
   /**
    * Represents a request to open a file. Possible {@code mResult} values are:
    * <ul>
    * <li>{@link FileOpenRequestResult#ERROR} if the file format is unknown</li>
-   * <li>{@link FileOpenRequestResult#WEBVIEW} if the file can be opened in a webview</li>
-   * <li>{@link FileOpenRequestResult#EXTERNAL} if the file can be opened by an external app</li>
+   * <li>{@link FileOpenRequestResult#WEBVIEW} if the file can be opened in a
+   * webview</li>
+   * <li>{@link FileOpenRequestResult#EXTERNAL} if the file can be opened by an
+   * external app</li>
    * </ul>
-   * If result is {@link FileOpenRequestResult#EXTERNAL} then the property {@code mFileOpenController} 
-   * contains the {@link CompatibleFileOpen} object controlling the download and opening of the file.
+   * If result is {@link FileOpenRequestResult#EXTERNAL} then the property
+   * {@code mFileOpenController} contains the {@link CompatibleFileOpen} object
+   * controlling the download and opening of the file.
    * 
    * @author paristote
-   *
    */
   public static class FileOpenRequest {
     public FileOpenRequestResult mResult;
+
     public CompatibleFileOpen    mFileOpenController;
   }
 
@@ -297,7 +294,7 @@ public class CompatibleFileOpen {
     }
 
   }
-  
+
   private Dialog onCreateDialog(int id) {
     switch (id) {
     case DIALOG_DOWNLOAD_PROGRESS: // we set this to 0
@@ -316,7 +313,7 @@ public class CompatibleFileOpen {
   private class DownloadProgressDialog extends ProgressDialog {
 
     private boolean mIsAttached;
-    
+
     public DownloadProgressDialog(Context context) {
       super(context);
     }
@@ -330,19 +327,19 @@ public class CompatibleFileOpen {
       onCancelLoad();
       super.onBackPressed();
     }
-    
+
     @Override
     public void onAttachedToWindow() {
       mIsAttached = true;
       super.onAttachedToWindow();
     }
-    
+
     @Override
     public void onDetachedFromWindow() {
       mIsAttached = false;
       super.onDetachedFromWindow();
     }
-    
+
     public boolean isAttachedToWindow() {
       return mIsAttached;
     }

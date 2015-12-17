@@ -26,10 +26,7 @@ public class PostWaitingDialog extends WaitingDialog {
 
   private ComposeMessageController messageController;
 
-  public PostWaitingDialog(Context context,
-                           ComposeMessageController controller,
-                           String titleString,
-                           String contentString) {
+  public PostWaitingDialog(Context context, ComposeMessageController controller, String titleString, String contentString) {
     super(context, titleString, contentString);
     messageController = controller;
   }

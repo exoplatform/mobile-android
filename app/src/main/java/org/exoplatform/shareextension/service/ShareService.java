@@ -63,7 +63,7 @@ import android.support.v4.app.NotificationCompat;
  */
 public class ShareService extends IntentService {
 
-  public static final String LOG_TAG     = "____eXo____ShareService____";
+  public static final String LOG_TAG     = ShareService.class.getName();
 
   public static final String POST_INFO   = "postInfo";
 
@@ -109,7 +109,6 @@ public class ShareService extends IntentService {
           doPost();
         }
       }
-      ;
     } else {
       // We don't have an attachment, maybe a link
       // TODO move as a separate Action - MOB-1866
@@ -264,9 +263,8 @@ public class ShareService extends IntentService {
   private boolean doComment(RestActivity restAct, UploadInfo commentInfo) {
     // TODO create a Comment Action to delegate the operation
     boolean ret = false;
-    String mimeType = (commentInfo == null ? null
-                                           : (commentInfo.fileToUpload == null ? null
-                                                                               : commentInfo.fileToUpload.documentMimeType));
+    String mimeType = (commentInfo == null ? null : (commentInfo.fileToUpload == null ? null
+                                                                                     : commentInfo.fileToUpload.documentMimeType));
     String urlWithoutServer = null;
     try {
       URL url = new URL(commentInfo.getUploadedUrl());
@@ -280,11 +278,7 @@ public class ShareService extends IntentService {
     }
     StringBuilder bld = new StringBuilder();
     // append link
-    bld.append("<a href=\"")
-       .append(urlWithoutServer)
-       .append("\">")
-       .append(commentInfo.fileToUpload.documentName)
-       .append("</a>");
+    bld.append("<a href=\"").append(urlWithoutServer).append("\">").append(commentInfo.fileToUpload.documentName).append("</a>");
     // add image in the comment's body
     if (mimeType != null && mimeType.startsWith("image/")) {
       String thumbnailUrl = urlWithoutServer.replace("/jcr/", "/thumbnailImage/large/");
@@ -480,7 +474,7 @@ public class ShareService extends IntentService {
         jcrUrl = url.toString();
       }
     }
-    
+
     public String getUploadedUrl() {
       return new StringBuffer(jcrUrl).append("/").append(folder).append("/").append(fileToUpload.documentName).toString();
     }

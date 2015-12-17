@@ -52,7 +52,7 @@ public class WebViewActivity extends Activity {
 
   private static final String ACCOUNT_SETTING = "account_setting";
 
-  private static final String LOG_TAG         = "eXo____WebViewActivity____";
+  private static final String LOG_TAG         = WebViewActivity.class.getName();
 
   private WebViewLoadTask     mLoadTask;
 

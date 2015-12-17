@@ -31,41 +31,40 @@ import java.io.IOException;
  */
 public class RequestTenantTask extends AsyncTask<String, Void, Integer> {
 
-  private static final String TAG = "eXo____RequestTenantTask____";
+  private static final String TAG = RequestTenantTask.class.getName();
 
-  private AsyncTaskListener mListener;
+  private AsyncTaskListener   mListener;
 
-  private String[]          mResult;
+  private String[]            mResult;
 
   @Override
   protected Integer doInBackground(String... params) {
     Log.i(TAG, "request tenant for email: " + params[0]);
     String email = params[0];
     try {
-      HttpResponse response  = ExoConnectionUtils.requestTenantForEmail(email);
+      HttpResponse response = ExoConnectionUtils.requestTenantForEmail(email);
       int responseCode = response.getStatusLine().getStatusCode();
       Log.d(TAG, "status: " + responseCode);
       mResult = ExoConnectionUtils.checkRequestTenant(response);
 
       /** check error */
       if (mResult == null) {
-        if (responseCode == HttpStatus.SC_SERVICE_UNAVAILABLE
-            || responseCode == HttpStatus.SC_NOT_FOUND)
+        if (responseCode == HttpStatus.SC_SERVICE_UNAVAILABLE || responseCode == HttpStatus.SC_NOT_FOUND)
           return ExoConnectionUtils.SIGNIN_SERVER_NAV;
 
         return ExoConnectionUtils.SIGNIN_NO_TENANT_FOR_EMAIL;
       }
 
       return ExoConnectionUtils.TENANT_OK;
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       Log.d(TAG, "IOException: " + e.getLocalizedMessage());
       return ExoConnectionUtils.SIGNIN_SERVER_NAV;
     }
   }
 
   public void onPostExecute(Integer result) {
-    if (mListener != null) mListener.onRequestingTenantFinished(result, mResult);
+    if (mListener != null)
+      mListener.onRequestingTenantFinished(result, mResult);
   }
 
   public void setListener(AsyncTaskListener listener) {
