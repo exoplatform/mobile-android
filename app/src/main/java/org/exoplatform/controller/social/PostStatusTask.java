@@ -96,6 +96,9 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
       postInfo.postMessage = composeMessage;
       postInfo.ownerAccount = AccountSetting.getInstance().getCurrentAccount();
 
+      final AtomicBoolean uploaded = new AtomicBoolean(false);
+
+
       // If the post contains an attached image
       if (sdcard_temp_dir != null) {
         postInfo.activityType = SocialPostInfo.TYPE_DOC;
@@ -118,7 +121,6 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
               if (uploadInfo.fileToUpload != null) {
                 uploadInfo.fileToUpload.documentName = uploadedFileName;
                 uploadInfo.fileToUpload.cleanupFilename(mContext);
-                final AtomicBoolean uploaded = new AtomicBoolean(false);
                 // UploadAction.excute is synchronize method
                 UploadAction.execute(postInfo, uploadInfo, new ActionListener() {
 
@@ -153,21 +155,24 @@ public class PostStatusTask extends AsyncTask<Void, Void, Integer> {
         }
       }
       final AtomicBoolean posted = new AtomicBoolean(false);
-      // post action execute is synchronize
-      PostAction.execute(postInfo, new PostActionListener() {
 
-        @Override
-        public boolean onSuccess(String message) {
-          posted.set(true);
-          return true;
-        }
+      if ((sdcard_temp_dir == null) || (sdcard_temp_dir != null && uploaded.get())) {
+        // post action execute is synchronize
+        PostAction.execute(postInfo, new PostActionListener() {
 
-        @Override
-        public boolean onError(String error) {
-          posted.set(false);
-          return false;
-        }
-      });
+          @Override
+          public boolean onSuccess(String message) {
+            posted.set(true);
+            return true;
+          }
+
+          @Override
+          public boolean onError(String error) {
+            posted.set(false);
+            return false;
+          }
+        });
+      }
       if (posted.get())
         return 1;
       else
