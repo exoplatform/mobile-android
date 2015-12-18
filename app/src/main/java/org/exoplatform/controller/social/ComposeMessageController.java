@@ -20,35 +20,20 @@ package org.exoplatform.controller.social;
 
 import org.exoplatform.R;
 import org.exoplatform.model.SocialSpaceInfo;
-import org.exoplatform.singleton.SocialDetailHelper;
-import org.exoplatform.singleton.SocialServiceHelper;
-import org.exoplatform.social.client.api.SocialClientLibException;
-import org.exoplatform.social.client.api.model.RestActivity;
-import org.exoplatform.social.client.api.model.RestComment;
-import org.exoplatform.social.client.api.service.ActivityService;
-import org.exoplatform.ui.social.AllUpdatesFragment;
 import org.exoplatform.ui.social.ComposeMessageActivity;
-import org.exoplatform.ui.social.MyConnectionsFragment;
-import org.exoplatform.ui.social.MySpacesFragment;
-import org.exoplatform.ui.social.MyStatusFragment;
-import org.exoplatform.ui.social.SocialDetailActivity;
-import org.exoplatform.ui.social.SocialTabsActivity;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.ExoConstants;
-import org.exoplatform.utils.Log;
 import org.exoplatform.utils.PhotoUtils;
 import org.exoplatform.widget.ConnectionErrorDialog;
 import org.exoplatform.widget.PostWaitingDialog;
-import org.exoplatform.widget.WarningDialog;
 
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.view.Gravity;
 import android.widget.Toast;
 
 public class ComposeMessageController {
 
-  private PostWaitingDialog      _progressDialog;
+  private PostWaitingDialog      mProgressDialog;
 
   private int                    composeType;
 
@@ -56,7 +41,7 @@ public class ComposeMessageController {
 
   private PostStatusTask         mPostTask;
 
-  private CommentTask            mCommetnTask;
+  private PostCommentTask        mCommentTask;
 
   private String                 sdcard_temp_dir = null;
 
@@ -68,6 +53,8 @@ public class ComposeMessageController {
 
   private String                 contentString;
 
+  private String                 sendingData;
+
   /**
    * Either null (public) or the space name
    */
@@ -77,7 +64,7 @@ public class ComposeMessageController {
     mComposeActivity = activity;
     composeType = type;
     postDestination = null;
-    _progressDialog = dialog;
+    mProgressDialog = dialog;
     changeLanguage();
 
   }
@@ -127,7 +114,8 @@ public class ComposeMessageController {
 
   private void onPostTask(String composeMessage, String sdcard) {
     if (mPostTask == null || mPostTask.getStatus() == PostStatusTask.Status.FINISHED) {
-      mPostTask = (PostStatusTask) new PostStatusTask(mComposeActivity, sdcard, composeMessage, this, _progressDialog).execute();
+      mPostTask = new PostStatusTask(mComposeActivity, sdcard, composeMessage, this, mProgressDialog);
+      mPostTask.execute();
     }
   }
 
@@ -139,8 +127,9 @@ public class ComposeMessageController {
   }
 
   private void onCommentTask(String composeMessage, int position) {
-    if (mCommetnTask == null || mCommetnTask.getStatus() == CommentTask.Status.FINISHED) {
-      mCommetnTask = (CommentTask) new CommentTask(position).execute(composeMessage);
+    if (mCommentTask == null || mCommentTask.getStatus() == PostCommentTask.Status.FINISHED) {
+      mCommentTask = new PostCommentTask(mComposeActivity, this, mProgressDialog, position);
+      mCommentTask.execute(composeMessage);
     }
   }
 
@@ -154,66 +143,6 @@ public class ComposeMessageController {
     okString = resource.getString(R.string.OK);
     titleString = resource.getString(R.string.Warning);
     contentString = resource.getString(R.string.ErrorOnComment);
-  }
-
-  private class CommentTask extends AsyncTask<String, Void, Boolean> {
-
-    private int currentPosition;
-
-    public CommentTask(int position) {
-      currentPosition = position;
-    }
-
-    @Override
-    protected Boolean doInBackground(String... params) {
-      try {
-        String composeMessage = params[0];
-        RestComment comment = new RestComment();
-        comment.setText(composeMessage);
-        String selectedId = SocialDetailHelper.getInstance().getActivityId();
-        ActivityService<RestActivity> activityService = SocialServiceHelper.getInstance().activityService;
-        RestActivity restActivity = activityService.get(selectedId);
-
-        activityService.createComment(restActivity, comment);
-        return true;
-      } catch (SocialClientLibException e) {
-        if (Log.LOGD)
-          Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
-        return false;
-      }
-
-    }
-
-    @Override
-    protected void onPostExecute(Boolean result) {
-      if (result) {
-        mComposeActivity.finish();
-        if (SocialDetailActivity.socialDetailActivity != null) {
-          SocialDetailActivity.socialDetailActivity.onLoad();
-        }
-
-        if (SocialTabsActivity.instance != null) {
-          int tabId = SocialTabsActivity.instance.mPager.getCurrentItem();
-          switch (tabId) {
-          case SocialTabsActivity.ALL_UPDATES:
-            AllUpdatesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
-            break;
-          case SocialTabsActivity.MY_CONNECTIONS:
-            MyConnectionsFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
-            break;
-          case SocialTabsActivity.MY_SPACES:
-            MySpacesFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
-            break;
-          case SocialTabsActivity.MY_STATUS:
-            MyStatusFragment.instance.onPrepareLoad(ExoConstants.NUMBER_OF_ACTIVITY, true, currentPosition);
-            break;
-          }
-        }
-      } else {
-        WarningDialog dialog = new WarningDialog(mComposeActivity, titleString, contentString, okString);
-        dialog.show();
-      }
-    }
-
+    sendingData = resource.getString(R.string.SendingData);
   }
 }
