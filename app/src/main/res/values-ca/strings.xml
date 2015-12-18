@@ -163,8 +163,8 @@
   <string name="SocialSettingContent">Recorda el meu filtre</string>
 
   <!-- Welcome screen -->
-  <string name="SignUp">Sign Up</string>
-  <string name="LogIn">Log In</string>
+  <string name="SignUp">Crea un compte</string>
+  <string name="LogIn">Inicia la sessió</string>
   <string name="SkipStep">or skip this for now</string>
   <string name="Or">o</string>
 
@@ -262,9 +262,9 @@
   <string name="ShareErrorSignInFailed">L\'inici de sessió ha fallat, si us plau provi una altra vegada</string>
   <string name="ShareErrorSomeFilesCannotShare">Alguns documents no poden ser compartits</string>
   <string name="ShareErrorAllFilesCannotShare">No es poden compartir tots els documents</string>
-  <string name="ShareErrorStoragePermissionDenied">The sharing must stop because storage access is forbidden for this app.\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorStoragePermissionDenied">S\'ha d\'aturar la compartició a causa de que estar prohibit l\'accés al emmagatzematge per aquesta aplicació.\\\\nPer permetre\'l, obre la Configuració de l\'Aplicació i activa el permís d\'emmagatzematge.</string>
   <string name="ShareErrorDialogLeave">Deixa</string>
-  <string name="ShareErrorDialogAppSettings">Open App Settings</string>
+  <string name="ShareErrorDialogAppSettings">Obre la configuració de l\'aplicació</string>
   
   <!-- Documents -->
   <string name="DeleteConfirmFolderTitle">Suprimeix la carpeta</string>
@@ -278,6 +278,6 @@
   <string name="RefreshTitle">Recarrega</string>
   
   <!-- Permission Requests -->
-  <string name="PermissionStorageRationale">The Storage access permission is needed to capture a photo or pick an image.</string>
-  <string name="PermissionStorageDeniedToast">Operation stopped: Storage permission denied</string>
+  <string name="PermissionStorageRationale">El permís d\'accés al emmagatzematge és necessari per capturar una foto o agafar una imatge.</string>
+  <string name="PermissionStorageDeniedToast">Operació aturada: permís d\'emmagatzematge denegat</string>
 </resources>
