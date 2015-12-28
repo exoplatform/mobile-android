@@ -279,5 +279,5 @@
   
   <!-- Permission Requests -->
   <string name="PermissionStorageRationale">The Storage access permission is needed to capture a photo or pick an image.</string>
-  <string name="PermissionStorageDeniedToast">Operation stopped: Storage permission denied</string>
+  <string name="PermissionStorageDeniedToast">توقف العملية: تم رفض صلاحيّة التخزين</string>
 </resources>
