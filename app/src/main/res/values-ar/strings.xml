@@ -242,34 +242,34 @@
   
   <!-- Share Extension -->
   <string name="ShareTitle">شارك</string>
-  <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
-  <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
-  <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
+  <string name="ShareCannotSelectSpaceBecauseOffline">يجب تحديد حساب وتسجيل الدخول لاختيار فضاء</string>
+  <string name="ShareCannotPostBecauseOffline">يجب اختيار حساب وتسجيل الدخول لامكانية نشر رسالة</string>
+  <string name="ShareOperationStarted">المشاركة في طور التقدم، يمكنك التحقق من الحالة في منطقة الإشعارات</string>
   <string name="ShareOperationSuccess">نجاح</string>
   <string name="ShareDocumentTitle">مشاركة الوثيقة</string>
   <string name="ShareMessageTitle">شارك الرسالة</string>
   <string name="ShareDocumentText">جاري التحميل</string>
-  <string name="ShareMessageText">Your message will be posted shortly</string>
-  <string name="ShareErrorNoAccountConfigured">No account configured</string>
-  <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
-  <string name="ShareErrorFileTooBig">Cannot share documents more than 10 MB</string>
-  <string name="ShareErrorTooManyFiles">Cannot share more than 10 documents</string>
-  <string name="ShareErrorUploadFailed">Could not share the document</string>
-  <string name="ShareErrorPostFailed">Could not post the message</string>
-  <string name="ShareErrorCommentFailed">Could not comment the message</string>
-  <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
-  <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
+  <string name="ShareMessageText">ستُـنشرالرسالة قريبا</string>
+  <string name="ShareErrorNoAccountConfigured">لا يوجد حساب تمّ اعداده</string>
+  <string name="ShareErrorCannotReadDoc">لا يمكنك الوصول إلى الوثيقة قصد مشاركتها</string>
+  <string name="ShareErrorFileTooBig">لا يمكن مشاركة وثائق حجمها أكثر من 10 ميغابايت</string>
+  <string name="ShareErrorTooManyFiles">لا يمكن مشاركة أكثر من 10 وثائق</string>
+  <string name="ShareErrorUploadFailed">لا يمكن مشاركة الوثيقة</string>
+  <string name="ShareErrorPostFailed">لا يمكن نشر الرسالة</string>
+  <string name="ShareErrorCommentFailed">لا يمكن اضافة تعليق بخصوص الرسالة</string>
+  <string name="ShareErrorUploadFolderFailed">تعذر عملية إعداد المجلد الأصل</string>
+  <string name="ShareErrorIncorrectAccount">لا يمكن استرداد إعدادات الحساب</string>
   <string name="ShareErrorSignInFailed">فشل تسجيل الدخول. الرجاء المحاولة مرة أخرى</string>
   <string name="ShareErrorSomeFilesCannotShare">لا يمكن مشاركة بعض الوثائق</string>
   <string name="ShareErrorAllFilesCannotShare">لا يمكن مشاركة كافة الوثائق</string>
-  <string name="ShareErrorStoragePermissionDenied">The sharing must stop because storage access is forbidden for this app.\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareErrorStoragePermissionDenied">يجب أن تتوقف عمليّة التشارك لأنه يتعذر الوصول الى خاصيّة التخزين الخاصّة بهذا التطبيق.\\\\n للسماح بذلك، يرجى فتح إعدادات التطبيق وتفعيل صلاحيّة التخزين.</string>
   <string name="ShareErrorDialogLeave">مغادرة</string>
   <string name="ShareErrorDialogAppSettings">فتح إعدادات التطبيق</string>
   
   <!-- Documents -->
   <string name="DeleteConfirmFolderTitle">حذف المجلد</string>
   <string name="DeleteConfirmFileTitle">حذف الملف</string>
-  <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
+  <string name="DeleteConfirmMessage">هل ترغب حقا بحذف هذا %1$s %2$s؟</string>
   <string name="Folder">مجلد</string>
   <string name="File">ملف</string>
 
@@ -278,6 +278,6 @@
   <string name="RefreshTitle">تحديث الصفحة</string>
   
   <!-- Permission Requests -->
-  <string name="PermissionStorageRationale">The Storage access permission is needed to capture a photo or pick an image.</string>
+  <string name="PermissionStorageRationale">هناك حاجة إلى صلاحيّة الوصول الى التخزين لامكانية التقاط أو اختيار صورة.</string>
   <string name="PermissionStorageDeniedToast">توقف العملية: تم رفض صلاحيّة التخزين</string>
 </resources>
