@@ -8,17 +8,17 @@
     <string name="NoServerSelected">Bitte wählen Sie einen Server aus</string>
     <string name="NoPasswordEnter">Bitte geben Sie Ihr Passwort ein</string>
   <string name="SpecialCharacters">Sonderzeichen sind nicht erlaubt.</string>
-  <string name="AccountNameInvalid">Only alphanumeric characters and spaces are allowed in the account name</string>
-  <string name="AccountServerInvalid">Invalid server address</string>
-  <string name="AccountServerForbidden">This server URL is not allowed</string>
-  <string name="AccountUsernameInvalid">Only alphanumeric characters, dashes, underscores, dots and pluses are allowed in the username</string>
-  <string name="AccountPasswordInvalid">Blanks are not allowed in the password</string>
+  <string name="AccountNameInvalid">Nur alphanumerische Zeichen und Leerzeichen sind im Account Namen erlaubt</string>
+  <string name="AccountServerInvalid">Ungültige Serveradresse</string>
+  <string name="AccountServerForbidden">Diese Server-URL ist nicht zulässig</string>
+  <string name="AccountUsernameInvalid">Nur alphanumerische Zeichen, Bindestriche, Unterstriche, Punkte und Pluszeichen sind im Benutzernamen erlaubt</string>
+  <string name="AccountPasswordInvalid">Leerzeichen sind im Passwort nicht erlaubt</string>
   <string name="Connected">Verbunden</string>
-  <string name="LastLoginDate">Last login</string>
+  <string name="LastLoginDate">Letzter Login</string>
     <string name="UserNameCellTitle">Benutzername</string>
     <string name="PasswordCellTitle">Passwort</string>
   <string name="Language">Sprache</string>
-  <string name="Server">Accounts</string>
+  <string name="Server">Konto</string>
     <string name="ServerList">Serverliste</string>
     <string name="AddAServer">Einen Server hinzufügen</string>
     <string name="ModifyServerList">Die Liste ändern</string>
@@ -31,8 +31,8 @@
     <string name="French">Französisch</string>
     <string name="German">Deutsch</string>
     <string name="Spanish">Spanisch</string>
-  <string name="PortugueseBrazil">Portuguese (Brazil)</string>
-  <string name="Greek">Greek</string>
+  <string name="PortugueseBrazil">Portugiesisch (Brasilien)</string>
+  <string name="Greek">Griechisch</string>
     <string name="CompliantMessage">Wir können keine Verbindung zu einer kompatiblen Plattformversion unter dieser URL herstellen Bitte kontaktieren Sie Ihren Administrator.</string>
     <string name="Delete">Löschen</string>
     <string name="Copy">Kopieren</string>
@@ -61,9 +61,9 @@
     <string name="StatusUpdate">Post</string>
   <string name="PostTo">An:</string>
   <string name="Public">Meine Aktivitäten</string>
-  <string name="NoSpaces">You are not in any space</string>
+  <string name="NoSpaces">Sie sind in keinem Raum</string>
   <string name="ComposerPlaceHolder">Woran arbeiten Sie gerade?</string>
-  <string name="ShareWithWhom">Select who will see this post</string>
+  <string name="ShareWithWhom">Wählen Sie aus, wer diesen Beitrag sehen kann</string>
     <string name="NoLike">Im Moment gefällt dies niemandem</string>
     <string name="LikedThis"> gefällt dies</string>
     <string name="And"> und</string>
@@ -99,13 +99,13 @@
     <string name="WarningServerNameIsEmpty">Servername oder URL darf nicht leer sein.</string>
     <string name="WarningServerNameIsExist">Dieser Servername ist in der Liste bereits vorhanden</string>
     <string name="WarningServerUrlIsExist">Diese Server-URL ist in Ihrer Liste bereits vorhanden</string>
-  <string name="WarningServerAlreadyExists">This account already exists in your list</string>
+  <string name="WarningServerAlreadyExists">Dieses Konto exestiert bereits in Ihrer Liste</string>
     <string name="DetailsNotAvaiable">Details der Aktivität sind nicht verfügbar</string>
     <string name="ErrorOnComment">Sie können diese Aktivität nicht kommentieren.</string>
     <string name="CannotLoadMoreActivities">Kann ältere Aktivitäten nicht laden. Die Liste wird aktualisiert.</string>
     <string name="LogoutTitle">Abmeldedialog</string>
     <string name="LogoutContent">Möchten Sie die Anwendung beenden?</string>
-  <string name="ApplicationInformation">Application Information</string>
+  <string name="ApplicationInformation">Anwendungsinformation</string>
     <string name="ServerVersion">Server Version</string>
     <string name="ServerEdition">Serverausgabe</string>
     <string name="ApplicationVersion">Anwendungsversion</string>
@@ -159,7 +159,7 @@
     <string name="CompatibleFileSuggest">Möchten Sie den Inhalt in einer installierten Anwendung öffnen?</string>
     <string name="OpenIn">Öffnen in …</string>
     <string name="DownloadingFile">Lade Datei herunter…</string>
-  <string name="SocialSettingTitle">Social</string>
+  <string name="SocialSettingTitle">Soziales</string>
     <string name="SocialSettingContent">An meinen Filter erinnern</string>
 
     <!-- Welcome screen -->
@@ -219,7 +219,7 @@
   <!-- Server edition -->
   <string name="OptionalHint">Optional</string>
   <string name="RequiredHint">Erforderlich</string>
-  <string name="Account">Account</string>
+  <string name="Account">Konto</string>
   <string name="YourCredentials">Ihre Anmeldeinformationen</string>
   <string name="ServerName">Server Name</string>
   <string name="ServerUrl">Server Url</string>
@@ -242,42 +242,42 @@
   
   <!-- Share Extension -->
   <string name="ShareTitle">Teilen</string>
-  <string name="ShareCannotSelectSpaceBecauseOffline">You must select an account and sign in to select a space</string>
-  <string name="ShareCannotPostBecauseOffline">You must select an account and sign in to post</string>
-  <string name="ShareOperationStarted">Share in progress, check the status in the notification area</string>
+  <string name="ShareCannotSelectSpaceBecauseOffline">Sie müssen ein Konto auswählen und sich anmelden, um einen Raum auszuwählen</string>
+  <string name="ShareCannotPostBecauseOffline">Sie müssen ein Konto auswählen und sich anmelden um etwas zu veröffentlichen</string>
+  <string name="ShareOperationStarted">Teilen ist in Arbeit, prüfen sie die den Status im Benachrichtigungsbereich</string>
   <string name="ShareOperationSuccess">Erfolg</string>
-  <string name="ShareDocumentTitle">Share document</string>
-  <string name="ShareMessageTitle">Share message</string>
-  <string name="ShareDocumentText">Upload in progress</string>
-  <string name="ShareMessageText">Your message will be posted shortly</string>
-  <string name="ShareErrorNoAccountConfigured">No account configured</string>
-  <string name="ShareErrorCannotReadDoc">Cannot access the document to share</string>
-  <string name="ShareErrorFileTooBig">Cannot share documents more than 10 MB</string>
-  <string name="ShareErrorTooManyFiles">Cannot share more than 10 documents</string>
-  <string name="ShareErrorUploadFailed">Could not share the document</string>
-  <string name="ShareErrorPostFailed">Could not post the message</string>
-  <string name="ShareErrorCommentFailed">Could not comment the message</string>
-  <string name="ShareErrorUploadFolderFailed">Could not prepare the destination folder</string>
-  <string name="ShareErrorIncorrectAccount">Could not retrieve the account settings</string>
-  <string name="ShareErrorSignInFailed">Login failed, please try again</string>
-  <string name="ShareErrorSomeFilesCannotShare">Some documents cannot be shared</string>
-  <string name="ShareErrorAllFilesCannotShare">All documents cannot be shared</string>
-  <string name="ShareErrorStoragePermissionDenied">The sharing must stop because storage access is forbidden for this app.\\\\nTo allow it, open the App Settings and enable the Storage permission.</string>
+  <string name="ShareDocumentTitle">Dokument teilen</string>
+  <string name="ShareMessageTitle">Nachricht teilen</string>
+  <string name="ShareDocumentText">Hochladen in Arbeit</string>
+  <string name="ShareMessageText">Ihre Nachricht wird in kürze veröffentlicht</string>
+  <string name="ShareErrorNoAccountConfigured">Kein Konto konfiguriert</string>
+  <string name="ShareErrorCannotReadDoc">Kein Zugang zum Dokument um zu teilen</string>
+  <string name="ShareErrorFileTooBig">Es können keine Dokumente die größer als 10 MB sind geteilt werden</string>
+  <string name="ShareErrorTooManyFiles">Es können nicht mehr als 10 Dokumente geteilt werden</string>
+  <string name="ShareErrorUploadFailed">Können das Dokument nicht teilen</string>
+  <string name="ShareErrorPostFailed">Die Nachricht konnte nicht gesendet werden</string>
+  <string name="ShareErrorCommentFailed">Die Nachricht konnte nicht kommentieren werden</string>
+  <string name="ShareErrorUploadFolderFailed">Der Zielordner konnte nicht vorbereitet werden</string>
+  <string name="ShareErrorIncorrectAccount">Die Kontoeinstellungen konnten nicht aufgerufen werden</string>
+  <string name="ShareErrorSignInFailed">Einloggen fehlgeschlagen, bitte versuchen Sie es erneut</string>
+  <string name="ShareErrorSomeFilesCannotShare">Einige Dokumente können nicht geteilt werden</string>
+  <string name="ShareErrorAllFilesCannotShare">Es konnten nicht alle Dokumente geteilt werden</string>
+  <string name="ShareErrorStoragePermissionDenied">Das Teilen musste gestoppt werden, da der Speicherzugriff für diese App verboten ist. \\\\nUm dies zu erlauben, öffnen Sie die App-Einstellungen und aktivieren Sie die Speicherberechtigung.</string>
   <string name="ShareErrorDialogLeave">Verlassen</string>
-  <string name="ShareErrorDialogAppSettings">Open App Settings</string>
+  <string name="ShareErrorDialogAppSettings">App Einstellung öffnen</string>
   
   <!-- Documents -->
-  <string name="DeleteConfirmFolderTitle">Delete folder</string>
-  <string name="DeleteConfirmFileTitle">Delete file</string>
-  <string name="DeleteConfirmMessage">Are you sure you want to delete the %1$s %2$s ?</string>
-  <string name="Folder">folder</string>
-  <string name="File">file</string>
+  <string name="DeleteConfirmFolderTitle">Ordner löschen</string>
+  <string name="DeleteConfirmFileTitle">Datei löschen</string>
+  <string name="DeleteConfirmMessage">Sind Sie sicher das Sie %1$s%2$s löschen möchten?</string>
+  <string name="Folder">Ordner</string>
+  <string name="File">Datei</string>
 
   <!-- Action Bar -->
-  <string name="SignOutTitle">Sign Out</string>
+  <string name="SignOutTitle">Ausloggen</string>
   <string name="RefreshTitle">Aktualisieren</string>
   
   <!-- Permission Requests -->
-  <string name="PermissionStorageRationale">The Storage access permission is needed to capture a photo or pick an image.</string>
-  <string name="PermissionStorageDeniedToast">Operation stopped: Storage permission denied</string>
+  <string name="PermissionStorageRationale">Die Storage-Zugriffsberechtigung ist erforderlich, um ein Foto zu machen oder ein Bild auszuwählen.</string>
+  <string name="PermissionStorageDeniedToast">Vorgang beendet: Speicher-Zugriff verweigert</string>
 </resources>
