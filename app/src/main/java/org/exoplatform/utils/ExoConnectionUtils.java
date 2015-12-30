@@ -172,14 +172,12 @@ public class ExoConnectionUtils {
       }
       return sb.toString();
     } catch (IOException e) {
-      if (Log.LOGD)
-        Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
     } finally {
       try {
         is.close();
       } catch (IOException e) {
-        if (Log.LOGD)
-          Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+        Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       }
     }
     return null;
@@ -213,12 +211,10 @@ public class ExoConnectionUtils {
       }
 
     } catch (IOException e) {
-      if (Log.LOGD)
-        Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return LOGIN_WRONG;
     } catch (IllegalStateException e) {
-      if (Log.LOGD)
-        Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(ExoConnectionUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return LOGIN_INVALID;
     }
 

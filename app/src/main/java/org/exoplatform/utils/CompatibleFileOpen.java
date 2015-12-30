@@ -231,8 +231,7 @@ public class CompatibleFileOpen {
         }
         return RESULT_OK;
       } catch (IOException e) {
-        if (Log.LOGD)
-          Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+        Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
         if (file != null) {
           file.delete();
         }

@@ -202,13 +202,11 @@ public class ShareService extends IntentService {
       if (uploadInfo != null && uploadInfo.fileToUpload != null)
         uploadInfo.fileToUpload.closeDocStream();
       if (!uploadedAll) {
-        if (Log.LOGD)
-          Log.e(LOG_TAG, String.format("Failed to upload file %d/%d : %s (doUpload)", i + 1, numberOfFiles, fileUri));
+        Log.e(LOG_TAG, String.format("Failed to upload file %d/%d : %s (doUpload)", i + 1, numberOfFiles, fileUri));
         break;
       }
       if (uploadedAll) {
-        if (Log.LOGD)
-          Log.d(LOG_TAG, String.format("Uploaded file %d/%d OK %s (doUpload)", i + 1, numberOfFiles, fileUri));
+        Log.d(LOG_TAG, String.format("Uploaded file %d/%d OK %s (doUpload)", i + 1, numberOfFiles, fileUri));
         if (i == 0)
           postInfo.buildTemplateParams(uploadInfo);
         else {
@@ -217,8 +215,7 @@ public class ShareService extends IntentService {
       }
       // Delete file after upload
       File f = new File(postInfo.postAttachedFiles.get(i));
-      if (Log.LOGD)
-        Log.d(LOG_TAG, "File " + f.getName() + " deleted: " + (f.delete() ? "YES" : "NO"));
+      Log.d(LOG_TAG, "File " + f.getName() + " deleted: " + (f.delete() ? "YES" : "NO"));
     }
     return uploadedAll;
 
@@ -231,14 +228,12 @@ public class ShareService extends IntentService {
     RestActivity createdAct = PostAction.execute(postInfo, new PostActionListener());
     boolean ret = createdAct != null;
     if (ret) {
-      if (Log.LOGD)
-        Log.d(LOG_TAG, "Post activity done");
+      Log.d(LOG_TAG, "Post activity done");
       for (UploadInfo commentInfo : uploadedMap) {
         ret = doComment(createdAct, commentInfo);
         if (!ret)
           break;
-        if (Log.LOGD)
-          Log.d(LOG_TAG, "Comment activity done");
+        Log.d(LOG_TAG, "Comment activity done");
       }
       // Share finished successfully
       // Needed to avoid some problems when reopening the app
@@ -272,8 +267,7 @@ public class ShareService extends IntentService {
       if (urlWithoutServer != null && !urlWithoutServer.startsWith("/"))
         urlWithoutServer = "/" + urlWithoutServer;
     } catch (MalformedURLException e) {
-      if (Log.LOGW)
-        Log.w(LOG_TAG, e.getMessage());
+      Log.w(LOG_TAG, e.getMessage());
       return false;
     }
     StringBuilder bld = new StringBuilder();
@@ -291,8 +285,7 @@ public class ShareService extends IntentService {
     try {
       ret = activityService.createComment(restAct, restComment) != null;
     } catch (SocialClientLibException e) {
-      if (Log.LOGD)
-        Log.e(LOG_TAG, Log.getStackTraceString(e));
+      Log.e(LOG_TAG, Log.getStackTraceString(e));
     }
     return ret;
   }

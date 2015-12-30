@@ -162,12 +162,10 @@ public class SocialDetailLoadTask extends AsyncTask<Boolean, Void, Integer> {
 
       return 1;
     } catch (SocialClientLibException e) {
-      if (Log.LOGD)
-        Log.d(getClass().getSimpleName(), "doInBackground ", Log.getStackTraceString(e));
+      Log.d(getClass().getSimpleName(), "doInBackground ", Log.getStackTraceString(e));
       return 0;
     } catch (RuntimeException e) {
-      if (Log.LOGD)
-        Log.d(getClass().getSimpleName(), "doInBackground ", Log.getStackTraceString(e));
+      Log.d(getClass().getSimpleName(), "doInBackground ", Log.getStackTraceString(e));
       return -1;
     }
   }

@@ -326,8 +326,7 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
       composeMessageActivity.fileAttachWrap.removeAllViews();
       composeMessageActivity.fileAttachWrap.addView(image, params);
     } catch (IOException e) {
-      if (Log.LOGD)
-        Log.e(TAG, "Error when adding image to message", e);
+      Log.e(TAG, "Error when adding image to message", e);
     }
   }
 

@@ -136,7 +136,6 @@ public class ComposeFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    Log.d("TEST", "onCreateView Compose");
     View layout = inflater.inflate(R.layout.share_extension_compose_fragment, container, false);
     etPostMessage = (EditText) layout.findViewById(R.id.share_post_message);
     etPostMessage.addTextChangedListener(postValidator);

@@ -195,8 +195,7 @@ public class ExoDocumentUtils {
       result.mFileOpenController = new CompatibleFileOpen(context, fileType, filePath, fileName);
       result.mResult = FileOpenRequestResult.EXTERNAL;
     }
-    if (Log.LOGD)
-      Log.d(LOG_TAG, "File Open Result: " + result.mResult);
+    Log.d(LOG_TAG, "File Open Result: " + result.mResult);
     return result;
   }
 
@@ -281,8 +280,7 @@ public class ExoDocumentUtils {
       int status = response.getStatusLine().getStatusCode();
       return status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES;
     } catch (IOException e) {
-      if (Log.LOGD)
-        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     } finally {
       fileManager.delete();
@@ -824,8 +822,7 @@ public class ExoDocumentUtils {
       return status >= HttpStatus.SC_OK && status < HttpStatus.SC_MULTIPLE_CHOICES;
 
     } catch (IOException e) {
-      if (Log.LOGD)
-        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     }
   }
@@ -974,8 +971,7 @@ public class ExoDocumentUtils {
       Log.d(LOG_TAG, e.getClass().getSimpleName(), e.getLocalizedMessage());
     } catch (Exception e) {
       Log.e(LOG_TAG, "Cannot retrieve the content at " + contentUri);
-      if (Log.LOGD)
-        Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
+      Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
     }
     return null;
   }
@@ -1020,12 +1016,10 @@ public class ExoDocumentUtils {
       return document;
     } catch (URISyntaxException e) {
       Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
-      if (Log.LOGD)
-        Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
+      Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
     } catch (FileNotFoundException e) {
       Log.e(LOG_TAG, "Cannot retrieve the file at " + fileUri);
-      if (Log.LOGD)
-        Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
+      Log.d(LOG_TAG, e.getMessage() + "\n" + Log.getStackTraceString(e));
     }
     return null;
   }
@@ -1116,8 +1110,7 @@ public class ExoDocumentUtils {
         break;
       }
     } catch (IOException e) {
-      if (Log.LOGD)
-        Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(ExoDocumentUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
     }
     return ret;
   }
@@ -1261,8 +1254,7 @@ public class ExoDocumentUtils {
         try {
           documentData.close();
         } catch (IOException e) {
-          if (Log.LOGD)
-            Log.d(LOG_TAG, Log.getStackTraceString(e));
+          Log.d(LOG_TAG, Log.getStackTraceString(e));
         }
     }
 

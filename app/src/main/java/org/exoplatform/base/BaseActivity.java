@@ -99,8 +99,7 @@ public abstract class BaseActivity extends FragmentActivity {
     }
     // clear release reference
     removeLifeCycleObserver(null);
-    if (Log.LOGD)
-      Log.d(getClass().getSimpleName(), "onPause isFinishing=", isFinishing(), " ", this);
+    Log.d(getClass().getSimpleName(), "onPause isFinishing=", isFinishing(), " ", this);
     super.onPause();
   }
 }

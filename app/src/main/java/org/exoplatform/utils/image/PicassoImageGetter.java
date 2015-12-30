@@ -71,8 +71,7 @@ public class PicassoImageGetter implements ImageGetter {
       try {
         imageAddr = new ExoWebAddress(imageUrl);
       } catch (ParseException e) {
-        if (Log.LOGI)
-          Log.i(getClass().getName(), e.getMessage());
+        Log.i(getClass().getName(), e.getMessage());
       }
       if (imageAddr == null || imageAddr.isRelativeURL()) {
         // relative URL => prefix with current server URL
@@ -102,8 +101,7 @@ public class PicassoImageGetter implements ImageGetter {
 
     @Override
     public void onBitmapFailed(Drawable arg0) {
-      if (Log.LOGD)
-        Log.d(this.getClass().getName(), "Image could not be loaded");
+      Log.d(this.getClass().getName(), "Image could not be loaded");
     }
 
     @Override

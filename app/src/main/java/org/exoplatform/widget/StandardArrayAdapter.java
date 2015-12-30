@@ -207,14 +207,12 @@ public class StandardArrayAdapter extends ArrayAdapter<SocialActivityInfo> {
         return true;
 
       } catch (SocialClientLibException e) {
-        if (Log.LOGD)
-          Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
+        Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
         return false;
       } catch (RuntimeException e) {
         // XXX cannot replace because SocialClientLib can throw exceptions like
         // ServerException, UnsupportMethod ,..
-        if (Log.LOGD)
-          Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
+        Log.d(TAG, e.getMessage(), Log.getStackTraceString(e));
         return false;
       }
     }

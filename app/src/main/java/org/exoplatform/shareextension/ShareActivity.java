@@ -162,12 +162,10 @@ public class ShareActivity extends FragmentActivity {
         } else {
           Uri contentUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
           if (contentUri != null) {
-            mAttachmentUris = new ArrayList<Uri>();
-            mAttachmentUris.add(contentUri);
+              mAttachmentUris = new ArrayList<Uri>();
+              mAttachmentUris.add(contentUri);
           }
-          if (Log.LOGD) {
-            Log.d(LOG_TAG, "Number of files to share: ", mAttachmentUris.size());
-          }
+          Log.d(LOG_TAG, "Number of files to share: ", mAttachmentUris.size());
         }
         prepareAttachmentsAsync();
       }
@@ -304,7 +302,6 @@ public class ShareActivity extends FragmentActivity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    Log.d("TEST", "onCreateOptionsMenu");
     getMenuInflater().inflate(R.menu.share, menu);
     mMenuItem = menu.findItem(R.id.menu_shareextension_post);
     if (mMenuItem != null) {

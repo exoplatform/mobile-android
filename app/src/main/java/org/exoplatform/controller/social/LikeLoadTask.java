@@ -120,8 +120,7 @@ public class LikeLoadTask extends AsyncTask<String, Void, LinkedList<SocialLikeI
       }
       return likeLinkedList;
     } catch (SocialClientLibException e) {
-      if (Log.LOGD)
-        Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     }
   }

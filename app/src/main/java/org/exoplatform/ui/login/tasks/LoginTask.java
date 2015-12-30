@@ -55,8 +55,7 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
     String password = params[1];
     String domain = params[2];
 
-    if (Log.LOGD)
-      Log.d(TAG, "Logging in with " + username + " at " + domain);
+    Log.d(TAG, "Logging in with " + username + " at " + domain);
 
     try {
       String versionUrl = domain + ExoConstants.DOMAIN_PLATFORM_VERSION;
@@ -65,8 +64,7 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
       setRedirectResponseInterceptor();
       int statusCode = response.getStatusLine().getStatusCode();
 
-      if (Log.LOGD)
-        Log.d(TAG, "response code: " + statusCode);
+      Log.d(TAG, "response code: " + statusCode);
 
       if (statusCode == HttpStatus.SC_NOT_FOUND)
         return ExoConnectionUtils.SIGNIN_SERVER_NAV;
@@ -101,8 +99,7 @@ public class LoginTask extends AsyncTask<String, Void, Integer> {
 
   @Override
   public void onPostExecute(Integer result) {
-    if (Log.LOGD)
-      Log.d(TAG, "Login result: " + result);
+    Log.d(TAG, "Login result: " + result);
 
     if (mListener != null)
       mListener.onLoggingInFinished(result);

@@ -102,8 +102,7 @@ public class LoginActivity extends BaseActivity implements AccountPanel.ViewList
   @Override
   protected void onResume() {
     super.onResume();
-    if (Log.LOGD)
-      Log.d(TAG, "onResume ", this);
+    Log.d(TAG, "onResume ", this);
     SettingUtils.setDefaultLanguage(this);
     onChangeLanguage();
     initState();

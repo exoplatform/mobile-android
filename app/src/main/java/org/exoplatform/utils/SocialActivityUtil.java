@@ -372,8 +372,7 @@ public class SocialActivityUtil {
           try {
             addr = new ExoWebAddress(spanUrl);
           } catch (ParseException e) {
-            if (Log.LOGI)
-              Log.i(SocialActivityUtil.class.getName(), e.getMessage());
+            Log.i(SocialActivityUtil.class.getName(), e.getMessage());
           }
           if (addr != null && !addr.isRelativeURL()) {
             // absolute URI => use as is (add protocol if missing)
@@ -391,8 +390,7 @@ public class SocialActivityUtil {
         }
       } catch (ClassCastException e) {
         // textView.getText() can fail to be casted to Spannable
-        if (Log.LOGD)
-          Log.d("eXo__SocialActivityUtil__", e.getMessage());
+        Log.d("eXo__SocialActivityUtil__", e.getMessage());
       }
     }
   }

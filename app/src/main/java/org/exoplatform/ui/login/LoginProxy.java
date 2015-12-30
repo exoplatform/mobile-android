@@ -109,8 +109,7 @@ public class LoginProxy implements CheckingTenantStatusTask.AsyncTaskListener, R
                                                                       // cancel
                                                                       // current
                                                                       // task
-                                                                      if (Log.LOGD)
-                                                                        Log.d(TAG, "onPause cancel task");
+                                                                      Log.d(TAG, "onPause cancel task");
                                                                       setListener(null);
                                                                       if (mLoginTask != null
                                                                           && mLoginTask.getStatus() == Status.RUNNING) {

@@ -58,12 +58,10 @@ public class ExoUtils {
       url.toURI();
       return true;
     } catch (MalformedURLException e) {
-      if (Log.LOGD)
-        Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     } catch (URISyntaxException e) {
-      if (Log.LOGD)
-        Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     }
   }
@@ -83,12 +81,10 @@ public class ExoUtils {
       return uri.toASCIIString();
 
     } catch (MalformedURLException e) {
-      if (Log.LOGD)
-        Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     } catch (URISyntaxException e) {
-      if (Log.LOGD)
-        Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     }
 
@@ -203,12 +199,10 @@ public class ExoUtils {
         }
         // else, URL is an IP address, return it as is
       } catch (URISyntaxException e) {
-        if (Log.LOGD)
-          Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+        Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
         finalName = defaultName;
       } catch (IndexOutOfBoundsException e) {
-        if (Log.LOGD)
-          Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+        Log.d(ExoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
         finalName = defaultName;
       }
     }

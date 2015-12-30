@@ -84,8 +84,7 @@ public class PostCommentTask extends AsyncTask<String, Void, Boolean> {
       activityService.createComment(restActivity, comment);
       return true;
     } catch (SocialClientLibException e) {
-      if (Log.LOGD)
-        Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return false;
     }
 

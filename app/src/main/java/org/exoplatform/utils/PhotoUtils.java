@@ -264,8 +264,7 @@ public class PhotoUtils {
       output.writeTo(out);
       return tempFile;
     } catch (IOException e) {
-      if (Log.LOGD)
-        Log.d(PhotoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(PhotoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     }
 
@@ -294,8 +293,7 @@ public class PhotoUtils {
       bitmap.recycle();
       return output;
     } catch (OutOfMemoryError e) {
-      if (Log.LOGD)
-        Log.d(PhotoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(PhotoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     }
   }
@@ -341,12 +339,10 @@ public class PhotoUtils {
       }
 
     } catch (ClientProtocolException e) {
-      if (Log.LOGD)
-        Log.d(PhotoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(PhotoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     } catch (IOException e) {
-      if (Log.LOGD)
-        Log.d(PhotoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
+      Log.d(PhotoUtils.class.getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
       return null;
     } finally {
       httpClient.getConnectionManager().shutdown();

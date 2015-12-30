@@ -18,10 +18,13 @@
  */
 package org.exoplatform.utils;
 
+import org.exoplatform.BuildConfig;
+
 /**
  * Created by minhtdh on 4/7/15.
  */
 public class Log {
+
   private static final int    DEFAULT_LOG_RETURN_VAL = 0;
 
   public static boolean       LOGGABLE               = true;
@@ -37,12 +40,13 @@ public class Log {
   public final static boolean LOGW;
 
   public final static boolean LOGE;
+
   static {
-    LOGV = (LOG_LEVEL <= android.util.Log.VERBOSE);
-    LOGD = (LOG_LEVEL <= android.util.Log.DEBUG);
-    LOGI = (LOG_LEVEL <= android.util.Log.INFO);
-    LOGW = (LOG_LEVEL <= android.util.Log.WARN);
-    LOGE = (LOG_LEVEL <= android.util.Log.ERROR);
+    LOGV = (LOG_LEVEL <= android.util.Log.VERBOSE && BuildConfig.DEBUG);
+    LOGD = (LOG_LEVEL <= android.util.Log.DEBUG && BuildConfig.DEBUG);
+    LOGI = (LOG_LEVEL <= android.util.Log.INFO && BuildConfig.DEBUG);
+    LOGW = (LOG_LEVEL <= android.util.Log.WARN && BuildConfig.DEBUG);
+    LOGE = (LOG_LEVEL <= android.util.Log.ERROR && BuildConfig.DEBUG);
   }
 
   public static boolean isLoggable(Object obj) {

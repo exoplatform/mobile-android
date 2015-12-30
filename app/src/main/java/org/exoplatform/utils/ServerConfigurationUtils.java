@@ -288,8 +288,7 @@ public class ServerConfigurationUtils {
       // i indent code just to have a view similar to xml-tree
       for (int i = 0; i < objList.size(); i++) {
         ExoAccount serverObj = objList.get(i);
-        if (Log.LOGD)
-          Log.d(TAG, "Writing account " + serverObj);
+        Log.d(TAG, "Writing account " + serverObj);
         serializer.startTag(null, "server");
         serializer.attribute(null, "name", serverObj.accountName);
         serializer.attribute(null, ExoConstants.EXO_URL_SERVER, serverObj.serverUrl);

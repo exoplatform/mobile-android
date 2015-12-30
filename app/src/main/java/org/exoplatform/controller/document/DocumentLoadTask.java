@@ -184,8 +184,7 @@ public class DocumentLoadTask extends AsyncTask<Integer, Void, Integer> {
         return RESULT_FALSE;
       }
     } catch (IOException e) {
-      if (Log.LOGE)
-        Log.e(LOG_TAG, e.getMessage(), e);
+      Log.e(LOG_TAG, e.getMessage(), e);
       return RESULT_ERROR;
     }
   }
