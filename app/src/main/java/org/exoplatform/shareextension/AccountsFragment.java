@@ -130,12 +130,12 @@ public class AccountsFragment extends ListFragment implements SimpleAdapter.View
   }
 
   @Override
-  public void onDestroy() {
-    Log.d(ACCOUNTS_FRAGMENT, "Destroyed " + this);
-    super.onDestroy();
+  public void onDetach() {
+    instance = null;
+    super.onDetach();
   }
 
-  /*
+    /*
    * GETTERS & SETTERS
    */
 

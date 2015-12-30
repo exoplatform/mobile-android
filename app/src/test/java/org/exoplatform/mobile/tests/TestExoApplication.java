@@ -29,4 +29,5 @@ public class TestExoApplication extends ExoApplication {
   protected void initCrashlytics() {
     // Do not initialize Crashlytics during tests
   }
+
 }

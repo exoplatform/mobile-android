@@ -175,7 +175,13 @@ public class ComposeFragment extends Fragment {
     super.onResume();
   }
 
-  /*
+  @Override
+  public void onDetach() {
+    instance = null;
+    super.onDetach();
+  }
+
+    /*
    * GETTERS & SETTERS
    */
 

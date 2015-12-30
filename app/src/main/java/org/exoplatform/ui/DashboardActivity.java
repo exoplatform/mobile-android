@@ -159,6 +159,12 @@ public class DashboardActivity extends FragmentActivity {
     super.onPause();
   }
 
+  @Override
+  protected void onDestroy() {
+    dashboardActivity = null;
+    super.onDestroy();
+  }
+
   private void changeLanguage() {
     Resources resource = getResources();
     setTitle(resource.getString(R.string.Dashboard));

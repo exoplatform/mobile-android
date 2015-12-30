@@ -23,8 +23,14 @@ import org.exoplatform.utils.AssetUtils;
 import org.exoplatform.utils.CrashUtils;
 import org.exoplatform.utils.ExoConnectionUtils;
 import org.exoplatform.utils.LaunchUtils;
+import org.exoplatform.utils.Log;
 
 import android.app.Application;
+import android.content.Context;
+import android.os.Build;
+import android.os.Bundle;
+
+import java.lang.reflect.Method;
 
 public class ExoApplication extends Application {
 
@@ -32,9 +38,22 @@ public class ExoApplication extends Application {
   public void onCreate() {
     super.onCreate();
     initCrashlytics();
+    if ("samsung".equalsIgnoreCase(Build.MANUFACTURER))
+      initSamsungClipboardManager();
     LaunchUtils.setAppVersion(this);
     SocialClientContext.setUserAgent(ExoConnectionUtils.getUserAgent());
     AssetUtils.setContext(this);
+  }
+
+  protected void initSamsungClipboardManager() {
+    // Workaround for a leak in Samsung devices
+    // https://gist.github.com/pepyakin/8d2221501fd572d4a61c
+    try {
+      Log.i(this.getClass().getName(), "Initializing Samsung ClipboardUIManager with ApplicationContext");
+      Class<?> cls = Class.forName("android.sec.clipboard.ClipboardUIManager");
+      Method m = cls.getDeclaredMethod("getInstance", Context.class);
+      Object o = m.invoke(null, this);
+    } catch (Exception ignored) { }
   }
 
   protected void initCrashlytics() {

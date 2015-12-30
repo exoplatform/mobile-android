@@ -96,12 +96,12 @@ public class SignInFragment extends Fragment {
   }
 
   @Override
-  public void onDestroy() {
-    Log.d(SIGN_IN_FRAGMENT, "Destroyed " + this);
-    super.onDestroy();
+  public void onDetach() {
+    instance = null;
+    super.onDetach();
   }
 
-  /*
+ /*
    * GETTERS & SETTERS
    */
 
