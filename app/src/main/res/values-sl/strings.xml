@@ -3,7 +3,7 @@
 <resources>
   <string name="SignInButton">Vzpostavi povezavo</string>
   <string name="SignInButton_In">k</string>
-  <string name="SignInInformation">Prijava</string>
+  <string name="SignInInformation">Sign In</string>
   <string name="SigningIn">Prijavljanje …</string>
   <string name="NoServerSelected">Izberi strežnik</string>
   <string name="NoPasswordEnter">Vnesi svoje geslo</string>
@@ -15,9 +15,9 @@
   <string name="AccountPasswordInvalid">V geslu niso dovoljeni presledki</string>
   <string name="Connected">Povezano</string>
   <string name="LastLoginDate">Zadnja prijava</string>
-  <string name="UserNameCellTitle">Uporabniško ime</string>
-  <string name="PasswordCellTitle">Geslo</string>
-  <string name="Language">Jezik</string>
+  <string name="UserNameCellTitle">Username</string>
+  <string name="PasswordCellTitle">Password</string>
+  <string name="Language">Language</string>
   <string name="Server">Računi</string>
   <string name="ServerList">Seznam strežnikov</string>
   <string name="AddAServer">Dodaj strežnik</string>
@@ -29,18 +29,18 @@
   <string name="CannotEditServer">Strežnika ni mogoče spremeniti ali izbrisati. Trenutno je v uporabi. </string>
   <string name="English">Angleščina</string>
   <string name="French">Francoščina</string>
-  <string name="German">Nemščina</string>
+  <string name="German">German</string>
   <string name="Spanish">Španščina</string>
   <string name="PortugueseBrazil">Portugalščina (Brazilija)</string>
   <string name="Greek">Grščina</string>
   <string name="CompliantMessage">Ni se mogoče povezati na združljivo različico platforme na tem spletnem naslovu. Obrnite se na skrbnika.</string>
   <string name="Delete">Izbriši</string>
   <string name="Copy">Kopiraj</string>
-  <string name="Move">Izreži</string>
+  <string name="Move">Cut</string>
   <string name="Rename">Preimenuj</string>
-  <string name="CreateFolder">Ustvari mapo</string>
-  <string name="Send">Pošljite</string>
-  <string name="Paste">Prilepi</string>
+  <string name="CreateFolder">Create Folder</string>
+  <string name="Send">Send</string>
+  <string name="Paste">Paste</string>
   <string name="Cancel">Prekliči</string>
   <string name="OK">V redu</string>
   <string name="Remove">Odstrani</string>
@@ -48,21 +48,21 @@
   <string name="Dashboard">Aplikacije</string>
   <string name="Settings">Nastavitve</string>
   <string name="GadgetsCannotBeRetrieved">Pripomočkov ni mogoče pridobiti.</string>
-  <string name="ActivityStream">Tok dejavnosti</string>
-  <string name="ActivityDetail">Podrobnosti</string>
-  <string name="You">Vi</string>
+  <string name="ActivityStream">Activity Stream</string>
+  <string name="ActivityDetail">Details</string>
+  <string name="You">You</string>
   <string name="Me">Jaz</string>
-  <string name="ShowMore">Pokaži več</string>
+  <string name="ShowMore">Show More</string>
   <string name="LoadingData">Nalaganje podatkov …</string>
   <string name="LoadingImage">Nalaganje slike …</string>
   <string name="SendingData">Pošiljanje podatkov …</string>
   <string name="YourComment">Vaš komentar...</string>
-  <string name="Comment">Komentar</string>
-  <string name="StatusUpdate">Objava</string>
-  <string name="PostTo">Za:</string>
-  <string name="Public">Moje dejavnosti</string>
+  <string name="Comment">Comment</string>
+  <string name="StatusUpdate">Post</string>
+  <string name="PostTo">To:</string>
+  <string name="Public">My Activities</string>
   <string name="NoSpaces">Niste v nobenem prostoru</string>
-  <string name="ComposerPlaceHolder">O čem razmišljate, na čem delate?</string>
+  <string name="ComposerPlaceHolder">What are you working on?</string>
   <string name="ShareWithWhom">Izberite, kdo bo videl to objavo</string>
   <string name="NoLike">V tem trenutku ni všečkov</string>
   <string name="LikedThis"> je všeč</string>
@@ -90,7 +90,7 @@
   <string name="PhotoLibrary">Knjižnica fotografij </string>
   <string name="SelectedPhoto">Izbrana slika</string>
   <string name="AttachedPhoto">Priložena fotografija</string>
-  <string name="Warning">Opozorilo</string>
+  <string name="Warning">Warning</string>
   <string name="PostError">Napaka pri objavi dejavnosti.</string>
   <string name="ErrorOnLike">Dejavnosti ne morete všečkati.</string>
   <string name="ConnectionError">Omrežje je nedosegljivo.</string>
@@ -130,7 +130,7 @@
   <string name="UpdatedATask"> je pravkar posodobil(a) opravilo:</string>
   <string name="DocumentRenameTitle">Preimenuj mapo</string>
   <string name="DocumentRenameContent">Vnesite novo ime:</string>
-  <string name="DocumentCreateTitle">Ustvari mapo</string>
+  <string name="DocumentCreateTitle">Create Folder</string>
   <string name="DocumentCreateContent">Vnesi ime mape:</string>
   <string name="DocumentCannotDelete">Te datoteke ni mogoče izbrisati.</string>
   <string name="DocumentCopyPasteError">Napaka med lepljenjem.</string>
@@ -138,28 +138,28 @@
   <string name="DocumentRenameError">Napaka med preimenovanjem datoteke.</string>
   <string name="DocumentCreateFolderError">Napaka pri ustvarjanju te mape.</string>
   <string name="DocumentFolderNameEmpty">Vnesite ime mape.</string>
-  <string name="DocumentSettingTitle">Dokumenti</string>
+  <string name="DocumentSettingTitle">Documents</string>
   <string name="DocumentShowPrivateDrive">Prikaži zasebni pogon</string>
-  <string name="CalendarDescription">Opis:</string>
-  <string name="CalendarLocation">Lokacija:</string>
+  <string name="CalendarDescription">Description:</string>
+  <string name="CalendarLocation">Location:</string>
   <string name="CalendarStart">Začetni čas:</string>
   <string name="CalendarEnd">Končni čas:</string>
   <string name="In"> v</string>
   <string name="Space"> prostor</string>
   <string name="Personal">Osebno</string>
-  <string name="Group">Skupina</string>
-  <string name="General">Splošno</string>
+  <string name="Group">Group</string>
+  <string name="General">General</string>
   <string name="NetworkTimeout">Časovna omejitev omrežne povezave je potekla. Prosimo, poskusite znova.</string>
   <string name="Liker">Všečkar</string>
   <string name="Likers">Všečkarji</string>
   <string name="NoAppFound">Nobena aplikacija ni bila najdena.</string>
   <string name="CannotOpenFile">Te datoteke ni mogoče odpreti.</string>
-  <string name="FileNotFound">Datoteke ni mogoče najti.</string>
+  <string name="FileNotFound">File not found.</string>
   <string name="FileNotSupported">Oblika zapisa datoteke ni podprta.</string>
   <string name="CompatibleFileSuggest">Ali želite odpreti v nameščeni aplikaciji?</string>
   <string name="OpenIn">Odpri v ...</string>
   <string name="DownloadingFile">Prenašanje datoteke…</string>
-  <string name="SocialSettingTitle">Družbeno</string>
+  <string name="SocialSettingTitle">Social</string>
   <string name="SocialSettingContent">Zapomni si moj filter</string>
 
   <!-- Welcome screen -->
@@ -212,7 +212,7 @@
   <!-- Setting -->
   <string name="RememberMe">Zapomni si me</string>
   <string name="Autologin">Samodejna prijava</string>
-  <string name="LoginTitle">Prijava</string>
+  <string name="LoginTitle">Login</string>
   <string name="Number1">1</string>
   <string name="Number2">2</string>
 
@@ -234,18 +234,18 @@
   <string name="LoginWarningMsg">Connection error</string>
 
   <string-array name="SocialTabs">
-    <item id="AllUpdates">Vse dejavnosti</item>
-    <item id="MyConnections">Moje povezave</item>
-    <item id="MySpaces">Moji prostori</item>
-    <item id="MyStatus">Moje dejavnosti</item>
+    <item id="AllUpdates">All Activities</item>
+    <item id="MyConnections">My Connections</item>
+    <item id="MySpaces">My Spaces</item>
+    <item id="MyStatus">My Activities</item>
   </string-array>
   
   <!-- Share Extension -->
-  <string name="ShareTitle">Daj v skupno rabo</string>
+  <string name="ShareTitle">Share</string>
   <string name="ShareCannotSelectSpaceBecauseOffline">Za izbor prostora morate izbrati račun in se prijaviti</string>
   <string name="ShareCannotPostBecauseOffline">Za objave morate izbrati račun in se prijaviti</string>
   <string name="ShareOperationStarted">Dajanje v skupno rabo poteka, preverite stanje med obvestili</string>
-  <string name="ShareOperationSuccess">Uspeh</string>
+  <string name="ShareOperationSuccess">Success</string>
   <string name="ShareDocumentTitle">Skupna raba dokumenta</string>
   <string name="ShareMessageTitle">Skupna raba sporočila</string>
   <string name="ShareDocumentText">Prenos v teku</string>
@@ -263,7 +263,7 @@
   <string name="ShareErrorSomeFilesCannotShare">Skupna raba nekaterih dokumentov ni mogoča</string>
   <string name="ShareErrorAllFilesCannotShare">Ni mogoča skupna raba vseh dokumentov</string>
   <string name="ShareErrorStoragePermissionDenied">Skupno rabo moramo ustaviti, ker je dostop do shrambe tej aplikaciji prepovedan.\\\nDa bi jo omogočili, odprite nastavitve aplikacije in omogočite uporabo shrambe.</string>
-  <string name="ShareErrorDialogLeave">Zapusti</string>
+  <string name="ShareErrorDialogLeave">Leave</string>
   <string name="ShareErrorDialogAppSettings">Odprite nastavitve aplikacije</string>
   
   <!-- Documents -->
@@ -275,7 +275,7 @@
   
   <!-- Action Bar -->
   <string name="SignOutTitle">Izpis</string>
-  <string name="RefreshTitle">Osveži</string>
+  <string name="RefreshTitle">Refresh</string>
   
   <!-- Permission Requests -->
   <string name="PermissionStorageRationale">Za zajem fotografije ali izbor slike je potrebno dovoljenje za dostop do shrambe.</string>
