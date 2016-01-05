@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:installLocation="auto" android:versionCode="1511271548" android:versionName="2.10-SNAPSHOT" package="org.exoplatform">
+    android:installLocation="auto" android:versionCode="21" android:versionName="2.10" package="org.exoplatform">
     <supports-screens android:smallScreens="false"/>
 
     <!-- Dangerous Permissions -->
