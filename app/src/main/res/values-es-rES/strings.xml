@@ -71,12 +71,12 @@
   <string name="PeopleLikedThis"> persona a la que le gusta esto</string>
   <string name="LessThanAMinute"> menos de un minuto</string>
   <string name="AboutAMinuteAgo"> hace un minuto</string>
-  <string name="About"> acerca de</string>
+  <string name="About"> hace</string>
   <string name="MinutesAgo"> hace   minutos</string>
   <string name="AboutAnHourAgo"> hace una hora</string>
   <string name="HoursAgo"> hace   horas</string>
   <string name="AboutADayAgo"> hace un día</string>
-  <string name="DaysAgo"> hace   días</string>
+  <string name="DaysAgo"> días</string>
   <string name="AboutAMonthAgo"> hace un mes</string>
   <string name="MonthsAgo"> hace   meses</string>
   <string name="InputTextWarning">Por favor, introduzca algún texto.</string>
