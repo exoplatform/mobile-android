@@ -51,6 +51,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 /**
  * Created by The eXo Platform SAS.<br/>
@@ -89,6 +90,11 @@ public class ShareService extends IntentService {
   protected void onHandleIntent(Intent intent) {
     // Retrieve the content of the post from the intent
     postInfo = (SocialPostInfo) intent.getParcelableExtra(POST_INFO);
+
+    if (postInfo == null) {
+      Toast.makeText(getApplicationContext(), R.string.ShareErrorNullPostInfo, Toast.LENGTH_LONG).show();
+      return;
+    }
 
     // Notify the user that the share has started
     notifyBegin();

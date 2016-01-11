@@ -245,8 +245,12 @@ public class ComposeMessageActivity extends Activity implements View.OnClickList
       // Add image after capturing photo from camera
       case ExoConstants.REQUEST_TAKE_PICTURE_WITH_CAMERA:
         String sdcard_dir = messageController.getSdCardTempDir();
-        File file = new File(sdcard_dir);
-        addImageToMessage(file);
+        if (sdcard_dir != null) {
+            File file = new File(sdcard_dir);
+            addImageToMessage(file);
+        } else {
+            Toast.makeText(this, R.string.AttachPhotoError, Toast.LENGTH_LONG).show();
+        }
         break;
 
       // Get the pick image action result from native photo album and send

@@ -234,7 +234,7 @@ public class CompatibleFileOpen {
         return RESULT_OK;
       } catch (IOException e) {
         Log.d(getClass().getSimpleName(), e.getMessage(), Log.getStackTraceString(e));
-        if (file != null) {
+        if (file != null && file.exists()) {
           file.delete();
         }
         return RESULT_ERROR;
@@ -248,10 +248,10 @@ public class CompatibleFileOpen {
      */
     @Override
     protected void onCancelled() {
-      if (file.exists()) {
+      if (file != null && file.exists()) {
         file.delete();
       }
-      if (mProgressDialog.isAttachedToWindow())
+      if (mProgressDialog != null && mProgressDialog.isAttachedToWindow())
         mProgressDialog.dismiss();
       super.onCancelled();
     }

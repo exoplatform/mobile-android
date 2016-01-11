@@ -121,7 +121,7 @@ public class ComposeFragment extends Fragment {
 
   public void setThumbnailImage(Bitmap bm) {
     bmThumb = bm;
-    if (bm != null) {
+    if (bm != null && imgThumb != null) {
       imgThumb.setImageBitmap(bm);
     }
   }
