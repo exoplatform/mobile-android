@@ -29,6 +29,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
@@ -194,6 +195,7 @@ public class CompatibleFileOpen {
       HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
       HttpConnectionParams.setSoTimeout(httpParameters, 10000);
       HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+      HttpProtocolParams.setUserAgent(httpParameters, ExoConnectionUtils.getUserAgent());
       DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
       httpClient.setCookieStore(ExoConnectionUtils.cookiesStore);
 
