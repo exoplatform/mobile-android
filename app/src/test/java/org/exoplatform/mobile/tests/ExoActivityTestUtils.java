@@ -50,8 +50,14 @@ import android.util.Log;
  * paristote@exoplatform.com Apr 15, 2014
  */
 
-// API LEVEL 21
-@Config(application = TestExoApplication.class, sdk = Build.VERSION_CODES.LOLLIPOP, constants = BuildConfig.class)
+@Config(// Custom Application which does not initialize Crashlytics
+        application = TestExoApplication.class,
+        // Run on SDK 21 because versions 22+ are not supported by Robolectric
+        sdk = Build.VERSION_CODES.LOLLIPOP,
+        //
+        constants = BuildConfig.class,
+        // Specify the packageName because it's different than the applicationId
+        packageName = "org.exoplatform")
 @RunWith(ExoRobolectricTestRunner.class)
 public abstract class ExoActivityTestUtils<A extends Activity> {
 
