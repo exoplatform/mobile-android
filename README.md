@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/exoplatform/mobile-android.svg)](https://travis-ci.org/exoplatform/mobile-android)
+
 eXo Mobile
 ==========
 
