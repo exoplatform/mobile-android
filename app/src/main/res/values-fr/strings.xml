@@ -13,7 +13,7 @@
   <string name="AccountServerForbidden">Cette URL de serveur n\'est pas autorisée</string>
   <string name="AccountUsernameInvalid">Seuls les caractères alphanumériques, les points, les plus, les tirets et les tirets de soulignement sont autorisés dans le nom d\'utilisateur</string>
   <string name="AccountPasswordInvalid">Les espaces ne sont pas autorisés dans le mot de passe</string>
-  <string name="Connected">Connecté</string>
+  <string name="Connected">Connected</string>
   <string name="LastLoginDate">Dernière connexion</string>
   <string name="UserNameCellTitle">Nom d\'utilisateur</string>
   <string name="PasswordCellTitle">Mot de passe</string>
@@ -60,9 +60,9 @@
   <string name="Comment">Commenter</string>
   <string name="StatusUpdate">Envoyer</string>
   <string name="PostTo">A</string>
-  <string name="Public">Mes Activités</string>
+  <string name="Public">My Activities</string>
   <string name="NoSpaces">Vous n\'êtes dans aucun espace</string>
-  <string name="ComposerPlaceHolder">Sur quoi travaillez-vous?</string>
+  <string name="ComposerPlaceHolder">What are you working on?</string>
   <string name="ShareWithWhom">Sélectionnez qui verra ce post</string>
   <string name="NoLike">Personne n\'aime pour le moment</string>
   <string name="LikedThis">aiment cela</string>
@@ -234,10 +234,10 @@
     <string name="LoginWarningMsg">La connexion a échoué</string>
 
   <string-array name="SocialTabs">
-    <item id="AllUpdates">Toutes les Activités</item>
+    <item id="AllUpdates">All Activities</item>
     <item id="MyConnections">Mes Connexions</item>
     <item id="MySpaces">Mes Espaces</item>
-    <item id="MyStatus">Mes Activités</item>
+    <item id="MyStatus">My Activities</item>
   </string-array>
   
   <!-- Share Extension -->
@@ -245,7 +245,7 @@
   <string name="ShareCannotSelectSpaceBecauseOffline">Veuillez choisir un compte et vous connecter pour accéder à la liste d\'espaces</string>
   <string name="ShareCannotPostBecauseOffline">Veuillez choisir un compte et vous connecter pour publier votre message</string>
   <string name="ShareOperationStarted">Le partage est en cours, suivez sa progression dans la barre de notifications</string>
-  <string name="ShareOperationSuccess">Succès</string>
+  <string name="ShareOperationSuccess">Success</string>
   <string name="ShareDocumentTitle">Partage de document</string>
   <string name="ShareMessageTitle">Partage de statut</string>
   <string name="ShareDocumentText">Envoi en cours</string>
