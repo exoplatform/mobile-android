@@ -62,7 +62,7 @@
   <string name="PostTo">Para:</string>
   <string name="Public">Mis Actividades</string>
   <string name="NoSpaces">No está en ningún espacio</string>
-  <string name="ComposerPlaceHolder">¿En qué está trabajando?</string>
+  <string name="ComposerPlaceHolder">What are you working on?</string>
   <string name="ShareWithWhom">Selecciona quien verá esta publicación</string>
   <string name="NoLike">Ningún \"me gusta\" por el momento</string>
   <string name="LikedThis"> le gusta esto</string>
